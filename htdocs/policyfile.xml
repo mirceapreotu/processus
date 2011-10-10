@@ -1,0 +1,7 @@
+<cross-domain-policy>
+ <allow-access-from domain="*" to-ports="507" />
+ <allow-access-from domain="*.area-network.de" to-ports="507,516" />
+ <allow-access-from domain="*.example.com" to-ports="516-523" />
+ <allow-access-from domain="flash.area-network.de" to-ports="507,516-523" />
+ <allow-access-from domain="www.example.com" to-ports="*" />
+</cross-domain-policy>

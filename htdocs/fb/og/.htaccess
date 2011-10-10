@@ -1,0 +1,19 @@
+<IfModule mod_rewrite.c>
+	# we need mod_rewrite on the server
+	RewriteEngine On
+	
+	# exclude the following directories:
+	RewriteRule ^img$ - [L]
+	RewriteRule ^img/.*$ - [L]
+	RewriteRule ^js$ - [L]
+	RewriteRule ^js/.*$ - [L]
+	RewriteRule ^css$ - [L]
+	RewriteRule ^css/.*$ - [L]
+	
+	# forward all requests for non-existing files,
+	# directories or links to our index.php controller 
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_FILENAME} !-l
+	RewriteRule .* index.php
+</IfModule>

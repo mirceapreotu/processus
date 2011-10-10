@@ -1,0 +1,10 @@
+<phpunit
+	bootstrap="../src/test/bootstrap.php"
+>
+	<filter>
+	  <blacklist>
+			<directory suffix=".php">../src/contrib</directory>
+			<file>../src/Bootstrap.php</file>
+		</blacklist>
+	</filter>
+</phpunit>

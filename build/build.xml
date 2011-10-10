@@ -1,0 +1,896 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.meetidaaa.dev" default="check" basedir="..">
+
+	<!--
+	HOWTO Setup Teamcity:
+
+		Build runner:       Command line
+		Working directory:  build
+		Command executable: phing
+		Command parameters: -logger phing.listener.DefaultLogger ci
+		Alternative command parameters: -logger phing.listener.DefaultLogger cicheck
+		Artifact paths:     var/build
+
+	Edit .BuildServer/config/main-config.xml, add:
+
+		<graph title="Checkstyle" defaultFilters="" hideFilters="" seriesTitle="Metric name">
+            <valueType key="CHECKSTYLE_ERROR" title="Errors" />
+            <valueType key="CHECKSTYLE_WARNING" title="Warnings" />
+        </graph>
+        <graph title="Metrics" defaultFilters="" hideFilters="" seriesTitle="Metric name">
+            <valueType key="METRICS_LOC" title="Lines" />
+            <valueType key="METRICS_NOC" title="Classes" />
+            <valueType key="METRICS_NOM" title="Methods" />
+        </graph>
+        <graph title="Mess Detection" defaultFilters="" hideFilters="" seriesTitle="Metric name">
+            <valueType key="PMD_ERROR" title="Errors" />
+		</graph>
+		<graph title="Copy Paste Detection" defaultFilters="" hideFilters="" seriesTitle="Metric name">
+		    <valueType key="CPD_ERROR" title="Duplicates" />
+        </graph>
+        <graph title="Documentation" defaultFilters="" hideFilters="" seriesTitle="Metric name">
+            <valueType key="PHPDOC_ERROR" title="Warnings" />
+        </graph>
+		<report-tab title="PHP Depend" basePath="pdepend" />
+		<report-tab title="PHPUnit" basePath="phpunit" />
+		<report-tab title="Coverage" basePath="coverage" />
+		<report-tab title="PHPDoc" basePath="doc/html" />
+		<report-tab title="PCI" basePath="pci" />
+
+	-->
+
+    <!-- Sets the DSTAMP, TSTAMP and TODAY properties -->
+    <tstamp/>
+
+    <!-- configuration defaults -->
+
+	<!--
+		mode of operation for certain tasks; default: show output and
+		request certain parameters from the command line (if needed) instead
+		of logging to some obscure (xml) files ... hint: ci target
+		sets this to false!
+	 -->
+    <property name="build.mode.interactive" value="true" />
+
+    <property name="cmd.sudo" value="sudo" />
+
+	<!--
+		Do we have the xdebug extension installed?
+		(for phpunit code coverage)
+		This is automatically detected in the "requirements" target.
+	 -->
+	<property name="php.pecl.xdebug" value="false" />
+
+    <property name="db.samplesize" value="1000" />
+
+    <!-- Load the sample default configuration -->
+    <property file="etc/samples/build.properties" override="true" />
+
+    <!-- Load our custom configuration (on top of these defaults), if exists -->
+    <property file="etc/build.properties" override="true" />
+
+	<!-- define the dbdeploy task (why is this needed?) -->
+	<taskdef
+		name="dbdeploy"
+		classname="phing.tasks.ext.dbdeploy.DbDeployTask"
+	/>
+
+	<!-- temporary sql files for dbdeploy -->
+	<property name="build.dbdeploy.deployfile" value="var/build/db-deploy-${DSTAMP}${TSTAMP}.sql" />
+	<property name="build.dbdeploy.undofile" value="var/build/db-undo-${DSTAMP}${TSTAMP}.sql" />
+
+
+	<!-- ========== MAIN/COMBINED TARGETS ========== -->
+
+	<target name="setup" depends="requirements" description="permissions, configs, dbstart, ...">
+		<phingcall target="permissions" />
+		<phingcall target="clean" />
+		<phingcall target="configcreate" />
+        <phingcall target="apacheconfig" />
+		<phingcall target="dbdrop" />
+		<phingcall target="dbcreate" />
+		<phingcall target="dbmigrate" />
+		<phingcall target="startup" />
+		<phingcall target="import" />
+		<phingcall target="shutdown" />
+	</target>
+
+	<target name="update" depends="requirements">
+		<phingcall target="permissions" />
+		<phingcall target="dbmigrate" />
+	</target>
+
+	<target name="check" description="Checks the sourcecode: lint, bom, dos, iso, unit, cs, cpd, md, doc">
+		<phingcall target="lint" />
+		<phingcall target="bom" />
+        <phingcall target="dos" />
+        <phingcall target="iso" />
+		<phingcall target="phpunit" />
+		<phingcall target="phpcs" />
+		<phingcall target="phpcpd" />
+		<phingcall target="phpmd" />
+		<phingcall target="phpdoc" />
+	</target>
+
+	<target name="stats" description="Generates loc, pdepend, pci statistics">
+		<phingcall target="loc" />
+		<phingcall target="pdepend" />
+		<phingcall target="pci" />
+	</target>
+
+    <target name="dbreset" description="Drop, create and migrate DB">
+        <phingcall target="dbdrop" />
+        <phingcall target="dbcreate" />
+        <phingcall target="dbmigrate" />
+        <phingcall target="dbsample" />
+    </target>
+
+	<target name="ci"  description="Default Continuous Integration Build">
+		<property name="build.mode.interactive" value="false" override="true" />
+        <!--<property name="cmd.sudo" value="echo '${sudo.password}'|sudo -S" override="true" />-->
+		<phingcall target="setup" />
+        <phingcall target="dbsample" />
+		<phingcall target="startup" />
+		<phingcall target="check" />
+		<phingcall target="stats" />
+		<phingcall target="shutdown" />
+		<!-- Register PMD for TeamCity (only one of these!) -->
+		<echo>
+##teamcity[importData type='pmd' path='var/build/pmd.xml']
+		</echo>
+        <!-- Register PHPUnit for TeamCity (only one of these!)
+		<echo>
+##teamcity[importData type='junit' path='var/build/phpunit.xml']
+		</echo>
+		 -->
+		<!-- Build Teamcity Graph Data -->
+		<exec
+			command="php -f build/bin/teamcity.php"
+			dir="."
+			checkreturn="false"
+		/>
+	</target>
+
+	<target name="cicheck" description="Lightweight Checkstyle Continuous Integration Build">
+		<property name="build.mode.interactive" value="false" override="true" />
+		<phingcall target="lint" />
+		<phingcall target="phpcs" />
+	<echo>
+##teamcity[importData type='checkstyle' path='var/build/checkstyle.xml']
+	</echo>
+	</target>
+
+	<target name="deploy">
+		<!-- 
+		<phingcall target="jsmin" />
+		<phingcall target="l10n" />
+		<phingcall target="setcopyright" />
+		 -->
+		 <phingcall target="clean" />
+		 <phingcall target="transfer" />
+		 <phingcall target="serverdeploy" />
+	</target>
+
+	<target name="purge" depends="clean">
+		<echo msg="Remove all traces of the app / build processes - [purge]" />
+		<phingcall target="clean" />
+		<phingcall target="dbdrop" />
+		<delete>
+			<fileset dir="etc">
+				<include name="*.properties" />
+				<include name="*.php" />
+				<include name="*.conf" />
+			</fileset>
+		</delete>	
+	</target>
+
+	<!-- ========== ISOLATED/SINGLE TARGETS ========== -->
+
+	<target name="transfer" description="Transfer project to live server">
+		<echo msg="Transfer project to live server - [transfer]" />
+		<if>
+			<equals arg1="${deploy.target.protocol}" arg2="ssh"/>
+			<then>
+				<echo msg="Protocol is [ssh]" />
+				<exec
+					command="rsync -az --delete --exclude '*.log' --exclude '.idea' --exclude '.project'  --exclude '.buildpath' --exclude '.settings' --exclude '.svn' --exclude '.git' . ${deploy.target.user}@${deploy.target.host}:${deploy.target.path}"
+					dir="."
+					logoutput="true"
+					checkreturn="true"
+				/>
+			</then>
+			<else>
+				<if>
+					<equals arg1="${deploy.target.protocol}" arg2="ftp"/>
+					<then>
+						<echo msg="Protocol is [ftp]" />
+						<exec
+							command="lftp mirror --dry-run  -R --delete --parallel=3 -X '*.log' -X '.idea' -X '.project'  -X '.buildpath' -X '.settings' -X '.svn' -X '.git' . ${deploy.target.user}@${deploy.target.host}:${deploy.target.path}"
+							dir="."
+							logoutput="true"
+							checkreturn="true"
+						/>
+					</then>
+					<else>
+						<fail message="Transfer called, but no valid deploy.target.protocol is set" />
+					</else>
+				</if>
+			</else>
+		</if>
+		<!-- deploy.target.protocol == none is silently ignored -->
+	</target>
+
+	<target name="serverdeploy" depends="transfer">
+		<echo msg="Run deploy script on live server - [serverdeploy]" />
+		<echo msg="(Only the default 'testing' target - you need to have passwordless ssh access!)" />
+		<exec
+			command="ssh ${deploy.target.user}@${deploy.target.host} ${deploy.target.path}/build/bin/deploy.sh"
+			dir="."
+			logoutput="true"
+			checkreturn="true"
+		/>
+	</target>
+
+	<target name="lint">
+		<echo msg="Check basic PHP syntax - [lint]" />
+		<phplint haltonfailure="true">
+		  <fileset dir="src/application">
+		    <include name="**/*.php"/>
+		  </fileset>
+		</phplint>
+	</target>
+
+	<target name="iso">
+		<echo msg="ISO-Charset-Detection - [iso]" />
+		<!-- js, html, css, php, xml -->
+		<exec
+			command="
+			    find . -type f \(
+			        -name '*.css'  -o
+			        -name '*.js'   -o
+			        -name '*.php'  -o
+			        -name '*.html' -o
+			        -name '*.xml'
+			    \) -exec file -i {} \; |sed -r -e 's/^(.+):.*=(.*)$/\2: \1/'| (! grep -E -i '^iso')"
+			dir="."
+			logoutput="true"
+			checkreturn="true"
+		/>
+	</target>    
+
+	<target name="bom">
+		<echo msg="BOM-Detection - [bom]" />
+		<exec
+			command="build/bin/checkbom.php ."
+			dir="."
+			logoutput="true"
+			checkreturn="true"
+		/>
+	</target>
+
+    <target name="dos">
+        <echo msg="DOS files CRLF vs LF detection - [dos]" />
+        <exec
+            command="build/bin/checkdos.sh src"
+            dir="."
+            logoutput="true"
+            checkreturn="true"
+        />
+        <exec
+            command="build/bin/checkdos.sh htdocs"
+            dir="."
+            logoutput="true"
+            checkreturn="true"
+        />
+    </target>
+
+
+	<target name="phpcs">
+		<echo msg="Check code style conformity - [phpcs]" />
+		<if>
+			<equals arg1="${build.mode.interactive}" arg2="1"/>
+			<then>
+				<phpcodesniffer
+				  standard="Zend"
+				  showSniffs="true"
+				  tabWidth="4"
+				  haltonerror="true"
+				  haltonwarning="false"
+				  showWarnings="true">
+				  <fileset dir="src/application">
+				    <include name="**/*.php"/>
+				  </fileset>
+				</phpcodesniffer>
+			</then>
+			<else>
+				<phpcodesniffer
+				  standard="Zend"
+				  showSniffs="true"
+				  tabWidth="4"
+				  haltonerror="false"
+				  haltonwarning="false"
+				  docGenerator="HTML"
+				  docFile="var/build/checkstyle.html"				  
+				  showWarnings="true">
+				  <fileset dir="src/application">
+				    <include name="**/*.php"/>
+				  </fileset>
+				 	<formatter type="checkstyle" outfile="var/build/checkstyle.xml" />
+					<formatter type="full" outfile="var/build/checkstyle.txt" />
+				</phpcodesniffer>
+			</else>
+		</if>
+	</target>
+
+	<target name="setcopyright">
+		<echo msg="Modify source for correct copyright infos - [setcopyright]" />
+        <!-- App / Lib -->
+        <exec
+            command="build/bin/setcopyright.sh src/application
+                '${phpdoc.category}' '${phpdoc.copyright}' '${phpdoc.license}'"
+            dir="."
+            logoutput="true"
+            checkreturn="false"
+        />
+        <!-- Tests -->
+        <exec
+            command="build/bin/setcopyright.sh src/test
+                '${phpdoc.category}' '${phpdoc.copyright}' '${phpdoc.license}'"
+            dir="."
+            logoutput="true"
+            checkreturn="false"
+        />
+	</target>
+
+	<target name="configcreate">
+		<echo msg="Creating initial set of configs - [configcreate]" />
+		<copy todir="etc" overwrite="false">
+		  <fileset dir="etc/samples">
+		    <include name="*.php" />
+		    <include name="*.properties" />
+		    <include name="*.ini" />
+		    <include name="*.cfg" />
+		    <include name="*.conf" />
+		  </fileset>
+		<filterchain>
+			<replacetokens begintoken="@@" endtoken="@@">
+				<token key="PROJECT_NAME" value="${phing.project.name}" />
+				<token key="PROJECT_BASEDIR" value="${project.basedir}" />
+				<token key="HTTPD_HOST" value="${httpd.host}" />
+				<token key="HTTPD_PROTOCOL" value="${httpd.protocol}" />
+				<token key="HTTPD_PATH" value="${httpd.path}" />
+				<token key="DB_HOST" value="${db.host}" />
+				<token key="DB_USER" value="${db.user}" />
+				<token key="DB_PASSWORD" value="${db.password}" />
+				<token key="DB_NAME" value="${db.name}" />
+
+                <token key="build.app.prefix" value="${phing.project.name}" />
+                <token key="build.app.httpd.host_local" value="${app.httpd.host_local}" />
+                <token key="build.app.httpd.host_local_ssl" value="${app.httpd.host_local_ssl}" />
+                <token key="build.app.httpd.host_live" value="${app.httpd.host_live}" />
+                <token key="build.app.httpd.host_live_ssl" value="${app.httpd.host_live_ssl}" />
+
+
+                <token key="build.app.fb.db.host" value="${app.fb.db.host}" />
+                <token key="build.app.fb.db.name" value="${app.fb.db.name}" />
+                <token key="build.app.fb.db.user" value="${app.fb.db.user}" />
+                <token key="build.app.fb.db.password" value="${app.fb.db.password}" />
+                <token key="build.app.fb.db.driver" value="${app.fb.db.driver}" />
+                <token key="build.app.fb.app.id" value="${app.fb.app.id}" />
+                <token key="build.app.fb.app.name" value="${app.fb.app.name}" />
+                <token key="build.app.fb.app.url" value="${app.fb.app.url}" />
+                <token key="build.app.fb.api.key" value="${app.fb.api.key}" />
+                <token key="build.app.fb.api.secret" value="${app.fb.api.secret}" />
+                <token key="build.app.fb.fanpage.id" value="${app.fb.fanpage.id}" />
+                <token key="build.app.fb.fanpage.url" value="${app.fb.fanpage.url}" />
+
+
+			</replacetokens>
+		</filterchain>
+		</copy>
+	</target>
+
+	<target name="phpdoc">
+		<echo msg="Generating / checking documentation - [phpdoc]" />
+		<phpdoc title="${phing.project.name}" output="HTML:frames:phphtmllib"
+			undocumentedelements="true"
+			sourcecode="false"
+			quiet="true"
+			defaultcategoryname="${phpdoc.category}"
+			defaultpackagename="${phing.project.name}"
+			destdir="var/build/doc/html">
+			<fileset dir="src/application">
+				<include name="**/*.php" />
+			</fileset>
+			<!--
+				This lists the files which are part of the official documentation
+			<projdocfileset dir="${project.exportdir}">
+				<include name="changelog.htm" />
+			</projdocfileset>
+ 			-->
+		</phpdoc>
+		<available
+			file="var/build/doc/html/errors.html"
+			property="doc_completed"
+			value="true"
+		/>
+		<fail
+			unless="doc_completed"
+			message="It APPEARS that the Doc generation failed."
+		/>
+		<exec
+			command="grep 'Warning ' var/build/doc/html/errors.html|wc -l"
+			dir="."
+			logoutput="false"
+			outputProperty="phpdoc.status.warnings"
+		/>
+		<if>
+			<equals arg1="${phpdoc.status.warnings}" arg2="0" />
+			<then>
+				<echo
+					msg="Perfect - documentation complete &amp; OK!"
+					level="info"
+				/>
+			</then>
+			<else>
+				<echo
+					msg="Found #${phpdoc.status.warnings} warnings - consult var/build/doc/html/errors.html"
+					level="error"
+				/>
+			</else>
+		</if>
+	</target>
+
+	<target name="docbook">
+		<echo msg="Generating / checking printable documentation - [docbook]" />
+		<phpdoc title="${phing.project.name}" output="XML:DocBook/peardoc2"
+			undocumentedelements="true"
+			sourcecode="false"
+			quiet="true"
+			defaultcategoryname="${phpdoc.category}"
+			defaultpackagename="${phing.project.name}"
+			destdir="var/build/doc/docbook">
+			<fileset dir="src/application">
+				<include name="**/*.php" />
+			</fileset>
+			<!--
+			// check markdown syntax & pandoc (or asciidoc ..)
+			pandoc -s -f markdown -t docbook -o test.xml test.markdown
+			xsltproc -o test.fo /usr/share/xml/docbook/stylesheet/docbook-xsl/fo/docbook.xsl
+			fop -pdf test.pdf test.fo
+			
+ 			-->
+		</phpdoc>
+	</target>
+
+	<target name="phinginfo">
+		<echo msg="Phing environment info - [phinginfo]" />
+		<echo msg="application.startdir=${application.startdir} - Current work directory" />
+		<!-- <echo msg="${env.*}	- Environment variables, extracted from $_SERVER." /> -->
+		<echo msg="host.arch=${host.arch}	- System architecture, i.e. i586. Not available on Windows machines." />
+		<echo msg="host.domain=${host.domain} - DNS domain name, i.e. php.net. Not available on Windows machines." />
+		<echo msg="host.fstype=${host.fstype} - The type of the filesystem. Possible values are UNIX, WINNT and WIN32" />
+		<echo msg="host.name=${host.name} - Operating System hostname as returned by posix_uname()." />
+		<echo msg="host.os=${host.os} - Operating System description as set in PHP_OS variable (see PHP Manual)." />
+		<echo msg="host.os.release=${host.os.release} - Operating version release" />
+		<echo msg="host.os.version=${host.os.version} - Operating system version" />
+		<echo msg="line.separator=[] - Character(s) that signal the end of a line, '\n' for Linux, '\r\n' for Windows system, '\r' for Macintosh." />
+		<echo msg="os.name=${os.name} - Operating System description as set in PHP_OS variable." />
+		<echo msg="phing.file=${phing.file} - Full path to current buildfile." />
+		<echo msg="phing.home=${phing.home} - Phing installation directory, not set in PEAR installations." />
+		<echo msg="phing.version=${phing.version} - Current Phing version." />
+		<echo msg="phing.project.name=${phing.project.name} - Name of the currently processed project." />
+		<echo msg="php.classpath=${php.classpath} - The value of the environment variable PHP_CLASSPATH." />
+		<echo msg="php.version=${php.version} - Version of the PHP interpreter. Same as PHP constant PHP_VERSION (see PHP Manual)." />
+		<echo msg="project.basedir=${project.basedir} - The current project basedir." />
+		<echo msg="user.home=${user.home} - Value of the environment variable HOME." />
+	</target>
+
+	<target name="permissions" description="Sets file- and directory permissions">
+		<chmod file="var/build" mode="0777" verbose="true" />
+		<chmod file="var/log" mode="0777" verbose="true" />
+		<chmod file="var/log/app" mode="0777" verbose="true" />
+        <chmod file="var/log/app/archive" mode="0777" verbose="true" />
+		<chmod file="var/log/httpd" mode="0777" verbose="true" />
+		<chmod file="var/log/php" mode="0777" verbose="true" />
+		<chmod file="var/build" mode="0777" verbose="true" />
+		<chmod file="var/tmp" mode="0777" verbose="true" />
+		<chmod file="var/upload" mode="0777" verbose="true" />
+	</target>
+
+	<target name="clean">
+		<echo msg="Cleaning var space - [clean]" />
+		<delete dir="var/build/doc" includeemptydirs="true" verbose="true" failonerror="false" />
+		<delete dir="var/build/pci" includeemptydirs="true" verbose="true" failonerror="false" />
+        <delete file="teamcity-info.xml" verbose="true" failonerror="false" />
+		<delete>
+			<fileset dir="var">
+				<include name="build/*" />
+				<include name="build/**/*" />
+				<include name="tmp/*" />
+				<include name="tmp/**/*" />
+				<include name="upload/*" />
+				<include name="upload/**/*" />
+				<include name="log/app/*" />
+				<include name="log/app/**/*" />
+				<include name="log/php/*" />
+				<include name="log/php/**/*" />
+				<!--<include name="log/httpd/*" />
+				<include name="log/httpd/**/*" />-->
+				<exclude name=".keep" />
+				<exclude name="**/.keep" />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="jsmin">
+		<echo msg="Shrinking and combining javascript - [jsmin]" />
+		<jsMin targetDir="var/tmp/jsmin" failOnError="true">
+			<fileset dir="htdocs/js/bas">
+				<include name="**/*.js"/>
+			</fileset>
+		</jsMin>
+		<!-- TODO: glue js together .. -->
+	</target>
+
+	<target name="l10n">
+		<echo msg="Generating localization - [l10n]" />
+		<!-- todo! -->
+	</target>
+
+	<target name="phpunit">
+		<echo msg="Performing unit tests - [phpunit]" />
+		<if>
+			<equals arg1="${build.mode.interactive}" arg2="1"/>
+			<then>
+				<exec
+					command="phpunit --verbose --exclude-group disabled,selenium --configuration build/phpunit.xml src/test"
+					dir="."
+					logoutput="true"
+					checkreturn="true"
+				/>
+			</then>
+			<else>
+				<delete dir="var/build/coverage" includeemptydirs="true" verbose="false" failonerror="false" />
+				<mkdir dir="var/build/coverage" />
+				<!--  Tests w/ annotations "disabled","soap" and "selenium" won't be run for now -->
+				<exec
+					command="phpunit --exclude-group selenium,disabled,soap --configuration build/phpunit.xml --log-junit var/build/phpunit.xml --coverage-clover var/build/coverage/clover.xml --coverage-html var/build/coverage/ src/test"
+					dir="."
+					logoutput="true"
+					checkreturn="false"
+                    returnProperty="phpunit.returncode"
+				/>
+                <mkdir dir="var/build/phpunit" />
+                <!-- format must be one of "noframes","frames" -->
+                <phpunitreport infile="var/build/phpunit.xml"
+                    format="noframes"
+                    todir="var/build/phpunit"
+                    styledir="/usr/share/php/data/phing/etc"/>
+                <!-- rename noframes output -->
+                <move file="var/build/phpunit/phpunit-noframes.html" tofile="var/build/phpunit/index.html" overwrite="true"/>
+                <if>
+                    <equals arg1="${phpunit.returncode}" arg2="0"/>
+                    <then>
+                        <echo msg="OK - All PHPunit tests succeeded." />
+                    </then>
+                    <else>
+                        <echo message="PHPUnit test failed [${phpunit.returncode}] - see report." />
+                    </else>
+                </if>
+            </else>
+		</if>
+	</target>
+
+	<target name="loc">
+		<echo msg="Counting code lines (code metrics) - [loc]" />
+		<exec
+			command="sloccount --duplicates --wide --details --addlangall src/application 2&gt;/dev/null"
+			dir="."
+			output="var/build/sloccount.sc"
+			checkreturn="false"
+		/>
+	</target>
+
+	<target name="pdepend">
+		<echo msg="Computing project code metrics - [pdepend]" />
+		<!-- http://www.browse-tutorials.net/tutorial/php-frameworks-benchmarks-in-phpdepend-u3i8 -->
+		<delete dir="var/build/pdepend" includeemptydirs="true" verbose="false" failonerror="false" />
+		<mkdir dir="var/build/pdepend" />
+		<exec
+			command="pdepend --jdepend-xml=var/build/jdepend.xml --phpunit-xml=var/build/pd-phpunit.xml --summary-xml=var/build/summary.xml --jdepend-chart=var/build/pdepend/pdepend.svg --overview-pyramid=var/build/pdepend/pyramid.svg src/application"
+			dir="."
+			checkreturn="false"
+		/>
+		<copy file="build/pdepend.html" tofile="var/build/pdepend/index.html" overwrite="true"/>
+	</target>
+
+	<target name="pci">
+		<echo msg="PHP Compatibility Info - [pci]" />
+		<delete dir="var/build/pci" includeemptydirs="true" verbose="false" failonerror="false" />
+		<mkdir dir="var/build/pci" />
+		<exec
+			command="echo '&lt;html&gt;&lt;body&gt;&lt;pre&gt;' &gt; var/build/pci/index.html"
+			dir="."
+			checkreturn="false"
+		/>
+		<exec
+			command="pci --dir src/application &gt;&gt; var/build/pci/index.html"
+			dir="."
+			checkreturn="false"
+		/>
+		<!-- skip contrib for now
+		<exec
+			command="pci -REMOVETHISTOKEN-dir src/contrib &gt;&gt; var/build/pci/index.html"
+			dir="."
+			checkreturn="false"
+		/>
+		-->
+	</target>
+
+	<target name="phpcpd">
+		<echo msg="PHP Copy-Paste-Detection - [phpcpd]" />
+		<exec
+			command="phpcpd --min-tokens 20 --log-pmd var/build/cpd.xml src/application/ | tee var/build/cpd.txt"
+			dir="."
+			logoutput="true"
+			checkreturn="false"
+		/>
+	</target>
+
+    <target name="apacheconfig">
+        <echo msg="Configure Apache - [apacheconfig]" />
+        <!--<property name="cmd.sudo" value="echo '${sudo.password}'|sudo -S" override="true" />-->
+        <if>
+            <equals arg1="${build.mode.interactive}" arg2="1"/>
+            <then>
+                <exec
+                    command="${cmd.sudo} cp etc/vhost.conf /etc/apache2/sites-available/${phing.project.name} &amp;&amp;
+                    ${cmd.sudo} a2ensite ${phing.project.name} &amp;&amp;
+                    ${cmd.sudo} /etc/init.d/apache2 reload"
+                    dir="."
+                    logoutput="true"
+                    checkreturn="true"
+                />
+            </then>
+        </if>
+    </target>
+
+	<target name="phpmd">
+		<echo msg="PHP Project Mess Detection - [phpmd]" />
+		<if>
+			<equals arg1="${build.mode.interactive}" arg2="1"/>
+			<then>
+				<exec
+					command="phpmd src/application text codesize,unusedcode,naming"
+					dir="."
+					checkreturn="false"
+					logoutput="true"
+					returnProperty="phpmd.status.warnings"
+				/>
+				<!-- DOES NOT WORK - BETTER SAVE IT TO A FILE, THEN ANALYZE:
+				<if>
+					<equals arg1="${phpmd.status.warnings}" arg2="0" />
+					<then>
+						<echo
+							msg="Perfect - 100% Mess-Free(tm) &amp; OK!"
+							level="info"
+						/>
+					</then>
+					<else>
+						<echo
+							msg="Warning, messy code detected - Fix it!"
+							level="error"
+						/>
+					</else>
+				</if>
+				-->
+			</then>
+			<else>
+				<!-- headless run, for hudson/ci -->
+				<exec
+					command="phpmd src/application xml codesize,unusedcode,naming >var/build/pmd.xml"
+					dir="."
+					checkreturn="false"
+				/>
+			</else>
+		</if>
+	</target>
+
+	<target name="dbcreate">
+		<echo msg="Creating Database / Access - [dbcreate]" />
+		<pdo
+			url="${db.driver}:host=${db.host}"
+			userid="${db.root.user}"
+			password="${db.root.password}"
+			onerror="abort">
+			<transaction>
+				CREATE DATABASE ${db.name} default charset utf8;
+				GRANT ALL PRIVILEGES ON ${db.name}.* TO '${db.user}'@'%' IDENTIFIED BY '${db.password}';
+				GRANT ALL PRIVILEGES ON ${db.name}.* TO '${db.user}'@'localhost' IDENTIFIED BY '${db.password}';
+				GRANT ALL PRIVILEGES ON ${db.name}.* TO '${db.user}'@'127.0.0.1' IDENTIFIED BY '${db.password}';
+				USE ${db.name};
+			</transaction>
+			<transaction src="build/db/init.sql"/>
+			<formatter type="plain" usefile="false"/>
+		</pdo>
+        <!--
+        <pdo
+            url="${db2.driver}:host=${db2.host}"
+            userid="${db.root.user}"
+            password="${db.root.password}"
+            onerror="abort">
+            <transaction>
+                CREATE DATABASE ${db2.name} default charset utf8;
+                GRANT ALL PRIVILEGES ON ${db2.name}.* TO '${db2.user}'@'%' IDENTIFIED BY '${db2.password}';
+                GRANT ALL PRIVILEGES ON ${db2.name}.* TO '${db2.user}'@'localhost' IDENTIFIED BY '${db2.password}';
+                GRANT ALL PRIVILEGES ON ${db2.name}.* TO '${db2.user}'@'127.0.0.1' IDENTIFIED BY '${db2.password}';
+                USE ${db2.name};
+            </transaction>
+            <transaction src="build/db/init.sql"/>
+            <formatter type="plain" usefile="false"/>
+        </pdo>
+        -->
+		<!--  <touch file="etc/dbcreate.conf" /> -->
+	</target>
+
+	<target name="dbstatic" description="Initializes various table w/ data">
+        <!-- <exec command="gunzip -c build/db/dump/zipcodegeo.sql.gz | mysql -u ${db.user} -h ${db.host} - -password=${db.password} ${db.name}" /> -->
+	</target>
+
+	<target name="dbdrop">
+		<echo msg="Drop database [dbdrop]" />
+		<pdo
+			url="${db.driver}:host=${db.host}"
+			userid="${db.root.user}"
+			password="${db.root.password}"
+			onerror="abort">
+			<transaction>
+				DROP DATABASE IF EXISTS ${db.name};
+			</transaction>
+			<formatter type="plain" usefile="false"/>
+		</pdo>
+        <!--
+        <pdo
+            url="${db2.driver}:host=${db2.host}"
+            userid="${db.root.user}"
+            password="${db.root.password}"
+            onerror="abort">
+            <transaction>
+                DROP DATABASE IF EXISTS ${db2.name};
+            </transaction>
+            <formatter type="plain" usefile="false"/>
+        </pdo>
+        -->
+	</target>
+
+	<target name="dbmigrate">
+		<echo msg="Migrating Database Schema - [dbdeploy]" />
+		<dbdeploy
+			url="mysql:host=${db.host};dbname=${db.name}"
+			userid="${db.user}"
+			password="${db.password}"
+			dir="build/db/schema"
+            outputfile="${build.dbdeploy.deployfile}"
+            undooutputfile="${build.dbdeploy.undofile}"
+		/>
+		<pdo
+			url="${db.driver}:host=${db.host};dbname=${db.name}"
+			userid="${db.user}"
+			password="${db.password}"
+			onerror="abort">
+			<transaction src="${build.dbdeploy.deployfile}"/>
+			<formatter type="plain" usefile="false"/>
+		</pdo>
+        <!--
+        <dbdeploy
+            url="mysql:host=${db2.host};dbname=${db2.name}"
+            userid="${db2.user}"
+            password="${db2.password}"
+            dir="build/db/schema"
+            outputfile="${build.dbdeploy.deployfile}"
+            undooutputfile="${build.dbdeploy.undofile}"
+        />
+        <pdo
+            url="${db2.driver}:host=${db2.host};dbname=${db2.name}"
+            userid="${db2.user}"
+            password="${db2.password}"
+            onerror="abort">
+            <transaction src="${build.dbdeploy.deployfile}"/>
+            <formatter type="plain" usefile="false"/>
+        </pdo>
+        -->
+	</target>
+	
+	<target name="dbdump">
+		<echo msg="Dump database (to var/tmp/)- [dbdump]" />
+		<exec
+			command="mysqldump --add-drop-table -h ${db.host} -u ${db.user} --password=${db.password} ${db.name} | gzip > var/tmp/${db.name}-${DSTAMP}${TSTAMP}.sql.gz"
+			dir="."
+			checkreturn="true"
+			logoutput="false"
+		/>
+		<echo msg="New SQL dump created: var/tmp/${db.name}-${DSTAMP}${TSTAMP}.sql.gz" />
+	</target>	
+
+	<target name="dbrestore">
+		<echo msg="Restore database from dump - [dbrestore]" />
+		<input propertyname="dbrestore.file" promptChar="?">SQL-Dump filename (e.g.: var/tmp/project.sql.gz)</input>
+		<exec
+			command="gunzip -c ${dbrestore.file} | mysql -h ${db.host} -u ${db.user} --password=${db.password} ${db.name}"
+			dir="."
+			checkreturn="true"
+			logoutput="false"
+		/>
+	</target>
+	
+	<target name="requirements">
+		<echo msg="Checking system requirements - [requirements]" />
+		<!-- mysql, memcache, ... -->
+		<php expression="function_exists('xdebug_enable')" returnProperty="php.pecl.xdebug"/>
+	</target>
+
+	<target name="startup">
+		<echo msg="Starting additional systems - [startup]" />
+        <!--
+		<exec
+			command="bash contrib/solr/bin/solr.sh restart"
+			checkreturn="true"
+			logoutput="true"
+		/>
+		-->
+		<!-- from svzt:
+        <exec
+            command="php -f bin/run_task.php Solr -c check"
+            dir="."
+            checkreturn="true"
+            logoutput="true"
+        />
+		-->
+	</target>
+
+	<target name="shutdown">
+		<echo msg="Shutting down additional systems - [shutdown]" />
+        <!--
+        <exec
+            command="bash contrib/solr/bin/solr.sh stop"
+            checkreturn="true"
+            logoutput="true"
+        />
+        -->
+	</target>
+
+	<target name="import">
+		<echo msg="Perform necessary imports - [import]" />
+		<!-- check if database exists! check if already imported ... -->
+		<!-- 
+		<exec
+			command="bin/re-import.sh"
+			dir="."
+			checkreturn="false"
+			logoutput="false"
+		/>
+		-->
+	</target>
+
+
+    <target name="dbsample">
+        <echo msg="Generate DB dummy data - [dbsample]" />
+		<!--
+        <exec
+            command="php -f bin/run_task.php SampleDataGenerator -n ${db.samplesize}"
+            dir="."
+            checkreturn="true"
+            logoutput="true"
+        />
+        <exec
+            command="php -f bin/run_task.php Solr -c index"
+            dir="."
+            checkreturn="true"
+            logoutput="true"
+        />
+		-->
+    </target>
+
+
+</project>
