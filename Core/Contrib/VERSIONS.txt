@@ -1,0 +1,32 @@
+ZEND: 1.11.0
+    Added to +139 Zend/Db/Pdo/Abstract.php::_connect():
+    // emulate prepares
+    $this->_connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+
+    Fixed CRLF Lineendings:
+    Zend/Service/Amazon/SimpleDb/Page.php
+    Zend/Cloud/QueueService/Message.php
+    Zend/Cloud/QueueService/Exception.php
+    Zend/Cloud/StorageService/Exception.php
+    Zend/Cloud/StorageService/Adapter/S3.php
+    Zend/Cloud/StorageService/Adapter/FileSystem.php
+    Zend/Cloud/StorageService/Adapter/WindowsAzure.php
+    Zend/Cloud/StorageService/Adapter/Nirvanix.php
+    Zend/Cloud/OperationNotAvailableException.php
+    Zend/Cloud/DocumentService/Query.php
+    Zend/Cloud/DocumentService/QueryAdapter.php
+    Zend/Cloud/DocumentService/Document.php
+    Zend/Cloud/DocumentService/Exception.php
+    Zend/Cloud/DocumentService/Adapter/WindowsAzure/Query.php
+    Zend/Cloud/DocumentService/Adapter/SimpleDb.php
+    Zend/Cloud/Exception.php
+    Zend/Http/UserAgent/Mobile.php
+    Zend/Application/Resource/Useragent.php
+
+    Fixed BOM:
+    Zend/Locale/Data/zh.xml
+
+Pheanstalk: 1.0
+    renamed Pheanstalk Class to Pheanstalk_Connector
+
+    
