@@ -7,6 +7,6 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class App_GaintS_Vo_Membase_UserMVO extends App_GaintS_Core_AbstractMVO
+class Core_GaintS_Vo_Membase_UserMVO extends Core_GaintS_Core_AbstractMVO
 {
 }

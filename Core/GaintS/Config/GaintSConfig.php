@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-    class App_GaintS_Config_GaintSConfig extends App_GaintS_Core_AbstractVO
+    class Core_GaintS_Config_GaintSConfig extends Core_GaintS_Core_AbstractVO
     {
 
         /**
@@ -34,9 +34,9 @@
 
             var_dump($config->membase_config);
 
-            $this->_membaseConfig = new App_GaintS_Config_Membase_Config();
+            $this->_membaseConfig = new Core_GaintS_Config_Membase_Config();
             $this->_membaseConfig->setData($this->getValueByKey("membase_config"));
-            $this->_couchDbConfig = new App_GaintS_Config_CouchDb_Config();
+            $this->_couchDbConfig = new Core_GaintS_Config_CouchDb_Config();
             $this->_couchDbConfig->setData($this->getValueByKey("couchDB"));
         }
 

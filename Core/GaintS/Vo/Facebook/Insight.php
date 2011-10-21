@@ -23,7 +23,7 @@
  *
  */
 
-    class App_GaintS_Vo_Facebook_Insight
+    class Core_GaintS_Vo_Facebook_Insight
     {
 
         /**

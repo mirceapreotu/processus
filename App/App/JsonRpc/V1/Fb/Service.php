@@ -1,12 +1,12 @@
 <?php
 
 /**
- * App_JsonRpc_V1_App_Service
+ * App_JsonRpc_V1_Fb_Service
  *
  *
  *
  * @category	meetidaaa.com
- * @package		App_JsonRpc_V1_App
+ * @package		App_JsonRpc_V1_Fb
  *
  * @copyright	Copyright (c) 2011 meetidaaa.com
  * @license		http://meetidaaa.com/license/default
@@ -14,29 +14,33 @@
  */
 
 /**
- * App_JsonRpc_V1_App_Service
+ * App_JsonRpc_V1_Fb_Service
  *
  *
  *
  * @category	meetidaaa.com
- * @package		App_JsonRpc_V1_App
+ * @package		App_JsonRpc_V1_Fb
  *
  * @copyright	Copyright (c) 2011 meetidaaa.com
  * @license		http://meetidaaa.com/license/default
  * @version		$Id:$
  */
 
-class App_JsonRpc_V1_App_Service extends Lib_JsonRpc_Service
+class App_JsonRpc_V1_Fb_Service extends Lib_JsonRpc_Service
 {
 
+
+
 	/**
-	 * @return App_JsonRpc_V1_App_Context
+	 * @return App_JsonRpc_V1_Fb_Context
 	 */
 	public function getContext()
 	{
 		return parent::getContext();
 	}
 
+
+ 
 
 }
 

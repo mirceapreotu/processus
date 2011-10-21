@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class App_GaintS_Config_CouchDb_Config extends App_GaintS_Core_AbstractVO
+class Core_GaintS_Config_CouchDb_Config extends Core_GaintS_Core_AbstractVO
 {
 
 }

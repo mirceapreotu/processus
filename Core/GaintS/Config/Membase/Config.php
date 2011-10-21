@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-    class App_GaintS_Config_Membase_Config extends App_GaintS_Core_AbstractVO
+    class Core_GaintS_Config_Membase_Config extends Core_GaintS_Core_AbstractVO
     {
 
         protected $_databucketList = array();
@@ -25,7 +25,7 @@
                 exit;
                 $config  = $this->getMembaseConfig();
                 $bucktData = $config['membase_databucket'];
-                $memServer = App_GaintS_Core_ServerFactory::createMemcachedServer($bucktData->host, $bucktData->port);
+                $memServer = Core_GaintS_Core_ServerFactory::createMemcachedServer($bucktData->host, $bucktData->port);
                 var_dump($bucktData);
                 //$this->_databucketList[] =
             }

@@ -1,12 +1,12 @@
 <?php
 
 /**
- * App_JsonRpc_V1_App_Gateway
+ * App_JsonRpc_V1_Fb_Gateway
  *
  *
  *
  * @category	meetidaaa.com
- * @package		App_JsonRpc_V1_App
+ * @package		App_JsonRpc_V1_Fb
  *
  * @copyright	Copyright (c) 2011 meetidaaa.com
  * @license		http://meetidaaa.com/license/default
@@ -19,14 +19,14 @@
  *
  *
  * @category	meetidaaa.com
- * @package		App_JsonRpc_V1_App
+ * @package		App_JsonRpc_V1_Fb
  *
  * @copyright	Copyright (c) 2011 meetidaaa.com
  * @license		http://meetidaaa.com/license/default
  * @version		$Id:$
  */
 
-class App_JsonRpc_V1_App_Gateway extends Lib_JsonRpc_Gateway
+class App_JsonRpc_V1_Fb_Gateway extends Lib_JsonRpc_Gateway
 {
 
 
@@ -45,7 +45,7 @@ class App_JsonRpc_V1_App_Gateway extends Lib_JsonRpc_Gateway
             "maxItems" => 100,
         ),
         "server" => array(
-            "class" => "App_JsonRpc_V1_App_Server",
+            "class" => "App_JsonRpc_V1_Fb_Server",
         ),
 
         "response" => array(
@@ -56,7 +56,7 @@ class App_JsonRpc_V1_App_Gateway extends Lib_JsonRpc_Gateway
 
         "destination" => array(
             "whitelist" => array(
-                "App.*"
+                "Fb.*"
             ),
             "blacklist" => array(
             ),
@@ -85,6 +85,13 @@ class App_JsonRpc_V1_App_Gateway extends Lib_JsonRpc_Gateway
                 ),
             ),
         ),
+
+
+
     );
+
+
+
+
 }
 

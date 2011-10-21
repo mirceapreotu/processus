@@ -1,12 +1,12 @@
 <?php
 
 /**
- * App_JsonRpc_V1_App_Server
+ * App_JsonRpc_V1_Fb_Server
  *
  *
  *
  * @category	meetidaaa.com
- * @package		App_JsonRpc_V1_App
+ * @package		App_JsonRpc_V1_Fb
  *
  * @copyright	Copyright (c) 2011 meetidaaa.com
  * @license		http://meetidaaa.com/license/default
@@ -14,19 +14,19 @@
  */
 
 /**
- * App_JsonRpc_V1_App_Server
+ * App_JsonRpc_V1_Fb_Server
  *
  *
  *
  * @category	meetidaaa.com
- * @package		App_JsonRpc_V1_App
+ * @package		App_JsonRpc_V1_Fb
  *
  * @copyright	Copyright (c) 2011 meetidaaa.com
  * @license		http://meetidaaa.com/license/default
  * @version		$Id:$
  */
 
-class App_JsonRpc_V1_App_Server extends Lib_JsonRpc_Server
+class App_JsonRpc_V1_Fb_Server extends Lib_JsonRpc_Server
 {
 
     protected $_configDefault = array(
@@ -35,24 +35,40 @@ class App_JsonRpc_V1_App_Server extends Lib_JsonRpc_Server
         "apiVersion" => array(
             "default" => 1,
         ),
+
+        
         
         "context" => array(
-            "class" => "App_JsonRpc_V1_App_Context",
+            "class" => "App_JsonRpc_V1_Fb_Context",
         ),
         "classes" => array(
             // NO WILDCARDS HERE! SINCE WE NEED ServiceNames FOR describe Api
 
             // v1
-            "App_JsonRpc_V1_App_Service_Reflection",
-            "App_JsonRpc_V1_App_Service_Dashboard",
-            "App_JsonRpc_V1_App_Service_User",    
+            "App_JsonRpc_V1_Fb_Service_Reflection",
+            "App_JsonRpc_V1_Fb_Service_Canvas",
 
+            "App_JsonRpc_V1_Fb_Service_Facebook_Graph",
+            "App_JsonRpc_V1_Fb_Service_Facebook_Application",
+
+            "App_JsonRpc_V1_Fb_Service_Facebook_Pages_Events",
+            "App_JsonRpc_V1_Fb_Service_Facebook_Pages_Admins",
+
+            "App_JsonRpc_V1_Fb_Service_Facebook_Viewer_Permissions",
+            "App_JsonRpc_V1_Fb_Service_Facebook_Viewer_Events",
+
+
+
+
+
+
+            //"App_JsonRpc_V1_Fb_Service_User",
             // v2
         ),
 
         "destination" => array(
             "whitelist" => array(
-                "App.*",
+                "Fb.*",
             ),
             "blacklist" => array(
             ),
@@ -81,6 +97,10 @@ class App_JsonRpc_V1_App_Server extends Lib_JsonRpc_Server
                 ),
             ),
         ),
+
+
+
+
 
         "interfaces" => array(
             "Lib_JsonRpc_ServiceInterface",

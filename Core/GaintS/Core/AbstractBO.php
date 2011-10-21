@@ -6,8 +6,8 @@
  * Time: 11:39 AM
  * To change this template use File | Settings | File Templates.
  */
- 
-abstract class App_GaintS_Core_AbstractBO extends App_GaintS_Core_AbstractClass
+
+abstract class Core_GaintS_Core_AbstractBO extends Core_GaintS_Core_AbstractClass
 {
 
 }

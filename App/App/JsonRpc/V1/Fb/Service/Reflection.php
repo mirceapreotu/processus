@@ -24,7 +24,7 @@
  * @license		http://meetidaaa.com/license/default
  * @version     $Id:$
  */
-class App_JsonRpc_V1_App_Service_Reflection
+class App_JsonRpc_V1_Fb_Service_Reflection
     extends Lib_JsonRpc_Service_Reflection
 {
 
@@ -38,7 +38,7 @@ class App_JsonRpc_V1_App_Service_Reflection
      */
     public function getReflector($type=null, $apiVersion=null)
     {
-        $destination = "App.Reflection.describe";
+        $destination = "Fb.Reflection.describe";
         $result = $this->_describeDestination($destination, $type, $apiVersion);
         return (object)$result;
     }

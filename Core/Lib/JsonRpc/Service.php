@@ -12,28 +12,14 @@
  * @license		http://meetidaaa.com/license/default
  * @version		$Id:$
  */
-
-/**
- * Lib_JsonRpc_Service
- *
- *
- *
- * @category	meetidaaa.com
- * @package		Lib_JsonRpc
- *
- * @copyright	Copyright (c) 2011 meetidaaa.com
- * @license		http://meetidaaa.com/license/default
- * @version		$Id:$
- */
 class Lib_JsonRpc_Service extends App_GaintS_Core_AbstractJsonRPCService implements Lib_JsonRpc_ServiceInterface
 {
-   
     /**
      *
      * @var Lib_JsonRpc_ContextInterface
      */
     protected $_context;
-    
+
     /**
      *
      * @param Lib_JsonRpc_ContextInterface $context
@@ -42,6 +28,7 @@ class Lib_JsonRpc_Service extends App_GaintS_Core_AbstractJsonRPCService impleme
     {
         $this->setContext($context);
     }
+
     /**
      *
      * @return Lib_JsonRpc_ContextInterface
@@ -50,6 +37,7 @@ class Lib_JsonRpc_Service extends App_GaintS_Core_AbstractJsonRPCService impleme
     {
         return $this->_context;
     }
+
     /**
      *
      * @param Lib_JsonRpc_ContextInterface $context

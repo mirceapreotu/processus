@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-abstract class App_GaintS_Core_AbstractModel extends App_GaintS_Core_AbstractManager
+abstract class Core_GaintS_Core_AbstractModel extends Core_GaintS_Core_AbstractManager
 {
     protected $_data = array();
 

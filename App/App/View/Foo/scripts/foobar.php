@@ -2,9 +2,9 @@
 
 <?php
 
-  // foreach($this->results as $r)
-  // {
-  //   print_r($r);
-  // }
+  foreach($this->results as $r)
+  {
+    print_r($r);
+  }
 
 ?>

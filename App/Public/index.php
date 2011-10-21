@@ -8,5 +8,7 @@
   require_once(PATH_CORE.'/Bootstrap.php');
   Bootstrap::init();
 
-  $fooController = new App_Ctrl_FooController();
+  $fooController = new App_Controller_FooController();
   $fooController->index();
+
+?>

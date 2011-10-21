@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class App_GaintS_Core_ServerFactory
+class Core_GaintS_Core_ServerFactory
 {
 
     /** @var array */

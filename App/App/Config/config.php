@@ -3,6 +3,10 @@ return array(
     //prefix must be alphanum and underscore
     'applicationPrefix' => 'com.meetidaaa.dev',
 
+
+    // #########################################################
+
+
     'gaintSConfig' => array(
 		'membase_config' => array(
 	        'membase_salt' => "monitoring_tool",
@@ -37,6 +41,7 @@ return array(
 	            ),
 	        ),
 	    ),
+
 	    'couchDB' => array(
 	        "logging" => array(
 	            "host" => "localhost",
@@ -45,18 +50,40 @@ return array(
 	    ),
 	),
 
+
+    // #########################################################
+
+
+    'database' => array(
+        'adapter' => 'pdo_mysql',
+        'params'  => array(
+            'host'     => 'localhost',
+            'username' => 'root',
+            'password' => 'root',
+            'dbname'   => 'crwd_testing',
+            'driver_options'  => array(
+                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"
+            )
+        )
+    ),
+
+
+    // #########################################################
+
+
     'serverStage' => array(
         // ZEND_Uri does not allow underscore in domain!
         "host" => "dev.meetidaaa.com.local.meetidaaa.com",
-        // local: dev.meetidaaa.com.local.meetidaaa.com
-        // live: dev.meetidaaa.com
 
         "hostHttps" => "ssl-dev.meetidaaa.com.local.meetidaaa.com",
-        // local: ssl-dev.meetidaaa.com.local.meetidaaa.com
-        // live: ssl-dev.meetidaaa.com
 
         "stage" => 'development'
     ),
+
+
+    // #########################################################
+
+
     'httpd' => array(
         'protocol' => 'http',
         // ZEND_Uri does not allow underscore in domain!
@@ -67,6 +94,10 @@ return array(
         'path' => 'htdocs'
     ),
 
+
+    // #########################################################
+
+
     'locale' => array(
         'default' => array(
             'lc_all' => 'C',
@@ -74,28 +105,10 @@ return array(
         )
     ),
 
-    // +++++++++++++++++ db: default (Zend) +++++++++++++++++++++++++
 
-    'path' => array(
-        'root' => PATH_ROOT,
-        'app' => PATH_ROOT.'/'
-    ),
+    // #########################################################
 
-    'database' => array(
-        'adapter' => 'pdo_mysql',
-        'params'  => array(
-            'host'     => 'localhost',
-            // username 16chars
-            'username' => 'root',
-            'password' => 'root',
-            'dbname'   => 'crwd_testing',
-	        'driver_options'  => array(
-	            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'utf8\''
-			)
-        )
-    ),
 
-    // ++++++++++++++++ Debugging  +++++++++++++
     "App_Debug" => array(
         "enabled" => true,
         "dumpVar" => array(
@@ -106,13 +119,14 @@ return array(
         ),
         "developers" => array(
             "enabled" => true, // (false ... noone is a developer)
+
             // if "clients" === null (anyone is a developer)
             "clients" => array(
-
 
                 // define a client
                 array(
                     "enabled" => true,
+
                     // stage is mandatory
                     // (ip: null - dont check ip,
                     //  any ip will be treated as developer)
@@ -135,16 +149,14 @@ return array(
                         ),
                     ),
                 ),
-
-                // define another client
             ),
-
         ),
-
     ),
 
 
-    // ++++++++++ session +++++++++++++++
+    // #########################################################
+
+
     'Lib_Session_AbstractSession' => array(
         "saveHandler" => array(
             "type" => "MEMCACHED",
@@ -162,13 +174,13 @@ return array(
                 'lifetime' => 1800,
                 'automatic_serialization' => true,
 
-                //   pre-pended to they id (index)
-                //   you choose for each cached item.
-                //'cache_id_prefix' => 'myApp',
-                //'logging' => true,
-                //'logger'  => $oCacheLog,
+                // pre-pended to they id (index)
+                // you choose for each cached item.
+                // 'cache_id_prefix' => 'myApp',
+                // 'logging' => true,
+                // 'logger'  => $oCacheLog,
 
-                //   this performs a consistency check
+                // this performs a consistency check
                 // whenever data is written to cache.
                 'write_control' => true,
 
@@ -180,10 +192,9 @@ return array(
     ),
 
 
-    // ++++++++++++++++++++++++ app: Fb ++++++++++++++++++++++++++++++
+    // #########################################################
 
 
-    // ++++++++++++++ fb: osapi ++++++++++++++++++++++++++++++++++++++
     'App_Facebook_Config' => array(
         "app" => array(
             "id" => "122284881179865", //"APPID",
@@ -229,10 +240,12 @@ return array(
             "canvas" => array(
                 "type" => "canvas",
                 "contentUrl" => null, //$this->getSiteUrl().'canvas/index.php',
+
                 // the nice url for external access
                 "url" => null, //$this->getAppUrl(),
                 "enabled" => true, //true,
                 "teaserTarget" => null, // e.g. "tab"
+
                 //  (may redirect to teaserTarget-page.
                 //  you must implement that in your view or controller)
                 "isAuthRequired" => true, // true
@@ -240,12 +253,15 @@ return array(
             "tab" => array(
                 "type" => "tab", //Lib_Facebook_Config::ENVIRONMENT_TYPE_TAB,
                 "contentUrl" => null, //$this->getSiteUrl().'canvas/tab.php',
+
                 // the nice url for external access
                 "url" => null, //$this->getFanPageTabUrl(),
                 "enabled" => null, //true,
                 "teaserTarget" => null, // e.g. "tab"
+
                 //  (may redirect to teaserTarget-page)
                 "teaserTarget" => null, // e.g. "tab"
+
                 //  (may redirect to teaserTarget-page.
                 //  you must implement that in your view or controller)
                 "isAuthRequired" => true, // true
@@ -253,10 +269,12 @@ return array(
             "connect" => array(
                 "type" => "connect", //Lib_Facebook_Config::ENVIRONMENT_TYPE_CONNECT,
                 "contentUrl" => null, //$this->getSiteUrl().'canvas/connect.php',
+
                 // the nice url for external access
                 "url" => null, //$this->getSiteUrl().'canvas/connect.php',
                 "enabled" => null, //true,
                 "teaserTarget" => null, // e.g. "tab"
+
                 //  (may redirect to teaserTarget-page.
                 //  you must implement that in your view or controller)
                 "isAuthRequired" => true, // true
@@ -265,7 +283,11 @@ return array(
         ),
 
     ),
-    // ++++++++++++++ fb: mock ++++++++++++++++++++++++++++++++++++++
+
+
+    // #########################################################
+
+
     'App_Facebook_Mock' => array(
         "mock" => array(
             "enabled" => true,
@@ -275,7 +297,10 @@ return array(
         ),
     ),
 
-    // ++++++++++++++++++++ fb: db ++++++++++++++++++++++++++
+
+
+    // #########################################################
+
 
     "App_Facebook_Db_Xdb_Client" => array(
 
@@ -314,11 +339,6 @@ return array(
             */
             // another slave
         ),
-
-
     ),
-
-
 );
-
-
+?>

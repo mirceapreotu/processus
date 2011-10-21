@@ -3,7 +3,7 @@
  * Lib_Redis_Redisek_Server Class
  *
  * @EXPERIMENTAL
- * 
+ *
  * @package Lib_Redis_Redisek
  * @category	meetidaaa.com
  * @copyright	Copyright (c) 2011 meetidaaa.com
@@ -25,7 +25,7 @@
  *
  */
 
-require_once SRC_PATH."/contrib/Redisek/src/lib/Redisek/Redisek.php";
+require_once PATH_CORE."/contrib/Redisek/src/lib/Redisek/Redisek.php";
 
 class Lib_Redis_Redisek_Server
 {

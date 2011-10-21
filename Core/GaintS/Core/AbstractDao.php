@@ -6,7 +6,7 @@
  * Time: 11:24 AM
  * To change this template use File | Settings | File Templates.
  */
-abstract class App_GaintS_Core_AbstractDao extends App_GaintS_Core_AbstractVO
+abstract class Core_GaintS_Core_AbstractDao extends Core_GaintS_Core_AbstractVO
 {
     /**
      * @var Memcached
@@ -127,10 +127,10 @@ abstract class App_GaintS_Core_AbstractDao extends App_GaintS_Core_AbstractVO
     public function getCouchDBClient ($dbName = 'monitoring_crowdpark')
     {
         if (! $this->_couchDBClient) {
-            $this->_coucDBClient = new Couch_Client(
+            $this->_couchDBClient = new Couch_Client(
             Bootstrap::getConfig()->couchDB->host, $dbName);
         }
-        return $this->_coucDBClient;
+        return $this->_couchDBClient;
     }
     /**
      * @param $value
@@ -173,7 +173,7 @@ abstract class App_GaintS_Core_AbstractDao extends App_GaintS_Core_AbstractVO
      */
     public function getRowsAndDontValidateParamsMissing ($config)
     {
-        if (! $config instanceof App_GaintS_Vo_Core_GetDataConfigVo) {
+        if (! $config instanceof Core_GaintS_Vo_Core_GetDataConfigVo) {
             throw new Exception('wrong class');
         }
         $rawData = null;
@@ -201,7 +201,7 @@ abstract class App_GaintS_Core_AbstractDao extends App_GaintS_Core_AbstractVO
      */
     public function insertOrUpdate ($table, $rowInsert, $rowUpdate)
     {
-        return $this->getDbClient()->insertOrUpdate($table, $rowInsert, 
+        return $this->getDbClient()->insertOrUpdate($table, $rowInsert,
         $rowUpdate);
     }
     /**
@@ -211,7 +211,7 @@ abstract class App_GaintS_Core_AbstractDao extends App_GaintS_Core_AbstractVO
      */
     public function getRows ($config)
     {
-        if (! $config instanceof App_GaintS_Vo_Core_GetDataConfigVo) {
+        if (! $config instanceof Core_GaintS_Vo_Core_GetDataConfigVo) {
             throw new Exception('wrong class');
         }
         $rawData = null;
@@ -237,7 +237,7 @@ abstract class App_GaintS_Core_AbstractDao extends App_GaintS_Core_AbstractVO
      */
     public function getRow ($config)
     {
-        if (! $config instanceof App_GaintS_Vo_Core_GetDataConfigVo) {
+        if (! $config instanceof Core_GaintS_Vo_Core_GetDataConfigVo) {
             throw new Exception('wrong class');
         }
         $rawData = null;
@@ -265,7 +265,7 @@ abstract class App_GaintS_Core_AbstractDao extends App_GaintS_Core_AbstractVO
     {
         if (! $this->_dbClient) {
             /** @var $_dbClient Lib_Db_Xdb_Client */
-            $this->_dbClient = App_Facebook_Application::getInstance()->getDbClient();
+            $this->_dbClient = Core_Facebook_Application::getInstance()->getDbClient();
         }
         return $this->_dbClient;
     }
@@ -277,7 +277,7 @@ abstract class App_GaintS_Core_AbstractDao extends App_GaintS_Core_AbstractVO
      */
     protected function getDataConfig ($sqlStmt, $method, $sqmParamData = null)
     {
-        $config = new App_GaintS_Vo_Core_GetDataConfigVo();
+        $config = new Core_GaintS_Vo_Core_GetDataConfigVo();
         $config->setSQLStmt($sqlStmt)
             ->setFromCache(true)
             ->setSQLParamData($sqmParamData)

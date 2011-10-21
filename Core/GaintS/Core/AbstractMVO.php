@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-abstract class App_GaintS_Core_AbstractMVO extends App_GaintS_Core_AbstractVO
+abstract class Core_GaintS_Core_AbstractMVO extends Core_GaintS_Core_AbstractVO
 {
 
     /** @var string */
@@ -68,7 +68,7 @@ abstract class App_GaintS_Core_AbstractMVO extends App_GaintS_Core_AbstractVO
         if (!$this->getMemId()) {
             return false;
         }
-        
+
         return $this->getMemcachedClient()->set($this->getMemId(), $this->getData(), 0);
     }
 

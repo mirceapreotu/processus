@@ -34,7 +34,7 @@ class Lib_Task_Logger
 	/**
 	 * @var boolean
 	 */
-	protected $_logEcho = false;	
+	protected $_logEcho = false;
 
 	/**
 	 * Log via Zend_Logger
@@ -99,10 +99,10 @@ class Lib_Task_Logger
 		*/
 
 		$writerDefault = new Lib_Log_Writer_DailyStream(
-			SRC_PATH.'/../var/log/app/'.$basename.'_default.log'
+			PATH_CORE.'/../var/log/app/'.$basename.'_default.log'
 		);
 		$writerCritical = new Lib_Log_Writer_DailyStream(
-			SRC_PATH.'/../var/log/app/'.$basename.'_critical.log'
+			PATH_CORE.'/../var/log/app/'.$basename.'_critical.log'
 		);
 
 		$format = '%timestamp%;%priorityName%;%priority%;%message%'.PHP_EOL;
@@ -136,7 +136,7 @@ class Lib_Task_Logger
 	{
 
 		// set default logger .. may be overwritten
-		$this->_logger = Zend_Registry::get('LOG');		
+		$this->_logger = Zend_Registry::get('LOG');
 	}
 
 }

@@ -71,7 +71,7 @@ class Lib_Task_Runner
 				echo "Available tasks to run:\n";
 
 				foreach (
-					new DirectoryIterator(SRC_PATH.'/application/App/Task')
+					new DirectoryIterator(PATH_CORE.'/application/App/Task')
 					as /** @var DirectoryIterator $fileInfo */ $fileInfo
 				) {
 
@@ -86,7 +86,7 @@ class Lib_Task_Runner
 				exit(0);
 			}
 		}
-	    
+
 		// strip class name from command line
 		if (!$invokedBySymlink) {
 
@@ -98,7 +98,7 @@ class Lib_Task_Runner
 
 	/**
 	 * Runs a task specified on the commandline (CLI)
-	 * 
+	 *
 	 * @static
 	 * @return void
 	 */
@@ -117,7 +117,7 @@ class Lib_Task_Runner
 		} catch (Exception $exception) {
 
 			unset($exception); // not needed
-			
+
 			$existsClass = false; // set to false on autoload exception
 		}
 

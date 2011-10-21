@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class App_GaintS_Vo_Core_GetDataConfigVo extends App_GaintS_Core_AbstractVO
+class Core_GaintS_Vo_Core_GetDataConfigVo extends Core_GaintS_Core_AbstractVO
 {
     /**
      * @var array

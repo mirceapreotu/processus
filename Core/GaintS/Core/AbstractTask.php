@@ -6,7 +6,7 @@
  * Time: 1:32 AM
  * To change this template use File | Settings | File Templates.
  */
- 
-class App_GaintS_Core_AbstractTask extends App_GaintS_Core_AbstractManager{
+
+class Core_GaintS_Core_AbstractTask extends Core_GaintS_Core_AbstractManager{
 
 }

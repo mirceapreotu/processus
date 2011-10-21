@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-abstract class App_GaintS_Core_AbstractClass
+abstract class Core_GaintS_Core_AbstractClass
 {
     /**
      * @var Lib_Log_CouchDBLogger
@@ -21,7 +21,7 @@ abstract class App_GaintS_Core_AbstractClass
     {
         if (!$this->_logger) {
             /** @var $_logger App_GaintS_Lib_Logger_CouchDBLogger */
-            $this->_logger = new App_GaintS_Lib_Logger_CouchDBLogger();
+            $this->_logger = new Core_GaintS_Lib_Logger_CouchDBLogger();
         }
 
         return $this->_logger;

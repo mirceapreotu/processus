@@ -24,7 +24,7 @@
  */
 
 
-require_once ROOT_PATH . "/src/contrib/Facebook/facebook.php";
+require_once PATH_CORE . "/Contrib/Facebook/src/facebook.php";
 
 class Lib_Facebook_Facebook extends Facebook
 {
@@ -33,8 +33,8 @@ class Lib_Facebook_Facebook extends Facebook
 	// api docs: http://developers.facebook.com/docs/api
 	// patches to facebook-php-sdk //
     // http://thinkdiff.net/facebook/graph-api-iframe-base-facebook-application-development-php-sdk-3-0/
-	
-	/*permissions: 
+
+	/*permissions:
 	http://developers.facebook.com/docs/authentication/permissions
 	http://developers.facebook.com/docs/authentication/
 	*/
@@ -194,7 +194,7 @@ class Lib_Facebook_Facebook extends Facebook
         }
         return $this->_servicePages;
     }
-    
+
 
 
 
@@ -255,8 +255,8 @@ class Lib_Facebook_Facebook extends Facebook
 
         parent::__construct($_config);
 
-        
-        
+
+
     }
 
 
@@ -309,7 +309,7 @@ class Lib_Facebook_Facebook extends Facebook
 
 
         //$sslDomain = "ssl-fb-five-gum-app.exitb.de";
-        
+
         $forceDomain = null;
         $forceDomain = $this->getForceloginUrlHost();//"fb-five-gum-app.app.exitb.de";
         if (Lib_Utils_String::isEmpty($forceDomain)) {
@@ -363,7 +363,7 @@ class Lib_Facebook_Facebook extends Facebook
      */
     public function graph($path, $method='GET', $params=array())
     {
-      
+
         return $this->_graph($path, $method, $params);
     }
 
@@ -376,16 +376,16 @@ class Lib_Facebook_Facebook extends Facebook
     {
 		// SESSION BASED!!!!
 		// REQUIRES AUTHORIZATION !!!!//
-		
-     	$method = 'POST';     	
-     	
-		$result = $this->graph($path,$method,$params);	
+
+     	$method = 'POST';
+
+		$result = $this->graph($path,$method,$params);
      	return $result;
     }
-     
-    
-     
-     
+
+
+
+
 
     /**
      * @obsolete
@@ -423,7 +423,7 @@ class Lib_Facebook_Facebook extends Facebook
         //var_dump($this->session);
         return $this->session;
     }
-     
+
     /**
      * @param  array $params
      * @return mixed
@@ -453,7 +453,7 @@ class Lib_Facebook_Facebook extends Facebook
     }
 
 
-    
+
 
 
     // ++++++++++++++++++++++ mocking & 3rd-party cookie bug ++++++++++++
@@ -749,7 +749,7 @@ class Lib_Facebook_Facebook extends Facebook
 	}
 
 
-    
+
     public function getUserAccessToken()
     {
         return parent::getUserAccessToken();
@@ -887,7 +887,7 @@ class Lib_Facebook_Facebook extends Facebook
 
         $facebook = $this;
         $facebook->setFileUploadSupport(true);
-        
+
 
         $image = (array)$additionalProperties;
         $image['access_token'] = $facebook->getAccessToken();
@@ -911,7 +911,7 @@ class Lib_Facebook_Facebook extends Facebook
                 throw new Exception("invalid result.id ");
             }
             return $result;
-            
+
         } catch (Exception $e) {
             throw new Exception(
                 "Method returns invalid result at ".__METHOD__

@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class App_JsonRpc_V1_App_Service_DJs extends App_GaintS_Core_AbstractJsonRPCService
+class App_JsonRpc_V1_Public_Service_DJs extends App_GaintS_Core_AbstractJsonRPCService
 {
 
 }

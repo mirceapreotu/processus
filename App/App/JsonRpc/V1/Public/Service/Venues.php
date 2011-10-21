@@ -7,6 +7,10 @@
  * To change this template use File | Settings | File Templates.
  */
  
-class App_JsonRpc_V1_App_Service_Members {
+class App_JsonRpc_V1_Public_Service_Venues extends App_JsonRpc_V1_Public_Service
+{
+    public function getVenueByCoord($coords)
+    {
 
+    }
 }

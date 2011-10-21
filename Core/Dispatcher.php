@@ -8,20 +8,8 @@
  * @license		http://meetidaaa.com/license/default
  * @version		$Id$
  */
-
-/**
- * Dispatcher 
- *
- * @category	meetidaaa.com
- * @package		App
- *
- * @copyright	Copyright (c) 2011 meetidaaa.com
- * @license		http://meetidaaa.com/license/default
- */
 class App_Dispatcher
 {
-
-    
 	/**
 	 * Create controller and call the run() method
 	 */
@@ -30,13 +18,11 @@ class App_Dispatcher
 
 		$request = new Lib_Ctrl_Request();
 		$response = new Zend_Controller_Response_Http();
-		
+
 		$channel = Zend_Wildfire_Channel_HttpHeaders::getInstance();
 		$channel->setRequest($request);
-		$channel->setResponse($response);		
+		$channel->setResponse($response);
 
-		#$gpc = Inspekt::makeSuperCage(ROOT_PATH.'/etc/inspekt.ini');
-		
 		ob_start();
 
 		$controller = $request->getControllerName();
@@ -44,29 +30,29 @@ class App_Dispatcher
 
 		// sanitize controller
 		$controller = preg_replace('#[^a-z0-9-]#', '', strtolower($controller));
-		
+
 		if ($controller == '') {
-			
+
 			$controller = 'index';
 		}
 
 		$controllerClassName = "App_Ctrl_".ucfirst($controller);
-		
+
 		// sanitize action
 		$action = preg_replace('#[^a-z0-9-]#', '', strtolower($action));
-		
+
 		if ($action == '') {
-			
+
 			$action = 'index';
 		}
 
 		$actionMethodName = $action.'Action';
-		
-		
+
+
 		try {
-			
+
 			if (class_exists($controllerClassName)) {
-				
+
 				$controllerClass = new $controllerClassName();
 
 				$controllerClass->setRequest($request);
@@ -75,13 +61,13 @@ class App_Dispatcher
 				if (method_exists($controllerClass, $actionMethodName)) {
 
 					$controllerClass->$actionMethodName();
-					
+
 				} else {
-					
+
 					// method not found, run the index Action
 					$controllerClass->indexAction();
 				}
-				
+
 			} else {
 
                 // controller not found, use error controller:
@@ -96,16 +82,16 @@ class App_Dispatcher
 		} catch (Exception $e) {
 
 			//unset($e); // not needed
-			
+
 			die($e->getMessage());
-			
+
 			// use the index controller as fallback .. ?
-			
+
 		}
-		
+
 		$channel->flush();
 		$response->sendHeaders();
-		
-		
+
+
 	}
 }

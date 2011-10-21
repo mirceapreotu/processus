@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class App_GaintS_Vo_Membase_FacebookUserMVO extends App_GaintS_Vo_Membase_UserMVO
+class Core_GaintS_Vo_Membase_FacebookUserMVO extends Core_GaintS_Vo_Membase_UserMVO
 {
     public function __construct()
     {
@@ -53,12 +53,12 @@ class App_GaintS_Vo_Membase_FacebookUserMVO extends App_GaintS_Vo_Membase_UserMV
 
             if($this->_data === false)
             {
-                $facebookClient = App_Facebook_Application::getInstance()->getFacebook();
+                $facebookClient = Core_Facebook_Application::getInstance()->getFacebook();
                 $fbUser = $facebookClient->fetchMe();
                 $this->setData($fbUser);
                 $successInMem = $this->saveInMem();
 
-                $manager = new App_Manager_App_UserManager();
+                $manager = new Core_Manager_App_UserManager();
                 $manager->saveUserFb($fbUser);
 
                 if($successInMem === false)
