@@ -28,8 +28,6 @@
 
 class Lib_Application_Registry
 {
-
-
 	/**
 	 * implement in subclasses !
 	 * @TODO Move to config
@@ -37,7 +35,6 @@ class Lib_Application_Registry
 	 */
 	public function getApplicationPrefix()
 	{
-		//return "";//"VZTreff";
         return Bootstrap::getRegistry()->getApplicationPrefix();
 	}
 
@@ -69,7 +66,6 @@ class Lib_Application_Registry
 
 	}
 
-
     /**
      *
      * @return ArrayObject|null
@@ -90,6 +86,7 @@ class Lib_Application_Registry
     {
         return $this->_getProperty($name);
     }
+
     /**
      * @param  $name
      * @param  $value
@@ -107,11 +104,15 @@ class Lib_Application_Registry
     protected function _getProperty($name)
     {
         $result = null;
-        try {
+
+        try
+        {
             $result = Zend_Registry::get($name);
-        } catch (Exception $exception) {
-            // NOP
         }
+        catch (Exception $exception)
+        {
+        }
+
         return $result;
     }
 
@@ -127,12 +128,6 @@ class Lib_Application_Registry
         return $result;
     }
 
-
-
-
-
-
-
-
-
 }
+
+?>

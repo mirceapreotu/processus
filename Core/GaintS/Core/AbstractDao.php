@@ -127,10 +127,10 @@ abstract class Core_GaintS_Core_AbstractDao extends Core_GaintS_Core_AbstractVO
     public function getCouchDBClient ($dbName = 'monitoring_crowdpark')
     {
         if (! $this->_couchDBClient) {
-            $this->_couchDBClient = new Couch_Client(
+            $this->_coucDBClient = new Couch_Client(
             Bootstrap::getConfig()->couchDB->host, $dbName);
         }
-        return $this->_couchDBClient;
+        return $this->_coucDBClient;
     }
     /**
      * @param $value

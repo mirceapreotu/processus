@@ -7,7 +7,7 @@ class App_Model_FooModel extends Core_GaintS_Core_AbstractManager
 		$select = $this->getDatabase()
 						->select()
 						->from(
-							array('u' => 'users')
+							array('u' => 'users'),
 							array('facebook_id', 'locale')
 						)
 						->limit(10);

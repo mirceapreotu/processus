@@ -7,6 +7,6 @@ abstract class Core_GaintS_Core_AbstractController
    */
   protected function getView($modelName = NULL)
   {
-    return new Zend_View(array('basePath' => PATH_APP . '/View/' . $modelName));
+	return new Zend_View(array('basePath' => PATH_APP . '/View/' . $modelName));
   }
 }

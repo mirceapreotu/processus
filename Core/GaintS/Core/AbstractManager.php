@@ -11,12 +11,12 @@ abstract class Core_GaintS_Core_AbstractManager extends Core_GaintS_Core_Abstrac
     /**
      * @var Memcached
      */
-    private $_memcachedClient = null;
+    private $_memcachedClient = NULL;
 
     /**
      * mysql database connector
      */
-    private $_database = null;
+    private $_database = NULL;
 
     /**
      * redis client
@@ -58,7 +58,7 @@ abstract class Core_GaintS_Core_AbstractManager extends Core_GaintS_Core_Abstrac
         if ( ! $this->_trackDB)
         {
             /** @var $_database Zend_Db_Adapter_Abstract  */
-            $this->_trackDB = Zend_Registry::get("DB_TRACK");
+            $this->_trackDB = Bootstrap::getRegistry()->getProperty("DB_TRACK");
         }
 
         return $this->_trackDB;
@@ -73,8 +73,7 @@ abstract class Core_GaintS_Core_AbstractManager extends Core_GaintS_Core_Abstrac
      */
     protected function getDatabaseName()
     {
-        $config = Zend_Registry::get('CONFIG');
-        return $config->database->params->dbname;
+        return "crowdpark";
     }
 
 
@@ -89,7 +88,7 @@ abstract class Core_GaintS_Core_AbstractManager extends Core_GaintS_Core_Abstrac
         if ( ! $this->_database)
         {
             /** @var $_database Zend_Db_Adapter_Abstract  */
-            $this->_database = Zend_Registry::get("DB");
+            $this->_database = Bootstrap::getRegistry()->getProperty("DB");
         }
 
         return $this->_database;
@@ -157,13 +156,7 @@ abstract class Core_GaintS_Core_AbstractManager extends Core_GaintS_Core_Abstrac
         {
             try
             {
-//                $this->getGlobalRegistry()
-//                    ->getGaintSConfig()
-//                    ->getMembaseConfig()
-//                    ->getMembaseDataBucketByName();
-//                $this->_memcachedClient = Zend_Registry::get("MEMCACHED");
-                $this->_memcachedClient = new Memcached();
-                $this->_memcachedClient->addServer("localhost", "11280");
+                $this->_memcachedClient = Bootstrap::getRegistry()->getProperty("MEMCACHED");
             }
             catch (Exception $error)
             {
@@ -191,17 +184,18 @@ abstract class Core_GaintS_Core_AbstractManager extends Core_GaintS_Core_Abstrac
     /**
      * @var Couch_Client
      */
-    private $_couchDBClient = null;
+    private $_couchDBClient = NULL;
 
     /**
      * @return Couch_Client
      */
     public function getCouchDBClient($dbName = 'monitoring_crowdpark')
     {
-        if ( ! $this->_couchDBClient) {
-            $this->_coucDBClient = new Couch_Client(
-            Bootstrap::getConfig()->couchDB->host, $dbName);
+        if ( ! $this->_couchDBClient)
+        {
+            $this->_coucDBClient = new Couch_Client(Bootstrap::getConfig()->couchDB->host, $dbName);
         }
+
         return $this->_coucDBClient;
     }
 
@@ -275,25 +269,39 @@ abstract class Core_GaintS_Core_AbstractManager extends Core_GaintS_Core_Abstrac
             throw new Exception('wrong class');
         }
 
-        $rawData = null;
+        $rawData = NULL;
         $memKey = $config->getMemKey();
         $sqlStmt = $config->getSQLStmt();
         $sqlParams = $config->getSQLParamData();
         $expiredTime = $config->getExpiredTime();
         $getFromCache = $config->getFromCache();
 
-        if ($getFromCache)
+        if($getFromCache)
         {
             $rawData = $this->getMemcachedClient()->get($memKey);
         }
+
         if ( ! $rawData)
         {
-            $rawData = $this->getDbClient()->getRowsAndDontValidateParamsMissing(
-            $sqlStmt, $sqlParams);
+            $rawData = $this->getDbClient()->getRowsAndDontValidateParamsMissing($sqlStmt, $sqlParams);
             $this->getMemcachedClient()->set($memKey, $rawData, $expiredTime);
         }
 
         return $rawData;
+    }
+
+
+    // #########################################################
+
+
+    /**
+     * @param string $table
+     * @param mixed $rowInsert
+     * @return NULL|string
+     */
+    public function insert($table, $rowInsert)
+    {
+        return $this->getDbClient()->insert($table, $rowInsert, TRUE);
     }
 
 
@@ -318,7 +326,7 @@ abstract class Core_GaintS_Core_AbstractManager extends Core_GaintS_Core_Abstrac
     /**
      * @throws Exception
      * @param App_GaintS_Vo_Core_GetDataConfigVo $config
-     * @return array|mixed|null
+     * @return array|mixed|NULL
      */
     public function getRows($config)
     {
@@ -327,14 +335,14 @@ abstract class Core_GaintS_Core_AbstractManager extends Core_GaintS_Core_Abstrac
             throw new Exception('wrong class');
         }
 
-        $rawData = null;
+        $rawData = NULL;
         $memKey = $config->getMemKey();
         $sqlStmt = $config->getSQLStmt();
         $sqlParams = $config->getSQLParamData();
         $expiredTime = $config->getExpiredTime();
         $getFromCache = $config->getFromCache();
 
-        if ($getFromCache)
+        if($getFromCache)
         {
             $rawData = $this->getMemcachedClient()->get($memKey);
         }
@@ -355,7 +363,7 @@ abstract class Core_GaintS_Core_AbstractManager extends Core_GaintS_Core_Abstrac
     /**
      * @throws Exception
      * @param App_GaintS_Vo_Core_GetDataConfigVo $config
-     * @return array|mixed|null
+     * @return array|mixed|NULL
      */
     public function getRow($config)
     {
@@ -364,14 +372,14 @@ abstract class Core_GaintS_Core_AbstractManager extends Core_GaintS_Core_Abstrac
             throw new Exception('wrong class');
         }
 
-        $rawData = null;
+        $rawData = NULL;
         $memKey = $config->getMemKey();
         $sqlStmt = $config->getSQLStmt();
         $sqlParams = $config->getSQLParamData();
         $expiredTime = $config->getExpiredTime();
         $getFromCache = $config->getFromCache();
 
-        if ($getFromCache)
+        if($getFromCache)
         {
             $rawData = $this->getMemcachedClient()->get($memKey);
         }
@@ -383,6 +391,7 @@ abstract class Core_GaintS_Core_AbstractManager extends Core_GaintS_Core_Abstrac
         }
 
         $rawData['debug'] = $config;
+
         return $rawData;
     }
 
@@ -414,12 +423,12 @@ abstract class Core_GaintS_Core_AbstractManager extends Core_GaintS_Core_Abstrac
      * @param $method
      * @return App_GaintS_Vo_Core_GetDataConfigVo
      */
-    protected function getDataConfig($sqlStmt, $method, $sqmParamData = null)
+    protected function getDataConfig($sqlStmt, $method, $sqmParamData = NULL)
     {
         $config = new Core_GaintS_Vo_Core_GetDataConfigVo();
 
         $config->setSQLStmt($sqlStmt)
-            ->setFromCache(true)
+            ->setFromCache(TRUE)
             ->setSQLParamData($sqmParamData)
             ->setMemKey($this->getMemKey($method));
 

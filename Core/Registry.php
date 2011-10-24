@@ -63,7 +63,7 @@ class Core_Registry extends Lib_Application_Registry
     protected $_currentDateMocked;
 
     /**
-     * @return string|null
+     * @return string|NULL
      */
     public function getCurrentDate()
     {
@@ -353,10 +353,10 @@ class Core_Registry extends Lib_Application_Registry
         $key = 'Memcached';
         $value = $this->_getProperty($key);
 
-        if (($value instanceof Lib_Cache_Impl_Memcached) !== TRUE)
+        if ($value instanceof Lib_Cache_Impl_Memcached !== TRUE)
         {
             $config = $this->getConfig();
-            $params = null; // use defaults
+            $params = NULL; // use defaults
 
             if (isset($config->cache))
             {
@@ -385,10 +385,10 @@ class Core_Registry extends Lib_Application_Registry
         $key = 'MemcachedSession';
         $value = $this->_getProperty($key);
 
-        if (($value instanceof Lib_Cache_Impl_Session) !== TRUE)
+        if ($value instanceof Lib_Cache_Impl_Session !== TRUE)
         {
             $config = $this->getConfig();
-            $params = null; // use defaults
+            $params = NULL; // use defaults
 
             if (isset($config->cache))
             {
@@ -417,7 +417,7 @@ class Core_Registry extends Lib_Application_Registry
         $key = 'Session';
         $value = $this->_getProperty($key);
 
-        if (($value instanceof Lib_Application_Session) !== TRUE)
+        if ($value instanceof Lib_Application_Session !== TRUE)
         {
             $value = new Lib_Application_Session();
             $this->_setProperty($key, $value);
@@ -458,7 +458,7 @@ class Core_Registry extends Lib_Application_Registry
 
     /**
      * @throws Exception
-     * @param  null|App_Debug $debug
+     * @param  NULL|App_Debug $debug
      * @return
      */
     public function setDebug($debug)
@@ -511,31 +511,8 @@ class Core_Registry extends Lib_Application_Registry
 
 
     /**
-     * @return Lib_Db_Xdb_Client
-     */
-    public function getXdbClient()
-    {
-        $key = 'XDB';
-        $value = $this->_getProperty($key);
-
-        if ($value instanceof Lib_Db_Xdb_Client !== TRUE)
-        {
-            $value = new Lib_Db_Xdb_Client();
-            $this->_setProperty($key, $value);
-        }
-
-        $value = $this->_getProperty($key);
-
-        return $value;
-    }
-
-
-    // #########################################################
-
-
-    /**
      *
-     * @return Zend_Db_Adapter_Pdo_Mysql|null
+     * @return Zend_Db_Adapter_Pdo_Mysql|NULL
      */
     public function getDb()
     {
@@ -550,14 +527,14 @@ class Core_Registry extends Lib_Application_Registry
 
     /**
      *
-     * @return Zend_Db_Adapter_Pdo_Mysql|null
+     * @return Zend_Db_Adapter_Pdo_Mysql|NULL
      */
     public function getSlaveDb()
     {
         $key = 'DBSLAVE';
         $value = $this->_getProperty($key);
 
-        if ($value === null)
+        if ($value === NULL)
         {
             // return master, if no slave is set
             return $this->getDb();
@@ -570,98 +547,10 @@ class Core_Registry extends Lib_Application_Registry
     // #########################################################
 
 
-    /**
-     * @return App_Model_Bo_User
-     */
-    public function getViewerBO()
-    {
-        if (($this->_viewerBO instanceof App_Model_Bo_User) !== TRUE)
-        {
-            $this->_viewerBO = new App_Model_Bo_User();
-        }
-
-        return $this->_viewerBO;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * @param App_Model_Bo_User $userBO
-     * @return void
-     */
-    public function setViewerBO(App_Model_Bo_User $userBO)
-    {
-        $this->_viewerBO = $userBO;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * @return App_Model_Bo_CmsUser
-     */
-    public function getCmsViewerBO()
-    {
-        if ($this->_cmsViewerBO instanceof App_Model_Bo_CmsUser !== TRUE)
-        {
-            $this->_cmsViewerBO = new App_Model_Bo_CmsUser();
-        }
-        return $this->_cmsViewerBO;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * @param App_Model_Bo_User $cmsUserBO
-     * @return void
-     */
-    public function setCmsViewerBO(App_Model_Bo_CmsUser $cmsUserBO)
-    {
-        $this->_cmsViewerBO = $cmsUserBO;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * @return bool
-     */
-    public function isCmsContext()
-    {
-        return (bool) ($this->_isCmsContext === TRUE);
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * @throws Exception
-     * @param  bool $value
-     * @return void
-     */
-    public function setIsCmsContext($value)
-    {
-        if (is_bool($value) !== TRUE)
-        {
-            throw new Exception("Parameter value must be a bool at " . __METHOD__);
-        }
-
-        $this->_isCmsContext = TRUE;
-    }
-
-
-    // #########################################################
-
-
     public function getMembaseDataBucketByName($bucketName)
     {
         var_dump($this->getGaintSConfig());
     }
 }
+
+?>

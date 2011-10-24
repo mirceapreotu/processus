@@ -9,7 +9,6 @@
 
 class Core_GaintS_Core_ServerFactory
 {
-
     /** @var array */
     protected static $_mysqlDBPool = array();
 
@@ -20,12 +19,19 @@ class Core_GaintS_Core_ServerFactory
     protected static $_memcachedDBPool = array();
 
 
+    // #########################################################
+
+
     public static function createMySQLServer($options, $isMaster)
     {
         $mysqlServer = null;
 
         return $mysqlServer;
     }
+
+
+    // #########################################################
+
 
     /**
      * @static
@@ -38,7 +44,7 @@ class Core_GaintS_Core_ServerFactory
     {
         $memPoolId = md5($host . $port . $serverKey);
 
-        if(!self::$_memcachedDBPool[3])
+        if(array_key_exists($memPoolId, self::$_memcachedDBPool) === FALSE)
         {
             $memServer = new Memcached($serverKey);
             $memServer->addServer($host, $port);
@@ -47,6 +53,10 @@ class Core_GaintS_Core_ServerFactory
 
         return self::$_memcachedDBPool[$memPoolId];
     }
+
+
+    // #########################################################
+
 
     public static function createCouchDBServer()
     {

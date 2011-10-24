@@ -119,7 +119,7 @@ class Bootstrap
 
             // load basic config and put it in registry
             $config = new Zend_Config(require PATH_APP.'/Config/config.php');
-            Zend_Registry::set('CONFIG', $config);
+            self::getRegistry()->setProperty('CONFIG', $config);
 
             // setup locale
             setlocale(LC_ALL, $config->locale->default->lc_all);
@@ -234,11 +234,9 @@ class Bootstrap
             throw $e;
         }
 
-        $db = Zend_Db::factory($config->database->adapter,
-                               $config->database->params->toArray());
-
-        Zend_Registry::set('DB', $db);
+        $db = Zend_Db::factory($config->database->adapter, $config->database->params->toArray());
         Zend_Db_Table_Abstract::setDefaultAdapter($db);
+        self::getRegistry()->setProperty('DB', $db);
     }
 
 
@@ -455,10 +453,10 @@ class Bootstrap
             // check this!
             $showDebugInfo = $isDebugMode;
 
-            if ($showDebugInfo !== TRUE)
-            {
-                die("An Error occured. Please retry lateron! (E0021)");
-            }
+            // if ($showDebugInfo !== TRUE)
+            // {
+            //     die("An Error occured. Please retry lateron! (E0021)");
+            // }
 
             $errorInfo = array(
                 "class" => get_class($exception),
