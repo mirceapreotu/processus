@@ -30,7 +30,7 @@ class Core_Registry
 
     /**
 	 * @static
-	 * @return Core_Registry
+	 * @return Core_Registry	
 	 */
     public static function getInstance()
     {

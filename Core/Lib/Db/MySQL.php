@@ -132,7 +132,7 @@ class Core_Lib_Db_MySQL implements Core_Interfaces_InterfaceDatabase
 		if( ! is_null($tableName) && ! empty($values))
 		{
 			// add an ID if not existing
-			if( ! array_key_exists('id', $values))
+			if ( ! array_key_exists('id', $values))
 			{
 				$values['id'] = NULL;
 			}
@@ -142,7 +142,7 @@ class Core_Lib_Db_MySQL implements Core_Interfaces_InterfaceDatabase
 			$_placeholder = array();
 			$_values = array();
 
-			foreach($values as $key => $val)
+			foreach ($values as $key => $val)
 			{
 				$_set[] = $key;
 
@@ -174,13 +174,13 @@ class Core_Lib_Db_MySQL implements Core_Interfaces_InterfaceDatabase
 	 */
 	public function update($tableName = NULL, $values = array(), $conditions = array())
 	{
-		if( ! is_null($tableName) && ! empty($values) && array_key_exists('id', $conditions))
+		if ( ! is_null($tableName) && ! empty($values) && array_key_exists('id', $conditions))
 		{
 			// prepare placeholders and values
 			$_set = array();
 			$_values = array();
 
-			foreach($values as $key => $val)
+			foreach ($values as $key => $val)
 			{
 				$placeholder_key = ':' . $key;
 				$_set[] = $key . '=' . $placeholder_key;
@@ -190,7 +190,7 @@ class Core_Lib_Db_MySQL implements Core_Interfaces_InterfaceDatabase
 			// prepare conditions
 			$_cond = array();
 
-			foreach($conditions as $key => $val)
+			foreach ($conditions as $key => $val)
 			{
 				$placeholder_key = ':_' . $key;
 				$_cond[] = $key . '=' . $placeholder_key;

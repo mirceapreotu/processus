@@ -76,7 +76,7 @@ class Bootstrap
                     break;
 
                 case 'DEFAULT':
-                    break;
+					break;
 
                 default:
                     break;

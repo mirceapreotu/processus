@@ -11,7 +11,7 @@ abstract class Core_Abstracts_AbstractManager
 	 */
 	public function getMysqlInstance()
 	{
-		if(self::$_mysqlInstance instanceof Core_Lib_Db_MySQL !== TRUE)
+		if (self::$_mysqlInstance instanceof Core_Lib_Db_MySQL !== TRUE)
 		{
 			self::$_mysqlInstance = Core_Lib_Db_MySQL::getInstance();
 		}
@@ -30,7 +30,7 @@ abstract class Core_Abstracts_AbstractManager
 	 */
 	public function getCouchDbInstance()
 	{
-		if(self::$_couchDbInstance instanceof Core_Lib_Db_CouchDb !== TRUE)
+		if (self::$_couchDbInstance instanceof Core_Lib_Db_CouchDb !== TRUE)
 		{
 			self::$_couchDbInstance = Core_Lib_Db_CouchDb::getInstance();
 		}
@@ -49,12 +49,12 @@ abstract class Core_Abstracts_AbstractManager
 	 */
 	public function getMemcachedInstance()
 	{
-		if(self::$_memcached instanceof Core_Lib_Db_Memcached !== TRUE)
+		if (self::$_memcachedInstance instanceof Core_Lib_Db_Memcached !== TRUE)
 		{
-			self::$_memcached = Core_Lib_Db_Memcached::getInstance();
+			self::$_memcachedInstance = Core_Lib_Db_Memcached::getInstance();
 		}
 
-		return self::$_memcached;
+		return self::$_memcachedInstance;
 	}
 }
 
