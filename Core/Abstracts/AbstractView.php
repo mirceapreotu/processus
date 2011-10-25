@@ -19,15 +19,23 @@ abstract class Core_Abstracts_AbstractView
 	/**
 	 * @param string $viewName
 	 * @param array $vars
-	 * @return
+	 * @param null $controllerName
+	 * @return 
 	 */
-	protected function renderView($viewName = 'index', $vars = array())
+	protected function renderView($viewName = 'index', $vars = array(), $controllerName = NULL)
 	{
 		// view directories are based on their controller names
-		$controllerName = $this->getControllerName();
+		if(is_null($controllerName))
+		{
+			$controllerName = $this->getControllerName();
+		}
 
-		$view = new Zend_View(array('basePath' => PATH_APP . '/View/' . $controllerName));
+		$view = new Zend_View(array('basePath' => PATH_APP . '/View/'));
+
+		// assign vars to view
 		$view->assign($vars);
-		return $view->render($viewName . 'View.php');
+
+		// return rendered view
+		return $view->render($controllerName . '/' . $viewName . 'View.php');
 	}
 }
