@@ -1,12 +1,6 @@
 <?php
 /**
- * Bootstrap Class
- *
- * @category    Core
- * @package     Default
- * @copyright   Copyright (c) 2011 crowdpark
- * @license
- * @version
+ * 
  */
 class Bootstrap
 {
@@ -42,6 +36,7 @@ class Bootstrap
 
             error_reporting(E_ALL | E_STRICT);
             set_error_handler(array('Bootstrap', 'handleError'));
+			register_shutdown_function(array('Bootstrap', 'handleError'));
 
             // all error handlers are initialized
             ini_set('display_errors', FALSE);
@@ -174,10 +169,21 @@ class Bootstrap
 
 	public static function handleError()
 	{
+		$lastError = error_get_last();
+
+		echo '<div style="background:#c00;color:#fff;font-size:22px;padding:10px">';
+		echo $lastError['message'] . '<hr>';
+		echo 'File: ' . $lastError['file'] . '<br>';
+		echo 'Line: ' . $lastError['line'] . '<br>';
+		echo '</div>';
+
+		echo '<h3>Stack</h3>';
 		echo '<pre style="background:#ffc;padding:10px">';
-		print_r(debug_backtrace());
+		debug_print_backtrace();
 		echo '</pre>';
-		exit;
+
+		return TRUE;
     }
 }
+
 ?>
