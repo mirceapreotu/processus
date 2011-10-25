@@ -89,6 +89,8 @@ class Core_Application extends Lib_Application
         return $this->_profilerRoot;
     }
 
+    Bootstrap::getConfig('var')
+    Bootstrap::getRegistry()->getProperty('var')
 
     // #########################################################
 

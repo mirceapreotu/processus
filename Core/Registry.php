@@ -1,56 +1,46 @@
 <?php
 /**
- * App_Registry
+ * Core_Registry
  *
  *
  *
- * @category    meetidaaa.com
- * @package        App
+ * @category
+ * @package
  *
- * @copyright    Copyright (c) 2011 meetidaaa.com
- * @license        http://meetidaaa.com/license/default
- * @version        $Id:$
+ * @copyright
+ * @license
+ * @version     
  */
 
-class Core_Registry extends Lib_Application_Registry
+class Core_Registry
 {
     /**
-     * @var App_Model_Bo_User
+     * @var Core_Registry instance
      */
-    protected $_viewerBO;
+    protected static $_instance;
 
-    /**
-     * @var App_Model_Bo_CmsUser
-     */
-    protected $_cmsViewerBO;
-
-    /**
-     * @var bool
-     */
-    protected $_isCmsContext = FALSE;
-
-    /**
-     * @var App_GaintS_Config_GaintSConfig
-     */
-    protected $_gaintSConfig;
+	/**
+	 * @var holds Zend_Config
+	 */
+	private $config;
 
 
     // #########################################################
 
 
     /**
-     * @return App_GaintS_Config_GaintSConfig
+     * @static
+     * @return Core_Registry
      */
-    public function getGaintSConfig()
+    public static function getInstance()
     {
-        if ( ! $this->_gaintSConfig)
+        if (self::$_instance instanceof self !== TRUE)
         {
-            $this->_gaintSConfig = new App_GaintS_Config_GaintSConfig();
-            $this->_gaintSConfig->setData((array)Zend_Registry::get('CONFIG')->gaintSConfig);
-            $this->_gaintSConfig->init();
+            self::$_instance = new self();
+            self::$_instance->init();
         }
 
-        return $this->_gaintSConfig;
+        return self::$_instance;
     }
 
 
@@ -58,50 +48,11 @@ class Core_Registry extends Lib_Application_Registry
 
 
     /**
-     * @var string
+     * @return void
      */
-    protected $_currentDateMocked;
-
-    /**
-     * @return string|NULL
-     */
-    public function getCurrentDate()
+    public function init()
     {
-        $format = 'Y-m-d H:i:s'; //DO NOT CHANGE THIS!
-        $currentDate = $this->getRealDate();
-
-        // mocking ?
-        $mockCurrentDateEnabled = FALSE;
-
-        if ($this->isDebugMode() !== TRUE)
-        {
-            $mockCurrentDateEnabled = FALSE;
-        }
-
-        if ($mockCurrentDateEnabled !== TRUE)
-        {
-            return $currentDate;
-        }
-
-        $mockedDate = $this->_currentDateMocked;
-
-        if (Lib_Utils_String::isEmpty($mockedDate) !== TRUE)
-        {
-            return $mockedDate;
-        }
-
-        // try load current date from db
-        $dao = App_Model_Dao_AppConfig::getInstance();
-        $mockedDate = $dao->loadValue(App_Model_Dao_AppConfig::KEY_CURRENTDATE);
-
-        if (Lib_Utils_Date::exists($mockedDate, $format))
-        {
-            $this->_currentDateMocked = $mockedDate;
-            return $this->_currentDateMocked;
-        }
-
-        // fallback: return the real date
-        return $currentDate;
+        $this->config = new Zend_Config(require PATH_APP.'/Config/config.php');
     }
 
 
@@ -109,447 +60,16 @@ class Core_Registry extends Lib_Application_Registry
 
 
     /**
-     * @return string
+     * @return object|NULL
      */
-    public function getRealDate()
+    public function getConfig($key = NULL)
     {
-        $format = 'Y-m-d H:i:s'; //DO NOT CHANGE THIS!
-        $currentDate = date($format);
-        return $currentDate;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * @param  string $path
-     * @return string
-     */
-    public function getSrcPath($path)
-    {
-        //throw new Exception("THIS METHOD HAS NOT BEEN TESTED BEFORE! ".__METHOD__);
-        $result = PATH_CORE;
-        if (Lib_Utils_String::isEmpty($path))
+        if( ! is_null($key) && $this->config->$key)
         {
-            return $result;
+			return $this->config->$key;
         }
 
-        if (Lib_Utils_String::startsWith($path, "/", TRUE) !== TRUE)
-        {
-            $result .= "/";
-        }
-
-        $result .= $path;
-
-        return $result;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * @param  string $path
-     * @return string
-     */
-    public function getHtdocsPath($path)
-    {
-        //throw new Exception("THIS METHOD HAS NOT BEEN TESTED BEFORE! ".__METHOD__);
-        $srcPath = $this->getSrcPath("");
-        $result = dirname($srcPath) . "/htdocs";
-
-        if (Lib_Utils_String::isEmpty($path))
-        {
-            return $result;
-        }
-
-        if (Lib_Utils_String::startsWith($path, "/", TRUE) !== TRUE)
-        {
-            $result .= "/";
-        }
-
-        $result .= $path;
-
-        return $result;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * @param  string $path
-     * @return string
-     */
-    public function getVarPath($path)
-    {
-        //throw new Exception("THIS METHOD HAS NOT BEEN TESTED BEFORE! ".__METHOD__);
-        $srcPath = $this->getSrcPath("");
-        $result = dirname($srcPath) . "/var";
-
-        if (Lib_Utils_String::isEmpty($path))
-        {
-            return $result;
-        }
-
-        if (Lib_Utils_String::startsWith($path, "/", TRUE) !== TRUE)
-        {
-            $result .= "/";
-        }
-
-        $result .= $path;
-
-        return $result;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * @param  string $path
-     * @return string
-     */
-    public function getVarUploadPath($path)
-    {
-        //throw new Exception("THIS METHOD HAS NOT BEEN TESTED BEFORE! ".__METHOD__);
-        $varPath = $this->getVarPath("");
-
-        $result = $varPath . "/upload";
-
-        if (Lib_Utils_String::isEmpty($path))
-        {
-            return $result;
-        }
-
-        if (Lib_Utils_String::startsWith($path, "/", TRUE) !== TRUE)
-        {
-            $result .= "/";
-        }
-
-        $result .= $path;
-
-        return $result;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * override
-     * @return string
-     */
-    public function getApplicationPrefix()
-    {
-        $prefix = $this->getConfig()->applicationPrefix;
-
-        if (Lib_Utils_String::isEmpty($prefix))
-        {
-            throw new Exception("Method returns invalid result! " . __METHOD__);
-        }
-
-        $prefix = str_replace(".", "___", $prefix);
-
-        if (strpos($prefix, " ") !== FALSE)
-        {
-            throw new Exception(
-                "Method returns invalid result! No whitespace allowed at "
-                . __METHOD__);
-        }
-
-        return $prefix;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * @throws Exception
-     * @return object
-     */
-    public function getServerStage()
-    {
-        $stageConfig = $this->getConfig()->serverStage;
-        $stage = $stageConfig->stage;
-
-        if (Lib_Utils_String::isEmpty($stage))
-        {
-            throw new Exception("Method returns invalid result! " . __METHOD__);
-        }
-
-        return $stageConfig;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * @throws Exception
-     * @return object
-     */
-    public function getServerStageHost()
-    {
-        $stageConfig = $this->getConfig()->serverStage;
-        $stage = $stageConfig->stage;
-
-        if (Lib_Utils_String::isEmpty($stage))
-        {
-            throw new Exception("Method returns invalid result! " . __METHOD__);
-        }
-
-        return $stageConfig->host;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * @param  string $stageName
-     * @return
-     */
-    public function isServerStage($stageName)
-    {
-        return ($this->getServerStage()->stage === $stageName);
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * @param  string $url
-     * @return string
-     */
-    public function getUrl($url)
-    {
-        // TODO: make protocoll dynamic
-        $protocol = 'http';
-        $host = $this->getServerStage()->host;
-        $url = trim($url);
-
-        if (Lib_Utils_String::startsWith($url, "/", TRUE))
-        {
-            return $protocol . "://" . $host . "" . $url;
-        }
-
-        return $protocol . "://" . $host . "/" . $url;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * The default memcached
-     * @return Lib_Cache_Impl_Memcached
-     */
-    public function getMemcached()
-    {
-        $key = 'Memcached';
-        $value = $this->_getProperty($key);
-
-        if ($value instanceof Lib_Cache_Impl_Memcached !== TRUE)
-        {
-            $config = $this->getConfig();
-            $params = NULL; // use defaults
-
-            if (isset($config->cache))
-            {
-                $params = $config->cache->params->backend->toArray();
-            }
-
-            $value = new Lib_Cache_Impl_Memcached($params);
-            $this->_setProperty($key, $value);
-        }
-
-        $value = $this->_getProperty($key);
-
-        return $value;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * The default memcached
-     * @return Lib_Cache_Impl_Session
-     */
-    public function getMemcachedSession()
-    {
-        $key = 'MemcachedSession';
-        $value = $this->_getProperty($key);
-
-        if ($value instanceof Lib_Cache_Impl_Session !== TRUE)
-        {
-            $config = $this->getConfig();
-            $params = NULL; // use defaults
-
-            if (isset($config->cache))
-            {
-                $params = $config->cache->params->backend->toArray();
-            }
-
-            $value = new Lib_Cache_Impl_Session($params);
-
-            $this->_setProperty($key, $value);
-        }
-
-        $value = $this->_getProperty($key);
-
-        return $value;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * @return Lib_Application_Session
-     */
-    public function getSession()
-    {
-        $key = 'Session';
-        $value = $this->_getProperty($key);
-
-        if ($value instanceof Lib_Application_Session !== TRUE)
-        {
-            $value = new Lib_Application_Session();
-            $this->_setProperty($key, $value);
-            $value->init();
-            $value->start();
-        }
-
-        $value = $this->_getProperty($key);
-
-        return $value;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * @var App_Debug
-     */
-    protected $_debug;
-
-    /**
-     * @return App_Debug
-     */
-    public function getDebug()
-    {
-        if ($this->_debug instanceof Core_Debug !== TRUE)
-        {
-            $this->_debug = Core_Debug::getInstance();
-        }
-
-        return $this->_debug;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * @throws Exception
-     * @param  NULL|App_Debug $debug
-     * @return
-     */
-    public function setDebug($debug)
-    {
-        if ($debug === NULL)
-        {
-            $this->_debug = NULL;
-            return;
-        }
-
-        if ($debug instanceof Core_Debug !== TRUE)
-        {
-            throw new Exception("Invalid parameter 'debug' at " . __METHOD__);
-        }
-
-        // check core functions work ...
-        try
-        {
-            $debug->test();
-        }
-        catch (Exception $e)
-        {
-            throw new Exception(
-                "Error while injecting debug class! "
-                . get_class($debug)
-                . " at "
-                . __METHOD__
-            );
-        }
-
-        $this->_debug = $debug;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     * e.g. FOR RPC DEFAULT ERROR HANDLING/LOGGING
-     * @TODO: check userAgent
-     * @return bool
-     */
-    public function isDebugMode()
-    {
-        return $this->getDebug()->isDebugMode();
-    }
-
-
-    // #########################################################
-
-
-    /**
-     *
-     * @return Zend_Db_Adapter_Pdo_Mysql|NULL
-     */
-    public function getDb()
-    {
-        $key = 'DB';
-        $value = $this->_getProperty($key);
-        return $value;
-    }
-
-
-    // #########################################################
-
-
-    /**
-     *
-     * @return Zend_Db_Adapter_Pdo_Mysql|NULL
-     */
-    public function getSlaveDb()
-    {
-        $key = 'DBSLAVE';
-        $value = $this->_getProperty($key);
-
-        if ($value === NULL)
-        {
-            // return master, if no slave is set
-            return $this->getDb();
-        }
-
-        return $value;
-    }
-
-
-    // #########################################################
-
-
-    public function getMembaseDataBucketByName($bucketName)
-    {
-        var_dump($this->getGaintSConfig());
+	    return NULL;
     }
 }
 
