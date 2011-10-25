@@ -19,16 +19,14 @@ class Core_Application extends Lib_Application
      */
     private static $_instance;
 
-    private $_initCounter;
-
 
     // #########################################################
 
 
     /**
-     * @static
-     * @return App_Application
-     */
+	 * @static
+	 * @return App_Application
+	 */
     public static function getInstance()
     {
         if (self::$_instance instanceof self !== TRUE)
@@ -60,17 +58,10 @@ class Core_Application extends Lib_Application
      */
     protected $_profiler;
 
-
-    // #########################################################
-
-
     /**
      * @var Lib_Profiler_Profiler
      */
     protected $_profilerRoot;
-
-
-    // #########################################################
 
 
     /**
@@ -89,8 +80,6 @@ class Core_Application extends Lib_Application
         return $this->_profilerRoot;
     }
 
-    Bootstrap::getConfig('var')
-    Bootstrap::getRegistry()->getProperty('var')
 
     // #########################################################
 

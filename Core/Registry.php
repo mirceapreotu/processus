@@ -29,9 +29,9 @@ class Core_Registry
 
 
     /**
-     * @static
-     * @return Core_Registry
-     */
+	 * @static
+	 * @return Core_Registry
+	 */
     public static function getInstance()
     {
         if (self::$_instance instanceof self !== TRUE)
@@ -48,11 +48,11 @@ class Core_Registry
 
 
     /**
-     * @return void
-     */
+	 * @return void
+	 */
     public function init()
     {
-        $this->config = new Zend_Config(require PATH_APP.'/Config/config.php');
+        $this->config = new Zend_Config(require PATH_APP . '/Config/config.php');
     }
 
 
@@ -60,8 +60,9 @@ class Core_Registry
 
 
     /**
-     * @return object|NULL
-     */
+	 * @param null $key
+	 * @return
+	 */
     public function getConfig($key = NULL)
     {
         if( ! is_null($key) && $this->config->$key)
@@ -69,7 +70,7 @@ class Core_Registry
 			return $this->config->$key;
         }
 
-	    return NULL;
+	    return;
     }
 }
 
