@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-abstract class Core_Abstracts_AbstractVO extends Core_Abstracts_AbstractClass
+abstract class Core_Abstracts_AbstractVO
 {
 
     /** @var object */

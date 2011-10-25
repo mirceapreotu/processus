@@ -2,7 +2,7 @@
 /**
  *
  */
-class Core_Lib_Db_CouchDB implements Core_Interfaces_InterfaceDatabase
+class Core_Lib_Db_Memcached implements Core_Interfaces_InterfaceDatabase
 {
 }
 

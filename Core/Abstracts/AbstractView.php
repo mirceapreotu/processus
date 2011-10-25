@@ -16,6 +16,10 @@ abstract class Core_Abstracts_AbstractView
 		return $last;
 	}
 
+
+    // #########################################################
+
+
 	/**
 	 * @param string $viewName
 	 * @param array $vars
@@ -25,7 +29,7 @@ abstract class Core_Abstracts_AbstractView
 	protected function renderView($viewName = 'index', $vars = array(), $controllerName = NULL)
 	{
 		// view directories are based on their controller names
-		if(is_null($controllerName))
+		if (is_null($controllerName))
 		{
 			$controllerName = $this->getControllerName();
 		}

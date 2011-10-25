@@ -2,25 +2,13 @@
 /**
  * 
  */
-abstract class Core_Abstracts_AbstractManager
+interface Core_Interfaces_InterfaceDatabase
 {
-
-	protected static $_mysqlInstance;
-
-
-    // #########################################################
-
-
-	/**
-	 * @return
-	 */
-	public function getMysqlInstance()
-	{
-		if(self::$_mysqlInstance instanceof Core_Lib_Db_MySQL !== TRUE)
-		{
-			self::$_mysqlInstance = Core_Lib_Db_MySQL::getInstance();
-		}
-
-		return self::$_mysqlInstance;
-	}
+	public function fetch();
+	public function fetchOne();
+	public function fetchAll();
+	public function insert();
+	public function update();
 }
+
+?>

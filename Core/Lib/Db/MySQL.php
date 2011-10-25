@@ -2,7 +2,7 @@
 /**
  *
  */
-class Core_Lib_Db_MySQL
+class Core_Lib_Db_MySQL implements Core_Interfaces_InterfaceDatabase
 {
 	/**
 	 * @var
@@ -23,7 +23,7 @@ class Core_Lib_Db_MySQL
 	 */
 	public static function getInstance()
 	{
-		if(self::$_instance instanceof self !== TRUE)
+		if (self::$_instance instanceof self !== TRUE)
 		{
 			self::$_instance = new self();
 			self::$_instance->init();
@@ -123,13 +123,88 @@ class Core_Lib_Db_MySQL
 
 
 	/**
-	 * @param null $sql
-	 * @param array $args
-	 * @return Zend_Db_Statement_Pdo
+	 * @param null $tableName
+	 * @param array $values
+	 * @return 
 	 */
-	public function query($sql = NULL, $args = array())
+	public function insert($tableName = NULL, $values = array())
 	{
-		return $this->_prepare($sql, $args);
+		if( ! is_null($tableName) && ! empty($values))
+		{
+			// add an ID if not existing
+			if( ! array_key_exists('id', $values))
+			{
+				$values['id'] = NULL;
+			}
+
+			// prepare placeholders and values
+			$_set = array();
+			$_placeholder = array();
+			$_values = array();
+
+			foreach($values as $key => $val)
+			{
+				$_set[] = $key;
+
+				$placeholder_key = ':' . $key;
+				$_placeholder[] = $placeholder_key;
+
+				$_values[$placeholder_key] = $val;
+			}
+
+			// build sql
+			$sql = 'INSERT INTO ' . $tableName . ' (' . join(',', $_set) . ') VALUES (' . join(',', $_placeholder) . ')';
+
+			// insert
+			$this->_prepare($sql, $_values);
+		}
+
+		return;
+	}
+
+
+    // #########################################################
+
+
+	/**
+	 * @param null $tableName
+	 * @param array $values
+	 * @param array $conditions
+	 * @return 
+	 */
+	public function update($tableName = NULL, $values = array(), $conditions = array())
+	{
+		if( ! is_null($tableName) && ! empty($values) && array_key_exists('id', $conditions))
+		{
+			// prepare placeholders and values
+			$_set = array();
+			$_values = array();
+
+			foreach($values as $key => $val)
+			{
+				$placeholder_key = ':' . $key;
+				$_set[] = $key . '=' . $placeholder_key;
+				$_values[$placeholder_key] = $val;
+			}
+
+			// prepare conditions
+			$_cond = array();
+
+			foreach($conditions as $key => $val)
+			{
+				$placeholder_key = ':_' . $key;
+				$_cond[] = $key . '=' . $placeholder_key;
+				$_values[$placeholder_key] = $val;
+			}
+
+			// build sql
+			$sql = 'UPDATE ' . $tableName . ' SET ' . join(',', $_set) . ' WHERE ' . join(' AND ', $_cond);
+
+			// update
+			$this->_prepare($sql, $_values);
+		}
+
+		return;
 	}
 }
 

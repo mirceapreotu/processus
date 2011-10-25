@@ -7,6 +7,6 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class Core_Abstracts_AbstractTask extends Core_Abstracts_AbstractManager{
-
+class Core_Abstracts_AbstractTask extends Core_Abstracts_AbstractManager
+{
 }
