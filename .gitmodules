@@ -1,0 +1,3 @@
+[submodule "Core/Contrib/Zend"]
+	path = Core/Contrib/Zend
+	url = git://github.com/zendframework/zf2.git
