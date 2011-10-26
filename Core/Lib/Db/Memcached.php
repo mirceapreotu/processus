@@ -1,9 +1,13 @@
 <?php
-/**
- *
- */
-class Core_Lib_Db_Memcached implements Core_Interfaces_InterfaceDatabase
-{
-}
+
+    namespace Core\Lib\Db;
+    use Core\Interfaces\InterfaceDatabase;
+
+    /**
+     *
+     */
+    class Memcached implements InterfaceDatabase
+    {
+    }
 
 ?>

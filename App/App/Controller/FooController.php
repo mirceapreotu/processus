@@ -1,12 +1,23 @@
 <?php
 
-Class App_Controller_FooController extends Core_Abstracts_AbstractView
-{
-  public function index()
-  {
-    $model = new App_Model_FooModel();
-    echo $this->renderView('foobar', array('results' => $model->foo()));
-  }
-}
+    namespace App\Controller;
+
+    use Core\Abstracts\AbstractView;
+    use App\Model\FooModel;
+
+    /**
+     *
+     */
+    Class FooController extends AbstractView
+    {
+      /**
+       *
+       */
+      public function index()
+      {
+        $model = new FooModel();
+        echo $this->renderView('foobar', array('results' => $model->foo()));
+      }
+    }
 
 ?>

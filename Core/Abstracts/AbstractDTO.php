@@ -1,4 +1,7 @@
 <?php
+
+    namespace Core\Abstracts;
+
     /**
      * Created by JetBrains PhpStorm.
      * User: francis
@@ -6,7 +9,7 @@
      * Time: 1:50 PM
      * To change this template use File | Settings | File Templates.
      */
-    abstract class Core_Abstracts_AbstractDTO extends Core_Abstracts_AbstractVO
+    abstract class AbstractDTO extends AbstractVO
     {
         /**
          * @return array
@@ -27,3 +30,5 @@
          */
         abstract protected function getMapping();
     }
+
+?>
