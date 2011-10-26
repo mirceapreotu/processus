@@ -1,7 +1,7 @@
 <?php
 
-    namespace App\Model;
-
+namespace App\Model
+{
     use Core\Abstracts\AbstractManager;
 
     /**
@@ -18,5 +18,6 @@
             return $mysql->fetch('SELECT id, facebook_id FROM users LIMIT 10');
         }
     }
+}
 
 ?>

@@ -1,7 +1,7 @@
 <?php
 
-    namespace Core\Lib\Db;
-
+ namespace Core\Lib\Db
+ {
     use Core\Registry;
     use Core\Interfaces\InterfaceDatabase;
     use Zend\Db\Db;
@@ -215,5 +215,6 @@
             return;
         }
     }
+ }
 
 ?>

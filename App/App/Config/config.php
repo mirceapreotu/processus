@@ -55,7 +55,7 @@ return array(
 
 
     'database' => array(
-        'adapter' => 'pdo_mysql',
+        'adapter' => 'PdoMysql',
         'params'  => array(
             'host'     => 'localhost',
             'username' => 'root',

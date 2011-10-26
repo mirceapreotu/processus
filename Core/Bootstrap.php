@@ -1,7 +1,7 @@
 <?php
 
-    namespace Core;
-
+namespace Core
+{
     /**
      *
      */
@@ -160,7 +160,7 @@
                 . implode(DIRECTORY_SEPARATOR, $pathParts)
                 . '.php';
 
-            echo $className . ' --> ' . $classFile.'<hr>';
+//            echo $className . ' --> ' . $classFile.'<hr>';
 
             if ( ! file_exists($classFile))
             {
@@ -213,5 +213,6 @@
             }
         }
     }
+}
 
 ?>
