@@ -4,7 +4,7 @@ namespace App\Controller
 {
     use Core\Abstracts\AbstractView;
     use App\Model\FooModel;
-
+	
     /**
      *
      */

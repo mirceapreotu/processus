@@ -1,9 +1,8 @@
 <?php
 
-    namespace Core\Abstracts;
-
+namespace Core\Abstracts
+{
     /**
-     * Created by IntelliJ IDEA.
      * User: francis
      * Date: 9/26/11
      * Time: 1:32 AM
@@ -12,5 +11,6 @@
     class AbstractTask extends AbstractManager
     {
     }
+}
 
 ?>

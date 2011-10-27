@@ -1,7 +1,7 @@
 <?php
 
-    namespace Core\Interfaces;
-
+namespace Core\Interfaces
+{
     /**
      *
      */
@@ -13,5 +13,6 @@
         public function insert();
         public function update();
     }
+}
 
 ?>

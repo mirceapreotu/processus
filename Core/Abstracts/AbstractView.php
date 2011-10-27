@@ -1,7 +1,10 @@
 <?php
 
-    namespace Core\Abstracts;
-
+namespace Core\Abstracts
+{
+    /**
+     *
+     */
     abstract class AbstractView
     {
         /**
@@ -45,5 +48,6 @@
 //            return $view->render($controllerName . '/' . $viewName . 'View.php');
         }
     }
+}
 
 ?>

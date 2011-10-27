@@ -1,7 +1,7 @@
 <?php
 
- namespace Core\Lib\Db
- {
+namespace Core\Lib\Db
+{
     use Core\Registry;
     use Core\Interfaces\InterfaceDatabase;
     use Zend\Db\Db;
@@ -31,8 +31,7 @@
          */
         public static function getInstance()
         {
-            if (self::$_instance instanceof self !== TRUE)
-            {
+            if (self::$_instance instanceof self !== TRUE) {
                 self::$_instance = new self();
                 self::$_instance->init();
             }
@@ -137,11 +136,9 @@
          */
         public function insert($tableName = NULL, $values = array())
         {
-            if( ! is_null($tableName) && ! empty($values))
-            {
+            if (!is_null($tableName) && !empty($values)) {
                 // add an ID if not existing
-                if ( ! array_key_exists('id', $values))
-                {
+                if (!array_key_exists('id', $values)) {
                     $values['id'] = NULL;
                 }
 
@@ -182,8 +179,7 @@
          */
         public function update($tableName = NULL, $values = array(), $conditions = array())
         {
-            if ( ! is_null($tableName) && ! empty($values) && array_key_exists('id', $conditions))
-            {
+            if (!is_null($tableName) && !empty($values) && array_key_exists('id', $conditions)) {
                 // prepare placeholders and values
                 $_set = array();
                 $_values = array();
@@ -215,6 +211,6 @@
             return;
         }
     }
- }
+}
 
 ?>

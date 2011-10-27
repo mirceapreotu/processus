@@ -1,7 +1,7 @@
 <?php
 
-    namespace Core\Abstracts;
-
+namespace Core\Abstracts
+{
     /**
      * Created by JetBrains PhpStorm.
      * User: francis
@@ -50,5 +50,6 @@
             return $this->_data[$id];
         }
     }
+}
 
 ?>
