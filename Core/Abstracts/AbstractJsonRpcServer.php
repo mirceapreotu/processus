@@ -2,28 +2,96 @@
 
 namespace Core\Abstracts
 {
-    use Core\Abstracts\AbstractServer;
+    use Zend\Json\Server\Server;
 
     /**
      *
      */
-    abstract class AbstractJsonRpcGateway extends Server
+    abstract class AbstractJsonRpcServer extends Server
     {
         protected $_config;
+        protected $_request;
+        protected $_namespace;
         protected $_domain;
         protected $_class;
-        protected $_method;
+
 
         // #########################################################
 
-        /**
-         *
-         */
-        public function getRequest()
+
+        public function __construct(Request $request, $namespace, $domain, $class)
         {
-            parent::getRequest();
-            list($this->_domain, $this->_class, $this->_method) = explode('.', $this->_request->getMethod());
-            $this->_request->setMethod($this->_method);
+            $this->_request = $request;
+            $this->_namespace = $namespace;
+            $this->_domain = $domain;
+            $this->_class = $class;
+        }
+
+
+        // #########################################################
+
+
+        /**
+         * @return bool
+         */
+        public function hasNamespace()
+        {
+            if (  ! empty($this->_namespace))
+            {
+                return TRUE;
+            }
+
+            return FALSE;
+        }
+
+
+        // #########################################################
+
+
+        /**
+         * @return bool
+         */
+        public function isValidMethod()
+        {
+            if ( ! empty($this->_config['validMethods']) && in_array($this->_request->getMethod(), $this->_config['validMethods']))
+            {
+                return TRUE;
+            }
+
+            return FALSE;
+        }
+
+
+        // #########################################################
+
+
+        /**
+         * @return string
+         */
+        public function getClassNamespace()
+        {
+            $namespace = array($this->_namespace);
+            $namespace[] = 'Service';
+            $namespace[] = $this->_class;
+
+            return join('\\', $namespace);
+        }
+
+
+        // #########################################################
+
+
+        /**
+         * @return bool
+         */
+        public function isValidRequest()
+        {
+            if ($this->hasNamespace() && $this->isValidMethod())
+            {
+                return TRUE;
+            }
+
+            return FALSE;
         }
 
 
@@ -32,8 +100,11 @@ namespace Core\Abstracts
 
         public function run()
         {
-            $this->getRequest();
-            $this->_run();
+            // if valid request let it handle via Zend\Json\Server\Server
+            if ($this->isValidRequest() === TRUE)
+            {
+                $this->_run();
+            }
         }
 
 
@@ -42,15 +113,13 @@ namespace Core\Abstracts
 
         protected function _run()
         {
-            print_r($this->_config);
-
             $server = new Server();
 
-            // Indicate what functionality is available:
-            print_r(array($this->_domain, $this->_class, $this->_method, join('\\', array('App', 'JsonRpc', 'v1', $this->_domain, $this->_class))));
+            // set correct request obj
+            $server->_request = $this->_request;
 
-            $serverClass = join('\\', array('App', 'JsonRpc', 'v1', $this->_domain, $this->_class));
-            $server->setClass();
+            // set requested class
+            $server->setClass($this->getClassNamespace());
 
             // Handle the request:
             $server->handle();

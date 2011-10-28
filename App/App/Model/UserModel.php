@@ -7,15 +7,15 @@ namespace App\Model
     /**
      *
      */
-    class FooModel extends AbstractManager
+    class UserModel extends AbstractManager
     {
         /**
          * @return mixed
          */
-        public function foo()
+        public function listing()
         {
             $mysql = $this->getMysqlInstance();
-            return $mysql->fetch('SELECT id, facebook_id FROM users LIMIT 10');
+            return $mysql->fetchAll('SELECT id, facebook_id FROM users LIMIT 10');
         }
     }
 }

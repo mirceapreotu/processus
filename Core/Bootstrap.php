@@ -196,7 +196,7 @@ namespace Core
         {
             $lastError = error_get_last();
 
-            if(array_key_exists('message', $lastError))
+            if(is_array($lastError) && array_key_exists('message', $lastError))
             {
                 echo '<div style="background:#c00;color:#fff;font-size:22px;padding:10px">';
                 echo $lastError['message'] . '<hr>';
@@ -206,7 +206,7 @@ namespace Core
 
                 echo '<h3>Stack</h3>';
                 echo '<pre style="background:#ffc;padding:10px">';
-                debug_print_backtrace();
+                print_r(debug_backtrace());
                 echo '</pre>';
 
                 return TRUE;

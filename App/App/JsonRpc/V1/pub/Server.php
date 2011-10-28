@@ -7,9 +7,13 @@ namespace App\JsonRpc\V1\Pub
     /**
      *
      */
-    class Gateway extends AbstractJsonRpcServer
+    class Server extends AbstractJsonRpcServer
     {
-
+        protected $_config = array(
+            'validMethods' => array(
+                'listing'
+            )
+        );
     }
 }
 
