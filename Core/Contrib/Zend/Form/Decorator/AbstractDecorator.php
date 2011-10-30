@@ -23,9 +23,7 @@
  */
 namespace Zend\Form\Decorator;
 
-use Zend\Form\Decorator,
-    Zend\Config\Config,
-    Zend\Form;
+use Zend\Form\Decorator, Zend\Config\Config, Zend\Form;
 
 /**
  * Zend_Form_Decorator_Abstract
@@ -40,10 +38,12 @@ use Zend\Form\Decorator,
  */
 abstract class AbstractDecorator implements Decorator
 {
+
     /**
      * Placement constants
      */
-    const APPEND  = 'APPEND';
+    const APPEND = 'APPEND';
+
     const PREPEND = 'PREPEND';
 
     /**
@@ -75,7 +75,7 @@ abstract class AbstractDecorator implements Decorator
      * @param  array|\Zend\Config\Config $options
      * @return void
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         if (is_array($options)) {
             $this->setOptions($options);
@@ -90,7 +90,7 @@ abstract class AbstractDecorator implements Decorator
      * @param  array $options
      * @return \Zend\Form\Decorator\AbstractDecorator
      */
-    public function setOptions(array $options)
+    public function setOptions (array $options)
     {
         $this->_options = $options;
         return $this;
@@ -102,7 +102,7 @@ abstract class AbstractDecorator implements Decorator
      * @param  \Zend\Config\Config $config
      * @return \Zend\Form\Decorator\AbstractDecorator
      */
-    public function setConfig(Config $config)
+    public function setConfig (Config $config)
     {
         return $this->setOptions($config->toArray());
     }
@@ -114,7 +114,7 @@ abstract class AbstractDecorator implements Decorator
      * @param  mixed $value
      * @return \Zend\Form\Decorator\AbstractDecorator
      */
-    public function setOption($key, $value)
+    public function setOption ($key, $value)
     {
         $this->_options[(string) $key] = $value;
         return $this;
@@ -126,13 +126,13 @@ abstract class AbstractDecorator implements Decorator
      * @param  string $key
      * @return mixed
      */
-    public function getOption($key)
+    public function getOption ($key)
     {
         $key = (string) $key;
         if (isset($this->_options[$key])) {
             return $this->_options[$key];
         }
-
+        
         return null;
     }
 
@@ -141,7 +141,7 @@ abstract class AbstractDecorator implements Decorator
      *
      * @return array
      */
-    public function getOptions()
+    public function getOptions ()
     {
         return $this->_options;
     }
@@ -152,13 +152,13 @@ abstract class AbstractDecorator implements Decorator
      * @param mixed $key
      * @return void
      */
-    public function removeOption($key)
+    public function removeOption ($key)
     {
         if (null !== $this->getOption($key)) {
             unset($this->_options[$key]);
             return true;
         }
-
+        
         return false;
     }
 
@@ -167,7 +167,7 @@ abstract class AbstractDecorator implements Decorator
      *
      * @return \Zend\Form\Decorator\AbstractDecorator
      */
-    public function clearOptions()
+    public function clearOptions ()
     {
         $this->_options = array();
         return $this;
@@ -180,15 +180,15 @@ abstract class AbstractDecorator implements Decorator
      * @return \Zend\Form\Decorator\AbstractDecorator
      * @throws \Zend\Form\Decorator\Exception on invalid element type
      */
-    public function setElement($element)
+    public function setElement ($element)
     {
-        if ((!$element instanceof Form\Element)
-            && (!$element instanceof Form\Form)
-            && (!$element instanceof Form\DisplayGroup))
-        {
-            throw new Exception\InvalidArgumentException('Invalid element type passed to decorator');
+        if ((! $element instanceof Form\Element) &&
+         (! $element instanceof Form\Form) &&
+         (! $element instanceof Form\DisplayGroup)) {
+            throw new Exception\InvalidArgumentException(
+            'Invalid element type passed to decorator');
         }
-
+        
         $this->_element = $element;
         return $this;
     }
@@ -198,7 +198,7 @@ abstract class AbstractDecorator implements Decorator
      *
      * @return \Zend\Form\Form_Element|\Zend\Form\Form
      */
-    public function getElement()
+    public function getElement ()
     {
         return $this->_element;
     }
@@ -208,7 +208,7 @@ abstract class AbstractDecorator implements Decorator
      *
      * @return string
      */
-    public function getPlacement()
+    public function getPlacement ()
     {
         $placement = $this->_placement;
         if (null !== ($placementOpt = $this->getOption('placement'))) {
@@ -226,7 +226,7 @@ abstract class AbstractDecorator implements Decorator
             }
             $this->removeOption('placement');
         }
-
+        
         return $placement;
     }
 
@@ -235,7 +235,7 @@ abstract class AbstractDecorator implements Decorator
      *
      * @return string
      */
-    public function getSeparator()
+    public function getSeparator ()
     {
         $separator = $this->_separator;
         if (null !== ($separatorOpt = $this->getOption('separator'))) {
@@ -252,7 +252,7 @@ abstract class AbstractDecorator implements Decorator
      * @return string
      * @throws \Zend\Form\Decorator\Exception when unimplemented
      */
-    public function render($content)
+    public function render ($content)
     {
         throw new Exception\RunTimeException('render() not implemented');
     }

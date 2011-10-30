@@ -40,7 +40,8 @@ class File extends Core
      * Consts for master_files_mode
      */
     const MODE_AND = 'AND';
-    const MODE_OR  = 'OR';
+
+    const MODE_OR = 'OR';
 
     /**
      * Available options
@@ -63,12 +64,9 @@ class File extends Core
      * - if set to false (default), an exception is thrown if there is a missing master file
      * @var array available options
      */
-    protected $_specificOptions = array(
-        'master_file' => null,
-        'master_files' => null,
-        'master_files_mode' => 'OR',
-        'ignore_missing_master_files' => false
-    );
+    protected $_specificOptions = array('master_file' => null, 
+    'master_files' => null, 'master_files_mode' => 'OR', 
+    'ignore_missing_master_files' => false);
 
     /**
      * Master file mtimes
@@ -86,12 +84,12 @@ class File extends Core
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    public function __construct(array $options = array())
+    public function __construct (array $options = array())
     {
-        while (list($name, $value) = each($options)) {
+        while (list ($name, $value) = each($options)) {
             $this->setOption($name, $value);
         }
-        if (!isset($this->_specificOptions['master_files'])) {
+        if (! isset($this->_specificOptions['master_files'])) {
             Cache::throwException('master_files option must be set');
         }
     }
@@ -101,7 +99,7 @@ class File extends Core
      *
      * @param string $masterFile the complete path and name of the master file
      */
-    public function setMasterFiles($masterFiles)
+    public function setMasterFiles ($masterFiles)
     {
         clearstatcache();
         $this->_specificOptions['master_file'] = $masterFiles[0]; // to keep a compatibility
@@ -110,10 +108,12 @@ class File extends Core
         $i = 0;
         foreach ($masterFiles as $masterFile) {
             $this->_masterFile_mtimes[$i] = @filemtime($masterFile);
-            if ((!($this->_specificOptions['ignore_missing_master_files'])) && (!($this->_masterFile_mtimes[$i]))) {
-                Cache::throwException('Unable to read master_file : '.$masterFile);
+            if ((! ($this->_specificOptions['ignore_missing_master_files'])) &&
+             (! ($this->_masterFile_mtimes[$i]))) {
+                Cache::throwException(
+                'Unable to read master_file : ' . $masterFile);
             }
-            $i++;
+            $i ++;
         }
     }
 
@@ -125,9 +125,9 @@ class File extends Core
      * @deprecated
      * @param string $masterFile the complete path and name of the master file
      */
-    public function setMasterFile($masterFile)
+    public function setMasterFile ($masterFile)
     {
-          $this->setMasterFiles(array(0 => $masterFile));
+        $this->setMasterFiles(array(0 => $masterFile));
     }
 
     /**
@@ -140,15 +140,16 @@ class File extends Core
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    public function setOption($name, $value)
+    public function setOption ($name, $value)
     {
         if ($name == 'master_file') {
             $this->setMasterFile($value);
-        } else if ($name == 'master_files') {
-            $this->setMasterFiles($value);
-        } else {
-            parent::setOption($name, $value);
-        }
+        } else 
+            if ($name == 'master_files') {
+                $this->setMasterFiles($value);
+            } else {
+                parent::setOption($name, $value);
+            }
     }
 
     /**
@@ -159,9 +160,10 @@ class File extends Core
      * @param  boolean $doNotUnserialize       Do not serialize (even if automatic_serialization is true) => for internal use
      * @return mixed|false Cached datas
      */
-    public function load($id, $doNotTestCacheValidity = false, $doNotUnserialize = false)
+    public function load ($id, $doNotTestCacheValidity = false, 
+    $doNotUnserialize = false)
     {
-        if (!$doNotTestCacheValidity) {
+        if (! $doNotTestCacheValidity) {
             if ($this->test($id)) {
                 return parent::load($id, true, $doNotUnserialize);
             }
@@ -176,13 +178,13 @@ class File extends Core
      * @param  string $id Cache id
      * @return int|false Last modified time of cache entry if it is available, false otherwise
      */
-    public function test($id)
+    public function test ($id)
     {
         $lastModified = parent::test($id);
         if ($lastModified) {
             if ($this->_specificOptions['master_files_mode'] == self::MODE_AND) {
                 // MODE_AND
-                foreach($this->_masterFile_mtimes as $masterFileMTime) {
+                foreach ($this->_masterFile_mtimes as $masterFileMTime) {
                     if ($masterFileMTime) {
                         if ($lastModified > $masterFileMTime) {
                             return $lastModified;
@@ -192,7 +194,7 @@ class File extends Core
             } else {
                 // MODE_OR
                 $res = true;
-                foreach($this->_masterFile_mtimes as $masterFileMTime) {
+                foreach ($this->_masterFile_mtimes as $masterFileMTime) {
                     if ($masterFileMTime) {
                         if ($lastModified <= $masterFileMTime) {
                             return false;

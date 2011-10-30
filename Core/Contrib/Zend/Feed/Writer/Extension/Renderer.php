@@ -19,26 +19,27 @@
  */
 
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Writer\Extension;
 
 /**
-* @category Zend
-* @package Zend_Feed_Writer
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @category Zend
+ * @package Zend_Feed_Writer
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 interface Renderer
 {
+
     /**
      * Constructor
      *
      * @param  mixed $container 
      * @return void
      */
-    public function __construct($container);
-    
+    public function __construct ($container);
+
     /**
      * Set DOMDocument and DOMElement on which to operate
      * 
@@ -46,19 +47,19 @@ interface Renderer
      * @param  \DOMElement $base 
      * @return void
      */
-    public function setDomDocument(\DOMDocument $dom, \DOMElement $base);
-    
+    public function setDomDocument (\DOMDocument $dom,\DOMElement $base);
+
     /**
      * Render
      * 
      * @return void
      */
-    public function render();
-    
+    public function render ();
+
     /**
      * Retrieve container
      * 
      * @return mixed
      */
-    public function getDataContainer();
+    public function getDataContainer ();
 }

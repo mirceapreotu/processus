@@ -2,12 +2,11 @@
 
 namespace Zend\Docbook;
 
-use ReflectionMethod,
-    Zend\Filter\Word\CamelCaseToDash as CamelCaseToDashFilter,
-    Zend\Reflection\ReflectionClass;
+use ReflectionMethod, Zend\Filter\Word\CamelCaseToDash as CamelCaseToDashFilter, Zend\Reflection\ReflectionClass;
 
 class ClassParser
 {
+
     /**
      * @var ReflectionClass
      */
@@ -29,7 +28,7 @@ class ClassParser
      * @param  ReflectionClass $class 
      * @return void
      */
-    public function __construct(ReflectionClass $class)
+    public function __construct (ReflectionClass $class)
     {
         $this->reflection = $class;
     }
@@ -39,22 +38,22 @@ class ClassParser
      * 
      * @return string
      */
-    public function getId()
+    public function getId ()
     {
         if (null !== $this->id) {
             return $this->id;
         }
-
-        $class     = $this->reflection->getName();
-        $id        = '';
-        $filter    = new CamelCaseToDashFilter();
-
+        
+        $class = $this->reflection->getName();
+        $id = '';
+        $filter = new CamelCaseToDashFilter();
+        
         foreach (explode('\\', $class) as $segment) {
             $id .= $filter->filter($segment) . '.';
         }
-
+        
         $id = strtolower(rtrim($id, '.'));
-
+        
         $this->id = $id;
         return $this->id;
     }
@@ -64,7 +63,7 @@ class ClassParser
      * 
      * @return string
      */
-    public function getName()
+    public function getName ()
     {
         return $this->reflection->getName();
     }
@@ -74,14 +73,14 @@ class ClassParser
      * 
      * @return array Array of ClassMethod objects
      */
-    public function getMethods()
+    public function getMethods ()
     {
         if (null !== $this->methods) {
             return $this->methods;
         }
-
+        
         $rMethods = $this->reflection->getMethods(ReflectionMethod::IS_PUBLIC);
-        $methods  = array();
+        $methods = array();
         foreach ($rMethods as $method) {
             $methods[] = new ClassMethod($method);
         }

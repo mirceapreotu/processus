@@ -34,6 +34,7 @@ use Zend\Acl\Role;
  */
 class GenericRole implements Role
 {
+
     /**
      * Unique id of Role
      *
@@ -47,7 +48,7 @@ class GenericRole implements Role
      * @param  string $roleId
      * @return void
      */
-    public function __construct($roleId)
+    public function __construct ($roleId)
     {
         $this->_roleId = (string) $roleId;
     }
@@ -57,7 +58,7 @@ class GenericRole implements Role
      *
      * @return string
      */
-    public function getRoleId()
+    public function getRoleId ()
     {
         return $this->_roleId;
     }
@@ -68,7 +69,7 @@ class GenericRole implements Role
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getRoleId();
     }

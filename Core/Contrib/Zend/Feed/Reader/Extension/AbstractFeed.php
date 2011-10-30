@@ -19,23 +19,24 @@
  */
 
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Reader\Extension;
 use Zend\Feed\Reader;
 
 /**
-* @uses \DOMXPath
-* @uses \Zend\Feed\Reader\Reader
-* @uses \Zend\Feed\Reader\Entry\Atom
-* @uses \Zend\Feed\Reader\Entry\RSS
-* @category Zend
-* @package Zend_Feed_Reader
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @uses \DOMXPath
+ * @uses \Zend\Feed\Reader\Reader
+ * @uses \Zend\Feed\Reader\Entry\Atom
+ * @uses \Zend\Feed\Reader\Entry\RSS
+ * @category Zend
+ * @package Zend_Feed_Reader
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 abstract class AbstractFeed
 {
+
     /**
      * Parsed feed data
      *
@@ -71,22 +72,23 @@ abstract class AbstractFeed
      * @param  string $type Feed type
      * @return void
      */
-    public function __construct(\DomDocument $dom, $type = null, \DOMXPath $xpath = null)
+    public function __construct (\DomDocument $dom, $type = null, 
+    DOMXPath $xpath = null)
     {
         $this->_domDocument = $dom;
-
+        
         if ($type !== null) {
             $this->_data['type'] = $type;
         } else {
             $this->_data['type'] = Reader\Reader::detectType($dom);
         }
-
+        
         if ($xpath !== null) {
             $this->_xpath = $xpath;
         } else {
             $this->_xpath = new \DOMXPath($this->_domDocument);
         }
-
+        
         $this->_registerNamespaces();
     }
 
@@ -95,7 +97,7 @@ abstract class AbstractFeed
      *
      * @return DOMDocument
      */
-    public function getDomDocument()
+    public function getDomDocument ()
     {
         return $this->_domDocument;
     }
@@ -105,7 +107,7 @@ abstract class AbstractFeed
      *
      * @return string
      */
-    public function getEncoding()
+    public function getEncoding ()
     {
         $assumed = $this->getDomDocument()->encoding;
         return $assumed;
@@ -116,18 +118,17 @@ abstract class AbstractFeed
      *
      * @return string
      */
-    public function getType()
+    public function getType ()
     {
         return $this->_data['type'];
     }
-
 
     /**
      * Return the feed as an array
      *
      * @return array
      */
-    public function toArray() // untested
+    public function toArray () // untested
     {
         return $this->_data;
     }
@@ -138,7 +139,7 @@ abstract class AbstractFeed
      * @param  DOMXPath $xpath
      * @return Reader\Reader_Extension_EntryAbstract
      */
-    public function setXpath(\DOMXPath $xpath)
+    public function setXpath (\DOMXPath $xpath)
     {
         $this->_xpath = $xpath;
         $this->_registerNamespaces();
@@ -150,7 +151,7 @@ abstract class AbstractFeed
      *
      * @return string
      */
-    public function getXpath()
+    public function getXpath ()
     {
         return $this->_xpath;
     }
@@ -160,7 +161,7 @@ abstract class AbstractFeed
      *
      * @return string
      */
-    public function getXpathPrefix()
+    public function getXpathPrefix ()
     {
         return $this->_xpathPrefix;
     }
@@ -170,7 +171,7 @@ abstract class AbstractFeed
      *
      * @return Reader\Reader_Feed_Atom
      */
-    public function setXpathPrefix($prefix)
+    public function setXpathPrefix ($prefix)
     {
         $this->_xpathPrefix = $prefix;
     }
@@ -178,5 +179,5 @@ abstract class AbstractFeed
     /**
      * Register the default namespaces for the current feed format
      */
-    abstract protected function _registerNamespaces();
+    abstract protected function _registerNamespaces ();
 }

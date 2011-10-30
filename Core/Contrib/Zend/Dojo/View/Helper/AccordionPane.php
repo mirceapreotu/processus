@@ -32,14 +32,15 @@ namespace Zend\Dojo\View\Helper;
  * @subpackage View
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
-  */
+ */
 class AccordionPane extends DijitContainer
 {
+
     /**
      * Dijit being used
      * @var string
      */
-    protected $_dijit  = 'dijit.layout.AccordionPane';
+    protected $_dijit = 'dijit.layout.AccordionPane';
 
     /**
      * Module being used
@@ -56,12 +57,13 @@ class AccordionPane extends DijitContainer
      * @param  array $attribs HTML attributes
      * @return string
      */
-    public function __invoke($id = null, $content = '', array $params = array(), array $attribs = array())
+    public function __invoke ($id = null, $content = '', array $params = array(), 
+    array $attribs = array())
     {
         if (0 === func_num_args()) {
             return $this;
         }
-
+        
         return $this->_createLayoutContainer($id, $content, $params, $attribs);
     }
 }

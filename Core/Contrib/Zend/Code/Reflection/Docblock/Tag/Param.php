@@ -22,8 +22,7 @@
  * @namespace
  */
 namespace Zend\Code\Reflection\Docblock\Tag;
-use Zend\Code\Reflection,
-    Zend\Code\Reflection\Exception;
+use Zend\Code\Reflection, Zend\Code\Reflection\Exception;
 
 /**
  * @uses       \Zend\Code\Reflection\ReflectionDocblockTag
@@ -35,6 +34,7 @@ use Zend\Code\Reflection,
  */
 class Param extends Reflection\ReflectionDocblockTag
 {
+
     /**
      * @var string
      */
@@ -50,25 +50,28 @@ class Param extends Reflection\ReflectionDocblockTag
      *
      * @param string $tagDocblockLine
      */
-    public function __construct($tagDocblockLine)
+    public function __construct ($tagDocblockLine)
     {
         $matches = array();
-
-        if (!preg_match('#^@(\w+)\s+([\w|\\\]+)(?:\s+(\$\S+))?(?:\s+(.*))?#s', $tagDocblockLine, $matches)) {
-            throw new Exception\InvalidArgumentException('Provided docblock line is does not contain a valid tag');
+        
+        if (! preg_match('#^@(\w+)\s+([\w|\\\]+)(?:\s+(\$\S+))?(?:\s+(.*))?#s', 
+        $tagDocblockLine, $matches)) {
+            throw new Exception\InvalidArgumentException(
+            'Provided docblock line is does not contain a valid tag');
         }
-
+        
         if ($matches[1] != 'param') {
-            throw new Exception\InvalidArgumentException('Provided docblock line is does not contain a valid @param tag');
+            throw new Exception\InvalidArgumentException(
+            'Provided docblock line is does not contain a valid @param tag');
         }
-
+        
         $this->_name = 'param';
         $this->type = $matches[2];
-
+        
         if (isset($matches[3])) {
             $this->variableName = $matches[3];
         }
-
+        
         if (isset($matches[4])) {
             $this->_description = preg_replace('#\s+#', ' ', $matches[4]);
         }
@@ -79,7 +82,7 @@ class Param extends Reflection\ReflectionDocblockTag
      *
      * @return string
      */
-    public function getType()
+    public function getType ()
     {
         return $this->type;
     }
@@ -89,7 +92,7 @@ class Param extends Reflection\ReflectionDocblockTag
      *
      * @return string
      */
-    public function getVariableName()
+    public function getVariableName ()
     {
         return $this->variableName;
     }

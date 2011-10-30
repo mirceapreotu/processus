@@ -40,6 +40,7 @@ namespace Zend\Form\Element;
  */
 class MultiCheckbox extends Multi
 {
+
     /**
      * Use formMultiCheckbox view helper by default
      * @var string

@@ -9,36 +9,37 @@ namespace Zend\Http\Header;
 class ContentMD5 implements HeaderDescription
 {
 
-    public static function fromString($headerLine)
+    public static function fromString ($headerLine)
     {
         $header = new static();
-
-        list($name, $value) = preg_split('#: #', $headerLine, 2);
-
+        
+        list ($name, $value) = preg_split('#: #', $headerLine, 2);
+        
         // check to ensure proper header type for this factory
         if (strtolower($name) !== 'content-md5') {
-            throw new Exception\InvalidArgumentException('Invalid header line for Content-MD5 string');
+            throw new Exception\InvalidArgumentException(
+            'Invalid header line for Content-MD5 string');
         }
-
+        
         // @todo implementation details
-        $header->value= $value;
+        $header->value = $value;
         
         return $header;
     }
 
-    public function getFieldName()
+    public function getFieldName ()
     {
         return 'Content-MD5';
     }
 
-    public function getFieldValue()
+    public function getFieldValue ()
     {
         return $this->value;
     }
 
-    public function toString()
+    public function toString ()
     {
         return 'Content-MD5: ' . $this->getFieldValue();
     }
-    
+
 }

@@ -23,8 +23,7 @@
  * @namespace
  */
 namespace Zend\Controller\Action\Helper;
-use Zend\Session,
-    Zend\Stdlib\SplQueue;
+use Zend\Session, Zend\Stdlib\SplQueue;
 
 /**
  * Flash Messenger - implement session-based messages
@@ -37,28 +36,30 @@ use Zend\Session,
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class FlashMessenger extends AbstractHelper implements \IteratorAggregate, \Countable
+class FlashMessenger extends AbstractHelper implements \IteratorAggregate, 
+\Countable
 {
+
     /**
      * $_messages - Messages from previous request
      *
      * @var array
      */
-    static protected $_messages = array();
+    protected static $_messages = array();
 
     /**
      * $_session - Zend_Session storage object
      *
      * @var \Zend\Session\Manager
      */
-    static protected $_session = null;
+    protected static $_session = null;
 
     /**
      * $_messageAdded - Wether a message has been previously added
      *
      * @var boolean
      */
-    static protected $_messageAdded = false;
+    protected static $_messageAdded = false;
 
     /**
      * $_namespace - Instance namespace, default is 'default'
@@ -73,11 +74,11 @@ class FlashMessenger extends AbstractHelper implements \IteratorAggregate, \Coun
      * @param  string $namespace
      * @return void
      */
-    public function __construct()
+    public function __construct ()
     {
-        if (!self::$_session instanceof Session\Container) {
+        if (! self::$_session instanceof Session\Container) {
             self::$_session = new Session\Container($this->getName());
-
+            
             // Should not modify the iterator while iterating; aggregate 
             // namespaces so they may be deleted after retrieving messages.
             $namespaces = array();
@@ -98,7 +99,7 @@ class FlashMessenger extends AbstractHelper implements \IteratorAggregate, \Coun
      *
      * @return \Zend\Controller\Action\Helper\FlashMessenger Provides a fluent interface
      */
-    public function postDispatch()
+    public function postDispatch ()
     {
         $this->resetNamespace();
         return $this;
@@ -111,7 +112,7 @@ class FlashMessenger extends AbstractHelper implements \IteratorAggregate, \Coun
      * @param  string $namespace
      * @return \Zend\Controller\Action\Helper\FlashMessenger Provides a fluent interface
      */
-    public function setNamespace($namespace = 'default')
+    public function setNamespace ($namespace = 'default')
     {
         $this->_namespace = $namespace;
         return $this;
@@ -122,7 +123,7 @@ class FlashMessenger extends AbstractHelper implements \IteratorAggregate, \Coun
      *
      * @return \Zend\Controller\Action\Helper\FlashMessenger Provides a fluent interface
      */
-    public function resetNamespace()
+    public function resetNamespace ()
     {
         $this->setNamespace();
         return $this;
@@ -134,20 +135,19 @@ class FlashMessenger extends AbstractHelper implements \IteratorAggregate, \Coun
      * @param  string $message
      * @return \Zend\Controller\Action\Helper\FlashMessenger Provides a fluent interface
      */
-    public function addMessage($message)
+    public function addMessage ($message)
     {
         if (self::$_messageAdded === false) {
             self::$_session->setExpirationHops(1, null, true);
         }
-
-        if (!isset(self::$_session->{$this->_namespace})
-            || !(self::$_session->{$this->_namespace} instanceof SplQueue)
-        ) {
+        
+        if (! isset(self::$_session->{$this->_namespace}) ||
+         ! (self::$_session->{$this->_namespace} instanceof SplQueue)) {
             self::$_session->{$this->_namespace} = new SplQueue();
         }
-
+        
         self::$_session->{$this->_namespace}->push($message);
-
+        
         return $this;
     }
 
@@ -156,7 +156,7 @@ class FlashMessenger extends AbstractHelper implements \IteratorAggregate, \Coun
      *
      * @return boolean
      */
-    public function hasMessages()
+    public function hasMessages ()
     {
         return isset(self::$_messages[$this->_namespace]);
     }
@@ -166,12 +166,12 @@ class FlashMessenger extends AbstractHelper implements \IteratorAggregate, \Coun
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages ()
     {
         if ($this->hasMessages()) {
             return self::$_messages[$this->_namespace]->toArray();
         }
-
+        
         return array();
     }
 
@@ -180,13 +180,13 @@ class FlashMessenger extends AbstractHelper implements \IteratorAggregate, \Coun
      *
      * @return boolean True if messages were cleared, false if none existed
      */
-    public function clearMessages()
+    public function clearMessages ()
     {
         if ($this->hasMessages()) {
             unset(self::$_messages[$this->_namespace]);
             return true;
         }
-
+        
         return false;
     }
 
@@ -196,7 +196,7 @@ class FlashMessenger extends AbstractHelper implements \IteratorAggregate, \Coun
      *
      * @return boolean
      */
-    public function hasCurrentMessages()
+    public function hasCurrentMessages ()
     {
         return isset(self::$_session->{$this->_namespace});
     }
@@ -207,12 +207,12 @@ class FlashMessenger extends AbstractHelper implements \IteratorAggregate, \Coun
      *
      * @return array
      */
-    public function getCurrentMessages()
+    public function getCurrentMessages ()
     {
         if ($this->hasCurrentMessages()) {
             return self::$_session->{$this->_namespace}->toArray();
         }
-
+        
         return array();
     }
 
@@ -221,13 +221,13 @@ class FlashMessenger extends AbstractHelper implements \IteratorAggregate, \Coun
      *
      * @return boolean
      */
-    public function clearCurrentMessages()
+    public function clearCurrentMessages ()
     {
         if ($this->hasCurrentMessages()) {
             unset(self::$_session->{$this->_namespace});
             return true;
         }
-
+        
         return false;
     }
 
@@ -236,12 +236,12 @@ class FlashMessenger extends AbstractHelper implements \IteratorAggregate, \Coun
      *
      * @return ArrayObject
      */
-    public function getIterator()
+    public function getIterator ()
     {
         if ($this->hasMessages()) {
             return new \ArrayObject($this->getMessages());
         }
-
+        
         return new \ArrayObject();
     }
 
@@ -250,12 +250,12 @@ class FlashMessenger extends AbstractHelper implements \IteratorAggregate, \Coun
      *
      * @return int
      */
-    public function count()
+    public function count ()
     {
         if ($this->hasMessages()) {
             return count($this->getMessages());
         }
-
+        
         return 0;
     }
 
@@ -265,7 +265,7 @@ class FlashMessenger extends AbstractHelper implements \IteratorAggregate, \Coun
      * @param  string $message
      * @return void
      */
-    public function direct($message)
+    public function direct ($message)
     {
         return $this->addMessage($message);
     }

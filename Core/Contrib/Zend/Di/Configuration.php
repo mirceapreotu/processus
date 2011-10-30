@@ -6,14 +6,15 @@ use Traversable;
 
 class Configuration
 {
+
     protected $data = array();
-    
+
     /**
      * @var Zend\Di\DependencyInjector
      */
     protected $di = null;
-    
-    public function __construct($data)
+
+    public function __construct ($data)
     {
         if ($data instanceof Traversable) {
             if (method_exists($data, 'toArray')) {
@@ -21,85 +22,93 @@ class Configuration
             } else {
                 $data = iterator_to_array($data, true);
             }
-        } elseif (!is_array($data)) {
+        } elseif (! is_array($data)) {
             throw new Exception\InvalidArgumentException(
-                'Configuration data must be of type Zend\Config\Config or an array'
-            );
+            'Configuration data must be of type Zend\Config\Config or an array');
         }
         $this->data = $data;
     }
-    
-    public function configure(Di $di)
+
+    public function configure (Di $di)
     {
         if (isset($this->data['definition'])) {
             $this->configureDefinition($di, $this->data['definition']);
         }
-
+        
         if (isset($this->data['instance'])) {
             $this->configureInstance($di, $this->data['instance']);
         }
-        
+    
     }
 
-    public function configureDefinition(Di $di, $definition)
+    public function configureDefinition (Di $di, $definition)
     {
         foreach ($definition as $definitionType => $definitionData) {
             switch ($definitionType) {
                 case 'compiler':
-                    // @todo
+                // @todo
                 case 'runtime':
-                    // @todo
+                // @todo
                 case 'class':
                     foreach ($definitionData as $className => $classData) {
-                        $classDefinitions = $di->definitions()->getDefinitionsByType('Zend\Di\Definition\ClassDefinition');
+                        $classDefinitions = $di->definitions()->getDefinitionsByType(
+                        'Zend\Di\Definition\ClassDefinition');
                         foreach ($classDefinitions as $classDefinition) {
-                            if (!$classDefinition->hasClass($className)) {
+                            if (! $classDefinition->hasClass($className)) {
                                 unset($classDefinition);
                             }
                         }
-                        if (!isset($classDefinition)) {
-                            $classDefinition = new Definition\ClassDefinition($className);
-                            $di->definitions()->addDefinition($classDefinition, false);
+                        if (! isset($classDefinition)) {
+                            $classDefinition = new Definition\ClassDefinition(
+                            $className);
+                            $di->definitions()->addDefinition($classDefinition, 
+                            false);
                         }
                         foreach ($classData as $classDefKey => $classDefData) {
                             switch ($classDefKey) {
                                 case 'instantiator':
-                                    $classDefinition->setInstantiator($classDefData);
+                                    $classDefinition->setInstantiator(
+                                    $classDefData);
                                     break;
                                 case 'supertypes':
-                                    $classDefinition->setSupertypes($classDefData);
+                                    $classDefinition->setSupertypes(
+                                    $classDefData);
                                     break;
                                 case 'methods':
                                 case 'method':
                                     foreach ($classDefData as $methodName => $methodInfo) {
                                         if (isset($methodInfo['required'])) {
-                                            $classDefinition->addMethod($methodName, $methodInfo['required']);
+                                            $classDefinition->addMethod(
+                                            $methodName, $methodInfo['required']);
                                             unset($methodInfo['required']);
                                         }
                                         foreach ($methodInfo as $paramName => $paramInfo) {
-                                            $classDefinition->addMethodParameter($methodName, $paramName, $paramInfo);
+                                            $classDefinition->addMethodParameter(
+                                            $methodName, $paramName, $paramInfo);
                                         }
                                     }
                                 default:
                                     $methodName = $classDefKey;
                                     $methodInfo = $classDefData;
                                     if (isset($classDefData['required'])) {
-                                        $classDefinition->addMethod($methodName, $methodInfo['required']);
+                                        $classDefinition->addMethod($methodName, 
+                                        $methodInfo['required']);
                                         unset($methodInfo['required']);
                                     }
                                     foreach ($methodInfo as $paramName => $paramInfo) {
-                                        $classDefinition->addMethodParameter($methodName, $paramName, $paramInfo);
+                                        $classDefinition->addMethodParameter(
+                                        $methodName, $paramName, $paramInfo);
                                     }
                             }
                         }
                     }
             }
-
+        
         }
-
-    }
     
-    public function configureInstance(Di $di, $instanceData)
+    }
+
+    public function configureInstance (Di $di, $instanceData)
     {
         $im = $di->instanceManager();
         
@@ -138,8 +147,7 @@ class Configuration
                     }
             }
         }
-
+    
     }
 
-    
 }

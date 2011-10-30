@@ -55,23 +55,39 @@ class VolumeEntry extends \Zend\GData\Entry
 {
 
     const THUMBNAIL_LINK_REL = 'http://schemas.google.com/books/2008/thumbnail';
+
     const PREVIEW_LINK_REL = 'http://schemas.google.com/books/2008/preview';
+
     const INFO_LINK_REL = 'http://schemas.google.com/books/2008/info';
+
     const ANNOTATION_LINK_REL = 'http://schemas.google.com/books/2008/annotation';
 
     protected $_comments = null;
+
     protected $_creators = array();
+
     protected $_dates = array();
+
     protected $_descriptions = array();
+
     protected $_embeddability = null;
+
     protected $_formats = array();
+
     protected $_identifiers = array();
+
     protected $_languages = array();
+
     protected $_publishers = array();
+
     protected $_rating = null;
+
     protected $_review = null;
+
     protected $_subjects = array();
+
     protected $_titles = array();
+
     protected $_viewability = null;
 
     /**
@@ -79,9 +95,9 @@ class VolumeEntry extends \Zend\GData\Entry
      * Describes an entry in a feed of Book Search volumes
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(Books::$namespaces);
         parent::__construct($element);
@@ -97,13 +113,13 @@ class VolumeEntry extends \Zend\GData\Entry
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc);
         if ($this->_creators !== null) {
             foreach ($this->_creators as $creators) {
-                $element->appendChild($creators->getDOM(
-                    $element->ownerDocument));
+                $element->appendChild(
+                $creators->getDOM($element->ownerDocument));
             }
         }
         if ($this->_dates !== null) {
@@ -113,38 +129,38 @@ class VolumeEntry extends \Zend\GData\Entry
         }
         if ($this->_descriptions !== null) {
             foreach ($this->_descriptions as $descriptions) {
-                $element->appendChild($descriptions->getDOM(
-                    $element->ownerDocument));
+                $element->appendChild(
+                $descriptions->getDOM($element->ownerDocument));
             }
         }
         if ($this->_formats !== null) {
             foreach ($this->_formats as $formats) {
-                $element->appendChild($formats->getDOM(
-                    $element->ownerDocument));
+                $element->appendChild(
+                $formats->getDOM($element->ownerDocument));
             }
         }
         if ($this->_identifiers !== null) {
             foreach ($this->_identifiers as $identifiers) {
-                $element->appendChild($identifiers->getDOM(
-                    $element->ownerDocument));
+                $element->appendChild(
+                $identifiers->getDOM($element->ownerDocument));
             }
         }
         if ($this->_languages !== null) {
             foreach ($this->_languages as $languages) {
-                $element->appendChild($languages->getDOM(
-                    $element->ownerDocument));
+                $element->appendChild(
+                $languages->getDOM($element->ownerDocument));
             }
         }
         if ($this->_publishers !== null) {
             foreach ($this->_publishers as $publishers) {
-                $element->appendChild($publishers->getDOM(
-                    $element->ownerDocument));
+                $element->appendChild(
+                $publishers->getDOM($element->ownerDocument));
             }
         }
         if ($this->_subjects !== null) {
             foreach ($this->_subjects as $subjects) {
-                $element->appendChild($subjects->getDOM(
-                    $element->ownerDocument));
+                $element->appendChild(
+                $subjects->getDOM($element->ownerDocument));
             }
         }
         if ($this->_titles !== null) {
@@ -153,24 +169,24 @@ class VolumeEntry extends \Zend\GData\Entry
             }
         }
         if ($this->_comments !== null) {
-            $element->appendChild($this->_comments->getDOM(
-                $element->ownerDocument));
+            $element->appendChild(
+            $this->_comments->getDOM($element->ownerDocument));
         }
         if ($this->_embeddability !== null) {
-            $element->appendChild($this->_embeddability->getDOM(
-                $element->ownerDocument));
+            $element->appendChild(
+            $this->_embeddability->getDOM($element->ownerDocument));
         }
         if ($this->_rating !== null) {
-            $element->appendChild($this->_rating->getDOM(
-                $element->ownerDocument));
+            $element->appendChild(
+            $this->_rating->getDOM($element->ownerDocument));
         }
         if ($this->_review !== null) {
-            $element->appendChild($this->_review->getDOM(
-                $element->ownerDocument));
+            $element->appendChild(
+            $this->_review->getDOM($element->ownerDocument));
         }
         if ($this->_viewability !== null) {
-            $element->appendChild($this->_viewability->getDOM(
-                $element->ownerDocument));
+            $element->appendChild(
+            $this->_viewability->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -181,83 +197,83 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @param DOMNode $child The DOMNode to process.
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('dc') . ':' . 'creator':
-            $creators = new \Zend\GData\DublinCore\Extension\Creator();
-            $creators->transferFromDOM($child);
-            $this->_creators[] = $creators;
-            break;
-        case $this->lookupNamespace('dc') . ':' . 'date':
-            $dates = new \Zend\GData\DublinCore\Extension\Date();
-            $dates->transferFromDOM($child);
-            $this->_dates[] = $dates;
-            break;
-        case $this->lookupNamespace('dc') . ':' . 'description':
-            $descriptions = new \Zend\GData\DublinCore\Extension\Description();
-            $descriptions->transferFromDOM($child);
-            $this->_descriptions[] = $descriptions;
-            break;
-        case $this->lookupNamespace('dc') . ':' . 'format':
-            $formats = new \Zend\GData\DublinCore\Extension\Format();
-            $formats->transferFromDOM($child);
-            $this->_formats[] = $formats;
-            break;
-        case $this->lookupNamespace('dc') . ':' . 'identifier':
-            $identifiers = new \Zend\GData\DublinCore\Extension\Identifier();
-            $identifiers->transferFromDOM($child);
-            $this->_identifiers[] = $identifiers;
-            break;
-        case $this->lookupNamespace('dc') . ':' . 'language':
-            $languages = new \Zend\GData\DublinCore\Extension\Language();
-            $languages->transferFromDOM($child);
-            $this->_languages[] = $languages;
-            break;
-        case $this->lookupNamespace('dc') . ':' . 'publisher':
-            $publishers = new \Zend\GData\DublinCore\Extension\Publisher();
-            $publishers->transferFromDOM($child);
-            $this->_publishers[] = $publishers;
-            break;
-        case $this->lookupNamespace('dc') . ':' . 'subject':
-            $subjects = new \Zend\GData\DublinCore\Extension\Subject();
-            $subjects->transferFromDOM($child);
-            $this->_subjects[] = $subjects;
-            break;
-        case $this->lookupNamespace('dc') . ':' . 'title':
-            $titles = new \Zend\GData\DublinCore\Extension\Title();
-            $titles->transferFromDOM($child);
-            $this->_titles[] = $titles;
-            break;
-        case $this->lookupNamespace('gd') . ':' . 'comments':
-            $comments = new \Zend\GData\Extension\Comments();
-            $comments->transferFromDOM($child);
-            $this->_comments = $comments;
-            break;
-        case $this->lookupNamespace('gbs') . ':' . 'embeddability':
-            $embeddability = new Extension\Embeddability();
-            $embeddability->transferFromDOM($child);
-            $this->_embeddability = $embeddability;
-            break;
-        case $this->lookupNamespace('gd') . ':' . 'rating':
-            $rating = new \Zend\GData\Extension\Rating();
-            $rating->transferFromDOM($child);
-            $this->_rating = $rating;
-            break;
-        case $this->lookupNamespace('gbs') . ':' . 'review':
-            $review = new Extension\Review();
-            $review->transferFromDOM($child);
-            $this->_review = $review;
-            break;
-        case $this->lookupNamespace('gbs') . ':' . 'viewability':
-            $viewability = new Extension\Viewability();
-            $viewability->transferFromDOM($child);
-            $this->_viewability = $viewability;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('dc') . ':' . 'creator':
+                $creators = new \Zend\GData\DublinCore\Extension\Creator();
+                $creators->transferFromDOM($child);
+                $this->_creators[] = $creators;
+                break;
+            case $this->lookupNamespace('dc') . ':' . 'date':
+                $dates = new \Zend\GData\DublinCore\Extension\Date();
+                $dates->transferFromDOM($child);
+                $this->_dates[] = $dates;
+                break;
+            case $this->lookupNamespace('dc') . ':' . 'description':
+                $descriptions = new \Zend\GData\DublinCore\Extension\Description();
+                $descriptions->transferFromDOM($child);
+                $this->_descriptions[] = $descriptions;
+                break;
+            case $this->lookupNamespace('dc') . ':' . 'format':
+                $formats = new \Zend\GData\DublinCore\Extension\Format();
+                $formats->transferFromDOM($child);
+                $this->_formats[] = $formats;
+                break;
+            case $this->lookupNamespace('dc') . ':' . 'identifier':
+                $identifiers = new \Zend\GData\DublinCore\Extension\Identifier();
+                $identifiers->transferFromDOM($child);
+                $this->_identifiers[] = $identifiers;
+                break;
+            case $this->lookupNamespace('dc') . ':' . 'language':
+                $languages = new \Zend\GData\DublinCore\Extension\Language();
+                $languages->transferFromDOM($child);
+                $this->_languages[] = $languages;
+                break;
+            case $this->lookupNamespace('dc') . ':' . 'publisher':
+                $publishers = new \Zend\GData\DublinCore\Extension\Publisher();
+                $publishers->transferFromDOM($child);
+                $this->_publishers[] = $publishers;
+                break;
+            case $this->lookupNamespace('dc') . ':' . 'subject':
+                $subjects = new \Zend\GData\DublinCore\Extension\Subject();
+                $subjects->transferFromDOM($child);
+                $this->_subjects[] = $subjects;
+                break;
+            case $this->lookupNamespace('dc') . ':' . 'title':
+                $titles = new \Zend\GData\DublinCore\Extension\Title();
+                $titles->transferFromDOM($child);
+                $this->_titles[] = $titles;
+                break;
+            case $this->lookupNamespace('gd') . ':' . 'comments':
+                $comments = new \Zend\GData\Extension\Comments();
+                $comments->transferFromDOM($child);
+                $this->_comments = $comments;
+                break;
+            case $this->lookupNamespace('gbs') . ':' . 'embeddability':
+                $embeddability = new Extension\Embeddability();
+                $embeddability->transferFromDOM($child);
+                $this->_embeddability = $embeddability;
+                break;
+            case $this->lookupNamespace('gd') . ':' . 'rating':
+                $rating = new \Zend\GData\Extension\Rating();
+                $rating->transferFromDOM($child);
+                $this->_rating = $rating;
+                break;
+            case $this->lookupNamespace('gbs') . ':' . 'review':
+                $review = new Extension\Review();
+                $review->transferFromDOM($child);
+                $this->_review = $review;
+                break;
+            case $this->lookupNamespace('gbs') . ':' . 'viewability':
+                $viewability = new Extension\Viewability();
+                $viewability->transferFromDOM($child);
+                $this->_viewability = $viewability;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
@@ -266,7 +282,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\Extension\Comments|null The comments
      */
-    public function getComments()
+    public function getComments ()
     {
         return $this->_comments;
     }
@@ -276,7 +292,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return array The creators
      */
-    public function getCreators()
+    public function getCreators ()
     {
         return $this->_creators;
     }
@@ -286,7 +302,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return array The dates
      */
-    public function getDates()
+    public function getDates ()
     {
         return $this->_dates;
     }
@@ -296,7 +312,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return array The descriptions
      */
-    public function getDescriptions()
+    public function getDescriptions ()
     {
         return $this->_descriptions;
     }
@@ -306,7 +322,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\Books\Extension\Embeddability|null The embeddability
      */
-    public function getEmbeddability()
+    public function getEmbeddability ()
     {
         return $this->_embeddability;
     }
@@ -316,7 +332,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return array The formats
      */
-    public function getFormats()
+    public function getFormats ()
     {
         return $this->_formats;
     }
@@ -326,7 +342,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return array The identifiers
      */
-    public function getIdentifiers()
+    public function getIdentifiers ()
     {
         return $this->_identifiers;
     }
@@ -336,7 +352,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return array The languages
      */
-    public function getLanguages()
+    public function getLanguages ()
     {
         return $this->_languages;
     }
@@ -346,7 +362,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return array The publishers
      */
-    public function getPublishers()
+    public function getPublishers ()
     {
         return $this->_publishers;
     }
@@ -356,7 +372,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\Extension\Rating|null The rating
      */
-    public function getRating()
+    public function getRating ()
     {
         return $this->_rating;
     }
@@ -366,7 +382,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\Books\Extension\Review|null The review
      */
-    public function getReview()
+    public function getReview ()
     {
         return $this->_review;
     }
@@ -376,7 +392,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return array The subjects
      */
-    public function getSubjects()
+    public function getSubjects ()
     {
         return $this->_subjects;
     }
@@ -386,7 +402,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return array The titles
      */
-    public function getTitles()
+    public function getTitles ()
     {
         return $this->_titles;
     }
@@ -396,7 +412,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\Books\Extension\Viewability|null The viewability
      */
-    public function getViewability()
+    public function getViewability ()
     {
         return $this->_viewability;
     }
@@ -407,7 +423,7 @@ class VolumeEntry extends \Zend\GData\Entry
      * @param \Zend\GData\Extension\Comments|null $comments Comments class
      * @return \Zend\GData\Books\VolumeEntry Provides a fluent interface
      */
-    public function setComments($comments)
+    public function setComments ($comments)
     {
         $this->_comments = $comments;
         return $this;
@@ -419,7 +435,7 @@ class VolumeEntry extends \Zend\GData\Entry
      * @param array $creators Creators|null
      * @return \Zend\GData\Books\VolumeEntry Provides a fluent interface
      */
-    public function setCreators($creators)
+    public function setCreators ($creators)
     {
         $this->_creators = $creators;
         return $this;
@@ -431,7 +447,7 @@ class VolumeEntry extends \Zend\GData\Entry
      * @param array $dates dates
      * @return \Zend\GData\Books\VolumeEntry Provides a fluent interface
      */
-    public function setDates($dates)
+    public function setDates ($dates)
     {
         $this->_dates = $dates;
         return $this;
@@ -443,7 +459,7 @@ class VolumeEntry extends \Zend\GData\Entry
      * @param array $descriptions descriptions
      * @return \Zend\GData\Books\VolumeEntry Provides a fluent interface
      */
-    public function setDescriptions($descriptions)
+    public function setDescriptions ($descriptions)
     {
         $this->_descriptions = $descriptions;
         return $this;
@@ -453,10 +469,10 @@ class VolumeEntry extends \Zend\GData\Entry
      * Sets the embeddability
      *
      * @param \Zend\GData\Books\Extension\Embeddability|null $embeddability
-     *        embeddability
+     * embeddability
      * @return \Zend\GData\Books\VolumeEntry Provides a fluent interface
      */
-    public function setEmbeddability($embeddability)
+    public function setEmbeddability ($embeddability)
     {
         $this->_embeddability = $embeddability;
         return $this;
@@ -468,7 +484,7 @@ class VolumeEntry extends \Zend\GData\Entry
      * @param array $formats formats
      * @return \Zend\GData\Books\VolumeEntry Provides a fluent interface
      */
-    public function setFormats($formats)
+    public function setFormats ($formats)
     {
         $this->_formats = $formats;
         return $this;
@@ -480,7 +496,7 @@ class VolumeEntry extends \Zend\GData\Entry
      * @param array $identifiers identifiers
      * @return \Zend\GData\Books\VolumeEntry Provides a fluent interface
      */
-    public function setIdentifiers($identifiers)
+    public function setIdentifiers ($identifiers)
     {
         $this->_identifiers = $identifiers;
         return $this;
@@ -492,7 +508,7 @@ class VolumeEntry extends \Zend\GData\Entry
      * @param array $languages languages
      * @return \Zend\GData\Books\VolumeEntry Provides a fluent interface
      */
-    public function setLanguages($languages)
+    public function setLanguages ($languages)
     {
         $this->_languages = $languages;
         return $this;
@@ -504,7 +520,7 @@ class VolumeEntry extends \Zend\GData\Entry
      * @param array $publishers publishers
      * @return \Zend\GData\Books\VolumeEntry Provides a fluent interface
      */
-    public function setPublishers($publishers)
+    public function setPublishers ($publishers)
     {
         $this->_publishers = $publishers;
         return $this;
@@ -516,7 +532,7 @@ class VolumeEntry extends \Zend\GData\Entry
      * @param \Zend\GData\Extension\Rating|null $rating rating
      * @return \Zend\GData\Books\VolumeEntry Provides a fluent interface
      */
-    public function setRating($rating)
+    public function setRating ($rating)
     {
         $this->_rating = $rating;
         return $this;
@@ -528,7 +544,7 @@ class VolumeEntry extends \Zend\GData\Entry
      * @param \Zend\GData\Books\Extension\Review|null $review review
      * @return \Zend\GData\Books\VolumeEntry Provides a fluent interface
      */
-    public function setReview($review)
+    public function setReview ($review)
     {
         $this->_review = $review;
         return $this;
@@ -540,7 +556,7 @@ class VolumeEntry extends \Zend\GData\Entry
      * @param array $subjects subjects
      * @return \Zend\GData\Books\VolumeEntry Provides a fluent interface
      */
-    public function setSubjects($subjects)
+    public function setSubjects ($subjects)
     {
         $this->_subjects = $subjects;
         return $this;
@@ -552,7 +568,7 @@ class VolumeEntry extends \Zend\GData\Entry
      * @param array $titles titles
      * @return \Zend\GData\Books\VolumeEntry Provides a fluent interface
      */
-    public function setTitles($titles)
+    public function setTitles ($titles)
     {
         $this->_titles = $titles;
         return $this;
@@ -562,15 +578,14 @@ class VolumeEntry extends \Zend\GData\Entry
      * Sets the viewability
      *
      * @param \Zend\GData\Books\Extension\Viewability|null $viewability
-     *        viewability
+     * viewability
      * @return \Zend\GData\Books\VolumeEntry Provides a fluent interface
      */
-    public function setViewability($viewability)
+    public function setViewability ($viewability)
     {
         $this->_viewability = $viewability;
         return $this;
     }
-
 
     /**
      * Gets the volume ID based upon the atom:id value
@@ -578,14 +593,14 @@ class VolumeEntry extends \Zend\GData\Entry
      * @return string The volume ID
      * @throws \Zend\GData\App\Exception
      */
-    public function getVolumeId()
+    public function getVolumeId ()
     {
         $fullId = $this->getId()->getText();
         $position = strrpos($fullId, '/');
         if ($position === false) {
             throw new \Zend\GData\App\Exception('Slash not found in atom:id');
         } else {
-            return substr($fullId, strrpos($fullId,'/') + 1);
+            return substr($fullId, strrpos($fullId, '/') + 1);
         }
     }
 
@@ -594,7 +609,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return Zend_Gdata_App_Extension_link|null The thumbnail link
      */
-    public function getThumbnailLink()
+    public function getThumbnailLink ()
     {
         return $this->getLink(self::THUMBNAIL_LINK_REL);
     }
@@ -604,7 +619,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\App\Extension\Link|null The preview link
      */
-    public function getPreviewLink()
+    public function getPreviewLink ()
     {
         return $this->getLink(self::PREVIEW_LINK_REL);
     }
@@ -614,7 +629,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\App\Extension\Link|null The info link
      */
-    public function getInfoLink()
+    public function getInfoLink ()
     {
         return $this->getLink(self::INFO_LINK_REL);
     }
@@ -624,7 +639,7 @@ class VolumeEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\App\Extension\Link|null The annotations link
      */
-    public function getAnnotationLink()
+    public function getAnnotationLink ()
     {
         return $this->getLink(self::ANNOTATION_LINK_REL);
     }

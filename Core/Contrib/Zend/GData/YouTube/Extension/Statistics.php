@@ -39,6 +39,7 @@ class Statistics extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'yt';
+
     protected $_rootElement = 'statistics';
 
     /**
@@ -98,9 +99,8 @@ class Statistics extends \Zend\GData\Extension
      * @param string $lastWebAccess(optional) The lastWebAccess value
      * @param string $favoriteCount(optional) The favoriteCount value
      */
-    public function __construct($viewCount = null, $videoWatchCount = null,
-        $subscriberCount = null, $lastWebAccess = null,
-        $favoriteCount = null)
+    public function __construct ($viewCount = null, $videoWatchCount = null, 
+    $subscriberCount = null, $lastWebAccess = null, $favoriteCount = null)
     {
         $this->registerAllNamespaces(\Zend\GData\YouTube::$namespaces);
         parent::__construct();
@@ -121,7 +121,7 @@ class Statistics extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_videoWatchCount !== null) {
@@ -131,16 +131,13 @@ class Statistics extends \Zend\GData\Extension
             $element->setAttribute('viewCount', $this->_viewCount);
         }
         if ($this->_subscriberCount !== null) {
-            $element->setAttribute('subscriberCount',
-                $this->_subscriberCount);
+            $element->setAttribute('subscriberCount', $this->_subscriberCount);
         }
         if ($this->_lastWebAccess !== null) {
-            $element->setAttribute('lastWebAccess',
-                $this->_lastWebAccess);
+            $element->setAttribute('lastWebAccess', $this->_lastWebAccess);
         }
         if ($this->_favoriteCount !== null) {
-            $element->setAttribute('favoriteCount',
-                $this->_favoriteCount);
+            $element->setAttribute('favoriteCount', $this->_favoriteCount);
         }
         return $element;
     }
@@ -153,26 +150,26 @@ class Statistics extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'videoWatchCount':
-            $this->_videoWatchCount = $attribute->nodeValue;
-            break;
-        case 'viewCount':
-            $this->_viewCount = $attribute->nodeValue;
-            break;
-        case 'subscriberCount':
-            $this->_subscriberCount = $attribute->nodeValue;
-            break;
-        case 'lastWebAccess':
-            $this->_lastWebAccess = $attribute->nodeValue;
-            break;
-        case 'favoriteCount':
-            $this->_favoriteCount = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'videoWatchCount':
+                $this->_videoWatchCount = $attribute->nodeValue;
+                break;
+            case 'viewCount':
+                $this->_viewCount = $attribute->nodeValue;
+                break;
+            case 'subscriberCount':
+                $this->_subscriberCount = $attribute->nodeValue;
+                break;
+            case 'lastWebAccess':
+                $this->_lastWebAccess = $attribute->nodeValue;
+                break;
+            case 'favoriteCount':
+                $this->_favoriteCount = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -181,7 +178,7 @@ class Statistics extends \Zend\GData\Extension
      *
      * @return int The value associated with this attribute.
      */
-    public function getViewCount()
+    public function getViewCount ()
     {
         return $this->_viewCount;
     }
@@ -193,7 +190,7 @@ class Statistics extends \Zend\GData\Extension
      * @return \Zend\GData\YouTube\Extension\Statistics The element being
      * modified.
      */
-    public function setViewCount($value)
+    public function setViewCount ($value)
     {
         $this->_viewCount = $value;
         return $this;
@@ -204,7 +201,7 @@ class Statistics extends \Zend\GData\Extension
      *
      * @return int The value associated with this attribute.
      */
-    public function getVideoWatchCount()
+    public function getVideoWatchCount ()
     {
         return $this->_videoWatchCount;
     }
@@ -216,7 +213,7 @@ class Statistics extends \Zend\GData\Extension
      * @return \Zend\GData\YouTube\Extension\Statistics The element being
      * modified.
      */
-    public function setVideoWatchCount($value)
+    public function setVideoWatchCount ($value)
     {
         $this->_videoWatchCount = $value;
         return $this;
@@ -227,7 +224,7 @@ class Statistics extends \Zend\GData\Extension
      *
      * @return int The value associated with this attribute.
      */
-    public function getSubscriberCount()
+    public function getSubscriberCount ()
     {
         return $this->_subscriberCount;
     }
@@ -239,7 +236,7 @@ class Statistics extends \Zend\GData\Extension
      * @return \Zend\GData\YouTube\Extension\Statistics The element being
      * modified.
      */
-    public function setSubscriberCount($value)
+    public function setSubscriberCount ($value)
     {
         $this->_subscriberCount = $value;
         return $this;
@@ -250,7 +247,7 @@ class Statistics extends \Zend\GData\Extension
      *
      * @return int The value associated with this attribute.
      */
-    public function getLastWebAccess()
+    public function getLastWebAccess ()
     {
         return $this->_lastWebAccess;
     }
@@ -262,7 +259,7 @@ class Statistics extends \Zend\GData\Extension
      * @return \Zend\GData\YouTube\Extension\Statistics The element being
      * modified.
      */
-    public function setLastWebAccess($value)
+    public function setLastWebAccess ($value)
     {
         $this->_lastWebAccess = $value;
         return $this;
@@ -273,7 +270,7 @@ class Statistics extends \Zend\GData\Extension
      *
      * @return int The value associated with this attribute.
      */
-    public function getFavoriteCount()
+    public function getFavoriteCount ()
     {
         return $this->_favoriteCount;
     }
@@ -285,7 +282,7 @@ class Statistics extends \Zend\GData\Extension
      * @return \Zend\GData\YouTube\Extension\Statistics The element being
      * modified.
      */
-    public function setFavoriteCount($value)
+    public function setFavoriteCount ($value)
     {
         $this->_favoriteCount = $value;
         return $this;
@@ -297,13 +294,12 @@ class Statistics extends \Zend\GData\Extension
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
-        return 'View Count=' . $this->_viewCount .
-            ' VideoWatchCount=' . $this->_videoWatchCount .
-            ' SubscriberCount=' . $this->_subscriberCount .
-            ' LastWebAccess=' . $this->_lastWebAccess .
-            ' FavoriteCount=' . $this->_favoriteCount;
+        return 'View Count=' . $this->_viewCount . ' VideoWatchCount=' .
+         $this->_videoWatchCount . ' SubscriberCount=' . $this->_subscriberCount .
+         ' LastWebAccess=' . $this->_lastWebAccess . ' FavoriteCount=' .
+         $this->_favoriteCount;
     }
 
 }

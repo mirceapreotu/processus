@@ -41,6 +41,7 @@ use Zend\GData\GBase;
  */
 class Feed extends \Zend\GData\Feed
 {
+
     /**
      * The classname for the feed.
      *
@@ -52,9 +53,9 @@ class Feed extends \Zend\GData\Feed
      * Create a new instance.
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(GBase::$namespaces);
         parent::__construct($element);

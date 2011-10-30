@@ -17,23 +17,23 @@
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
- 
+
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Writer\Extension\ITunes\Renderer;
 use Zend\Feed\Writer\Extension;
 
 /**
-* @uses \Zend\Feed\Writer\Extension\AbstractRenderer
-* @category Zend
-* @package Zend_Feed_Writer
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @uses \Zend\Feed\Writer\Extension\AbstractRenderer
+ * @category Zend
+ * @package Zend_Feed_Writer
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 class Feed extends Extension\AbstractRenderer
 {
-    
+
     /**
      * Set to TRUE if a rendering method actually renders something. This
      * is used to prevent premature appending of a XML namespace declaration
@@ -42,13 +42,13 @@ class Feed extends Extension\AbstractRenderer
      * @var bool
      */
     protected $_called = false;
-    
+
     /**
      * Render feed
      * 
      * @return void
      */
-    public function render()
+    public function render ()
     {
         $this->_setAuthors($this->_dom, $this->_base);
         $this->_setBlock($this->_dom, $this->_base);
@@ -65,16 +65,16 @@ class Feed extends Extension\AbstractRenderer
             $this->_appendNamespaces();
         }
     }
-    
+
     /**
      * Append feed namespaces
      * 
      * @return void
      */
-    protected function _appendNamespaces()
+    protected function _appendNamespaces ()
     {
-        $this->getRootElement()->setAttribute('xmlns:itunes',
-            'http://www.itunes.com/dtds/podcast-1.0.dtd');  
+        $this->getRootElement()->setAttribute('xmlns:itunes', 
+        'http://www.itunes.com/dtds/podcast-1.0.dtd');
     }
 
     /**
@@ -84,10 +84,10 @@ class Feed extends Extension\AbstractRenderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setAuthors(\DOMDocument $dom, \DOMElement $root)
+    protected function _setAuthors (\DOMDocument $dom,\DOMElement $root)
     {
         $authors = $this->getDataContainer()->getItunesAuthors();
-        if (!$authors || empty($authors)) {
+        if (! $authors || empty($authors)) {
             return;
         }
         foreach ($authors as $author) {
@@ -98,7 +98,7 @@ class Feed extends Extension\AbstractRenderer
         }
         $this->_called = true;
     }
-    
+
     /**
      * Set feed itunes block
      * 
@@ -106,7 +106,7 @@ class Feed extends Extension\AbstractRenderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setBlock(\DOMDocument $dom, \DOMElement $root)
+    protected function _setBlock (\DOMDocument $dom,\DOMElement $root)
     {
         $block = $this->getDataContainer()->getItunesBlock();
         if ($block === null) {
@@ -118,7 +118,7 @@ class Feed extends Extension\AbstractRenderer
         $root->appendChild($el);
         $this->_called = true;
     }
-    
+
     /**
      * Set feed categories
      * 
@@ -126,14 +126,14 @@ class Feed extends Extension\AbstractRenderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setCategories(\DOMDocument $dom, \DOMElement $root)
+    protected function _setCategories (\DOMDocument $dom,\DOMElement $root)
     {
         $cats = $this->getDataContainer()->getItunesCategories();
-        if (!$cats || empty($cats)) {
+        if (! $cats || empty($cats)) {
             return;
         }
-        foreach ($cats as $key=>$cat) {
-            if (!is_array($cat)) {
+        foreach ($cats as $key => $cat) {
+            if (! is_array($cat)) {
                 $el = $dom->createElement('itunes:category');
                 $el->setAttribute('text', $cat);
                 $root->appendChild($el);
@@ -150,7 +150,7 @@ class Feed extends Extension\AbstractRenderer
         }
         $this->_called = true;
     }
-    
+
     /**
      * Set feed image (icon)
      * 
@@ -158,10 +158,10 @@ class Feed extends Extension\AbstractRenderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setImage(\DOMDocument $dom, \DOMElement $root)
+    protected function _setImage (\DOMDocument $dom,\DOMElement $root)
     {
         $image = $this->getDataContainer()->getItunesImage();
-        if (!$image) {
+        if (! $image) {
             return;
         }
         $el = $dom->createElement('itunes:image');
@@ -169,7 +169,7 @@ class Feed extends Extension\AbstractRenderer
         $root->appendChild($el);
         $this->_called = true;
     }
-    
+
     /**
      * Set feed cumulative duration
      * 
@@ -177,10 +177,10 @@ class Feed extends Extension\AbstractRenderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setDuration(\DOMDocument $dom, \DOMElement $root)
+    protected function _setDuration (\DOMDocument $dom,\DOMElement $root)
     {
         $duration = $this->getDataContainer()->getItunesDuration();
-        if (!$duration) {
+        if (! $duration) {
             return;
         }
         $el = $dom->createElement('itunes:duration');
@@ -189,7 +189,7 @@ class Feed extends Extension\AbstractRenderer
         $root->appendChild($el);
         $this->_called = true;
     }
-    
+
     /**
      * Set explicit flag
      * 
@@ -197,7 +197,7 @@ class Feed extends Extension\AbstractRenderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setExplicit(\DOMDocument $dom, \DOMElement $root)
+    protected function _setExplicit (\DOMDocument $dom,\DOMElement $root)
     {
         $explicit = $this->getDataContainer()->getItunesExplicit();
         if ($explicit === null) {
@@ -209,7 +209,7 @@ class Feed extends Extension\AbstractRenderer
         $root->appendChild($el);
         $this->_called = true;
     }
-    
+
     /**
      * Set feed keywords
      * 
@@ -217,10 +217,10 @@ class Feed extends Extension\AbstractRenderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setKeywords(\DOMDocument $dom, \DOMElement $root)
+    protected function _setKeywords (\DOMDocument $dom,\DOMElement $root)
     {
         $keywords = $this->getDataContainer()->getItunesKeywords();
-        if (!$keywords || empty($keywords)) {
+        if (! $keywords || empty($keywords)) {
             return;
         }
         $el = $dom->createElement('itunes:keywords');
@@ -229,7 +229,7 @@ class Feed extends Extension\AbstractRenderer
         $root->appendChild($el);
         $this->_called = true;
     }
-    
+
     /**
      * Set feed's new URL
      * 
@@ -237,10 +237,10 @@ class Feed extends Extension\AbstractRenderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setNewFeedUrl(\DOMDocument $dom, \DOMElement $root)
+    protected function _setNewFeedUrl (\DOMDocument $dom,\DOMElement $root)
     {
         $url = $this->getDataContainer()->getItunesNewFeedUrl();
-        if (!$url) {
+        if (! $url) {
             return;
         }
         $el = $dom->createElement('itunes:new-feed-url');
@@ -249,7 +249,7 @@ class Feed extends Extension\AbstractRenderer
         $root->appendChild($el);
         $this->_called = true;
     }
-    
+
     /**
      * Set feed owners 
      * 
@@ -257,10 +257,10 @@ class Feed extends Extension\AbstractRenderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setOwners(\DOMDocument $dom, \DOMElement $root)
+    protected function _setOwners (\DOMDocument $dom,\DOMElement $root)
     {
         $owners = $this->getDataContainer()->getItunesOwners();
-        if (!$owners || empty($owners)) {
+        if (! $owners || empty($owners)) {
             return;
         }
         foreach ($owners as $owner) {
@@ -277,7 +277,7 @@ class Feed extends Extension\AbstractRenderer
         }
         $this->_called = true;
     }
-    
+
     /**
      * Set feed subtitle
      * 
@@ -285,10 +285,10 @@ class Feed extends Extension\AbstractRenderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setSubtitle(\DOMDocument $dom, \DOMElement $root)
+    protected function _setSubtitle (\DOMDocument $dom,\DOMElement $root)
     {
         $subtitle = $this->getDataContainer()->getItunesSubtitle();
-        if (!$subtitle) {
+        if (! $subtitle) {
             return;
         }
         $el = $dom->createElement('itunes:subtitle');
@@ -297,7 +297,7 @@ class Feed extends Extension\AbstractRenderer
         $root->appendChild($el);
         $this->_called = true;
     }
-    
+
     /**
      * Set feed summary
      * 
@@ -305,10 +305,10 @@ class Feed extends Extension\AbstractRenderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setSummary(\DOMDocument $dom, \DOMElement $root)
+    protected function _setSummary (\DOMDocument $dom,\DOMElement $root)
     {
         $summary = $this->getDataContainer()->getItunesSummary();
-        if (!$summary) {
+        if (! $summary) {
             return;
         }
         $el = $dom->createElement('itunes:summary');

@@ -41,43 +41,46 @@ class Control extends Extension
 {
 
     protected $_rootNamespace = 'app';
+
     protected $_rootElement = 'control';
+
     protected $_draft = null;
 
-    public function __construct($draft = null)
+    public function __construct ($draft = null)
     {
         parent::__construct();
         $this->_draft = $draft;
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_draft != null) {
-            $element->appendChild($this->_draft->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_draft->getDOM($element->ownerDocument));
         }
         return $element;
     }
 
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('app') . ':' . 'draft':
-            $draft = new Draft();
-            $draft->transferFromDOM($child);
-            $this->_draft = $draft;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('app') . ':' . 'draft':
+                $draft = new Draft();
+                $draft->transferFromDOM($child);
+                $this->_draft = $draft;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
     /**
      * @return \Zend\GData\App\Extension\Draft
      */
-    public function getDraft()
+    public function getDraft ()
     {
         return $this->_draft;
     }
@@ -86,7 +89,7 @@ class Control extends Extension
      * @param \Zend\GData\App\Extension\Draft $value
      * @return \Zend\GData\App\Entry Provides a fluent interface
      */
-    public function setDraft($value)
+    public function setDraft ($value)
     {
         $this->_draft = $value;
         return $this;

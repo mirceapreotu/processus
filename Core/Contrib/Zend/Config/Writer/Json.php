@@ -20,8 +20,7 @@
 
 namespace Zend\Config\Writer;
 
-use Zend\Config\Json as JsonConfig,
-    Zend\Json\Json as JsonUtil;
+use Zend\Config\Json as JsonConfig, Zend\Json\Json as JsonUtil;
 
 /**
  * @category   Zend
@@ -31,6 +30,7 @@ use Zend\Config\Json as JsonConfig,
  */
 class Json extends AbstractFileWriter
 {
+
     /**
      * If we need to pretty-print JSON data
      *
@@ -43,7 +43,7 @@ class Json extends AbstractFileWriter
      *
      * @return the prettyPrint flag
      */
-    public function prettyPrint()
+    public function prettyPrint ()
     {
         return $this->_prettyPrint;
     }
@@ -54,7 +54,7 @@ class Json extends AbstractFileWriter
      * @param  bool $prettyPrint PrettyPrint flag
      * @return Zend_Config_Writer_Json
      */
-    public function setPrettyPrint($flag)
+    public function setPrettyPrint ($flag)
     {
         $this->_prettyPrint = (bool) $flag;
         return $this;
@@ -66,34 +66,36 @@ class Json extends AbstractFileWriter
      * @since 1.10
      * @return string
      */
-    public function render()
+    public function render ()
     {
-        $data        = $this->_config->toArray();
+        $data = $this->_config->toArray();
         $sectionName = $this->_config->getSectionName();
-        $extends     = $this->_config->getExtends();
-
+        $extends = $this->_config->getExtends();
+        
         if (is_string($sectionName)) {
             $data = array($sectionName => $data);
         }
-
+        
         foreach ($extends as $section => $parentSection) {
             $data[$section][JsonConfig::EXTENDS_NAME] = $parentSection;
         }
-
+        
         // Ensure that each "extends" section actually exists
         foreach ($data as $section => $sectionData) {
-            if (is_array($sectionData) && isset($sectionData[JsonConfig::EXTENDS_NAME])) {
+            if (is_array($sectionData) &&
+             isset($sectionData[JsonConfig::EXTENDS_NAME])) {
                 $sectionExtends = $sectionData[JsonConfig::EXTENDS_NAME];
-                if (!isset($data[$sectionExtends])) {
+                if (! isset($data[$sectionExtends])) {
                     // Remove "extends" declaration if section does not exist
-                    unset($data[$section][JsonConfig::EXTENDS_NAME]);
+                    unset(
+                    $data[$section][JsonConfig::EXTENDS_NAME]);
                 }
             }
         }
-
+        
         $out = JsonUtil::encode($data);
         if ($this->prettyPrint()) {
-             $out = JsonUtil::prettyPrint($out);
+            $out = JsonUtil::prettyPrint($out);
         }
         return $out;
     }

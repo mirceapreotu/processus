@@ -38,6 +38,7 @@ use Zend\Db\Adapter;
  */
 class Db2
 {
+
     /**
      * @var \Zend\Db\Adapter\AbstractAdapter
      */
@@ -51,7 +52,7 @@ class Db2
      *
      * @param \Zend\Db\Adapter\AbstractAdapter $adapter
      */
-    public function __construct($adapter)
+    public function __construct ($adapter)
     {
         $this->_adapter = $adapter;
     }
@@ -61,10 +62,9 @@ class Db2
      *
      * @return array
      */
-    public function listTables()
+    public function listTables ()
     {
-        $sql = "SELECT tabname "
-        . "FROM SYSCAT.TABLES ";
+        $sql = "SELECT tabname " . "FROM SYSCAT.TABLES ";
         return $this->_adapter->fetchCol($sql);
     }
 
@@ -75,7 +75,7 @@ class Db2
      * @param string $schemaName OPTIONAL
      * @return array
      */
-    public function describeTable($tableName, $schemaName = null)
+    public function describeTable ($tableName, $schemaName = null)
     {
         $sql = "SELECT DISTINCT c.tabschema, c.tabname, c.colname, c.colno,
                 c.typename, c.default, c.nulls, c.length, c.scale,
@@ -88,40 +88,42 @@ class Db2
                  ON (c.tabschema = k.tabschema
                  AND c.tabname = k.tabname
                  AND c.colname = k.colname)
-            WHERE "
-            . $this->_adapter->quoteInto('UPPER(c.tabname) = UPPER(?)', $tableName);
+            WHERE " .
+         $this->_adapter->quoteInto('UPPER(c.tabname) = UPPER(?)', $tableName);
         if ($schemaName) {
-            $sql .= $this->_adapter->quoteInto(' AND UPPER(c.tabschema) = UPPER(?)', $schemaName);
+            $sql .= $this->_adapter->quoteInto(
+            ' AND UPPER(c.tabschema) = UPPER(?)', $schemaName);
         }
         $sql .= " ORDER BY c.colno";
-
+        
         $desc = array();
         $stmt = $this->_adapter->query($sql);
-
+        
         /**
          * To avoid case issues, fetch using FETCH_NUM
          */
         $result = $stmt->fetchAll(\Zend\Db\Db::FETCH_NUM);
-
+        
         /**
          * The ordering of columns is defined by the query so we can map
          * to variables to improve readability
          */
-        $tabschema      = 0;
-        $tabname        = 1;
-        $colname        = 2;
-        $colno          = 3;
-        $typename       = 4;
-        $default        = 5;
-        $nulls          = 6;
-        $length         = 7;
-        $scale          = 8;
-        $identityCol    = 9;
-        $tabconstype    = 10;
-        $colseq         = 11;
-
+        $tabschema = 0;
+        $tabname = 1;
+        $colname = 2;
+        $colno = 3;
+        $typename = 4;
+        $default = 5;
+        $nulls = 6;
+        $length = 7;
+        $scale = 8;
+        $identityCol = 9;
+        $tabconstype = 10;
+        $colseq = 11;
+        
         foreach ($result as $key => $row) {
-            list ($primary, $primaryPosition, $identity) = array(false, null, false);
+            list ($primary, $primaryPosition, $identity) = array(false, null, 
+            false);
             if ($row[$tabconstype] == 'P') {
                 $primary = true;
                 $primaryPosition = $row[$colseq];
@@ -133,25 +135,21 @@ class Db2
             if ($row[$identityCol] == 'Y') {
                 $identity = true;
             }
-
+            
             $desc[$this->_adapter->foldCase($row[$colname])] = array(
-            'SCHEMA_NAME'      => $this->_adapter->foldCase($row[$tabschema]),
-            'TABLE_NAME'       => $this->_adapter->foldCase($row[$tabname]),
-            'COLUMN_NAME'      => $this->_adapter->foldCase($row[$colname]),
-            'COLUMN_POSITION'  => $row[$colno]+1,
-            'DATA_TYPE'        => $row[$typename],
-            'DEFAULT'          => $row[$default],
-            'NULLABLE'         => (bool) ($row[$nulls] == 'Y'),
-            'LENGTH'           => $row[$length],
-            'SCALE'            => $row[$scale],
-            'PRECISION'        => ($row[$typename] == 'DECIMAL' ? $row[$length] : 0),
-            'UNSIGNED'         => false,
-            'PRIMARY'          => $primary,
-            'PRIMARY_POSITION' => $primaryPosition,
-            'IDENTITY'         => $identity
-            );
+            'SCHEMA_NAME' => $this->_adapter->foldCase($row[$tabschema]), 
+            'TABLE_NAME' => $this->_adapter->foldCase($row[$tabname]), 
+            'COLUMN_NAME' => $this->_adapter->foldCase($row[$colname]), 
+            'COLUMN_POSITION' => $row[$colno] + 1, 
+            'DATA_TYPE' => $row[$typename], 'DEFAULT' => $row[$default], 
+            'NULLABLE' => (bool) ($row[$nulls] == 'Y'), 
+            'LENGTH' => $row[$length], 'SCALE' => $row[$scale], 
+            'PRECISION' => ($row[$typename] == 'DECIMAL' ? $row[$length] : 0), 
+            'UNSIGNED' => false, 'PRIMARY' => $primary, 
+            'PRIMARY_POSITION' => $primaryPosition, 
+            'IDENTITY' => $identity);
         }
-
+        
         return $desc;
     }
 
@@ -164,17 +162,19 @@ class Db2
      * @throws \Zend\Db\Adapter\Exception
      * @return string
      */
-    public function limit($sql, $count, $offset = 0)
+    public function limit ($sql, $count, $offset = 0)
     {
         $count = intval($count);
         if ($count < 0) {
-            throw new Adapter\Exception("LIMIT argument count=$count is not valid");
+            throw new Adapter\Exception(
+            "LIMIT argument count=$count is not valid");
         } else {
             $offset = intval($offset);
             if ($offset < 0) {
-                throw new Adapter\Exception("LIMIT argument offset=$offset is not valid");
+                throw new Adapter\Exception(
+                "LIMIT argument offset=$offset is not valid");
             }
-
+            
             if ($offset == 0 && $count > 0) {
                 $limit_sql = $sql . " FETCH FIRST $count ROWS ONLY";
                 return $limit_sql;
@@ -189,10 +189,12 @@ class Db2
               FROM (
                   SELECT ROW_NUMBER() OVER() AS \"ZEND_DB_ROWNUM\", z1.*
                   FROM (
-                      " . $sql . "
+                      " . $sql .
+             "
                   ) z1
               ) z2
-              WHERE z2.zend_db_rownum BETWEEN " . ($offset+1) . " AND " . ($offset+$count);
+              WHERE z2.zend_db_rownum BETWEEN " .
+             ($offset + 1) . " AND " . ($offset + $count);
         }
         return $limit_sql;
     }
@@ -203,9 +205,11 @@ class Db2
      * @param string $sequenceName
      * @return integer
      */
-    public function lastSequenceId($sequenceName)
+    public function lastSequenceId ($sequenceName)
     {
-        $sql = 'SELECT PREVVAL FOR '.$this->_adapter->quoteIdentifier($sequenceName).' AS VAL FROM SYSIbm.SYSDUMMY1';
+        $sql = 'SELECT PREVVAL FOR ' .
+         $this->_adapter->quoteIdentifier($sequenceName) .
+         ' AS VAL FROM SYSIbm.SYSDUMMY1';
         $value = $this->_adapter->fetchOne($sql);
         return $value;
     }
@@ -213,12 +217,14 @@ class Db2
     /**
      * Db2-specific sequence id value
      *
-     *  @param string $sequenceName
-     *  @return integer
+     * @param string $sequenceName
+     * @return integer
      */
-    public function nextSequenceId($sequenceName)
+    public function nextSequenceId ($sequenceName)
     {
-        $sql = 'SELECT NEXTVAL FOR '.$this->_adapter->quoteIdentifier($sequenceName).' AS VAL FROM SYSIbm.SYSDUMMY1';
+        $sql = 'SELECT NEXTVAL FOR ' .
+         $this->_adapter->quoteIdentifier($sequenceName) .
+         ' AS VAL FROM SYSIbm.SYSDUMMY1';
         $value = $this->_adapter->fetchOne($sql);
         return $value;
     }

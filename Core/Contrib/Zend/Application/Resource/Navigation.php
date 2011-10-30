@@ -37,9 +37,9 @@ namespace Zend\Application\Resource;
  * @author     Dolf Schimmel
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Navigation
-    extends AbstractResource
+class Navigation extends AbstractResource
 {
+
     const DEFAULT_REGISTRY_KEY = 'Zend_Navigation';
 
     /**
@@ -52,14 +52,14 @@ class Navigation
      *
      * @return \Zend\Navigation\Navigation
      */
-    public function init()
+    public function init ()
     {
-        if (!$this->_container) {
+        if (! $this->_container) {
             $options = $this->getOptions();
             $pages = isset($options['pages']) ? $options['pages'] : array();
             $this->_container = new \Zend\Navigation\Navigation($pages);
         }
-
+        
         $this->store();
         return $this->_container;
     }
@@ -69,11 +69,11 @@ class Navigation
      *
      * @return void
      */
-    public function store()
+    public function store ()
     {
         $options = $this->getOptions();
         if (isset($options['storage']['registry']) &&
-            $options['storage']['registry'] == true) {
+         $options['storage']['registry'] == true) {
             $this->_storeRegistry();
         } else {
             $this->_storeHelper();
@@ -85,18 +85,18 @@ class Navigation
      *
      * @return void
      */
-    protected function _storeRegistry()
+    protected function _storeRegistry ()
     {
         $options = $this->getOptions();
-        if(isset($options['storage']['registry']['key']) &&
-           !is_numeric($options['storage']['registry']['key'])) // see ZF-7461
-        {
-           $key = $options['storage']['registry']['key'];
+        if (isset($options['storage']['registry']['key']) &&
+         ! is_numeric($options['storage']['registry']['key'])) // see ZF-7461
+{
+            $key = $options['storage']['registry']['key'];
         } else {
             $key = self::DEFAULT_REGISTRY_KEY;
         }
-
-        \Zend\Registry::set($key,$this->getContainer());
+        
+        \Zend\Registry::set($key, $this->getContainer());
     }
 
     /**
@@ -104,7 +104,7 @@ class Navigation
      *
      * @return void
      */
-    protected function _storeHelper()
+    protected function _storeHelper ()
     {
         $this->getBootstrap()->bootstrap('view');
         $view = $this->getBootstrap()->view;
@@ -116,7 +116,7 @@ class Navigation
      *
      * @return \Zend\Navigation\Navigation
      */
-    public function getContainer()
+    public function getContainer ()
     {
         return $this->_container;
     }

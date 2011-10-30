@@ -1,4 +1,5 @@
 <?php
+
 /**
  * LICENSE
  *
@@ -28,14 +29,16 @@
  */
 class Zend_Cloud_QueueService_Message
 {
+
     protected $_body;
+
     protected $_clientMessage;
 
     /**
      * @param string $body Message text
      * @param string $message Original message
      */
-    function __construct($body, $message)
+    function __construct ($body, $message)
     {
         $this->_body = $body;
         $this->_clientMessage = $message;
@@ -45,7 +48,7 @@ class Zend_Cloud_QueueService_Message
      * Get the message body
      * @return string
      */
-    public function getBody()
+    public function getBody ()
     {
         return $this->_body;
     }
@@ -53,7 +56,7 @@ class Zend_Cloud_QueueService_Message
     /**
      * Get the original adapter-specific message
      */
-    public function getMessage()
+    public function getMessage ()
     {
         return $this->_clientMessage;
     }

@@ -36,6 +36,7 @@ namespace Zend\Form\Element;
  */
 class Submit extends Xhtml
 {
+
     /**
      * Default view helper to use
      * @var string
@@ -49,16 +50,16 @@ class Submit extends Xhtml
      * @param  string|array|\Zend\Config\Config $options Element value or configuration
      * @return void
      */
-    public function __construct($spec, $options = null)
+    public function __construct ($spec, $options = null)
     {
         if (is_string($spec) && ((null !== $options) && is_string($options))) {
             $options = array('label' => $options);
         }
-
-        if (!isset($options['ignore'])) {
+        
+        if (! isset($options['ignore'])) {
             $options['ignore'] = true;
         }
-
+        
         parent::__construct($spec, $options);
     }
 
@@ -71,18 +72,18 @@ class Submit extends Xhtml
      *
      * @return string
      */
-    public function getLabel()
+    public function getLabel ()
     {
         $value = parent::getLabel();
-
+        
         if (null === $value) {
             $value = $this->getName();
         }
-
+        
         if (null !== ($translator = $this->getTranslator())) {
             return $translator->translate($value);
         }
-
+        
         return $value;
     }
 
@@ -91,17 +92,17 @@ class Submit extends Xhtml
      *
      * @return bool
      */
-    public function isChecked()
+    public function isChecked ()
     {
         $value = $this->getValue();
-
+        
         if (empty($value)) {
             return false;
         }
         if ($value != $this->getLabel()) {
             return false;
         }
-
+        
         return true;
     }
 
@@ -112,17 +113,17 @@ class Submit extends Xhtml
      *
      * @return \Zend\Form\Element\Submit
      */
-    public function loadDefaultDecorators()
+    public function loadDefaultDecorators ()
     {
         if ($this->loadDefaultDecoratorsIsDisabled()) {
             return $this;
         }
-
+        
         $decorators = $this->getDecorators();
         if (empty($decorators)) {
             $this->addDecorator('Tooltip')
-                 ->addDecorator('ViewHelper')
-                 ->addDecorator('DtDdWrapper');
+                ->addDecorator('ViewHelper')
+                ->addDecorator('DtDdWrapper');
         }
         return $this;
     }

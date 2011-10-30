@@ -40,7 +40,7 @@ class Identcode extends Code25interleaved
      * Default options for Identcode barcode
      * @return void
      */
-    protected function _getDefaultOptions()
+    protected function _getDefaultOptions ()
     {
         $this->_barcodeLength = 12;
         $this->_mandatoryChecksum = true;
@@ -50,11 +50,10 @@ class Identcode extends Code25interleaved
      * Retrieve text to display
      * @return string
      */
-    public function getTextToDisplay()
+    public function getTextToDisplay ()
     {
-        return preg_replace('/([0-9]{2})([0-9]{3})([0-9]{3})([0-9]{3})([0-9])/',
-                            '$1.$2 $3.$4 $5',
-                            $this->getText());
+        return preg_replace('/([0-9]{2})([0-9]{3})([0-9]{3})([0-9]{3})([0-9])/', 
+        '$1.$2 $3.$4 $5', $this->getText());
     }
 
     /**
@@ -63,7 +62,7 @@ class Identcode extends Code25interleaved
      * @return string
      * @throw \Zend\Barcode\Object\Exception
      */
-    public function validateText($value)
+    public function validateText ($value)
     {
         $this->_validateText($value, array('validator' => $this->getType()));
     }
@@ -74,17 +73,17 @@ class Identcode extends Code25interleaved
      * @param  string $text
      * @return int
      */
-    public function getChecksum($text)
+    public function getChecksum ($text)
     {
         $this->_checkText($text);
         $checksum = 0;
-
+        
         for ($i = strlen($text); $i > 0; $i --) {
             $checksum += intval($text{$i - 1}) * (($i % 2) ? 4 : 9);
         }
-
+        
         $checksum = (10 - ($checksum % 10)) % 10;
-
+        
         return $checksum;
     }
 }

@@ -33,6 +33,7 @@ namespace Zend\Amf\Adobe;
  */
 class DbInspector
 {
+
     /**
      * Connect to the database
      *
@@ -41,7 +42,7 @@ class DbInspector
      * @param  array|object $dbDescription Adapter-specific connection settings
      * @return Zend_Db_Adapter_Abstract
      */
-    protected function _connect($dbType, $dbDescription)
+    protected function _connect ($dbType, $dbDescription)
     {
         if (is_object($dbDescription)) {
             $dbDescription = get_object_vars($dbDescription);
@@ -54,13 +55,13 @@ class DbInspector
      *
      * Usage example:
      * $inspector->describeTable('Pdo_Mysql',
-     *     array(
-     *         'host'     => '127.0.0.1',
-     *         'username' => 'webuser',
-     *         'password' => 'xxxxxxxx',
-     *         'dbname'   => 'test'
-     *     ),
-     *     'mytable'
+     * array(
+     * 'host'     => '127.0.0.1',
+     * 'username' => 'webuser',
+     * 'password' => 'xxxxxxxx',
+     * 'dbname'   => 'test'
+     * ),
+     * 'mytable'
      * );
      *
      * @see    Zend_Db::describeTable()
@@ -70,7 +71,7 @@ class DbInspector
      * @param  string $tableName Table name
      * @return array Table description
      */
-    public function describeTable($dbType, $dbDescription, $tableName)
+    public function describeTable ($dbType, $dbDescription, $tableName)
     {
         $db = $this->_connect($dbType, $dbDescription);
         return $db->describeTable($tableName);
@@ -84,7 +85,7 @@ class DbInspector
      * @param  array|object $dbDescription Adapter-specific connection settings
      * @return bool
      */
-    public function connect($dbType, $dbDescription)
+    public function connect ($dbType, $dbDescription)
     {
         $db = $this->_connect($dbType, $dbDescription);
         $db->listTables();
@@ -98,7 +99,7 @@ class DbInspector
      * @param  array|object $dbDescription Adapter-specific connection settings
      * @return array List of the tables
      */
-    public function getTables($dbType, $dbDescription)
+    public function getTables ($dbType, $dbDescription)
     {
         $db = $this->_connect($dbType, $dbDescription);
         return $db->listTables();

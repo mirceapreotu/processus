@@ -31,10 +31,11 @@ namespace Zend\Acl;
  */
 interface Resource
 {
+
     /**
      * Returns the string identifier of the Resource
      *
      * @return string
      */
-    public function getResourceId();
+    public function getResourceId ();
 }

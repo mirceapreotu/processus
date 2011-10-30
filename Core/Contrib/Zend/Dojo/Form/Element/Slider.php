@@ -35,13 +35,14 @@ namespace Zend\Dojo\Form\Element;
  */
 abstract class Slider extends Dijit
 {
+
     /**
      * Set clickSelect flag
      *
      * @param  bool $clickSelect
      * @return \Zend\Dojo\Form\Element\TextBox
      */
-    public function setClickSelect($flag)
+    public function setClickSelect ($flag)
     {
         $this->setDijitParam('clickSelect', (bool) $flag);
         return $this;
@@ -52,9 +53,9 @@ abstract class Slider extends Dijit
      *
      * @return bool
      */
-    public function getClickSelect()
+    public function getClickSelect ()
     {
-        if (!$this->hasDijitParam('clickSelect')) {
+        if (! $this->hasDijitParam('clickSelect')) {
             return false;
         }
         return $this->getDijitParam('clickSelect');
@@ -66,7 +67,7 @@ abstract class Slider extends Dijit
      * @param  bool $intermediateChanges
      * @return \Zend\Dojo\Form\Element\TextBox
      */
-    public function setIntermediateChanges($flag)
+    public function setIntermediateChanges ($flag)
     {
         $this->setDijitParam('intermediateChanges', (bool) $flag);
         return $this;
@@ -77,9 +78,9 @@ abstract class Slider extends Dijit
      *
      * @return bool
      */
-    public function getIntermediateChanges()
+    public function getIntermediateChanges ()
     {
-        if (!$this->hasDijitParam('intermediateChanges')) {
+        if (! $this->hasDijitParam('intermediateChanges')) {
             return false;
         }
         return $this->getDijitParam('intermediateChanges');
@@ -91,7 +92,7 @@ abstract class Slider extends Dijit
      * @param  bool $showButtons
      * @return \Zend\Dojo\Form\Element\TextBox
      */
-    public function setShowButtons($flag)
+    public function setShowButtons ($flag)
     {
         $this->setDijitParam('showButtons', (bool) $flag);
         return $this;
@@ -102,9 +103,9 @@ abstract class Slider extends Dijit
      *
      * @return bool
      */
-    public function getShowButtons()
+    public function getShowButtons ()
     {
-        if (!$this->hasDijitParam('showButtons')) {
+        if (! $this->hasDijitParam('showButtons')) {
             return false;
         }
         return $this->getDijitParam('showButtons');
@@ -116,7 +117,7 @@ abstract class Slider extends Dijit
      * @param  int $value
      * @return \Zend\Dojo\Form\Element\TextBox
      */
-    public function setDiscreteValues($value)
+    public function setDiscreteValues ($value)
     {
         $this->setDijitParam('discreteValues', (int) $value);
         return $this;
@@ -127,7 +128,7 @@ abstract class Slider extends Dijit
      *
      * @return int|null
      */
-    public function getDiscreteValues()
+    public function getDiscreteValues ()
     {
         return $this->getDijitParam('discreteValues');
     }
@@ -138,7 +139,7 @@ abstract class Slider extends Dijit
      * @param  int $value
      * @return \Zend\Dojo\Form\Element\TextBox
      */
-    public function setMaximum($value)
+    public function setMaximum ($value)
     {
         $this->setDijitParam('maximum', (int) $value);
         return $this;
@@ -149,7 +150,7 @@ abstract class Slider extends Dijit
      *
      * @return int|null
      */
-    public function getMaximum()
+    public function getMaximum ()
     {
         return $this->getDijitParam('maximum');
     }
@@ -160,7 +161,7 @@ abstract class Slider extends Dijit
      * @param  int $value
      * @return \Zend\Dojo\Form\Element\TextBox
      */
-    public function setMinimum($value)
+    public function setMinimum ($value)
     {
         $this->setDijitParam('minimum', (int) $value);
         return $this;
@@ -171,7 +172,7 @@ abstract class Slider extends Dijit
      *
      * @return int|null
      */
-    public function getMinimum()
+    public function getMinimum ()
     {
         return $this->getDijitParam('minimum');
     }
@@ -182,7 +183,7 @@ abstract class Slider extends Dijit
      * @param  int $value
      * @return \Zend\Dojo\Form\Element\TextBox
      */
-    public function setPageIncrement($value)
+    public function setPageIncrement ($value)
     {
         $this->setDijitParam('pageIncrement', (int) $value);
         return $this;
@@ -193,7 +194,7 @@ abstract class Slider extends Dijit
      *
      * @return int|null
      */
-    public function getPageIncrement()
+    public function getPageIncrement ()
     {
         return $this->getDijitParam('pageIncrement');
     }

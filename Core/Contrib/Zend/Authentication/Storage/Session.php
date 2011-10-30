@@ -24,9 +24,7 @@
  */
 namespace Zend\Authentication\Storage;
 
-use Zend\Authentication\Storage as AuthenticationStorage,
-    Zend\Session\Container as SessionContainer,
-    Zend\Session\Manager as SessionManager;
+use Zend\Authentication\Storage as AuthenticationStorage, Zend\Session\Container as SessionContainer, Zend\Session\Manager as SessionManager;
 
 /**
  * @uses       Zend\Authentication\Storage
@@ -39,6 +37,7 @@ use Zend\Authentication\Storage as AuthenticationStorage,
  */
 class Session implements AuthenticationStorage
 {
+
     /**
      * Default session namespace
      */
@@ -77,12 +76,12 @@ class Session implements AuthenticationStorage
      * @param  mixed $member
      * @return void
      */
-    public function __construct(
-        $namespace = self::NAMESPACE_DEFAULT, $member = self::MEMBER_DEFAULT, SessionManager $manager = null
-    ) {
+    public function __construct ($namespace = self::NAMESPACE_DEFAULT, $member = self::MEMBER_DEFAULT, 
+    SessionManager $manager = null)
+    {
         $this->_namespace = $namespace;
-        $this->_member    = $member;
-        $this->_session   = new SessionContainer($this->_namespace, $manager);
+        $this->_member = $member;
+        $this->_session = new SessionContainer($this->_namespace, $manager);
     }
 
     /**
@@ -90,7 +89,7 @@ class Session implements AuthenticationStorage
      *
      * @return string
      */
-    public function getNamespace()
+    public function getNamespace ()
     {
         return $this->_namespace;
     }
@@ -100,7 +99,7 @@ class Session implements AuthenticationStorage
      *
      * @return string
      */
-    public function getMember()
+    public function getMember ()
     {
         return $this->_member;
     }
@@ -110,9 +109,9 @@ class Session implements AuthenticationStorage
      *
      * @return boolean
      */
-    public function isEmpty()
+    public function isEmpty ()
     {
-        return !isset($this->_session->{$this->_member});
+        return ! isset($this->_session->{$this->_member});
     }
 
     /**
@@ -120,7 +119,7 @@ class Session implements AuthenticationStorage
      *
      * @return mixed
      */
-    public function read()
+    public function read ()
     {
         return $this->_session->{$this->_member};
     }
@@ -131,7 +130,7 @@ class Session implements AuthenticationStorage
      * @param  mixed $contents
      * @return void
      */
-    public function write($contents)
+    public function write ($contents)
     {
         $this->_session->{$this->_member} = $contents;
     }
@@ -141,7 +140,7 @@ class Session implements AuthenticationStorage
      *
      * @return void
      */
-    public function clear()
+    public function clear ()
     {
         unset($this->_session->{$this->_member});
     }

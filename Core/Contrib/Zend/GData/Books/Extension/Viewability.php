@@ -39,7 +39,9 @@ class Viewability extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'gbs';
+
     protected $_rootElement = 'viewability';
+
     protected $_value = null;
 
     /**
@@ -47,9 +49,9 @@ class Viewability extends \Zend\GData\Extension
      * Describes a viewability
      *
      * @param string|null $value A programmatic value representing the book's
-     *        viewability mode.
+     * viewability mode.
      */
-    public function __construct($value = null)
+    public function __construct ($value = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Books::$namespaces);
         parent::__construct();
@@ -66,7 +68,7 @@ class Viewability extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc);
         if ($this->_value !== null) {
@@ -81,14 +83,14 @@ class Viewability extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute to be handled.
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'value':
-            $this->_value = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'value':
+                $this->_value = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -98,7 +100,7 @@ class Viewability extends \Zend\GData\Extension
      *
      * @return string The value
      */
-    public function getValue()
+    public function getValue ()
     {
         return $this->_value;
     }
@@ -108,16 +110,15 @@ class Viewability extends \Zend\GData\Extension
      * Google Book Search
      *
      * @param string $value programmatic value that describes the viewability
-     *     of a volume in Googl eBook Search
+     * of a volume in Googl eBook Search
      * @return \Zend\GData\Books\Extension\Viewability Provides a fluent
-     *     interface
+     * interface
      */
-    public function setValue($value)
+    public function setValue ($value)
     {
         $this->_value = $value;
         return $this;
     }
-
 
 }
 

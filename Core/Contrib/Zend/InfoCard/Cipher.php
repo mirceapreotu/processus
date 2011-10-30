@@ -40,15 +40,16 @@ namespace Zend\InfoCard;
  */
 class Cipher
 {
+
     /**
      * AES 256 Encryption with CBC
      */
-    const ENC_AES256CBC      = 'http://www.w3.org/2001/04/xmlenc#aes256-cbc';
+    const ENC_AES256CBC = 'http://www.w3.org/2001/04/xmlenc#aes256-cbc';
 
     /**
      * AES 128 Encryption with CBC
      */
-    const ENC_AES128CBC      = 'http://www.w3.org/2001/04/xmlenc#aes128-cbc';
+    const ENC_AES128CBC = 'http://www.w3.org/2001/04/xmlenc#aes128-cbc';
 
     /**
      * RSA Public Key Encryption with OAEP Padding
@@ -58,7 +59,7 @@ class Cipher
     /**
      * RSA Public Key Encryption with no padding
      */
-    const ENC_RSA            = 'http://www.w3.org/2001/04/xmlenc#rsa-1_5';
+    const ENC_RSA = 'http://www.w3.org/2001/04/xmlenc#rsa-1_5';
 
     /**
      * Constructor (disabled)
@@ -66,9 +67,9 @@ class Cipher
      * @return void
      * @codeCoverageIgnoreStart
      */
-    protected function __construct()
-    {
-    }
+    protected function __construct ()
+    {}
+
     // @codeCoverageIgnoreEnd
     /**
      * Returns an instance of a cipher object supported based on the URI provided
@@ -76,27 +77,30 @@ class Cipher
      * @throws \Zend\InfoCard\Cipher\Exception
      * @param string $uri The URI of the encryption method wantde
      * @return mixed an Instance of Zend\InfoCard\Cipher\Symmetric or Zend\InfoCard\Cipher\PKI
-     *               depending on URI
+     * depending on URI
      */
-    static public function getInstanceByURI($uri)
+    static public function getInstanceByURI ($uri)
     {
-        switch($uri) {
+        switch ($uri) {
             case self::ENC_AES256CBC:
                 return new Cipher\Symmetric\Adapter\AES256CBC();
-
+            
             case self::ENC_AES128CBC:
                 return new Cipher\Symmetric\Adapter\AES128CBC();
-
+            
             case self::ENC_RSA_OAEP_MGF1P:
-                return new Cipher\PKI\Adapter\RSA(Cipher\PKI\Adapter\RSA::OAEP_PADDING);
+                return new Cipher\PKI\Adapter\RSA(
+                Cipher\PKI\Adapter\RSA::OAEP_PADDING);
                 break;
-
+            
             case self::ENC_RSA:
-                return new Cipher\PKI\Adapter\RSA(Cipher\PKI\Adapter\RSA::NO_PADDING);
+                return new Cipher\PKI\Adapter\RSA(
+                Cipher\PKI\Adapter\RSA::NO_PADDING);
                 break;
-
+            
             default:
-                throw new Cipher\Exception\InvalidArgumentException("Unknown Cipher URI");
+                throw new Cipher\Exception\InvalidArgumentException(
+                "Unknown Cipher URI");
         }
     }
 }

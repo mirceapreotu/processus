@@ -45,7 +45,7 @@ abstract class AbstractSeparator extends PregReplaceFilter
      * @param  string $separator Space by default
      * @return void
      */
-    public function __construct($separator = ' ')
+    public function __construct ($separator = ' ')
     {
         $this->setSeparator($separator);
     }
@@ -56,10 +56,11 @@ abstract class AbstractSeparator extends PregReplaceFilter
      * @param  string  $separator  Seperator
      * @return $this
      */
-    public function setSeparator($separator)
+    public function setSeparator ($separator)
     {
         if ($separator == null) {
-            throw new \Zend\Filter\Exception\InvalidArgumentException('"' . $separator . '" is not a valid separator.');
+            throw new \Zend\Filter\Exception\InvalidArgumentException(
+            '"' . $separator . '" is not a valid separator.');
         }
         $this->_separator = $separator;
         return $this;
@@ -70,7 +71,7 @@ abstract class AbstractSeparator extends PregReplaceFilter
      *
      * @return  string
      */
-    public function getSeparator()
+    public function getSeparator ()
     {
         return $this->_separator;
     }

@@ -23,8 +23,7 @@
  * @namespace
  */
 namespace Zend\Authentication\Adapter;
-use Zend\Authentication\Adapter as AuthenticationAdapter,
-    Zend\Authentication\Result as AuthenticationResult;
+use Zend\Authentication\Adapter as AuthenticationAdapter, Zend\Authentication\Result as AuthenticationResult;
 
 /**
  * A Zend_Auth Authentication Adapter allowing the use of Information Cards as an
@@ -41,6 +40,7 @@ use Zend\Authentication\Adapter as AuthenticationAdapter,
  */
 class InfoCard implements AuthenticationAdapter
 {
+
     /**
      * The XML Token being authenticated
      *
@@ -61,7 +61,7 @@ class InfoCard implements AuthenticationAdapter
      * @param  string $strXmlDocument The XML Token provided by the client
      * @return void
      */
-    public function __construct($strXmlDocument)
+    public function __construct ($strXmlDocument)
     {
         $this->_xmlToken = $strXmlDocument;
         $this->_infoCard = new \Zend_InfoCard();
@@ -73,7 +73,7 @@ class InfoCard implements AuthenticationAdapter
      * @param  Zend_InfoCard_Adapter_Interface $a
      * @return Zend\Authentication\Adapter\InfoCard Provides a fluent interface
      */
-    public function setAdapter(\Zend_InfoCard_Adapter_Interface $a)
+    public function setAdapter (\Zend_InfoCard_Adapter_Interface $a)
     {
         $this->_infoCard->setAdapter($a);
         return $this;
@@ -84,7 +84,7 @@ class InfoCard implements AuthenticationAdapter
      *
      * @return Zend_InfoCard_Adapter_Interface
      */
-    public function getAdapter()
+    public function getAdapter ()
     {
         return $this->_infoCard->getAdapter();
     }
@@ -94,7 +94,7 @@ class InfoCard implements AuthenticationAdapter
      *
      * @return Zend_InfoCard_Cipher_Pki_Interface
      */
-    public function getPKCipherObject()
+    public function getPKCipherObject ()
     {
         return $this->_infoCard->getPKCipherObject();
     }
@@ -105,7 +105,8 @@ class InfoCard implements AuthenticationAdapter
      * @param  Zend_InfoCard_Cipher_Pki_Interface $cipherObj
      * @return \Zend\Authentication\Adapter\InfoCard Provides a fluent interface
      */
-    public function setPKICipherObject(\Zend_InfoCard_Cipher_Pki_Interface $cipherObj)
+    public function setPKICipherObject (
+    \Zend_InfoCard_Cipher_Pki_Interface $cipherObj)
     {
         $this->_infoCard->setPKICipherObject($cipherObj);
         return $this;
@@ -116,7 +117,7 @@ class InfoCard implements AuthenticationAdapter
      *
      * @return Zend_InfoCard_Cipher_Symmetric_Interface
      */
-    public function getSymCipherObject()
+    public function getSymCipherObject ()
     {
         return $this->_infoCard->getSymCipherObject();
     }
@@ -127,7 +128,8 @@ class InfoCard implements AuthenticationAdapter
      * @param  Zend_InfoCard_Cipher_Symmetric_Interface $cipherObj
      * @return Zend\Authentication\Adapter\InfoCard Provides a fluent interface
      */
-    public function setSymCipherObject(\Zend_InfoCard_Cipher_Symmetric_Interface $cipherObj)
+    public function setSymCipherObject (
+    \Zend_InfoCard_Cipher_Symmetric_Interface $cipherObj)
     {
         $this->_infoCard->setSymCipherObject($cipherObj);
         return $this;
@@ -140,7 +142,7 @@ class InfoCard implements AuthenticationAdapter
      * @throws Zend\InfoCard\Exception
      * @return Zend\Authentication\Adapter\InfoCard Provides a fluent interface
      */
-    public function removeCertificatePair($key_id)
+    public function removeCertificatePair ($key_id)
     {
         $this->_infoCard->removeCertificatePair($key_id);
         return $this;
@@ -156,9 +158,11 @@ class InfoCard implements AuthenticationAdapter
      * @throws Zend_InfoCard_Exception
      * @return string A key ID representing this key pair in the component
      */
-    public function addCertificatePair($private_key_file, $public_key_file, $type = \Zend_InfoCard_Cipher::ENC_RSA_OAEP_MGF1P, $password = null)
+    public function addCertificatePair ($private_key_file, $public_key_file, 
+    $type = \Zend_InfoCard_Cipher::ENC_RSA_OAEP_MGF1P, $password = null)
     {
-        return $this->_infoCard->addCertificatePair($private_key_file, $public_key_file, $type, $password);
+        return $this->_infoCard->addCertificatePair($private_key_file, 
+        $public_key_file, $type, $password);
     }
 
     /**
@@ -167,9 +171,9 @@ class InfoCard implements AuthenticationAdapter
      * @param  string $key_id The Key ID of the certificate pair in the component
      * @throws Zend_InfoCard_Exception
      * @return array An array containing the path to the private/public key files,
-     *               the type URI and the password if provided
+     * the type URI and the password if provided
      */
-    public function getCertificatePair($key_id)
+    public function getCertificatePair ($key_id)
     {
         return $this->_infoCard->getCertificatePair($key_id);
     }
@@ -180,7 +184,7 @@ class InfoCard implements AuthenticationAdapter
      * @param  string $strXmlToken The XML token to process
      * @return \Zend\Authentication\Adapter\InfoCard Provides a fluent interface
      */
-    public function setXmlToken($strXmlToken)
+    public function setXmlToken ($strXmlToken)
     {
         $this->_xmlToken = $strXmlToken;
         return $this;
@@ -191,7 +195,7 @@ class InfoCard implements AuthenticationAdapter
      *
      * @return string The XML token to be processed
      */
-    public function getXmlToken()
+    public function getXmlToken ()
     {
         return $this->_xmlToken;
     }
@@ -201,55 +205,36 @@ class InfoCard implements AuthenticationAdapter
      *
      * @return Zend\Authentication\Result The result of the authentication
      */
-    public function authenticate()
+    public function authenticate ()
     {
         try {
             $claims = $this->_infoCard->process($this->getXmlToken());
-        } catch(\Exception $e) {
-            return new AuthenticationResult(AuthenticationResult::FAILURE , null, array('Exception Thrown',
-                                                                                $e->getMessage(),
-                                                                                $e->getTraceAsString(),
-                                                                                serialize($e)));
+        } catch (\Exception $e) {
+            return new AuthenticationResult(AuthenticationResult::FAILURE, null, 
+            array('Exception Thrown', $e->getMessage(), $e->getTraceAsString(), 
+            serialize($e)));
         }
-
-        if(!$claims->isValid()) {
-            switch($claims->getCode()) {
+        
+        if (! $claims->isValid()) {
+            switch ($claims->getCode()) {
                 case \Zend_InfoCard_Claims::RESULT_PROCESSING_FAILURE:
                     return new AuthenticationResult(
-                        AuthenticationResult::FAILURE,
-                        $claims,
-                        array(
-                            'Processing Failure',
-                            $claims->getErrorMsg()
-                        )
-                    );
+                    AuthenticationResult::FAILURE, $claims, 
+                    array('Processing Failure', $claims->getErrorMsg()));
                     break;
                 case \Zend_InfoCard_Claims::RESULT_VALIDATION_FAILURE:
                     return new AuthenticationResult(
-                        AuthenticationResult::FAILURE_CREDENTIAL_INVALID,
-                        $claims,
-                        array(
-                            'Validation Failure',
-                            $claims->getErrorMsg()
-                        )
-                    );
+                    AuthenticationResult::FAILURE_CREDENTIAL_INVALID, $claims, 
+                    array('Validation Failure', $claims->getErrorMsg()));
                     break;
                 default:
                     return new AuthenticationResult(
-                        AuthenticationResult::FAILURE,
-                        $claims,
-                        array(
-                            'Unknown Failure',
-                            $claims->getErrorMsg()
-                        )
-                    );
+                    AuthenticationResult::FAILURE, $claims, 
+                    array('Unknown Failure', $claims->getErrorMsg()));
                     break;
             }
         }
-
-        return new AuthenticationResult(
-            AuthenticationResult::SUCCESS,
-            $claims
-        );
+        
+        return new AuthenticationResult(AuthenticationResult::SUCCESS, $claims);
     }
 }

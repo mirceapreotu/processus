@@ -33,6 +33,7 @@ namespace Zend\Feed\Reader;
  */
 abstract class AbstractEntry
 {
+
     /**
      * Feed entry data
      *
@@ -83,10 +84,10 @@ abstract class AbstractEntry
      * @param  string $type
      * @return void
      */
-    public function __construct(\DOMElement $entry, $entryKey, $type = null)
+    public function __construct (\DOMElement $entry, $entryKey, $type = null)
     {
-        $this->_entry       = $entry;
-        $this->_entryKey    = $entryKey;
+        $this->_entry = $entry;
+        $this->_entryKey = $entryKey;
         $this->_domDocument = $entry->ownerDocument;
         if ($type !== null) {
             $this->_data['type'] = $type;
@@ -101,7 +102,7 @@ abstract class AbstractEntry
      *
      * @return DOMDocument
      */
-    public function getDomDocument()
+    public function getDomDocument ()
     {
         return $this->_domDocument;
     }
@@ -111,7 +112,7 @@ abstract class AbstractEntry
      *
      * @return DOMElement
      */
-    public function getElement()
+    public function getElement ()
     {
         return $this->_entry;
     }
@@ -121,7 +122,7 @@ abstract class AbstractEntry
      *
      * @return string
      */
-    public function getEncoding()
+    public function getEncoding ()
     {
         $assumed = $this->getDomDocument()->encoding;
         if (empty($assumed)) {
@@ -135,7 +136,7 @@ abstract class AbstractEntry
      *
      * @return string
      */
-    public function saveXml()
+    public function saveXml ()
     {
         $dom = new \DOMDocument('1.0', $this->getEncoding());
         $entry = $dom->importNode($this->getElement(), true);
@@ -148,7 +149,7 @@ abstract class AbstractEntry
      *
      * @return string
      */
-    public function getType()
+    public function getType ()
     {
         return $this->_data['type'];
     }
@@ -158,9 +159,9 @@ abstract class AbstractEntry
      *
      * @return DOMXPath
      */
-    public function getXpath()
+    public function getXpath ()
     {
-        if (!$this->_xpath) {
+        if (! $this->_xpath) {
             $this->setXpath(new \DOMXPath($this->getDomDocument()));
         }
         return $this->_xpath;
@@ -172,7 +173,7 @@ abstract class AbstractEntry
      * @param  DOMXPath $xpath
      * @return Zend\Feed\Reader\AbstractEntry
      */
-    public function setXpath(\DOMXPath $xpath)
+    public function setXpath (\DOMXPath $xpath)
     {
         $this->_xpath = $xpath;
         return $this;
@@ -183,7 +184,7 @@ abstract class AbstractEntry
      *
      * @return array
      */
-    public function getExtensions()
+    public function getExtensions ()
     {
         return $this->_extensions;
     }
@@ -194,7 +195,7 @@ abstract class AbstractEntry
      * @param string $name
      * @return \Zend\Feed\Reader\Extension\AbstractEntry
      */
-    public function getExtension($name)
+    public function getExtension ($name)
     {
         if (array_key_exists($name . '\Entry', $this->_extensions)) {
             return $this->_extensions[$name . '\Entry'];
@@ -210,15 +211,16 @@ abstract class AbstractEntry
      * @return mixed
      * @throws \Zend\Feed\Exception if no extensions implements the method
      */
-    public function __call($method, $args)
+    public function __call ($method, $args)
     {
         foreach ($this->_extensions as $extension) {
             if (method_exists($extension, $method)) {
                 return call_user_func_array(array($extension, $method), $args);
             }
         }
-        throw new \Zend\Feed\Exception('Method: ' . $method
-            . 'does not exist and could not be located on a registered Extension');
+        throw new \Zend\Feed\Exception(
+        'Method: ' . $method .
+         'does not exist and could not be located on a registered Extension');
     }
 
     /**
@@ -226,7 +228,7 @@ abstract class AbstractEntry
      *
      * @return void
      */
-    protected function _loadExtensions()
+    protected function _loadExtensions ()
     {
         $all = Reader::getExtensions();
         $feed = $all['entry'];
@@ -235,9 +237,8 @@ abstract class AbstractEntry
                 continue;
             }
             $className = Reader::getPluginLoader()->getClassName($extension);
-            $this->_extensions[$extension] = new $className(
-                $this->getElement(), $this->_entryKey, $this->_data['type']
-            );
+            $this->_extensions[$extension] = new $className($this->getElement(), 
+            $this->_entryKey, $this->_data['type']);
         }
     }
 }

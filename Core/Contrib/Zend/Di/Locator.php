@@ -3,6 +3,7 @@ namespace Zend\Di;
 
 interface Locator
 {
+
     /**
      * Retrieve a class instance
      * 
@@ -10,5 +11,5 @@ interface Locator
      * @param  null|array $params Parameters to be used when instantiating a new instance of $name
      * @return object|null
      */
-    public function get($name, array $params = array());
+    public function get ($name, array $params = array());
 }

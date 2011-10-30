@@ -33,6 +33,7 @@ namespace Zend\Config;
  */
 class Ini extends Config
 {
+
     /**
      * String that separates nesting levels of configuration data identifiers
      *
@@ -69,16 +70,16 @@ class Ini extends Config
      * create a sub-property.
      *
      * example ini file:
-     *      [all]
-     *      db.connection = database
-     *      hostname = live
+     * [all]
+     * db.connection = database
+     * hostname = live
      *
-     *      [staging : all]
-     *      hostname = staging
+     * [staging : all]
+     * hostname = staging
      *
      * after calling $data = new Zend_Config_Ini($file, 'staging'); then
-     *      $data->hostname === "staging"
-     *      $data->db->connection === "database"
+     * $data->hostname === "staging"
+     * $data->db->connection === "database"
      *
      * The $options parameter may be provided as either a boolean or an array.
      * If provided as a boolean, this sets the $allowModifications option of
@@ -86,9 +87,9 @@ class Ini extends Config
      * directives that may be set. For example:
      *
      * $options = array(
-     *     'allowModifications' => false,
-     *     'nestSeparator'      => '->'
-     *      );
+     * 'allowModifications' => false,
+     * 'nestSeparator'      => '->'
+     * );
      *
      * @param  string        $filename
      * @param  string|null   $section
@@ -96,12 +97,12 @@ class Ini extends Config
      * @throws \Zend\Config\Exception
      * @return void
      */
-    public function __construct($filename, $section = null, $options = false)
+    public function __construct ($filename, $section = null, $options = false)
     {
         if (empty($filename)) {
             throw new Exception\InvalidArgumentException('Filename is not set');
         }
-
+        
         $allowModifications = false;
         if (is_bool($options)) {
             $allowModifications = $options;
@@ -116,36 +117,40 @@ class Ini extends Config
                 $this->_skipExtends = (bool) $options['skipExtends'];
             }
         }
-
+        
         $iniArray = $this->_loadIniFile($filename);
-
+        
         if (null === $section) {
             // Load entire file
             $dataArray = array();
             foreach ($iniArray as $sectionName => $sectionData) {
-                if(!is_array($sectionData)) {
-                    $dataArray = $this->_arrayMergeRecursive($dataArray, $this->_processKey(array(), $sectionName, $sectionData));
+                if (! is_array($sectionData)) {
+                    $dataArray = $this->_arrayMergeRecursive($dataArray, 
+                    $this->_processKey(array(), $sectionName, $sectionData));
                 } else {
-                    $dataArray[$sectionName] = $this->_processSection($iniArray, $sectionName);
+                    $dataArray[$sectionName] = $this->_processSection($iniArray, 
+                    $sectionName);
                 }
             }
             parent::__construct($dataArray, $allowModifications);
         } else {
             // Load one or more sections
-            if (!is_array($section)) {
+            if (! is_array($section)) {
                 $section = array($section);
             }
             $dataArray = array();
             foreach ($section as $sectionName) {
-                if (!isset($iniArray[$sectionName])) {
-                    throw new Exception\InvalidArgumentException("Section '$sectionName' cannot be found in $filename");
+                if (! isset($iniArray[$sectionName])) {
+                    throw new Exception\InvalidArgumentException(
+                    "Section '$sectionName' cannot be found in $filename");
                 }
-                $dataArray = $this->_arrayMergeRecursive($this->_processSection($iniArray, $sectionName), $dataArray);
-
+                $dataArray = $this->_arrayMergeRecursive(
+                $this->_processSection($iniArray, $sectionName), $dataArray);
+            
             }
             parent::__construct($dataArray, $allowModifications);
         }
-
+        
         $this->_loadedSection = $section;
     }
 
@@ -161,7 +166,7 @@ class Ini extends Config
      * @throws \Zend\Config\Exception
      * @return array
      */
-    protected function _loadIniFile($filename)
+    protected function _loadIniFile ($filename)
     {
         $this->_setErrorHandler();
         $loaded = parse_ini_file($filename, true);
@@ -171,30 +176,32 @@ class Ini extends Config
             foreach ($errorMessages as $errMsg) {
                 $e = new Exception\RuntimeException($errMsg, 0, $e);
             }
-            $e = new Exception\RuntimeException("Can't parse ini file '{$filename}'", 0, $e);
+            $e = new Exception\RuntimeException(
+            "Can't parse ini file '{$filename}'", 0, $e);
             throw $e;
         }
-
+        
         $iniArray = array();
-        foreach ($loaded as $key => $data)
-        {
+        foreach ($loaded as $key => $data) {
             $pieces = explode($this->_sectionSeparator, $key);
             $thisSection = trim($pieces[0]);
             switch (count($pieces)) {
                 case 1:
                     $iniArray[$thisSection] = $data;
                     break;
-
+                
                 case 2:
                     $extendedSection = trim($pieces[1]);
-                    $iniArray[$thisSection] = array_merge(array(';extends'=>$extendedSection), $data);
+                    $iniArray[$thisSection] = array_merge(
+                    array(';extends' => $extendedSection), $data);
                     break;
-
+                
                 default:
-                    throw new Exception\RuntimeException("Section '$thisSection' may not extend multiple sections in $filename");
+                    throw new Exception\RuntimeException(
+                    "Section '$thisSection' may not extend multiple sections in $filename");
             }
         }
-
+        
         return $iniArray;
     }
 
@@ -209,20 +216,22 @@ class Ini extends Config
      * @throws \Zend\Config\Exception
      * @return array
      */
-    protected function _processSection($iniArray, $section, $config = array())
+    protected function _processSection ($iniArray, $section, $config = array())
     {
         $thisSection = $iniArray[$section];
-
+        
         foreach ($thisSection as $key => $value) {
             if (strtolower($key) == ';extends') {
                 if (isset($iniArray[$value])) {
                     $this->_assertValidExtend($section, $value);
-
-                    if (!$this->_skipExtends) {
-                        $config = $this->_processSection($iniArray, $value, $config);
+                    
+                    if (! $this->_skipExtends) {
+                        $config = $this->_processSection($iniArray, $value, 
+                        $config);
                     }
                 } else {
-                    throw new Exception\RuntimeException("Parent section '$section' cannot be found");
+                    throw new Exception\RuntimeException(
+                    "Parent section '$section' cannot be found");
                 }
             } else {
                 $config = $this->_processKey($config, $key, $value);
@@ -241,30 +250,33 @@ class Ini extends Config
      * @throws \Zend\Config\Exception
      * @return array
      */
-    protected function _processKey($config, $key, $value)
+    protected function _processKey ($config, $key, $value)
     {
         if (strpos($key, $this->_nestSeparator) !== false) {
             $pieces = explode($this->_nestSeparator, $key, 2);
             if (strlen($pieces[0]) && strlen($pieces[1])) {
-                if (!isset($config[$pieces[0]])) {
-                    if ($pieces[0] === '0' && !empty($config)) {
+                if (! isset($config[$pieces[0]])) {
+                    if ($pieces[0] === '0' && ! empty($config)) {
                         // convert the current values in $config into an array
-                        $config = array($pieces[0] => $config);
+                        $config = array(
+                        $pieces[0] => $config);
                     } else {
                         $config[$pieces[0]] = array();
                     }
-                } elseif (!is_array($config[$pieces[0]])) {
-                    throw new Exception\RuntimeException("Cannot create sub-key for '{$pieces[0]}' as key already exists");
+                } elseif (! is_array($config[$pieces[0]])) {
+                    throw new Exception\RuntimeException(
+                    "Cannot create sub-key for '{$pieces[0]}' as key already exists");
                 }
-                $config[$pieces[0]] = $this->_processKey($config[$pieces[0]], $pieces[1], $value);
+                $config[$pieces[0]] = $this->_processKey($config[$pieces[0]], 
+                $pieces[1], $value);
             } else {
                 throw new Exception\RuntimeException("Invalid key '$key'");
             }
         } else {
             if (is_string($value)) {
-                if(strtolower(trim($value)) === 'true') {
+                if (strtolower(trim($value)) === 'true') {
                     $value = '1';
-                } elseif(strtolower(trim($value)) === 'false') {
+                } elseif (strtolower(trim($value)) === 'false') {
                     $value = '';
                 }
             }

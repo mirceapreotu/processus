@@ -38,6 +38,7 @@ use Zend\Controller\Request\Http as HttpRequest;
  */
 class Router
 {
+
     /**
      * Heap containing all routes
      *
@@ -51,10 +52,10 @@ class Router
      * @param  mixed $options
      * @return void
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         $this->_routes = new PriorityList();
-
+        
         if ($options !== null) {
             $this->setOptions($options);
         }
@@ -66,16 +67,17 @@ class Router
      * @param  mixed $options
      * @return Router
      */
-    public function setOptions($options)
+    public function setOptions ($options)
     {
         if ($options instanceof \Zend\Config) {
             $options = $options->toArray();
         }
-
-        if (!is_array($options)) {
-            throw new InvalidArgumentException('Options must either be an array or an instance of \Zend\Config');
+        
+        if (! is_array($options)) {
+            throw new InvalidArgumentException(
+            'Options must either be an array or an instance of \Zend\Config');
         }
-
+        
         foreach ($options as $key => $value) {
             switch ($key) {
                 case 'routes':
@@ -91,12 +93,12 @@ class Router
      * @param  array $routes
      * @return Router
      */
-    public function addRoutes(array $routes)
+    public function addRoutes (array $routes)
     {
         foreach ($routes as $name => $route) {
             $this->addRoute($name, $route);
         }
-
+        
         return $this;
     }
 
@@ -107,18 +109,19 @@ class Router
      * @param  mixed  $route
      * @return Router
      */
-    public function addRoute($name, $route)
+    public function addRoute ($name, $route)
     {
         if (is_array($route)) {
             $route = $this->_routeFromArray($specs);
         }
-
-        if (!$route instanceof Route\Route) {
-            throw new InvalidArgumentException('Supplied route must either be an array or a route object');
+        
+        if (! $route instanceof Route\Route) {
+            throw new InvalidArgumentException(
+            'Supplied route must either be an array or a route object');
         }
-
+        
         $this->_routes[$name] = $route;
-
+        
         return $this;
     }
 
@@ -128,35 +131,36 @@ class Router
      * @param  array $specs
      * @return Route\Route
      */
-    protected function _routeFromArray(array $specs)
+    protected function _routeFromArray (array $specs)
     {
-        if (!isset($specs['type']) || !is_string($specs['type'])) {
-            throw new InvalidArgumentException('Type not defined or not a string');
-        } elseif (!isset($specs['options']) || !is_array($specs['options'])) {
-            throw new InvalidArgumentException('Options not defined or not an array');
+        if (! isset($specs['type']) || ! is_string($specs['type'])) {
+            throw new InvalidArgumentException(
+            'Type not defined or not a string');
+        } elseif (! isset($specs['options']) || ! is_array($specs['options'])) {
+            throw new InvalidArgumentException(
+            'Options not defined or not an array');
         }
-
+        
         if (strpos($specs['type'], '\\') !== false) {
             $className = $specs['type'];
         } else {
             $className = 'Route\\' . $specs['type'];
         }
-
+        
         $route = new $className($specs['options']);
-
+        
         if (isset($specs['routes'])) {
-            $options = array(
-                'route'         => $route,
-                'may_terminate' => (isset($specs['may_terminate']) && $specs['may_terminate'])
-            );
-
+            $options = array('route' => $route, 
+            'may_terminate' => (isset($specs['may_terminate']) &&
+             $specs['may_terminate']));
+            
             $route = new Route\Part($options);
-
+            
             foreach ($specs['routes'] as $subName => $subSpecs) {
                 $route->append($subName, $this->_routeFromArray($subSpecs));
             }
         }
-
+        
         return $route;
     }
 
@@ -166,15 +170,14 @@ class Router
      * @param  HttpRequest $request
      * @return RouterMatch
      */
-    public function match(HttpRequest $request)
+    public function match (HttpRequest $request)
     {
         $match = null;
-
+        
         foreach ($this->_routes as $route) {
-            if (($result = $route->match($request)) !== null) {
-            }
+            if (($result = $route->match($request)) !== null) {}
         }
-
+        
         return $match;
     }
 
@@ -185,8 +188,8 @@ class Router
      * @param  array $options
      * @return string
      */
-    public function assemble(array $params = null, array $options = null)
+    public function assemble (array $params = null, array $options = null)
     {
-        
+
     }
 }

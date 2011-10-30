@@ -56,24 +56,28 @@ class PropertyGenerator extends AbstractMemberGenerator
      * @param ReflectionProperty $reflectionProperty
      * @return PropertyGenerator
      */
-    public static function fromReflection(PropertyReflection $reflectionProperty)
+    public static function fromReflection (
+    PropertyReflection $reflectionProperty)
     {
         $property = new self();
-
+        
         $property->setName($reflectionProperty->getName());
-
+        
         $allDefaultProperties = $reflectionProperty->getDeclaringClass()->getDefaultProperties();
-
-        $property->setDefaultValue($allDefaultProperties[$reflectionProperty->getName()]);
-
+        
+        $property->setDefaultValue(
+        $allDefaultProperties[$reflectionProperty->getName()]);
+        
         if ($reflectionProperty->getDocComment() != '') {
-            $property->setDocblock(DocblockGenerator::fromReflection($reflectionProperty->getDocComment()));
+            $property->setDocblock(
+            DocblockGenerator::fromReflection(
+            $reflectionProperty->getDocComment()));
         }
-
+        
         if ($reflectionProperty->isStatic()) {
             $property->setStatic(true);
         }
-
+        
         if ($reflectionProperty->isPrivate()) {
             $property->setVisibility(self::VISIBILITY_PRIVATE);
         } elseif ($reflectionProperty->isProtected()) {
@@ -81,13 +85,14 @@ class PropertyGenerator extends AbstractMemberGenerator
         } else {
             $property->setVisibility(self::VISIBILITY_PUBLIC);
         }
-
+        
         $property->setSourceDirty(false);
-
+        
         return $property;
     }
 
-    public function __construct($name = null, $defaultValue = null, $flags = self::FLAG_PUBLIC)
+    public function __construct ($name = null, $defaultValue = null, 
+    $flags = self::FLAG_PUBLIC)
     {
         if ($name !== null) {
             $this->setName($name);
@@ -106,10 +111,11 @@ class PropertyGenerator extends AbstractMemberGenerator
      * @param bool $const
      * @return PropertyGenerator
      */
-    public function setConst($const)
+    public function setConst ($const)
     {
         if ($const) {
-            $this->removeFlag(self::FLAG_PUBLIC | self::FLAG_PRIVATE | self::FLAG_PROTECTED);
+            $this->removeFlag(
+            self::FLAG_PUBLIC | self::FLAG_PRIVATE | self::FLAG_PROTECTED);
         }
     }
 
@@ -118,7 +124,7 @@ class PropertyGenerator extends AbstractMemberGenerator
      *
      * @return bool
      */
-    public function isConst()
+    public function isConst ()
     {
         return ($this->flags & self::FLAG_CONSTANT);
     }
@@ -129,19 +135,19 @@ class PropertyGenerator extends AbstractMemberGenerator
      * @param \PropertyValueGenerator\Code\Generator\PhpPropertyValue|string|array $defaultValue
      * @return \PropertyGenerator\Code\Generator\PhpProperty
      */
-    public function setDefaultValue($defaultValue)
+    public function setDefaultValue ($defaultValue)
     {
         // if it looks like
-        if (is_array($defaultValue)
-            && array_key_exists('value', $defaultValue)
-            && array_key_exists('type', $defaultValue)) {
+        if (is_array($defaultValue) &&
+         array_key_exists('value', $defaultValue) &&
+         array_key_exists('type', $defaultValue)) {
             $defaultValue = new PropertyValueGenerator($defaultValue);
         }
-
-        if (!($defaultValue instanceof PropertyValueGenerator)) {
+        
+        if (! ($defaultValue instanceof PropertyValueGenerator)) {
             $defaultValue = new PropertyValueGenerator($defaultValue);
         }
-
+        
         $this->defaultValue = $defaultValue;
         return $this;
     }
@@ -151,7 +157,7 @@ class PropertyGenerator extends AbstractMemberGenerator
      *
      * @return PropertyValueGenerator
      */
-    public function getDefaultValue()
+    public function getDefaultValue ()
     {
         return $this->defaultValue;
     }
@@ -161,31 +167,30 @@ class PropertyGenerator extends AbstractMemberGenerator
      *
      * @return string
      */
-    public function generate()
+    public function generate ()
     {
-        $name         = $this->getName();
+        $name = $this->getName();
         $defaultValue = $this->getDefaultValue();
-
+        
         $output = '';
-
+        
         if (($docblock = $this->getDocblock()) !== null) {
             $docblock->setIndentation('    ');
             $output .= $docblock->generate();
         }
-
+        
         if ($this->isConst()) {
-            if ($defaultValue != null && !$defaultValue->isValidConstantType()) {
-                throw new Exception\RuntimeException('The property ' . $this->name . ' is said to be '
-                    . 'constant but does not have a valid constant value.');
+            if ($defaultValue != null && ! $defaultValue->isValidConstantType()) {
+                throw new Exception\RuntimeException(
+                'The property ' . $this->name . ' is said to be ' .
+                 'constant but does not have a valid constant value.');
             }
-            $output .= $this->indentation . 'const ' . $name . ' = '
-                . (($defaultValue !== null) ? $defaultValue->generate() : 'null;');
+            $output .= $this->indentation . 'const ' . $name . ' = ' .
+             (($defaultValue !== null) ? $defaultValue->generate() : 'null;');
         } else {
-            $output .= $this->indentation
-                . $this->getVisibility()
-                . (($this->isStatic()) ? ' static' : '')
-                . ' $' . $name . ' = '
-                . (($defaultValue !== null) ? $defaultValue->generate() : 'null;');
+            $output .= $this->indentation . $this->getVisibility() .
+             (($this->isStatic()) ? ' static' : '') . ' $' . $name . ' = ' .
+             (($defaultValue !== null) ? $defaultValue->generate() : 'null;');
         }
         return $output;
     }

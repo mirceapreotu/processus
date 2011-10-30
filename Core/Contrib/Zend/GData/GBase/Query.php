@@ -60,7 +60,7 @@ class Query extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\GBase\Query Provides a fluent interface
      */
-    public function setKey($value)
+    public function setKey ($value)
     {
         if ($value !== null) {
             $this->_params['key'] = $value;
@@ -74,7 +74,7 @@ class Query extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\GBase\ItemQuery Provides a fluent interface
      */
-    public function setBq($value)
+    public function setBq ($value)
     {
         if ($value !== null) {
             $this->_params['bq'] = $value;
@@ -88,7 +88,7 @@ class Query extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\GBase\ItemQuery Provides a fluent interface
      */
-    public function setRefine($value)
+    public function setRefine ($value)
     {
         if ($value !== null) {
             $this->_params['refine'] = $value;
@@ -102,7 +102,7 @@ class Query extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\GBase\ItemQuery Provides a fluent interface
      */
-    public function setContent($value)
+    public function setContent ($value)
     {
         if ($value !== null) {
             $this->_params['content'] = $value;
@@ -116,7 +116,7 @@ class Query extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\GBase\ItemQuery Provides a fluent interface
      */
-    public function setOrderBy($value)
+    public function setOrderBy ($value)
     {
         if ($value !== null) {
             $this->_params['orderby'] = $value;
@@ -130,7 +130,7 @@ class Query extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\GBase\ItemQuery Provides a fluent interface
      */
-    public function setSortOrder($value)
+    public function setSortOrder ($value)
     {
         if ($value !== null) {
             $this->_params['sortorder'] = $value;
@@ -144,7 +144,7 @@ class Query extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\GBase\ItemQuery Provides a fluent interface
      */
-    public function setCrowdBy($value)
+    public function setCrowdBy ($value)
     {
         if ($value !== null) {
             $this->_params['crowdby'] = $value;
@@ -158,7 +158,7 @@ class Query extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\GBase\ItemQuery Provides a fluent interface
      */
-    public function setAdjust($value)
+    public function setAdjust ($value)
     {
         if ($value !== null) {
             $this->_params['adjust'] = $value;
@@ -171,7 +171,7 @@ class Query extends \Zend\GData\Query
     /**
      * @return string key
      */
-    public function getKey()
+    public function getKey ()
     {
         if (array_key_exists('key', $this->_params)) {
             return $this->_params['key'];
@@ -183,7 +183,7 @@ class Query extends \Zend\GData\Query
     /**
      * @return string bq
      */
-    public function getBq()
+    public function getBq ()
     {
         if (array_key_exists('bq', $this->_params)) {
             return $this->_params['bq'];
@@ -195,7 +195,7 @@ class Query extends \Zend\GData\Query
     /**
      * @return string refine
      */
-    public function getRefine()
+    public function getRefine ()
     {
         if (array_key_exists('refine', $this->_params)) {
             return $this->_params['refine'];
@@ -207,7 +207,7 @@ class Query extends \Zend\GData\Query
     /**
      * @return string content
      */
-    public function getContent()
+    public function getContent ()
     {
         if (array_key_exists('content', $this->_params)) {
             return $this->_params['content'];
@@ -219,7 +219,7 @@ class Query extends \Zend\GData\Query
     /**
      * @return string orderby
      */
-    public function getOrderBy()
+    public function getOrderBy ()
     {
         if (array_key_exists('orderby', $this->_params)) {
             return $this->_params['orderby'];
@@ -231,7 +231,7 @@ class Query extends \Zend\GData\Query
     /**
      * @return string sortorder
      */
-    public function getSortOrder()
+    public function getSortOrder ()
     {
         if (array_key_exists('sortorder', $this->_params)) {
             return $this->_params['sortorder'];
@@ -243,7 +243,7 @@ class Query extends \Zend\GData\Query
     /**
      * @return string crowdby
      */
-    public function getCrowdBy()
+    public function getCrowdBy ()
     {
         if (array_key_exists('crowdby', $this->_params)) {
             return $this->_params['crowdby'];
@@ -255,7 +255,7 @@ class Query extends \Zend\GData\Query
     /**
      * @return string adjust
      */
-    public function getAdjust()
+    public function getAdjust ()
     {
         if (array_key_exists('adjust', $this->_params)) {
             return $this->_params['adjust'];

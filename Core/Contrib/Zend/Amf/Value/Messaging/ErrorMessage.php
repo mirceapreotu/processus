@@ -37,6 +37,7 @@ namespace Zend\Amf\Value\Messaging;
  */
 class ErrorMessage extends AcknowledgeMessage
 {
+
     /**
      * Additional data with error
      * @var object

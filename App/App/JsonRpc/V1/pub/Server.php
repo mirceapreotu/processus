@@ -9,11 +9,9 @@ namespace App\JsonRpc\V1\Pub
      */
     class Server extends AbstractJsonRpcServer
     {
+
         protected $_config = array(
-            'validMethods' => array(
-                'listing'
-            )
-        );
+        'validMethods' => array('listing'));
     }
 }
 

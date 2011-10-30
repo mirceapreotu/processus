@@ -37,6 +37,7 @@ use Zend\Controller\Router\Rewrite\Route\Route;
  */
 class PriorityList implements \Iterator, \Countable
 {
+
     /**
      * Internal list of all routes
      *
@@ -73,16 +74,13 @@ class PriorityList implements \Iterator, \Countable
      * @param  integer $priority
      * @return void
      */
-    public function insert($name, Route $route, $priority)
+    public function insert ($name, Route $route, $priority)
     {
         $this->_sorted = false;
-        $this->_count++;
-
-        $this->_routes[$name] = array(
-            'route'    => $route,
-            'priority' => $priority,
-            'serial'   => $this->_serial++
-        );
+        $this->_count ++;
+        
+        $this->_routes[$name] = array('route' => $route, 
+        'priority' => $priority, 'serial' => $this->_serial ++);
     }
 
     /**
@@ -91,11 +89,11 @@ class PriorityList implements \Iterator, \Countable
      * @param  string $name
      * @return void
      */
-    public function remove($name)
+    public function remove ($name)
     {
         $this->_sorted = false;
-        $this->_count--;
-
+        $this->_count --;
+        
         unset($this->_routes['name']);
     }
 
@@ -104,7 +102,7 @@ class PriorityList implements \Iterator, \Countable
      *
      * @return void
      */
-    protected function _sort()
+    protected function _sort ()
     {
         uasort($this->_routes, array($this, '_compare'));
     }
@@ -116,13 +114,13 @@ class PriorityList implements \Iterator, \Countable
      * @param  array $route2
      * @return integer
      */
-    protected function _compare(array $route1, array $route2)
+    protected function _compare (array $route1, array $route2)
     {
         if ($route1['priority'] === $route2['priority']) {
-            return ($route1['serial'] > $route2['serial'] ? -1 : 1);
+            return ($route1['serial'] > $route2['serial'] ? - 1 : 1);
         }
-
-        return ($route1['priority'] > $route2['priority'] ? -1 : 1);
+        
+        return ($route1['priority'] > $route2['priority'] ? - 1 : 1);
     }
 
     /**
@@ -131,11 +129,12 @@ class PriorityList implements \Iterator, \Countable
      * @see    \Iterator::rewind()
      * @return void
      */
-    public function rewind() {
-        if (!$this->_sorted) {
+    public function rewind ()
+    {
+        if (! $this->_sorted) {
             $this->_sort();
         }
-
+        
         reset($this->_routes);
     }
 
@@ -145,7 +144,8 @@ class PriorityList implements \Iterator, \Countable
      * @see    \Iterator::current()
      * @return Route
      */
-    public function current() {
+    public function current ()
+    {
         $node = current($this->_routes);
         return ($node !== false ? $node['route'] : false);
     }
@@ -156,7 +156,8 @@ class PriorityList implements \Iterator, \Countable
      * @see    \Iterator::key()
      * @return string
      */
-    public function key() {
+    public function key ()
+    {
         return key($this->_routes);
     }
 
@@ -166,7 +167,8 @@ class PriorityList implements \Iterator, \Countable
      * @see    \Iterator::next()
      * @return Route
      */
-    public function next() {
+    public function next ()
+    {
         $node = next($this->_routes);
         return ($node !== false ? $node['route'] : false);
     }
@@ -177,7 +179,8 @@ class PriorityList implements \Iterator, \Countable
      * @see    \Iterator::valid()
      * @return boolean
      */
-    public function valid() {
+    public function valid ()
+    {
         return ($this->current() !== false);
     }
 
@@ -187,7 +190,8 @@ class PriorityList implements \Iterator, \Countable
      * @see    \Countable::valid()
      * @return integer
      */
-    public function count() {
+    public function count ()
+    {
         return $this->_count;
     }
 }

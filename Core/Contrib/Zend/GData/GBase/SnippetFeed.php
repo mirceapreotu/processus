@@ -38,6 +38,7 @@ namespace Zend\GData\GBase;
  */
 class SnippetFeed extends \Zend\GData\Feed
 {
+
     /**
      * The classname for individual snippet feed elements.
      *

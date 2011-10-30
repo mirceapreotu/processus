@@ -38,6 +38,7 @@ namespace Zend\Application\Resource;
  */
 class Modules extends AbstractResource
 {
+
     /**
      * @var ArrayObject
      */
@@ -49,7 +50,7 @@ class Modules extends AbstractResource
      * @param  mixed $options
      * @return void
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         $this->_bootstraps = new \ArrayObject(array(), \ArrayObject::ARRAY_AS_PROPS);
         parent::__construct($options);
@@ -61,35 +62,32 @@ class Modules extends AbstractResource
      * @return array
      * @throws \Zend\Application\ResourceException When bootstrap class was not found
      */
-    public function init()
+    public function init ()
     {
         $bootstrap = $this->getBootstrap();
         $bootstrap->bootstrap('frontcontroller');
         $front = $bootstrap->getResource('frontcontroller');
-
+        
         $modules = $front->getControllerDirectory();
         $default = $front->getDefaultModule();
         $curBootstrapClass = get_class($bootstrap);
         foreach ($modules as $module => $moduleDirectory) {
             $bootstrapClass = $this->_formatModuleName($module) . '\Bootstrap';
-            if (!class_exists($bootstrapClass, false)) {
-                $bootstrapPath  = dirname($moduleDirectory) . '/Bootstrap.php';
+            if (! class_exists($bootstrapClass, false)) {
+                $bootstrapPath = dirname($moduleDirectory) . '/Bootstrap.php';
                 if (file_exists($bootstrapPath)) {
                     $eMsgTpl = 'Bootstrap file found for module "%s" but bootstrap class "%s" not found';
                     include_once $bootstrapPath;
-                    if (($default != $module)
-                        && !class_exists($bootstrapClass, false)
-                    ) {
-                        throw new Exception\InitializationException(sprintf(
-                            $eMsgTpl, $module, $bootstrapClass
-                        ));
+                    if (($default != $module) &&
+                     ! class_exists($bootstrapClass, false)) {
+                        throw new Exception\InitializationException(
+                        sprintf($eMsgTpl, $module, $bootstrapClass));
                     } elseif ($default == $module) {
-                        if (!class_exists($bootstrapClass, false)) {
+                        if (! class_exists($bootstrapClass, false)) {
                             $bootstrapClass = 'Bootstrap';
-                            if (!class_exists($bootstrapClass, false)) {
-                                throw new Exception\InitializationException(sprintf(
-                                    $eMsgTpl, $module, $bootstrapClass
-                                ));
+                            if (! class_exists($bootstrapClass, false)) {
+                                throw new Exception\InitializationException(
+                                sprintf($eMsgTpl, $module, $bootstrapClass));
                             }
                         }
                     }
@@ -97,18 +95,18 @@ class Modules extends AbstractResource
                     continue;
                 }
             }
-
+            
             if ($bootstrapClass == $curBootstrapClass) {
                 // If the found bootstrap class matches the one calling this
                 // resource, don't re-execute.
                 continue;
             }
-
+            
             $moduleBootstrap = new $bootstrapClass($bootstrap);
             $moduleBootstrap->bootstrap();
             $this->_bootstraps[$module] = $moduleBootstrap;
         }
-
+        
         return $this->_bootstraps;
     }
 
@@ -117,7 +115,7 @@ class Modules extends AbstractResource
      *
      * @return ArrayObject
      */
-    public function getExecutedBootstraps()
+    public function getExecutedBootstraps ()
     {
         return $this->_bootstraps;
     }
@@ -128,7 +126,7 @@ class Modules extends AbstractResource
      * @param  string $name
      * @return string
      */
-    protected function _formatModuleName($name)
+    protected function _formatModuleName ($name)
     {
         $name = strtolower($name);
         $name = str_replace(array('-', '.'), ' ', $name);

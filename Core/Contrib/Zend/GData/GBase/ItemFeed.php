@@ -38,6 +38,7 @@ namespace Zend\GData\GBase;
  */
 class ItemFeed extends \Zend\GData\Feed
 {
+
     /**
      * The classname for individual item feed elements.
      *

@@ -38,6 +38,7 @@ namespace Zend\GData\Health;
  */
 class ProfileListFeed extends \Zend\GData\Feed
 {
+
     /**
      * The class name for individual profile feed elements.
      *
@@ -45,7 +46,7 @@ class ProfileListFeed extends \Zend\GData\Feed
      */
     protected $_entryClassName = '\Zend\GData\Health\ProfileListEntry';
 
-    public function getEntries()
+    public function getEntries ()
     {
         return $this->entry;
     }

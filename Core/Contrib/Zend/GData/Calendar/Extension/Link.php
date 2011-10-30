@@ -46,8 +46,8 @@ class Link extends \Zend\GData\App\Extension\Link
      * @see Zend_Gdata_App_Extension_Link#__construct
      * @param Zend_Gdata_Calendar_Extension_Webcontent $webContent
      */
-    public function __construct($href = null, $rel = null, $type = null,
-            $hrefLang = null, $title = null, $length = null, $webContent = null)
+    public function __construct ($href = null, $rel = null, $type = null, $hrefLang = null, 
+    $title = null, $length = null, $webContent = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Calendar::$namespaces);
         parent::__construct($href, $rel, $type, $hrefLang, $title, $length);
@@ -64,11 +64,12 @@ class Link extends \Zend\GData\App\Extension\Link
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_webContent != null) {
-            $element->appendChild($this->_webContent->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_webContent->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -79,18 +80,18 @@ class Link extends \Zend\GData\App\Extension\Link
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('gCal') . ':' . 'webContent':
-            $webContent = new WebContent();
-            $webContent->transferFromDOM($child);
-            $this->_webContent = $webContent;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('gCal') . ':' . 'webContent':
+                $webContent = new WebContent();
+                $webContent->transferFromDOM($child);
+                $this->_webContent = $webContent;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
@@ -99,7 +100,7 @@ class Link extends \Zend\GData\App\Extension\Link
      *
      * @return Zend_Gdata_Calendar_Extension_Webcontent The WebContent value
      */
-    public function getWebContent()
+    public function getWebContent ()
     {
         return $this->_webContent;
     }
@@ -110,12 +111,11 @@ class Link extends \Zend\GData\App\Extension\Link
      * @param \Zend\GData\Calendar\Extension\WebContent $value The desired value for this attribute.
      * @return Zend_Calendar_Extension_Link The element being modified.  Provides a fluent interface.
      */
-    public function setWebContent($value)
+    public function setWebContent ($value)
     {
         $this->_webContent = $value;
         return $this;
     }
-
 
 }
 

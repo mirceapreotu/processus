@@ -39,13 +39,14 @@ use Zend\Ldap\Node\RootDse;
  */
 class eDirectory extends RootDse
 {
+
     /**
      * Determines if the extension is supported
      *
      * @param  string|array $oids oid(s) to check
      * @return boolean
      */
-    public function supportsExtension($oids)
+    public function supportsExtension ($oids)
     {
         return $this->attributeHasValue('supportedExtension', $oids);
     }
@@ -55,7 +56,7 @@ class eDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getVendorName()
+    public function getVendorName ()
     {
         return $this->getAttribute('vendorName', 0);
     }
@@ -65,7 +66,7 @@ class eDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getVendorVersion()
+    public function getVendorVersion ()
     {
         return $this->getAttribute('vendorVersion', 0);
     }
@@ -75,7 +76,7 @@ class eDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getDsaName()
+    public function getDsaName ()
     {
         return $this->getAttribute('dsaName', 0);
     }
@@ -85,7 +86,7 @@ class eDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getStatisticsErrors()
+    public function getStatisticsErrors ()
     {
         return $this->getAttribute('errors', 0);
     }
@@ -95,7 +96,7 @@ class eDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getStatisticsSecurityErrors()
+    public function getStatisticsSecurityErrors ()
     {
         return $this->getAttribute('securityErrors', 0);
     }
@@ -105,7 +106,7 @@ class eDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getStatisticsChainings()
+    public function getStatisticsChainings ()
     {
         return $this->getAttribute('chainings', 0);
     }
@@ -115,7 +116,7 @@ class eDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getStatisticsReferralsReturned()
+    public function getStatisticsReferralsReturned ()
     {
         return $this->getAttribute('referralsReturned', 0);
     }
@@ -125,7 +126,7 @@ class eDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getStatisticsExtendedOps()
+    public function getStatisticsExtendedOps ()
     {
         return $this->getAttribute('extendedOps', 0);
     }
@@ -135,7 +136,7 @@ class eDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getStatisticsAbandonOps()
+    public function getStatisticsAbandonOps ()
     {
         return $this->getAttribute('abandonOps', 0);
     }
@@ -145,7 +146,7 @@ class eDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getStatisticsWholeSubtreeSearchOps()
+    public function getStatisticsWholeSubtreeSearchOps ()
     {
         return $this->getAttribute('wholeSubtreeSearchOps', 0);
     }
@@ -155,7 +156,7 @@ class eDirectory extends RootDse
      *
      * @return int
      */
-    public function getServerType()
+    public function getServerType ()
     {
         return self::SERVER_TYPE_EDIRECTORY;
     }

@@ -41,15 +41,16 @@ class CommentingEnabled extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'gphoto';
+
     protected $_rootElement = 'commentingEnabled';
 
     /**
      * Constructs a new Zend_Gdata_Photos_Extension_CommentingEnabled object.
      *
      * @param string $text (optional) Whether commenting should be enabled
-     *          or not.
+     * or not.
      */
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Photos::$namespaces);
         parent::__construct();

@@ -23,8 +23,7 @@
  * @namespace
  */
 namespace Zend\InfoCard\XML\EncryptedData;
-use Zend\InfoCard\XML\AbstractElement,
-    Zend\InfoCard\XML;
+use Zend\InfoCard\XML\AbstractElement, Zend\InfoCard\XML;
 
 /**
  * An XmlEnc formatted EncryptedData XML block
@@ -46,22 +45,27 @@ class XMLEnc extends AbstractEncryptedData
      * @throws \Zend\InfoCard\XML\Exception
      * @return string The value of the CipherValue block base64 encoded
      */
-    public function getCipherValue()
+    public function getCipherValue ()
     {
-        $this->registerXPathNamespace('enc', 'http://www.w3.org/2001/04/xmlenc#');
-
-        list(,$cipherdata) = $this->xpath("//enc:CipherData");
-
-        if(!($cipherdata instanceof AbstractElement)) {
-            throw new XML\Exception\RuntimeException("Unable to find the enc:CipherData block");
+        $this->registerXPathNamespace('enc', 
+        'http://www.w3.org/2001/04/xmlenc#');
+        
+        list (, $cipherdata) = $this->xpath("//enc:CipherData");
+        
+        if (! ($cipherdata instanceof AbstractElement)) {
+            throw new XML\Exception\RuntimeException(
+            "Unable to find the enc:CipherData block");
         }
-        $cipherdata->registerXPathNamespace('enc', 'http://www.w3.org/2001/04/xmlenc#');;
-        list(,$ciphervalue) = $cipherdata->xpath("//enc:CipherValue");
-
-        if(!($ciphervalue instanceof AbstractElement)) {
-            throw new XML\Exception\RuntimeException("Unable to fidn the enc:CipherValue block");
+        $cipherdata->registerXPathNamespace('enc', 
+        'http://www.w3.org/2001/04/xmlenc#');
+        ;
+        list (, $ciphervalue) = $cipherdata->xpath("//enc:CipherValue");
+        
+        if (! ($ciphervalue instanceof AbstractElement)) {
+            throw new XML\Exception\RuntimeException(
+            "Unable to fidn the enc:CipherValue block");
         }
-
-        return (string)$ciphervalue;
+        
+        return (string) $ciphervalue;
     }
 }

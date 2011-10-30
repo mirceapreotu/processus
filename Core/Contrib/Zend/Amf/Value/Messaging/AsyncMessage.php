@@ -36,6 +36,7 @@ namespace Zend\Amf\Value\Messaging;
  */
 class AsyncMessage extends AbstractMessage
 {
+
     /**
      * The message id to be responded to.
      * @var String

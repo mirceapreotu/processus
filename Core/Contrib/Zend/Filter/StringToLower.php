@@ -33,6 +33,7 @@ namespace Zend\Filter;
  */
 class StringToLower extends AbstractFilter
 {
+
     /**
      * Encoding for the input string
      *
@@ -45,23 +46,25 @@ class StringToLower extends AbstractFilter
      *
      * @param string|array|\Zend\Config\Config $options OPTIONAL
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         if ($options instanceof \Zend\Config\Config) {
             $options = $options->toArray();
-        } else if (!is_array($options)) {
-            $options = func_get_args();
-            $temp    = array();
-            if (!empty($options)) {
-                $temp['encoding'] = array_shift($options);
+        } else 
+            if (! is_array($options)) {
+                $options = func_get_args();
+                $temp = array();
+                if (! empty($options)) {
+                    $temp['encoding'] = array_shift($options);
+                }
+                $options = $temp;
             }
-            $options = $temp;
-        }
-
-        if (!array_key_exists('encoding', $options) && function_exists('mb_internal_encoding')) {
+        
+        if (! array_key_exists('encoding', $options) &&
+         function_exists('mb_internal_encoding')) {
             $options['encoding'] = mb_internal_encoding();
         }
-
+        
         if (array_key_exists('encoding', $options)) {
             $this->setEncoding($options['encoding']);
         }
@@ -72,7 +75,7 @@ class StringToLower extends AbstractFilter
      *
      * @return string
      */
-    public function getEncoding()
+    public function getEncoding ()
     {
         return $this->_encoding;
     }
@@ -84,19 +87,22 @@ class StringToLower extends AbstractFilter
      * @return \Zend\Filter\StringToLower Provides a fluent interface
      * @throws \Zend\Filter\Exception
      */
-    public function setEncoding($encoding = null)
+    public function setEncoding ($encoding = null)
     {
         if ($encoding !== null) {
-            if (!function_exists('mb_strtolower')) {
-                throw new Exception\ExtensionNotLoadedException('mbstring is required for this feature');
+            if (! function_exists('mb_strtolower')) {
+                throw new Exception\ExtensionNotLoadedException(
+                'mbstring is required for this feature');
             }
-
+            
             $encoding = (string) $encoding;
-            if (!in_array(strtolower($encoding), array_map('strtolower', mb_list_encodings()))) {
-                throw new Exception\InvalidArgumentException("The given encoding '$encoding' is not supported by mbstring");
+            if (! in_array(strtolower($encoding), 
+            array_map('strtolower', mb_list_encodings()))) {
+                throw new Exception\InvalidArgumentException(
+                "The given encoding '$encoding' is not supported by mbstring");
             }
         }
-
+        
         $this->_encoding = $encoding;
         return $this;
     }
@@ -109,12 +115,12 @@ class StringToLower extends AbstractFilter
      * @param  string $value
      * @return string
      */
-    public function filter($value)
+    public function filter ($value)
     {
         if ($this->_encoding !== null) {
             return mb_strtolower((string) $value, $this->_encoding);
         }
-
+        
         return strtolower((string) $value);
     }
 }

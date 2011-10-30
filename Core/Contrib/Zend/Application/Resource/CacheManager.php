@@ -37,6 +37,7 @@ namespace Zend\Application\Resource;
  */
 class CacheManager extends AbstractResource
 {
+
     /**
      * @var \Zend\Cache\Manager
      */
@@ -47,7 +48,7 @@ class CacheManager extends AbstractResource
      *
      * @return \Zend\Cache\Manager
      */
-    public function init()
+    public function init ()
     {
         return $this->getCacheManager();
     }
@@ -57,10 +58,10 @@ class CacheManager extends AbstractResource
      *
      * @return \Zend\Cache\Manager
      */
-    public function getCacheManager()
+    public function getCacheManager ()
     {
         if (null === $this->_manager) {
-            $this->_manager = new \Zend\Cache\Manager;
+            $this->_manager = new \Zend\Cache\Manager();
             
             $options = $this->getOptions();
             foreach ($options as $key => $value) {

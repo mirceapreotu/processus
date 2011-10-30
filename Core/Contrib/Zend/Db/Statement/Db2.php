@@ -55,19 +55,16 @@ class Db2 extends AbstractStatement
      * @return void
      * @throws \Zend\Db\Statement\Db2Exception
      */
-    public function _prepare($sql)
+    public function _prepare ($sql)
     {
         $connection = $this->_adapter->getConnection();
-
+        
         // db2_prepare on i5 emits errors, these need to be
         // suppressed so that proper exceptions can be thrown
         $this->_stmt = @db2_prepare($connection, $sql);
-
-        if (!$this->_stmt) {
-            throw new Db2Exception(
-                db2_stmt_errormsg(),
-                db2_stmt_error()
-            );
+        
+        if (! $this->_stmt) {
+            throw new Db2Exception(db2_stmt_errormsg(), db2_stmt_error());
         }
     }
 
@@ -82,25 +79,24 @@ class Db2 extends AbstractStatement
      * @return bool
      * @throws \Zend\Db\Statement\Db2Exception
      */
-    public function _bindParam($parameter, &$variable, $type = null, $length = null, $options = null)
+    public function _bindParam ($parameter, &$variable, $type = null, $length = null, 
+    $options = null)
     {
         if ($type === null) {
             $type = Db2_PARAM_IN;
         }
-
+        
         if (isset($options['data-type'])) {
             $datatype = $options['data-type'];
         } else {
             $datatype = Db2_CHAR;
         }
-
-        if (!db2_bind_param($this->_stmt, $position, "variable", $type, $datatype)) {
-            throw new Db2Exception(
-                db2_stmt_errormsg(),
-                db2_stmt_error()
-            );
+        
+        if (! db2_bind_param($this->_stmt, $position, "variable", $type, 
+        $datatype)) {
+            throw new Db2Exception(db2_stmt_errormsg(), db2_stmt_error());
         }
-
+        
         return true;
     }
 
@@ -109,9 +105,9 @@ class Db2 extends AbstractStatement
      *
      * @return bool
      */
-    public function closeCursor()
+    public function closeCursor ()
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
         db2_free_stmt($this->_stmt);
@@ -119,16 +115,15 @@ class Db2 extends AbstractStatement
         return true;
     }
 
-
     /**
      * Returns the number of columns in the result set.
      * Returns null if the statement has no result set metadata.
      *
      * @return int The number of columns.
      */
-    public function columnCount()
+    public function columnCount ()
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
         return db2_num_fields($this->_stmt);
@@ -140,17 +135,17 @@ class Db2 extends AbstractStatement
      *
      * @return string error code.
      */
-    public function errorCode()
+    public function errorCode ()
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
-
+        
         $error = db2_stmt_error();
         if ($error === '') {
             return false;
         }
-
+        
         return $error;
     }
 
@@ -160,22 +155,18 @@ class Db2 extends AbstractStatement
      *
      * @return array
      */
-    public function errorInfo()
+    public function errorInfo ()
     {
         $error = $this->errorCode();
-        if ($error === false){
+        if ($error === false) {
             return false;
         }
-
+        
         /*
          * Return three-valued array like PDO.  But Db2 does not distinguish
          * between SQLCODE and native RDBMS error code, so repeat the SQLCODE.
          */
-        return array(
-            $error,
-            $error,
-            db2_stmt_errormsg()
-        );
+        return array($error, $error, db2_stmt_errormsg());
     }
 
     /**
@@ -185,38 +176,36 @@ class Db2 extends AbstractStatement
      * @return bool
      * @throws \Zend\Db\Statement\Db2Exception
      */
-    public function _execute(array $params = null)
+    public function _execute (array $params = null)
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
-
+        
         $retval = true;
         if ($params !== null) {
             $retval = @db2_execute($this->_stmt, $params);
         } else {
             $retval = @db2_execute($this->_stmt);
         }
-
+        
         if ($retval === false) {
-            throw new Db2Exception(
-                db2_stmt_errormsg(),
-                db2_stmt_error());
+            throw new Db2Exception(db2_stmt_errormsg(), db2_stmt_error());
         }
-
+        
         $this->_keys = array();
         if ($field_num = $this->columnCount()) {
-            for ($i = 0; $i < $field_num; $i++) {
+            for ($i = 0; $i < $field_num; $i ++) {
                 $name = db2_field_name($this->_stmt, $i);
                 $this->_keys[] = $name;
             }
         }
-
+        
         $this->_values = array();
         if ($this->_keys) {
             $this->_values = array_fill(0, count($this->_keys), null);
         }
-
+        
         return $retval;
     }
 
@@ -229,27 +218,27 @@ class Db2 extends AbstractStatement
      * @return mixed Array, object, or scalar depending on fetch mode.
      * @throws \Zend\Db\Statement\Db2Exception
      */
-    public function fetch($style = null, $cursor = null, $offset = null)
+    public function fetch ($style = null, $cursor = null, $offset = null)
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
-
+        
         if ($style === null) {
             $style = $this->_fetchMode;
         }
-
+        
         switch ($style) {
-            case Db\Db::FETCH_NUM :
+            case Db\Db::FETCH_NUM:
                 $row = db2_fetch_array($this->_stmt);
                 break;
-            case Db\Db::FETCH_ASSOC :
+            case Db\Db::FETCH_ASSOC:
                 $row = db2_fetch_assoc($this->_stmt);
                 break;
-            case Db\Db::FETCH_BOTH :
+            case Db\Db::FETCH_BOTH:
                 $row = db2_fetch_both($this->_stmt);
                 break;
-            case Db\Db::FETCH_OBJ :
+            case Db\Db::FETCH_OBJ:
                 $row = db2_fetch_object($this->_stmt);
                 break;
             case Db\Db::FETCH_BOUND:
@@ -262,7 +251,7 @@ class Db2 extends AbstractStatement
                 throw new Db2Exception("Invalid fetch mode '$style' specified");
                 break;
         }
-
+        
         return $row;
     }
 
@@ -273,7 +262,7 @@ class Db2 extends AbstractStatement
      * @param array  $config OPTIONAL Constructor arguments for the class.
      * @return mixed One object instance of the specified class.
      */
-    public function fetchObject($class = 'stdClass', array $config = array())
+    public function fetchObject ($class = 'stdClass', array $config = array())
     {
         $obj = $this->fetch(Db\Db::FETCH_OBJ);
         return $obj;
@@ -287,7 +276,7 @@ class Db2 extends AbstractStatement
      * @return bool
      * @throws \Zend\Db\Statement\Db2Exception
      */
-    public function nextRowset()
+    public function nextRowset ()
     {
         throw new Db2Exception(__FUNCTION__ . '() is not implemented');
     }
@@ -299,22 +288,22 @@ class Db2 extends AbstractStatement
      *
      * @return int     The number of rows affected.
      */
-    public function rowCount()
+    public function rowCount ()
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
-
+        
         $num = @db2_num_rows($this->_stmt);
-
+        
         if ($num === false) {
             return 0;
         }
-
+        
         return $num;
     }
 
-     /**
+    /**
      * Returns an array containing all of the result set rows.
      *
      * @param int $style OPTIONAL Fetch mode.
@@ -325,12 +314,12 @@ class Db2 extends AbstractStatement
      * is used, the final result removes the extra column
      * 'zend_db_rownum'
      */
-    public function fetchAll($style = null, $col = null)
+    public function fetchAll ($style = null, $col = null)
     {
         $data = parent::fetchAll($style, $col);
         $results = array();
         $remove = $this->_adapter->foldCase('ZEND_DB_ROWNUM');
-
+        
         foreach ($data as $row) {
             if (is_array($row) && array_key_exists($remove, $row)) {
                 unset($row[$remove]);

@@ -35,6 +35,7 @@ namespace Zend\Dojo\Form;
  */
 class SubForm extends \Zend\Form\SubForm
 {
+
     /**
      * Has the dojo view helper path been registered?
      * @var bool
@@ -47,13 +48,17 @@ class SubForm extends \Zend\Form\SubForm
      * @param  array|\Zend\Config\Config|null $options
      * @return void
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
-        $this->addPrefixPath('Zend\Dojo\Form\Decorator', 'Zend/Dojo/Form/Decorator', 'decorator')
-             ->addPrefixPath('Zend\Dojo\Form\Element', 'Zend/Dojo/Form/Element', 'element')
-             ->addElementPrefixPath('Zend\Dojo\Form\Decorator', 'Zend/Dojo/Form/Decorator', 'decorator')
-             ->addDisplayGroupPrefixPath('Zend\Dojo\Form\Decorator', 'Zend/Dojo/Form/Decorator')
-             ->setDefaultDisplayGroupClass('Zend\Dojo\Form\DisplayGroup');
+        $this->addPrefixPath('Zend\Dojo\Form\Decorator', 
+        'Zend/Dojo/Form/Decorator', 'decorator')
+            ->addPrefixPath('Zend\Dojo\Form\Element', 'Zend/Dojo/Form/Element', 
+        'element')
+            ->addElementPrefixPath('Zend\Dojo\Form\Decorator', 
+        'Zend/Dojo/Form/Decorator', 'decorator')
+            ->addDisplayGroupPrefixPath('Zend\Dojo\Form\Decorator', 
+        'Zend/Dojo/Form/Decorator')
+            ->setDefaultDisplayGroupClass('Zend\Dojo\Form\DisplayGroup');
         parent::__construct($options);
     }
 
@@ -62,17 +67,17 @@ class SubForm extends \Zend\Form\SubForm
      *
      * @return void
      */
-    public function loadDefaultDecorators()
+    public function loadDefaultDecorators ()
     {
         if ($this->loadDefaultDecoratorsIsDisabled()) {
             return;
         }
-
+        
         $decorators = $this->getDecorators();
         if (empty($decorators)) {
             $this->addDecorator('FormElements')
-                 ->addDecorator('HtmlTag', array('tag' => 'dl'))
-                 ->addDecorator('ContentPane');
+                ->addDecorator('HtmlTag', array('tag' => 'dl'))
+                ->addDecorator('ContentPane');
         }
     }
 
@@ -81,13 +86,15 @@ class SubForm extends \Zend\Form\SubForm
      *
      * @return \Zend\View\Renderer
      */
-    public function getView()
+    public function getView ()
     {
         $view = parent::getView();
-        if (!$this->_dojoViewPathRegistered) {
-            if(false === $view->getBroker()->isLoaded('dojo')) {
+        if (! $this->_dojoViewPathRegistered) {
+            if (false === $view->getBroker()->isLoaded('dojo')) {
                 $loader = new \Zend\Dojo\View\HelperLoader();
-                $view->getBroker()->getClassLoader()->registerPlugins($loader);
+                $view->getBroker()
+                    ->getClassLoader()
+                    ->registerPlugins($loader);
             }
             $this->_dojoViewPathRegistered = true;
         }

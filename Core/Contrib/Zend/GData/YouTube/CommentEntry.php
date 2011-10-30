@@ -52,7 +52,7 @@ class CommentEntry extends \Zend\GData\Entry
      * @param DOMElement $element (optional) The DOMElement on which to
      * base this object.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(YouTube::$namespaces);
         parent::__construct($element);

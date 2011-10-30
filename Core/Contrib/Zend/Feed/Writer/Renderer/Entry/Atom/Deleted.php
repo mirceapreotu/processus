@@ -33,10 +33,10 @@ namespace Zend\Feed\Writer\Renderer\Entry\Atom;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Deleted
-    extends \Zend\Feed\Writer\Renderer\AbstractRenderer
-    implements \Zend\Feed\Writer\Renderer
+class Deleted extends \Zend\Feed\Writer\Renderer\AbstractRenderer implements 
+\Zend\Feed\Writer\Renderer
 {
+
     /**
      * Constructor
      * 
@@ -53,7 +53,7 @@ class Deleted
      * 
      * @return \Zend\Feed\Writer\Renderer\Entry\Atom
      */
-    public function render()
+    public function render ()
     {
         $this->_dom = new \DOMDocument('1.0', $this->_container->getEncoding());
         $this->_dom->formatOutput = true;
@@ -61,14 +61,16 @@ class Deleted
         $this->_dom->appendChild($entry);
         
         $entry->setAttribute('ref', $this->_container->getReference());
-        $entry->setAttribute('when', $this->_container->getWhen()->get(\Zend\Date\Date::ISO_8601));
+        $entry->setAttribute('when', 
+        $this->_container->getWhen()
+            ->get(\Zend\Date\Date::ISO_8601));
         
         $this->_setBy($this->_dom, $entry);
         $this->_setComment($this->_dom, $entry);
         
         return $this;
     }
-    
+
     /**
      * Set tombstone comment
      * 
@@ -76,18 +78,20 @@ class Deleted
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setComment(\DOMDocument $dom, \DOMElement $root)
+    protected function _setComment (\DOMDocument $dom,\DOMElement $root)
     {
-        if(!$this->getDataContainer()->getComment()) {
+        if (! $this->getDataContainer()->getComment()) {
             return;
         }
         $c = $dom->createElement('at:comment');
         $root->appendChild($c);
         $c->setAttribute('type', 'html');
-        $cdata = $dom->createCDATASection($this->getDataContainer()->getComment());
+        $cdata = $dom->createCDATASection(
+        $this->getDataContainer()
+            ->getComment());
         $c->appendChild($cdata);
     }
-    
+
     /**
      * Set entry authors 
      * 
@@ -95,10 +99,10 @@ class Deleted
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setBy(\DOMDocument $dom, \DOMElement $root)
+    protected function _setBy (\DOMDocument $dom,\DOMElement $root)
     {
         $data = $this->_container->getBy();
-        if ((!$data || empty($data))) {
+        if ((! $data || empty($data))) {
             return;
         }
         $author = $this->_dom->createElement('at:by');
@@ -120,5 +124,5 @@ class Deleted
             $uri->appendChild($text);
         }
     }
-    
+
 }

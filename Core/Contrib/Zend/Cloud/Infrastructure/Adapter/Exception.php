@@ -15,4 +15,5 @@
 namespace Zend\Cloud\Infrastructure\Adapter;
 
 interface Exception
-{}
+{
+}

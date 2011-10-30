@@ -57,8 +57,11 @@ abstract class FeedSourceParent extends FeedEntryParent
     protected $_rootElement = null;
 
     protected $_generator = null;
+
     protected $_icon = null;
+
     protected $_logo = null;
+
     protected $_subtitle = null;
 
     /**
@@ -67,11 +70,11 @@ abstract class FeedSourceParent extends FeedEntryParent
      * Sets the HTTP client object to use for retrieving the feed.
      *
      * @deprecated Deprecated as of Zend Framework 1.7. Use
-     *             setService() instead.
+     * setService() instead.
      * @param  \Zend\Http\Client $httpClient
      * @return \Zend\GData\App\FeedSourceParent Provides a fluent interface
      */
-    public function setHttpClient(\Zend\Http\Client $httpClient)
+    public function setHttpClient (\Zend\Http\Client $httpClient)
     {
         parent::setHttpClient($httpClient);
         foreach ($this->_entry as $entry) {
@@ -88,7 +91,7 @@ abstract class FeedSourceParent extends FeedEntryParent
      * @param \Zend\GData\App $instance The new service instance.
      * @return \Zend\GData\App\FeedEntryParent Provides a fluent interface.
      */
-    public function setService($instance)
+    public function setService ($instance)
     {
         parent::setService($instance);
         foreach ($this->_entry as $entry) {
@@ -108,7 +111,7 @@ abstract class FeedSourceParent extends FeedEntryParent
      * @param  string $var The property to access.
      * @return mixed
      */
-    public function __get($var)
+    public function __get ($var)
     {
         switch ($var) {
             default:
@@ -116,12 +119,12 @@ abstract class FeedSourceParent extends FeedEntryParent
         }
     }
 
-
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_generator != null) {
-            $element->appendChild($this->_generator->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_generator->getDOM($element->ownerDocument));
         }
         if ($this->_icon != null) {
             $element->appendChild($this->_icon->getDOM($element->ownerDocument));
@@ -130,7 +133,8 @@ abstract class FeedSourceParent extends FeedEntryParent
             $element->appendChild($this->_logo->getDOM($element->ownerDocument));
         }
         if ($this->_subtitle != null) {
-            $element->appendChild($this->_subtitle->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_subtitle->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -141,40 +145,40 @@ abstract class FeedSourceParent extends FeedEntryParent
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('atom') . ':' . 'generator':
-            $generator = new Extension\Generator();
-            $generator->transferFromDOM($child);
-            $this->_generator = $generator;
-            break;
-        case $this->lookupNamespace('atom') . ':' . 'icon':
-            $icon = new Extension\Icon();
-            $icon->transferFromDOM($child);
-            $this->_icon = $icon;
-            break;
-        case $this->lookupNamespace('atom') . ':' . 'logo':
-            $logo = new Extension\Logo();
-            $logo->transferFromDOM($child);
-            $this->_logo = $logo;
-            break;
-        case $this->lookupNamespace('atom') . ':' . 'subtitle':
-            $subtitle = new Extension\Subtitle();
-            $subtitle->transferFromDOM($child);
-            $this->_subtitle = $subtitle;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('atom') . ':' . 'generator':
+                $generator = new Extension\Generator();
+                $generator->transferFromDOM($child);
+                $this->_generator = $generator;
+                break;
+            case $this->lookupNamespace('atom') . ':' . 'icon':
+                $icon = new Extension\Icon();
+                $icon->transferFromDOM($child);
+                $this->_icon = $icon;
+                break;
+            case $this->lookupNamespace('atom') . ':' . 'logo':
+                $logo = new Extension\Logo();
+                $logo->transferFromDOM($child);
+                $this->_logo = $logo;
+                break;
+            case $this->lookupNamespace('atom') . ':' . 'subtitle':
+                $subtitle = new Extension\Subtitle();
+                $subtitle->transferFromDOM($child);
+                $this->_subtitle = $subtitle;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
     /**
      * @return \Zend\Gdata\AppExtension\Generator
      */
-    public function getGenerator()
+    public function getGenerator ()
     {
         return $this->_generator;
     }
@@ -183,7 +187,7 @@ abstract class FeedSourceParent extends FeedEntryParent
      * @param \Zend\GData\App\Extension\Generator $value
      * @return \Zend\GData\App\FeedSourceParent Provides a fluent interface
      */
-    public function setGenerator($value)
+    public function setGenerator ($value)
     {
         $this->_generator = $value;
         return $this;
@@ -192,7 +196,7 @@ abstract class FeedSourceParent extends FeedEntryParent
     /**
      * @return \Zend\Gdata\AppExtension\Icon
      */
-    public function getIcon()
+    public function getIcon ()
     {
         return $this->_icon;
     }
@@ -201,7 +205,7 @@ abstract class FeedSourceParent extends FeedEntryParent
      * @param \Zend\GData\App\Extension\Icon $value
      * @return \Zend\GData\App\FeedSourceParent Provides a fluent interface
      */
-    public function setIcon($value)
+    public function setIcon ($value)
     {
         $this->_icon = $value;
         return $this;
@@ -210,7 +214,7 @@ abstract class FeedSourceParent extends FeedEntryParent
     /**
      * @return \Zend\Gdata\AppExtension\logo
      */
-    public function getlogo()
+    public function getlogo ()
     {
         return $this->_logo;
     }
@@ -219,7 +223,7 @@ abstract class FeedSourceParent extends FeedEntryParent
      * @param \Zend\Gdata\AppExtension\logo $value
      * @return \Zend\GData\App\FeedSourceParent Provides a fluent interface
      */
-    public function setlogo($value)
+    public function setlogo ($value)
     {
         $this->_logo = $value;
         return $this;
@@ -228,7 +232,7 @@ abstract class FeedSourceParent extends FeedEntryParent
     /**
      * @return \Zend\Gdata\AppExtension\Subtitle
      */
-    public function getSubtitle()
+    public function getSubtitle ()
     {
         return $this->_subtitle;
     }
@@ -237,7 +241,7 @@ abstract class FeedSourceParent extends FeedEntryParent
      * @param \Zend\GData\App\Extension\Subtitle $value
      * @return \Zend\GData\App\FeedSourceParent Provides a fluent interface
      */
-    public function setSubtitle($value)
+    public function setSubtitle ($value)
     {
         $this->_subtitle = $value;
         return $this;

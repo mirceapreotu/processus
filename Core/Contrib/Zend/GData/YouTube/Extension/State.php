@@ -39,9 +39,13 @@ class State extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'yt';
+
     protected $_rootElement = 'state';
+
     protected $_name = null;
+
     protected $_reasonCode = null;
+
     protected $_helpUrl = null;
 
     /**
@@ -52,8 +56,8 @@ class State extends \Zend\GData\Extension
      * @param string $reasonCode(optional) The reasonCode value
      * @param string $helpUrl(optional) The helpUrl value
      */
-    public function __construct($explanation = null, $name = null,
-                                $reasonCode = null, $helpUrl = null)
+    public function __construct ($explanation = null, $name = null, $reasonCode = null, 
+    $helpUrl = null)
     {
         $this->registerAllNamespaces(\Zend\GData\YouTube::$namespaces);
         parent::__construct();
@@ -73,7 +77,7 @@ class State extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_name !== null) {
@@ -96,20 +100,20 @@ class State extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'name':
-            $this->_name = $attribute->nodeValue;
-            break;
-        case 'reasonCode':
-            $this->_reasonCode = $attribute->nodeValue;
-            break;
-        case 'helpUrl':
-            $this->_helpUrl = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'name':
+                $this->_name = $attribute->nodeValue;
+                break;
+            case 'reasonCode':
+                $this->_reasonCode = $attribute->nodeValue;
+                break;
+            case 'helpUrl':
+                $this->_helpUrl = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -118,7 +122,7 @@ class State extends \Zend\GData\Extension
      *
      * @return int The value associated with this attribute.
      */
-    public function getName()
+    public function getName ()
     {
         return $this->_name;
     }
@@ -129,7 +133,7 @@ class State extends \Zend\GData\Extension
      * @param int $value The desired value for this attribute.
      * @return \Zend\GData\YouTube\Extension\State The element being modified.
      */
-    public function setName($value)
+    public function setName ($value)
     {
         $this->_name = $value;
         return $this;
@@ -140,7 +144,7 @@ class State extends \Zend\GData\Extension
      *
      * @return int The value associated with this attribute.
      */
-    public function getReasonCode()
+    public function getReasonCode ()
     {
         return $this->_reasonCode;
     }
@@ -151,7 +155,7 @@ class State extends \Zend\GData\Extension
      * @param int $value The desired value for this attribute.
      * @return \Zend\GData\YouTube\Extension\State The element being modified.
      */
-    public function setReasonCode($value)
+    public function setReasonCode ($value)
     {
         $this->_reasonCode = $value;
         return $this;
@@ -162,7 +166,7 @@ class State extends \Zend\GData\Extension
      *
      * @return int The value associated with this attribute.
      */
-    public function getHelpUrl()
+    public function getHelpUrl ()
     {
         return $this->_helpUrl;
     }
@@ -173,7 +177,7 @@ class State extends \Zend\GData\Extension
      * @param int $value The desired value for this attribute.
      * @return \Zend\GData\YouTube\Extension\State The element being modified.
      */
-    public function setHelpUrl($value)
+    public function setHelpUrl ($value)
     {
         $this->_helpUrl = $value;
         return $this;
@@ -185,7 +189,7 @@ class State extends \Zend\GData\Extension
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->_text;
     }

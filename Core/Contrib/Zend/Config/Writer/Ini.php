@@ -34,6 +34,7 @@ use Zend\Config;
  */
 class Ini extends AbstractFileWriter
 {
+
     /**
      * String that separates nesting levels of configuration data identifiers
      *
@@ -54,10 +55,10 @@ class Ini extends AbstractFileWriter
      * @param  string $filename
      * @return \Zend\Config\Writer\Ini
      */
-    public function setNestSeparator($separator)
+    public function setNestSeparator ($separator)
     {
         $this->_nestSeparator = $separator;
-
+        
         return $this;
     }
 
@@ -70,9 +71,9 @@ class Ini extends AbstractFileWriter
      * @param  bool $withoutSections
      * @return \Zend\Config\Writer\Ini
      */
-    public function setRenderWithoutSections($withoutSections=true)
+    public function setRenderWithoutSections ($withoutSections = true)
     {
-        $this->_renderWithoutSections = (bool)$withoutSections;
+        $this->_renderWithoutSections = (bool) $withoutSections;
         return $this;
     }
 
@@ -82,38 +83,35 @@ class Ini extends AbstractFileWriter
      * @since 1.10
      * @return string
      */
-    public function render()
+    public function render ()
     {
-        $iniString   = '';
-        $extends     = $this->_config->getExtends();
+        $iniString = '';
+        $extends = $this->_config->getExtends();
         $sectionName = $this->_config->getSectionName();
-
-        if($this->_renderWithoutSections == true) {
+        
+        if ($this->_renderWithoutSections == true) {
             $iniString .= $this->_addBranch($this->_config);
-        } else if (is_string($sectionName)) {
-            $iniString .= '[' . $sectionName . ']' . "\n"
-                       .  $this->_addBranch($this->_config)
-                       .  "\n";
-        } else {
-            $config = $this->_sortRootElements($this->_config);
-            foreach ($config as $sectionName => $data) {
-                if (!($data instanceof Config\Config)) {
-                    $iniString .= $sectionName
-                               .  ' = '
-                               .  $this->_prepareValue($data)
-                               .  "\n";
-                } else {
-                    if (isset($extends[$sectionName])) {
-                        $sectionName .= ' : ' . $extends[$sectionName];
+        } else 
+            if (is_string($sectionName)) {
+                $iniString .= '[' . $sectionName . ']' . "\n" .
+                 $this->_addBranch($this->_config) . "\n";
+            } else {
+                $config = $this->_sortRootElements($this->_config);
+                foreach ($config as $sectionName => $data) {
+                    if (! ($data instanceof Config\Config)) {
+                        $iniString .= $sectionName . ' = ' .
+                         $this->_prepareValue($data) . "\n";
+                    } else {
+                        if (isset($extends[$sectionName])) {
+                            $sectionName .= ' : ' . $extends[$sectionName];
+                        }
+                        
+                        $iniString .= '[' . $sectionName . ']' . "\n" .
+                         $this->_addBranch($data) . "\n";
                     }
-
-                    $iniString .= '[' . $sectionName . ']' . "\n"
-                               .  $this->_addBranch($data)
-                               .  "\n";
                 }
             }
-        }
-
+        
         return $iniString;
     }
 
@@ -123,23 +121,21 @@ class Ini extends AbstractFileWriter
      * @param  \Zend\Config\Config $config
      * @return void
      */
-    protected function _addBranch(Config\Config $config, $parents = array())
+    protected function _addBranch (Config\Config $config, $parents = array())
     {
         $iniString = '';
-
+        
         foreach ($config as $key => $value) {
             $group = array_merge($parents, array($key));
-
+            
             if ($value instanceof Config\Config) {
                 $iniString .= $this->_addBranch($value, $group);
             } else {
-                $iniString .= implode($this->_nestSeparator, $group)
-                           .  ' = '
-                           .  $this->_prepareValue($value)
-                           .  "\n";
+                $iniString .= implode($this->_nestSeparator, $group) . ' = ' .
+                 $this->_prepareValue($value) . "\n";
             }
         }
-
+        
         return $iniString;
     }
 
@@ -149,19 +145,20 @@ class Ini extends AbstractFileWriter
      * @param  mixed $value
      * @return string
      */
-    protected function _prepareValue($value)
+    protected function _prepareValue ($value)
     {
         if (is_integer($value) || is_float($value)) {
             return $value;
         } elseif (is_bool($value)) {
             return ($value ? 'true' : 'false');
         } elseif (strpos($value, '"') === false) {
-            return '"' . $value .  '"';
+            return '"' . $value . '"';
         } else {
-            throw new Config\Exception\RuntimeException('Value can not contain double quotes "');
+            throw new Config\Exception\RuntimeException(
+            'Value can not contain double quotes "');
         }
     }
-    
+
     /**
      * Root elements that are not assigned to any section needs to be
      * on the top of config.
@@ -170,7 +167,7 @@ class Ini extends AbstractFileWriter
      * @param  Zend\Config
      * @return Zend\Config
      */
-    protected function _sortRootElements(\Zend\Config\Config $config)
+    protected function _sortRootElements (\Zend\Config\Config $config)
     {
         $configArray = $config->toArray();
         $sections = array();

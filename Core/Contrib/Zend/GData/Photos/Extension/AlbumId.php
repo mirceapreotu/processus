@@ -41,6 +41,7 @@ class AlbumId extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'gphoto';
+
     protected $_rootElement = 'albumid';
 
     /**
@@ -48,7 +49,7 @@ class AlbumId extends \Zend\GData\Extension
      *
      * @param string $text (optional) The value to use for the Album ID.
      */
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Photos::$namespaces);
         parent::__construct();

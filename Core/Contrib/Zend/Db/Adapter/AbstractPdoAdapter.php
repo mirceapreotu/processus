@@ -56,11 +56,11 @@ abstract class AbstractPdoAdapter extends AbstractAdapter
      *
      * @return string
      */
-    protected function _dsn()
+    protected function _dsn ()
     {
         // baseline of DSN parts
         $dsn = $this->_config;
-
+        
         // don't pass the username, password, charset, persistent and driver_options in the DSN
         unset($dsn['username']);
         unset($dsn['password']);
@@ -68,12 +68,12 @@ abstract class AbstractPdoAdapter extends AbstractAdapter
         unset($dsn['charset']);
         unset($dsn['persistent']);
         unset($dsn['driver_options']);
-
+        
         // use all remaining parts in the DSN
         foreach ($dsn as $key => $val) {
             $dsn[$key] = "$key=$val";
         }
-
+        
         return $this->_pdoType . ':' . implode(';', $dsn);
     }
 
@@ -83,54 +83,56 @@ abstract class AbstractPdoAdapter extends AbstractAdapter
      * @return void
      * @throws \Zend\Db\Adapter\Exception
      */
-    protected function _connect()
+    protected function _connect ()
     {
         // if we already have a Pdo object, no need to re-connect.
         if ($this->_connection) {
             return;
         }
-
+        
         // get the dsn first, because some adapters alter the $_pdoType
         $dsn = $this->_dsn();
-
+        
         // check for Pdo extension
-        if (!extension_loaded('pdo')) {
-            throw new Exception('The Pdo extension is required for this adapter but the extension is not loaded');
+        if (! extension_loaded('pdo')) {
+            throw new Exception(
+            'The Pdo extension is required for this adapter but the extension is not loaded');
         }
-
+        
         // check the Pdo driver is available
-        if (!in_array($this->_pdoType, \PDO::getAvailableDrivers())) {
-            throw new Exception('The ' . $this->_pdoType . ' driver is not currently installed');
+        if (! in_array($this->_pdoType, \PDO::getAvailableDrivers())) {
+            throw new Exception(
+            'The ' . $this->_pdoType . ' driver is not currently installed');
         }
-
+        
         // create Pdo connection
-        $q = $this->_profiler->queryStart('connect', \Zend\Db\Profiler::CONNECT);
-
+        $q = $this->_profiler->queryStart('connect', 
+        \Zend\Db\Profiler::CONNECT);
+        
         // add the persistence flag if we find it in our config array
-        if (isset($this->_config['persistent']) && ($this->_config['persistent'] == true)) {
+        if (isset($this->_config['persistent']) &&
+         ($this->_config['persistent'] == true)) {
             $this->_config['driver_options'][\PDO::ATTR_PERSISTENT] = true;
         }
-
+        
         try {
-            $this->_connection = new \PDO(
-                $dsn,
-                $this->_config['username'],
-                $this->_config['password'],
-                $this->_config['driver_options']
-            );
-
+            $this->_connection = new \PDO($dsn, $this->_config['username'], 
+            $this->_config['password'], $this->_config['driver_options']);
+            
             $this->_profiler->queryEnd($q);
-
+            
             // set the Pdo connection to perform case-folding on array keys, or not
-            $this->_connection->setAttribute(\PDO::ATTR_CASE, $this->_caseFolding);
-
+            $this->_connection->setAttribute(\PDO::ATTR_CASE, 
+            $this->_caseFolding);
+            
             // always use exceptions.
-            $this->_connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-
+            $this->_connection->setAttribute(\PDO::ATTR_ERRMODE, 
+            \PDO::ERRMODE_EXCEPTION);
+        
         } catch (\PDOException $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
-
+    
     }
 
     /**
@@ -138,7 +140,7 @@ abstract class AbstractPdoAdapter extends AbstractAdapter
      *
      * @return boolean
      */
-    public function isConnected()
+    public function isConnected ()
     {
         return ((bool) ($this->_connection instanceof \PDO));
     }
@@ -148,7 +150,7 @@ abstract class AbstractPdoAdapter extends AbstractAdapter
      *
      * @return void
      */
-    public function closeConnection()
+    public function closeConnection ()
     {
         $this->_connection = null;
     }
@@ -160,7 +162,7 @@ abstract class AbstractPdoAdapter extends AbstractAdapter
      * @param array $bind An array of data to bind to the placeholders.
      * @return PdoStatement
      */
-    public function prepare($sql)
+    public function prepare ($sql)
     {
         $this->_connect();
         $stmtClass = $this->_defaultStmtClass;
@@ -186,7 +188,7 @@ abstract class AbstractPdoAdapter extends AbstractAdapter
      * @param string $primaryKey  OPTIONAL Name of primary key column.
      * @return string
      */
-    public function lastInsertId($tableName = null, $primaryKey = null)
+    public function lastInsertId ($tableName = null, $primaryKey = null)
     {
         $this->_connect();
         return $this->_connection->lastInsertId();
@@ -201,26 +203,27 @@ abstract class AbstractPdoAdapter extends AbstractAdapter
      * @return \Zend\Db\Statement\Pdo
      * @throws \Zend\Db\Adapter\Exception To re-throw PdoException.
      */
-    public function query($sql, $bind = array())
+    public function query ($sql, $bind = array())
     {
         if (empty($bind) && $sql instanceof Select) {
             $bind = $sql->getBind();
         }
-
+        
         if (is_array($bind)) {
             foreach ($bind as $name => $value) {
-                if (!is_int($name) && !preg_match('/^:/', $name)) {
+                if (! is_int($name) && ! preg_match('/^:/', $name)) {
                     $newName = ":$name";
                     unset($bind[$name]);
                     $bind[$newName] = $value;
                 }
             }
         }
-
+        
         try {
             return parent::query($sql, $bind);
         } catch (\PDOException $e) {
-            throw new \Zend\Db\Statement\Exception($e->getMessage(), $e->getCode(), $e);
+            throw new \Zend\Db\Statement\Exception($e->getMessage(), 
+            $e->getCode(), $e);
         }
     }
 
@@ -228,24 +231,24 @@ abstract class AbstractPdoAdapter extends AbstractAdapter
      * Executes an SQL statement and return the number of affected rows
      *
      * @param  mixed  $sql  The SQL statement with placeholders.
-     *                      May be a string or Zend_Db_Select.
+     * May be a string or Zend_Db_Select.
      * @return integer      Number of rows that were modified
-     *                      or deleted by the SQL statement
+     * or deleted by the SQL statement
      */
-    public function exec($sql)
+    public function exec ($sql)
     {
         if ($sql instanceof Select) {
             $sql = $sql->assemble();
         }
-
+        
         try {
             $affected = $this->getConnection()->exec($sql);
-
+            
             if ($affected === false) {
                 $errorInfo = $this->getConnection()->errorInfo();
                 throw new Exception($errorInfo[2]);
             }
-
+            
             return $affected;
         } catch (\PDOException $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
@@ -258,7 +261,7 @@ abstract class AbstractPdoAdapter extends AbstractAdapter
      * @param string $value     Raw string
      * @return string           Quoted string
      */
-    protected function _quote($value)
+    protected function _quote ($value)
     {
         if (is_int($value) || is_float($value)) {
             return $value;
@@ -270,7 +273,7 @@ abstract class AbstractPdoAdapter extends AbstractAdapter
     /**
      * Begin a transaction.
      */
-    protected function _beginTransaction()
+    protected function _beginTransaction ()
     {
         $this->_connect();
         $this->_connection->beginTransaction();
@@ -279,7 +282,7 @@ abstract class AbstractPdoAdapter extends AbstractAdapter
     /**
      * Commit a transaction.
      */
-    protected function _commit()
+    protected function _commit ()
     {
         $this->_connect();
         $this->_connection->commit();
@@ -288,7 +291,8 @@ abstract class AbstractPdoAdapter extends AbstractAdapter
     /**
      * Roll-back a transaction.
      */
-    protected function _rollBack() {
+    protected function _rollBack ()
+    {
         $this->_connect();
         $this->_connection->rollBack();
     }
@@ -302,11 +306,12 @@ abstract class AbstractPdoAdapter extends AbstractAdapter
      * @return void
      * @throws \Zend\Db\Adapter\Exception
      */
-    public function setFetchMode($mode)
+    public function setFetchMode ($mode)
     {
         //check for Pdo extension
-        if (!extension_loaded('pdo')) {
-            throw new Exception('The Pdo extension is required for this adapter but the extension is not loaded');
+        if (! extension_loaded('pdo')) {
+            throw new Exception(
+            'The Pdo extension is required for this adapter but the extension is not loaded');
         }
         switch ($mode) {
             case \PDO::FETCH_LAZY:
@@ -329,7 +334,7 @@ abstract class AbstractPdoAdapter extends AbstractAdapter
      * @param string $type 'positional' or 'named'
      * @return bool
      */
-    public function supportsParameters($type)
+    public function supportsParameters ($type)
     {
         switch ($type) {
             case 'positional':
@@ -344,17 +349,19 @@ abstract class AbstractPdoAdapter extends AbstractAdapter
      *
      * @return string
      */
-    public function getServerVersion()
+    public function getServerVersion ()
     {
         $this->_connect();
         try {
-            $version = $this->_connection->getAttribute(\PDO::ATTR_SERVER_VERSION);
+            $version = $this->_connection->getAttribute(
+            \PDO::ATTR_SERVER_VERSION);
         } catch (\PDOException $e) {
             // In case of the driver doesn't support getting attributes
             return null;
         }
         $matches = null;
-        if (preg_match('/((?:[0-9]{1,2}\.){1,3}[0-9]{1,2})/', $version, $matches)) {
+        if (preg_match('/((?:[0-9]{1,2}\.){1,3}[0-9]{1,2})/', $version, 
+        $matches)) {
             return $matches[1];
         } else {
             return null;

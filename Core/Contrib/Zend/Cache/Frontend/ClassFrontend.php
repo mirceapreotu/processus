@@ -35,6 +35,7 @@ use Zend\Cache\Cache;
  */
 class ClassFrontend extends Core
 {
+
     /**
      * Available options
      *
@@ -53,12 +54,9 @@ class ClassFrontend extends Core
      *
      * @var array available options
      */
-    protected $_specificOptions = array(
-        'cached_entity' => null,
-        'cache_by_default' => true,
-        'cached_methods' => array(),
-        'non_cached_methods' => array()
-    );
+    protected $_specificOptions = array('cached_entity' => null, 
+    'cache_by_default' => true, 'cached_methods' => array(), 
+    'non_cached_methods' => array());
 
     /**
      * Tags array
@@ -83,13 +81,13 @@ class ClassFrontend extends Core
      */
     private $_cachedEntity = null;
 
-     /**
-      * The class name of the cached object or cached abstract class
-      *
-      * Used to differentiate between different classes with the same method calls.
-      *
-      * @var string
-      */
+    /**
+     * The class name of the cached object or cached abstract class
+     *
+     * Used to differentiate between different classes with the same method calls.
+     *
+     * @var string
+     */
     private $_cachedEntityLabel = '';
 
     /**
@@ -106,9 +104,9 @@ class ClassFrontend extends Core
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    public function __construct(array $options = array())
+    public function __construct (array $options = array())
     {
-        while (list($name, $value) = each($options)) {
+        while (list ($name, $value) = each($options)) {
             $this->setOption($name, $value);
         }
         if ($this->_specificOptions['cached_entity'] === null) {
@@ -124,7 +122,7 @@ class ClassFrontend extends Core
      * @param  int $specificLifetime
      * @return void
      */
-    public function setSpecificLifetime($specificLifetime = false)
+    public function setSpecificLifetime ($specificLifetime = false)
     {
         $this->_specificLifetime = $specificLifetime;
     }
@@ -134,7 +132,7 @@ class ClassFrontend extends Core
      *
      * @param int $priority integer between 0 (very low priority) and 10 (maximum priority)
      */
-    public function setPriority($priority)
+    public function setPriority ($priority)
     {
         $this->_priority = $priority;
     }
@@ -149,7 +147,7 @@ class ClassFrontend extends Core
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    public function setOption($name, $value)
+    public function setOption ($name, $value)
     {
         if ($name == 'cached_entity') {
             $this->setCachedEntity($value);
@@ -166,14 +164,15 @@ class ClassFrontend extends Core
      *
      * @param mixed $cachedEntity
      */
-    public function setCachedEntity($cachedEntity)
+    public function setCachedEntity ($cachedEntity)
     {
-        if (!is_string($cachedEntity) && !is_object($cachedEntity)) {
-            Cache::throwException('cached_entity must be an object or a class name');
+        if (! is_string($cachedEntity) && ! is_object($cachedEntity)) {
+            Cache::throwException(
+            'cached_entity must be an object or a class name');
         }
         $this->_cachedEntity = $cachedEntity;
         $this->_specificOptions['cached_entity'] = $cachedEntity;
-        if (is_string($this->_cachedEntity)){
+        if (is_string($this->_cachedEntity)) {
             $this->_cachedEntityLabel = $this->_cachedEntity;
         } else {
             $ro = new \ReflectionObject($this->_cachedEntity);
@@ -187,7 +186,7 @@ class ClassFrontend extends Core
      * @param  array $tags
      * @return void
      */
-    public function setTagsArray($tags = array())
+    public function setTagsArray ($tags = array())
     {
         $this->_tags = $tags;
     }
@@ -199,19 +198,21 @@ class ClassFrontend extends Core
      * @param  array  $parameters Method parameters
      * @return mixed Result
      */
-    public function __call($name, $parameters)
+    public function __call ($name, $parameters)
     {
         $cacheBool1 = $this->_specificOptions['cache_by_default'];
         $cacheBool2 = in_array($name, $this->_specificOptions['cached_methods']);
-        $cacheBool3 = in_array($name, $this->_specificOptions['non_cached_methods']);
-        $cache = (($cacheBool1 || $cacheBool2) && (!$cacheBool3));
-        if (!$cache) {
+        $cacheBool3 = in_array($name, 
+        $this->_specificOptions['non_cached_methods']);
+        $cache = (($cacheBool1 || $cacheBool2) && (! $cacheBool3));
+        if (! $cache) {
             // We do not have not cache
-            return call_user_func_array(array($this->_cachedEntity, $name), $parameters);
+            return call_user_func_array(
+            array($this->_cachedEntity, $name), $parameters);
         }
-
+        
         $id = $this->_makeId($name, $parameters);
-        if ( ($rs = $this->load($id)) && isset($rs[0], $rs[1]) ) {
+        if (($rs = $this->load($id)) && isset($rs[0], $rs[1])) {
             // A cache is available
             $output = $rs[0];
             $return = $rs[1];
@@ -219,13 +220,15 @@ class ClassFrontend extends Core
             // A cache is not available (or not valid for this frontend)
             ob_start();
             ob_implicit_flush(false);
-            $return = call_user_func_array(array($this->_cachedEntity, $name), $parameters);
+            $return = call_user_func_array(array($this->_cachedEntity, $name), 
+            $parameters);
             $output = ob_get_contents();
             ob_end_clean();
             $data = array($output, $return);
-            $this->save($data, $id, $this->_tags, $this->_specificLifetime, $this->_priority);
+            $this->save($data, $id, $this->_tags, $this->_specificLifetime, 
+            $this->_priority);
         }
-
+        
         echo $output;
         return $return;
     }
@@ -235,7 +238,7 @@ class ClassFrontend extends Core
      *
      * @deprecated
      */
-    private function _makeId($name, $args)
+    private function _makeId ($name, $args)
     {
         return $this->makeId($name, $args);
     }
@@ -247,9 +250,10 @@ class ClassFrontend extends Core
      * @param  array  $args Method parameters
      * @return string Cache id
      */
-    public function makeId($name, array $args = array())
+    public function makeId ($name, array $args = array())
     {
-        return md5($this->_cachedEntityLabel . '__' . $name . '__' . serialize($args));
+        return md5(
+        $this->_cachedEntityLabel . '__' . $name . '__' . serialize($args));
     }
 
 }

@@ -60,7 +60,7 @@ abstract class BaseMediaSource implements MediaSource
      *
      * @return string The content type
      */
-    public function getContentType()
+    public function getContentType ()
     {
         return $this->_contentType;
     }
@@ -71,7 +71,7 @@ abstract class BaseMediaSource implements MediaSource
      * @param string $value The content type
      * @return \Zend\GData\App\MediaFileSource Provides a fluent interface
      */
-    public function setContentType($value)
+    public function setContentType ($value)
     {
         $this->_contentType = $value;
         return $this;
@@ -83,7 +83,8 @@ abstract class BaseMediaSource implements MediaSource
      *
      * @return string
      */
-    public function getSlug(){
+    public function getSlug ()
+    {
         return $this->_slug;
     }
 
@@ -94,11 +95,11 @@ abstract class BaseMediaSource implements MediaSource
      * @var string The slug value
      * @return \Zend\GData\App\MediaSource Provides a fluent interface
      */
-    public function setSlug($value){
+    public function setSlug ($value)
+    {
         $this->_slug = $value;
         return $this;
     }
-
 
     /**
      * Magic getter to allow acces like $source->foo to call $source->getFoo()
@@ -109,17 +110,18 @@ abstract class BaseMediaSource implements MediaSource
      *
      * @param string $name The variable name sought
      */
-    public function __get($name)
+    public function __get ($name)
     {
-        $method = 'get'.ucfirst($name);
+        $method = 'get' . ucfirst($name);
         if (method_exists($this, $method)) {
             return $this->$method();
-        } else if (property_exists($this, "_${name}")) {
-            return $this->{'_' . $name};
-        } else {
-            throw new InvalidArgumentException(
-                    'Property ' . $name . ' does not exist');
-        }
+        } else 
+            if (property_exists($this, "_${name}")) {
+                return $this->{'_' . $name};
+            } else {
+                throw new InvalidArgumentException(
+                'Property ' . $name . ' does not exist');
+            }
     }
 
     /**
@@ -133,17 +135,18 @@ abstract class BaseMediaSource implements MediaSource
      * @param string $value
      * @return void
      */
-    public function __set($name, $val)
+    public function __set ($name, $val)
     {
-        $method = 'set'.ucfirst($name);
+        $method = 'set' . ucfirst($name);
         if (method_exists($this, $method)) {
             $this->$method($val);
-        } else if (isset($this->{'_' . $name}) || ($this->{'_' . $name} === null)) {
-            $this->{'_' . $name} = $val;
-        } else {
-            throw new InvalidArgumentException(
-                    'Property ' . $name . '  does not exist');
-        }
+        } else 
+            if (isset($this->{'_' . $name}) || ($this->{'_' . $name} === null)) {
+                $this->{'_' . $name} = $val;
+            } else {
+                throw new InvalidArgumentException(
+                'Property ' . $name . '  does not exist');
+            }
     }
 
     /**
@@ -151,13 +154,13 @@ abstract class BaseMediaSource implements MediaSource
      *
      * @param string $name
      */
-    public function __isset($name)
+    public function __isset ($name)
     {
         $rc = new \ReflectionClass(get_class($this));
         $privName = '_' . $name;
-        if (!($rc->hasProperty($privName))) {
+        if (! ($rc->hasProperty($privName))) {
             throw new InvalidArgumentException(
-                    'Property ' . $name . ' does not exist');
+            'Property ' . $name . ' does not exist');
         } else {
             if (isset($this->{$privName})) {
                 if (is_array($this->{$privName})) {

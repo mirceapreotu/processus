@@ -45,20 +45,20 @@ class VolumeFeed extends \Zend\GData\Feed
      * Describes a Book Search volume feed
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(Books::$namespaces);
         parent::__construct($element);
     }
 
-     /**
-      * The classname for individual feed elements.
-      *
-      * @var string
-      */
-     protected $_entryClassName = 'Zend\GData\Books\VolumeEntry';
+    /**
+     * The classname for individual feed elements.
+     *
+     * @var string
+     */
+    protected $_entryClassName = 'Zend\GData\Books\VolumeEntry';
 
 }
 

@@ -9,15 +9,12 @@ namespace App\JsonRpc\V1\Pub
      */
     class Gateway extends AbstractJsonRpcGateway
     {
-        protected $_config = array(
-            'enabled' => TRUE,
 
-            'namespace' => __NAMESPACE__,
-
-            'validDomains' => array(
-                'Pub'
-            )
-        );
+        protected $_config = array('enabled' => TRUE, 
+        
+        'namespace' => __NAMESPACE__, 
+        
+        'validDomains' => array('Pub'));
     }
 }
 

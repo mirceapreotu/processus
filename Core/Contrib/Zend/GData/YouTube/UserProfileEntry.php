@@ -24,8 +24,7 @@
  */
 namespace Zend\GData\YouTube;
 
-use Zend\GData\YouTube,
-    Zend\GData\App;
+use Zend\GData\YouTube, Zend\GData\App;
 
 /**
  * Represents the YouTube video playlist flavor of an Atom entry
@@ -209,9 +208,9 @@ class UserProfileEntry extends \Zend\GData\Entry
      * and their attributes.
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(YouTube::$namespaces);
         parent::__construct($element);
@@ -227,69 +226,88 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_description != null) {
-            $element->appendChild($this->_description->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_description->getDOM($element->ownerDocument));
         }
         if ($this->_aboutMe != null) {
-            $element->appendChild($this->_aboutMe->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_aboutMe->getDOM($element->ownerDocument));
         }
         if ($this->_age != null) {
             $element->appendChild($this->_age->getDOM($element->ownerDocument));
         }
         if ($this->_username != null) {
-            $element->appendChild($this->_username->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_username->getDOM($element->ownerDocument));
         }
         if ($this->_books != null) {
-            $element->appendChild($this->_books->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_books->getDOM($element->ownerDocument));
         }
         if ($this->_company != null) {
-            $element->appendChild($this->_company->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_company->getDOM($element->ownerDocument));
         }
         if ($this->_hobbies != null) {
-            $element->appendChild($this->_hobbies->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_hobbies->getDOM($element->ownerDocument));
         }
         if ($this->_hometown != null) {
-            $element->appendChild($this->_hometown->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_hometown->getDOM($element->ownerDocument));
         }
         if ($this->_location != null) {
-            $element->appendChild($this->_location->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_location->getDOM($element->ownerDocument));
         }
         if ($this->_movies != null) {
-            $element->appendChild($this->_movies->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_movies->getDOM($element->ownerDocument));
         }
         if ($this->_music != null) {
-            $element->appendChild($this->_music->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_music->getDOM($element->ownerDocument));
         }
         if ($this->_occupation != null) {
-            $element->appendChild($this->_occupation->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_occupation->getDOM($element->ownerDocument));
         }
         if ($this->_school != null) {
-            $element->appendChild($this->_school->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_school->getDOM($element->ownerDocument));
         }
         if ($this->_gender != null) {
-            $element->appendChild($this->_gender->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_gender->getDOM($element->ownerDocument));
         }
         if ($this->_relationship != null) {
-            $element->appendChild($this->_relationship->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_relationship->getDOM($element->ownerDocument));
         }
         if ($this->_firstName != null) {
-            $element->appendChild($this->_firstName->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_firstName->getDOM($element->ownerDocument));
         }
         if ($this->_lastName != null) {
-            $element->appendChild($this->_lastName->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_lastName->getDOM($element->ownerDocument));
         }
         if ($this->_statistics != null) {
-            $element->appendChild($this->_statistics->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_statistics->getDOM($element->ownerDocument));
         }
         if ($this->_thumbnail != null) {
-            $element->appendChild($this->_thumbnail->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_thumbnail->getDOM($element->ownerDocument));
         }
         if ($this->_feedLink != null) {
             foreach ($this->_feedLink as $feedLink) {
-                $element->appendChild($feedLink->getDOM($element->ownerDocument));
+                $element->appendChild(
+                $feedLink->getDOM($element->ownerDocument));
             }
         }
         return $element;
@@ -301,113 +319,113 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('yt') . ':' . 'description':
-            $description = new Extension\Description();
-            $description->transferFromDOM($child);
-            $this->_description = $description;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'aboutMe':
-            $aboutMe = new Extension\AboutMe();
-            $aboutMe->transferFromDOM($child);
-            $this->_aboutMe = $aboutMe;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'age':
-            $age = new Extension\Age();
-            $age->transferFromDOM($child);
-            $this->_age = $age;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'username':
-            $username = new Extension\Username();
-            $username->transferFromDOM($child);
-            $this->_username = $username;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'books':
-            $books = new Extension\Books();
-            $books->transferFromDOM($child);
-            $this->_books = $books;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'company':
-            $company = new Extension\Company();
-            $company->transferFromDOM($child);
-            $this->_company = $company;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'hobbies':
-            $hobbies = new Extension\Hobbies();
-            $hobbies->transferFromDOM($child);
-            $this->_hobbies = $hobbies;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'hometown':
-            $hometown = new Extension\Hometown();
-            $hometown->transferFromDOM($child);
-            $this->_hometown = $hometown;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'location':
-            $location = new Extension\Location();
-            $location->transferFromDOM($child);
-            $this->_location = $location;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'movies':
-            $movies = new Extension\Movies();
-            $movies->transferFromDOM($child);
-            $this->_movies = $movies;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'music':
-            $music = new Extension\Music();
-            $music->transferFromDOM($child);
-            $this->_music = $music;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'occupation':
-            $occupation = new Extension\Occupation();
-            $occupation->transferFromDOM($child);
-            $this->_occupation = $occupation;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'school':
-            $school = new Extension\School();
-            $school->transferFromDOM($child);
-            $this->_school = $school;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'gender':
-            $gender = new Extension\Gender();
-            $gender->transferFromDOM($child);
-            $this->_gender = $gender;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'relationship':
-            $relationship = new Extension\Relationship();
-            $relationship->transferFromDOM($child);
-            $this->_relationship = $relationship;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'firstName':
-            $firstName = new Extension\FirstName();
-            $firstName->transferFromDOM($child);
-            $this->_firstName = $firstName;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'lastName':
-            $lastName = new Extension\LastName();
-            $lastName->transferFromDOM($child);
-            $this->_lastName = $lastName;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'statistics':
-            $statistics = new Extension\Statistics();
-            $statistics->transferFromDOM($child);
-            $this->_statistics = $statistics;
-            break;
-        case $this->lookupNamespace('media') . ':' . 'thumbnail':
-            $thumbnail = new \Zend\GData\Media\Extension\MediaThumbnail();
-            $thumbnail->transferFromDOM($child);
-            $this->_thumbnail = $thumbnail;
-            break;
-        case $this->lookupNamespace('gd') . ':' . 'feedLink':
-            $feedLink = new \Zend\GData\Extension\FeedLink();
-            $feedLink->transferFromDOM($child);
-            $this->_feedLink[] = $feedLink;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('yt') . ':' . 'description':
+                $description = new Extension\Description();
+                $description->transferFromDOM($child);
+                $this->_description = $description;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'aboutMe':
+                $aboutMe = new Extension\AboutMe();
+                $aboutMe->transferFromDOM($child);
+                $this->_aboutMe = $aboutMe;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'age':
+                $age = new Extension\Age();
+                $age->transferFromDOM($child);
+                $this->_age = $age;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'username':
+                $username = new Extension\Username();
+                $username->transferFromDOM($child);
+                $this->_username = $username;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'books':
+                $books = new Extension\Books();
+                $books->transferFromDOM($child);
+                $this->_books = $books;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'company':
+                $company = new Extension\Company();
+                $company->transferFromDOM($child);
+                $this->_company = $company;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'hobbies':
+                $hobbies = new Extension\Hobbies();
+                $hobbies->transferFromDOM($child);
+                $this->_hobbies = $hobbies;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'hometown':
+                $hometown = new Extension\Hometown();
+                $hometown->transferFromDOM($child);
+                $this->_hometown = $hometown;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'location':
+                $location = new Extension\Location();
+                $location->transferFromDOM($child);
+                $this->_location = $location;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'movies':
+                $movies = new Extension\Movies();
+                $movies->transferFromDOM($child);
+                $this->_movies = $movies;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'music':
+                $music = new Extension\Music();
+                $music->transferFromDOM($child);
+                $this->_music = $music;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'occupation':
+                $occupation = new Extension\Occupation();
+                $occupation->transferFromDOM($child);
+                $this->_occupation = $occupation;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'school':
+                $school = new Extension\School();
+                $school->transferFromDOM($child);
+                $this->_school = $school;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'gender':
+                $gender = new Extension\Gender();
+                $gender->transferFromDOM($child);
+                $this->_gender = $gender;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'relationship':
+                $relationship = new Extension\Relationship();
+                $relationship->transferFromDOM($child);
+                $this->_relationship = $relationship;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'firstName':
+                $firstName = new Extension\FirstName();
+                $firstName->transferFromDOM($child);
+                $this->_firstName = $firstName;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'lastName':
+                $lastName = new Extension\LastName();
+                $lastName->transferFromDOM($child);
+                $this->_lastName = $lastName;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'statistics':
+                $statistics = new Extension\Statistics();
+                $statistics->transferFromDOM($child);
+                $this->_statistics = $statistics;
+                break;
+            case $this->lookupNamespace('media') . ':' . 'thumbnail':
+                $thumbnail = new \Zend\GData\Media\Extension\MediaThumbnail();
+                $thumbnail->transferFromDOM($child);
+                $this->_thumbnail = $thumbnail;
+                break;
+            case $this->lookupNamespace('gd') . ':' . 'feedLink':
+                $feedLink = new \Zend\GData\Extension\FeedLink();
+                $feedLink->transferFromDOM($child);
+                $this->_feedLink[] = $feedLink;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
@@ -415,17 +433,17 @@ class UserProfileEntry extends \Zend\GData\Entry
      * Sets the content of the 'about me' field.
      *
      * @param \Zend\GData\YouTube\Extension\AboutMe $aboutMe The 'about me'
-     *        information.
+     * information.
      * @throws \Zend\GData\App\VersionException
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setAboutMe($aboutMe = null)
+    public function setAboutMe ($aboutMe = null)
     {
         if (($this->getMajorProtocolVersion() == null) ||
-           ($this->getMajorProtocolVersion() == 1)) {
-            throw new App\VersionException('The setAboutMe ' .
-                ' method is only supported as of version 2 of the YouTube ' .
-                'API.');
+         ($this->getMajorProtocolVersion() == 1)) {
+            throw new App\VersionException(
+            'The setAboutMe ' .
+             ' method is only supported as of version 2 of the YouTube ' . 'API.');
         } else {
             $this->_aboutMe = $aboutMe;
             return $this;
@@ -438,13 +456,13 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @throws \Zend\GData\App\VersionException
      * @return \Zend\GData\YouTube\Extension\AboutMe  The 'about me' information
      */
-    public function getAboutMe()
+    public function getAboutMe ()
     {
         if (($this->getMajorProtocolVersion() == null) ||
-           ($this->getMajorProtocolVersion() == 1)) {
-            throw new App\VersionException('The getAboutMe ' .
-                ' method is only supported as of version 2 of the YouTube ' .
-                'API.');
+         ($this->getMajorProtocolVersion() == 1)) {
+            throw new App\VersionException(
+            'The getAboutMe ' .
+             ' method is only supported as of version 2 of the YouTube ' . 'API.');
         } else {
             return $this->_aboutMe;
         }
@@ -457,13 +475,13 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @throws \Zend\GData\App\VersionException
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setFirstName($firstName = null)
+    public function setFirstName ($firstName = null)
     {
         if (($this->getMajorProtocolVersion() == null) ||
-           ($this->getMajorProtocolVersion() == 1)) {
-            throw new App\VersionException('The setFirstName ' .
-                ' method is only supported as of version 2 of the YouTube ' .
-                'API.');
+         ($this->getMajorProtocolVersion() == 1)) {
+            throw new App\VersionException(
+            'The setFirstName ' .
+             ' method is only supported as of version 2 of the YouTube ' . 'API.');
         } else {
             $this->_firstName = $firstName;
             return $this;
@@ -476,13 +494,13 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @throws \Zend\GData\App\VersionException
      * @return \Zend\GData\YouTube\Extension\FirstName  The first name
      */
-    public function getFirstName()
+    public function getFirstName ()
     {
         if (($this->getMajorProtocolVersion() == null) ||
-           ($this->getMajorProtocolVersion() == 1)) {
-            throw new App\VersionException('The getFirstName ' .
-                ' method is only supported as of version 2 of the YouTube ' .
-                'API.');
+         ($this->getMajorProtocolVersion() == 1)) {
+            throw new App\VersionException(
+            'The getFirstName ' .
+             ' method is only supported as of version 2 of the YouTube ' . 'API.');
         } else {
             return $this->_firstName;
         }
@@ -495,13 +513,13 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @throws \Zend\GData\App\VersionException
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setLastName($lastName = null)
+    public function setLastName ($lastName = null)
     {
         if (($this->getMajorProtocolVersion() == null) ||
-           ($this->getMajorProtocolVersion() == 1)) {
-            throw new App\VersionException('The setLastName ' .
-                ' method is only supported as of version 2 of the YouTube ' .
-                'API.');
+         ($this->getMajorProtocolVersion() == 1)) {
+            throw new App\VersionException(
+            'The setLastName ' .
+             ' method is only supported as of version 2 of the YouTube ' . 'API.');
         } else {
             $this->_lastName = $lastName;
             return $this;
@@ -514,13 +532,13 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @throws \Zend\GData\App\VersionException
      * @return \Zend\GData\YouTube\Extension\LastName  The last name
      */
-    public function getLastName()
+    public function getLastName ()
     {
         if (($this->getMajorProtocolVersion() == null) ||
-           ($this->getMajorProtocolVersion() == 1)) {
-            throw new App\VersionException('The getLastName ' .
-                ' method is only supported as of version 2 of the YouTube ' .
-                'API.');
+         ($this->getMajorProtocolVersion() == 1)) {
+            throw new App\VersionException(
+            'The getLastName ' .
+             ' method is only supported as of version 2 of the YouTube ' . 'API.');
         } else {
             return $this->_lastName;
         }
@@ -532,13 +550,13 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @throws \Zend\GData\App\VersionException
      * @return \Zend\GData\YouTube\Extension\Statistics  The profile statistics
      */
-    public function getStatistics()
+    public function getStatistics ()
     {
         if (($this->getMajorProtocolVersion() == null) ||
-           ($this->getMajorProtocolVersion() == 1)) {
-            throw new App\VersionException('The getStatistics ' .
-                ' method is only supported as of version 2 of the YouTube ' .
-                'API.');
+         ($this->getMajorProtocolVersion() == 1)) {
+            throw new App\VersionException(
+            'The getStatistics ' .
+             ' method is only supported as of version 2 of the YouTube ' . 'API.');
         } else {
             return $this->_statistics;
         }
@@ -550,13 +568,13 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @throws \Zend\GData\App\VersionException
      * @return \Zend\GData\Media\Extension\MediaThumbnail The profile thumbnail
      */
-    public function getThumbnail()
+    public function getThumbnail ()
     {
         if (($this->getMajorProtocolVersion() == null) ||
-           ($this->getMajorProtocolVersion() == 1)) {
-            throw new App\VersionException('The getThumbnail ' .
-                ' method is only supported as of version 2 of the YouTube ' .
-                'API.');
+         ($this->getMajorProtocolVersion() == 1)) {
+            throw new App\VersionException(
+            'The getThumbnail ' .
+             ' method is only supported as of version 2 of the YouTube ' . 'API.');
         } else {
             return $this->_thumbnail;
         }
@@ -568,7 +586,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @param \Zend\GData\YouTube\Extension\Age $age The age
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setAge($age = null)
+    public function setAge ($age = null)
     {
         $this->_age = $age;
         return $this;
@@ -579,7 +597,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\YouTube\Extension\Age  The age
      */
-    public function getAge()
+    public function getAge ()
     {
         return $this->_age;
     }
@@ -590,7 +608,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @param \Zend\GData\YouTube\Extension\Username $username The username
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setUsername($username = null)
+    public function setUsername ($username = null)
     {
         $this->_username = $username;
         return $this;
@@ -601,7 +619,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\YouTube\Extension\Username  The username
      */
-    public function getUsername()
+    public function getUsername ()
     {
         return $this->_username;
     }
@@ -612,7 +630,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @param \Zend\GData\YouTube\Extension\Books $books The books
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setBooks($books = null)
+    public function setBooks ($books = null)
     {
         $this->_books = $books;
         return $this;
@@ -623,7 +641,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\YouTube\Extension\Books  The books
      */
-    public function getBooks()
+    public function getBooks ()
     {
         return $this->_books;
     }
@@ -634,7 +652,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @param \Zend\GData\YouTube\Extension\Company $company The company
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setCompany($company = null)
+    public function setCompany ($company = null)
     {
         $this->_company = $company;
         return $this;
@@ -645,7 +663,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\YouTube\Extension\Company  The company
      */
-    public function getCompany()
+    public function getCompany ()
     {
         return $this->_company;
     }
@@ -656,7 +674,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @param \Zend\GData\YouTube\Extension\Hobbies $hobbies The hobbies
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setHobbies($hobbies = null)
+    public function setHobbies ($hobbies = null)
     {
         $this->_hobbies = $hobbies;
         return $this;
@@ -667,7 +685,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\YouTube\Extension\Hobbies  The hobbies
      */
-    public function getHobbies()
+    public function getHobbies ()
     {
         return $this->_hobbies;
     }
@@ -678,7 +696,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @param \Zend\GData\YouTube\Extension\Hometown $hometown The hometown
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setHometown($hometown = null)
+    public function setHometown ($hometown = null)
     {
         $this->_hometown = $hometown;
         return $this;
@@ -689,7 +707,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\YouTube\Extension\Hometown  The hometown
      */
-    public function getHometown()
+    public function getHometown ()
     {
         return $this->_hometown;
     }
@@ -700,7 +718,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @param \Zend\GData\YouTube\Extension\Location $location The location
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setLocation($location = null)
+    public function setLocation ($location = null)
     {
         $this->_location = $location;
         return $this;
@@ -711,7 +729,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\YouTube\Extension\Location  The location
      */
-    public function getLocation()
+    public function getLocation ()
     {
         return $this->_location;
     }
@@ -722,7 +740,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @param \Zend\GData\YouTube\Extension\Movies $movies The movies
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setMovies($movies = null)
+    public function setMovies ($movies = null)
     {
         $this->_movies = $movies;
         return $this;
@@ -733,7 +751,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\YouTube\Extension\Movies  The movies
      */
-    public function getMovies()
+    public function getMovies ()
     {
         return $this->_movies;
     }
@@ -744,7 +762,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @param \Zend\GData\YouTube\Extension\Music $music The music
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setMusic($music = null)
+    public function setMusic ($music = null)
     {
         $this->_music = $music;
         return $this;
@@ -755,7 +773,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\YouTube\Extension\Music  The music
      */
-    public function getMusic()
+    public function getMusic ()
     {
         return $this->_music;
     }
@@ -766,7 +784,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @param \Zend\GData\YouTube\Extension\Occupation $occupation The occupation
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setOccupation($occupation = null)
+    public function setOccupation ($occupation = null)
     {
         $this->_occupation = $occupation;
         return $this;
@@ -777,7 +795,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\YouTube\Extension\Occupation  The occupation
      */
-    public function getOccupation()
+    public function getOccupation ()
     {
         return $this->_occupation;
     }
@@ -788,7 +806,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @param \Zend\GData\YouTube\Extension\School $school The school
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setSchool($school = null)
+    public function setSchool ($school = null)
     {
         $this->_school = $school;
         return $this;
@@ -799,7 +817,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\YouTube\Extension\School  The school
      */
-    public function getSchool()
+    public function getSchool ()
     {
         return $this->_school;
     }
@@ -810,7 +828,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @param \Zend\GData\YouTube\Extension\Gender $gender The gender
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setGender($gender = null)
+    public function setGender ($gender = null)
     {
         $this->_gender = $gender;
         return $this;
@@ -821,7 +839,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\YouTube\Extension\Gender  The gender
      */
-    public function getGender()
+    public function getGender ()
     {
         return $this->_gender;
     }
@@ -832,7 +850,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @param \Zend\GData\YouTube\Extension\Relationship $relationship The relationship
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setRelationship($relationship = null)
+    public function setRelationship ($relationship = null)
     {
         $this->_relationship = $relationship;
         return $this;
@@ -843,7 +861,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\YouTube\Extension\Relationship  The relationship
      */
-    public function getRelationship()
+    public function getRelationship ()
     {
         return $this->_relationship;
     }
@@ -854,7 +872,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      * @param array $feedLink The array of embedded feeds relating to the video
      * @return \Zend\GData\YouTube\UserProfileEntry Provides a fluent interface
      */
-    public function setFeedLink($feedLink = null)
+    public function setFeedLink ($feedLink = null)
     {
         $this->_feedLink = $feedLink;
         return $this;
@@ -865,15 +883,15 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @see setFeedLink
      * @param string $rel (optional) The rel value of the link to be found.
-     *          If null, the array of links is returned.
+     * If null, the array of links is returned.
      * @return mixed If $rel is specified, a \Zend\GData\Extension\FeedLink
-     *          object corresponding to the requested rel value is returned
-     *          if found, or null if the requested value is not found. If
-     *          $rel is null or not specified, an array of all available
-     *          feed links for this entry is returned, or null if no feed
-     *          links are set.
+     * object corresponding to the requested rel value is returned
+     * if found, or null if the requested value is not found. If
+     * $rel is null or not specified, an array of all available
+     * feed links for this entry is returned, or null if no feed
+     * links are set.
      */
-    public function getFeedLink($rel = null)
+    public function getFeedLink ($rel = null)
     {
         if ($rel == null) {
             return $this->_feedLink;
@@ -892,9 +910,9 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @param string $rel The rel value to find
      * @return mixed Either the URL as a string or null if a feedLink wasn't
-     *     found with the provided rel value
+     * found with the provided rel value
      */
-    public function getFeedLinkHref($rel)
+    public function getFeedLinkHref ($rel)
     {
         $feedLink = $this->getFeedLink($rel);
         if ($feedLink !== null) {
@@ -909,7 +927,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return string The URL of the playlist video feed
      */
-    public function getPlaylistListFeedUrl()
+    public function getPlaylistListFeedUrl ()
     {
         return $this->getFeedLinkHref(YouTube::USER_PLAYLISTS_REL);
     }
@@ -919,7 +937,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return string The URL of the uploads video feed
      */
-    public function getUploadsFeedUrl()
+    public function getUploadsFeedUrl ()
     {
         return $this->getFeedLinkHref(YouTube::USER_UPLOADS_REL);
     }
@@ -929,7 +947,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return string The URL of the subscriptions feed
      */
-    public function getSubscriptionsFeedUrl()
+    public function getSubscriptionsFeedUrl ()
     {
         return $this->getFeedLinkHref(YouTube::USER_SUBSCRIPTIONS_REL);
     }
@@ -939,7 +957,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return string The URL of the contacts feed
      */
-    public function getContactsFeedUrl()
+    public function getContactsFeedUrl ()
     {
         return $this->getFeedLinkHref(YouTube::USER_CONTACTS_REL);
     }
@@ -949,7 +967,7 @@ class UserProfileEntry extends \Zend\GData\Entry
      *
      * @return string The URL of the favorites feed
      */
-    public function getFavoritesFeedUrl()
+    public function getFavoritesFeedUrl ()
     {
         return $this->getFeedLinkHref(YouTube::USER_FAVORITES_REL);
     }

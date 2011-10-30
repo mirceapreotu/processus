@@ -12,11 +12,7 @@
  */
 namespace Zend\Cloud\Infrastructure;
 
-use Zend\Cloud\Infrastructure\Image,  
-    Zend\Cloud\Infrastructure\Exception,
-    Countable,
-    Iterator,
-    ArrayAccess;
+use Zend\Cloud\Infrastructure\Image, Zend\Cloud\Infrastructure\Exception, Countable, Iterator, ArrayAccess;
 
 /**
  * List of images
@@ -28,6 +24,7 @@ use Zend\Cloud\Infrastructure\Image,
  */
 class ImageList implements Countable, Iterator, ArrayAccess
 {
+
     /**
      * @var array Array of Zend\Cloud\Infrastructure\Image
      */
@@ -52,12 +49,13 @@ class ImageList implements Countable, Iterator, ArrayAccess
      * @param  null|object $adapter
      * @return boolean
      */
-    public function __construct($images, $adapter = null)
+    public function __construct ($images, $adapter = null)
     {
-        if (empty($images) || !is_array($images)) {
-            throw new Exception\InvalidArgumentException(__CLASS__ . ' expects an array of images');
+        if (empty($images) || ! is_array($images)) {
+            throw new Exception\InvalidArgumentException(
+            __CLASS__ . ' expects an array of images');
         }
-
+        
         $this->adapter = $adapter;
         $this->constructFromArray($images);
     }
@@ -68,7 +66,7 @@ class ImageList implements Countable, Iterator, ArrayAccess
      * @param  array $list
      * @return void
      */
-    protected function constructFromArray(array $list)
+    protected function constructFromArray (array $list)
     {
         foreach ($list as $image) {
             $this->addImage(new Image($image, $this->adapter));
@@ -81,7 +79,7 @@ class ImageList implements Countable, Iterator, ArrayAccess
      * @param  Image
      * @return ImageList
      */
-    protected function addImage(Image $image)
+    protected function addImage (Image $image)
     {
         $this->images[] = $image;
         return $this;
@@ -94,7 +92,7 @@ class ImageList implements Countable, Iterator, ArrayAccess
      *
      * @return int
      */
-    public function count()
+    public function count ()
     {
         return count($this->images);
     }
@@ -106,7 +104,7 @@ class ImageList implements Countable, Iterator, ArrayAccess
      *
      * @return Image
      */
-    public function current()
+    public function current ()
     {
         return $this->images[$this->iteratorKey];
     }
@@ -118,7 +116,7 @@ class ImageList implements Countable, Iterator, ArrayAccess
      *
      * @return int
      */
-    public function key()
+    public function key ()
     {
         return $this->iteratorKey;
     }
@@ -130,9 +128,9 @@ class ImageList implements Countable, Iterator, ArrayAccess
      *
      * @return void
      */
-    public function next()
+    public function next ()
     {
-        $this->iteratorKey++;
+        $this->iteratorKey ++;
     }
 
     /**
@@ -142,7 +140,7 @@ class ImageList implements Countable, Iterator, ArrayAccess
      *
      * @return void
      */
-    public function rewind()
+    public function rewind ()
     {
         $this->iteratorKey = 0;
     }
@@ -154,7 +152,7 @@ class ImageList implements Countable, Iterator, ArrayAccess
      *
      * @return bool
      */
-    public function valid()
+    public function valid ()
     {
         $numItems = $this->count();
         if ($numItems > 0 && $this->iteratorKey < $numItems) {
@@ -171,7 +169,7 @@ class ImageList implements Countable, Iterator, ArrayAccess
      * @param   int     $offset
      * @return  bool
      */
-    public function offsetExists($offset)
+    public function offsetExists ($offset)
     {
         return ($offset < $this->count());
     }
@@ -185,9 +183,9 @@ class ImageList implements Countable, Iterator, ArrayAccess
      * @throws  OutOfBoundsException
      * @return  Image
      */
-    public function offsetGet($offset)
+    public function offsetGet ($offset)
     {
-        if (!$this->offsetExists($offset)) {
+        if (! $this->offsetExists($offset)) {
             throw new Exception\OutOfBoundsException('Illegal index');
         }
         return $this->images[$offset];
@@ -202,9 +200,10 @@ class ImageList implements Countable, Iterator, ArrayAccess
      * @param   string  $value
      * @throws  Exception\InvalidArgumentException
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet ($offset, $value)
     {
-        throw new Exception\InvalidArgumentException('You are trying to set read-only property');
+        throw new Exception\InvalidArgumentException(
+        'You are trying to set read-only property');
     }
 
     /**
@@ -215,8 +214,9 @@ class ImageList implements Countable, Iterator, ArrayAccess
      * @param   int     $offset
      * @throws  Exception\InvalidArgumentException
      */
-    public function offsetUnset($offset)
+    public function offsetUnset ($offset)
     {
-        throw new Exception\InvalidArgumentException('You are trying to unset read-only property');
+        throw new Exception\InvalidArgumentException(
+        'You are trying to unset read-only property');
     }
 }

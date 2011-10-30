@@ -33,13 +33,14 @@ namespace Zend\Filter\Encrypt;
  */
 interface EncryptionAlgorithm
 {
+
     /**
      * Encrypts $value with the defined settings
      *
      * @param  string $value Data to encrypt
      * @return string The encrypted data
      */
-    public function encrypt($value);
+    public function encrypt ($value);
 
     /**
      * Decrypts $value with the defined settings
@@ -47,12 +48,12 @@ interface EncryptionAlgorithm
      * @param  string $value Data to decrypt
      * @return string The decrypted data
      */
-    public function decrypt($value);
+    public function decrypt ($value);
 
     /**
      * Return the adapter name
      * 
      * @return string
      */
-    public function toString();
+    public function toString ();
 }

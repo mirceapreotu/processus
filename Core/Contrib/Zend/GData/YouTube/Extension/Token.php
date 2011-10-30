@@ -39,12 +39,13 @@ class Token extends \Zend\GData\App\Extension
 {
 
     protected $_rootNamespace = 'yt';
+
     protected $_rootElement = 'token';
 
     /**
      * Constructs a new Zend_Gdata_YouTube_Extension_Token object.
      */
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         $this->registerAllNamespaces(\Zend\GData\YouTube::$namespaces);
         parent::__construct();
@@ -61,7 +62,7 @@ class Token extends \Zend\GData\App\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         return $element;

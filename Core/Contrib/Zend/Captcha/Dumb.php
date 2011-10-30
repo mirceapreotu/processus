@@ -35,9 +35,10 @@ namespace Zend\Captcha;
  * @subpackage Adapter
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
-*/
+ */
 class Dumb extends Word
 {
+
     /**
      * Render the captcha
      *
@@ -45,10 +46,9 @@ class Dumb extends Word
      * @param  mixed $element
      * @return string
      */
-    public function render(\Zend\View\Renderer $view = null, $element = null)
+    public function render (\Zend\View\Renderer $view = null, $element = null)
     {
-        return 'Please type this word backwards: <b>'
-             . strrev($this->getWord())
-             . '</b>';
+        return 'Please type this word backwards: <b>' . strrev($this->getWord()) .
+         '</b>';
     }
 }

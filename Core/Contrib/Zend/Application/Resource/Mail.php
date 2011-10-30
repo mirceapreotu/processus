@@ -48,7 +48,7 @@ class Mail extends AbstractResource
      *
      * @return \Zend\Mail\AbstractTransport
      */
-    public function init()
+    public function init ()
     {
         return $this->getMail();
     }
@@ -56,33 +56,32 @@ class Mail extends AbstractResource
     /**
      * @return \Zend\Mail\AbstractTransport|null
      */
-    public function getMail()
+    public function getMail ()
     {
         if (null === $this->_transport) {
             $options = $this->getOptions();
-            foreach($options as $key => $option) {
+            foreach ($options as $key => $option) {
                 $options[strtolower($key)] = $option;
             }
             $this->setOptions($options);
-
-            if(isset($options['transport']) &&
-               !is_numeric($options['transport']))
-            {
-                $this->_transport = $this->_setupTransport($options['transport']);
-                if(!isset($options['transport']['register']) ||
-                   $options['transport']['register'] == '1' ||
-                   (isset($options['transport']['register']) &&
-                        !is_numeric($options['transport']['register']) &&
-                        (bool) $options['transport']['register'] == true))
-                {
+            
+            if (isset($options['transport']) &&
+             ! is_numeric($options['transport'])) {
+                $this->_transport = $this->_setupTransport(
+                $options['transport']);
+                if (! isset($options['transport']['register']) ||
+                 $options['transport']['register'] == '1' || (isset(
+                $options['transport']['register']) &&
+                 ! is_numeric($options['transport']['register']) &&
+                 (bool) $options['transport']['register'] == true)) {
                     \Zend\Mail\Mail::setDefaultTransport($this->_transport);
                 }
             }
-
+            
             $this->_setDefaults('from');
             $this->_setDefaults('replyTo');
         }
-
+        
         return $this->_transport;
     }
 
@@ -92,19 +91,18 @@ class Mail extends AbstractResource
      * @param  string $type
      * @return void
      */
-    protected function _setDefaults($type)
+    protected function _setDefaults ($type)
     {
         $key = strtolower('default' . $type);
         $options = $this->getOptions();
-
-        if(isset($options[$key]['email']) &&
-           !is_numeric($options[$key]['email']))
-        {
+        
+        if (isset($options[$key]['email']) &&
+         ! is_numeric($options[$key]['email'])) {
             $method = 'setDefault' . ucfirst($type);
-            if(isset($options[$key]['name']) &&
-               !is_numeric($options[$key]['name']))
-            {
-                \Zend\Mail\Mail::$method($options[$key]['email'], $options[$key]['name']);
+            if (isset($options[$key]['name']) &&
+             ! is_numeric($options[$key]['name'])) {
+                \Zend\Mail\Mail::$method($options[$key]['email'], 
+                $options[$key]['name']);
             } else {
                 \Zend\Mail\Mail::$method($options[$key]['email']);
             }
@@ -117,33 +115,32 @@ class Mail extends AbstractResource
      * @param  array $options
      * @return void
      */
-    protected function _setupTransport(array $options)
+    protected function _setupTransport (array $options)
     {
-    	if(!isset($options['type'])) {
-    		$options['type'] = 'sendmail';
-    	}
-
+        if (! isset($options['type'])) {
+            $options['type'] = 'sendmail';
+        }
+        
         $transportName = ucfirst($options['type']);
-        if (!class_exists($options['type'])) {
+        if (! class_exists($options['type'])) {
             $qualifiedTransportName = 'Zend\Mail\Transport\\' . $transportName;
-            if (!class_exists($qualifiedTransportName)) {
+            if (! class_exists($qualifiedTransportName)) {
                 throw new Exception\InitializationException(
-                    "Specified Mail Transport '{$transportName}' could not be found"
-                );
+                "Specified Mail Transport '{$transportName}' could not be found");
             }
             $transportName = $qualifiedTransportName;
         }
-
+        
         unset($options['type']);
-
-        switch($transportName) {
+        
+        switch ($transportName) {
             case 'Zend\Mail\Transport\Smtp':
-                if(!isset($options['host'])) {
+                if (! isset($options['host'])) {
                     throw new Exception\InitializationException(
-                        'A host is necessary for smtp transport,'
-                        .' but none was given');
+                    'A host is necessary for smtp transport,' .
+                     ' but none was given');
                 }
-
+                
                 $transport = new $transportName($options['host'], $options);
                 break;
             case 'Zend\Mail\Transport\Sendmail':
@@ -151,7 +148,7 @@ class Mail extends AbstractResource
                 $transport = new $transportName($options);
                 break;
         }
-
+        
         return $transport;
     }
 }

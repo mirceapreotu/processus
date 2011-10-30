@@ -36,6 +36,7 @@ namespace Zend\Db\Adapter;
  */
 class SqlsrvException extends Exception
 {
+
     /**
      * Constructor
      *
@@ -46,18 +47,18 @@ class SqlsrvException extends Exception
      * @param null|array|string $message
      * @param null|int $code
      */
-    public function __construct($message = null, $code = 0)
+    public function __construct ($message = null, $code = 0)
     {
-       if (is_array($message)) {
+        if (is_array($message)) {
             // Error should be array of errors
             // We only need first one (?)
             if (isset($message[0])) {
                 $message = $message[0];
             }
-
-            $code    = (int)    $message['code'];
+            
+            $code = (int) $message['code'];
             $message = (string) $message['message'];
-       }
-       parent::__construct($message, $code, new \Exception($message, $code));
-   }
+        }
+        parent::__construct($message, $code, new \Exception($message, $code));
+    }
 }

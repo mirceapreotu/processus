@@ -72,16 +72,16 @@ class CommentEntry extends \Zend\GData\Entry
      * Create a new instance.
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(Photos::$namespaces);
         parent::__construct($element);
-
+        
         $category = new \Zend\GData\App\Extension\Category(
-            'http://schemas.google.com/photos/2007#comment',
-            'http://schemas.google.com/g/2005#kind');
+        'http://schemas.google.com/photos/2007#comment', 
+        'http://schemas.google.com/g/2005#kind');
         $this->setCategory(array($category));
     }
 
@@ -92,16 +92,18 @@ class CommentEntry extends \Zend\GData\Entry
      *
      * @param DOMDocument $doc The DOMDocument used to construct DOMElements
      * @return DOMElement The DOMElement representing this element and all
-     *          child properties.
+     * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_gphotoId !== null) {
-            $element->appendChild($this->_gphotoId->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_gphotoId->getDOM($element->ownerDocument));
         }
         if ($this->_gphotoPhotoId !== null) {
-            $element->appendChild($this->_gphotoPhotoId->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_gphotoPhotoId->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -112,17 +114,17 @@ class CommentEntry extends \Zend\GData\Entry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
-
+        
         switch ($absoluteNodeName) {
-            case $this->lookupNamespace('gphoto') . ':' . 'id';
+            case $this->lookupNamespace('gphoto') . ':' . 'id':
                 $id = new Extension\Id();
                 $id->transferFromDOM($child);
                 $this->_gphotoId = $id;
                 break;
-            case $this->lookupNamespace('gphoto') . ':' . 'photoid';
+            case $this->lookupNamespace('gphoto') . ':' . 'photoid':
                 $photoid = new Extension\PhotoId();
                 $photoid->transferFromDOM($child);
                 $this->_gphotoPhotoId = $photoid;
@@ -139,7 +141,7 @@ class CommentEntry extends \Zend\GData\Entry
      * @see setGphotoPhotoId
      * @return string The requested attribute.
      */
-    public function getGphotoPhotoId()
+    public function getGphotoPhotoId ()
     {
         return $this->_gphotoPhotoId;
     }
@@ -150,7 +152,7 @@ class CommentEntry extends \Zend\GData\Entry
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\Photos\Extension\PhotoId The element being modified.
      */
-    public function setGphotoPhotoId($value)
+    public function setGphotoPhotoId ($value)
     {
         $this->_gphotoPhotoId = $value;
         return $this;
@@ -162,7 +164,7 @@ class CommentEntry extends \Zend\GData\Entry
      * @see setGphotoId
      * @return string The requested attribute.
      */
-    public function getGphotoId()
+    public function getGphotoId ()
     {
         return $this->_gphotoId;
     }
@@ -173,7 +175,7 @@ class CommentEntry extends \Zend\GData\Entry
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\Photos\Extension\Id The element being modified.
      */
-    public function setGphotoId($value)
+    public function setGphotoId ($value)
     {
         $this->_gphotoId = $value;
         return $this;

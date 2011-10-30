@@ -37,6 +37,7 @@ use Zend\Code\Reflection\ParameterReflection;
  */
 class ParameterGenerator extends AbstractGenerator
 {
+
     /**
      * @var string
      */
@@ -65,7 +66,8 @@ class ParameterGenerator extends AbstractGenerator
     /**
      * @var array
      */
-    protected static $simple = array('int', 'bool', 'string', 'float', 'resource', 'mixed', 'object');
+    protected static $simple = array('int', 'bool', 'string', 'float', 
+    'resource', 'mixed', 'object');
 
     /**
      * fromReflection()
@@ -73,31 +75,34 @@ class ParameterGenerator extends AbstractGenerator
      * @param ReflectionParameter $reflectionParameter
      * @return ParameterGenerator
      */
-    public static function fromReflection(ParameterReflection $reflectionParameter)
+    public static function fromReflection (
+    ParameterReflection $reflectionParameter)
     {
         $param = new ParameterGenerator();
         $param->setName($reflectionParameter->getName());
-
+        
         if ($reflectionParameter->isArray()) {
             $param->setType('array');
         } else {
             $typeClass = $reflectionParameter->getClass();
-            if($typeClass !== null) {
+            if ($typeClass !== null) {
                 $param->setType($typeClass->getName());
             }
         }
-
+        
         $param->setPosition($reflectionParameter->getPosition());
-
+        
         if ($reflectionParameter->isOptional()) {
             $param->setDefaultValue($reflectionParameter->getDefaultValue());
         }
-        $param->setPassedByReference($reflectionParameter->isPassedByReference());
-
+        $param->setPassedByReference(
+        $reflectionParameter->isPassedByReference());
+        
         return $param;
     }
 
-    public function __construct($name = null, $type = null, $defaultValue = null, $position = null, $passByReference = false)
+    public function __construct ($name = null, $type = null, $defaultValue = null, 
+    $position = null, $passByReference = false)
     {
         if ($name !== null) {
             $this->setName($name);
@@ -122,7 +127,7 @@ class ParameterGenerator extends AbstractGenerator
      * @param string $type
      * @return \Zend\Code\Generator\PhpParameter\Parameter
      */
-    public function setType($type)
+    public function setType ($type)
     {
         $this->type = $type;
         return $this;
@@ -133,7 +138,7 @@ class ParameterGenerator extends AbstractGenerator
      *
      * @return string
      */
-    public function getType()
+    public function getType ()
     {
         return $this->type;
     }
@@ -144,7 +149,7 @@ class ParameterGenerator extends AbstractGenerator
      * @param string $name
      * @return \Zend\Code\Generator\PhpParameter\Parameter
      */
-    public function setName($name)
+    public function setName ($name)
     {
         $this->name = $name;
         return $this;
@@ -155,7 +160,7 @@ class ParameterGenerator extends AbstractGenerator
      *
      * @return string
      */
-    public function getName()
+    public function getName ()
     {
         return $this->name;
     }
@@ -168,9 +173,9 @@ class ParameterGenerator extends AbstractGenerator
      * @param null|bool|string|int|float|\Zend\Code\Generator\PhpParameter\DefaultValue $defaultValue
      * @return \Zend\Code\Generator\PhpParameter\Parameter
      */
-    public function setDefaultValue($defaultValue)
+    public function setDefaultValue ($defaultValue)
     {
-        if (!$defaultValue instanceof ValueGenerator) {
+        if (! $defaultValue instanceof ValueGenerator) {
             $this->defaultValue = new ValueGenerator($defaultValue);
         } else {
             $this->defaultValue = $defaultValue;
@@ -201,7 +206,7 @@ class ParameterGenerator extends AbstractGenerator
      *
      * @return string
      */
-    public function getDefaultValue()
+    public function getDefaultValue ()
     {
         return $this->defaultValue;
     }
@@ -212,7 +217,7 @@ class ParameterGenerator extends AbstractGenerator
      * @param int $position
      * @return \Zend\Code\Generator\PhpParameter\Parameter
      */
-    public function setPosition($position)
+    public function setPosition ($position)
     {
         $this->position = $position;
         return $this;
@@ -223,7 +228,7 @@ class ParameterGenerator extends AbstractGenerator
      *
      * @return int
      */
-    public function getPosition()
+    public function getPosition ()
     {
         return $this->position;
     }
@@ -231,7 +236,7 @@ class ParameterGenerator extends AbstractGenerator
     /**
      * @return bool
      */
-    public function getPassedByReference()
+    public function getPassedByReference ()
     {
         return $this->passedByReference;
     }
@@ -240,7 +245,7 @@ class ParameterGenerator extends AbstractGenerator
      * @param bool $passedByReference
      * @return ParameterGenerator
      */
-    public function setPassedByReference($passedByReference)
+    public function setPassedByReference ($passedByReference)
     {
         $this->passedByReference = $passedByReference;
         return $this;
@@ -251,32 +256,34 @@ class ParameterGenerator extends AbstractGenerator
      *
      * @return string
      */
-    public function generate()
+    public function generate ()
     {
         $output = '';
-
-        if ($this->type && !in_array($this->type, self::$simple)) {
+        
+        if ($this->type && ! in_array($this->type, self::$simple)) {
             $output .= $this->type . ' ';
         }
-
-        if($this->passedByReference === true) {
+        
+        if ($this->passedByReference === true) {
             $output .= '&';
         }
-
+        
         $output .= '$' . $this->name;
-
+        
         if ($this->defaultValue !== null) {
             $output .= ' = ';
             if (is_string($this->defaultValue)) {
                 $output .= ValueGenerator::escape($this->defaultValue);
-            } else if($this->defaultValue instanceof ValueGenerator) {
-                $this->defaultValue->setOutputMode(ValueGenerator::OUTPUT_SINGLE_LINE);
-                $output .= (string) $this->defaultValue;
-            } else {
-                $output .= $this->defaultValue;
-            }
+            } else 
+                if ($this->defaultValue instanceof ValueGenerator) {
+                    $this->defaultValue->setOutputMode(
+                    ValueGenerator::OUTPUT_SINGLE_LINE);
+                    $output .= (string) $this->defaultValue;
+                } else {
+                    $output .= $this->defaultValue;
+                }
         }
-
+        
         return $output;
     }
 

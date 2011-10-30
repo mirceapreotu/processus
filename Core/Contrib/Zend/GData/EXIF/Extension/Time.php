@@ -39,6 +39,7 @@ class Time extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'exif';
+
     protected $_rootElement = 'time';
 
     /**
@@ -46,7 +47,7 @@ class Time extends \Zend\GData\Extension
      *
      * @param string $text (optional) The value to use for this element.
      */
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         $this->registerAllNamespaces(\Zend\GData\EXIF::$namespaces);
         parent::__construct();

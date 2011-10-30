@@ -34,6 +34,7 @@ use Zend\Json\Server\Response as JsonResponse;
  */
 class Http extends JsonResponse
 {
+
     /**
      * Emit JSON
      *
@@ -41,13 +42,13 @@ class Http extends JsonResponse
      *
      * @return string
      */
-    public function toJson()
+    public function toJson ()
     {
         $this->sendHeaders();
-        if (!$this->isError() && null === $this->getId()) {
+        if (! $this->isError() && null === $this->getId()) {
             return '';
         }
-
+        
         return parent::toJson();
     }
 
@@ -60,23 +61,23 @@ class Http extends JsonResponse
      *
      * @return void
      */
-    public function sendHeaders()
+    public function sendHeaders ()
     {
         if (headers_sent()) {
             return;
         }
-
-        if (!$this->isError() && (null === $this->getId())) {
+        
+        if (! $this->isError() && (null === $this->getId())) {
             header('HTTP/1.1 204 No Content');
             return;
         }
-
+        
         if (null === ($smd = $this->getServiceMap())) {
             return;
         }
-
+        
         $contentType = $smd->getContentType();
-        if (!empty($contentType)) {
+        if (! empty($contentType)) {
             header('Content-Type: ' . $contentType);
         }
     }

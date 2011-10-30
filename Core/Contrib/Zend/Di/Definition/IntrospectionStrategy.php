@@ -6,6 +6,7 @@ use Zend\Code\Annotation\AnnotationManager;
 
 class IntrospectionStrategy
 {
+
     /**
      * @var bool
      */
@@ -26,53 +27,50 @@ class IntrospectionStrategy
      */
     protected $annotationManager = null;
 
-    public function __construct(AnnotationManager $annotationManager = null)
+    public function __construct (AnnotationManager $annotationManager = null)
     {
-        $this->annotationManager = ($annotationManager) ?: $this->createDefaultAnnotationManager();
+        $this->annotationManager = ($annotationManager) ?  : $this->createDefaultAnnotationManager();
     }
 
-    public function getAnnotationManager()
+    public function getAnnotationManager ()
     {
         return $this->annotationManager;
     }
 
-    public function createDefaultAnnotationManager()
+    public function createDefaultAnnotationManager ()
     {
-        $annotationManager = new AnnotationManager;
+        $annotationManager = new AnnotationManager();
         $annotationManager->registerAnnotation(new Annotation\Inject());
         return $annotationManager;
     }
 
-
-    
-    public function setUseAnnotations($useAnnotations)
+    public function setUseAnnotations ($useAnnotations)
     {
         $this->useAnnotations = $useAnnotations;
     }
 
-    public function getUseAnnotations()
+    public function getUseAnnotations ()
     {
         return $this->useAnnotations;
     }
 
-
-    public function setMethodNameInclusionPatterns($methodNameInclusionPatterns)
+    public function setMethodNameInclusionPatterns ($methodNameInclusionPatterns)
     {
         $this->methodNameInclusionPatterns = $methodNameInclusionPatterns;
     }
 
-    public function getMethodNameInclusionPatterns()
+    public function getMethodNameInclusionPatterns ()
     {
         return $this->methodNameInclusionPatterns;
     }
 
-
-    public function setInterfaceInjectionInclusionPatterns($interfaceInjectionInclusionPatterns)
+    public function setInterfaceInjectionInclusionPatterns (
+    $interfaceInjectionInclusionPatterns)
     {
         $this->interfaceInjectionInclusionPatterns = $interfaceInjectionInclusionPatterns;
     }
 
-    public function getInterfaceInjectionInclusionPatterns()
+    public function getInterfaceInjectionInclusionPatterns ()
     {
         return $this->interfaceInjectionInclusionPatterns;
     }

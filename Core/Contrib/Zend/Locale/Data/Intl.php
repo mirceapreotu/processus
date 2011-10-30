@@ -24,11 +24,7 @@
  */
 namespace Zend\Locale\Data;
 
-use Zend\Cache\Cache,
-    Zend\Cache\Frontend as CacheFrontend,
-    Zend\Locale\Locale as ZFLocale,
-    Zend\Locale\Exception\InvalidArgumentException,
-    Zend\Locale\Exception\UnexpectedValueException;
+use Zend\Cache\Cache, Zend\Cache\Frontend as CacheFrontend, Zend\Locale\Locale as ZFLocale, Zend\Locale\Exception\InvalidArgumentException, Zend\Locale\Exception\UnexpectedValueException;
 
 /**
  * Locale data provider, handles INTL
@@ -44,6 +40,7 @@ use Zend\Cache\Cache,
  */
 class Intl extends AbstractLocale
 {
+
     /**
      * Returns detailed informations from the language table
      * If no detail is given a complete table is returned
@@ -53,20 +50,21 @@ class Intl extends AbstractLocale
      * @param string|array $detail Detail to return information for
      * @return array
      */
-    public static function getDisplayLanguage($locale, $invert = false, $detail = null)
+    public static function getDisplayLanguage ($locale, $invert = false, 
+    $detail = null)
     {
         if ($detail !== null) {
             return Locale::getDisplayLanguage($locale);
         } else {
             $list = ZFLocale::getLocaleList();
-            foreach($list as $key => $value) {
+            foreach ($list as $key => $value) {
                 $list[$key] = Locale::getDisplayLanguage($key);
             }
-
+            
             if ($invert) {
                 array_flip($list);
             }
-
+            
             return $list;
         }
     }
@@ -80,20 +78,20 @@ class Intl extends AbstractLocale
      * @param string|array $detail Detail to return information for
      * @return array
      */
-    public static function getDisplayScript($locale, $invert = false, $detail = null)
+    public static function getDisplayScript ($locale, $invert = false, $detail = null)
     {
         if ($detail !== null) {
             return Locale::getDisplayScript($locale);
         } else {
             $list = ZFLocale::getLocaleList();
-            foreach($list as $key => $value) {
+            foreach ($list as $key => $value) {
                 $list[$key] = Locale::getDisplayScript($key);
             }
-
+            
             if ($invert) {
                 array_flip($list);
             }
-
+            
             return $list;
         }
     }
@@ -107,20 +105,21 @@ class Intl extends AbstractLocale
      * @param string|array $detail Detail to return information for
      * @return array
      */
-    public static function getDisplayTerritory($locale, $invert = false, $detail = null)
+    public static function getDisplayTerritory ($locale, $invert = false, 
+    $detail = null)
     {
         if ($detail !== null) {
             return Locale::getDisplayRegion($locale);
         } else {
             $list = ZFLocale::getLocaleList();
-            foreach($list as $key => $value) {
+            foreach ($list as $key => $value) {
                 $list[$key] = Locale::getDisplayRegion($key);
             }
-
+            
             if ($invert) {
                 array_flip($list);
             }
-
+            
             return $list;
         }
     }
@@ -134,20 +133,21 @@ class Intl extends AbstractLocale
      * @param string|array $detail Detail to return information for
      * @return array
      */
-    public static function getDisplayVariant($locale, $invert = false, $detail = null)
+    public static function getDisplayVariant ($locale, $invert = false, 
+    $detail = null)
     {
         if ($detail !== null) {
             return Locale::getDisplayVariant($locale);
         } else {
             $list = ZFLocale::getLocaleList();
-            foreach($list as $key => $value) {
+            foreach ($list as $key => $value) {
                 $list[$key] = Locale::getDisplayVariant($key);
             }
-
+            
             if ($invert) {
                 array_flip($list);
             }
-
+            
             return $list;
         }
     }

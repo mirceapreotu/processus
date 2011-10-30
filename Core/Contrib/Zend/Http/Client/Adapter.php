@@ -38,12 +38,13 @@ namespace Zend\Http\Client;
  */
 interface Adapter
 {
+
     /**
      * Set the configuration array for the adapter
      *
      * @param array $config
      */
-    public function setConfig($config = array());
+    public function setConfig ($config = array());
 
     /**
      * Connect to the remote server
@@ -52,7 +53,7 @@ interface Adapter
      * @param int     $port
      * @param boolean $secure
      */
-    public function connect($host, $port = 80, $secure = false);
+    public function connect ($host, $port = 80, $secure = false);
 
     /**
      * Send request to the remote server
@@ -64,18 +65,18 @@ interface Adapter
      * @param string        $body
      * @return string Request as text
      */
-    public function write($method, $url, $http_ver = '1.1', $headers = array(), $body = '');
+    public function write ($method, $url, $http_ver = '1.1', $headers = array(), $body = '');
 
     /**
      * Read response from server
      *
      * @return string
      */
-    public function read();
+    public function read ();
 
     /**
      * Close the connection to the server
      *
      */
-    public function close();
+    public function close ();
 }

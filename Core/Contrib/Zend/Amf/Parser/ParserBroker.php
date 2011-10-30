@@ -21,8 +21,7 @@
 
 namespace Zend\Amf\Parser;
 
-use Zend\Loader\PluginBroker,
-    Zend\Amf\Exception as AMFException;
+use Zend\Loader\PluginBroker, Zend\Amf\Exception as AMFException;
 
 /**
  * Broker for parser resources
@@ -35,6 +34,7 @@ use Zend\Loader\PluginBroker,
  */
 class ParserBroker extends PluginBroker
 {
+
     /**
      * @var string Default plugin loading strategy
      */
@@ -47,13 +47,13 @@ class ParserBroker extends PluginBroker
      * @return true
      * @throws AMFException
      */
-    protected function validatePlugin($plugin)
+    protected function validatePlugin ($plugin)
     {
-        if (!method_exists($plugin, 'parse')) {
-            throw new AMFException(sprintf(
-                'Parsers must implement a parse() method; none defined in class "%s"',
-                get_class($plugin)
-            ));
+        if (! method_exists($plugin, 'parse')) {
+            throw new AMFException(
+            sprintf(
+            'Parsers must implement a parse() method; none defined in class "%s"', 
+            get_class($plugin)));
         }
         return true;
     }

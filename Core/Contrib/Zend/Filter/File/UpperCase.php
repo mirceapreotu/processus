@@ -22,8 +22,7 @@
  * @namespace
  */
 namespace Zend\Filter\File;
-use Zend\Filter,
-    Zend\Filter\Exception;
+use Zend\Filter, Zend\Filter\Exception;
 
 /**
  * @uses       \Zend\Filter\Exception
@@ -35,14 +34,15 @@ use Zend\Filter,
  */
 class UpperCase extends Filter\StringToUpper
 {
+
     /**
      * Adds options to the filter at initiation
      *
      * @param string $options
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
-        if (!empty($options)) {
+        if (! empty($options)) {
             $this->setEncoding($options);
         }
     }
@@ -56,28 +56,32 @@ class UpperCase extends Filter\StringToUpper
      * @return string The given $value
      * @throws \Zend\Filter\Exception
      */
-    public function __invoke($value)
+    public function __invoke ($value)
     {
-        if (!file_exists($value)) {
-            throw new Exception\InvalidArgumentException("File '$value' not found");
+        if (! file_exists($value)) {
+            throw new Exception\InvalidArgumentException(
+            "File '$value' not found");
         }
-
-        if (!is_writable($value)) {
-            throw new Exception\InvalidArgumentException("File '$value' is not writable");
+        
+        if (! is_writable($value)) {
+            throw new Exception\InvalidArgumentException(
+            "File '$value' is not writable");
         }
-
+        
         $content = file_get_contents($value);
-        if (!$content) {
-            throw new Exception\RuntimeException("Problem while reading file '$value'");
+        if (! $content) {
+            throw new Exception\RuntimeException(
+            "Problem while reading file '$value'");
         }
-
+        
         $content = parent::__invoke($content);
-        $result  = file_put_contents($value, $content);
-
-        if (!$result) {
-            throw new Exception\RuntimeException("Problem while writing file '$value'");
+        $result = file_put_contents($value, $content);
+        
+        if (! $result) {
+            throw new Exception\RuntimeException(
+            "Problem while writing file '$value'");
         }
-
+        
         return $value;
     }
 }

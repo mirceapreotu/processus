@@ -37,6 +37,7 @@ namespace Zend\Amf\Value;
  */
 class MessageHeader
 {
+
     /**
      * Name of the header
      *
@@ -73,11 +74,11 @@ class MessageHeader
      * @param misc $content
      * @param integer $length
      */
-    public function __construct($name, $mustRead, $data, $length=null)
+    public function __construct ($name, $mustRead, $data, $length = null)
     {
-        $this->name     = $name;
+        $this->name = $name;
         $this->mustRead = (bool) $mustRead;
-        $this->data     = $data;
+        $this->data = $data;
         if (null !== $length) {
             $this->length = (int) $length;
         }

@@ -36,6 +36,7 @@ use Zend\Cache;
  */
 class TestBackend extends AbstractBackend implements ExtendedBackend
 {
+
     /**
      * Available options
      *
@@ -70,7 +71,7 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      * @param  array $options associative array of options
      * @return void
      */
-    public function __construct($options = array())
+    public function __construct ($options = array())
     {
         $this->_addLog('construct', array($options));
     }
@@ -81,7 +82,7 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      * @param  array $directives assoc of directives
      * @return void
      */
-    public function setDirectives($directives)
+    public function setDirectives ($directives)
     {
         $this->_addLog('setDirectives', array($directives));
     }
@@ -97,31 +98,28 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      * @param  boolean $doNotTestCacheValidity If set to true, the cache validity won't be tested
      * @return string Cached datas (or false)
      */
-    public function load($id, $doNotTestCacheValidity = false)
+    public function load ($id, $doNotTestCacheValidity = false)
     {
         $this->_addLog('get', array($id, $doNotTestCacheValidity));
-
-        if ($id == 'false'
-            || $id == 'd8523b3ee441006261eeffa5c3d3a0a7'
-            || $id == 'e83249ea22178277d5befc2c5e2e9ace'
-            || $id == '40f649b94977c0a6e76902e2a0b43587'
-            || $id == '88161989b73a4cbfd0b701c446115a99'
-            || $id == '205fc79cba24f0f0018eb92c7c8b3ba4'
-        ) {
+        
+        if ($id == 'false' || $id == 'd8523b3ee441006261eeffa5c3d3a0a7' ||
+         $id == 'e83249ea22178277d5befc2c5e2e9ace' ||
+         $id == '40f649b94977c0a6e76902e2a0b43587' ||
+         $id == '88161989b73a4cbfd0b701c446115a99' ||
+         $id == '205fc79cba24f0f0018eb92c7c8b3ba4') {
             return false;
         }
-        if ($id=='serialized') {
+        if ($id == 'serialized') {
             return serialize(array('foo'));
         }
-        if ($id=='serialized2') {
+        if ($id == 'serialized2') {
             return serialize(array('headers' => array(), 'data' => 'foo'));
         }
-        if ($id == '71769f39054f75894288e397df04e445' 
-            || $id == '615d222619fb20b527168340cebd0578'
-            || $id == '8a02d218a5165c467e7a5747cc6bd4b6' 
-            || $id == '648aca1366211d17cbf48e65dc570bee'
-            || $id == '4a923ef02d7f997ca14d56dfeae25ea7'
-        ) {
+        if ($id == '71769f39054f75894288e397df04e445' ||
+         $id == '615d222619fb20b527168340cebd0578' ||
+         $id == '8a02d218a5165c467e7a5747cc6bd4b6' ||
+         $id == '648aca1366211d17cbf48e65dc570bee' ||
+         $id == '4a923ef02d7f997ca14d56dfeae25ea7') {
             return serialize(array('foo', 'bar'));
         }
         return 'foo';
@@ -136,13 +134,13 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      * @param  string $id Cache id
      * @return mixed|false false (a cache is not available) or "last modified" timestamp (int) of the available cache record
      */
-    public function test($id)
+    public function test ($id)
     {
         $this->_addLog('test', array($id));
-        if ($id=='false') {
+        if ($id == 'false') {
             return false;
         }
-        if (($id=='3c439c922209e2cb0b54d6deffccd75a')) {
+        if (($id == '3c439c922209e2cb0b54d6deffccd75a')) {
             return false;
         }
         return 123456;
@@ -160,10 +158,10 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      * @param  int    $specificLifetime If != false, set a specific lifetime for this cache record (null => infinite lifetime)
      * @return boolean True if no problem
      */
-    public function save($data, $id, $tags = array(), $specificLifetime = false)
+    public function save ($data, $id, $tags = array(), $specificLifetime = false)
     {
         $this->_addLog('save', array($data, $id, $tags));
-        if ($id=='false') {
+        if ($id == 'false') {
             return false;
         }
         return true;
@@ -178,10 +176,10 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      * @param  string $id Cache id
      * @return boolean True if no problem
      */
-    public function remove($id)
+    public function remove ($id)
     {
         $this->_addLog('remove', array($id));
-        if ($id=='false') {
+        if ($id == 'false') {
             return false;
         }
         return true;
@@ -197,18 +195,18 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      * Zend_Cache::CLEANING_MODE_ALL (default)    => remove all cache entries ($tags is not used)
      * Zend_Cache::CLEANING_MODE_OLD              => remove too old cache entries ($tags is not used)
      * Zend_Cache::CLEANING_MODE_MATCHING_TAG     => remove cache entries matching all given tags
-     *                                               ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      * Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG => remove cache entries not {matching one of the given tags}
-     *                                               ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      *
      * @param  string $mode Clean mode
      * @param  array  $tags Array of tags
      * @return boolean True if no problem
      */
-    public function clean($mode = Cache\CacheCache\Cache::CLEANING_MODE_ALL, $tags = array())
+    public function clean ($mode = Cache\CacheCache\Cache::CLEANING_MODE_ALL, $tags = array())
     {
         $this->_addLog('clean', array($mode, $tags));
-        if ($mode=='false') {
+        if ($mode == 'false') {
             return false;
         }
         return true;
@@ -219,7 +217,7 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      *
      * @return string The last log
      */
-    public function getLastLog()
+    public function getLastLog ()
     {
         return $this->_log[$this->_index - 1];
     }
@@ -229,7 +227,7 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      *
      * @return int Log index
      */
-    public function getLogIndex()
+    public function getLogIndex ()
     {
         return $this->_index;
     }
@@ -239,7 +237,7 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      *
      * @return array Complete log array
      */
-    public function getAllLogs()
+    public function getAllLogs ()
     {
         return $this->_log;
     }
@@ -249,7 +247,7 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      *
      * @return boolean
      */
-    public function isAutomaticCleaningAvailable()
+    public function isAutomaticCleaningAvailable ()
     {
         return true;
     }
@@ -259,11 +257,9 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      *
      * @return array array of stored cache ids (string)
      */
-    public function getIds()
+    public function getIds ()
     {
-        return array(
-            'prefix_id1', 'prefix_id2'
-        );
+        return array('prefix_id1', 'prefix_id2');
     }
 
     /**
@@ -271,11 +267,9 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      *
      * @return array array of stored tags (string)
      */
-    public function getTags()
+    public function getTags ()
     {
-        return array(
-            'tag1', 'tag2'
-        );
+        return array('tag1', 'tag2');
     }
 
     /**
@@ -286,12 +280,12 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      * @param array $tags array of tags
      * @return array array of matching cache ids (string)
      */
-    public function getIdsMatchingTags($tags = array())
+    public function getIdsMatchingTags ($tags = array())
     {
         if ($tags == array('tag1', 'tag2')) {
             return array('prefix_id1', 'prefix_id2');
         }
-
+        
         return array();
     }
 
@@ -303,12 +297,12 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      * @param array $tags array of tags
      * @return array array of not matching cache ids (string)
      */
-    public function getIdsNotMatchingTags($tags = array())
+    public function getIdsNotMatchingTags ($tags = array())
     {
         if ($tags == array('tag3', 'tag4')) {
             return array('prefix_id3', 'prefix_id4');
         }
-
+        
         return array();
     }
 
@@ -320,12 +314,12 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      * @param array $tags array of tags
      * @return array array of any matching cache ids (string)
      */
-    public function getIdsMatchingAnyTags($tags = array())
+    public function getIdsMatchingAnyTags ($tags = array())
     {
         if ($tags == array('tag5', 'tag6')) {
             return array('prefix_id5', 'prefix_id6');
         }
-
+        
         return array();
     }
 
@@ -334,7 +328,7 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      *
      * @return int integer between 0 and 100
      */
-    public function getFillingPercentage()
+    public function getFillingPercentage ()
     {
         return 50;
     }
@@ -350,7 +344,7 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      * @param string $id cache id
      * @return array array of metadatas (false if the cache id is not found)
      */
-    public function getMetadatas($id)
+    public function getMetadatas ($id)
     {
         return false;
     }
@@ -362,7 +356,7 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      * @param int $extraLifetime
      * @return boolean true if ok
      */
-    public function touch($id, $extraLifetime)
+    public function touch ($id, $extraLifetime)
     {
         return true;
     }
@@ -374,23 +368,18 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      * - automatic_cleaning (is automating cleaning necessary)
      * - tags (are tags supported)
      * - expired_read (is it possible to read expired cache records
-     *                 (for doNotTestCacheValidity option for example))
+     * (for doNotTestCacheValidity option for example))
      * - priority does the backend deal with priority when saving
      * - infinite_lifetime (is infinite lifetime can work with this backend)
      * - get_list (is it possible to get the list of cache ids and the complete list of tags)
      *
      * @return array associative of with capabilities
      */
-    public function getCapabilities()
+    public function getCapabilities ()
     {
-        return array(
-            'automatic_cleaning' => true,
-            'tags'               => true,
-            'expired_read'       => false,
-            'priority'           => true,
-            'infinite_lifetime'  => true,
-            'get_list'           => true
-        );
+        return array('automatic_cleaning' => true, 'tags' => true, 
+        'expired_read' => false, 'priority' => true, 
+        'infinite_lifetime' => true, 'get_list' => true);
     }
 
     /**
@@ -400,12 +389,10 @@ class TestBackend extends AbstractBackend implements ExtendedBackend
      * @param  array  $args       Arguments
      * @return void
      */
-    private function _addLog($methodName, $args)
+    private function _addLog ($methodName, $args)
     {
-        $this->_log[$this->_index] = array(
-            'methodName' => $methodName,
-            'args' => $args
-        );
+        $this->_log[$this->_index] = array('methodName' => $methodName, 
+        'args' => $args);
         $this->_index = $this->_index + 1;
     }
 

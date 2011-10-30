@@ -42,6 +42,7 @@ use Zend\GData\Health;
  */
 class ProfileFeed extends \Zend\GData\Feed
 {
+
     /**
      * The class name for individual profile feed elements.
      *
@@ -53,9 +54,9 @@ class ProfileFeed extends \Zend\GData\Feed
      * Creates a Health Profile feed, representing a user's Health profile
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         foreach (Health::$namespaces as $nsPrefix => $nsUri) {
             $this->registerNamespace($nsPrefix, $nsUri);
@@ -63,7 +64,7 @@ class ProfileFeed extends \Zend\GData\Feed
         parent::__construct($element);
     }
 
-    public function getEntries()
+    public function getEntries ()
     {
         return $this->entry;
     }

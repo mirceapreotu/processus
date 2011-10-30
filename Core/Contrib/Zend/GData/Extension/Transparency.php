@@ -40,13 +40,14 @@ class Transparency extends Extension
 {
 
     protected $_rootElement = 'transparency';
+
     protected $_value = null;
 
     /**
      * Constructs a new Zend_Gdata_Extension_Transparency object.
      * @param bool $value (optional) Transparency value as URI
      */
-    public function __construct($value = null)
+    public function __construct ($value = null)
     {
         parent::__construct();
         $this->_value = $value;
@@ -62,7 +63,7 @@ class Transparency extends Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_value !== null) {
@@ -78,14 +79,14 @@ class Transparency extends Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'value':
-            $this->_value = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'value':
+                $this->_value = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -94,7 +95,7 @@ class Transparency extends Extension
      *
      * @return bool The requested attribute.
      */
-    public function getValue()
+    public function getValue ()
     {
         return $this->_value;
     }
@@ -105,7 +106,7 @@ class Transparency extends Extension
      * @param bool $value The desired value for this attribute.
      * @return \Zend\GData\Extension\Transparency The element being modified.
      */
-    public function setValue($value)
+    public function setValue ($value)
     {
         $this->_value = $value;
         return $this;
@@ -115,7 +116,7 @@ class Transparency extends Extension
      * Magic toString method allows using this directly via echo
      * Works best in PHP >= 4.2.0
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getValue();
     }

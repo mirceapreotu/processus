@@ -39,9 +39,13 @@ class WebContent extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'gCal';
+
     protected $_rootElement = 'webContent';
+
     protected $_url = null;
+
     protected $_height = null;
+
     protected $_width = null;
 
     /**
@@ -50,7 +54,7 @@ class WebContent extends \Zend\GData\Extension
      * @param string $height (optional) The value for this element's height attribute.
      * @param string $width (optional) The value for this element's width attribute.
      */
-    public function __construct($url = null, $height = null, $width = null)
+    public function __construct ($url = null, $height = null, $width = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Calendar::$namespaces);
         parent::__construct();
@@ -69,7 +73,7 @@ class WebContent extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->url != null) {
@@ -91,20 +95,20 @@ class WebContent extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-                case 'url':
-                        $this->_url = $attribute->nodeValue;
-                        break;
-                case 'height':
-                        $this->_height = $attribute->nodeValue;
-                        break;
-                case 'width':
-                        $this->_width = $attribute->nodeValue;
-                        break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'url':
+                $this->_url = $attribute->nodeValue;
+                break;
+            case 'height':
+                $this->_height = $attribute->nodeValue;
+                break;
+            case 'width':
+                $this->_width = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -113,7 +117,7 @@ class WebContent extends \Zend\GData\Extension
      *
      * @return string The desired value for this attribute.
      */
-    public function getURL()
+    public function getURL ()
     {
         return $this->_url;
     }
@@ -124,7 +128,7 @@ class WebContent extends \Zend\GData\Extension
      * @param bool $value The desired value for this attribute.
      * @return \Zend\GData\Calendar\Extension\WebContent The element being modified.
      */
-    public function setURL($value)
+    public function setURL ($value)
     {
         $this->_url = $value;
         return $this;
@@ -135,7 +139,7 @@ class WebContent extends \Zend\GData\Extension
      *
      * @return int The desired value for this attribute.
      */
-    public function getHeight()
+    public function getHeight ()
     {
         return $this->_height;
     }
@@ -146,7 +150,7 @@ class WebContent extends \Zend\GData\Extension
      * @param int $value The desired value for this attribute.
      * @return \Zend\GData\Calendar\Extension\WebContent The element being modified.
      */
-    public function setHeight($value)
+    public function setHeight ($value)
     {
         $this->_height = $value;
         return $this;
@@ -157,7 +161,7 @@ class WebContent extends \Zend\GData\Extension
      *
      * @return int The desired value for this attribute.
      */
-    public function getWidth()
+    public function getWidth ()
     {
         return $this->_width;
     }
@@ -168,7 +172,7 @@ class WebContent extends \Zend\GData\Extension
      * @param int $value The desired value for this attribute.
      * @return \Zend\GData\Calendar\Extension\WebContent The element being modified.
      */
-    public function setWidth($value)
+    public function setWidth ($value)
     {
         $this->_width = $value;
         return $this;

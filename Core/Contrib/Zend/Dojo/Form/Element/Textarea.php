@@ -36,6 +36,7 @@ namespace Zend\Dojo\Form\Element;
  */
 class Textarea extends Dijit
 {
+
     /**
      * Use Textarea dijit view helper
      * @var string

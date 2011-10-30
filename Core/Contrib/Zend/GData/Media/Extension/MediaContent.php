@@ -40,7 +40,9 @@ namespace Zend\GData\Media\Extension;
  */
 class MediaContent extends \Zend\GData\Extension
 {
+
     protected $_rootElement = 'content';
+
     protected $_rootNamespace = 'media';
 
     /**
@@ -116,11 +118,10 @@ class MediaContent extends \Zend\GData\Extension
     /**
      * Creates an individual MediaContent object.
      */
-    public function __construct($url = null, $fileSize = null, $type = null,
-            $medium = null, $isDefault = null, $expression = null,
-            $bitrate = null, $framerate = null, $samplingrate = null,
-            $channels = null, $duration = null, $height = null, $width = null,
-            $lang = null)
+    public function __construct ($url = null, $fileSize = null, $type = null, $medium = null, 
+    $isDefault = null, $expression = null, $bitrate = null, $framerate = null, 
+    $samplingrate = null, $channels = null, $duration = null, $height = null, $width = null, 
+    $lang = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Media::$namespaces);
         parent::__construct();
@@ -140,7 +141,6 @@ class MediaContent extends \Zend\GData\Extension
         $this->_lang = $lang;
     }
 
-
     /**
      * Retrieves a DOMElement which corresponds to this element and all
      * child properties.  This is used to build an entry back into a DOM
@@ -151,7 +151,7 @@ class MediaContent extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_url !== null) {
@@ -206,7 +206,7 @@ class MediaContent extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
             case 'url':
@@ -261,7 +261,7 @@ class MediaContent extends \Zend\GData\Extension
      *
      * @return string   The URL representing this MediaContent object.
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getUrl();
     }
@@ -269,7 +269,7 @@ class MediaContent extends \Zend\GData\Extension
     /**
      * @return string   The direct URL to the media object
      */
-    public function getUrl()
+    public function getUrl ()
     {
         return $this->_url;
     }
@@ -278,7 +278,7 @@ class MediaContent extends \Zend\GData\Extension
      * @param string $value     The direct URL to the media object
      * @return \Zend\GData\Media\Extension\MediaContent  Provides a fluent interface
      */
-    public function setUrl($value)
+    public function setUrl ($value)
     {
         $this->_url = $value;
         return $this;
@@ -287,7 +287,7 @@ class MediaContent extends \Zend\GData\Extension
     /**
      * @return int  The size of the media in bytes
      */
-    public function getFileSize()
+    public function getFileSize ()
     {
         return $this->_fileSize;
     }
@@ -296,7 +296,7 @@ class MediaContent extends \Zend\GData\Extension
      * @param int $value
      * @return \Zend\GData\Media\Extension\MediaContent  Provides a fluent interface
      */
-    public function setFileSize($value)
+    public function setFileSize ($value)
     {
         $this->_fileSize = $value;
         return $this;
@@ -305,7 +305,7 @@ class MediaContent extends \Zend\GData\Extension
     /**
      * @return string
      */
-    public function getType()
+    public function getType ()
     {
         return $this->_type;
     }
@@ -314,7 +314,7 @@ class MediaContent extends \Zend\GData\Extension
      * @param string $value
      * @return \Zend\GData\Media\Extension\MediaContent  Provides a fluent interface
      */
-    public function setType($value)
+    public function setType ($value)
     {
         $this->_type = $value;
         return $this;
@@ -323,7 +323,7 @@ class MediaContent extends \Zend\GData\Extension
     /**
      * @return string
      */
-    public function getMedium()
+    public function getMedium ()
     {
         return $this->_medium;
     }
@@ -332,7 +332,7 @@ class MediaContent extends \Zend\GData\Extension
      * @param string $value
      * @return \Zend\GData\Media\Extension\MediaContent  Provides a fluent interface
      */
-    public function setMedium($value)
+    public function setMedium ($value)
     {
         $this->_medium = $value;
         return $this;
@@ -341,7 +341,7 @@ class MediaContent extends \Zend\GData\Extension
     /**
      * @return bool
      */
-    public function getIsDefault()
+    public function getIsDefault ()
     {
         return $this->_isDefault;
     }
@@ -350,7 +350,7 @@ class MediaContent extends \Zend\GData\Extension
      * @param bool $value
      * @return \Zend\GData\Media\Extension\MediaContent  Provides a fluent interface
      */
-    public function setIsDefault($value)
+    public function setIsDefault ($value)
     {
         $this->_isDefault = $value;
         return $this;
@@ -359,7 +359,7 @@ class MediaContent extends \Zend\GData\Extension
     /**
      * @return string
      */
-    public function getExpression()
+    public function getExpression ()
     {
         return $this->_expression;
     }
@@ -368,7 +368,7 @@ class MediaContent extends \Zend\GData\Extension
      * @param string
      * @return \Zend\GData\Media\Extension\MediaContent  Provides a fluent interface
      */
-    public function setExpression($value)
+    public function setExpression ($value)
     {
         $this->_expression = $value;
         return $this;
@@ -377,7 +377,7 @@ class MediaContent extends \Zend\GData\Extension
     /**
      * @return int
      */
-    public function getBitrate()
+    public function getBitrate ()
     {
         return $this->_bitrate;
     }
@@ -386,7 +386,7 @@ class MediaContent extends \Zend\GData\Extension
      * @param int
      * @return \Zend\GData\Media\Extension\MediaContent  Provides a fluent interface
      */
-    public function setBitrate($value)
+    public function setBitrate ($value)
     {
         $this->_bitrate = $value;
         return $this;
@@ -395,7 +395,7 @@ class MediaContent extends \Zend\GData\Extension
     /**
      * @return int
      */
-    public function getFramerate()
+    public function getFramerate ()
     {
         return $this->_framerate;
     }
@@ -404,7 +404,7 @@ class MediaContent extends \Zend\GData\Extension
      * @param int
      * @return \Zend\GData\Media\Extension\MediaContent  Provides a fluent interface
      */
-    public function setFramerate($value)
+    public function setFramerate ($value)
     {
         $this->_framerate = $value;
         return $this;
@@ -413,7 +413,7 @@ class MediaContent extends \Zend\GData\Extension
     /**
      * @return int
      */
-    public function getSamplingrate()
+    public function getSamplingrate ()
     {
         return $this->_samplingrate;
     }
@@ -422,7 +422,7 @@ class MediaContent extends \Zend\GData\Extension
      * @param int
      * @return \Zend\GData\Media\Extension\MediaContent  Provides a fluent interface
      */
-    public function setSamplingrate($value)
+    public function setSamplingrate ($value)
     {
         $this->_samplingrate = $value;
         return $this;
@@ -431,7 +431,7 @@ class MediaContent extends \Zend\GData\Extension
     /**
      * @return int
      */
-    public function getChannels()
+    public function getChannels ()
     {
         return $this->_channels;
     }
@@ -440,7 +440,7 @@ class MediaContent extends \Zend\GData\Extension
      * @param int
      * @return \Zend\GData\Media\Extension\MediaContent  Provides a fluent interface
      */
-    public function setChannels($value)
+    public function setChannels ($value)
     {
         $this->_channels = $value;
         return $this;
@@ -449,7 +449,7 @@ class MediaContent extends \Zend\GData\Extension
     /**
      * @return int
      */
-    public function getDuration()
+    public function getDuration ()
     {
         return $this->_duration;
     }
@@ -459,7 +459,7 @@ class MediaContent extends \Zend\GData\Extension
      * @param int
      * @return \Zend\GData\Media\Extension\MediaContent  Provides a fluent interface
      */
-    public function setDuration($value)
+    public function setDuration ($value)
     {
         $this->_duration = $value;
         return $this;
@@ -468,7 +468,7 @@ class MediaContent extends \Zend\GData\Extension
     /**
      * @return int
      */
-    public function getHeight()
+    public function getHeight ()
     {
         return $this->_height;
     }
@@ -477,7 +477,7 @@ class MediaContent extends \Zend\GData\Extension
      * @param int
      * @return \Zend\GData\Media\Extension\MediaContent  Provides a fluent interface
      */
-    public function setHeight($value)
+    public function setHeight ($value)
     {
         $this->_height = $value;
         return $this;
@@ -486,7 +486,7 @@ class MediaContent extends \Zend\GData\Extension
     /**
      * @return int
      */
-    public function getWidth()
+    public function getWidth ()
     {
         return $this->_width;
     }
@@ -495,7 +495,7 @@ class MediaContent extends \Zend\GData\Extension
      * @param int
      * @return \Zend\GData\Media\Extension\MediaContent  Provides a fluent interface
      */
-    public function setWidth($value)
+    public function setWidth ($value)
     {
         $this->_width = $value;
         return $this;
@@ -504,7 +504,7 @@ class MediaContent extends \Zend\GData\Extension
     /**
      * @return string
      */
-    public function getLang()
+    public function getLang ()
     {
         return $this->_lang;
     }
@@ -513,7 +513,7 @@ class MediaContent extends \Zend\GData\Extension
      * @param string
      * @return \Zend\GData\Media\Extension\MediaContent  Provides a fluent interface
      */
-    public function setLang($value)
+    public function setLang ($value)
     {
         $this->_lang = $value;
         return $this;

@@ -39,9 +39,10 @@ class Age extends \Zend\GData\Extension
 {
 
     protected $_rootElement = 'age';
+
     protected $_rootNamespace = 'yt';
 
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         $this->registerAllNamespaces(\Zend\GData\YouTube::$namespaces);
         parent::__construct();

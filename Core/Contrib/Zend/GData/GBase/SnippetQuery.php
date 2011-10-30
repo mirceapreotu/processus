@@ -39,6 +39,7 @@ namespace Zend\GData\GBase;
  */
 class SnippetQuery extends Query
 {
+
     /**
      * Path to the snippets feeds on the Google Base server.
      */
@@ -56,7 +57,7 @@ class SnippetQuery extends Query
      *
      * @return string The query URL for this instance.
      */
-    public function getQueryUrl()
+    public function getQueryUrl ()
     {
         $uri = $this->_defaultFeedUri;
         if ($this->getCategory() !== null) {

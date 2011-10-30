@@ -36,12 +36,13 @@ namespace Zend\Db\Statement;
  */
 class Exception extends \Zend\Db\Exception
 {
+
     /**
      * Check if this general exception has a specific database driver specific exception nested inside.
      *
      * @return bool
      */
-    public function hasChainedException()
+    public function hasChainedException ()
     {
         return ($this->getPrevious() !== null);
     }
@@ -49,7 +50,7 @@ class Exception extends \Zend\Db\Exception
     /**
      * @return Exception|null
      */
-    public function getChainedException()
+    public function getChainedException ()
     {
         return $this->getPrevious();
     }

@@ -33,17 +33,18 @@ namespace Zend\Dom;
  */
 class Css2Xpath
 {
+
     /**
      * Transform CSS expression to XPath
      *
      * @param  string $path
      * @return string
      */
-    public static function transform($path)
+    public static function transform ($path)
     {
         $path = (string) $path;
         if (strstr($path, ',')) {
-            $paths       = explode(',', $path);
+            $paths = explode(',', $path);
             $expressions = array();
             foreach ($paths as $path) {
                 $xpath = self::transform(trim($path));
@@ -55,9 +56,9 @@ class Css2Xpath
             }
             return implode('|', $expressions);
         }
-
-        $paths    = array('//');
-        $path     = preg_replace('|\s+>\s+|', '>', $path);
+        
+        $paths = array('//');
+        $path = preg_replace('|\s+>\s+|', '>', $path);
         $segments = preg_split('/\s+/', $path);
         foreach ($segments as $key => $segment) {
             $pathSegment = self::_tokenize($segment);
@@ -72,7 +73,7 @@ class Css2Xpath
             if (0 === strpos($pathSegment, '[contains(')) {
                 foreach ($paths as $key => $xpath) {
                     $paths[$key] .= '//*' . ltrim($pathSegment, '*');
-                    $paths[]      = $xpath . $pathSegment;
+                    $paths[] = $xpath . $pathSegment;
                 }
             } else {
                 foreach ($paths as $key => $xpath) {
@@ -80,7 +81,7 @@ class Css2Xpath
                 }
             }
         }
-
+        
         if (1 == count($paths)) {
             return $paths[0];
         }
@@ -93,54 +94,51 @@ class Css2Xpath
      * @param  string $expression
      * @return string
      */
-    protected static function _tokenize($expression)
+    protected static function _tokenize ($expression)
     {
         // Child selectors
         $expression = str_replace('>', '/', $expression);
-
+        
         // IDs
-        $expression = preg_replace('|#([a-z][a-z0-9_-]*)|i', '[@id=\'$1\']', $expression);
-        $expression = preg_replace('|(?<![a-z0-9_-])(\[@id=)|i', '*$1', $expression);
-
+        $expression = preg_replace('|#([a-z][a-z0-9_-]*)|i', 
+        '[@id=\'$1\']', $expression);
+        $expression = preg_replace('|(?<![a-z0-9_-])(\[@id=)|i', '*$1', 
+        $expression);
+        
         // arbitrary attribute strict equality
         $expression = preg_replace_callback(
-            '|\[([a-z0-9_-]+)=[\'"]([^\'"]+)[\'"]\]|i',
-            function ($matches) {
-                return '[@' . strtolower($matches[1]) . "='" . $matches[2] . "']";
-            },
-            $expression
-        );
-
+        '|\[([a-z0-9_-]+)=[\'"]([^\'"]+)[\'"]\]|i', 
+        function  ($matches)
+        {
+            return '[@' . strtolower($matches[1]) . "='" . $matches[2] . "']";
+        }, $expression);
+        
         // arbitrary attribute contains full word
         $expression = preg_replace_callback(
-            '|\[([a-z0-9_-]+)~=[\'"]([^\'"]+)[\'"]\]|i',
-            function ($matches) {
-                return "[contains(concat(' ', normalize-space(@" . strtolower($matches[1]) . "), ' '), ' " 
-                     . $matches[2] . " ')]";
-            },
-            $expression
-        );
-
+        '|\[([a-z0-9_-]+)~=[\'"]([^\'"]+)[\'"]\]|i', 
+        function  ($matches)
+        {
+            return "[contains(concat(' ', normalize-space(@" .
+             strtolower($matches[1]) . "), ' '), ' " . $matches[2] . " ')]";
+        }, $expression);
+        
         // arbitrary attribute contains specified content
         $expression = preg_replace_callback(
-            '|\[([a-z0-9_-]+)\*=[\'"]([^\'"]+)[\'"]\]|i',
-            function ($matches) {
-                return "[contains(@" . strtolower($matches[1]) . ", '" 
-                     . $matches[2] . "')]";
-            },
-            $expression
-        );
-
+        '|\[([a-z0-9_-]+)\*=[\'"]([^\'"]+)[\'"]\]|i', 
+        function  ($matches)
+        {
+            return "[contains(@" . strtolower($matches[1]) . ", '" . $matches[2] .
+             "')]";
+        }, $expression);
+        
         // Classes
-        $expression = preg_replace(
-            '|\.([a-z][a-z0-9_-]*)|i', 
-            "[contains(concat(' ', normalize-space(@class), ' '), ' \$1 ')]", 
-            $expression
-        );
-
+        $expression = preg_replace('|\.([a-z][a-z0-9_-]*)|i', 
+        "[contains(concat(' ', normalize-space(@class), ' '), ' \$1 ')]", 
+        $expression);
+        
         /** ZF-9764 -- remove double asterix */
         $expression = str_replace('**', '*', $expression);
-
+        
         return $expression;
     }
 }

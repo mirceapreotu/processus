@@ -43,6 +43,7 @@ class EmailListRecipientFeed extends \Zend\GData\Feed
 {
 
     protected $_entryClassName = '\Zend\GData\GApps\EmailListRecipientEntry';
+
     protected $_feedClassName = '\Zend\GData\GApps\EmailListRecipientFeed';
 
 }

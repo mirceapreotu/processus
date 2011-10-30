@@ -44,6 +44,7 @@ class Login extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'apps';
+
     protected $_rootElement = 'login';
 
     /**
@@ -109,25 +110,25 @@ class Login extends \Zend\GData\Extension
      * Constructs a new Zend_Gdata_GApps_Extension_Login object.
      *
      * @param string $username (optional) The username to be used for this
-     *          login.
+     * login.
      * @param string $password (optional) The password to be used for this
-     *          login.
+     * login.
      * @param string $hashFunctionName (optional) The name of the hash
-     *          function used to protect the password, or null if no
-     *          has function has been applied. As of this writing,
-     *          the only valid values are 'SHA-1' or null.
+     * function used to protect the password, or null if no
+     * has function has been applied. As of this writing,
+     * the only valid values are 'SHA-1' or null.
      * @param boolean $admin (optional) Whether the user is an administrator
-     *          or not.
+     * or not.
      * @param boolean $suspended (optional) Whether this login is suspended or not.
      * @param boolean $changePasswordAtNextLogin (optional) Whether
-     *          the user is required to change their password at their
-     *          next login.
+     * the user is required to change their password at their
+     * next login.
      * @param boolean $agreedToTerms (optional) Whether the user has
-     *          agreed to the terms of service.
+     * agreed to the terms of service.
      */
-    public function __construct($username = null, $password = null,
-        $hashFunctionName = null, $admin = null, $suspended = null,
-        $changePasswordAtNextLogin = null, $agreedToTerms = null)
+    public function __construct ($username = null, $password = null, 
+    $hashFunctionName = null, $admin = null, $suspended = null, 
+    $changePasswordAtNextLogin = null, $agreedToTerms = null)
     {
         $this->registerAllNamespaces(\Zend\GData\GApps::$namespaces);
         parent::__construct();
@@ -150,7 +151,7 @@ class Login extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_username !== null) {
@@ -166,15 +167,18 @@ class Login extends \Zend\GData\Extension
             $element->setAttribute('admin', ($this->_admin ? "true" : "false"));
         }
         if ($this->_agreedToTerms !== null) {
-            $element->setAttribute('agreedToTerms', ($this->_agreedToTerms ? "true" : "false"));
+            $element->setAttribute('agreedToTerms', 
+            ($this->_agreedToTerms ? "true" : "false"));
         }
         if ($this->_suspended !== null) {
-            $element->setAttribute('suspended', ($this->_suspended ? "true" : "false"));
+            $element->setAttribute('suspended', 
+            ($this->_suspended ? "true" : "false"));
         }
         if ($this->_changePasswordAtNextLogin !== null) {
-            $element->setAttribute('changePasswordAtNextLogin', ($this->_changePasswordAtNextLogin ? "true" : "false"));
+            $element->setAttribute('changePasswordAtNextLogin', 
+            ($this->_changePasswordAtNextLogin ? "true" : "false"));
         }
-
+        
         return $element;
     }
 
@@ -186,64 +190,64 @@ class Login extends \Zend\GData\Extension
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'userName':
-            $this->_username = $attribute->nodeValue;
-            break;
-        case 'password':
-            $this->_password = $attribute->nodeValue;
-            break;
-        case 'hashFunctionName':
-            $this->_hashFunctionName = $attribute->nodeValue;
-            break;
-        case 'admin':
-            if ($attribute->nodeValue == "true") {
-                $this->_admin = true;
-            }
-            else if ($attribute->nodeValue == "false") {
-                $this->_admin = false;
-            }
-            else {
-                throw new App\InvalidArgumentException("Expected 'true' or 'false' for apps:login#admin.");
-            }
-            break;
-        case 'agreedToTerms':
-            if ($attribute->nodeValue == "true") {
-                $this->_agreedToTerms = true;
-            }
-            else if ($attribute->nodeValue == "false") {
-                $this->_agreedToTerms = false;
-            }
-            else {
-                throw new App\InvalidArgumentException("Expected 'true' or 'false' for apps:login#agreedToTerms.");
-            }
-            break;
-        case 'suspended':
-            if ($attribute->nodeValue == "true") {
-                $this->_suspended = true;
-            }
-            else if ($attribute->nodeValue == "false") {
-                $this->_suspended = false;
-            }
-            else {
-                throw new App\InvalidArgumentException("Expected 'true' or 'false' for apps:login#suspended.");
-            }
-            break;
-        case 'changePasswordAtNextLogin':
-            if ($attribute->nodeValue == "true") {
-                $this->_changePasswordAtNextLogin = true;
-            }
-            else if ($attribute->nodeValue == "false") {
-                $this->_changePasswordAtNextLogin = false;
-            }
-            else {
-                throw new App\InvalidArgumentException("Expected 'true' or 'false' for apps:login#changePasswordAtNextLogin.");
-            }
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'userName':
+                $this->_username = $attribute->nodeValue;
+                break;
+            case 'password':
+                $this->_password = $attribute->nodeValue;
+                break;
+            case 'hashFunctionName':
+                $this->_hashFunctionName = $attribute->nodeValue;
+                break;
+            case 'admin':
+                if ($attribute->nodeValue == "true") {
+                    $this->_admin = true;
+                } else 
+                    if ($attribute->nodeValue == "false") {
+                        $this->_admin = false;
+                    } else {
+                        throw new App\InvalidArgumentException(
+                        "Expected 'true' or 'false' for apps:login#admin.");
+                    }
+                break;
+            case 'agreedToTerms':
+                if ($attribute->nodeValue == "true") {
+                    $this->_agreedToTerms = true;
+                } else 
+                    if ($attribute->nodeValue == "false") {
+                        $this->_agreedToTerms = false;
+                    } else {
+                        throw new App\InvalidArgumentException(
+                        "Expected 'true' or 'false' for apps:login#agreedToTerms.");
+                    }
+                break;
+            case 'suspended':
+                if ($attribute->nodeValue == "true") {
+                    $this->_suspended = true;
+                } else 
+                    if ($attribute->nodeValue == "false") {
+                        $this->_suspended = false;
+                    } else {
+                        throw new App\InvalidArgumentException(
+                        "Expected 'true' or 'false' for apps:login#suspended.");
+                    }
+                break;
+            case 'changePasswordAtNextLogin':
+                if ($attribute->nodeValue == "true") {
+                    $this->_changePasswordAtNextLogin = true;
+                } else 
+                    if ($attribute->nodeValue == "false") {
+                        $this->_changePasswordAtNextLogin = false;
+                    } else {
+                        throw new App\InvalidArgumentException(
+                        "Expected 'true' or 'false' for apps:login#changePasswordAtNextLogin.");
+                    }
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -253,7 +257,7 @@ class Login extends \Zend\GData\Extension
      * @see setUsername
      * @return string The attribute being modified.
      */
-    public function getUsername()
+    public function getUsername ()
     {
         return $this->_username;
     }
@@ -266,7 +270,7 @@ class Login extends \Zend\GData\Extension
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\GApps\Extension\Login Provides a fluent interface.
      */
-    public function setUsername($value)
+    public function setUsername ($value)
     {
         $this->_username = $value;
         return $this;
@@ -278,7 +282,7 @@ class Login extends \Zend\GData\Extension
      * @see setPassword
      * @return string The requested attribute.
      */
-    public function getPassword()
+    public function getPassword ()
     {
         return $this->_password;
     }
@@ -292,7 +296,7 @@ class Login extends \Zend\GData\Extension
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\GApps\Extension\Login Provides a fluent interface.
      */
-    public function setPassword($value)
+    public function setPassword ($value)
     {
         $this->_password = $value;
         return $this;
@@ -304,7 +308,7 @@ class Login extends \Zend\GData\Extension
      * @see setHashFunctionName
      * @return string The requested attribute.
      */
-    public function getHashFunctionName()
+    public function getHashFunctionName ()
     {
         return $this->_hashFunctionName;
     }
@@ -319,7 +323,7 @@ class Login extends \Zend\GData\Extension
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\GApps\Extension\Login Provides a fluent interface.
      */
-    public function setHashFunctionName($value)
+    public function setHashFunctionName ($value)
     {
         $this->_hashFunctionName = $value;
         return $this;
@@ -332,9 +336,9 @@ class Login extends \Zend\GData\Extension
      * @return boolean The requested attribute.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function getAdmin()
+    public function getAdmin ()
     {
-        if (!(is_bool($this->_admin))) {
+        if (! (is_bool($this->_admin))) {
             throw new App\InvalidArgumentException('Expected boolean for admin.');
         }
         return $this->_admin;
@@ -348,10 +352,11 @@ class Login extends \Zend\GData\Extension
      * @return \Zend\GData\GApps\Extension\Login Provides a fluent interface.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function setAdmin($value)
+    public function setAdmin ($value)
     {
-        if (!(is_bool($value))) {
-            throw new App\InvalidArgumentException('Expected boolean for $value.');
+        if (! (is_bool($value))) {
+            throw new App\InvalidArgumentException(
+            'Expected boolean for $value.');
         }
         $this->_admin = $value;
         return $this;
@@ -364,10 +369,11 @@ class Login extends \Zend\GData\Extension
      * @return boolean The requested attribute.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function getAgreedToTerms()
+    public function getAgreedToTerms ()
     {
-        if (!(is_bool($this->_agreedToTerms))) {
-            throw new App\InvalidArgumentException('Expected boolean for agreedToTerms.');
+        if (! (is_bool($this->_agreedToTerms))) {
+            throw new App\InvalidArgumentException(
+            'Expected boolean for agreedToTerms.');
         }
         return $this->_agreedToTerms;
     }
@@ -380,10 +386,11 @@ class Login extends \Zend\GData\Extension
      * @return \Zend\GData\GApps\Extension\Login Provides a fluent interface.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function setAgreedToTerms($value)
+    public function setAgreedToTerms ($value)
     {
-        if (!(is_bool($value))) {
-            throw new App\InvalidArgumentException('Expected boolean for $value.');
+        if (! (is_bool($value))) {
+            throw new App\InvalidArgumentException(
+            'Expected boolean for $value.');
         }
         $this->_agreedToTerms = $value;
         return $this;
@@ -396,10 +403,11 @@ class Login extends \Zend\GData\Extension
      * @return boolean The requested attribute.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function getSuspended()
+    public function getSuspended ()
     {
-        if (!(is_bool($this->_suspended))) {
-            throw new App\InvalidArgumentException('Expected boolean for suspended.');
+        if (! (is_bool($this->_suspended))) {
+            throw new App\InvalidArgumentException(
+            'Expected boolean for suspended.');
         }
         return $this->_suspended;
     }
@@ -412,10 +420,11 @@ class Login extends \Zend\GData\Extension
      * @return \Zend\GData\GApps\Extension\Login Provides a fluent interface.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function setSuspended($value)
+    public function setSuspended ($value)
     {
-        if (!(is_bool($value))) {
-            throw new App\InvalidArgumentException('Expected boolean for $value.');
+        if (! (is_bool($value))) {
+            throw new App\InvalidArgumentException(
+            'Expected boolean for $value.');
         }
         $this->_suspended = $value;
         return $this;
@@ -428,10 +437,11 @@ class Login extends \Zend\GData\Extension
      * @return boolean The requested attribute.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function getChangePasswordAtNextLogin()
+    public function getChangePasswordAtNextLogin ()
     {
-        if (!(is_bool($this->_changePasswordAtNextLogin))) {
-            throw new App\InvalidArgumentException('Expected boolean for changePasswordAtNextLogin.');
+        if (! (is_bool($this->_changePasswordAtNextLogin))) {
+            throw new App\InvalidArgumentException(
+            'Expected boolean for changePasswordAtNextLogin.');
         }
         return $this->_changePasswordAtNextLogin;
     }
@@ -445,10 +455,11 @@ class Login extends \Zend\GData\Extension
      * @return \Zend\GData\GApps\Extension\Login Provides a fluent interface.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function setChangePasswordAtNextLogin($value)
+    public function setChangePasswordAtNextLogin ($value)
     {
-        if (!(is_bool($value))) {
-            throw new App\InvalidArgumentException('Expected boolean for $value.');
+        if (! (is_bool($value))) {
+            throw new App\InvalidArgumentException(
+            'Expected boolean for $value.');
         }
         $this->_changePasswordAtNextLogin = $value;
         return $this;
@@ -458,13 +469,13 @@ class Login extends \Zend\GData\Extension
      * Magic toString method allows using this directly via echo
      * Works best in PHP >= 4.2.0
      */
-    public function __toString()
+    public function __toString ()
     {
-        return "Username: " . $this->getUsername() .
-            "\nPassword: " . (($this->getPassword() === null) ? "NOT SET" : "SET") .
-            "\nPassword Hash Function: " . $this->getHashFunctionName() .
-            "\nAdministrator: " . ($this->getAdmin() ? "Yes" : "No") .
-            "\nAgreed To Terms: " . ($this->getAgreedToTerms() ? "Yes" : "No") .
-            "\nSuspended: " . ($this->getSuspended() ? "Yes" : "No");
+        return "Username: " . $this->getUsername() . "\nPassword: " .
+         (($this->getPassword() === null) ? "NOT SET" : "SET") .
+         "\nPassword Hash Function: " . $this->getHashFunctionName() .
+         "\nAdministrator: " . ($this->getAdmin() ? "Yes" : "No") .
+         "\nAgreed To Terms: " . ($this->getAgreedToTerms() ? "Yes" : "No") .
+         "\nSuspended: " . ($this->getSuspended() ? "Yes" : "No");
     }
 }

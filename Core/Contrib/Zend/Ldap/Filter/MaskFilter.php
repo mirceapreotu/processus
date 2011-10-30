@@ -36,17 +36,18 @@ namespace Zend\Ldap\Filter;
  */
 class MaskFilter extends StringFilter
 {
+
     /**
      * Creates a Zend_Ldap_Filter_String.
      *
      * @param string $mask
      * @param string $value,...
      */
-    public function __construct($mask, $value)
+    public function __construct ($mask, $value)
     {
         $args = func_get_args();
         array_shift($args);
-        for ($i = 0; $i<count($args); $i++) {
+        for ($i = 0; $i < count($args); $i ++) {
             $args[$i] = self::escapeValue($args[$i]);
         }
         $filter = vsprintf($mask, $args);
@@ -58,7 +59,7 @@ class MaskFilter extends StringFilter
      *
      * @return string
      */
-    public function toString()
+    public function toString ()
     {
         return $this->_filter;
     }

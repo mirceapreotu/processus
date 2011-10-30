@@ -42,11 +42,14 @@ class OriginalEvent extends Extension
 {
 
     protected $_rootElement = 'originalEvent';
+
     protected $_id = null;
+
     protected $_href = null;
+
     protected $_when = null;
 
-    public function __construct($id = null, $href = null, $when = null)
+    public function __construct ($id = null, $href = null, $when = null)
     {
         parent::__construct();
         $this->_id = $id;
@@ -54,7 +57,7 @@ class OriginalEvent extends Extension
         $this->_when = $when;
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_id !== null) {
@@ -69,67 +72,66 @@ class OriginalEvent extends Extension
         return $element;
     }
 
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'id':
-            $this->_id = $attribute->nodeValue;
-            break;
-        case 'href':
-            $this->_href = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'id':
+                $this->_id = $attribute->nodeValue;
+                break;
+            case 'href':
+                $this->_href = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-            case $this->lookupNamespace('gd') . ':' . 'when';
+            case $this->lookupNamespace('gd') . ':' . 'when':
                 $when = new When();
                 $when->transferFromDOM($child);
                 $this->_when = $when;
                 break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
-    public function getId()
+    public function getId ()
     {
         return $this->_id;
     }
 
-    public function setId($value)
+    public function setId ($value)
     {
         $this->_id = $value;
         return $this;
     }
 
-    public function getHref()
+    public function getHref ()
     {
         return $this->_href;
     }
 
-    public function setHref($value)
+    public function setHref ($value)
     {
         $this->_href = $value;
         return $this;
     }
 
-    public function getWhen()
+    public function getWhen ()
     {
         return $this->_when;
     }
 
-    public function setWhen($value)
+    public function setWhen ($value)
     {
         $this->_when = $value;
         return $this;
     }
-
 
 }

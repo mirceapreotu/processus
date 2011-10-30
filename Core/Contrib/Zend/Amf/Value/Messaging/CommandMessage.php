@@ -41,8 +41,9 @@ namespace Zend\Amf\Value\Messaging;
  */
 class CommandMessage extends AsyncMessage
 {
+
     /**
-     *  This operation is used to subscribe to a remote destination.
+     * This operation is used to subscribe to a remote destination.
      */
     const SUBSCRIBE_OPERATION = 0;
 

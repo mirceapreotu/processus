@@ -35,43 +35,46 @@ use Zend\Config;
  */
 class Xml extends AbstractFileWriter
 {
+
     /**
      * Render a Zend_Config into a XML config string.
      *
      * @since 1.10
      * @return string
      */
-    public function render()
+    public function render ()
     {
-        $xml         = new \SimpleXMLElement('<zend-config xmlns:zf="' . Config\Xml::XML_NAMESPACE . '"/>');
-        $extends     = $this->_config->getExtends();
+        $xml = new \SimpleXMLElement(
+        '<zend-config xmlns:zf="' . Config\Xml::XML_NAMESPACE . '"/>');
+        $extends = $this->_config->getExtends();
         $sectionName = $this->_config->getSectionName();
-
+        
         if (is_string($sectionName)) {
             $child = $xml->addChild($sectionName);
-
+            
             $this->_addBranch($this->_config, $child, $xml);
         } else {
             foreach ($this->_config as $sectionName => $data) {
-                if (!($data instanceof Config\Config)) {
+                if (! ($data instanceof Config\Config)) {
                     $xml->addChild($sectionName, (string) $data);
                 } else {
                     $child = $xml->addChild($sectionName);
-
+                    
                     if (isset($extends[$sectionName])) {
-                        $child->addAttribute('zf:extends', $extends[$sectionName], Config\Xml::XML_NAMESPACE);
+                        $child->addAttribute('zf:extends', 
+                        $extends[$sectionName], Config\Xml::XML_NAMESPACE);
                     }
-
+                    
                     $this->_addBranch($data, $child, $xml);
                 }
             }
         }
-
+        
         $dom = dom_import_simplexml($xml)->ownerDocument;
         $dom->formatOutput = true;
-
+        
         $xmlString = $dom->saveXML();
-
+        
         return $xmlString;
     }
 
@@ -83,29 +86,32 @@ class Xml extends AbstractFileWriter
      * @param  SimpleXMLElement $parent
      * @return void
      */
-    protected function _addBranch(Config\Config $config, \SimpleXMLElement $xml, \SimpleXMLElement $parent)
+    protected function _addBranch (Config\Config $config,\SimpleXMLElement $xml, 
+    SimpleXMLElement $parent)
     {
         $branchType = null;
-
+        
         foreach ($config as $key => $value) {
             if ($branchType === null) {
                 if (is_numeric($key)) {
                     $branchType = 'numeric';
                     $branchName = $xml->getName();
-                    $xml        = $parent;
-
+                    $xml = $parent;
+                    
                     unset($parent->{$branchName});
                 } else {
                     $branchType = 'string';
                 }
-            } else if ($branchType !== (is_numeric($key) ? 'numeric' : 'string')) {
-                throw new Config\Exception\RuntimeException('Mixing of string and numeric keys is not allowed');
-            }
-
+            } else 
+                if ($branchType !== (is_numeric($key) ? 'numeric' : 'string')) {
+                    throw new Config\Exception\RuntimeException(
+                    'Mixing of string and numeric keys is not allowed');
+                }
+            
             if ($branchType === 'numeric') {
                 if ($value instanceof Config\Config) {
                     $child = $parent->addChild($branchName);
-
+                    
                     $this->_addBranch($value, $child, $parent);
                 } else {
                     $parent->addChild($branchName, (string) $value);
@@ -113,7 +119,7 @@ class Xml extends AbstractFileWriter
             } else {
                 if ($value instanceof Config\Config) {
                     $child = $xml->addChild($key);
-
+                    
                     $this->_addBranch($value, $child, $xml);
                 } else {
                     $xml->addChild($key, (string) $value);

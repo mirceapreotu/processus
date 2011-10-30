@@ -36,7 +36,9 @@ use Zend\Config;
  */
 class Chain extends AbstractRoute
 {
+
     protected $_routes = array();
+
     protected $_separators = array();
 
     /**
@@ -44,7 +46,7 @@ class Chain extends AbstractRoute
      *
      * @param \Zend\Config\Config $config Configuration object
      */
-    public static function getInstance(Config\Config $config)
+    public static function getInstance (Config\Config $config)
     {
         $defs = ($config->defaults instanceof Config\Config) ? $config->defaults->toArray() : array();
         return new self($config->route, $defs);
@@ -57,13 +59,13 @@ class Chain extends AbstractRoute
      * @param  string                                $separator
      * @return \Zend\Controller\Router\Route\Chain
      */
-    public function addChain(AbstractRoute $route, $separator = '/')
+    public function addChain (AbstractRoute $route, $separator = '/')
     {
-        $this->_routes[]     = $route;
+        $this->_routes[] = $route;
         $this->_separators[] = $separator;
-
+        
         return $this;
-
+    
     }
 
     /**
@@ -73,52 +75,55 @@ class Chain extends AbstractRoute
      * @param  \Zend\Controller\Request\Http $request Request to get the path info from
      * @return array|false An array of assigned values or a false on a mismatch
      */
-    public function match($request, $partial = null)
+    public function match ($request, $partial = null)
     {
-        $path    = trim($request->getPathInfo(), '/');
+        $path = trim($request->getPathInfo(), '/');
         $subPath = $path;
-        $values  = array();
-
+        $values = array();
+        
         foreach ($this->_routes as $key => $route) {
             if ($key > 0 && $matchedPath !== null) {
-                $separator = substr($subPath, 0, strlen($this->_separators[$key]));
-
+                $separator = substr($subPath, 0, 
+                strlen($this->_separators[$key]));
+                
                 if ($separator !== $this->_separators[$key]) {
                     return false;
                 }
-
+                
                 $subPath = substr($subPath, strlen($separator));
             }
-
+            
             // TODO: Should be an interface method. Hack for 1.0 BC
-            if (!method_exists($route, 'getVersion') || $route->getVersion() == 1) {
+            if (! method_exists($route, 'getVersion') ||
+             $route->getVersion() == 1) {
                 $match = $subPath;
             } else {
                 $request->setPathInfo($subPath);
                 $match = $request;
             }
-
+            
             $res = $route->match($match, true);
             if ($res === false) {
                 return false;
             }
-
+            
             $matchedPath = $route->getMatchedPath();
-
+            
             if ($matchedPath !== null) {
-                $subPath     = substr($subPath, strlen($matchedPath));
-                $separator   = substr($subPath, 0, strlen($this->_separators[$key]));
+                $subPath = substr($subPath, strlen($matchedPath));
+                $separator = substr($subPath, 0, 
+                strlen($this->_separators[$key]));
             }
-
+            
             $values = $res + $values;
         }
-
+        
         $request->setPathInfo($path);
-
+        
         if ($subPath !== '' && $subPath !== false) {
             return false;
         }
-
+        
         return $values;
     }
 
@@ -128,27 +133,28 @@ class Chain extends AbstractRoute
      * @param array $data An array of variable and value pairs used as parameters
      * @return string Route path with user submitted parameters
      */
-    public function assemble($data = array(), $reset = false, $encode = false)
+    public function assemble ($data = array(), $reset = false, $encode = false)
     {
-        $value     = '';
+        $value = '';
         $numRoutes = count($this->_routes);
-
+        
         foreach ($this->_routes as $key => $route) {
             if ($key > 0) {
                 $value .= $this->_separators[$key];
             }
-
-            $value .= $route->assemble($data, $reset, $encode, (($numRoutes - 1) > $key));
-
+            
+            $value .= $route->assemble($data, $reset, $encode, 
+            (($numRoutes - 1) > $key));
+            
             if (method_exists($route, 'getVariables')) {
                 $variables = $route->getVariables();
-
+                
                 foreach ($variables as $variable) {
                     $data[$variable] = null;
                 }
             }
         }
-
+        
         return $value;
     }
 
@@ -158,10 +164,11 @@ class Chain extends AbstractRoute
      * @param  \Zend\Controller\Request\AbstractRequest|null $request
      * @return void
      */
-    public function setRequest(\Zend\Controller\Request\AbstractRequest $request = null)
+    public function setRequest (
+    \Zend\Controller\Request\AbstractRequest $request = null)
     {
         $this->_request = $request;
-
+        
         foreach ($this->_routes as $route) {
             if (method_exists($route, 'setRequest')) {
                 $route->setRequest($request);

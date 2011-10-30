@@ -34,6 +34,7 @@ namespace Zend\Form;
  */
 class SubForm extends Form
 {
+
     /**
      * Whether or not form elements are members of an array
      * @var bool
@@ -45,18 +46,18 @@ class SubForm extends Form
      *
      * @return Zend\Form\SubForm
      */
-    public function loadDefaultDecorators()
+    public function loadDefaultDecorators ()
     {
         if ($this->loadDefaultDecoratorsIsDisabled()) {
             return $this;
         }
-
+        
         $decorators = $this->getDecorators();
         if (empty($decorators)) {
             $this->addDecorator('FormElements')
-                 ->addDecorator('HtmlTag', array('tag' => 'dl'))
-                 ->addDecorator('Fieldset')
-                 ->addDecorator('DtDdWrapper');
+                ->addDecorator('HtmlTag', array('tag' => 'dl'))
+                ->addDecorator('Fieldset')
+                ->addDecorator('DtDdWrapper');
         }
         return $this;
     }

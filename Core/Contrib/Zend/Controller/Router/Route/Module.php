@@ -44,6 +44,7 @@ use Zend\Config;
  */
 class Module extends AbstractRoute
 {
+
     /**
      * URI delimiter
      */
@@ -55,19 +56,24 @@ class Module extends AbstractRoute
      */
     protected $_defaults;
 
-    protected $_values      = array();
+    protected $_values = array();
+
     protected $_moduleValid = false;
-    protected $_keysSet     = false;
+
+    protected $_keysSet = false;
 
     /**#@+
      * Array keys to use for module, controller, and action. Should be taken out of request.
      * @var string
      */
-    protected $_moduleKey     = 'module';
-    protected $_controllerKey = 'controller';
-    protected $_actionKey     = 'action';
-    /**#@-*/
+    protected $_moduleKey = 'module';
 
+    protected $_controllerKey = 'controller';
+
+    protected $_actionKey = 'action';
+
+    /**#@-*/
+    
     /**
      * @var \Zend\Controller\Dispatcher
      */
@@ -78,21 +84,22 @@ class Module extends AbstractRoute
      */
     protected $_request;
 
-    public function getVersion() {
+    public function getVersion ()
+    {
         return 1;
     }
 
     /**
      * Instantiates route based on passed Zend_Config structure
      */
-    public static function getInstance(Config\Config $config)
+    public static function getInstance (Config\Config $config)
     {
         $frontController = \Zend\Controller\Front::getInstance();
-
-        $defs       = ($config->defaults instanceof Config\Config) ? $config->defaults->toArray() : array();
+        
+        $defs = ($config->defaults instanceof Config\Config) ? $config->defaults->toArray() : array();
         $dispatcher = $frontController->getDispatcher();
-        $request    = $frontController->getRequest();
-
+        $request = $frontController->getRequest();
+        
         return new self($defs, $dispatcher, $request);
     }
 
@@ -103,16 +110,16 @@ class Module extends AbstractRoute
      * @param \Zend\Controller\Dispatcher $dispatcher Dispatcher object
      * @param \Zend\Controller\Request\AbstractRequest $request Request object
      */
-    public function __construct(array $defaults = array(),
-                \Zend\Controller\Dispatcher $dispatcher = null,
-                \Zend\Controller\Request\AbstractRequest $request = null)
+    public function __construct (array $defaults = array(), 
+    Zend\Controller\Dispatcher $dispatcher = null, 
+    Zend\Controller\Request\AbstractRequest $request = null)
     {
         $this->_defaults = $defaults;
-
+        
         if (isset($request)) {
             $this->_request = $request;
         }
-
+        
         if (isset($dispatcher)) {
             $this->_dispatcher = $dispatcher;
         }
@@ -123,22 +130,21 @@ class Module extends AbstractRoute
      *
      * @return void
      */
-    protected function _setRequestKeys()
+    protected function _setRequestKeys ()
     {
         if (null !== $this->_request) {
-            $this->_moduleKey     = $this->_request->getModuleKey();
+            $this->_moduleKey = $this->_request->getModuleKey();
             $this->_controllerKey = $this->_request->getControllerKey();
-            $this->_actionKey     = $this->_request->getActionKey();
+            $this->_actionKey = $this->_request->getActionKey();
         }
-
+        
         if (null !== $this->_dispatcher) {
             $this->_defaults += array(
-                $this->_controllerKey => $this->_dispatcher->getDefaultControllerName(),
-                $this->_actionKey     => $this->_dispatcher->getDefaultAction(),
-                $this->_moduleKey     => $this->_dispatcher->getDefaultModule()
-            );
+            $this->_controllerKey => $this->_dispatcher->getDefaultControllerName(), 
+            $this->_actionKey => $this->_dispatcher->getDefaultAction(), 
+            $this->_moduleKey => $this->_dispatcher->getDefaultModule());
         }
-
+        
         $this->_keysSet = true;
     }
 
@@ -153,50 +159,52 @@ class Module extends AbstractRoute
      * @param string $path Path used to match against this routing map
      * @return array An array of assigned values or a false on a mismatch
      */
-    public function match($path, $partial = false)
+    public function match ($path, $partial = false)
     {
         $this->_setRequestKeys();
-
+        
         $values = array();
         $params = array();
-
-        if (!$partial) {
+        
+        if (! $partial) {
             $path = trim($path, self::URI_DELIMITER);
         } else {
             $matchedPath = $path;
         }
-
+        
         if ($path != '') {
             $path = explode(self::URI_DELIMITER, $path);
-
-            if ($this->_dispatcher && $this->_dispatcher->isValidModule($path[0])) {
+            
+            if ($this->_dispatcher && $this->_dispatcher->isValidModule(
+            $path[0])) {
                 $values[$this->_moduleKey] = array_shift($path);
                 $this->_moduleValid = true;
             }
-
-            if (count($path) && !empty($path[0])) {
+            
+            if (count($path) && ! empty($path[0])) {
                 $values[$this->_controllerKey] = array_shift($path);
             }
-
-            if (count($path) && !empty($path[0])) {
+            
+            if (count($path) && ! empty($path[0])) {
                 $values[$this->_actionKey] = array_shift($path);
             }
-
+            
             if ($numSegs = count($path)) {
                 for ($i = 0; $i < $numSegs; $i = $i + 2) {
                     $key = urldecode($path[$i]);
                     $val = isset($path[$i + 1]) ? urldecode($path[$i + 1]) : null;
-                    $params[$key] = (isset($params[$key]) ? (array_merge((array) $params[$key], array($val))): $val);
+                    $params[$key] = (isset($params[$key]) ? (array_merge(
+                    (array) $params[$key], array($val))) : $val);
                 }
             }
         }
-
+        
         if ($partial) {
             $this->setMatchedPath($matchedPath);
         }
-
+        
         $this->_values = $values + $params;
-
+        
         return $this->_values + $this->_defaults;
     }
 
@@ -207,14 +215,14 @@ class Module extends AbstractRoute
      * @param bool $reset Weither to reset the current params
      * @return string Route path with user submitted parameters
      */
-    public function assemble($data = array(), $reset = false, $encode = true, $partial = false)
+    public function assemble ($data = array(), $reset = false, $encode = true, $partial = false)
     {
-        if (!$this->_keysSet) {
+        if (! $this->_keysSet) {
             $this->_setRequestKeys();
         }
-
-        $params = (!$reset) ? $this->_values : array();
-
+        
+        $params = (! $reset) ? $this->_values : array();
+        
         foreach ($data as $key => $value) {
             if ($value !== null) {
                 $params[$key] = $value;
@@ -222,24 +230,24 @@ class Module extends AbstractRoute
                 unset($params[$key]);
             }
         }
-
+        
         $params += $this->_defaults;
-
+        
         $url = '';
-
+        
         if ($this->_moduleValid || array_key_exists($this->_moduleKey, $data)) {
             if ($params[$this->_moduleKey] != $this->_defaults[$this->_moduleKey]) {
                 $module = $params[$this->_moduleKey];
             }
         }
         unset($params[$this->_moduleKey]);
-
+        
         $controller = $params[$this->_controllerKey];
         unset($params[$this->_controllerKey]);
-
+        
         $action = $params[$this->_actionKey];
         unset($params[$this->_actionKey]);
-
+        
         foreach ($params as $key => $value) {
             $key = ($encode) ? urlencode($key) : $key;
             if (is_array($value)) {
@@ -253,27 +261,32 @@ class Module extends AbstractRoute
                     $url .= '/' . $arrayValue;
                 }
             } else {
-                if ($encode) $value = urlencode($value);
+                if ($encode)
+                    $value = urlencode($value);
                 $url .= '/' . $key;
                 $url .= '/' . $value;
             }
         }
-
-        if (!empty($url) || $action !== $this->_defaults[$this->_actionKey]) {
-            if ($encode) $action = urlencode($action);
+        
+        if (! empty($url) || $action !== $this->_defaults[$this->_actionKey]) {
+            if ($encode)
+                $action = urlencode($action);
             $url = '/' . $action . $url;
         }
-
-        if (!empty($url) || $controller !== $this->_defaults[$this->_controllerKey]) {
-            if ($encode) $controller = urlencode($controller);
+        
+        if (! empty($url) ||
+         $controller !== $this->_defaults[$this->_controllerKey]) {
+            if ($encode)
+                $controller = urlencode($controller);
             $url = '/' . $controller . $url;
         }
-
+        
         if (isset($module)) {
-            if ($encode) $module = urlencode($module);
+            if ($encode)
+                $module = urlencode($module);
             $url = '/' . $module . $url;
         }
-
+        
         return ltrim($url, self::URI_DELIMITER);
     }
 
@@ -283,7 +296,8 @@ class Module extends AbstractRoute
      * @param string $name Array key of the parameter
      * @return string Previously set default
      */
-    public function getDefault($name) {
+    public function getDefault ($name)
+    {
         if (isset($this->_defaults[$name])) {
             return $this->_defaults[$name];
         }
@@ -294,7 +308,8 @@ class Module extends AbstractRoute
      *
      * @return array Route defaults
      */
-    public function getDefaults() {
+    public function getDefaults ()
+    {
         return $this->_defaults;
     }
 

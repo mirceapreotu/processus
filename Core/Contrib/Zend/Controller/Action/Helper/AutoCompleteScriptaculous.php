@@ -39,18 +39,19 @@ use Zend\Controller\Action\Exception as ActionException;
  */
 class AutoCompleteScriptaculous extends AbstractAutoComplete
 {
+
     /**
      * Validate data for autocompletion
      *
      * @param  mixed $data
      * @return bool
      */
-    public function validateData($data)
+    public function validateData ($data)
     {
-        if (!is_array($data) && !is_scalar($data)) {
+        if (! is_array($data) && ! is_scalar($data)) {
             return false;
         }
-
+        
         return true;
     }
 
@@ -62,19 +63,19 @@ class AutoCompleteScriptaculous extends AbstractAutoComplete
      * @throws \Zend\Controller\Action\Exception
      * @return string
      */
-    public function prepareAutoCompletion($data, $keepLayouts = false)
+    public function prepareAutoCompletion ($data, $keepLayouts = false)
     {
-        if (!$this->validateData($data)) {
+        if (! $this->validateData($data)) {
             throw new ActionException('Invalid data passed for autocompletion');
         }
-
+        
         $data = (array) $data;
         $data = '<ul><li>' . implode('</li><li>', $data) . '</li></ul>';
-
-        if (!$keepLayouts) {
+        
+        if (! $keepLayouts) {
             $this->disableLayouts();
         }
-
+        
         return $data;
     }
 }

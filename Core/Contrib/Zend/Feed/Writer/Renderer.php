@@ -31,55 +31,56 @@ namespace Zend\Feed\Writer;
  */
 interface Renderer
 {
+
     /**
      * Render feed/entry
      * 
      * @return void
      */
-    public function render();
+    public function render ();
 
     /**
      * Save feed and/or entry to XML and return string
      * 
      * @return string
      */
-    public function saveXml();
+    public function saveXml ();
 
     /**
      * Get DOM document
      * 
      * @return DOMDocument
      */
-    public function getDomDocument();
+    public function getDomDocument ();
 
     /**
      * Get document element from DOM
      * 
      * @return DOMElement
      */
-    public function getElement();
+    public function getElement ();
 
     /**
      * Get data container containing feed items
      * 
      * @return mixed
      */
-    public function getDataContainer();
+    public function getDataContainer ();
 
     /**
      * Should exceptions be ignored?
      * 
      * @return mixed
      */
-    public function ignoreExceptions();
-    
+    public function ignoreExceptions ();
+
     /**
      * Get list of thrown exceptions
      * 
      * @return array
      */
-    public function getExceptions();
-    
+    public function getExceptions ();
+
     /**
      * Set the current feed type being exported to "rss" or "atom". This allows
      * other objects to gracefully choose whether to execute or not, depending
@@ -87,15 +88,15 @@ interface Renderer
      *
      * @param string $type
      */
-    public function setType($type);
-    
+    public function setType ($type);
+
     /**
      * Retrieve the current or last feed type exported.
      *
      * @return string Value will be "rss" or "atom"
      */
-    public function getType();
-    
+    public function getType ();
+
     /**
      * Sets the absolute root element for the XML feed being generated. This
      * helps simplify the appending of namespace declarations, but also ensures
@@ -104,12 +105,12 @@ interface Renderer
      *
      * @param DOMElement $root
      */
-    public function setRootElement(\DOMElement $root);
-    
+    public function setRootElement (\DOMElement $root);
+
     /**
      * Retrieve the absolute root element for the XML feed being generated.
      *
      * @return DOMElement
      */
-    public function getRootElement();
+    public function getRootElement ();
 }

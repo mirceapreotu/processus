@@ -3,5 +3,6 @@ namespace Zend\Di;
 
 interface ServiceLocation extends Locator
 {
-    public function set($name, $service);
+
+    public function set ($name, $service);
 }

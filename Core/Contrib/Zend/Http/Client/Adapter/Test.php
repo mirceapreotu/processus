@@ -23,9 +23,7 @@
  * @namespace
  */
 namespace Zend\Http\Client\Adapter;
-use Zend\Http\Client\Adapter as HttpAdapter,
-    Zend\Http\Client\Adapter\Exception as AdapterException,
-    Zend\Http\Response;
+use Zend\Http\Client\Adapter as HttpAdapter, Zend\Http\Client\Adapter\Exception as AdapterException, Zend\Http\Response;
 
 /**
  * A testing-purposes adapter.
@@ -43,6 +41,7 @@ use Zend\Http\Client\Adapter as HttpAdapter,
  */
 class Test implements HttpAdapter
 {
+
     /**
      * Parameters array
      *
@@ -76,8 +75,8 @@ class Test implements HttpAdapter
      * Adapter constructor, currently empty. Config is set using setConfig()
      *
      */
-    public function __construct()
-    { }
+    public function __construct ()
+    {}
 
     /**
      * Set the nextRequestWillFail flag
@@ -85,10 +84,10 @@ class Test implements HttpAdapter
      * @param boolean $flag
      * @return \Zend\Http\Client\Adapter\Test
      */
-    public function setNextRequestWillFail($flag)
+    public function setNextRequestWillFail ($flag)
     {
         $this->_nextRequestWillFail = (bool) $flag;
-
+        
         return $this;
     }
 
@@ -97,22 +96,21 @@ class Test implements HttpAdapter
      *
      * @param \Zend\Config\Config | array $config
      */
-    public function setConfig($config = array())
+    public function setConfig ($config = array())
     {
         if ($config instanceof \Zend\Config\Config) {
             $config = $config->toArray();
-
+        
         } elseif (! is_array($config)) {
             throw new AdapterException\InvalidArgumentException(
-                'Array or Zend\Config\Config object expected, got ' . gettype($config)
-            );
+            'Array or Zend\Config\Config object expected, got ' .
+             gettype($config));
         }
-
+        
         foreach ($config as $k => $v) {
             $this->config[strtolower($k)] = $v;
         }
     }
-
 
     /**
      * Connect to the remote server
@@ -123,7 +121,7 @@ class Test implements HttpAdapter
      * @param int     $timeout
      * @throws \Zend\Http\Client\Adapter\Exception
      */
-    public function connect($host, $port = 80, $secure = false)
+    public function connect ($host, $port = 80, $secure = false)
     {
         if ($this->_nextRequestWillFail) {
             $this->_nextRequestWillFail = false;
@@ -141,27 +139,30 @@ class Test implements HttpAdapter
      * @param string        $body
      * @return string Request as string
      */
-    public function write($method, $uri, $http_ver = '1.1', $headers = array(), $body = '')
+    public function write ($method, $uri, $http_ver = '1.1', $headers = array(), $body = '')
     {
         $host = $uri->getHost();
-            $host = (strtolower($uri->getScheme()) == 'https' ? 'sslv2://' . $host : $host);
-
+        $host = (strtolower($uri->getScheme()) == 'https' ? 'sslv2://' . $host : $host);
+        
         // Build request headers
         $path = $uri->getPath();
         if (empty($path)) {
             $path = '/';
         }
-        if ($uri->getQuery()) $path .= '?' . $uri->getQuery();
+        if ($uri->getQuery())
+            $path .= '?' . $uri->getQuery();
         $request = "{$method} {$path} HTTP/{$http_ver}\r\n";
         foreach ($headers as $k => $v) {
-            if (is_string($k)) $v = ucfirst($k) . ": $v";
+            if (is_string($k))
+                $v = ucfirst($k) . ": $v";
             $request .= "$v\r\n";
         }
-
+        
         // Add the request body
         $request .= "\r\n" . $body;
-
+        
         // Do nothing - just return the request as string
+        
 
         return $request;
     }
@@ -171,33 +172,33 @@ class Test implements HttpAdapter
      *
      * @return string
      */
-    public function read()
+    public function read ()
     {
         if ($this->responseIndex >= count($this->responses)) {
             $this->responseIndex = 0;
         }
-        return $this->responses[$this->responseIndex++];
+        return $this->responses[$this->responseIndex ++];
     }
 
     /**
      * Close the connection (dummy)
      *
      */
-    public function close()
-    { }
+    public function close ()
+    {}
 
     /**
      * Set the HTTP response(s) to be returned by this adapter
      *
      * @param \Zend\Http\Response|array|string $response
      */
-    public function setResponse($response)
+    public function setResponse ($response)
     {
         if ($response instanceof Response) {
             $response = $response->asString("\r\n");
         }
-
-        $this->responses = (array)$response;
+        
+        $this->responses = (array) $response;
         $this->responseIndex = 0;
     }
 
@@ -206,12 +207,12 @@ class Test implements HttpAdapter
      *
      * @param string \Zend\Http\Response|$response
      */
-    public function addResponse($response)
+    public function addResponse ($response)
     {
-         if ($response instanceof Response) {
+        if ($response instanceof Response) {
             $response = $response->toString();
         }
-
+        
         $this->responses[] = $response;
     }
 
@@ -221,11 +222,11 @@ class Test implements HttpAdapter
      *
      * @param integer $index
      */
-    public function setResponseIndex($index)
+    public function setResponseIndex ($index)
     {
         if ($index < 0 || $index >= count($this->responses)) {
             throw new AdapterException\OutOfRangeException(
-                'Index out of range of response buffer size');
+            'Index out of range of response buffer size');
         }
         $this->responseIndex = $index;
     }

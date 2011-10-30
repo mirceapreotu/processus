@@ -35,11 +35,12 @@ namespace Zend\Dojo\View\Helper;
  */
 class Button extends Dijit
 {
+
     /**
      * Dijit being used
      * @var string
      */
-    protected $_dijit  = 'dijit.form.Button';
+    protected $_dijit = 'dijit.form.Button';
 
     /**
      * Dojo module to use
@@ -56,14 +57,15 @@ class Button extends Dijit
      * @param  array $attribs HTML attributes
      * @return string
      */
-    public function __invoke($id = null, $value = null, array $params = array(), array $attribs = array())
+    public function __invoke ($id = null, $value = null, array $params = array(), 
+    array $attribs = array())
     {
         $attribs['name'] = $id;
-        if (!array_key_exists('id', $attribs)) {
+        if (! array_key_exists('id', $attribs)) {
             $attribs['id'] = $id;
         }
         $attribs = $this->_prepareDijit($attribs, $params, 'element');
-
+        
         return $this->view->formButton($id, $value, $attribs);
     }
 }

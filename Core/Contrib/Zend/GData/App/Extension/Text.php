@@ -41,16 +41,17 @@ abstract class Text extends Extension
 {
 
     protected $_rootElement = null;
+
     protected $_type = 'text';
 
-    public function __construct($text = null, $type = 'text')
+    public function __construct ($text = null, $type = 'text')
     {
         parent::__construct();
         $this->_text = $text;
         $this->_type = $type;
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_type !== null) {
@@ -59,21 +60,21 @@ abstract class Text extends Extension
         return $element;
     }
 
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'type':
-            $this->_type = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'type':
+                $this->_type = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
     /*
      * @return Zend\GData\App\Extension\Type
      */
-    public function getType()
+    public function getType ()
     {
         return $this->_type;
     }
@@ -82,7 +83,7 @@ abstract class Text extends Extension
      * @param string $value
      * @return Zend\GData\App\Extension\Text Provides a fluent interface
      */
-    public function setType($value)
+    public function setType ($value)
     {
         $this->_type = $value;
         return $this;

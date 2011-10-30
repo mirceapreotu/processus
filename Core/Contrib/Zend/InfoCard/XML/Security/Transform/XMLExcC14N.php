@@ -24,8 +24,7 @@
  */
 namespace Zend\InfoCard\XML\Security\Transform;
 
-use Zend\InfoCard\XML\Security\Transform,
-    Zend\InfoCard\XML\Security\Exception;
+use Zend\InfoCard\XML\Security\Transform, Zend\InfoCard\XML\Security\Exception;
 
 /**
  * A Transform to perform C14n XML Exclusive Canonicalization
@@ -41,6 +40,7 @@ use Zend\InfoCard\XML\Security\Transform,
  */
 class XMLExcC14N implements Transform
 {
+
     /**
      * Transform the input XML based on C14n XML Exclusive Canonicalization rules
      *
@@ -48,15 +48,16 @@ class XMLExcC14N implements Transform
      * @param string $strXMLData The input XML
      * @return string The output XML
      */
-    public function transform($strXMLData)
+    public function transform ($strXMLData)
     {
         $dom = new \DOMDocument();
         $dom->loadXML($strXMLData);
-
-        if(method_exists($dom, 'C14N')) {
+        
+        if (method_exists($dom, 'C14N')) {
             return $dom->C14N(true, false);
         }
-
-        throw new Exception\RuntimeException("This transform requires the C14N() method to exist in the DOM extension");
+        
+        throw new Exception\RuntimeException(
+        "This transform requires the C14N() method to exist in the DOM extension");
     }
 }

@@ -45,9 +45,9 @@ class DocumentListEntry extends \Zend\GData\Entry
      * Create a new instance of an entry representing a document.
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(Docs::$namespaces);
         parent::__construct($element);

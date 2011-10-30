@@ -31,6 +31,7 @@ namespace Zend\Loader;
  */
 interface Broker
 {
+
     /**
      * Load a plugin and return it
      * 
@@ -38,14 +39,14 @@ interface Broker
      * @param  null|array $options Options to pass to the plugin constructor
      * @return object
      */
-    public function load($plugin, array $options = null);
+    public function load ($plugin, array $options = null);
 
     /**
      * Retrieve list of all loaded plugins
      * 
      * @return array
      */
-    public function getPlugins();
+    public function getPlugins ();
 
     /**
      * Whether or not a given plugin has been loaded or registered
@@ -53,7 +54,7 @@ interface Broker
      * @param  string $name 
      * @return bool
      */
-    public function isLoaded($name);
+    public function isLoaded ($name);
 
     /**
      * Register a named plugin
@@ -62,7 +63,7 @@ interface Broker
      * @param  string|object $plugin Plugin class or object
      * @return void
      */
-    public function register($name, $plugin);
+    public function register ($name, $plugin);
 
     /**
      * Unregister a named plugin
@@ -70,7 +71,7 @@ interface Broker
      * @param  string $name 
      * @return void
      */
-    public function unregister($name);
+    public function unregister ($name);
 
     /**
      * Set class loader to use when resolving plugin names to classes
@@ -78,12 +79,12 @@ interface Broker
      * @param  ShortNameLocator $loader 
      * @return void
      */
-    public function setClassLoader(ShortNameLocator $loader);
+    public function setClassLoader (ShortNameLocator $loader);
 
     /**
      * Retrieve the plugin class loader
      * 
      * @return ShortNameLocator
      */
-    public function getClassLoader();
+    public function getClassLoader ();
 }

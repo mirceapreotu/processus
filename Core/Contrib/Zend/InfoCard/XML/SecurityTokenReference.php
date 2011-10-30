@@ -37,6 +37,7 @@ namespace Zend\InfoCard\XML;
  */
 class SecurityTokenReference extends AbstractElement
 {
+
     /**
      * Base64 Binary Encoding URI
      */
@@ -49,23 +50,27 @@ class SecurityTokenReference extends AbstractElement
      * @return \Zend\InfoCard\XML\SecurityTokenReference
      * @throws \Zend\InfoCard\XML\Exception
      */
-    static public function getInstance($xmlData)
+    static public function getInstance ($xmlData)
     {
-        if($xmlData instanceof AbstractElement) {
+        if ($xmlData instanceof AbstractElement) {
             $strXmlData = $xmlData->asXML();
-        } else if (is_string($xmlData)) {
-            $strXmlData = $xmlData;
-        } else {
-            throw new Exception\InvalidArgumentException("Invalid Data provided to create instance");
-        }
-
+        } else 
+            if (is_string($xmlData)) {
+                $strXmlData = $xmlData;
+            } else {
+                throw new Exception\InvalidArgumentException(
+                "Invalid Data provided to create instance");
+            }
+        
         $sxe = simplexml_load_string($strXmlData);
-
-        if($sxe->getName() != "SecurityTokenReference") {
-            throw new Exception\InvalidArgumentException("Invalid XML Block provided for SecurityTokenReference");
+        
+        if ($sxe->getName() != "SecurityTokenReference") {
+            throw new Exception\InvalidArgumentException(
+            "Invalid XML Block provided for SecurityTokenReference");
         }
-
-        return simplexml_load_string($strXmlData, 'Zend\InfoCard\XML\SecurityTokenReference');
+        
+        return simplexml_load_string($strXmlData, 
+        'Zend\InfoCard\XML\SecurityTokenReference');
     }
 
     /**
@@ -74,15 +79,17 @@ class SecurityTokenReference extends AbstractElement
      * @return \Zend\InfoCard\XML\AbstractElement
      * @throws \Zend\InfoCard\XML\Exception
      */
-    protected function _getKeyIdentifier()
+    protected function _getKeyIdentifier ()
     {
-        $this->registerXPathNamespace('o', 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd');
-        list($keyident) = $this->xpath('//o:KeyIdentifier');
-
-        if(!($keyident instanceof AbstractElement)) {
-            throw new Exception\RuntimeException("Failed to retrieve Key Identifier");
+        $this->registerXPathNamespace('o', 
+        'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd');
+        list ($keyident) = $this->xpath('//o:KeyIdentifier');
+        
+        if (! ($keyident instanceof AbstractElement)) {
+            throw new Exception\RuntimeException(
+            "Failed to retrieve Key Identifier");
         }
-
+        
         return $keyident;
     }
 
@@ -92,20 +99,20 @@ class SecurityTokenReference extends AbstractElement
      * @return string The thumbprint type URI
      * @throws  \Zend\InfoCard\XML\Exception
      */
-    public function getKeyThumbprintType()
+    public function getKeyThumbprintType ()
     {
-
+        
         $keyident = $this->_getKeyIdentifier();
-
+        
         $dom = self::convertToDOM($keyident);
-
-        if(!$dom->hasAttribute('ValueType')) {
-            throw new Exception\RuntimeException("Key Identifier did not provide a type for the value");
+        
+        if (! $dom->hasAttribute('ValueType')) {
+            throw new Exception\RuntimeException(
+            "Key Identifier did not provide a type for the value");
         }
-
+        
         return $dom->getAttribute('ValueType');
     }
-
 
     /**
      * Return the thumbprint encoding type used as a URI
@@ -113,17 +120,18 @@ class SecurityTokenReference extends AbstractElement
      * @return string the URI of the thumbprint encoding used
      * @throws \Zend\InfoCard\XML\Exception
      */
-    public function getKeyThumbprintEncodingType()
+    public function getKeyThumbprintEncodingType ()
     {
-
+        
         $keyident = $this->_getKeyIdentifier();
-
+        
         $dom = self::convertToDOM($keyident);
-
-        if(!$dom->hasAttribute('EncodingType')) {
-            throw new Exception\RuntimeException("Unable to determine the encoding type for the key identifier");
+        
+        if (! $dom->hasAttribute('EncodingType')) {
+            throw new Exception\RuntimeException(
+            "Unable to determine the encoding type for the key identifier");
         }
-
+        
         return $dom->getAttribute('EncodingType');
     }
 
@@ -134,35 +142,38 @@ class SecurityTokenReference extends AbstractElement
      * @return string the key reference thumbprint, either in binary or encoded form
      * @throws \Zend\InfoCard\XML\Exception
      */
-    public function getKeyReference($decode = true)
+    public function getKeyReference ($decode = true)
     {
         $keyIdentifier = $this->_getKeyIdentifier();
-
+        
         $dom = self::convertToDOM($keyIdentifier);
         $encoded = $dom->nodeValue;
-
-        if(empty($encoded)) {
-            throw new Exception\InvalidArgumentException("Could not find the Key Reference Encoded Value");
+        
+        if (empty($encoded)) {
+            throw new Exception\InvalidArgumentException(
+            "Could not find the Key Reference Encoded Value");
         }
-
-        if($decode) {
-
+        
+        if ($decode) {
+            
             $decoded = "";
-            switch($this->getKeyThumbprintEncodingType()) {
+            switch ($this->getKeyThumbprintEncodingType()) {
                 case self::ENCODING_BASE64BIN:
                     $decoded = base64_decode($encoded, true);
                     break;
                 default:
-                    throw new Exception\RuntimeException("Unknown Key Reference Encoding Type: {$this->getKeyThumbprintEncodingType()}");
+                    throw new Exception\RuntimeException(
+                    "Unknown Key Reference Encoding Type: {$this->getKeyThumbprintEncodingType()}");
             }
-
-            if(!$decoded || empty($decoded)) {
-                throw new Exception\RuntimeException("Failed to decode key reference");
+            
+            if (! $decoded || empty($decoded)) {
+                throw new Exception\RuntimeException(
+                "Failed to decode key reference");
             }
-
+            
             return $decoded;
         }
-
+        
         return $encoded;
     }
 }

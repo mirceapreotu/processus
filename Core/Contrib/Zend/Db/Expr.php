@@ -51,6 +51,7 @@ namespace Zend\Db;
  */
 class Expr
 {
+
     /**
      * Storage for the SQL expression.
      *
@@ -64,7 +65,7 @@ class Expr
      *
      * @param string $expression The string containing a SQL expression.
      */
-    public function __construct($expression)
+    public function __construct ($expression)
     {
         $this->_expression = (string) $expression;
     }
@@ -72,7 +73,7 @@ class Expr
     /**
      * @return string The string of the SQL expression stored in this object.
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->_expression;
     }

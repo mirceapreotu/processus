@@ -35,8 +35,7 @@ namespace Zend\GData\Books\Extension;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class BooksCategory extends
-    \Zend\GData\App\Extension\Category
+class BooksCategory extends \Zend\GData\App\Extension\Category
 {
 
     /**
@@ -44,13 +43,13 @@ class BooksCategory extends
      * Describes a books category
      *
      * @param string|null $term An identifier representing the category within
-     *        the categorization scheme.
+     * the categorization scheme.
      * @param string|null $scheme A string containing a URI identifying the
-     *        categorization scheme.
+     * categorization scheme.
      * @param string|null $label A human-readable label for display in
-     *        end-user applications.
+     * end-user applications.
      */
-    public function __construct($term = null, $scheme = null, $label = null)
+    public function __construct ($term = null, $scheme = null, $label = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Books::$namespaces);
         parent::__construct($term, $scheme, $label);

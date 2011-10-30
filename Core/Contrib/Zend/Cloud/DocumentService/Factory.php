@@ -24,8 +24,7 @@
  */
 namespace Zend\Cloud\DocumentService;
 
-use Zend\Cloud\AbstractFactory,
-    Zend\Cloud\Exception\InvalidArgumentException;
+use Zend\Cloud\AbstractFactory, Zend\Cloud\Exception\InvalidArgumentException;
 
 /**
  * Class implementing working with Azure queries in a structured way
@@ -40,6 +39,7 @@ use Zend\Cloud\AbstractFactory,
  */
 class Factory extends AbstractFactory
 {
+
     const DOCUMENT_ADAPTER_KEY = 'document_adapter';
 
     /**
@@ -52,7 +52,7 @@ class Factory extends AbstractFactory
      *
      * @return void
      */
-    private function __construct()
+    private function __construct ()
     {
         // private ctor - should not be used
     }
@@ -63,18 +63,16 @@ class Factory extends AbstractFactory
      * @param array $options
      * @return void
      */
-    public static function getAdapter($options = array())
+    public static function getAdapter ($options = array())
     {
         $adapter = parent::_getAdapter(self::DOCUMENT_ADAPTER_KEY, $options);
-        if (!$adapter) {
+        if (! $adapter) {
             throw new InvalidArgumentException(
-                'Class must be specified using the \''
-                . self::DOCUMENT_ADAPTER_KEY . '\' key'
-            );
-        } elseif (!$adapter instanceof self::$_adapterInterface) {
+            'Class must be specified using the \'' . self::DOCUMENT_ADAPTER_KEY .
+             '\' key');
+        } elseif (! $adapter instanceof self::$_adapterInterface) {
             throw new InvalidArgumentException(
-                'Adapter must implement \'' . self::$_adapterInterface . '\''
-            );
+            'Adapter must implement \'' . self::$_adapterInterface . '\'');
         }
         return $adapter;
     }

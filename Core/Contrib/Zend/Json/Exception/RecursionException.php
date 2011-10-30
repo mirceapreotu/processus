@@ -31,4 +31,5 @@ namespace Zend\Json\Exception;
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class RecursionException extends RuntimeException
-{}
+{
+}

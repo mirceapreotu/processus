@@ -34,25 +34,25 @@ use Zend\Loader\PluginClassLoader;
  */
 class HelperLoader extends PluginClassLoader
 {
+
     /**
      * @var array Pre-aliased view helpers
      */
     protected $plugins = array(
-        'action_stack'       => 'Zend\Controller\Action\Helper\ActionStack',
-        'actionstack'        => 'Zend\Controller\Action\Helper\ActionStack',
-        'ajax_context'       => 'Zend\Controller\Action\Helper\AjaxContext',
-        'ajaxcontext'        => 'Zend\Controller\Action\Helper\AjaxContext',
-        'auto_complete_dojo' => 'Zend\Controller\Action\Helper\AutoCompleteDojo',
-        'autocompletedojo'   => 'Zend\Controller\Action\Helper\AutoCompleteDojo',
-        'cache'              => 'Zend\Controller\Action\Helper\Cache',
-        'context_switch'     => 'Zend\Controller\Action\Helper\ContextSwitch',
-        'contextswitch'      => 'Zend\Controller\Action\Helper\ContextSwitch',
-        'flash_messenger'    => 'Zend\Controller\Action\Helper\FlashMessenger',
-        'flashmessenger'     => 'Zend\Controller\Action\Helper\FlashMessenger',
-        'json'               => 'Zend\Controller\Action\Helper\Json',
-        'redirector'         => 'Zend\Controller\Action\Helper\Redirector',
-        'url'                => 'Zend\Controller\Action\Helper\Url',
-        'view_renderer'      => 'Zend\Controller\Action\Helper\ViewRenderer',
-        'viewrenderer'       => 'Zend\Controller\Action\Helper\ViewRenderer',
-    );
+    'action_stack' => 'Zend\Controller\Action\Helper\ActionStack', 
+    'actionstack' => 'Zend\Controller\Action\Helper\ActionStack', 
+    'ajax_context' => 'Zend\Controller\Action\Helper\AjaxContext', 
+    'ajaxcontext' => 'Zend\Controller\Action\Helper\AjaxContext', 
+    'auto_complete_dojo' => 'Zend\Controller\Action\Helper\AutoCompleteDojo', 
+    'autocompletedojo' => 'Zend\Controller\Action\Helper\AutoCompleteDojo', 
+    'cache' => 'Zend\Controller\Action\Helper\Cache', 
+    'context_switch' => 'Zend\Controller\Action\Helper\ContextSwitch', 
+    'contextswitch' => 'Zend\Controller\Action\Helper\ContextSwitch', 
+    'flash_messenger' => 'Zend\Controller\Action\Helper\FlashMessenger', 
+    'flashmessenger' => 'Zend\Controller\Action\Helper\FlashMessenger', 
+    'json' => 'Zend\Controller\Action\Helper\Json', 
+    'redirector' => 'Zend\Controller\Action\Helper\Redirector', 
+    'url' => 'Zend\Controller\Action\Helper\Url', 
+    'view_renderer' => 'Zend\Controller\Action\Helper\ViewRenderer', 
+    'viewrenderer' => 'Zend\Controller\Action\Helper\ViewRenderer');
 }

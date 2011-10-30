@@ -11,46 +11,47 @@ class Age implements HeaderDescription
 
     protected $deltaSeconds = null;
 
-    public static function fromString($headerLine)
+    public static function fromString ($headerLine)
     {
         $header = new static();
-
-        list($name, $value) = preg_split('#: #', $headerLine, 2);
-
+        
+        list ($name, $value) = preg_split('#: #', $headerLine, 2);
+        
         // check to ensure proper header type for this factory
         if (strtolower($name) !== 'age') {
-            throw new Exception\InvalidArgumentException('Invalid header line for Age string');
+            throw new Exception\InvalidArgumentException(
+            'Invalid header line for Age string');
         }
-
+        
         $header->deltaSeconds = $value;
-
+        
         return $header;
     }
 
-    public function getFieldName()
+    public function getFieldName ()
     {
         return 'Age';
     }
 
-    public function getFieldValue()
+    public function getFieldValue ()
     {
         return $this->getDeltaSeconds();
     }
 
-    public function setDeltaSeconds($deltaSeconds)
+    public function setDeltaSeconds ($deltaSeconds)
     {
         $this->deltaSeconds = $deltaSeconds;
         return $this;
     }
 
-    public function getDeltaSeconds()
+    public function getDeltaSeconds ()
     {
         return $this->deltaSeconds;
     }
 
-    public function toString()
+    public function toString ()
     {
         return 'Age: ' . $this->getFieldValue();
     }
-    
+
 }

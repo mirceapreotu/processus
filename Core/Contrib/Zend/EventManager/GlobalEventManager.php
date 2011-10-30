@@ -23,9 +23,7 @@
  */
 namespace Zend\EventManager;
 
-use Zend\Stdlib\CallbackHandler,
-    Zend\Stdlib\PriorityQueue,
-    ArrayObject;
+use Zend\Stdlib\CallbackHandler, Zend\Stdlib\PriorityQueue, ArrayObject;
 
 /**
  * Event manager: notification system
@@ -40,6 +38,7 @@ use Zend\Stdlib\CallbackHandler,
  */
 class GlobalEventManager
 {
+
     /**
      * @var EventCollection
      */
@@ -51,7 +50,7 @@ class GlobalEventManager
      * @param  null|EventCollection $events 
      * @return void
      */
-    public static function setEventCollection(EventCollection $events = null)
+    public static function setEventCollection (EventCollection $events = null)
     {
         static::$events = $events;
     }
@@ -61,7 +60,7 @@ class GlobalEventManager
      * 
      * @return void
      */
-    public static function getEventCollection()
+    public static function getEventCollection ()
     {
         if (null === static::$events) {
             static::setEventCollection(new EventManager());
@@ -77,7 +76,7 @@ class GlobalEventManager
      * @param  array|object $argv 
      * @return ResponseCollection
      */
-    public static function trigger($event, $context, $argv = array())
+    public static function trigger ($event, $context, $argv = array())
     {
         return static::getEventCollection()->trigger($event, $context, $argv);
     }
@@ -92,9 +91,10 @@ class GlobalEventManager
      * @param  callback $callback 
      * @return ResponseCollection
      */
-    public static function triggerUntil($event, $context, $argv, $callback)
+    public static function triggerUntil ($event, $context, $argv, $callback)
     {
-        return static::getEventCollection()->triggerUntil($event, $context, $argv, $callback);
+        return static::getEventCollection()->triggerUntil($event, $context, 
+        $argv, $callback);
     }
 
     /**
@@ -105,9 +105,10 @@ class GlobalEventManager
      * @param  int $priority 
      * @return CallbackHandler
      */
-    public static function attach($event, $callback, $priority = 1)
+    public static function attach ($event, $callback, $priority = 1)
     {
-        return static::getEventCollection()->attach($event, $callback, $priority);
+        return static::getEventCollection()->attach($event, $callback, 
+        $priority);
     }
 
     /**
@@ -116,7 +117,7 @@ class GlobalEventManager
      * @param  CallbackHandler $listener 
      * @return bool
      */
-    public static function detach(CallbackHandler $listener)
+    public static function detach (CallbackHandler $listener)
     {
         return static::getEventCollection()->detach($listener);
     }
@@ -126,7 +127,7 @@ class GlobalEventManager
      * 
      * @return array
      */
-    public static function getEvents()
+    public static function getEvents ()
     {
         return static::getEventCollection()->getEvents();
     }
@@ -137,7 +138,7 @@ class GlobalEventManager
      * @param  string $event 
      * @return PriorityQueue|array
      */
-    public static function getListeners($event)
+    public static function getListeners ($event)
     {
         return static::getEventCollection()->getListeners($event);
     }
@@ -148,7 +149,7 @@ class GlobalEventManager
      * @param  string $event 
      * @return void
      */
-    public static function clearListeners($event)
+    public static function clearListeners ($event)
     {
         return static::getEventCollection()->clearListeners($event);
     }

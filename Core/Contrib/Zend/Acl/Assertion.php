@@ -34,6 +34,7 @@ namespace Zend\Acl;
  */
 interface Assertion
 {
+
     /**
      * Returns true if and only if the assertion conditions are met
      *
@@ -47,5 +48,6 @@ interface Assertion
      * @param  string            $privilege
      * @return boolean
      */
-    public function assert(Acl $acl, Role $role = null, Resource $resource = null, $privilege = null);
+    public function assert (Acl $acl, Role $role = null, Resource $resource = null, 
+    $privilege = null);
 }

@@ -45,14 +45,15 @@ class LicenseTag extends \Zend\Code\Generator\Docblock\Tag
      * @param \Zend\Code\Reflection\ReflectionDocblockTag $reflectionTagReturn
      * @return \Zend\Code\Generator\Docblock\Tag\LicenseTag
      */
-    public static function fromReflection(\Zend\Code\Reflection\ReflectionDocblockTag $reflectionTagLicense)
+    public static function fromReflection (
+    \Zend\Code\Reflection\ReflectionDocblockTag $reflectionTagLicense)
     {
         $returnTag = new self();
-
+        
         $returnTag->setName('license');
         $returnTag->setUrl($reflectionTagLicense->getUrl());
         $returnTag->setDescription($reflectionTagLicense->getDescription());
-
+        
         return $returnTag;
     }
 
@@ -62,7 +63,7 @@ class LicenseTag extends \Zend\Code\Generator\Docblock\Tag
      * @param string $url
      * @return \Zend\Code\Generator\Docblock\Tag\LicenseTag
      */
-    public function setUrl($url)
+    public function setUrl ($url)
     {
         $this->_url = $url;
         return $this;
@@ -73,20 +74,20 @@ class LicenseTag extends \Zend\Code\Generator\Docblock\Tag
      *
      * @return string
      */
-    public function getUrl()
+    public function getUrl ()
     {
         return $this->_url;
     }
-
 
     /**
      * generate()
      *
      * @return string
      */
-    public function generate()
+    public function generate ()
     {
-        $output = '@license ' . $this->_url . ' ' . $this->description . self::LINE_FEED;
+        $output = '@license ' . $this->_url . ' ' . $this->description .
+         self::LINE_FEED;
         return $output;
     }
 

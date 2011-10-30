@@ -68,9 +68,9 @@ class EmailListRecipientEntry extends \Zend\GData\Entry
      * Create a new instance.
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(GApps::$namespaces);
         parent::__construct($element);
@@ -83,9 +83,9 @@ class EmailListRecipientEntry extends \Zend\GData\Entry
      *
      * @param DOMDocument $doc The DOMDocument used to construct DOMElements
      * @return DOMElement The DOMElement representing this element and all
-     *          child properties.
+     * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_who !== null) {
@@ -100,12 +100,12 @@ class EmailListRecipientEntry extends \Zend\GData\Entry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
-
+        
         switch ($absoluteNodeName) {
-            case $this->lookupNamespace('gd') . ':' . 'who';
+            case $this->lookupNamespace('gd') . ':' . 'who':
                 $who = new \Zend\GData\Extension\Who();
                 $who->transferFromDOM($child);
                 $this->_who = $who;
@@ -122,7 +122,7 @@ class EmailListRecipientEntry extends \Zend\GData\Entry
      * @see setWho
      * @return \Zend\GData\Extension\Who The requested object.
      */
-    public function getWho()
+    public function getWho ()
     {
         return $this->_who;
     }
@@ -132,10 +132,10 @@ class EmailListRecipientEntry extends \Zend\GData\Entry
      * is used to store the email address of the current recipient.
      *
      * @param \Zend\GData\Extension\Who $value The desired value for this
-     *          instance's who property.
+     * instance's who property.
      * @return Zend_Gdata_GApps_EventEntry Provides a fluent interface.
      */
-    public function setWho($value)
+    public function setWho ($value)
     {
         $this->_who = $value;
         return $this;

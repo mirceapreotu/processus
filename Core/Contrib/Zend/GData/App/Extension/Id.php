@@ -41,7 +41,7 @@ class Id extends Extension
 
     protected $_rootElement = 'id';
 
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         parent::__construct();
         $this->_text = $text;

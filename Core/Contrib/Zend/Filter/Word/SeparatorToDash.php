@@ -32,13 +32,14 @@ namespace Zend\Filter\Word;
  */
 class SeparatorToDash extends SeparatorToSeparator
 {
+
     /**
      * Constructor
      *
      * @param  string  $searchSeparator  Seperator to search for change
      * @return void
      */
-    public function __construct($searchSeparator = ' ')
+    public function __construct ($searchSeparator = ' ')
     {
         parent::__construct($searchSeparator, '-');
     }

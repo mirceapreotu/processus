@@ -24,9 +24,7 @@
  */
 namespace Zend\Dojo\View\Helper;
 
-use Zend\Json\Json,
-    Zend\View\Renderer as View,
-    Zend\View\Helper\HtmlElement;
+use Zend\Json\Json, Zend\View\Renderer as View, Zend\View\Helper\HtmlElement;
 
 /**
  * Dojo dijit base class
@@ -41,6 +39,7 @@ use Zend\Json\Json,
  */
 abstract class Dijit extends HtmlElement
 {
+
     /**
      * @var \Zend\Dojo\View\Helper\Dojo\Container
      */
@@ -84,7 +83,7 @@ abstract class Dijit extends HtmlElement
      * @param  \Zend\View\Renderer $view
      * @return \Zend\Dojo\View\Helper\Dijit
      */
-    public function setView(View $view)
+    public function setView (View $view)
     {
         parent::setView($view);
         $this->dojo = $this->view->plugin('dojo');
@@ -92,13 +91,12 @@ abstract class Dijit extends HtmlElement
         return $this;
     }
 
-
     /**
      * Get root node type
      *
      * @return string
      */
-    public function getRootNode()
+    public function getRootNode ()
     {
         return $this->_rootNode;
     }
@@ -109,7 +107,7 @@ abstract class Dijit extends HtmlElement
      * @param  string $value
      * @return \Zend\Dojo\View\Helper\Dijit
      */
-    public function setRootNode($value)
+    public function setRootNode ($value)
     {
         $this->_rootNode = $value;
         return $this;
@@ -120,7 +118,7 @@ abstract class Dijit extends HtmlElement
      *
      * @return bool
      */
-    protected function _useDeclarative()
+    protected function _useDeclarative ()
     {
         return Dojo::useDeclarative();
     }
@@ -130,7 +128,7 @@ abstract class Dijit extends HtmlElement
      *
      * @return bool
      */
-    protected function _useProgrammatic()
+    protected function _useProgrammatic ()
     {
         return Dojo::useProgrammatic();
     }
@@ -140,7 +138,7 @@ abstract class Dijit extends HtmlElement
      *
      * @return bool
      */
-    protected function _useProgrammaticNoScript()
+    protected function _useProgrammaticNoScript ()
     {
         return Dojo::useProgrammaticNoScript();
     }
@@ -155,16 +153,16 @@ abstract class Dijit extends HtmlElement
      * @param  string|null $dijit
      * @return string
      */
-    protected function _createLayoutContainer($id, $content, array $params, array $attribs, $dijit = null)
+    protected function _createLayoutContainer ($id, $content, array $params, 
+    array $attribs, $dijit = null)
     {
         $attribs['id'] = $id;
         $attribs = $this->_prepareDijit($attribs, $params, 'layout', $dijit);
-
+        
         $nodeType = $this->getRootNode();
-        $html = '<' . $nodeType . $this->_htmlAttribs($attribs) . '>'
-              . $content
-              . "</$nodeType>\n";
-
+        $html = '<' . $nodeType . $this->_htmlAttribs($attribs) . '>' . $content .
+         "</$nodeType>\n";
+        
         return $html;
     }
 
@@ -178,20 +176,20 @@ abstract class Dijit extends HtmlElement
      * @param  string|null $dijit
      * @return string
      */
-    public function _createFormElement($id, $value, array $params, array $attribs, $dijit = null)
+    public function _createFormElement ($id, $value, array $params, 
+    array $attribs, $dijit = null)
     {
-        if (!array_key_exists('id', $attribs)) {
+        if (! array_key_exists('id', $attribs)) {
             $attribs['id'] = $id;
         }
-        $attribs['name']  = $id;
+        $attribs['name'] = $id;
         $attribs['value'] = (string) $value;
-        $attribs['type']  = $this->_elementType;
-
+        $attribs['type'] = $this->_elementType;
+        
         $attribs = $this->_prepareDijit($attribs, $params, 'element', $dijit);
-
-        $html = '<input'
-              . $this->_htmlAttribs($attribs)
-              . $this->getClosingBracket();
+        
+        $html = '<input' . $this->_htmlAttribs($attribs) .
+         $this->getClosingBracket();
         return $html;
     }
 
@@ -206,10 +204,11 @@ abstract class Dijit extends HtmlElement
      * @param  string $dijit Dijit type to use (otherwise, pull from $_dijit)
      * @return array
      */
-    protected function _prepareDijit(array $attribs, array $params, $type, $dijit = null)
+    protected function _prepareDijit (array $attribs, array $params, $type, 
+    $dijit = null)
     {
         $this->dojo->requireModule($this->_module);
-
+        
         switch ($type) {
             case 'layout':
                 $stripParams = array('id');
@@ -231,20 +230,20 @@ abstract class Dijit extends HtmlElement
                 break;
             default:
         }
-
+        
         foreach ($stripParams as $param) {
             if (array_key_exists($param, $params)) {
                 unset($params[$param]);
             }
         }
-
+        
         // Normalize constraints, if present
         foreach ($this->_jsonParams as $param) {
             if (array_key_exists($param, $params)) {
                 if (is_array($params[$param])) {
                     $values = array();
                     foreach ($params[$param] as $key => $value) {
-                        if (!is_scalar($value)) {
+                        if (! is_scalar($value)) {
                             continue;
                         }
                         $values[$key] = $value;
@@ -261,7 +260,7 @@ abstract class Dijit extends HtmlElement
                 $params[$param] = $values;
             }
         }
-
+        
         $dijit = (null === $dijit) ? $this->_dijit : $dijit;
         if ($this->_useDeclarative()) {
             $attribs = array_merge($attribs, $params);
@@ -269,10 +268,10 @@ abstract class Dijit extends HtmlElement
                 $attribs['required'] = ($attribs['required']) ? 'true' : 'false';
             }
             $attribs['dojoType'] = $dijit;
-        } elseif (!$this->_useProgrammaticNoScript()) {
+        } elseif (! $this->_useProgrammaticNoScript()) {
             $this->_createDijit($dijit, $attribs['id'], $params);
         }
-
+        
         return $attribs;
     }
 
@@ -284,12 +283,12 @@ abstract class Dijit extends HtmlElement
      * @param  array $params
      * @return void
      */
-    protected function _createDijit($dijit, $id, array $params)
+    protected function _createDijit ($dijit, $id, array $params)
     {
         $params['dojoType'] = $dijit;
-
+        
         array_walk_recursive($params, array($this, '_castBoolToString'));
-
+        
         $this->dojo->setDijit($id, $params);
     }
 
@@ -300,9 +299,9 @@ abstract class Dijit extends HtmlElement
      * @param  string $key
      * @return void
      */
-    protected function _castBoolToString(&$item, $key)
+    protected function _castBoolToString (&$item, $key)
     {
-        if (!is_bool($item)) {
+        if (! is_bool($item)) {
             return;
         }
         $item = ($item) ? "true" : "false";
@@ -315,14 +314,12 @@ abstract class Dijit extends HtmlElement
      * @param  string|int|float $value
      * @return string
      */
-    protected function _renderHiddenElement($id, $value)
+    protected function _renderHiddenElement ($id, $value)
     {
-        $hiddenAttribs = array(
-            'name'  => $id,
-            'value' => (string) $value,
-            'type'  => 'hidden',
-        );
-        return '<input' . $this->_htmlAttribs($hiddenAttribs) . $this->getClosingBracket();
+        $hiddenAttribs = array('name' => $id, 'value' => (string) $value, 
+        'type' => 'hidden');
+        return '<input' . $this->_htmlAttribs($hiddenAttribs) .
+         $this->getClosingBracket();
     }
 
     /**
@@ -330,9 +327,9 @@ abstract class Dijit extends HtmlElement
      *
      * @return void
      */
-    protected function _createGetParentFormFunction()
+    protected function _createGetParentFormFunction ()
     {
-        $function =<<<EOJ
+        $function = <<<EOJ
 if (zend == undefined) {
     var zend = {};
 }
@@ -343,7 +340,7 @@ zend.findParentForm = function(elementNode) {
     return elementNode;
 };
 EOJ;
-
+        
         $this->dojo->addJavascript($function);
     }
 }

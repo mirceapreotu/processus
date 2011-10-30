@@ -31,5 +31,6 @@ namespace Zend\Layout;
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Exception extends \Exception
-{}
+{
+}
 

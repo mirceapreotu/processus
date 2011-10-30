@@ -2,22 +2,19 @@
 
 namespace Zend\Code\Scanner;
 
-use Zend\Code\Scanner,
-    Zend\Code\Scanner\DirectoryScanner,
-    Zend\Code\Scanner\TokenArrayScanner,
-    Zend\Code\Exception;
+use Zend\Code\Scanner, Zend\Code\Scanner\DirectoryScanner, Zend\Code\Scanner\TokenArrayScanner, Zend\Code\Exception;
 
 class AggregateDirectoryScanner extends DirectoryScanner
 {
-    
+
     protected $isScanned = false;
 
     /**
      * @var DirectoryScanner[]
      */
     protected $scanners = array();
-    
-    public function addScanner(DirectoryScanner $scanner)
+
+    public function addScanner (DirectoryScanner $scanner)
     {
         $this->scanners[] = $scanner;
         
@@ -25,19 +22,20 @@ class AggregateDirectoryScanner extends DirectoryScanner
             $scanner->scan();
         }
     }
-    
-    public function getNamespaces($returnScannerClass = false)
+
+    public function getNamespaces ($returnScannerClass = false)
     {}
-    
+
     /*
     public function getUses($returnScannerClass = false)
     {}
     */
     
-    public function getIncludes($returnScannerClass = false)
+    public function getIncludes ($returnScannerClass = false)
     {}
-    
-    public function getClasses($returnScannerClass = false, $returnDerivedScannerClass = false)
+
+    public function getClasses ($returnScannerClass = false, 
+    $returnDerivedScannerClass = false)
     {
         $classes = array();
         foreach ($this->scanners as $scanner) {
@@ -45,13 +43,14 @@ class AggregateDirectoryScanner extends DirectoryScanner
         }
         if ($returnScannerClass) {
             foreach ($classes as $index => $class) {
-                $classes[$index] = $this->getClass($class, $returnScannerClass, $returnDerivedScannerClass);
+                $classes[$index] = $this->getClass($class, $returnScannerClass, 
+                $returnDerivedScannerClass);
             }
         }
         return $classes;
     }
-    
-    public function hasClass($class)
+
+    public function hasClass ($class)
     {
         foreach ($this->scanners as $scanner) {
             if ($scanner->hasClass($class)) {
@@ -63,8 +62,9 @@ class AggregateDirectoryScanner extends DirectoryScanner
         
         return (isset($scanner));
     }
-    
-    public function getClass($class, $returnScannerClass = true, $returnDerivedScannerClass = false)
+
+    public function getClass ($class, $returnScannerClass = true, 
+    $returnDerivedScannerClass = false)
     {
         foreach ($this->scanners as $scanner) {
             if ($scanner->hasClass($class)) {
@@ -74,19 +74,20 @@ class AggregateDirectoryScanner extends DirectoryScanner
             }
         }
         
-        if (!isset($scanner)) {
-            throw new Exception\RuntimeException('Class by that name was not found.');
+        if (! isset($scanner)) {
+            throw new Exception\RuntimeException(
+            'Class by that name was not found.');
         }
         
         $classScanner = $scanner->getClass($class);
         return new DerivedClassScanner($classScanner, $this);
     }
-    
-    public function getFunctions($returnScannerClass = false)
+
+    public function getFunctions ($returnScannerClass = false)
     {
         $this->scan();
         
-        if (!$returnScannerClass) {
+        if (! $returnScannerClass) {
             $functions = array();
             foreach ($this->infos as $info) {
                 if ($info['type'] == 'function') {
@@ -96,10 +97,11 @@ class AggregateDirectoryScanner extends DirectoryScanner
             return $functions;
         }
         $scannerClass = new FunctionScanner();
-        // @todo
+    
+     // @todo
     }
-
-    /*
+    
+/*
     public static function export()
     {
         // @todo
@@ -110,5 +112,5 @@ class AggregateDirectoryScanner extends DirectoryScanner
         // @todo
     }
     */
-    
+
 }

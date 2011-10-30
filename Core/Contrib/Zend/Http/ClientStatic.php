@@ -35,7 +35,7 @@ use Zend\Http\Client;
  */
 class ClientStatic
 {
-    
+
     protected static $client;
 
     /**
@@ -43,14 +43,14 @@ class ClientStatic
      *
      * @return Zend\Http\Client
      */
-    protected static function getStaticClient()
+    protected static function getStaticClient ()
     {
-        if (!isset(self::$client)) {
+        if (! isset(self::$client)) {
             self::$client = new Client();
         }
         return self::$client;
     }
-    
+
     /**
      * HTTP GET METHOD (static)
      *
@@ -59,30 +59,31 @@ class ClientStatic
      * @param  array $headers
      * @return Response|boolean
      */
-    public static function get($url, $query=array(), $headers=array(), $body=null)
+    public static function get ($url, $query = array(), $headers = array(), $body = null)
     {
         if (empty($url)) {
             return false;
         }
         
-        $request= new Request();
+        $request = new Request();
         $request->setUri($url);
         $request->setMethod(Request::METHOD_GET);
         
-        if (!empty($query) && is_array($query)) {
+        if (! empty($query) && is_array($query)) {
             $request->query()->fromArray($query);
         }
         
-        if (!empty($headers) && is_array($headers)) {
+        if (! empty($headers) && is_array($headers)) {
             $request->headers()->addHeaders($headers);
         }
         
-        if (!empty($body)) {
+        if (! empty($body)) {
             $request->setBody($body);
         }
         
         return self::getStaticClient()->send($request);
     }
+
     /**
      * HTTP POST METHOD (static)
      *
@@ -91,31 +92,32 @@ class ClientStatic
      * @param  array $headers
      * @return Response|boolean
      */
-    public static function post($url, $params, $headers=array(), $body=null)
+    public static function post ($url, $params, $headers = array(), $body = null)
     {
         if (empty($url)) {
             return false;
         }
         
-        $request= new Request();
+        $request = new Request();
         $request->setUri($url);
         $request->setMethod(Request::METHOD_POST);
         
-        if (!empty($params) && is_array($params)) {
+        if (! empty($params) && is_array($params)) {
             $request->post()->fromArray($params);
         } else {
-            throw new Exception\InvalidArgumentException('The array of post parameters is empty');
+            throw new Exception\InvalidArgumentException(
+            'The array of post parameters is empty');
         }
         
-        if (!isset($headers['Content-Type'])) {
-            $headers['Content-Type']= Client::ENC_URLENCODED;
+        if (! isset($headers['Content-Type'])) {
+            $headers['Content-Type'] = Client::ENC_URLENCODED;
         }
         
-        if (!empty($headers) && is_array($headers)) {
+        if (! empty($headers) && is_array($headers)) {
             $request->headers()->addHeaders($headers);
         }
         
-        if (!empty($body)) {
+        if (! empty($body)) {
             $request->setBody($body);
         }
         

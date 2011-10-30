@@ -43,6 +43,7 @@ class UserFeed extends \Zend\GData\Feed
 {
 
     protected $_entryClassName = '\Zend\GData\GApps\UserEntry';
+
     protected $_feedClassName = '\Zend\GData\GApps\UserFeed';
 
 }

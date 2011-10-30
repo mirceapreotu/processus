@@ -39,14 +39,16 @@ class Racy extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'yt';
+
     protected $_rootElement = 'racy';
+
     protected $_state = null;
 
     /**
      * Constructs a new Zend_Gdata_YouTube_Extension_Racy object.
      * @param bool $state(optional) The state value of the element.
      */
-    public function __construct($state = null)
+    public function __construct ($state = null)
     {
         $this->registerAllNamespaces(\Zend\GData\YouTube::$namespaces);
         parent::__construct();
@@ -63,7 +65,7 @@ class Racy extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_state !== null) {
@@ -79,14 +81,14 @@ class Racy extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'state':
-            $this->_state = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'state':
+                $this->_state = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -95,7 +97,7 @@ class Racy extends \Zend\GData\Extension
      *
      * @return bool The value associated with this attribute.
      */
-    public function getState()
+    public function getState ()
     {
         return $this->_state;
     }
@@ -106,7 +108,7 @@ class Racy extends \Zend\GData\Extension
      * @param bool $value The desired value for this attribute.
      * @return \Zend\GData\YouTube\Extension\Racy The element being modified.
      */
-    public function setState($value)
+    public function setState ($value)
     {
         $this->_state = $value;
         return $this;
@@ -116,7 +118,7 @@ class Racy extends \Zend\GData\Extension
      * Magic toString method allows using this directly via echo
      * Works best in PHP >= 4.2.0
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->_state;
     }

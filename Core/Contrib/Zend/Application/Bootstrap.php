@@ -24,8 +24,7 @@
  */
 namespace Zend\Application;
 
-use Zend\Loader\ResourceAutoloader,
-    Zend\Application\Module\Autoloader as ModuleAutoloader;
+use Zend\Loader\ResourceAutoloader, Zend\Application\Module\Autoloader as ModuleAutoloader;
 
 /**
  * Concrete base class for bootstrap classes
@@ -40,6 +39,7 @@ use Zend\Loader\ResourceAutoloader,
  */
 class Bootstrap extends AbstractBootstrap
 {
+
     /**
      * Application resource namespace
      * @var false|string
@@ -60,25 +60,26 @@ class Bootstrap extends AbstractBootstrap
      * @param  Zend_Application|\Zend\Application\Bootstrapper $application
      * @return void
      */
-    public function __construct($application)
+    public function __construct ($application)
     {
         $this->setApplication($application);
         $options = $application->getOptions();
-
+        
         if ($application->hasOption('resourceloader')) {
-            $options['resourceloader'] = $application->getOption('resourceloader');
+            $options['resourceloader'] = $application->getOption(
+            'resourceloader');
         }
         if ($application->hasOption('resource_broker')) {
             $options['broker'] = $application->getOption('resource_broker');
         }
-
+        
         $this->setOptions($options);
-
+        
         $this->getResourceLoader();
-
-        if (!$this->hasResource('frontcontroller')) {
+        
+        if (! $this->hasResource('frontcontroller')) {
             $broker = $this->getBroker();
-            if (!$broker->hasPlugin('frontcontroller')) {
+            if (! $broker->hasPlugin('frontcontroller')) {
                 $broker->registerSpec('frontcontroller');
             }
         }
@@ -96,16 +97,15 @@ class Bootstrap extends AbstractBootstrap
      * @return mixed
      * @throws \Zend\Application\Exception\RuntimeException
      */
-    public function run()
+    public function run ()
     {
-        $front   = $this->getResource('frontcontroller');
+        $front = $this->getResource('frontcontroller');
         $default = $front->getDefaultModule();
         if (null === $front->getControllerDirectory($default)) {
             throw new Exception\RuntimeException(
-                'No default controller directory registered with front controller'
-            );
+            'No default controller directory registered with front controller');
         }
-
+        
         $front->setParam('bootstrap', $this);
         $response = $front->dispatch();
         if ($front->returnResponse()) {
@@ -119,7 +119,7 @@ class Bootstrap extends AbstractBootstrap
      * @param  \Zend\Loader\ResourceAutoloader $loader
      * @return \Zend\Application\Module\Bootstrap
      */
-    public function setResourceLoader(ResourceAutoloader $loader)
+    public function setResourceLoader (ResourceAutoloader $loader)
     {
         $this->_resourceLoader = $loader;
         return $this;
@@ -130,17 +130,14 @@ class Bootstrap extends AbstractBootstrap
      *
      * @return \Zend\Loader\ResourceAutoloader
      */
-    public function getResourceLoader()
+    public function getResourceLoader ()
     {
-        if ((null === $this->_resourceLoader)
-            && (false !== ($namespace = $this->getAppNamespace()))
-        ) {
-            $r    = new \ReflectionClass($this);
+        if ((null === $this->_resourceLoader) &&
+         (false !== ($namespace = $this->getAppNamespace()))) {
+            $r = new \ReflectionClass($this);
             $path = $r->getFileName();
-            $autoloader = new ModuleAutoloader(array(
-                'namespace' => $namespace,
-                'basePath'  => dirname($path),
-            ));
+            $autoloader = new ModuleAutoloader(
+            array('namespace' => $namespace, 'basePath' => dirname($path)));
             $autoloader->register();
             $this->setResourceLoader($autoloader);
         }
@@ -152,7 +149,7 @@ class Bootstrap extends AbstractBootstrap
      *
      * @return string
      */
-    public function getAppNamespace()
+    public function getAppNamespace ()
     {
         return $this->_appNamespace;
     }
@@ -163,7 +160,7 @@ class Bootstrap extends AbstractBootstrap
      * @param  string
      * @return \Zend\Application\Bootstrap
      */
-    public function setAppNamespace($value)
+    public function setAppNamespace ($value)
     {
         $this->_appNamespace = (string) $value;
         return $this;

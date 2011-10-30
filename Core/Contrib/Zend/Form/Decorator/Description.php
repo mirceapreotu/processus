@@ -46,6 +46,7 @@ namespace Zend\Form\Decorator;
  */
 class Description extends AbstractDecorator
 {
+
     /**
      * Whether or not to escape the description
      * @var bool
@@ -70,7 +71,7 @@ class Description extends AbstractDecorator
      * @param  string $tag
      * @return \Zend\Form\Decorator\Description
      */
-    public function setTag($tag)
+    public function setTag ($tag)
     {
         $this->_tag = (string) $tag;
         return $this;
@@ -81,7 +82,7 @@ class Description extends AbstractDecorator
      *
      * @return string
      */
-    public function getTag()
+    public function getTag ()
     {
         if (null === $this->_tag) {
             $tag = $this->getOption('tag');
@@ -90,11 +91,11 @@ class Description extends AbstractDecorator
             } else {
                 $tag = 'p';
             }
-
+            
             $this->setTag($tag);
             return $tag;
         }
-
+        
         return $this->_tag;
     }
 
@@ -105,14 +106,14 @@ class Description extends AbstractDecorator
      *
      * @return string
      */
-    public function getClass()
+    public function getClass ()
     {
         $class = $this->getOption('class');
         if (null === $class) {
             $class = 'hint';
             $this->setOption('class', $class);
         }
-
+        
         return $class;
     }
 
@@ -122,7 +123,7 @@ class Description extends AbstractDecorator
      * @param  bool $flag
      * @return \Zend\Form\Decorator\Description
      */
-    public function setEscape($flag)
+    public function setEscape ($flag)
     {
         $this->_escape = (bool) $flag;
         return $this;
@@ -133,7 +134,7 @@ class Description extends AbstractDecorator
      *
      * @return true
      */
-    public function getEscape()
+    public function getEscape ()
     {
         if (null === $this->_escape) {
             if (null !== ($escape = $this->getOption('escape'))) {
@@ -143,7 +144,7 @@ class Description extends AbstractDecorator
                 $this->setEscape(true);
             }
         }
-
+        
         return $this->_escape;
     }
 
@@ -153,43 +154,44 @@ class Description extends AbstractDecorator
      * @param  string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
         $element = $this->getElement();
-        $view    = $element->getView();
+        $view = $element->getView();
         if (null === $view) {
             return $content;
         }
-
+        
         $description = $element->getDescription();
         $description = trim($description);
-
-        if (!empty($description) && (null !== ($translator = $element->getTranslator()))) {
+        
+        if (! empty($description) &&
+         (null !== ($translator = $element->getTranslator()))) {
             $description = $translator->translate($description);
         }
-
+        
         if (empty($description)) {
             return $content;
         }
-
+        
         $separator = $this->getSeparator();
         $placement = $this->getPlacement();
-        $tag       = $this->getTag();
-        $class     = $this->getClass();
-        $escape    = $this->getEscape();
-
-        $options   = $this->getOptions();
-
+        $tag = $this->getTag();
+        $class = $this->getClass();
+        $escape = $this->getEscape();
+        
+        $options = $this->getOptions();
+        
         if ($escape) {
             $description = $view->vars()->escape($description);
         }
-
-        if (!empty($tag)) {
+        
+        if (! empty($tag)) {
             $options['tag'] = $tag;
-            $decorator      = new HtmlTag($options);
-            $description    = $decorator->render($description);
+            $decorator = new HtmlTag($options);
+            $description = $decorator->render($description);
         }
-
+        
         switch ($placement) {
             case self::PREPEND:
                 return $description . $separator . $content;

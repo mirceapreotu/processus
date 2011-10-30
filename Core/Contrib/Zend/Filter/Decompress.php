@@ -34,6 +34,7 @@ namespace Zend\Filter;
  */
 class Decompress extends Compress
 {
+
     /**
      * Defined by Zend_Filter_Filter
      *
@@ -42,7 +43,7 @@ class Decompress extends Compress
      * @param  string $value Content to decompress
      * @return string The decompressed content
      */
-    public function __invoke($value)
+    public function __invoke ($value)
     {
         return $this->getAdapter()->decompress($value);
     }

@@ -36,17 +36,19 @@ namespace Zend\Controller\Plugin;
  */
 class PutHandler extends AbstractPlugin
 {
+
     /**
      * Before dispatching, digest PUT request body and set params
      *
      * @param \Zend\Controller\Request\AbstractRequest $request
      */
-    public function preDispatch(\Zend\Controller\Request\AbstractRequest $request)
+    public function preDispatch (
+    \Zend\Controller\Request\AbstractRequest $request)
     {
-        if (!$request instanceof \Zend\Controller\Request\Http) {
+        if (! $request instanceof \Zend\Controller\Request\Http) {
             return;
         }
-
+        
         if ($this->_request->isPut()) {
             $putParams = array();
             parse_str($this->_request->getRawBody(), $putParams);

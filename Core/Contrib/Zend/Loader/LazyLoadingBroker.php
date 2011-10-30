@@ -30,6 +30,7 @@ namespace Zend\Loader;
  */
 interface LazyLoadingBroker extends Broker
 {
+
     /**
      * Register a plugin specification
      *
@@ -42,7 +43,7 @@ interface LazyLoadingBroker extends Broker
      * @param  array $spec 
      * @return LazyLoadingBroker
      */
-    public function registerSpec($name, array $spec = null);
+    public function registerSpec ($name, array $spec = null);
 
     /**
      * Register many plugin specifications at once
@@ -53,7 +54,7 @@ interface LazyLoadingBroker extends Broker
      * @param  array|Traversable $specs 
      * @return LazyLoadingBroker
      */
-    public function registerSpecs($specs);
+    public function registerSpecs ($specs);
 
     /**
      * Unregister a plugin specification
@@ -61,7 +62,7 @@ interface LazyLoadingBroker extends Broker
      * @param  string $name 
      * @return void
      */
-    public function unregisterSpec($name);
+    public function unregisterSpec ($name);
 
     /**
      * Retrieve a list of plugins and/or specs registered
@@ -72,7 +73,7 @@ interface LazyLoadingBroker extends Broker
      * 
      * @return array
      */
-    public function getRegisteredPlugins();
+    public function getRegisteredPlugins ();
 
     /**
      * Whether or not a plugin exists
@@ -85,5 +86,5 @@ interface LazyLoadingBroker extends Broker
      * @param  string $name 
      * @return bool
      */
-    public function hasPlugin($name);
+    public function hasPlugin ($name);
 }

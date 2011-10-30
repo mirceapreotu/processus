@@ -22,8 +22,7 @@
  * @namespace
  */
 namespace Zend\Filter\File;
-use Zend\Filter,
-    Zend\Filter\Exception;
+use Zend\Filter, Zend\Filter\Exception;
 
 /**
  * @uses       Zend\Filter\Exception
@@ -35,6 +34,7 @@ use Zend\Filter,
  */
 class Rename extends Filter\AbstractFilter
 {
+
     /**
      * Internal array of array(source, target, overwrite)
      */
@@ -54,28 +54,29 @@ class Rename extends Filter\AbstractFilter
      * @param  bool $overwrite Should existing files be overwritten (deprecated)
      * @return void
      */
-    public function __construct($options)
+    public function __construct ($options)
     {
         if ($options instanceof \Zend\Config\Config) {
             $options = $options->toArray();
         } elseif (is_string($options)) {
             $options = array('target' => $options);
-        } elseif (!is_array($options)) {
-            throw new Exception\InvalidArgumentException('Invalid options argument provided to filter');
+        } elseif (! is_array($options)) {
+            throw new Exception\InvalidArgumentException(
+            'Invalid options argument provided to filter');
         }
-
+        
         if (1 < func_num_args()) {
             $argv = func_get_args();
             array_shift($argv);
-            $source    = array_shift($argv);
+            $source = array_shift($argv);
             $overwrite = false;
-            if (!empty($argv)) {
+            if (! empty($argv)) {
                 $overwrite = array_shift($argv);
             }
-            $options['source']    = $source;
+            $options['source'] = $source;
             $options['overwrite'] = $overwrite;
         }
-
+        
         $this->setFile($options);
     }
 
@@ -84,7 +85,7 @@ class Rename extends Filter\AbstractFilter
      *
      * @return array
      */
-    public function getFile()
+    public function getFile ()
     {
         return $this->_files;
     }
@@ -100,11 +101,11 @@ class Rename extends Filter\AbstractFilter
      * @param  string|array $options Old file or directory to be rewritten
      * @return \Zend\Filter\File\Rename
      */
-    public function setFile($options)
+    public function setFile ($options)
     {
         $this->_files = array();
         $this->addFile($options);
-
+        
         return $this;
     }
 
@@ -119,16 +120,17 @@ class Rename extends Filter\AbstractFilter
      * @param  string|array $options Old file or directory to be rewritten
      * @return \Zend\Filter\File\Rename
      */
-    public function addFile($options)
+    public function addFile ($options)
     {
         if (is_string($options)) {
             $options = array('target' => $options);
-        } elseif (!is_array($options)) {
-            throw new Exception\InvalidArgumentException('Invalid options to rename filter provided');
+        } elseif (! is_array($options)) {
+            throw new Exception\InvalidArgumentException(
+            'Invalid options to rename filter provided');
         }
-
+        
         $this->_convertOptions($options);
-
+        
         return $this;
     }
 
@@ -140,29 +142,31 @@ class Rename extends Filter\AbstractFilter
      * @param  boolean $source Return internal informations
      * @return string The new filename which has been set
      */
-    public function getNewName($value, $source = false)
+    public function getNewName ($value, $source = false)
     {
         $file = $this->_getFileName($value);
         if ($file['source'] == $file['target']) {
             return $value;
         }
-
-        if (!file_exists($file['source'])) {
+        
+        if (! file_exists($file['source'])) {
             return $value;
         }
-
+        
         if (($file['overwrite'] == true) && (file_exists($file['target']))) {
             unlink($file['target']);
         }
-
+        
         if (file_exists($file['target'])) {
-            throw new Exception\InvalidArgumentException(sprintf("File '%s' could not be renamed. It already exists.", $value));
+            throw new Exception\InvalidArgumentException(
+            sprintf("File '%s' could not be renamed. It already exists.", 
+            $value));
         }
-
+        
         if ($source) {
             return $file;
         }
-
+        
         return $file['target'];
     }
 
@@ -176,19 +180,22 @@ class Rename extends Filter\AbstractFilter
      * @throws \Zend\Filter\Exception
      * @return string The new filename which has been set, or false when there were errors
      */
-    public function filter($value)
+    public function filter ($value)
     {
-        $file   = $this->getNewName($value, true);
+        $file = $this->getNewName($value, true);
         if (is_string($file)) {
             return $file;
         }
-
+        
         $result = rename($file['source'], $file['target']);
-
+        
         if ($result !== true) {
-            throw new Exception\RuntimeException(sprintf("File '%s' could not be renamed. An error occured while processing the file.", $value));
+            throw new Exception\RuntimeException(
+            sprintf(
+            "File '%s' could not be renamed. An error occured while processing the file.", 
+            $value));
         }
-
+        
         return $file['target'];
     }
 
@@ -199,7 +206,7 @@ class Rename extends Filter\AbstractFilter
      * @param  array $options
      * @return array
      */
-    protected function _convertOptions($options) 
+    protected function _convertOptions ($options)
     {
         $files = array();
         foreach ($options as $key => $value) {
@@ -207,54 +214,54 @@ class Rename extends Filter\AbstractFilter
                 $this->_convertOptions($value);
                 continue;
             }
-
+            
             switch ($key) {
                 case "source":
                     $files['source'] = (string) $value;
                     break;
-
-                case 'target' :
+                
+                case 'target':
                     $files['target'] = (string) $value;
                     break;
-
-                case 'overwrite' :
+                
+                case 'overwrite':
                     $files['overwrite'] = (boolean) $value;
                     break;
-
+                
                 default:
                     break;
             }
         }
-
+        
         if (empty($files)) {
             return $this;
         }
-
+        
         if (empty($files['source'])) {
             $files['source'] = '*';
         }
-
+        
         if (empty($files['target'])) {
             $files['target'] = '*';
         }
-
+        
         if (empty($files['overwrite'])) {
             $files['overwrite'] = false;
         }
-
+        
         $found = false;
         foreach ($this->_files as $key => $value) {
             if ($value['source'] == $files['source']) {
                 $this->_files[$key] = $files;
-                $found              = true;
+                $found = true;
             }
         }
-
-        if (!$found) {
-            $count                = count($this->_files);
+        
+        if (! $found) {
+            $count = count($this->_files);
             $this->_files[$count] = $files;
         }
-
+        
         return $this;
     }
 
@@ -265,40 +272,40 @@ class Rename extends Filter\AbstractFilter
      * @param  string $file Filename to get the informations for
      * @return array
      */
-    protected function _getFileName($file)
+    protected function _getFileName ($file)
     {
         $rename = array();
         foreach ($this->_files as $value) {
             if ($value['source'] == '*') {
-                if (!isset($rename['source'])) {
-                    $rename           = $value;
+                if (! isset($rename['source'])) {
+                    $rename = $value;
                     $rename['source'] = $file;
                 }
             }
-
+            
             if ($value['source'] == $file) {
                 $rename = $value;
             }
         }
-
-        if (!isset($rename['source'])) {
+        
+        if (! isset($rename['source'])) {
             return $file;
         }
-
-        if (!isset($rename['target']) or ($rename['target'] == '*')) {
+        
+        if (! isset($rename['target']) or ($rename['target'] == '*')) {
             $rename['target'] = $rename['source'];
         }
-
+        
         if (is_dir($rename['target'])) {
             $name = basename($rename['source']);
             $last = $rename['target'][strlen($rename['target']) - 1];
             if (($last != '/') and ($last != '\\')) {
                 $rename['target'] .= DIRECTORY_SEPARATOR;
             }
-
+            
             $rename['target'] .= $name;
         }
-
+        
         return $rename;
     }
 }

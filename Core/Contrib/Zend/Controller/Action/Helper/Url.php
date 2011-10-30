@@ -38,6 +38,7 @@ use Zend\Controller\Request;
 
 class Url extends AbstractHelper
 {
+
     /**
      * Create URL based on default route
      *
@@ -47,27 +48,31 @@ class Url extends AbstractHelper
      * @param  array  $params
      * @return string
      */
-    public function simple($action, $controller = null, $module = null, array $params = null)
+    public function simple ($action, $controller = null, $module = null, 
+    array $params = null)
     {
         $request = $this->getRequest();
         
         if (null === $controller) {
             $controller = $request->getControllerName();
         }
-
+        
         if (null === $module) {
             $module = $request->getModuleName();
         }
-
+        
         $url = $controller . '/' . $action;
-        if ($module != $this->getFrontController()->getDispatcher()->getDefaultModule()) {
+        if ($module !=
+         $this->getFrontController()
+            ->getDispatcher()
+            ->getDefaultModule()) {
             $url = $module . '/' . $url;
         }
-
+        
         if ('' !== ($baseUrl = $this->getFrontController()->getBaseUrl())) {
             $url = $baseUrl . '/' . $url;
         }
-
+        
         if (null !== $params) {
             $paramPairs = array();
             foreach ($params as $key => $value) {
@@ -76,9 +81,9 @@ class Url extends AbstractHelper
             $paramString = implode('/', $paramPairs);
             $url .= '/' . $paramString;
         }
-
+        
         $url = '/' . ltrim($url, '/');
-
+        
         return $url;
     }
 
@@ -94,7 +99,8 @@ class Url extends AbstractHelper
      * @param  boolean $encode
      * @return string URL for the link href attribute.
      */
-    public function __invoke($urlOptions = array(), $name = null, $reset = false, $encode = true)
+    public function __invoke ($urlOptions = array(), $name = null, $reset = false, 
+    $encode = true)
     {
         $router = $this->getFrontController()->getRouter();
         return $router->assemble($urlOptions, $name, $reset, $encode);
@@ -111,7 +117,8 @@ class Url extends AbstractHelper
      * @param  array  $params
      * @return string
      */
-    public function direct($action, $controller = null, $module = null, array $params = null)
+    public function direct ($action, $controller = null, $module = null, 
+    array $params = null)
     {
         return $this->simple($action, $controller, $module, $params);
     }

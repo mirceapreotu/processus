@@ -57,13 +57,12 @@ class GroupQuery extends \Zend\GData\Query
      * Create a new instance.
      *
      * @param string $domain (optional) The Google Apps-hosted domain to use
-     *          when constructing query URIs.
+     * when constructing query URIs.
      * @param string $groupId (optional) Value for the groupId property.
      * @param string $startGroupName (optional) Value for the
-     *          startGroupName property.
+     * startGroupName property.
      */
-    public function __construct($domain = null, $groupId = null,
-            $startGroupId = null)
+    public function __construct ($domain = null, $groupId = null, $startGroupId = null)
     {
         parent::__construct($domain);
         $this->setGroupId($groupId);
@@ -77,9 +76,9 @@ class GroupQuery extends \Zend\GData\Query
      *
      * @see getGroupId
      * @param string $value The group id to filter search results by, or null to
-     *              disable.
+     * disable.
      */
-    public function setGroupId($value)
+    public function setGroupId ($value)
     {
         $this->_groupId = $value;
     }
@@ -89,9 +88,9 @@ class GroupQuery extends \Zend\GData\Query
      * returned.
      *
      * @param string $value The group id to filter search results by, or
-     *          null if disabled.
+     * null if disabled.
      */
-    public function getGroupId()
+    public function getGroupId ()
     {
         return $this->_groupId;
     }
@@ -102,14 +101,13 @@ class GroupQuery extends \Zend\GData\Query
      * Set to null to disable filtering by username.
      *
      * @param string $value The member email address to filter search
-     *              results by, or null to  disable.
+     * results by, or null to  disable.
      */
-    public function setMember($value)
+    public function setMember ($value)
     {
         if ($value !== null) {
             $this->_params['member'] = $value;
-        }
-        else {
+        } else {
             unset($this->_params['member']);
         }
     }
@@ -120,9 +118,9 @@ class GroupQuery extends \Zend\GData\Query
      *
      * @see setMember
      * @return string The member email address to filter search
-     *              results by, or null if disabled.
+     * results by, or null if disabled.
      */
-    public function getMember()
+    public function getMember ()
     {
         if (array_key_exists('member', $this->_params)) {
             return $this->_params['member'];
@@ -131,15 +129,14 @@ class GroupQuery extends \Zend\GData\Query
         }
     }
 
-
     /**
      * Sets the query parameter directOnly
      * @param bool $value
      */
-    public function setDirectOnly($value)
+    public function setDirectOnly ($value)
     {
         if ($value !== null) {
-            if($value == true) {
+            if ($value == true) {
                 $this->_params['directOnly'] = 'true';
             } else {
                 $this->_params['directOnly'] = 'false';
@@ -154,11 +151,11 @@ class GroupQuery extends \Zend\GData\Query
      * @see setDirectOnly
      * @return bool
      */
-    public function getDirectOnly()
+    public function getDirectOnly ()
     {
         if (array_key_exists('directOnly', $this->_params)) {
-
-            if($this->_params['directOnly'] == 'true') {
+            
+            if ($this->_params['directOnly'] == 'true') {
                 return true;
             } else {
                 return false;
@@ -173,9 +170,9 @@ class GroupQuery extends \Zend\GData\Query
      * a list of groups.
      *
      * @param string $value The first group id to be returned, or null to
-     *          disable.
+     * disable.
      */
-    public function setStartGroupId($value)
+    public function setStartGroupId ($value)
     {
         if ($value !== null) {
             $this->_params['start'] = $value;
@@ -190,9 +187,9 @@ class GroupQuery extends \Zend\GData\Query
      *
      * @see setStartGroupId
      * @return string The first group id to be returned, or null if
-     *          disabled.
+     * disabled.
      */
-    public function getStartGroupId()
+    public function getStartGroupId ()
     {
         if (array_key_exists('start', $this->_params)) {
             return $this->_params['start'];
@@ -206,21 +203,21 @@ class GroupQuery extends \Zend\GData\Query
      *
      * @return string The query URL for this instance.
      */
-    public function getQueryUrl()
+    public function getQueryUrl ()
     {
-
-        $uri  = \Zend\Gdata\Gapps::APPS_BASE_FEED_URI;
+        
+        $uri = \Zend\Gdata\Gapps::APPS_BASE_FEED_URI;
         $uri .= \Zend\Gdata\Gapps::APPS_GROUP_PATH;
         $uri .= '/' . $this->_domain;
-
+        
         if ($this->_groupId !== null) {
             $uri .= '/' . $this->_groupId;
         }
-
-        if(array_key_exists('member', $this->_params)) {
+        
+        if (array_key_exists('member', $this->_params)) {
             $uri .= '/';
         }
-
+        
         $uri .= $this->getQueryString();
         return $uri;
     }

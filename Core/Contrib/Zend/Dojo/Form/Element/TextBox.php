@@ -35,6 +35,7 @@ namespace Zend\Dojo\Form\Element;
  */
 class TextBox extends Dijit
 {
+
     /**
      * Use TextBox dijit view helper
      * @var string
@@ -47,7 +48,7 @@ class TextBox extends Dijit
      * @param  bool $lowercase
      * @return \Zend\Dojo\Form\Element\TextBox
      */
-    public function setLowercase($flag)
+    public function setLowercase ($flag)
     {
         $this->setDijitParam('lowercase', (bool) $flag);
         return $this;
@@ -58,9 +59,9 @@ class TextBox extends Dijit
      *
      * @return bool
      */
-    public function getLowercase()
+    public function getLowercase ()
     {
-        if (!$this->hasDijitParam('lowercase')) {
+        if (! $this->hasDijitParam('lowercase')) {
             return false;
         }
         return $this->getDijitParam('lowercase');
@@ -72,7 +73,7 @@ class TextBox extends Dijit
      * @param  bool $propercase
      * @return \Zend\Dojo\Form\Element\TextBox
      */
-    public function setPropercase($flag)
+    public function setPropercase ($flag)
     {
         $this->setDijitParam('propercase', (bool) $flag);
         return $this;
@@ -83,9 +84,9 @@ class TextBox extends Dijit
      *
      * @return bool
      */
-    public function getPropercase()
+    public function getPropercase ()
     {
-        if (!$this->hasDijitParam('propercase')) {
+        if (! $this->hasDijitParam('propercase')) {
             return false;
         }
         return $this->getDijitParam('propercase');
@@ -97,7 +98,7 @@ class TextBox extends Dijit
      * @param  bool $uppercase
      * @return \Zend\Dojo\Form\Element\TextBox
      */
-    public function setUppercase($flag)
+    public function setUppercase ($flag)
     {
         $this->setDijitParam('uppercase', (bool) $flag);
         return $this;
@@ -108,9 +109,9 @@ class TextBox extends Dijit
      *
      * @return bool
      */
-    public function getUppercase()
+    public function getUppercase ()
     {
-        if (!$this->hasDijitParam('uppercase')) {
+        if (! $this->hasDijitParam('uppercase')) {
             return false;
         }
         return $this->getDijitParam('uppercase');
@@ -122,7 +123,7 @@ class TextBox extends Dijit
      * @param  bool $trim
      * @return \Zend\Dojo\Form\Element\TextBox
      */
-    public function setTrim($flag)
+    public function setTrim ($flag)
     {
         $this->setDijitParam('trim', (bool) $flag);
         return $this;
@@ -133,9 +134,9 @@ class TextBox extends Dijit
      *
      * @return bool
      */
-    public function getTrim()
+    public function getTrim ()
     {
-        if (!$this->hasDijitParam('trim')) {
+        if (! $this->hasDijitParam('trim')) {
             return false;
         }
         return $this->getDijitParam('trim');
@@ -147,7 +148,7 @@ class TextBox extends Dijit
      * @param  int $length
      * @return \Zend\Dojo\Form\Element\TextBox
      */
-    public function setMaxLength($length)
+    public function setMaxLength ($length)
     {
         $this->setDijitParam('maxLength', (int) $length);
         return $this;
@@ -158,7 +159,7 @@ class TextBox extends Dijit
      *
      * @return int|null
      */
-    public function getMaxLength()
+    public function getMaxLength ()
     {
         return $this->getDijitParam('maxLength');
     }

@@ -33,23 +33,25 @@ namespace Zend\Filter;
  */
 class Null extends AbstractFilter
 {
-    const BOOLEAN      = 1;
-    const INTEGER      = 2;
-    const EMPTY_ARRAY  = 4;
-    const STRING       = 8;
-    const ZERO         = 16;
-    const FLOAT        = 32;
-    const ALL          = 63;
 
-    protected $_constants = array(
-        self::BOOLEAN     => 'boolean',
-        self::INTEGER     => 'integer',
-        self::EMPTY_ARRAY => 'array',
-        self::STRING      => 'string',
-        self::ZERO        => 'zero',
-        self::FLOAT       => 'float',
-        self::ALL         => 'all',
-    );
+    const BOOLEAN = 1;
+
+    const INTEGER = 2;
+
+    const EMPTY_ARRAY = 4;
+
+    const STRING = 8;
+
+    const ZERO = 16;
+
+    const FLOAT = 32;
+
+    const ALL = 63;
+
+    protected $_constants = array(self::BOOLEAN => 'boolean', 
+    self::INTEGER => 'integer', self::EMPTY_ARRAY => 'array', 
+    self::STRING => 'string', self::ZERO => 'zero', self::FLOAT => 'float', 
+    self::ALL => 'all');
 
     /**
      * Internal type to detect
@@ -63,22 +65,22 @@ class Null extends AbstractFilter
      *
      * @param string|array|\Zend\Config\Config $options OPTIONAL
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         if ($options instanceof \Zend\Config\Config) {
             $options = $options->toArray();
-        } elseif (!is_array($options)) {
+        } elseif (! is_array($options)) {
             $options = func_get_args();
-            $temp    = array();
-            if (!empty($options)) {
+            $temp = array();
+            if (! empty($options)) {
                 $temp = array_shift($options);
             }
             $options = $temp;
         } elseif (is_array($options) && array_key_exists('type', $options)) {
             $options = $options['type'];
         }
-
-        if (!empty($options)) {
+        
+        if (! empty($options)) {
             $this->setType($options);
         }
     }
@@ -88,7 +90,7 @@ class Null extends AbstractFilter
      *
      * @return array
      */
-    public function getType()
+    public function getType ()
     {
         return $this->_type;
     }
@@ -100,29 +102,31 @@ class Null extends AbstractFilter
      * @throws \Zend\Filter\Exception
      * @return \Zend\Filter\Null
      */
-    public function setType($type = null)
+    public function setType ($type = null)
     {
         if (is_array($type)) {
             $detected = 0;
-            foreach($type as $value) {
+            foreach ($type as $value) {
                 if (is_int($value)) {
                     $detected += $value;
-                } else if (in_array($value, $this->_constants)) {
-                    $detected += array_search($value, $this->_constants);
+                } else 
+                    if (in_array($value, $this->_constants)) {
+                        $detected += array_search($value, $this->_constants);
+                    }
+            }
+            
+            $type = $detected;
+        } else 
+            if (is_string($type)) {
+                if (in_array($type, $this->_constants)) {
+                    $type = array_search($type, $this->_constants);
                 }
             }
-
-            $type = $detected;
-        } else if (is_string($type)) {
-            if (in_array($type, $this->_constants)) {
-                $type = array_search($type, $this->_constants);
-            }
-        }
-
-        if (!is_int($type) || ($type < 0) || ($type > self::ALL)) {
+        
+        if (! is_int($type) || ($type < 0) || ($type > self::ALL)) {
             throw new Exception\InvalidArgumentException('Unknown type');
         }
-
+        
         $this->_type = $type;
         return $this;
     }
@@ -136,10 +140,10 @@ class Null extends AbstractFilter
      * @param  string $value
      * @return string
      */
-    public function filter($value)
+    public function filter ($value)
     {
         $type = $this->getType();
-
+        
         // FLOAT (0.0)
         if ($type >= self::FLOAT) {
             $type -= self::FLOAT;
@@ -147,7 +151,7 @@ class Null extends AbstractFilter
                 return null;
             }
         }
-
+        
         // STRING ZERO ('0')
         if ($type >= self::ZERO) {
             $type -= self::ZERO;
@@ -155,7 +159,7 @@ class Null extends AbstractFilter
                 return null;
             }
         }
-
+        
         // STRING ('')
         if ($type >= self::STRING) {
             $type -= self::STRING;
@@ -163,7 +167,7 @@ class Null extends AbstractFilter
                 return null;
             }
         }
-
+        
         // EMPTY_ARRAY (array())
         if ($type >= self::EMPTY_ARRAY) {
             $type -= self::EMPTY_ARRAY;
@@ -171,7 +175,7 @@ class Null extends AbstractFilter
                 return null;
             }
         }
-
+        
         // INTEGER (0)
         if ($type >= self::INTEGER) {
             $type -= self::INTEGER;
@@ -179,7 +183,7 @@ class Null extends AbstractFilter
                 return null;
             }
         }
-
+        
         // BOOLEAN (false)
         if ($type >= self::BOOLEAN) {
             $type -= self::BOOLEAN;
@@ -187,7 +191,7 @@ class Null extends AbstractFilter
                 return null;
             }
         }
-
+        
         return $value;
     }
 }

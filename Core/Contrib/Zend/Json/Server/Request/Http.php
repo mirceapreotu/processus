@@ -34,6 +34,7 @@ use Zend\Json\Server\Request as JsonRequest;
  */
 class Http extends JsonRequest
 {
+
     /**
      * Raw JSON pulled from POST body
      * @var string
@@ -47,11 +48,11 @@ class Http extends JsonRequest
      *
      * @return void
      */
-    public function __construct()
+    public function __construct ()
     {
         $json = file_get_contents('php://input');
         $this->_rawJson = $json;
-        if (!empty($json)) {
+        if (! empty($json)) {
             $this->loadJson($json);
         }
     }
@@ -61,7 +62,7 @@ class Http extends JsonRequest
      *
      * @return string
      */
-    public function getRawJson()
+    public function getRawJson ()
     {
         return $this->_rawJson;
     }

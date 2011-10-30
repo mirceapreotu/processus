@@ -31,35 +31,36 @@ namespace Zend\Authentication;
  */
 class Result
 {
+
     /**
      * General Failure
      */
-    const FAILURE                        =  0;
+    const FAILURE = 0;
 
     /**
      * Failure due to identity not being found.
      */
-    const FAILURE_IDENTITY_NOT_FOUND     = -1;
+    const FAILURE_IDENTITY_NOT_FOUND = - 1;
 
     /**
      * Failure due to identity being ambiguous.
      */
-    const FAILURE_IDENTITY_AMBIGUOUS     = -2;
+    const FAILURE_IDENTITY_AMBIGUOUS = - 2;
 
     /**
      * Failure due to invalid credential being supplied.
      */
-    const FAILURE_CREDENTIAL_INVALID     = -3;
+    const FAILURE_CREDENTIAL_INVALID = - 3;
 
     /**
      * Failure due to uncategorized reasons.
      */
-    const FAILURE_UNCATEGORIZED          = -4;
+    const FAILURE_UNCATEGORIZED = - 4;
 
     /**
      * Authentication success.
      */
-    const SUCCESS                        =  1;
+    const SUCCESS = 1;
 
     /**
      * Authentication result code
@@ -92,17 +93,17 @@ class Result
      * @param  array   $messages
      * @return void
      */
-    public function __construct($code, $identity, array $messages = array())
+    public function __construct ($code, $identity, array $messages = array())
     {
         $code = (int) $code;
-
+        
         if ($code < self::FAILURE_UNCATEGORIZED) {
             $code = self::FAILURE;
-        } elseif ($code > self::SUCCESS ) {
+        } elseif ($code > self::SUCCESS) {
             $code = 1;
         }
-
-        $this->_code     = $code;
+        
+        $this->_code = $code;
         $this->_identity = $identity;
         $this->_messages = $messages;
     }
@@ -112,7 +113,7 @@ class Result
      *
      * @return boolean
      */
-    public function isValid()
+    public function isValid ()
     {
         return ($this->_code > 0) ? true : false;
     }
@@ -122,7 +123,7 @@ class Result
      *
      * @return int
      */
-    public function getCode()
+    public function getCode ()
     {
         return $this->_code;
     }
@@ -132,7 +133,7 @@ class Result
      *
      * @return mixed
      */
-    public function getIdentity()
+    public function getIdentity ()
     {
         return $this->_identity;
     }
@@ -144,7 +145,7 @@ class Result
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages ()
     {
         return $this->_messages;
     }

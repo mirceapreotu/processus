@@ -32,49 +32,27 @@ namespace Zend\Crypt;
  */
 class Crypt
 {
+
     const TYPE_OPENSSL = 'openssl';
-    const TYPE_HASH    = 'hash';
-    const TYPE_MHASH   = 'mhash';
+
+    const TYPE_HASH = 'hash';
+
+    const TYPE_MHASH = 'mhash';
 
     protected static $_type = null;
 
     /**
      * @var array
      */
-    protected static $_supportedAlgosOpenssl = array(
-        'md2',
-        'md4',
-        'mdc2',
-        'rmd160',
-        'sha',
-        'sha1',
-        'sha224',
-        'sha256',
-        'sha384',
-        'sha512',
-    );
+    protected static $_supportedAlgosOpenssl = array('md2', 'md4', 'mdc2', 
+    'rmd160', 'sha', 'sha1', 'sha224', 'sha256', 'sha384', 'sha512');
 
     /**
      * @var array
      */
-    protected static $_supportedAlgosMhash = array(
-        'adler32',
-        'crc32',
-        'crc32b',
-        'gost',
-        'haval128',
-        'haval160',
-        'haval192',
-        'haval256',
-        'md4',
-        'md5',
-        'ripemd160',
-        'sha1',
-        'sha256',
-        'tiger',
-        'tiger128',
-        'tiger160',
-    );
+    protected static $_supportedAlgosMhash = array('adler32', 'crc32', 'crc32b', 
+    'gost', 'haval128', 'haval160', 'haval192', 'haval256', 'md4', 'md5', 
+    'ripemd160', 'sha1', 'sha256', 'tiger', 'tiger128', 'tiger160');
 
     /**
      * @param  string $algorithm
@@ -82,7 +60,7 @@ class Crypt
      * @param  bool $binaryOutput
      * @return void
      */
-    public static function hash($algorithm, $data, $binaryOutput = false)
+    public static function hash ($algorithm, $data, $binaryOutput = false)
     {
         $algorithm = strtolower($algorithm);
         if (function_exists($algorithm)) {
@@ -97,18 +75,18 @@ class Crypt
      * @param  string $algorithm
      * @throws Zend\Crypt\Exception
      */
-    protected static function _detectHashSupport($algorithm)
+    protected static function _detectHashSupport ($algorithm)
     {
         if (function_exists('hash')) {
             self::$_type = self::TYPE_HASH;
             if (in_array($algorithm, hash_algos())) {
-               return;
+                return;
             }
         }
         if (function_exists('mhash')) {
             self::$_type = self::TYPE_MHASH;
             if (in_array($algorithm, self::$_supportedAlgosMhash)) {
-               return;
+                return;
             }
         }
         if (function_exists('openssl_digest')) {
@@ -117,10 +95,12 @@ class Crypt
             }
             self::$_type = self::TYPE_OPENSSL;
             if (in_array($algorithm, self::$_supportedAlgosOpenssl)) {
-               return;
+                return;
             }
         }
-        throw new Exception('\'' . $algorithm . '\' is not supported by any available extension or native function');
+        throw new Exception(
+        '\'' . $algorithm .
+         '\' is not supported by any available extension or native function');
     }
 
     /**
@@ -129,7 +109,7 @@ class Crypt
      * @param  bool $binaryOutput
      * @return string
      */
-    protected static function _digestHash($algorithm, $data, $binaryOutput)
+    protected static function _digestHash ($algorithm, $data, $binaryOutput)
     {
         return hash($algorithm, $data, $binaryOutput);
     }
@@ -140,7 +120,7 @@ class Crypt
      * @param  bool $binaryOutput
      * @return string
      */
-    protected static function _digestMhash($algorithm, $data, $binaryOutput)
+    protected static function _digestMhash ($algorithm, $data, $binaryOutput)
     {
         $constant = constant('MHASH_' . strtoupper($algorithm));
         $binary = mhash($constant, $data);
@@ -156,7 +136,7 @@ class Crypt
      * @param  bool $binaryOutput
      * @return string
      */
-    protected static function _digestOpenssl($algorithm, $data, $binaryOutput)
+    protected static function _digestOpenssl ($algorithm, $data, $binaryOutput)
     {
         if ($algorithm == 'ripemd160') {
             $algorithm = 'rmd160';

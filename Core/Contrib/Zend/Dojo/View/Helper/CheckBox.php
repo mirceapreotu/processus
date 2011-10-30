@@ -35,14 +35,15 @@ use Zend\View\Helper\FormCheckbox as FormCheckboxHelper;
  * @subpackage View
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
-  */
+ */
 class CheckBox extends Dijit
 {
+
     /**
      * Dijit being used
      * @var string
      */
-    protected $_dijit  = 'dijit.form.CheckBox';
+    protected $_dijit = 'dijit.form.CheckBox';
 
     /**
      * Element type
@@ -66,7 +67,8 @@ class CheckBox extends Dijit
      * @param  array $checkedOptions Should contain either two items, or the keys checkedValue and uncheckedValue
      * @return string
      */
-    public function __invoke($id = null, $value = null, array $params = array(), array $attribs = array(), array $checkedOptions = null)
+    public function __invoke ($id = null, $value = null, array $params = array(), 
+    array $attribs = array(), array $checkedOptions = null)
     {
         // Prepare the checkbox options
         $checked = false;
@@ -75,29 +77,32 @@ class CheckBox extends Dijit
         } elseif (isset($attribs['checked'])) {
             $checked = false;
         }
-        $checkboxInfo = FormCheckboxHelper::determineCheckboxInfo($value, $checked, $checkedOptions);
+        $checkboxInfo = FormCheckboxHelper::determineCheckboxInfo($value, 
+        $checked, $checkedOptions);
         $attribs['checked'] = $checkboxInfo['checked'];
-        if (!array_key_exists('id', $attribs)) {
+        if (! array_key_exists('id', $attribs)) {
             $attribs['id'] = $id;
         }
-
+        
         $attribs = $this->_prepareDijit($attribs, $params, 'element');
-
+        
         // strip options so they don't show up in markup
         if (array_key_exists('options', $attribs)) {
             unset($attribs['options']);
         }
-
+        
         // and now we create it:
         $html = '';
-        if (!strstr($id, '[]')) {
+        if (! strstr($id, '[]')) {
             // hidden element for unchecked value
-            $html .= $this->_renderHiddenElement($id, $checkboxInfo['uncheckedValue']);
+            $html .= $this->_renderHiddenElement($id, 
+            $checkboxInfo['uncheckedValue']);
         }
-
+        
         // and final element
-        $html .= $this->_createFormElement($id, $checkboxInfo['checkedValue'], $params, $attribs);
-
+        $html .= $this->_createFormElement($id, 
+        $checkboxInfo['checkedValue'], $params, $attribs);
+        
         return $html;
     }
 }

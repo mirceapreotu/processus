@@ -2,9 +2,7 @@
 
 namespace Zend\Code\Scanner;
 
-use Zend\Code\Scanner\DirectoryScanner,
-    Zend\Code\Scanner\ClassScanner,
-    Zend\Code\Exception;
+use Zend\Code\Scanner\DirectoryScanner, Zend\Code\Scanner\ClassScanner, Zend\Code\Exception;
 
 class DerivedClassScanner extends ClassScanner
 {
@@ -13,15 +11,18 @@ class DerivedClassScanner extends ClassScanner
      * @var Zend\Code\Scanner\DirectoryScanner
      */
     protected $directoryScanner = null;
-    
+
     /**
      * @var Zend\Code\Scanner\ClassScanner
-     */  
+     */
     protected $classScanner = null;
+
     protected $parentClassScanners = array();
+
     protected $interfaceClassScanners = array();
-    
-    public function __construct(ClassScanner $classScanner, DirectoryScanner $directoryScanner)
+
+    public function __construct (ClassScanner $classScanner, 
+    DirectoryScanner $directoryScanner)
     {
         $this->classScanner = $classScanner;
         $this->directoryScanner = $directoryScanner;
@@ -31,7 +32,8 @@ class DerivedClassScanner extends ClassScanner
         while ($currentScannerClass && $currentScannerClass->hasParentClass()) {
             $currentParentClassName = $currentScannerClass->getParentClass();
             if ($directoryScanner->hasClass($currentParentClassName)) {
-                $currentParentClass = $directoryScanner->getClass($currentParentClassName);
+                $currentParentClass = $directoryScanner->getClass(
+                $currentParentClassName);
                 $this->parentClassScanners[$currentParentClassName] = $currentParentClass;
                 $currentScannerClass = $currentParentClass;
             } else {
@@ -41,57 +43,58 @@ class DerivedClassScanner extends ClassScanner
         
         foreach ($interfaces = $this->classScanner->getInterfaces() as $iName) {
             if ($directoryScanner->hasClass($iName)) {
-                $this->interfaceClassScanners[$iName] = $directoryScanner->getClass($iName);
+                $this->interfaceClassScanners[$iName] = $directoryScanner->getClass(
+                $iName);
             }
         }
     }
-    
-    public function getName()
+
+    public function getName ()
     {
         return $this->classScanner->getName();
     }
-    
-    public function getShortName()
+
+    public function getShortName ()
     {
         return $this->classScanner->getShortName();
     }
-    
-    public function isInstantiable()
+
+    public function isInstantiable ()
     {
         return $this->classScanner->isInstantiable();
     }
-    
-    public function isFinal()
+
+    public function isFinal ()
     {
         return $this->classScanner->isFinal();
     }
 
-    public function isAbstract()
+    public function isAbstract ()
     {
         return $this->classScanner->isAbstract();
     }
-    
-    public function isInterface()
+
+    public function isInterface ()
     {
         return $this->classScanner->isInterface();
     }
 
-    public function getParentClasses()
+    public function getParentClasses ()
     {
         return array_keys($this->parentClassScanners);
     }
-    
-    public function hasParentClass()
+
+    public function hasParentClass ()
     {
         return ($this->classScanner->getParentClass() != null);
     }
-    
-    public function getParentClass()
+
+    public function getParentClass ()
     {
         return $this->classScanner->getParentClass();
     }
-    
-    public function getInterfaces($returnClassScanners = false)
+
+    public function getInterfaces ($returnClassScanners = false)
     {
         if ($returnClassScanners) {
             return $this->interfaceClassScanners;
@@ -99,12 +102,13 @@ class DerivedClassScanner extends ClassScanner
         
         $interfaces = $this->classScanner->getInterfaces();
         foreach ($this->parentClassScanners as $pClassScanner) {
-            $interfaces = array_merge($interfaces, $pClassScanner->getInterfaces());
+            $interfaces = array_merge($interfaces, 
+            $pClassScanner->getInterfaces());
         }
         return $interfaces;
     }
-    
-    public function getConstants()
+
+    public function getConstants ()
     {
         $constants = $this->classScanner->getConstants();
         foreach ($this->parentClassScanners as $pClassScanner) {
@@ -112,12 +116,13 @@ class DerivedClassScanner extends ClassScanner
         }
         return $constants;
     }
-    
-    public function getProperties($returnScannerProperty = false)
+
+    public function getProperties ($returnScannerProperty = false)
     {
         $properties = $this->classScanner->getProperties($returnScannerProperty);
         foreach ($this->parentClassScanners as $pClassScanner) {
-            $properties = array_merge($properties, $pClassScanner->getProperties($returnScannerProperty));
+            $properties = array_merge($properties, 
+            $pClassScanner->getProperties($returnScannerProperty));
         }
         return $properties;
     }
@@ -126,16 +131,17 @@ class DerivedClassScanner extends ClassScanner
      * @param bool $returnScannerMethod
      * @return MethodScanner[]
      */
-    public function getMethods($returnScannerMethod = false)
+    public function getMethods ($returnScannerMethod = false)
     {
         $methods = $this->classScanner->getMethods($returnScannerMethod);
         foreach ($this->parentClassScanners as $pClassScanner) {
-            $methods = array_merge($methods, $pClassScanner->getMethods($returnScannerMethod));
+            $methods = array_merge($methods, 
+            $pClassScanner->getMethods($returnScannerMethod));
         }
         return $methods;
     }
-    
-    public function getMethod($methodNameOrInfoIndex)
+
+    public function getMethod ($methodNameOrInfoIndex)
     {
         if ($this->classScanner->hasMethod($methodNameOrInfoIndex)) {
             return $this->classScanner->getMethod($methodNameOrInfoIndex);
@@ -145,14 +151,12 @@ class DerivedClassScanner extends ClassScanner
                 return $pClassScanner->getMethod($methodNameOrInfoIndex);
             }
         }
-        throw new Exception\InvalidArgumentException(sprintf(
-            'Method %s not found in %s',
-            $methodNameOrInfoIndex,
-            $this->classScanner->getName()
-        ));
+        throw new Exception\InvalidArgumentException(
+        sprintf('Method %s not found in %s', $methodNameOrInfoIndex, 
+        $this->classScanner->getName()));
     }
-    
-    public function hasMethod($name)
+
+    public function hasMethod ($name)
     {
         if ($this->classScanner->hasMethod($name)) {
             return true;

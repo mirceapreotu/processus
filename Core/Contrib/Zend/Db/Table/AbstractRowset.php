@@ -33,8 +33,10 @@ namespace Zend\Db\Table;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAccess
+abstract class AbstractRowset implements \SeekableIterator, \Countable, 
+\ArrayAccess
 {
+
     /**
      * The original data for each row.
      *
@@ -108,31 +110,31 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      *
      * @param array $config
      */
-    public function __construct(array $config)
+    public function __construct (array $config)
     {
         if (isset($config['table'])) {
-            $this->_table      = $config['table'];
+            $this->_table = $config['table'];
             $this->_tableClass = get_class($this->_table);
         }
         if (isset($config['rowClass'])) {
-            $this->_rowClass   = $config['rowClass'];
+            $this->_rowClass = $config['rowClass'];
         }
-        if (!class_exists($this->_rowClass)) {
+        if (! class_exists($this->_rowClass)) {
             \Zend\Loader::loadClass($this->_rowClass);
         }
         if (isset($config['data'])) {
-            $this->_data       = $config['data'];
+            $this->_data = $config['data'];
         }
         if (isset($config['readOnly'])) {
-            $this->_readOnly   = $config['readOnly'];
+            $this->_readOnly = $config['readOnly'];
         }
         if (isset($config['stored'])) {
-            $this->_stored     = $config['stored'];
+            $this->_stored = $config['stored'];
         }
-
+        
         // set the count of rows
         $this->_count = count($this->_data);
-
+        
         $this->init();
     }
 
@@ -141,10 +143,10 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      *
      * @return array
      */
-    public function __sleep()
+    public function __sleep ()
     {
-        return array('_data', '_tableClass', '_rowClass', '_pointer', '_count', '_rows', '_stored',
-                     '_readOnly');
+        return array('_data', '_tableClass', '_rowClass', '_pointer', '_count', 
+        '_rows', '_stored', '_readOnly');
     }
 
     /**
@@ -154,7 +156,7 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      *
      * @return void
      */
-    public function __wakeup()
+    public function __wakeup ()
     {
         $this->_connected = false;
     }
@@ -166,16 +168,15 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      *
      * @return void
      */
-    public function init()
-    {
-    }
+    public function init ()
+    {}
 
     /**
      * Return the connected state of the rowset.
      *
      * @return boolean
      */
-    public function isConnected()
+    public function isConnected ()
     {
         return $this->_connected;
     }
@@ -185,7 +186,7 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      *
      * @return \Zend\Db\Table\AbstractTable
      */
-    public function getTable()
+    public function getTable ()
     {
         return $this->_table;
     }
@@ -198,7 +199,7 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      * @return boolean
      * @throws \Zend\Db\Table\RowException
      */
-    public function setTable(AbstractTable $table)
+    public function setTable (AbstractTable $table)
     {
         $this->_table = $table;
         $this->_connected = false;
@@ -219,7 +220,7 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      *
      * @return string
      */
-    public function getTableClass()
+    public function getTableClass ()
     {
         return $this->_tableClass;
     }
@@ -231,7 +232,7 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      *
      * @return \Zend\Db\Table\AbstractRowset Fluent interface.
      */
-    public function rewind()
+    public function rewind ()
     {
         $this->_pointer = 0;
         return $this;
@@ -244,24 +245,20 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      *
      * @return \Zend\Db\Table\AbstractRow current element from the collection
      */
-    public function current()
+    public function current ()
     {
         if ($this->valid() === false) {
             return null;
         }
-
+        
         // do we already have a row object for this position?
         if (empty($this->_rows[$this->_pointer])) {
             $this->_rows[$this->_pointer] = new $this->_rowClass(
-                array(
-                    'table'    => $this->_table,
-                    'data'     => $this->_data[$this->_pointer],
-                    'stored'   => $this->_stored,
-                    'readOnly' => $this->_readOnly
-                )
-            );
+            array('table' => $this->_table, 
+            'data' => $this->_data[$this->_pointer], 
+            'stored' => $this->_stored, 'readOnly' => $this->_readOnly));
         }
-
+        
         // return the row object
         return $this->_rows[$this->_pointer];
     }
@@ -273,7 +270,7 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      *
      * @return int
      */
-    public function key()
+    public function key ()
     {
         return $this->_pointer;
     }
@@ -285,9 +282,9 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      *
      * @return void
      */
-    public function next()
+    public function next ()
     {
-        ++$this->_pointer;
+        ++ $this->_pointer;
     }
 
     /**
@@ -297,7 +294,7 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      *
      * @return bool False if there's nothing more to iterate over
      */
-    public function valid()
+    public function valid ()
     {
         return $this->_pointer >= 0 && $this->_pointer < $this->_count;
     }
@@ -309,7 +306,7 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      *
      * @return int
      */
-    public function count()
+    public function count ()
     {
         return $this->_count;
     }
@@ -322,7 +319,7 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      * @return \Zend\Db\Table\AbstractRowset
      * @throws \Zend\Db\Table\RowsetException
      */
-    public function seek($position)
+    public function seek ($position)
     {
         $position = (int) $position;
         if ($position < 0 || $position >= $this->_count) {
@@ -339,7 +336,7 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      * @param string $offset
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists ($offset)
     {
         return isset($this->_data[(int) $offset]);
     }
@@ -351,7 +348,7 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      * @param string $offset
      * @return \Zend\Db\Table\AbstractRow
      */
-    public function offsetGet($offset)
+    public function offsetGet ($offset)
     {
         $offset = (int) $offset;
         if ($offset < 0 || $offset >= $this->_count) {
@@ -359,7 +356,7 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
             throw new Zend_Db_Table_Rowset_Exception("Illegal index $offset");
         }
         $this->_pointer = $offset;
-
+        
         return $this->current();
     }
 
@@ -370,9 +367,8 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      * @param string $offset
      * @param mixed $value
      */
-    public function offsetSet($offset, $value)
-    {
-    }
+    public function offsetSet ($offset, $value)
+    {}
 
     /**
      * Does nothing
@@ -380,9 +376,8 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      *
      * @param string $offset
      */
-    public function offsetUnset($offset)
-    {
-    }
+    public function offsetUnset ($offset)
+    {}
 
     /**
      * Returns a Zend_Db_Table_Row from a known position into the Iterator
@@ -392,14 +387,15 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      * @return \Zend\Db\Table\Row
      * @throws \Zend\Db\Table\RowsetException
      */
-    public function getRow($position, $seek = false)
+    public function getRow ($position, $seek = false)
     {
         $key = $this->key();
         try {
             $this->seek($position);
             $row = $this->current();
         } catch (RowsetException $e) {
-            throw new RowsetException('No row could be found at position ' . (int) $position, 0, $e);
+            throw new RowsetException(
+            'No row could be found at position ' . (int) $position, 0, $e);
         }
         if ($seek == false) {
             $this->seek($key);
@@ -414,7 +410,7 @@ abstract class AbstractRowset implements \SeekableIterator, \Countable, \ArrayAc
      *
      * @return array
      */
-    public function toArray()
+    public function toArray ()
     {
         // @todo This works only if we have iterated through
         // the result set once to instantiate the rows.

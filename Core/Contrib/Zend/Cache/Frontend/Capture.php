@@ -35,6 +35,7 @@ use Zend\Cache\Cache;
  */
 class Capture extends Core
 {
+
     /**
      * Page identifiers
      * @var array
@@ -46,7 +47,7 @@ class Capture extends Core
      * @var array
      */
     protected $_tags = array();
-    
+
     protected $_extension = null;
 
     /**
@@ -55,7 +56,7 @@ class Capture extends Core
      * @param  string  $id Cache id
      * @return mixed True if the cache is hit (false else) with $echoData=true (default) ; string else (datas)
      */
-    public function start($id, array $tags, $extension = null)
+    public function start ($id, array $tags, $extension = null)
     {
         $this->_tags = $tags;
         $this->_extension = $extension;
@@ -72,14 +73,15 @@ class Capture extends Core
      * @param  string $data Buffered output
      * @return string Data to send to browser
      */
-    public function _flush($data)
+    public function _flush ($data)
     {
         $id = array_pop($this->_idStack);
         if ($id === null) {
             Cache::throwException('use of _flush() without a start()');
         }
         if ($this->_extension) {
-            $this->save(serialize(array($data, $this->_extension)), $id, $this->_tags);
+            $this->save(serialize(array($data, $this->_extension)), $id, 
+            $this->_tags);
         } else {
             $this->save($data, $id, $this->_tags);
         }

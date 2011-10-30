@@ -32,6 +32,7 @@ namespace Zend\Controller;
  */
 interface Router
 {
+
     /**
      * Processes a request and sets its controller and action.  If
      * no route was possible, an exception is thrown.
@@ -40,7 +41,7 @@ interface Router
      * @throws \Zend\Controller\Router\Exception
      * @return \Zend\Controller\Request\AbstractRequest|boolean
      */
-    public function route(\Zend\Controller\Request\AbstractRequest $dispatcher);
+    public function route (\Zend\Controller\Request\AbstractRequest $dispatcher);
 
     /**
      * Generates a URL path that can be used in URL creation, redirection, etc.
@@ -64,14 +65,14 @@ interface Router
      * @throws \Zend\Controller\Router\Exception
      * @return string Resulting URL path
      */
-    public function assemble($userParams, $name = null, $reset = false, $encode = true);
+    public function assemble ($userParams, $name = null, $reset = false, $encode = true);
 
     /**
      * Retrieve Front Controller
      *
      * @return \Zend\Controller\Front
      */
-    public function getFrontController();
+    public function getFrontController ();
 
     /**
      * Set Front Controller
@@ -79,7 +80,7 @@ interface Router
      * @param \Zend\Controller\Front $controller
      * @return \Zend\Controller\Router
      */
-    public function setFrontController(\Zend\Controller\Front $controller);
+    public function setFrontController (\Zend\Controller\Front $controller);
 
     /**
      * Add or modify a parameter with which to instantiate any helper objects
@@ -88,7 +89,7 @@ interface Router
      * @param mixed $param
      * @return \Zend\Controller\Router
      */
-    public function setParam($name, $value);
+    public function setParam ($name, $value);
 
     /**
      * Set an array of a parameters to pass to helper object constructors
@@ -96,7 +97,7 @@ interface Router
      * @param array $params
      * @return \Zend\Controller\Router
      */
-    public function setParams(array $params);
+    public function setParams (array $params);
 
     /**
      * Retrieve a single parameter from the controller parameter stack
@@ -104,14 +105,14 @@ interface Router
      * @param string $name
      * @return mixed
      */
-    public function getParam($name);
+    public function getParam ($name);
 
     /**
      * Retrieve the parameters to pass to helper object constructors
      *
      * @return array
      */
-    public function getParams();
+    public function getParams ();
 
     /**
      * Clear the controller parameter stack
@@ -123,6 +124,6 @@ interface Router
      * @param null|string|array single key or array of keys for params to clear
      * @return \Zend\Controller\Router
      */
-    public function clearParams($name = null);
+    public function clearParams ($name = null);
 
 }

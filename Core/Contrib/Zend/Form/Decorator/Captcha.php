@@ -38,32 +38,33 @@ namespace Zend\Form\Decorator;
  */
 class Captcha extends AbstractDecorator
 {
+
     /**
      * Render captcha
      *
      * @param  string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
         $element = $this->getElement();
-        if (!method_exists($element, 'getCaptcha')) {
+        if (! method_exists($element, 'getCaptcha')) {
             return $content;
         }
-
-        $view    = $element->getView();
+        
+        $view = $element->getView();
         if (null === $view) {
             return $content;
         }
-
+        
         $placement = $this->getPlacement();
         $separator = $this->getSeparator();
-
+        
         $captcha = $element->getCaptcha();
-        $markup  = $captcha->render($view, $element);
+        $markup = $captcha->render($view, $element);
         switch ($placement) {
             case 'PREPEND':
-                $content = $markup . $separator .  $content;
+                $content = $markup . $separator . $content;
                 break;
             case 'APPEND':
             default:

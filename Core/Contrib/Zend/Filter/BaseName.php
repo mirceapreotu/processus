@@ -32,6 +32,7 @@ namespace Zend\Filter;
  */
 class BaseName extends AbstractFilter
 {
+
     /**
      * Defined by Zend_Filter_Interface
      *
@@ -40,7 +41,7 @@ class BaseName extends AbstractFilter
      * @param  string $value
      * @return string
      */
-    public function filter($value)
+    public function filter ($value)
     {
         return basename((string) $value);
     }

@@ -6,28 +6,31 @@ class ClassDefinition implements Definition, PartialMarker
 {
 
     protected $class = null;
+
     protected $supertypes = null;
+
     protected $instantiator = null;
+
     protected $methods = array();
+
     protected $methodParameters = array();
 
-
-    public function __construct($class)
+    public function __construct ($class)
     {
         $this->class = $class;
     }
 
-    public function setInstantiator($instantiator)
+    public function setInstantiator ($instantiator)
     {
         $this->instantiator = $instantiator;
     }
 
-    public function setSupertypes(array $supertypes)
+    public function setSupertypes (array $supertypes)
     {
         $this->supertypes = $supertypes;
     }
 
-    public function addMethod($method, $isRequired = null)
+    public function addMethod ($method, $isRequired = null)
     {
         if ($isRequired === null) {
             $isRequired = ($method === '__construct') ? true : false;
@@ -35,29 +38,29 @@ class ClassDefinition implements Definition, PartialMarker
         $this->methods[$method] = (bool) $isRequired;
     }
 
-    public function addMethodParameter($method, $parameterName, array $parameterInfo)
+    public function addMethodParameter ($method, $parameterName, 
+    array $parameterInfo)
     {
-        if (!array_key_exists($method, $this->methods)) {
+        if (! array_key_exists($method, $this->methods)) {
             $this->methods[$method] = ($method === '__construct') ? true : false;
         }
-
-        if (!array_key_exists($method, $this->methodParameters)) {
+        
+        if (! array_key_exists($method, $this->methodParameters)) {
             $this->methodParameters[$method] = array();
         }
-
+        
         $type = (isset($parameterInfo['type'])) ? $parameterInfo['type'] : null;
         $required = (isset($parameterInfo['required'])) ? (bool) $parameterInfo['required'] : false;
-
+        
         $fqName = $this->class . '::' . $method . ':' . $parameterName;
-        $this->methodParameters[$method][$fqName] = array(
-            $parameterName, $type, $required
-        );
+        $this->methodParameters[$method][$fqName] = array($parameterName, $type, 
+        $required);
     }
 
     /**
      * @return string[]
      */
-    public function getClasses()
+    public function getClasses ()
     {
         return array($this->class);
     }
@@ -66,7 +69,7 @@ class ClassDefinition implements Definition, PartialMarker
      * @param string $class
      * @return bool
      */
-    public function hasClass($class)
+    public function hasClass ($class)
     {
         return ($class === $this->class);
     }
@@ -75,7 +78,7 @@ class ClassDefinition implements Definition, PartialMarker
      * @param string $class
      * @return string[]
      */
-    public function getClassSupertypes($class)
+    public function getClassSupertypes ($class)
     {
         return $this->supertypes;
     }
@@ -84,7 +87,7 @@ class ClassDefinition implements Definition, PartialMarker
      * @param string $class
      * @return string|array
      */
-    public function getInstantiator($class)
+    public function getInstantiator ($class)
     {
         return $this->instantiator;
     }
@@ -93,7 +96,7 @@ class ClassDefinition implements Definition, PartialMarker
      * @param string $class
      * @return bool
      */
-    public function hasMethods($class)
+    public function hasMethods ($class)
     {
         return ($this->methods);
     }
@@ -102,7 +105,7 @@ class ClassDefinition implements Definition, PartialMarker
      * @param string $class
      * @return string[]
      */
-    public function getMethods($class)
+    public function getMethods ($class)
     {
         return $this->methods;
     }
@@ -112,7 +115,7 @@ class ClassDefinition implements Definition, PartialMarker
      * @param string $method
      * @return bool
      */
-    public function hasMethod($class, $method)
+    public function hasMethod ($class, $method)
     {
         if (is_array($this->methods)) {
             return array_key_exists($method, $this->methods);
@@ -126,7 +129,7 @@ class ClassDefinition implements Definition, PartialMarker
      * @param string $method
      * @return bool
      */
-    public function hasMethodParameters($class, $method)
+    public function hasMethodParameters ($class, $method)
     {
         return (array_key_exists($method, $this->methodParameters));
     }
@@ -138,9 +141,9 @@ class ClassDefinition implements Definition, PartialMarker
      * Each value should be an array, of length 4 with the following information:
      *
      * array(
-     *     0, // string|null: Type Name (if it exists)
-     *     1, // bool: whether this param is required
-     *     2, // string: fully qualified path to this parameter
+     * 0, // string|null: Type Name (if it exists)
+     * 1, // bool: whether this param is required
+     * 2, // string: fully qualified path to this parameter
      * );
      *
      *
@@ -148,7 +151,7 @@ class ClassDefinition implements Definition, PartialMarker
      * @param $method
      * @return array[]
      */
-    public function getMethodParameters($class, $method)
+    public function getMethodParameters ($class, $method)
     {
         if (array_key_exists($method, $this->methodParameters)) {
             return $this->methodParameters[$method];

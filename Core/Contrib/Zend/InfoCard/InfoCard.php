@@ -39,10 +39,11 @@ namespace Zend\InfoCard;
  */
 class InfoCard
 {
+
     /**
      * URI for XML Digital Signature SHA1 Digests
      */
-    const DIGEST_SHA1        = 'http://www.w3.org/2000/09/xmldsig#sha1';
+    const DIGEST_SHA1 = 'http://www.w3.org/2000/09/xmldsig#sha1';
 
     /**
      * An array of certificate pair files and optional passwords for them to search
@@ -74,22 +75,23 @@ class InfoCard
      */
     protected $_adapter;
 
-
     /**
      * InfoCard Constructor
      *
      * @throws \Zend\InfoCard\Exception
      */
-    public function __construct()
+    public function __construct ()
     {
         $this->_keyPairs = array();
-
-        if(!extension_loaded('mcrypt')) {
-            throw new Exception\ExtensionNotLoadedException("Use of the Zend_InfoCard component requires the mcrypt extension to be enabled in PHP");
+        
+        if (! extension_loaded('mcrypt')) {
+            throw new Exception\ExtensionNotLoadedException(
+            "Use of the Zend_InfoCard component requires the mcrypt extension to be enabled in PHP");
         }
-
-        if(!extension_loaded('openssl')) {
-            throw new Exception\ExtensionNotLoadedException("Use of the Zend_InfoCard component requires the openssl extension to be enabled in PHP");
+        
+        if (! extension_loaded('openssl')) {
+            throw new Exception\ExtensionNotLoadedException(
+            "Use of the Zend_InfoCard component requires the openssl extension to be enabled in PHP");
         }
     }
 
@@ -100,7 +102,7 @@ class InfoCard
      * @param \Zend\InfoCard\Adapter $a The Adapter instance
      * @return \Zend\InfoCard\InfoCard The instnace
      */
-    public function setAdapter(Adapter $a)
+    public function setAdapter (Adapter $a)
     {
         $this->_adapter = $a;
         return $this;
@@ -112,12 +114,12 @@ class InfoCard
      *
      * @return \Zend\InfoCard\Adapter The Adapter instance
      */
-    public function getAdapter()
+    public function getAdapter ()
     {
-        if($this->_adapter === null) {
+        if ($this->_adapter === null) {
             $this->setAdapter(new Adapter\DefaultAdapter());
         }
-
+        
         return $this->_adapter;
     }
 
@@ -126,7 +128,7 @@ class InfoCard
      *
      * @return \Zend\InfoCard\Cipher\PKI
      */
-    public function getPkiCipherObject()
+    public function getPkiCipherObject ()
     {
         return $this->_pkiCipherObj;
     }
@@ -137,7 +139,7 @@ class InfoCard
      * @param \Zend\InfoCard\Cipher\PKI $cipherObj
      * @return \Zend\InfoCard\InfoCard
      */
-    public function setPkiCipherObject(Cipher\PKI $cipherObj)
+    public function setPkiCipherObject (Cipher\PKI $cipherObj)
     {
         $this->_pkiCipherObj = $cipherObj;
         return $this;
@@ -148,7 +150,7 @@ class InfoCard
      *
      * @return \Zend\InfoCard\Cipher\Symmetric
      */
-    public function getSymCipherObject()
+    public function getSymCipherObject ()
     {
         return $this->_symCipherObj;
     }
@@ -159,7 +161,7 @@ class InfoCard
      * @param \Zend\InfoCard\Cipher\Symmetric $cipherObj
      * @return \Zend\InfoCard\InfoCard
      */
-    public function setSymCipherObject($cipherObj)
+    public function setSymCipherObject ($cipherObj)
     {
         $this->_symCipherObj = $cipherObj;
         return $this;
@@ -172,13 +174,14 @@ class InfoCard
      * @param string $key_id The Certificate Key ID returned from adding the certificate pair
      * @return \Zend\InfoCard\InfoCard
      */
-    public function removeCertificatePair($key_id)
+    public function removeCertificatePair ($key_id)
     {
-
-        if(!key_exists($key_id, $this->_keyPairs)) {
-            throw new Exception\InvalidArgumentException("Attempted to remove unknown key id: $key_id");
+        
+        if (! key_exists($key_id, $this->_keyPairs)) {
+            throw new Exception\InvalidArgumentException(
+            "Attempted to remove unknown key id: $key_id");
         }
-
+        
         unset($this->_keyPairs[$key_id]);
         return $this;
     }
@@ -193,41 +196,44 @@ class InfoCard
      * @param string $password (optional) The password for the private key file if necessary
      * @return string A key ID representing this key pair in the component
      */
-    public function addCertificatePair($private_key_file, $public_key_file, $type = Cipher::ENC_RSA_OAEP_MGF1P, $password = null)
+    public function addCertificatePair ($private_key_file, $public_key_file, 
+    $type = Cipher::ENC_RSA_OAEP_MGF1P, $password = null)
     {
-        if(!file_exists($private_key_file) ||
-           !file_exists($public_key_file)) {
-            throw new Exception\InvalidArgumentException("Could not locate the public and private certificate pair files: $private_key_file, $public_key_file");
+        if (! file_exists($private_key_file) || ! file_exists($public_key_file)) {
+            throw new Exception\InvalidArgumentException(
+            "Could not locate the public and private certificate pair files: $private_key_file, $public_key_file");
         }
-
-        if(!is_readable($private_key_file) ||
-           !is_readable($public_key_file)) {
-            throw new Exception\InvalidArgumentException("Could not read the public and private certificate pair files (check permissions): $private_key_file, $public_key_file");
+        
+        if (! is_readable($private_key_file) || ! is_readable($public_key_file)) {
+            throw new Exception\InvalidArgumentException(
+            "Could not read the public and private certificate pair files (check permissions): $private_key_file, $public_key_file");
         }
-
-        $key_id = md5($private_key_file.$public_key_file);
-
-        if(key_exists($key_id, $this->_keyPairs)) {
-            throw new Exception\InvalidArgumentException("Attempted to add previously existing certificate pair: $private_key_file, $public_key_file");
+        
+        $key_id = md5($private_key_file . $public_key_file);
+        
+        if (key_exists($key_id, $this->_keyPairs)) {
+            throw new Exception\InvalidArgumentException(
+            "Attempted to add previously existing certificate pair: $private_key_file, $public_key_file");
         }
-
-        switch($type) {
+        
+        switch ($type) {
             case Cipher::ENC_RSA:
             case Cipher::ENC_RSA_OAEP_MGF1P:
-                $this->_keyPairs[$key_id] = array('private' => $private_key_file,
-                                'public'      => $public_key_file,
-                                'type_uri'    => $type);
-
-                if($password !== null) {
+                $this->_keyPairs[$key_id] = array(
+                'private' => $private_key_file, 
+                'public' => $public_key_file, 'type_uri' => $type);
+                
+                if ($password !== null) {
                     $this->_keyPairs[$key_id]['password'] = $password;
                 } else {
                     $this->_keyPairs[$key_id]['password'] = null;
                 }
-
+                
                 return $key_id;
                 break;
             default:
-                throw new Exception\InvalidArgumentException("Invalid Certificate Pair Type specified: $type");
+                throw new Exception\InvalidArgumentException(
+                "Invalid Certificate Pair Type specified: $type");
         }
     }
 
@@ -237,15 +243,16 @@ class InfoCard
      * @throws \Zend\InfoCard\Exception
      * @param string $key_id The Key ID of the certificate pair in the component
      * @return array An array containing the path to the private/public key files,
-     *               the type URI and the password if provided
+     * the type URI and the password if provided
      */
-    public function getCertificatePair($key_id)
+    public function getCertificatePair ($key_id)
     {
-        if(key_exists($key_id, $this->_keyPairs)) {
+        if (key_exists($key_id, $this->_keyPairs)) {
             return $this->_keyPairs[$key_id];
         }
-
-        throw new Exception\InvalidArgumentException("Invalid Certificate Pair ID provided: $key_id");
+        
+        throw new Exception\InvalidArgumentException(
+        "Invalid Certificate Pair ID provided: $key_id");
     }
 
     /**
@@ -257,23 +264,25 @@ class InfoCard
      * @param string $digestMethod The URI of the digest method to use (default SHA1)
      * @return string The digest value in binary format
      */
-    protected function _getPublicKeyDigest($key_id, $digestMethod = self::DIGEST_SHA1)
+    protected function _getPublicKeyDigest ($key_id, 
+    $digestMethod = self::DIGEST_SHA1)
     {
         $certificatePair = $this->getCertificatePair($key_id);
-
+        
         $temp = file($certificatePair['public']);
-        unset($temp[count($temp)-1]);
+        unset($temp[count($temp) - 1]);
         unset($temp[0]);
         $certificateData = base64_decode(implode("\n", $temp));
-
-        switch($digestMethod) {
+        
+        switch ($digestMethod) {
             case self::DIGEST_SHA1:
                 $digest_retval = sha1($certificateData, true);
                 break;
             default:
-                throw new Exception\InvalidArgumentException("Invalid Digest Type Provided: $digestMethod");
+                throw new Exception\InvalidArgumentException(
+                "Invalid Digest Type Provided: $digestMethod");
         }
-
+        
         return $digest_retval;
     }
 
@@ -284,18 +293,19 @@ class InfoCard
      * @param string $digestMethod The URI of the digest method used to calculate the digest
      * @return mixed The Key ID of the matching certificate pair or false if not found
      */
-    protected function _findCertifiatePairByDigest($digest, $digestMethod = self::DIGEST_SHA1)
+    protected function _findCertifiatePairByDigest ($digest, 
+    $digestMethod = self::DIGEST_SHA1)
     {
-
-        foreach($this->_keyPairs as $key_id => $certificate_data) {
-
+        
+        foreach ($this->_keyPairs as $key_id => $certificate_data) {
+            
             $cert_digest = $this->_getPublicKeyDigest($key_id, $digestMethod);
-
-            if($cert_digest == $digest) {
+            
+            if ($cert_digest == $digest) {
                 return $key_id;
             }
         }
-
+        
         return false;
     }
 
@@ -306,71 +316,82 @@ class InfoCard
      * @param string $strXmlToken The EncryptedData XML block
      * @return string The XML of the Signed Token inside of the EncryptedData block
      */
-    protected function _extractSignedToken($strXmlToken)
+    protected function _extractSignedToken ($strXmlToken)
     {
         $encryptedData = XML\EncryptedData\Factory::getInstance($strXmlToken);
-
+        
         // Determine the Encryption Method used to encrypt the token
+        
 
-        switch($encryptedData->getEncryptionMethod()) {
+        switch ($encryptedData->getEncryptionMethod()) {
             case Cipher::ENC_AES128CBC:
             case Cipher::ENC_AES256CBC:
                 break;
             default:
-                throw new Exception\RuntimeException("Unknown Encryption Method used in the secure token");
+                throw new Exception\RuntimeException(
+                "Unknown Encryption Method used in the secure token");
         }
-
+        
         // Figure out the Key we are using to decrypt the token
+        
 
         $keyinfo = $encryptedData->getKeyInfo();
-
-        if(!($keyinfo instanceof XML\KeyInfo\XMLDSig)) {
-            throw new Exception\RuntimeException("Expected a XML digital signature KeyInfo, but was not found");
+        
+        if (! ($keyinfo instanceof XML\KeyInfo\XMLDSig)) {
+            throw new Exception\RuntimeException(
+            "Expected a XML digital signature KeyInfo, but was not found");
         }
-
-
+        
         $encryptedKey = $keyinfo->getEncryptedKey();
-
-        switch($encryptedKey->getEncryptionMethod()) {
+        
+        switch ($encryptedKey->getEncryptionMethod()) {
             case Cipher::ENC_RSA:
             case Cipher::ENC_RSA_OAEP_MGF1P:
                 break;
             default:
-                throw new Exception\RuntimeException("Unknown Key Encryption Method used in secure token");
+                throw new Exception\RuntimeException(
+                "Unknown Key Encryption Method used in secure token");
         }
-
+        
         $securityTokenRef = $encryptedKey->getKeyInfo()->getSecurityTokenReference();
-
-        $key_id = $this->_findCertifiatePairByDigest($securityTokenRef->getKeyReference());
-
-        if(!$key_id) {
-            throw new Exception\RuntimeException("Unable to find key pair used to encrypt symmetric InfoCard Key");
+        
+        $key_id = $this->_findCertifiatePairByDigest(
+        $securityTokenRef->getKeyReference());
+        
+        if (! $key_id) {
+            throw new Exception\RuntimeException(
+            "Unable to find key pair used to encrypt symmetric InfoCard Key");
         }
-
+        
         $certificate_pair = $this->getCertificatePair($key_id);
-
+        
         // Santity Check
+        
 
-        if($certificate_pair['type_uri'] != $encryptedKey->getEncryptionMethod()) {
-            throw new Exception\RuntimeException("Certificate Pair which matches digest is not of same algorithm type as document, check addCertificate()");
+        if ($certificate_pair['type_uri'] != $encryptedKey->getEncryptionMethod()) {
+            throw new Exception\RuntimeException(
+            "Certificate Pair which matches digest is not of same algorithm type as document, check addCertificate()");
         }
-
-        $PKcipher = Cipher::getInstanceByURI($encryptedKey->getEncryptionMethod());
-
-        $keyCipherValueBase64Decoded = base64_decode($encryptedKey->getCipherValue(), true);
-
-        $symmetricKey = $PKcipher->decrypt(
-            $keyCipherValueBase64Decoded,
-            file_get_contents($certificate_pair['private']),
-            $certificate_pair['password']
-            );
-
-        $symCipher = Cipher::getInstanceByURI($encryptedData->getEncryptionMethod());
-
-        $dataCipherValueBase64Decoded = base64_decode($encryptedData->getCipherValue(), true);
-
-        $signedToken = $symCipher->decrypt($dataCipherValueBase64Decoded, $symmetricKey);
-
+        
+        $PKcipher = Cipher::getInstanceByURI(
+        $encryptedKey->getEncryptionMethod());
+        
+        $keyCipherValueBase64Decoded = base64_decode(
+        $encryptedKey->getCipherValue(), true);
+        
+        $symmetricKey = $PKcipher->decrypt($keyCipherValueBase64Decoded, 
+        file_get_contents($certificate_pair['private']), 
+        $certificate_pair['password']);
+        
+        $symCipher = Cipher::getInstanceByURI(
+        $encryptedData->getEncryptionMethod());
+        
+        $dataCipherValueBase64Decoded = base64_decode(
+        $encryptedData->getCipherValue(), true);
+        
+        $signedToken = $symCipher->decrypt($dataCipherValueBase64Decoded, 
+        $symmetricKey);
+        
         return $signedToken;
     }
 
@@ -381,73 +402,81 @@ class InfoCard
      * @param string $strXmlToken The XML token sent to the server from the client
      * @return Zend_Infocard_Claims The Claims object containing the claims, or any errors which occurred
      */
-    public function process($strXmlToken)
+    public function process ($strXmlToken)
     {
-
+        
         $retval = new Claims();
-
+        
         try {
             $signedAssertionsXml = $this->_extractSignedToken($strXmlToken);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $retval->setError('Failed to extract assertion document');
             $retval->setCode(Claims::RESULT_PROCESSING_FAILURE);
             return $retval;
         }
-
+        
         try {
-            $assertions = XML\Assertion\Factory::getInstance($signedAssertionsXml);
-        } catch(Exception $e) {
+            $assertions = XML\Assertion\Factory::getInstance(
+            $signedAssertionsXml);
+        } catch (Exception $e) {
             $retval->setError('Failure processing assertion document');
             $retval->setCode(Claims::RESULT_PROCESSING_FAILURE);
             return $retval;
         }
-
-        if(!($assertions instanceof XML\Assertion)) {
-            throw new Exception\RuntimeException("Invalid Assertion Object returned");
+        
+        if (! ($assertions instanceof XML\Assertion)) {
+            throw new Exception\RuntimeException(
+            "Invalid Assertion Object returned");
         }
-
-        if(!($reference_id = XML\Security::validateXMLSignature($assertions->asXML()))) {
-            $retval->setError("Failure Validating the Signature of the assertion document");
+        
+        if (! ($reference_id = XML\Security::validateXMLSignature(
+        $assertions->asXML()))) {
+            $retval->setError(
+            "Failure Validating the Signature of the assertion document");
             $retval->setCode(Claims::RESULT_VALIDATION_FAILURE);
             return $retval;
         }
-
+        
         // The reference id should be locally scoped as far as I know
-        if($reference_id[0] == '#') {
+        if ($reference_id[0] == '#') {
             $reference_id = substr($reference_id, 1);
         } else {
-            $retval->setError("Reference of document signature does not reference the local document");
+            $retval->setError(
+            "Reference of document signature does not reference the local document");
             $retval->setCode(Claims::RESULT_VALIDATION_FAILURE);
             return $retval;
         }
-
+        
         // Make sure the signature is in reference to the same document as the assertions
-        if($reference_id != $assertions->getAssertionID()) {
-            $retval->setError("Reference of document signature does not reference the local document");
+        if ($reference_id != $assertions->getAssertionID()) {
+            $retval->setError(
+            "Reference of document signature does not reference the local document");
             $retval->setCode(Claims::RESULT_VALIDATION_FAILURE);
         }
-
+        
         // Validate we haven't seen this before and the conditions are acceptable
-        $conditions = $this->getAdapter()->retrieveAssertion($assertions->getAssertionURI(), $assertions->getAssertionID());
-
-        if($conditions === false) {
+        $conditions = $this->getAdapter()->retrieveAssertion(
+        $assertions->getAssertionURI(), $assertions->getAssertionID());
+        
+        if ($conditions === false) {
             $conditions = $assertions->getConditions();
         }
-
-
-        if(is_array($condition_error = $assertions->validateConditions($conditions))) {
-            $retval->setError("Conditions of assertion document are not met: {$condition_error[1]} ({$condition_error[0]})");
+        
+        if (is_array(
+        $condition_error = $assertions->validateConditions($conditions))) {
+            $retval->setError(
+            "Conditions of assertion document are not met: {$condition_error[1]} ({$condition_error[0]})");
             $retval->setCode(Claims::RESULT_VALIDATION_FAILURE);
         }
-
+        
         $attributes = $assertions->getAttributes();
-
+        
         $retval->setClaims($attributes);
-
-        if($retval->getCode() == 0) {
+        
+        if ($retval->getCode() == 0) {
             $retval->setCode(Claims::RESULT_SUCCESS);
         }
-
+        
         return $retval;
     }
 }

@@ -40,10 +40,12 @@ class Generator extends Extension
 {
 
     protected $_rootElement = 'generator';
+
     protected $_uri = null;
+
     protected $_version = null;
 
-    public function __construct($text = null, $uri = null, $version = null)
+    public function __construct ($text = null, $uri = null, $version = null)
     {
         parent::__construct();
         $this->_text = $text;
@@ -51,7 +53,7 @@ class Generator extends Extension
         $this->_version = $version;
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_uri !== null) {
@@ -63,24 +65,24 @@ class Generator extends Extension
         return $element;
     }
 
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'uri':
-            $this->_uri = $attribute->nodeValue;
-            break;
-        case 'version':
-            $this->_version= $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'uri':
+                $this->_uri = $attribute->nodeValue;
+                break;
+            case 'version':
+                $this->_version = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
     /**
      * @return \Zend\GData\App\Extension\Uri
      */
-    public function getUri()
+    public function getUri ()
     {
         return $this->_uri;
     }
@@ -89,7 +91,7 @@ class Generator extends Extension
      * @param \Zend\GData\App\Extension\Uri $value
      * @return \Zend\GData\App\Entry Provides a fluent interface
      */
-    public function setUri($value)
+    public function setUri ($value)
     {
         $this->_uri = $value;
         return $this;
@@ -98,7 +100,7 @@ class Generator extends Extension
     /**
      * @return Zend\GData\App\Extension\Version
      */
-    public function getVersion()
+    public function getVersion ()
     {
         return $this->_version;
     }
@@ -107,7 +109,7 @@ class Generator extends Extension
      * @param Zend\GData\App\Extension\Version $value
      * @return \Zend\GData\App\Entry Provides a fluent interface
      */
-    public function setVersion($value)
+    public function setVersion ($value)
     {
         $this->_version = $value;
         return $this;

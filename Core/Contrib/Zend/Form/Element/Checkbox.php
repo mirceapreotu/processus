@@ -36,6 +36,7 @@ namespace Zend\Form\Element;
  */
 class Checkbox extends Xhtml
 {
+
     /**
      * Is the checkbox checked?
      * @var bool
@@ -52,10 +53,7 @@ class Checkbox extends Xhtml
      * Options that will be passed to the view helper
      * @var array
      */
-    public $options = array(
-        'checkedValue'   => '1',
-        'uncheckedValue' => '0',
-    );
+    public $options = array('checkedValue' => '1', 'uncheckedValue' => '0');
 
     /**
      * Value when checked
@@ -84,7 +82,7 @@ class Checkbox extends Xhtml
      * @param  array $options
      * @return \Zend\Form\Element\Checkbox
      */
-    public function setOptions(array $options)
+    public function setOptions (array $options)
     {
         if (array_key_exists('checkedValue', $options)) {
             $this->setCheckedValue($options['checkedValue']);
@@ -95,13 +93,13 @@ class Checkbox extends Xhtml
             unset($options['uncheckedValue']);
         }
         parent::setOptions($options);
-
+        
         $curValue = $this->getValue();
-        $test     = array($this->getCheckedValue(), $this->getUncheckedValue());
-        if (!in_array($curValue, $test)) {
+        $test = array($this->getCheckedValue(), $this->getUncheckedValue());
+        if (! in_array($curValue, $test)) {
             $this->setValue($curValue);
         }
-
+        
         return $this;
     }
 
@@ -118,7 +116,7 @@ class Checkbox extends Xhtml
      * @param  mixed $value
      * @return \Zend\Form\Element\Checkbox
      */
-    public function setValue($value)
+    public function setValue ($value)
     {
         if ($value == $this->getCheckedValue()) {
             parent::setValue($value);
@@ -136,7 +134,7 @@ class Checkbox extends Xhtml
      * @param  string $value
      * @return \Zend\Form\Element\Checkbox
      */
-    public function setCheckedValue($value)
+    public function setCheckedValue ($value)
     {
         $this->_checkedValue = (string) $value;
         $this->options['checkedValue'] = $value;
@@ -148,7 +146,7 @@ class Checkbox extends Xhtml
      *
      * @return string
      */
-    public function getCheckedValue()
+    public function getCheckedValue ()
     {
         return $this->_checkedValue;
     }
@@ -159,7 +157,7 @@ class Checkbox extends Xhtml
      * @param  string $value
      * @return \Zend\Form\Element\Checkbox
      */
-    public function setUncheckedValue($value)
+    public function setUncheckedValue ($value)
     {
         $this->_uncheckedValue = (string) $value;
         $this->options['uncheckedValue'] = $value;
@@ -171,7 +169,7 @@ class Checkbox extends Xhtml
      *
      * @return string
      */
-    public function getUncheckedValue()
+    public function getUncheckedValue ()
     {
         return $this->_uncheckedValue;
     }
@@ -182,7 +180,7 @@ class Checkbox extends Xhtml
      * @param  bool $flag
      * @return \Zend\Form\Element\Checkbox
      */
-    public function setChecked($flag)
+    public function setChecked ($flag)
     {
         $this->checked = (bool) $flag;
         if ($this->checked) {
@@ -198,7 +196,7 @@ class Checkbox extends Xhtml
      *
      * @return bool
      */
-    public function isChecked()
+    public function isChecked ()
     {
         return $this->checked;
     }

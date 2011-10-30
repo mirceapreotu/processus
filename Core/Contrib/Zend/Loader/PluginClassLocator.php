@@ -34,6 +34,7 @@ namespace Zend\Loader;
  */
 interface PluginClassLocator extends ShortNameLocator, \IteratorAggregate
 {
+
     /**
      * Register a class to a given short name
      * 
@@ -41,7 +42,7 @@ interface PluginClassLocator extends ShortNameLocator, \IteratorAggregate
      * @param  string $className 
      * @return PluginClassLocator
      */
-    public function registerPlugin($shortName, $className);
+    public function registerPlugin ($shortName, $className);
 
     /**
      * Unregister a short name lookup
@@ -49,13 +50,13 @@ interface PluginClassLocator extends ShortNameLocator, \IteratorAggregate
      * @param mixed $shortName 
      * @return void
      */
-    public function unregisterPlugin($shortName);
+    public function unregisterPlugin ($shortName);
 
     /**
      * Get a list of all registered plugins
      * 
      * @return array|Traversable
      */
-    public function getRegisteredPlugins();
+    public function getRegisteredPlugins ();
 }
 

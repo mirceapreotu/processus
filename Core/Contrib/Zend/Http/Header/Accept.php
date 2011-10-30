@@ -11,33 +11,34 @@ class Accept implements HeaderDescription
 
     protected $values = array();
 
-    public static function fromString($headerLine)
+    public static function fromString ($headerLine)
     {
         $acceptHeader = new static();
-
-        list($name, $values) = preg_split('#: #', $headerLine, 2);
-
+        
+        list ($name, $values) = preg_split('#: #', $headerLine, 2);
+        
         // check to ensure proper header type for this factory
         if (strtolower($name) !== 'accept') {
-            throw new Exception\InvalidArgumentException('Invalid header line for accept header string');
+            throw new Exception\InvalidArgumentException(
+            'Invalid header line for accept header string');
         }
-
+        
         // process multiple accept values
         // @todo q and level processing here to be retrieved by getters in accept object later
         $acceptHeader->values = explode(',', $values);
         foreach ($acceptHeader->values as $index => $value) {
             $acceptHeader->values[$index] = explode(';', $value);
         }
-
+        
         return $acceptHeader;
     }
 
-    public function getFieldName()
+    public function getFieldName ()
     {
         return 'Accept';
     }
 
-    public function getFieldValue()
+    public function getFieldValue ()
     {
         $strings = array();
         foreach ($this->values as $value) {
@@ -46,12 +47,12 @@ class Accept implements HeaderDescription
         return implode(',', $strings);
     }
 
-    public function toString()
+    public function toString ()
     {
         return 'Accept: ' . $this->getFieldValue();
     }
 
-//
+    //
 //    /**
 //     * Get the quality factor of the value (q=)
 //     *
@@ -95,5 +96,6 @@ class Accept implements HeaderDescription
 //        return false;
 //    }
 //
+
 
 }

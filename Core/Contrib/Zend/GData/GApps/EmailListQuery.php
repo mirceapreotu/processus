@@ -57,16 +57,16 @@ class EmailListQuery extends Query
      * Create a new instance.
      *
      * @param string $domain (optional) The Google Apps-hosted domain to use
-     *          when constructing query URIs.
+     * when constructing query URIs.
      * @param string $emailListName (optional) Value for the emailListName
-     *          property.
+     * property.
      * @param string $recipient (optional) Value for the recipient
-     *          property.
+     * property.
      * @param string $startEmailListName (optional) Value for the
-     *          startEmailListName property.
+     * startEmailListName property.
      */
-    public function __construct($domain = null, $emailListName = null,
-            $recipient = null, $startEmailListName = null)
+    public function __construct ($domain = null, $emailListName = null, 
+    $recipient = null, $startEmailListName = null)
     {
         parent::__construct($domain);
         $this->setEmailListName($emailListName);
@@ -80,12 +80,12 @@ class EmailListQuery extends Query
      * null to disable filtering by list name.
      *
      * @param string $value The email list name to filter search results by,
-     *          or null to disable.
+     * or null to disable.
      */
-     public function setEmailListName($value)
-     {
-         $this->_emailListName = $value;
-     }
+    public function setEmailListName ($value)
+    {
+        $this->_emailListName = $value;
+    }
 
     /**
      * Get the email list name to query for. If no name is set, null will be
@@ -93,9 +93,9 @@ class EmailListQuery extends Query
      *
      * @see setEmailListName
      * @return string The email list name to filter search results by, or null
-     *              if disabled.
+     * if disabled.
      */
-    public function getEmailListName()
+    public function getEmailListName ()
     {
         return $this->_emailListName;
     }
@@ -106,14 +106,13 @@ class EmailListQuery extends Query
      * Set to null to disable filtering by username.
      *
      * @param string $value The recipient email address to filter search
-     *              results by, or null to  disable.
+     * results by, or null to  disable.
      */
-    public function setRecipient($value)
+    public function setRecipient ($value)
     {
         if ($value !== null) {
             $this->_params['recipient'] = $value;
-        }
-        else {
+        } else {
             unset($this->_params['recipient']);
         }
     }
@@ -124,9 +123,9 @@ class EmailListQuery extends Query
      *
      * @see setRecipient
      * @return string The recipient email address to filter search results by,
-     *              or null if disabled.
+     * or null if disabled.
      */
-    public function getRecipient()
+    public function getRecipient ()
     {
         if (array_key_exists('recipient', $this->_params)) {
             return $this->_params['recipient'];
@@ -140,9 +139,9 @@ class EmailListQuery extends Query
      * a list of email lists.
      *
      * @param string $value The first email list to be returned, or null to
-     *              disable.
+     * disable.
      */
-    public function setStartEmailListName($value)
+    public function setStartEmailListName ($value)
     {
         if ($value !== null) {
             $this->_params['startEmailListName'] = $value;
@@ -156,9 +155,9 @@ class EmailListQuery extends Query
      * a list of email lists.
      *
      * @return string The first email list to be returned, or null to
-     *              disable.
+     * disable.
      */
-    public function getStartEmailListName()
+    public function getStartEmailListName ()
     {
         if (array_key_exists('startEmailListName', $this->_params)) {
             return $this->_params['startEmailListName'];
@@ -174,9 +173,9 @@ class EmailListQuery extends Query
      * @return string A URL generated based on the state of this query.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function getQueryUrl()
+    public function getQueryUrl ()
     {
-
+        
         $uri = $this->getBaseUrl();
         $uri .= GApps::APPS_EMAIL_LIST_PATH;
         if ($this->_emailListName !== null) {

@@ -4,45 +4,49 @@ namespace Zend\Di\Definition\Builder;
 
 class PhpClass
 {
+
     protected $defaultMethodBuilder = 'Zend\Di\Definition\Builder\InjectionMethod';
-    protected $name                 = null;
-    protected $instantiator         = '__construct';
-    protected $injectionMethods     = array();
-    
-    public function setName($name)
+
+    protected $name = null;
+
+    protected $instantiator = '__construct';
+
+    protected $injectionMethods = array();
+
+    public function setName ($name)
     {
         $this->name = $name;
         return $this;
     }
-    
-    public function getName()
+
+    public function getName ()
     {
         return $this->name;
     }
-    
-    public function setInstantiator($instantiator)
+
+    public function setInstantiator ($instantiator)
     {
         $this->instantiator = $instantiator;
         return $this;
     }
-    
-    public function getInstantiator()
+
+    public function getInstantiator ()
     {
         return $this->instantiator;
     }
-    
-    public function addSuperType($superType)
+
+    public function addSuperType ($superType)
     {
         $this->superTypes[] = $superType;
         return $this;
     }
-    
-    public function getSuperTypes()
+
+    public function getSuperTypes ()
     {
         return $this->superTypes;
     }
-    
-    public function addInjectionMethod(InjectionMethod $injectionMethod)
+
+    public function addInjectionMethod (InjectionMethod $injectionMethod)
     {
         $this->injectionMethods[] = $injectionMethod;
         return $this;
@@ -60,10 +64,10 @@ class PhpClass
      * @param  null|string $name 
      * @return InjectionMethod
      */
-    public function createInjectionMethod($name = null)
+    public function createInjectionMethod ($name = null)
     {
         $builder = $this->defaultMethodBuilder;
-        $method  = new $builder();
+        $method = new $builder();
         if (null !== $name) {
             $method->setName($name);
         }
@@ -77,7 +81,7 @@ class PhpClass
      * @param  string $class 
      * @return PhpClass
      */
-    public function setMethodBuilder($class)
+    public function setMethodBuilder ($class)
     {
         $this->defaultMethodBuilder = $class;
         return $this;
@@ -90,12 +94,12 @@ class PhpClass
      * 
      * @return string
      */
-    public function getMethodBuilder()
+    public function getMethodBuilder ()
     {
         return $this->defaultMethodBuilder;
     }
-    
-    public function getInjectionMethods()
+
+    public function getInjectionMethods ()
     {
         return $this->injectionMethods;
     }

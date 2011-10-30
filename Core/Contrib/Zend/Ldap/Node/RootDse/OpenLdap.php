@@ -39,12 +39,13 @@ use Zend\Ldap\Node\RootDse;
  */
 class OpenLdap extends RootDse
 {
+
     /**
      * Gets the configContext.
      *
      * @return string|null
      */
-    public function getConfigContext()
+    public function getConfigContext ()
     {
         return $this->getAttribute('configContext', 0);
     }
@@ -54,7 +55,7 @@ class OpenLdap extends RootDse
      *
      * @return string|null
      */
-    public function getMonitorContext()
+    public function getMonitorContext ()
     {
         return $this->getAttribute('monitorContext', 0);
     }
@@ -65,7 +66,7 @@ class OpenLdap extends RootDse
      * @param  string|array $oids control oid(s) to check
      * @return boolean
      */
-    public function supportsControl($oids)
+    public function supportsControl ($oids)
     {
         return $this->attributeHasValue('supportedControl', $oids);
     }
@@ -76,7 +77,7 @@ class OpenLdap extends RootDse
      * @param  string|array $oids oid(s) to check
      * @return boolean
      */
-    public function supportsExtension($oids)
+    public function supportsExtension ($oids)
     {
         return $this->attributeHasValue('supportedExtension', $oids);
     }
@@ -87,7 +88,7 @@ class OpenLdap extends RootDse
      * @param  string|array $oids feature oid(s) to check
      * @return boolean
      */
-    public function supportsFeature($oids)
+    public function supportsFeature ($oids)
     {
         return $this->attributeHasValue('supportedFeatures', $oids);
     }
@@ -97,7 +98,7 @@ class OpenLdap extends RootDse
      *
      * @return int
      */
-    public function getServerType()
+    public function getServerType ()
     {
         return self::SERVER_TYPE_OPENLDAP;
     }

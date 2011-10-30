@@ -36,6 +36,7 @@ namespace Zend\Dojo\Form\Element;
  */
 class Button extends Dijit
 {
+
     /**
      * Use Button dijit view helper
      * @var string
@@ -49,12 +50,12 @@ class Button extends Dijit
      * @param  string|array|\Zend\Config\Config $options Element value or configuration
      * @return void
      */
-    public function __construct($spec, $options = null)
+    public function __construct ($spec, $options = null)
     {
         if (is_string($spec) && ((null !== $options) && is_string($options))) {
             $options = array('label' => $options);
         }
-
+        
         parent::__construct($spec, $options);
     }
 
@@ -67,18 +68,18 @@ class Button extends Dijit
      *
      * @return string
      */
-    public function getLabel()
+    public function getLabel ()
     {
         $value = parent::getLabel();
-
+        
         if (null === $value) {
             $value = $this->getName();
         }
-
+        
         if (null !== ($translator = $this->getTranslator())) {
             return $translator->translate($value);
         }
-
+        
         return $value;
     }
 
@@ -87,17 +88,17 @@ class Button extends Dijit
      *
      * @return bool
      */
-    public function isChecked()
+    public function isChecked ()
     {
         $value = $this->getValue();
-
+        
         if (empty($value)) {
             return false;
         }
         if ($value != $this->getLabel()) {
             return false;
         }
-
+        
         return true;
     }
 
@@ -108,16 +109,15 @@ class Button extends Dijit
      *
      * @return void
      */
-    public function loadDefaultDecorators()
+    public function loadDefaultDecorators ()
     {
         if ($this->loadDefaultDecoratorsIsDisabled()) {
             return;
         }
-
+        
         $decorators = $this->getDecorators();
         if (empty($decorators)) {
-            $this->addDecorator('DijitElement')
-                 ->addDecorator('DtDdWrapper');
+            $this->addDecorator('DijitElement')->addDecorator('DtDdWrapper');
         }
     }
 }

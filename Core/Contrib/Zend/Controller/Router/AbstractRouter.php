@@ -24,8 +24,7 @@
  */
 namespace Zend\Controller\Router;
 
-use Zend\Controller\Router,
-    Zend\Controller\Front as FrontController;
+use Zend\Controller\Router, Zend\Controller\Front as FrontController;
 
 /**
  * Simple first implementation of a router, to be replaced
@@ -41,6 +40,7 @@ use Zend\Controller\Router,
  */
 abstract class AbstractRouter implements Router
 {
+
     /**
      * Front controller instance
      * @var \Zend\Controller\Front
@@ -60,7 +60,7 @@ abstract class AbstractRouter implements Router
      * @param array $params
      * @return void
      */
-    public function __construct(array $params = array())
+    public function __construct (array $params = array())
     {
         $this->setParams($params);
     }
@@ -72,7 +72,7 @@ abstract class AbstractRouter implements Router
      * @param mixed $value
      * @return Zend_Controller_Router
      */
-    public function setParam($name, $value)
+    public function setParam ($name, $value)
     {
         $name = (string) $name;
         $this->_invokeParams[$name] = $value;
@@ -85,7 +85,7 @@ abstract class AbstractRouter implements Router
      * @param array $params
      * @return Zend_Controller_Router
      */
-    public function setParams(array $params)
+    public function setParams (array $params)
     {
         $this->_invokeParams = array_merge($this->_invokeParams, $params);
         return $this;
@@ -97,12 +97,12 @@ abstract class AbstractRouter implements Router
      * @param string $name
      * @return mixed
      */
-    public function getParam($name)
+    public function getParam ($name)
     {
-        if(isset($this->_invokeParams[$name])) {
+        if (isset($this->_invokeParams[$name])) {
             return $this->_invokeParams[$name];
         }
-
+        
         return null;
     }
 
@@ -111,7 +111,7 @@ abstract class AbstractRouter implements Router
      *
      * @return array
      */
-    public function getParams()
+    public function getParams ()
     {
         return $this->_invokeParams;
     }
@@ -126,7 +126,7 @@ abstract class AbstractRouter implements Router
      * @param null|string|array single key or array of keys for params to clear
      * @return Zend_Controller_Router
      */
-    public function clearParams($name = null)
+    public function clearParams ($name = null)
     {
         if (null === $name) {
             $this->_invokeParams = array();
@@ -139,7 +139,7 @@ abstract class AbstractRouter implements Router
                 }
             }
         }
-
+        
         return $this;
     }
 
@@ -148,13 +148,13 @@ abstract class AbstractRouter implements Router
      *
      * @return \Zend\Controller\Front
      */
-    public function getFrontController()
+    public function getFrontController ()
     {
         // Used cache version if found
         if (null !== $this->_frontController) {
             return $this->_frontController;
         }
-
+        
         $this->_frontController = FrontController::getInstance();
         return $this->_frontController;
     }
@@ -165,7 +165,7 @@ abstract class AbstractRouter implements Router
      * @param \Zend\Controller\Front $controller
      * @return \Zend\Controller\Router
      */
-    public function setFrontController(FrontController $controller)
+    public function setFrontController (FrontController $controller)
     {
         $this->_frontController = $controller;
         return $this;

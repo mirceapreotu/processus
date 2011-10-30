@@ -36,12 +36,13 @@ namespace Zend\Ldap\Filter;
  */
 class AndFilter extends LogicalFilter
 {
+
     /**
      * Creates an 'and' grouping filter.
      *
      * @param array $subfilters
      */
-    public function __construct(array $subfilters)
+    public function __construct (array $subfilters)
     {
         parent::__construct($subfilters, self::TYPE_AND);
     }

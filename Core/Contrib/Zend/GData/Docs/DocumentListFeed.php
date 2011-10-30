@@ -58,9 +58,9 @@ class DocumentListFeed extends \Zend\GData\Feed
      * Create a new instance of a feed for a list of documents.
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(Docs::$namespaces);
         parent::__construct($element);

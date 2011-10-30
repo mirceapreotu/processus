@@ -4,5 +4,6 @@ namespace Zend\Code\Annotation;
 
 interface Annotation
 {
-    public function initialize($content);
+
+    public function initialize ($content);
 }

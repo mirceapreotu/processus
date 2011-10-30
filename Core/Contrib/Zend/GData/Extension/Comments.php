@@ -41,33 +41,36 @@ class Comments extends Extension
 {
 
     protected $_rootElement = 'comments';
+
     protected $_rel = null;
+
     protected $_feedLink = null;
 
-    public function __construct($rel = null, $feedLink = null)
+    public function __construct ($rel = null, $feedLink = null)
     {
         parent::__construct();
         $this->_rel = $rel;
         $this->_feedLink = $feedLink;
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_rel !== null) {
             $element->setAttribute('rel', $this->_rel);
         }
         if ($this->_feedLink !== null) {
-            $element->appendChild($this->_feedLink->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_feedLink->getDOM($element->ownerDocument));
         }
         return $element;
     }
 
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-            case $this->lookupNamespace('gd') . ':' . 'feedLink';
+            case $this->lookupNamespace('gd') . ':' . 'feedLink':
                 $feedLink = new FeedLink();
                 $feedLink->transferFromDOM($child);
                 $this->_feedLink = $feedLink;
@@ -78,34 +81,34 @@ class Comments extends Extension
         }
     }
 
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'rel':
-            $this->_rel = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'rel':
+                $this->_rel = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
-    public function getRel()
+    public function getRel ()
     {
         return $this->_rel;
     }
 
-    public function setRel($value)
+    public function setRel ($value)
     {
         $this->_rel = $value;
         return $this;
     }
 
-    public function getFeedLink()
+    public function getFeedLink ()
     {
         return $this->_feedLink;
     }
 
-    public function setFeedLink($value)
+    public function setFeedLink ($value)
     {
         $this->_feedLink = $value;
         return $this;

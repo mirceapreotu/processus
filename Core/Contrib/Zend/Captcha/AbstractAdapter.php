@@ -39,8 +39,10 @@ use Zend\Config\Config;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-abstract class AbstractAdapter extends \Zend\Validator\AbstractValidator implements Adapter
+abstract class AbstractAdapter extends \Zend\Validator\AbstractValidator implements 
+Adapter
 {
+
     /**
      * Element name
      *
@@ -61,17 +63,14 @@ abstract class AbstractAdapter extends \Zend\Validator\AbstractValidator impleme
      * Options to skip when processing options
      * @var array
      */
-    protected $_skipOptions = array(
-        'options',
-        'config',
-    );
+    protected $_skipOptions = array('options', 'config');
 
     /**
      * Get name
      *
      * @return string
      */
-    public function getName()
+    public function getName ()
     {
         return $this->_name;
     }
@@ -81,7 +80,7 @@ abstract class AbstractAdapter extends \Zend\Validator\AbstractValidator impleme
      *
      * @param string $name
      */
-    public function setName($name)
+    public function setName ($name)
     {
         $this->_name = $name;
         return $this;
@@ -93,14 +92,15 @@ abstract class AbstractAdapter extends \Zend\Validator\AbstractValidator impleme
      * @param  array|Zend\Config\Config $options
      * @return void
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         // Set options
         if (is_array($options)) {
             $this->setOptions($options);
-        } else if ($options instanceof Config) {
-            $this->setConfig($options);
-        }
+        } else 
+            if ($options instanceof Config) {
+                $this->setConfig($options);
+            }
     }
 
     /**
@@ -110,16 +110,16 @@ abstract class AbstractAdapter extends \Zend\Validator\AbstractValidator impleme
      * @param string $value
      * @return Zend_Form_Element
      */
-    public function setOption($key, $value)
+    public function setOption ($key, $value)
     {
         if (in_array(strtolower($key), $this->_skipOptions)) {
             return $this;
         }
-
-        $method = 'set' . ucfirst ($key);
-        if (method_exists ($this, $method)) {
+        
+        $method = 'set' . ucfirst($key);
+        if (method_exists($this, $method)) {
             // Setter exists; use it
-            $this->$method ($value);
+            $this->$method($value);
             $this->_options[$key] = $value;
         } elseif (property_exists($this, $key)) {
             // Assume it's metadata
@@ -135,7 +135,7 @@ abstract class AbstractAdapter extends \Zend\Validator\AbstractValidator impleme
      * @param  array $options
      * @return Zend_Form_Element
      */
-    public function setOptions($options = null)
+    public function setOptions ($options = null)
     {
         foreach ($options as $key => $value) {
             $this->setOption($key, $value);
@@ -148,7 +148,7 @@ abstract class AbstractAdapter extends \Zend\Validator\AbstractValidator impleme
      *
      * @return array
      */
-    public function getOptions()
+    public function getOptions ()
     {
         return $this->_options;
     }
@@ -159,7 +159,7 @@ abstract class AbstractAdapter extends \Zend\Validator\AbstractValidator impleme
      * @param  Zend\Config\Config $config
      * @return Zend\Captcha\AbstractAdapter
      */
-    public function setConfig(Config $config)
+    public function setConfig (Config $config)
     {
         return $this->setOptions($config->toArray());
     }
@@ -171,7 +171,7 @@ abstract class AbstractAdapter extends \Zend\Validator\AbstractValidator impleme
      *
      * @return null
      */
-    public function getDecorator()
+    public function getDecorator ()
     {
         return null;
     }

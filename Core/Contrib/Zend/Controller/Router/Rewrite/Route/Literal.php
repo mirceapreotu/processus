@@ -37,6 +37,7 @@ use Zend\Controller\Request\Http as HttpRequest;
  */
 class Literal implements Route
 {
+
     /**
      * Route to match
      * 
@@ -58,9 +59,9 @@ class Literal implements Route
      * @param  array  $defaults
      * @return void
      */
-    public function __construct($route, $defaults = array())
+    public function __construct ($route, $defaults = array())
     {
-        $this->_route    = $route;
+        $this->_route = $route;
         $this->_defaults = $defaults;
     }
 
@@ -72,7 +73,7 @@ class Literal implements Route
      * @param  integer     $pathOffset
      * @return boolean
      */
-    public function match(HttpRequest $request, $pathOffset = null)
+    public function match (HttpRequest $request, $pathOffset = null)
     {
         if ($pathOffset !== null) {
             if (strpos($request->getRequestUri(), $this->_route) === $pathOffset) {
@@ -83,7 +84,7 @@ class Literal implements Route
                 return $this->_defaults;
             }
         }
-
+        
         return null;
     }
 
@@ -95,7 +96,7 @@ class Literal implements Route
      * @param  array $options
      * @return string
      */
-    public function assemble(array $params = null, array $options = null)
+    public function assemble (array $params = null, array $options = null)
     {
         return $this->_route;
     }

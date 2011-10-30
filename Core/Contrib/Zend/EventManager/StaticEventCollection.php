@@ -33,5 +33,6 @@ namespace Zend\EventManager;
  */
 interface StaticEventCollection
 {
-    public function getListeners($id, $event);
+
+    public function getListeners ($id, $event);
 }

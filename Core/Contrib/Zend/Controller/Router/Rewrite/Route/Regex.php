@@ -37,6 +37,7 @@ use Zend\Controller\Request\Http as HttpRequest;
  */
 class Regex implements Route
 {
+
     /**
      * Regex to match
      * 
@@ -58,9 +59,9 @@ class Regex implements Route
      * @param  array  $defaults
      * @return void
      */
-    public function __construct($regex, $defaults = array())
+    public function __construct ($regex, $defaults = array())
     {
-        $this->_route    = $regex;
+        $this->_route = $regex;
         $this->_defaults = $defaults;
     }
 
@@ -72,18 +73,20 @@ class Regex implements Route
      * @param  integer     $pathOffset
      * @return boolean
      */
-    public function match(HttpRequest $request, $pathOffset = null)
+    public function match (HttpRequest $request, $pathOffset = null)
     {
         if ($pathOffset !== null) {
-            $result = preg_match('(\G' . $this->_regex . ')i', $request->getRequestUri(), $match, null, $pathOffset);
+            $result = preg_match('(\G' . $this->_regex . ')i', 
+            $request->getRequestUri(), $match, null, $pathOffset);
         } else {
-            $result = preg_match('(^' . $this->_regex . '$)i', $request->getRequestUri(), $match);
+            $result = preg_match('(^' . $this->_regex . '$)i', 
+            $request->getRequestUri(), $match);
         }
-
+        
         if ($result === null) {
             return null;
         }
-
+        
         // @todo: examine $match
         return $this->_defaults;
     }
@@ -96,7 +99,7 @@ class Regex implements Route
      * @param  array $options
      * @return string
      */
-    public function assemble(array $params = null, array $options = null)
+    public function assemble (array $params = null, array $options = null)
     {
         // @todo: implement this
     }

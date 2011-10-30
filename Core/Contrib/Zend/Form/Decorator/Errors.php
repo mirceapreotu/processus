@@ -38,29 +38,30 @@ namespace Zend\Form\Decorator;
  */
 class Errors extends AbstractDecorator
 {
+
     /**
      * Render errors
      *
      * @param  string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
         $element = $this->getElement();
-        $view    = $element->getView();
+        $view = $element->getView();
         if (null === $view) {
             return $content;
         }
-
+        
         $errors = $element->getMessages();
         if (empty($errors)) {
             return $content;
         }
-
+        
         $separator = $this->getSeparator();
         $placement = $this->getPlacement();
-        $errors    = $view->formErrors($errors, $this->getOptions());
-
+        $errors = $view->formErrors($errors, $this->getOptions());
+        
         switch ($placement) {
             case self::APPEND:
                 return $content . $separator . $errors;

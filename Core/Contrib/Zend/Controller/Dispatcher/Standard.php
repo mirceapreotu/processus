@@ -39,6 +39,7 @@ use Zend\Controller\Request;
  */
 class Standard extends AbstractDispatcher
 {
+
     /**
      * Current dispatchable directory
      * @var string
@@ -63,7 +64,7 @@ class Standard extends AbstractDispatcher
      * @param  array $params
      * @return void
      */
-    public function __construct(array $params = array())
+    public function __construct (array $params = array())
     {
         parent::__construct($params);
         $this->_curModule = $this->getDefaultModule();
@@ -76,15 +77,15 @@ class Standard extends AbstractDispatcher
      * @param string $module
      * @return \Zend\Controller\Dispatcher\Standard
      */
-    public function addControllerDirectory($path, $module = null)
+    public function addControllerDirectory ($path, $module = null)
     {
         if (null === $module) {
             $module = $this->_defaultModule;
         }
-
+        
         $module = (string) $module;
-        $path   = rtrim((string) $path, '/\\');
-
+        $path = rtrim((string) $path, '/\\');
+        
         $this->_controllerDirectory[$module] = $path;
         return $this;
     }
@@ -95,10 +96,10 @@ class Standard extends AbstractDispatcher
      * @param array|string $directory
      * @return \Zend\Controller\Dispatcher\Standard
      */
-    public function setControllerDirectory($directory, $module = null)
+    public function setControllerDirectory ($directory, $module = null)
     {
         $this->_controllerDirectory = array();
-
+        
         if (is_string($directory)) {
             $this->addControllerDirectory($directory, $module);
         } elseif (is_array($directory)) {
@@ -106,9 +107,10 @@ class Standard extends AbstractDispatcher
                 $this->addControllerDirectory($path, $module);
             }
         } else {
-            throw new Controller\Exception('Controller directory spec must be either a string or an array');
+            throw new Controller\Exception(
+            'Controller directory spec must be either a string or an array');
         }
-
+        
         return $this;
     }
 
@@ -122,17 +124,17 @@ class Standard extends AbstractDispatcher
      * @return array|string Returns array of all directories by default, single
      * module directory if module argument provided
      */
-    public function getControllerDirectory($module = null)
+    public function getControllerDirectory ($module = null)
     {
         if (null === $module) {
             return $this->_controllerDirectory;
         }
-
+        
         $module = (string) $module;
         if (array_key_exists($module, $this->_controllerDirectory)) {
             return $this->_controllerDirectory[$module];
         }
-
+        
         return null;
     }
 
@@ -142,7 +144,7 @@ class Standard extends AbstractDispatcher
      * @param  string $module
      * @return bool
      */
-    public function removeControllerDirectory($module)
+    public function removeControllerDirectory ($module)
     {
         $module = (string) $module;
         if (array_key_exists($module, $this->_controllerDirectory)) {
@@ -158,12 +160,13 @@ class Standard extends AbstractDispatcher
      * @param string $unformatted
      * @return string
      */
-    public function formatModuleName($unformatted)
+    public function formatModuleName ($unformatted)
     {
-        if (($this->_defaultModule == $unformatted) && !$this->getParam('prefixDefaultModule')) {
+        if (($this->_defaultModule == $unformatted) &&
+         ! $this->getParam('prefixDefaultModule')) {
             return $unformatted;
         }
-
+        
         return ucfirst($this->_formatName($unformatted));
     }
 
@@ -174,7 +177,7 @@ class Standard extends AbstractDispatcher
      * @param string $className Name of the action class
      * @return string Formatted class name
      */
-    public function formatClassName($moduleName, $className)
+    public function formatClassName ($moduleName, $className)
     {
         return $this->formatModuleName($moduleName) . '\\' . $className;
     }
@@ -185,7 +188,7 @@ class Standard extends AbstractDispatcher
      * @param string $class
      * @return string
      */
-    public function classToFilename($class)
+    public function classToFilename ($class)
     {
         return str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
     }
@@ -202,26 +205,25 @@ class Standard extends AbstractDispatcher
      * @param \Zend\Controller\Request\AbstractRequest $action
      * @return boolean
      */
-    public function isDispatchable(Request\AbstractRequest $request)
+    public function isDispatchable (Request\AbstractRequest $request)
     {
         $className = $this->getControllerClass($request);
-        if (!$className) {
+        if (! $className) {
             return false;
         }
-
-        $finalClass  = $className;
-        if (($this->_defaultModule != $this->_curModule)
-            || $this->getParam('prefixDefaultModule'))
-        {
+        
+        $finalClass = $className;
+        if (($this->_defaultModule != $this->_curModule) ||
+         $this->getParam('prefixDefaultModule')) {
             $finalClass = $this->formatClassName($this->_curModule, $className);
         }
         if (class_exists($finalClass, false)) {
             return true;
         }
-
-        $fileSpec    = $this->classToFilename($className);
+        
+        $fileSpec = $this->classToFilename($className);
         $dispatchDir = $this->getDispatchDirectory();
-        $test        = $dispatchDir . DIRECTORY_SEPARATOR . $fileSpec;
+        $test = $dispatchDir . DIRECTORY_SEPARATOR . $fileSpec;
         return \Zend\Loader::isReadable($test);
     }
 
@@ -237,71 +239,76 @@ class Standard extends AbstractDispatcher
      * @return void
      * @throws \Zend\Controller\Dispatcher\Exception
      */
-    public function dispatch(Controller\Request\AbstractRequest $request, Controller\Response\AbstractResponse $response)
+    public function dispatch (Controller\Request\AbstractRequest $request, 
+    Controller\Response\AbstractResponse $response)
     {
         $this->setResponse($response);
-
+        
         /**
          * Get controller class
          */
-        if (!$this->isDispatchable($request)) {
+        if (! $this->isDispatchable($request)) {
             $controller = $request->getControllerName();
-            if (!$this->getParam('useDefaultControllerAlways') && !empty($controller)) {
-                throw new Exception('Invalid controller specified (' . $request->getControllerName() . ')');
+            if (! $this->getParam('useDefaultControllerAlways') &&
+             ! empty($controller)) {
+                throw new Exception(
+                'Invalid controller specified (' . $request->getControllerName() .
+                 ')');
             }
-
+            
             $className = $this->getDefaultControllerClass($request);
         } else {
             $className = $this->getControllerClass($request);
-            if (!$className) {
+            if (! $className) {
                 $className = $this->getDefaultControllerClass($request);
             }
         }
-
+        
         /**
          * Load the controller class file
          */
         $className = $this->loadClass($className);
-
+        
         /**
          * Instantiate controller with request, response, and invocation
          * arguments; throw exception if it's not an action controller
          */
-        $controller = new $className($request, $this->getResponse(), $this->getParams());
-        if (!($controller instanceof \Zend\Controller\ActionController) &&
-            !($controller instanceof \Zend\Controller\Action)) {
+        $controller = new $className($request, $this->getResponse(), 
+        $this->getParams());
+        if (! ($controller instanceof \Zend\Controller\ActionController) &&
+         ! ($controller instanceof \Zend\Controller\Action)) {
             throw new Exception(
-                'Controller "' . $className . '" is not an instance of Zend\Controller\ActionController'
-            );
+            'Controller "' . $className .
+             '" is not an instance of Zend\Controller\ActionController');
         }
-
+        
         /**
          * Inject helper broker
          */
         $controller->setHelperBroker($this->broker);
-
+        
         /**
          * Call user-defined initialization
          */
         $controller->init();
-
+        
         /**
          * Retrieve the action name
          */
         $action = $this->getActionMethod($request);
-
+        
         /**
          * Dispatch the method call
          */
         $request->setDispatched(true);
-
+        
         // by default, buffer output
         $disableOb = $this->getParam('disableOutputBuffering');
-        $obLevel   = ob_get_level();
+        $obLevel = ob_get_level();
         if (empty($disableOb)) {
             ob_start();
         }
-
+        
         try {
             $controller->dispatch($action);
         } catch (\Exception $e) {
@@ -315,12 +322,12 @@ class Standard extends AbstractDispatcher
             }
             throw $e;
         }
-
+        
         if (empty($disableOb)) {
             $content = ob_get_clean();
             $response->appendBody($content);
         }
-
+        
         // Destroy the page controller instance and reflection objects
         $controller = null;
     }
@@ -336,30 +343,33 @@ class Standard extends AbstractDispatcher
      * @return string Class name loaded
      * @throws \Zend\Controller\Dispatcher\Exception if class not loaded
      */
-    public function loadClass($className)
+    public function loadClass ($className)
     {
-        $finalClass  = $className;
-        if (($this->_defaultModule != $this->_curModule)
-            || $this->getParam('prefixDefaultModule'))
-        {
+        $finalClass = $className;
+        if (($this->_defaultModule != $this->_curModule) ||
+         $this->getParam('prefixDefaultModule')) {
             $finalClass = $this->formatClassName($this->_curModule, $className);
         }
         if (class_exists($finalClass, false)) {
             return $finalClass;
         }
-
+        
         $dispatchDir = $this->getDispatchDirectory();
-        $loadFile    = $dispatchDir . DIRECTORY_SEPARATOR . $this->classToFilename($className);
+        $loadFile = $dispatchDir . DIRECTORY_SEPARATOR .
+         $this->classToFilename($className);
         if (\Zend\Loader::isReadable($loadFile)) {
             include_once $loadFile;
         } else {
-            throw new Exception('Cannot load controller class "' . $className . '" from file "' . $loadFile . "'");
+            throw new Exception(
+            'Cannot load controller class "' . $className . '" from file "' .
+             $loadFile . "'");
         }
-
-        if (!class_exists($finalClass, false)) {
-            throw new Exception('Invalid controller class ("' . $finalClass . '")');
+        
+        if (! class_exists($finalClass, false)) {
+            throw new Exception(
+            'Invalid controller class ("' . $finalClass . '")');
         }
-
+        
         return $finalClass;
     }
 
@@ -372,32 +382,33 @@ class Standard extends AbstractDispatcher
      * @param \Zend\Controller\Request\AbstractRequest $request
      * @return string|false Returns class name on success
      */
-    public function getControllerClass(Request\AbstractRequest $request)
+    public function getControllerClass (Request\AbstractRequest $request)
     {
         $controllerName = $request->getControllerName();
         if (empty($controllerName)) {
-            if (!$this->getParam('useDefaultControllerAlways')) {
+            if (! $this->getParam('useDefaultControllerAlways')) {
                 return false;
             }
             $controllerName = $this->getDefaultControllerName();
             $request->setControllerName($controllerName);
         }
-
+        
         $className = $this->formatControllerName($controllerName);
-
-        $controllerDirs      = $this->getControllerDirectory();
+        
+        $controllerDirs = $this->getControllerDirectory();
         $module = $request->getModuleName();
         if ($this->isValidModule($module)) {
-            $this->_curModule    = $module;
+            $this->_curModule = $module;
             $this->_curDirectory = $controllerDirs[$module];
         } elseif ($this->isValidModule($this->_defaultModule)) {
             $request->setModuleName($this->_defaultModule);
-            $this->_curModule    = $this->_defaultModule;
+            $this->_curModule = $this->_defaultModule;
             $this->_curDirectory = $controllerDirs[$this->_defaultModule];
         } else {
-            throw new Controller\Exception('No default module defined for this application');
+            throw new Controller\Exception(
+            'No default module defined for this application');
         }
-
+        
         return $className;
     }
 
@@ -407,20 +418,20 @@ class Standard extends AbstractDispatcher
      * @param  string $module
      * @return bool
      */
-    public function isValidModule($module)
+    public function isValidModule ($module)
     {
-        if (!is_string($module)) {
+        if (! is_string($module)) {
             return false;
         }
-
-        $module        = strtolower($module);
+        
+        $module = strtolower($module);
         $controllerDir = $this->getControllerDirectory();
         foreach (array_keys($controllerDir) as $moduleName) {
             if ($module == strtolower($moduleName)) {
                 return true;
             }
         }
-
+        
         return false;
     }
 
@@ -437,16 +448,15 @@ class Standard extends AbstractDispatcher
      * @param \Zend\Controller\Request\AbstractRequest $request
      * @return string
      */
-    public function getDefaultControllerClass(Request\AbstractRequest $request)
+    public function getDefaultControllerClass (Request\AbstractRequest $request)
     {
         $controller = $this->getDefaultControllerName();
-        $default    = $this->formatControllerName($controller);
-        $request->setControllerName($controller)
-                ->setActionName(null);
-
-        $module              = $request->getModuleName();
-        $controllerDirs      = $this->getControllerDirectory();
-        $this->_curModule    = $this->_defaultModule;
+        $default = $this->formatControllerName($controller);
+        $request->setControllerName($controller)->setActionName(null);
+        
+        $module = $request->getModuleName();
+        $controllerDirs = $this->getControllerDirectory();
+        $this->_curModule = $this->_defaultModule;
         $this->_curDirectory = $controllerDirs[$this->_defaultModule];
         if ($this->isValidModule($module)) {
             $found = false;
@@ -454,7 +464,8 @@ class Standard extends AbstractDispatcher
                 $found = true;
             } else {
                 $moduleDir = $controllerDirs[$module];
-                $fileSpec  = $moduleDir . DIRECTORY_SEPARATOR . $this->classToFilename($default);
+                $fileSpec = $moduleDir . DIRECTORY_SEPARATOR .
+                 $this->classToFilename($default);
                 if (\Zend\Loader::isReadable($fileSpec)) {
                     $found = true;
                     $this->_curDirectory = $moduleDir;
@@ -462,12 +473,12 @@ class Standard extends AbstractDispatcher
             }
             if ($found) {
                 $request->setModuleName($module);
-                $this->_curModule    = $this->formatModuleName($module);
+                $this->_curModule = $this->formatModuleName($module);
             }
         } else {
             $request->setModuleName($this->_defaultModule);
         }
-
+        
         return $default;
     }
 
@@ -477,7 +488,7 @@ class Standard extends AbstractDispatcher
      *
      * @return string
      */
-    public function getDispatchDirectory()
+    public function getDispatchDirectory ()
     {
         return $this->_curDirectory;
     }
@@ -493,14 +504,14 @@ class Standard extends AbstractDispatcher
      * @param \Zend\Controller\Request\AbstractRequest $request
      * @return string
      */
-    public function getActionMethod(Request\AbstractRequest $request)
+    public function getActionMethod (Request\AbstractRequest $request)
     {
         $action = $request->getActionName();
         if (empty($action)) {
             $action = $this->getDefaultAction();
             $request->setActionName($action);
         }
-
+        
         return $this->formatActionName($action);
     }
 }

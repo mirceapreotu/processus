@@ -35,6 +35,7 @@ namespace Zend\Dojo\Form\Element;
  */
 class PasswordTextBox extends ValidationTextBox
 {
+
     /**
      * Use PasswordTextBox dijit view helper
      * @var string

@@ -54,7 +54,7 @@ class MimeBodyString
      *
      * @param string $sourceString The string we are wrapping.
      */
-    public function __construct($sourceString)
+    public function __construct ($sourceString)
     {
         $this->_sourceString = $sourceString;
         $this->_bytesRead = 0;
@@ -66,19 +66,21 @@ class MimeBodyString
      * @param integer $bytesRequested The size of the chunk that is to be read.
      * @return string A corresponding piece of the string.
      */
-    public function read($bytesRequested)
+    public function read ($bytesRequested)
     {
-      $len = strlen($this->_sourceString);
-      if($this->_bytesRead == $len) {
-          return FALSE;
-      } else if($bytesRequested > $len - $this->_bytesRead) {
-          $bytesRequested = $len - $this->_bytesRead;
-      }
-
-      $buffer = substr($this->_sourceString, $this->_bytesRead, $bytesRequested);
-      $this->_bytesRead += $bytesRequested;
-
-      return $buffer;
+        $len = strlen($this->_sourceString);
+        if ($this->_bytesRead == $len) {
+            return FALSE;
+        } else 
+            if ($bytesRequested > $len - $this->_bytesRead) {
+                $bytesRequested = $len - $this->_bytesRead;
+            }
+        
+        $buffer = substr($this->_sourceString, $this->_bytesRead, 
+        $bytesRequested);
+        $this->_bytesRead += $bytesRequested;
+        
+        return $buffer;
     }
 
     /**
@@ -86,10 +88,9 @@ class MimeBodyString
      *
      * @return int The length of the string contained in the object.
      */
-    public function getSize()
+    public function getSize ()
     {
-      return strlen($this->_sourceString);
+        return strlen($this->_sourceString);
     }
-
 
 }

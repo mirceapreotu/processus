@@ -38,6 +38,7 @@ namespace Zend\GData\GBase;
  */
 class SnippetEntry extends Entry
 {
+
     /**
      * The classname for individual snippet entry elements.
      *

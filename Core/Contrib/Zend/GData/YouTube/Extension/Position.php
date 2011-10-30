@@ -39,6 +39,7 @@ class Position extends \Zend\GData\Extension
 {
 
     protected $_rootElement = 'position';
+
     protected $_rootNamespace = 'yt';
 
     /**
@@ -46,7 +47,7 @@ class Position extends \Zend\GData\Extension
      *
      * @param string $value (optional) The 1-based position in the playlist
      */
-    public function __construct($value = null)
+    public function __construct ($value = null)
     {
         $this->registerAllNamespaces(\Zend\GData\YouTube::$namespaces);
         parent::__construct();
@@ -58,7 +59,7 @@ class Position extends \Zend\GData\Extension
      *
      * @return int The 1-based position in the playlist
      */
-    public function getValue()
+    public function getValue ()
     {
         return $this->_text;
     }
@@ -69,7 +70,7 @@ class Position extends \Zend\GData\Extension
      * @param int $value The 1-based position in the playlist
      * @return \Zend\GData\Extension\Visibility The element being modified
      */
-    public function setValue($value)
+    public function setValue ($value)
     {
         $this->_text = $value;
         return $this;
@@ -81,7 +82,7 @@ class Position extends \Zend\GData\Extension
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getValue();
     }

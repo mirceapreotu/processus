@@ -30,6 +30,7 @@ namespace Zend\Loader;
  */
 class PluginSpecBroker extends PluginBroker implements LazyLoadingBroker
 {
+
     /**
      * Registered specifications
      * 
@@ -47,18 +48,18 @@ class PluginSpecBroker extends PluginBroker implements LazyLoadingBroker
      * @param  array|Traversable $options 
      * @return PluginSpecBroker
      */
-    public function setOptions($options)
+    public function setOptions ($options)
     {
         parent::setOptions($options);
-
+        
         foreach ($options as $key => $value) {
-            switch(strtolower($key)) {
+            switch (strtolower($key)) {
                 case 'specs':
-                    if (!is_array($value) && !$value instanceof \Traversable) {
-                        throw new Exception\RuntimeException(sprintf(
-                            'Expected array or Traversable for specs option; received "%s"',
-                            (is_object($value) ? get_class($value) : gettype($value))
-                        ));
+                    if (! is_array($value) && ! $value instanceof \Traversable) {
+                        throw new Exception\RuntimeException(
+                        sprintf(
+                        'Expected array or Traversable for specs option; received "%s"', 
+                        (is_object($value) ? get_class($value) : gettype($value))));
                     }
                     foreach ($value as $name => $pluginOptions) {
                         $this->registerSpec($name, $pluginOptions);
@@ -69,7 +70,7 @@ class PluginSpecBroker extends PluginBroker implements LazyLoadingBroker
                     break;
             }
         }
-
+        
         return $this;
     }
 
@@ -85,7 +86,7 @@ class PluginSpecBroker extends PluginBroker implements LazyLoadingBroker
      * @param  array $spec 
      * @return PluginSpecBroker
      */
-    public function registerSpec($name, array $spec = null)
+    public function registerSpec ($name, array $spec = null)
     {
         $name = strtolower($name);
         $this->specs[$name] = $spec;
@@ -102,7 +103,7 @@ class PluginSpecBroker extends PluginBroker implements LazyLoadingBroker
      * @param  mixed $plugin 
      * @return PluginSpecBroker
      */
-    public function register($name, $plugin)
+    public function register ($name, $plugin)
     {
         if (null === $plugin || is_array($plugin)) {
             $this->registerSpec($name, $plugin);
@@ -120,13 +121,12 @@ class PluginSpecBroker extends PluginBroker implements LazyLoadingBroker
      * @param  array|Traversable $specs 
      * @return PluginSpecBroker
      */
-    public function registerSpecs($specs)
+    public function registerSpecs ($specs)
     {
-        if (!is_array($specs) && !$specs instanceof \Traversable) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Expected array or Traversable object; received "%s"',
-                (is_object($specs) ? get_class($specs) : gettype($specs))
-            ));
+        if (! is_array($specs) && ! $specs instanceof \Traversable) {
+            throw new Exception\InvalidArgumentException(
+            sprintf('Expected array or Traversable object; received "%s"', 
+            (is_object($specs) ? get_class($specs) : gettype($specs))));
         }
         foreach ($specs as $name => $spec) {
             $this->registerSpec($name, $spec);
@@ -140,7 +140,7 @@ class PluginSpecBroker extends PluginBroker implements LazyLoadingBroker
      * @param  string $name 
      * @return void
      */
-    public function unregisterSpec($name)
+    public function unregisterSpec ($name)
     {
         $name = strtolower($name);
         if (array_key_exists($name, $this->specs)) {
@@ -165,25 +165,25 @@ class PluginSpecBroker extends PluginBroker implements LazyLoadingBroker
      * @return object
      * @throws Exception if plugin not found
      */
-    public function load($plugin, array $options = null)
+    public function load ($plugin, array $options = null)
     {
         $pluginName = strtolower($plugin);
         if (isset($this->plugins[$pluginName])) {
             // If we've loaded it already, just return it
             return $this->plugins[$pluginName];
         }
-
-        if ((null !== $options) || !isset($this->specs[$pluginName])) {
+        
+        if ((null !== $options) || ! isset($this->specs[$pluginName])) {
             // If we got options, or if there are no specs for this plugin,
             // simply proxy to the parent method
             return parent::load($plugin, $options);
         }
-
+        
         if (isset($this->specs[$pluginName])) {
             // If we have a spec, pass the spec to the parent method
             return parent::load($plugin, $this->specs[$pluginName]);
         }
-
+        
         // Return control to the parent method with original arguments
         return parent::load($plugin, $options);
     }
@@ -197,9 +197,9 @@ class PluginSpecBroker extends PluginBroker implements LazyLoadingBroker
      * 
      * @return array
      */
-    public function getRegisteredPlugins()
+    public function getRegisteredPlugins ()
     {
-        $specNames   = array_keys($this->specs);
+        $specNames = array_keys($this->specs);
         $pluginNames = array_keys($this->plugins);
         return array_merge($specNames, $pluginNames);
     }
@@ -215,9 +215,10 @@ class PluginSpecBroker extends PluginBroker implements LazyLoadingBroker
      * @param  string $name 
      * @return bool
      */
-    public function hasPlugin($name)
+    public function hasPlugin ($name)
     {
         $name = strtolower($name);
-        return (isset($this->plugins[$name]) || array_key_exists($name, $this->specs));
+        return (isset($this->plugins[$name]) ||
+         array_key_exists($name, $this->specs));
     }
 }

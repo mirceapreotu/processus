@@ -24,8 +24,7 @@
  */
 namespace Zend\Db\Statement\Pdo;
 
-use Zend\Db\Statement\Pdo,
-    Zend\Db\Statement\Exception as StatementException;
+use Zend\Db\Statement\Pdo, Zend\Db\Statement\Exception as StatementException;
 
 /**
  * Proxy class to wrap a PDOStatement object for Ibm Databases.
@@ -43,24 +42,25 @@ use Zend\Db\Statement\Pdo,
  */
 class Ibm extends Pdo
 {
+
     /**
-    * Returns an array containing all of the result set rows.
-    *
-    * Behaves like parent, but if limit()
-    * is used, the final result removes the extra column
-    * 'zend_db_rownum'
-    *
-    * @param int $style OPTIONAL Fetch mode.
-    * @param int $col   OPTIONAL Column number, if fetch mode is by column.
-    * @return array Collection of rows, each in a format by the fetch mode.
-    * @throws \Zend\Db\Statement\Exception
-    */
-    public function fetchAll($style = null, $col = null)
+     * Returns an array containing all of the result set rows.
+     *
+     * Behaves like parent, but if limit()
+     * is used, the final result removes the extra column
+     * 'zend_db_rownum'
+     *
+     * @param int $style OPTIONAL Fetch mode.
+     * @param int $col   OPTIONAL Column number, if fetch mode is by column.
+     * @return array Collection of rows, each in a format by the fetch mode.
+     * @throws \Zend\Db\Statement\Exception
+     */
+    public function fetchAll ($style = null, $col = null)
     {
         $data = parent::fetchAll($style, $col);
         $results = array();
         $remove = $this->_adapter->foldCase('ZEND_DB_ROWNUM');
-
+        
         foreach ($data as $row) {
             if (is_array($row) && array_key_exists($remove, $row)) {
                 unset($row[$remove]);
@@ -81,13 +81,15 @@ class Ibm extends Pdo
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function _bindParam($parameter, &$variable, $type = null, $length = null, $options = null)
+    public function _bindParam ($parameter, &$variable, $type = null, $length = null, 
+    $options = null)
     {
         try {
             if (($type === null) && ($length === null) && ($options === null)) {
                 return $this->_stmt->bindParam($parameter, $variable);
             } else {
-                return $this->_stmt->bindParam($parameter, $variable, $type, $length, $options);
+                return $this->_stmt->bindParam($parameter, $variable, $type, 
+                $length, $options);
             }
         } catch (\PDOException $e) {
             throw new StatementException($e->getMessage(), $e->getCode(), $e);

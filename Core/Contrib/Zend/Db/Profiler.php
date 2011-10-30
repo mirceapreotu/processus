@@ -126,7 +126,7 @@ class Profiler
      * @param  boolean $enabled
      * @return void
      */
-    public function __construct($enabled = false)
+    public function __construct ($enabled = false)
     {
         $this->setEnabled($enabled);
     }
@@ -138,10 +138,10 @@ class Profiler
      * @param  boolean $enable
      * @return \Zend\Db\Profiler Provides a fluent interface
      */
-    public function setEnabled($enable)
+    public function setEnabled ($enable)
     {
         $this->_enabled = (boolean) $enable;
-
+        
         return $this;
     }
 
@@ -151,7 +151,7 @@ class Profiler
      *
      * @return boolean
      */
-    public function getEnabled()
+    public function getEnabled ()
     {
         return $this->_enabled;
     }
@@ -165,14 +165,14 @@ class Profiler
      * @param  integer $minimumSeconds OPTIONAL
      * @return \Zend\Db\Profiler Provides a fluent interface
      */
-    public function setFilterElapsedSecs($minimumSeconds = null)
+    public function setFilterElapsedSecs ($minimumSeconds = null)
     {
         if (null === $minimumSeconds) {
             $this->_filterElapsedSecs = null;
         } else {
             $this->_filterElapsedSecs = (integer) $minimumSeconds;
         }
-
+        
         return $this;
     }
 
@@ -182,7 +182,7 @@ class Profiler
      *
      * @return integer|null
      */
-    public function getFilterElapsedSecs()
+    public function getFilterElapsedSecs ()
     {
         return $this->_filterElapsedSecs;
     }
@@ -196,10 +196,10 @@ class Profiler
      * @param  integer $queryTypes OPTIONAL
      * @return \Zend\Db\Profiler Provides a fluent interface
      */
-    public function setFilterQueryType($queryTypes = null)
+    public function setFilterQueryType ($queryTypes = null)
     {
         $this->_filterTypes = $queryTypes;
-
+        
         return $this;
     }
 
@@ -210,7 +210,7 @@ class Profiler
      * @return integer|null
      * @see    Zend_Db_Profiler::setFilterQueryType()
      */
-    public function getFilterQueryType()
+    public function getFilterQueryType ()
     {
         return $this->_filterTypes;
     }
@@ -222,10 +222,10 @@ class Profiler
      *
      * @return \Zend\Db\Profiler Provides a fluent interface
      */
-    public function clear()
+    public function clear ()
     {
         $this->_queryProfiles = array();
-
+        
         return $this;
     }
 
@@ -233,12 +233,12 @@ class Profiler
      * @param  integer $queryId
      * @return integer or null
      */
-    public function queryClone(Query $query)
+    public function queryClone (Query $query)
     {
         $this->_queryProfiles[] = clone $query;
-
+        
         end($this->_queryProfiles);
-
+        
         return key($this->_queryProfiles);
     }
 
@@ -253,12 +253,12 @@ class Profiler
      * @param  integer $queryType   OPTIONAL Type of query, one of the \Zend\Db\Profiler::* constants
      * @return integer|null
      */
-    public function queryStart($queryText, $queryType = null)
+    public function queryStart ($queryText, $queryType = null)
     {
-        if (!$this->_enabled) {
+        if (! $this->_enabled) {
             return null;
         }
-
+        
         // make sure we have a query type
         if (null === $queryType) {
             switch (strtolower(substr(ltrim($queryText), 0, 6))) {
@@ -279,11 +279,11 @@ class Profiler
                     break;
             }
         }
-
+        
         $this->_queryProfiles[] = new Profiler\Query($queryText, $queryType);
-
+        
         end($this->_queryProfiles);
-
+        
         return key($this->_queryProfiles);
     }
 
@@ -295,46 +295,50 @@ class Profiler
      * @throws \Zend\Db\Profiler\Exception
      * @return void
      */
-    public function queryEnd($queryId)
+    public function queryEnd ($queryId)
     {
         // Don't do anything if the Zend_Db_Profiler is not enabled.
-        if (!$this->_enabled) {
+        if (! $this->_enabled) {
             return self::IGNORED;
         }
-
+        
         // Check for a valid query handle.
-        if (!isset($this->_queryProfiles[$queryId])) {
-            throw new Profiler\Exception("Profiler has no query with handle '$queryId'.");
+        if (! isset($this->_queryProfiles[$queryId])) {
+            throw new Profiler\Exception(
+            "Profiler has no query with handle '$queryId'.");
         }
-
+        
         $qp = $this->_queryProfiles[$queryId];
-
+        
         // Ensure that the query profile has not already ended
         if ($qp->hasEnded()) {
-            throw new Profiler\Exception("Query with profiler handle '$queryId' has already ended.");
+            throw new Profiler\Exception(
+            "Query with profiler handle '$queryId' has already ended.");
         }
-
+        
         // End the query profile so that the elapsed time can be calculated.
         $qp->end();
-
+        
         /**
          * If filtering by elapsed time is enabled, only keep the profile if
          * it ran for the minimum time.
          */
-        if (null !== $this->_filterElapsedSecs && $qp->getElapsedSecs() < $this->_filterElapsedSecs) {
+        if (null !== $this->_filterElapsedSecs &&
+         $qp->getElapsedSecs() < $this->_filterElapsedSecs) {
             unset($this->_queryProfiles[$queryId]);
             return self::IGNORED;
         }
-
+        
         /**
          * If filtering by query type is enabled, only keep the query if
          * it was one of the allowed types.
          */
-        if (null !== $this->_filterTypes && !($qp->getQueryType() & $this->_filterTypes)) {
+        if (null !== $this->_filterTypes &&
+         ! ($qp->getQueryType() & $this->_filterTypes)) {
             unset($this->_queryProfiles[$queryId]);
             return self::IGNORED;
         }
-
+        
         return self::STORED;
     }
 
@@ -346,12 +350,13 @@ class Profiler
      * @throws \Zend\Db\Profiler\Exception
      * @return \Zend\Db\Profiler\Query
      */
-    public function getQueryProfile($queryId)
+    public function getQueryProfile ($queryId)
     {
-        if (!array_key_exists($queryId, $this->_queryProfiles)) {
-            throw new Profiler\Exception("Query handle '$queryId' not found in profiler log.");
+        if (! array_key_exists($queryId, $this->_queryProfiles)) {
+            throw new Profiler\Exception(
+            "Query handle '$queryId' not found in profiler log.");
         }
-
+        
         return $this->_queryProfiles[$queryId];
     }
 
@@ -367,7 +372,7 @@ class Profiler
      * @param  boolean $showUnfinished
      * @return array|false
      */
-    public function getQueryProfiles($queryType = null, $showUnfinished = false)
+    public function getQueryProfiles ($queryType = null, $showUnfinished = false)
     {
         $queryProfiles = array();
         foreach ($this->_queryProfiles as $key => $qp) {
@@ -376,16 +381,16 @@ class Profiler
             } else {
                 $condition = ($qp->getQueryType() & $queryType);
             }
-
+            
             if (($qp->hasEnded() || $showUnfinished) && $condition) {
                 $queryProfiles[$key] = $qp;
             }
         }
-
+        
         if (empty($queryProfiles)) {
             $queryProfiles = false;
         }
-
+        
         return $queryProfiles;
     }
 
@@ -398,7 +403,7 @@ class Profiler
      * @param  integer $queryType OPTIONAL
      * @return float
      */
-    public function getTotalElapsedSecs($queryType = null)
+    public function getTotalElapsedSecs ($queryType = null)
     {
         $elapsedSecs = 0;
         foreach ($this->_queryProfiles as $key => $qp) {
@@ -422,19 +427,19 @@ class Profiler
      * @param  integer $queryType OPTIONAL
      * @return integer
      */
-    public function getTotalNumQueries($queryType = null)
+    public function getTotalNumQueries ($queryType = null)
     {
         if (null === $queryType) {
             return count($this->_queryProfiles);
         }
-
+        
         $numQueries = 0;
         foreach ($this->_queryProfiles as $qp) {
             if ($qp->hasEnded() && ($qp->getQueryType() & $queryType)) {
-                $numQueries++;
+                $numQueries ++;
             }
         }
-
+        
         return $numQueries;
     }
 
@@ -445,14 +450,14 @@ class Profiler
      *
      * @return \Zend\Db\Profiler\Query|false
      */
-    public function getLastQueryProfile()
+    public function getLastQueryProfile ()
     {
         if (empty($this->_queryProfiles)) {
             return false;
         }
-
+        
         end($this->_queryProfiles);
-
+        
         return current($this->_queryProfiles);
     }
 

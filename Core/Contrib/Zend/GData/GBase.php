@@ -73,18 +73,18 @@ class GBase extends GData
      * @var array
      */
     public static $namespaces = array(
-        array('g', 'http://base.google.com/ns/1.0', 1, 0),
-        array('batch', 'http://schemas.google.com/gdata/batch', 1, 0)
-    );
+    array('g', 'http://base.google.com/ns/1.0', 1, 0), 
+    array('batch', 'http://schemas.google.com/gdata/batch', 1, 0));
 
     /**
      * Create Zend_Gdata_GBase object
      *
      * @param \Zend\Http\Client $client (optional) The HTTP client to use when
-     *          when communicating with the Google Apps servers.
+     * when communicating with the Google Apps servers.
      * @param string $applicationId The identity of the app in the form of Company-AppName-Version
      */
-    public function __construct($client = null, $applicationId = 'MyCompany-MyApp-1.0')
+    public function __construct ($client = null, 
+    $applicationId = 'MyCompany-MyApp-1.0')
     {
         $this->registerPackage('Zend\GData\GBase');
         $this->registerPackage('Zend\GData\GBase\Extension');
@@ -98,15 +98,16 @@ class GBase extends GData
      * @param mixed $location The location for the feed, as a URL or Query
      * @return \Zend\GData\GBase\ItemFeed
      */
-    public function getGBaseItemFeed($location = null)
+    public function getGBaseItemFeed ($location = null)
     {
         if ($location === null) {
             $uri = self::GBASE_ITEM_FEED_URI;
-        } else if ($location instanceof Query) {
-            $uri = $location->getQueryUrl();
-        } else {
-            $uri = $location;
-        }
+        } else 
+            if ($location instanceof Query) {
+                $uri = $location->getQueryUrl();
+            } else {
+                $uri = $location;
+            }
         return parent::getFeed($uri, 'Zend\GData\GBase\ItemFeed');
     }
 
@@ -116,16 +117,16 @@ class GBase extends GData
      * @param mixed $location The location for the feed, as a URL or Query
      * @return \Zend\GData\GBase\ItemEntry
      */
-    public function getGBaseItemEntry($location = null)
+    public function getGBaseItemEntry ($location = null)
     {
         if ($location === null) {
-            throw new App\InvalidArgumentException(
-                    'Location must not be null');
-        } else if ($location instanceof Query) {
-            $uri = $location->getQueryUrl();
-        } else {
-            $uri = $location;
-        }
+            throw new App\InvalidArgumentException('Location must not be null');
+        } else 
+            if ($location instanceof Query) {
+                $uri = $location->getQueryUrl();
+            } else {
+                $uri = $location;
+            }
         return parent::getEntry($uri, 'Zend\GData\GBase\ItemEntry');
     }
 
@@ -136,14 +137,15 @@ class GBase extends GData
      * @param boolean $dryRun Flag for the 'dry-run' parameter
      * @return \Zend\GData\GBase\ItemFeed
      */
-    public function insertGBaseItem($entry, $dryRun = false)
+    public function insertGBaseItem ($entry, $dryRun = false)
     {
         if ($dryRun == false) {
             $uri = $this->_defaultPostUri;
         } else {
             $uri = $this->_defaultPostUri . '?dry-run=true';
         }
-        $newitem = $this->insertEntry($entry, $uri, 'Zend\GData\GBase\ItemEntry');
+        $newitem = $this->insertEntry($entry, $uri, 
+        'Zend\GData\GBase\ItemEntry');
         return $newitem;
     }
 
@@ -154,7 +156,7 @@ class GBase extends GData
      * @param boolean $dryRun Flag for the 'dry-run' parameter
      * @return \Zend\GData\GBase\ItemEntry
      */
-    public function updateGBaseItem($entry, $dryRun = false)
+    public function updateGBaseItem ($entry, $dryRun = false)
     {
         $returnedEntry = $entry->save($dryRun);
         return $returnedEntry;
@@ -167,7 +169,7 @@ class GBase extends GData
      * @param boolean $dryRun Flag for the 'dry-run' parameter
      * @return \Zend\GData\GBase\ItemFeed
      */
-    public function deleteGBaseItem($entry, $dryRun = false)
+    public function deleteGBaseItem ($entry, $dryRun = false)
     {
         $entry->delete($dryRun);
         return $this;
@@ -179,15 +181,16 @@ class GBase extends GData
      * @param mixed $location The location for the feed, as a URL or Query
      * @return \Zend\GData\GBase\SnippetFeed
      */
-    public function getGBaseSnippetFeed($location = null)
+    public function getGBaseSnippetFeed ($location = null)
     {
         if ($location === null) {
             $uri = self::GBASE_SNIPPET_FEED_URI;
-        } else if ($location instanceof Query) {
-            $uri = $location->getQueryUrl();
-        } else {
-            $uri = $location;
-        }
+        } else 
+            if ($location instanceof Query) {
+                $uri = $location->getQueryUrl();
+            } else {
+                $uri = $location;
+            }
         return parent::getFeed($uri, 'Zend\GData\GBase\SnippetFeed');
     }
 }

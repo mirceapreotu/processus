@@ -99,67 +99,73 @@ class Entry extends FeedEntryParent
      */
     protected $_edited = null;
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_content != null) {
-            $element->appendChild($this->_content->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_content->getDOM($element->ownerDocument));
         }
         if ($this->_published != null) {
-            $element->appendChild($this->_published->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_published->getDOM($element->ownerDocument));
         }
         if ($this->_source != null) {
-            $element->appendChild($this->_source->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_source->getDOM($element->ownerDocument));
         }
         if ($this->_summary != null) {
-            $element->appendChild($this->_summary->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_summary->getDOM($element->ownerDocument));
         }
         if ($this->_control != null) {
-            $element->appendChild($this->_control->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_control->getDOM($element->ownerDocument));
         }
         if ($this->_edited != null) {
-            $element->appendChild($this->_edited->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_edited->getDOM($element->ownerDocument));
         }
         return $element;
     }
 
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('atom') . ':' . 'content':
-            $content = new Extension\Content();
-            $content->transferFromDOM($child);
-            $this->_content = $content;
-            break;
-        case $this->lookupNamespace('atom') . ':' . 'published':
-            $published = new Extension\Published();
-            $published->transferFromDOM($child);
-            $this->_published = $published;
-            break;
-        case $this->lookupNamespace('atom') . ':' . 'source':
-            $source = new Extension\Source();
-            $source->transferFromDOM($child);
-            $this->_source = $source;
-            break;
-        case $this->lookupNamespace('atom') . ':' . 'summary':
-            $summary = new Extension\Summary();
-            $summary->transferFromDOM($child);
-            $this->_summary = $summary;
-            break;
-        case $this->lookupNamespace('app') . ':' . 'control':
-            $control = new Extension\Control();
-            $control->transferFromDOM($child);
-            $this->_control = $control;
-            break;
-        case $this->lookupNamespace('app') . ':' . 'edited':
-            $edited = new Extension\Edited();
-            $edited->transferFromDOM($child);
-            $this->_edited = $edited;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('atom') . ':' . 'content':
+                $content = new Extension\Content();
+                $content->transferFromDOM($child);
+                $this->_content = $content;
+                break;
+            case $this->lookupNamespace('atom') . ':' . 'published':
+                $published = new Extension\Published();
+                $published->transferFromDOM($child);
+                $this->_published = $published;
+                break;
+            case $this->lookupNamespace('atom') . ':' . 'source':
+                $source = new Extension\Source();
+                $source->transferFromDOM($child);
+                $this->_source = $source;
+                break;
+            case $this->lookupNamespace('atom') . ':' . 'summary':
+                $summary = new Extension\Summary();
+                $summary->transferFromDOM($child);
+                $this->_summary = $summary;
+                break;
+            case $this->lookupNamespace('app') . ':' . 'control':
+                $control = new Extension\Control();
+                $control->transferFromDOM($child);
+                $this->_control = $control;
+                break;
+            case $this->lookupNamespace('app') . ':' . 'edited':
+                $edited = new Extension\Edited();
+                $edited->transferFromDOM($child);
+                $this->_edited = $edited;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
@@ -167,21 +173,19 @@ class Entry extends FeedEntryParent
      * Uploads changes in this entry to the server using \Zend\Gdata\App
      *
      * @param string|null $uri The URI to send requests to, or null if $data
-     *        contains the URI.
+     * contains the URI.
      * @param string|null $className The name of the class that should we
-     *        deserializing the server response. If null, then
-     *        '\Zend\Gdata\App\Entry' will be used.
+     * deserializing the server response. If null, then
+     * '\Zend\Gdata\App\Entry' will be used.
      * @param array $extraHeaders Extra headers to add to the request, as an
-     *        array of string-based key/value pairs.
+     * array of string-based key/value pairs.
      * @return \Zend\GData\App\Entry The updated entry.
      * @throws \Zend\GData\App\Exception
      */
-    public function save($uri = null, $className = null, $extraHeaders = array())
+    public function save ($uri = null, $className = null, $extraHeaders = array())
     {
-        return $this->getService()->updateEntry($this,
-                                                $uri,
-                                                $className,
-                                                $extraHeaders);
+        return $this->getService()->updateEntry($this, $uri, $className, 
+        $extraHeaders);
     }
 
     /**
@@ -192,7 +196,7 @@ class Entry extends FeedEntryParent
      * @return void
      * @throws \Zend\GData\App\Exception
      */
-    public function delete()
+    public function delete ()
     {
         $this->getService()->delete($this);
     }
@@ -203,37 +207,37 @@ class Entry extends FeedEntryParent
      * modify the current entry instance.
      *
      * @param string|null The URI to send requests to, or null if $data
-     *        contains the URI.
+     * contains the URI.
      * @param string|null The name of the class that should we deserializing
-     *        the server response. If null, then '\Zend\Gdata\App\Entry' will
-     *        be used.
+     * the server response. If null, then '\Zend\Gdata\App\Entry' will
+     * be used.
      * @param array $extraHeaders Extra headers to add to the request, as an
-     *        array of string-based key/value pairs.
+     * array of string-based key/value pairs.
      * @return mixed A new instance of the current entry with updated data, or
-     *         null if the server reports that no changes have been made.
+     * null if the server reports that no changes have been made.
      * @throws \Zend\GData\App\Exception
      */
-    public function reload($uri = null, $className = null, $extraHeaders = array())
+    public function reload ($uri = null, $className = null, $extraHeaders = array())
     {
         // Get URI
         $editLink = $this->getEditLink();
         if (($uri === null) && $editLink != null) {
             $uri = $editLink->getHref();
         }
-
+        
         // Set classname to current class, if not otherwise set
         if ($className === null) {
             $className = get_class($this);
         }
-
+        
         // Append ETag, if present (Gdata v2 and above, only) and doesn't
         // conflict with existing headers
-        if ($this->_etag != null
-                && !array_key_exists('If-Match', $extraHeaders)
-                && !array_key_exists('If-None-Match', $extraHeaders)) {
+        if ($this->_etag != null &&
+         ! array_key_exists('If-Match', $extraHeaders) &&
+         ! array_key_exists('If-None-Match', $extraHeaders)) {
             $extraHeaders['If-None-Match'] = $this->_etag;
         }
-
+        
         // If an HTTP 304 status (Not Modified)is returned, then we return
         // null.
         $result = null;
@@ -243,7 +247,7 @@ class Entry extends FeedEntryParent
             if ($e->getResponse()->getStatus() != '304')
                 throw $e;
         }
-
+        
         return $result;
     }
 
@@ -252,7 +256,7 @@ class Entry extends FeedEntryParent
      *
      * @return \Zend\GData\App\Extension\Content
      */
-    public function getContent()
+    public function getContent ()
     {
         return $this->_content;
     }
@@ -263,7 +267,7 @@ class Entry extends FeedEntryParent
      * @param \Zend\GData\App\Extension\Content $value
      * @return \Zend\GData\App\Entry Provides a fluent interface
      */
-    public function setContent($value)
+    public function setContent ($value)
     {
         $this->_content = $value;
         return $this;
@@ -275,7 +279,7 @@ class Entry extends FeedEntryParent
      *
      * @return \Zend\GData\App\Extension\Published
      */
-    public function getPublished()
+    public function getPublished ()
     {
         return $this->_published;
     }
@@ -287,7 +291,7 @@ class Entry extends FeedEntryParent
      * @param \Zend\GData\App\Extension\Published $value
      * @return \Zend\GData\App\Entry Provides a fluent interface
      */
-    public function setPublished($value)
+    public function setPublished ($value)
     {
         $this->_published = $value;
         return $this;
@@ -298,7 +302,7 @@ class Entry extends FeedEntryParent
      *
      * @return \Zend\GData\App\Extension\Source
      */
-    public function getSource()
+    public function getSource ()
     {
         return $this->_source;
     }
@@ -309,7 +313,7 @@ class Entry extends FeedEntryParent
      * @param \Zend\GData\App\Extension\Source $value
      * @return \Zend\GData\App\Entry Provides a fluent interface
      */
-    public function setSource($value)
+    public function setSource ($value)
     {
         $this->_source = $value;
         return $this;
@@ -321,7 +325,7 @@ class Entry extends FeedEntryParent
      *
      * @return \Zend\GData\App\Extension\Summary
      */
-    public function getSummary()
+    public function getSummary ()
     {
         return $this->_summary;
     }
@@ -333,7 +337,7 @@ class Entry extends FeedEntryParent
      * @param \Zend\GData\App\Extension\Summary $value
      * @return \Zend\GData\App\Entry Provides a fluent interface
      */
-    public function setSummary($value)
+    public function setSummary ($value)
     {
         $this->_summary = $value;
         return $this;
@@ -344,7 +348,7 @@ class Entry extends FeedEntryParent
      *
      * @return \Zend\GData\App\Extension\Control
      */
-    public function getControl()
+    public function getControl ()
     {
         return $this->_control;
     }
@@ -355,7 +359,7 @@ class Entry extends FeedEntryParent
      * @param \Zend\GData\App\Extension\Control $value
      * @return \Zend\GData\App\Entry Provides a fluent interface
      */
-    public function setControl($value)
+    public function setControl ($value)
     {
         $this->_control = $value;
         return $this;

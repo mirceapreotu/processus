@@ -39,6 +39,7 @@ use Zend\Controller\Request;
  */
 class ActionStack extends AbstractPlugin
 {
+
     /** @var \Zend\Registry */
     protected $_registry;
 
@@ -52,12 +53,7 @@ class ActionStack extends AbstractPlugin
      * Valid keys for stack items
      * @var array
      */
-    protected $_validKeys = array(
-        'module',
-        'controller',
-        'action',
-        'params'
-    );
+    protected $_validKeys = array('module', 'controller', 'action', 'params');
 
     /**
      * Flag to determine whether request parameters are cleared between actions, or whether new parameters
@@ -74,19 +70,19 @@ class ActionStack extends AbstractPlugin
      * @param  string $key
      * @return void
      */
-    public function __construct(\Zend\Registry $registry = null, $key = null)
+    public function __construct (\Zend\Registry $registry = null, $key = null)
     {
         if (null === $registry) {
             $registry = \Zend\Registry::getInstance();
         }
         $this->setRegistry($registry);
-
+        
         if (null !== $key) {
             $this->setRegistryKey($key);
         } else {
             $key = $this->getRegistryKey();
         }
-
+        
         $registry[$key] = array();
     }
 
@@ -96,7 +92,7 @@ class ActionStack extends AbstractPlugin
      * @param  \Zend\Registry $registry
      * @return \Zend\Controller\Plugin\ActionStack
      */
-    public function setRegistry(\Zend\Registry $registry)
+    public function setRegistry (\Zend\Registry $registry)
     {
         $this->_registry = $registry;
         return $this;
@@ -107,7 +103,7 @@ class ActionStack extends AbstractPlugin
      *
      * @return \Zend\Registry
      */
-    public function getRegistry()
+    public function getRegistry ()
     {
         return $this->_registry;
     }
@@ -117,7 +113,7 @@ class ActionStack extends AbstractPlugin
      *
      * @return string
      */
-    public function getRegistryKey()
+    public function getRegistryKey ()
     {
         return $this->_registryKey;
     }
@@ -128,19 +124,19 @@ class ActionStack extends AbstractPlugin
      * @param  string $key
      * @return \Zend\Controller\Plugin\ActionStack
      */
-    public function setRegistryKey($key)
+    public function setRegistryKey ($key)
     {
         $this->_registryKey = (string) $key;
         return $this;
     }
 
     /**
-     *  Set clearRequestParams flag
+     * Set clearRequestParams flag
      *
-     *  @param  bool $clearRequestParams
-     *  @return \Zend\Controller\Plugin\ActionStack
+     * @param  bool $clearRequestParams
+     * @return \Zend\Controller\Plugin\ActionStack
      */
-    public function setClearRequestParams($clearRequestParams)
+    public function setClearRequestParams ($clearRequestParams)
     {
         $this->_clearRequestParams = (bool) $clearRequestParams;
         return $this;
@@ -151,7 +147,7 @@ class ActionStack extends AbstractPlugin
      *
      * @return bool
      */
-    public function getClearRequestParams()
+    public function getClearRequestParams ()
     {
         return $this->_clearRequestParams;
     }
@@ -161,10 +157,10 @@ class ActionStack extends AbstractPlugin
      *
      * @return array
      */
-    public function getStack()
+    public function getStack ()
     {
         $registry = $this->getRegistry();
-        $stack    = $registry[$this->getRegistryKey()];
+        $stack = $registry[$this->getRegistryKey()];
         return $stack;
     }
 
@@ -174,7 +170,7 @@ class ActionStack extends AbstractPlugin
      * @param  array $stack
      * @return \Zend\Controller\Plugin\ActionStack
      */
-    protected function _saveStack(array $stack)
+    protected function _saveStack (array $stack)
     {
         $registry = $this->getRegistry();
         $registry[$this->getRegistryKey()] = $stack;
@@ -187,7 +183,7 @@ class ActionStack extends AbstractPlugin
      * @param  \Zend\Controller\Request\AbstractRequest $next
      * @return \Zend\Controller\Plugin\ActionStack
      */
-    public function pushStack(Request\AbstractRequest $next)
+    public function pushStack (Request\AbstractRequest $next)
     {
         $stack = $this->getStack();
         array_push($stack, $next);
@@ -199,35 +195,36 @@ class ActionStack extends AbstractPlugin
      *
      * @return false|\Zend\Controller\Request\AbstractRequest
      */
-    public function popStack()
+    public function popStack ()
     {
         $stack = $this->getStack();
         if (0 == count($stack)) {
             return false;
         }
-
+        
         $next = array_pop($stack);
         $this->_saveStack($stack);
-
-        if (!$next instanceof Request\AbstractRequest) {
-            throw new end\Controller\Exception('ArrayStack should only contain request objects');
+        
+        if (! $next instanceof Request\AbstractRequest) {
+            throw new end\Controller\Exception(
+            'ArrayStack should only contain request objects');
         }
         $action = $next->getActionName();
         if (empty($action)) {
             return $this->popStack($stack);
         }
-
-        $request    = $this->getRequest();
+        
+        $request = $this->getRequest();
         $controller = $next->getControllerName();
         if (empty($controller)) {
             $next->setControllerName($request->getControllerName());
         }
-
+        
         $module = $next->getModuleName();
         if (empty($module)) {
             $next->setModuleName($request->getModuleName());
         }
-
+        
         return $next;
     }
 
@@ -237,24 +234,24 @@ class ActionStack extends AbstractPlugin
      * @param  \Zend\Controller\Request\AbstractRequest $request
      * @return void
      */
-    public function postDispatch(Request\AbstractRequest $request)
+    public function postDispatch (Request\AbstractRequest $request)
     {
         // Don't move on to next request if this is already an attempt to
         // forward
-        if (!$request->isDispatched()) {
+        if (! $request->isDispatched()) {
             return;
         }
-
+        
         $this->setRequest($request);
         $stack = $this->getStack();
         if (empty($stack)) {
             return;
         }
         $next = $this->popStack();
-        if (!$next) {
+        if (! $next) {
             return;
         }
-
+        
         $this->forward($next);
     }
 
@@ -264,17 +261,17 @@ class ActionStack extends AbstractPlugin
      * @param  array $next
      * @return void
      */
-    public function forward(Request\AbstractRequest $next)
+    public function forward (Request\AbstractRequest $next)
     {
         $request = $this->getRequest();
         if ($this->getClearRequestParams()) {
             $request->clearParams();
         }
-
+        
         $request->setModuleName($next->getModuleName())
-                ->setControllerName($next->getControllerName())
-                ->setActionName($next->getActionName())
-                ->setParams($next->getParams())
-                ->setDispatched(false);
+            ->setControllerName($next->getControllerName())
+            ->setActionName($next->getActionName())
+            ->setParams($next->getParams())
+            ->setDispatched(false);
     }
 }

@@ -40,6 +40,7 @@ class GmlPoint extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'gml';
+
     protected $_rootElement = 'Point';
 
     /**
@@ -53,9 +54,9 @@ class GmlPoint extends \Zend\GData\Extension
      * Create a new instance.
      *
      * @param \Zend\GData\Geo\Extension\GmlPos $pos (optional) Pos to which this
-     *          object should be initialized.
+     * object should be initialized.
      */
-    public function __construct($pos = null)
+    public function __construct ($pos = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Geo::$namespaces);
         parent::__construct();
@@ -69,9 +70,9 @@ class GmlPoint extends \Zend\GData\Extension
      *
      * @param DOMDocument $doc The DOMDocument used to construct DOMElements
      * @return DOMElement The DOMElement representing this element and all
-     *          child properties.
+     * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_pos !== null) {
@@ -86,12 +87,12 @@ class GmlPoint extends \Zend\GData\Extension
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
-
+        
         switch ($absoluteNodeName) {
-            case $this->lookupNamespace('gml') . ':' . 'pos';
+            case $this->lookupNamespace('gml') . ':' . 'pos':
                 $pos = new GmlPos();
                 $pos->transferFromDOM($child);
                 $this->_pos = $pos;
@@ -105,7 +106,7 @@ class GmlPoint extends \Zend\GData\Extension
      * @see setPos
      * @return \Zend\GData\Geo\Extension\GmlPos The requested attribute.
      */
-    public function getPos()
+    public function getPos ()
     {
         return $this->_pos;
     }
@@ -116,11 +117,10 @@ class GmlPoint extends \Zend\GData\Extension
      * @param \Zend\GData\Geo\Extension\GmlPos $value The desired value for this attribute
      * @return \Zend\GData\Geo\Extension\GmlPoint Provides a fluent interface
      */
-    public function setPos($value)
+    public function setPos ($value)
     {
         $this->_pos = $value;
         return $this;
     }
-
 
 }

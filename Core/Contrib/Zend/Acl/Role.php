@@ -31,10 +31,11 @@ namespace Zend\Acl;
  */
 interface Role
 {
+
     /**
      * Returns the string identifier of the Role
      *
      * @return string
      */
-    public function getRoleId();
+    public function getRoleId ();
 }

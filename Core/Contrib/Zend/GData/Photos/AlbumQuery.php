@@ -64,19 +64,19 @@ class AlbumQuery extends UserQuery
      * returned instead.
      *
      * NOTE: AlbumName and AlbumId are mutually exclusive. Setting one will
-     *       automatically set the other to null.
+     * automatically set the other to null.
      *
      * @param string $value The name of the album to retrieve, or null to
-     *          clear.
+     * clear.
      * @return \Zend\GData\Photos\AlbumQuery The query object.
      */
-     public function setAlbumName($value)
-     {
-         $this->_albumId = null;
-         $this->_albumName = $value;
-
-         return $this;
-     }
+    public function setAlbumName ($value)
+    {
+        $this->_albumId = null;
+        $this->_albumName = $value;
+        
+        return $this;
+    }
 
     /**
      * Get the album name which is to be returned.
@@ -84,7 +84,7 @@ class AlbumQuery extends UserQuery
      * @see setAlbumName
      * @return string The name of the album to retrieve.
      */
-    public function getAlbumName()
+    public function getAlbumName ()
     {
         return $this->_albumName;
     }
@@ -95,19 +95,19 @@ class AlbumQuery extends UserQuery
      * returned instead.
      *
      * NOTE: Album and AlbumId are mutually exclusive. Setting one will
-     *       automatically set the other to null.
+     * automatically set the other to null.
      *
      * @param string $value The ID of the album to retrieve, or null to
-     *          clear.
+     * clear.
      * @return \Zend\GData\Photos\AlbumQuery The query object.
      */
-     public function setAlbumId($value)
-     {
-         $this->_albumName = null;
-         $this->_albumId = $value;
-
-         return $this;
-     }
+    public function setAlbumId ($value)
+    {
+        $this->_albumName = null;
+        $this->_albumId = $value;
+        
+        return $this;
+    }
 
     /**
      * Get the album ID which is to be returned.
@@ -115,7 +115,7 @@ class AlbumQuery extends UserQuery
      * @see setAlbum
      * @return string The ID of the album to retrieve.
      */
-    public function getAlbumId()
+    public function getAlbumId ()
     {
         return $this->_albumId;
     }
@@ -127,7 +127,7 @@ class AlbumQuery extends UserQuery
      * @return string A URL generated based on the state of this query.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function getQueryUrl($incomingUri = '')
+    public function getQueryUrl ($incomingUri = '')
     {
         $uri = '';
         if ($this->getAlbumName() !== null && $this->getAlbumId() === null) {
@@ -136,10 +136,10 @@ class AlbumQuery extends UserQuery
             $uri .= '/albumid/' . $this->getAlbumId();
         } elseif ($this->getAlbumName() !== null && $this->getAlbumId() !== null) {
             throw new App\InvalidArgumentException(
-                    'AlbumName and AlbumId cannot both be non-null');
+            'AlbumName and AlbumId cannot both be non-null');
         } else {
             throw new App\InvalidArgumentException(
-                    'AlbumName and AlbumId cannot both be null');
+            'AlbumName and AlbumId cannot both be null');
         }
         $uri .= $incomingUri;
         return parent::getQueryUrl($uri);

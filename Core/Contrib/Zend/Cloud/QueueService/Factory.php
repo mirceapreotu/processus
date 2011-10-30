@@ -30,6 +30,7 @@ require_once 'Zend/Cloud/AbstractFactory.php';
  */
 class Zend_Cloud_QueueService_Factory extends Zend_Cloud_AbstractFactory
 {
+
     const QUEUE_ADAPTER_KEY = 'queue_adapter';
 
     /**
@@ -42,7 +43,7 @@ class Zend_Cloud_QueueService_Factory extends Zend_Cloud_AbstractFactory
      *
      * @return void
      */
-    private function __construct()
+    private function __construct ()
     {
         // private ctor - should not be used
     }
@@ -53,18 +54,18 @@ class Zend_Cloud_QueueService_Factory extends Zend_Cloud_AbstractFactory
      * @param  array $options
      * @return void
      */
-    public static function getAdapter($options = array())
+    public static function getAdapter ($options = array())
     {
         $adapter = parent::_getAdapter(self::QUEUE_ADAPTER_KEY, $options);
-        if (!$adapter) {
-            require_once 'Zend/Cloud/QueueService/Exception.php';
-            throw new Zend_Cloud_QueueService_Exception('Class must be specified using the \'' .
-            self::QUEUE_ADAPTER_KEY . '\' key');
-        } elseif (!$adapter instanceof self::$_adapterInterface) {
+        if (! $adapter) {
             require_once 'Zend/Cloud/QueueService/Exception.php';
             throw new Zend_Cloud_QueueService_Exception(
-                'Adapter must implement \'' . self::$_adapterInterface . '\''
-            );
+            'Class must be specified using the \'' . self::QUEUE_ADAPTER_KEY .
+             '\' key');
+        } elseif (! $adapter instanceof self::$_adapterInterface) {
+            require_once 'Zend/Cloud/QueueService/Exception.php';
+            throw new Zend_Cloud_QueueService_Exception(
+            'Adapter must implement \'' . self::$_adapterInterface . '\'');
         }
         return $adapter;
     }

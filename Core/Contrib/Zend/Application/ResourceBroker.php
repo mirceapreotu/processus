@@ -32,6 +32,7 @@ use Zend\Loader\PluginSpecBroker;
  */
 class ResourceBroker extends PluginSpecBroker implements BootstrapAware
 {
+
     /**
      * @var string Default plugin loading strategy
      */
@@ -43,12 +44,11 @@ class ResourceBroker extends PluginSpecBroker implements BootstrapAware
      * @var Bootstrap
      */
     protected $bootstrap;
-    
+
     /**
      * @var array Initializers that have been run
      */
     protected $run = array();
-
 
     /**
      * Set boostrap object with which to inject resources
@@ -56,7 +56,7 @@ class ResourceBroker extends PluginSpecBroker implements BootstrapAware
      * @param  ResourceBootstrapper $bootstrap 
      * @return ResourceBroker
      */
-    public function setBootstrap(Bootstrapper $bootstrap)
+    public function setBootstrap (Bootstrapper $bootstrap)
     {
         $this->bootstrap = $bootstrap;
         return $this;
@@ -67,7 +67,7 @@ class ResourceBroker extends PluginSpecBroker implements BootstrapAware
      * 
      * @return null|ResourceBootstrapper
      */
-    public function getBootstrap()
+    public function getBootstrap ()
     {
         return $this->bootstrap;
     }
@@ -79,7 +79,7 @@ class ResourceBroker extends PluginSpecBroker implements BootstrapAware
      * @param  array $options 
      * @return Zend\Application\Resource
      */
-    public function load($plugin, array $options = null)
+    public function load ($plugin, array $options = null)
     {
         $resource = parent::load($plugin, $options);
         if (null !== $bootstrap = $this->getBootstrap()) {
@@ -95,34 +95,35 @@ class ResourceBroker extends PluginSpecBroker implements BootstrapAware
      * @return true
      * @throws InvalidArgumentException
      */
-    protected function validatePlugin($plugin)
+    protected function validatePlugin ($plugin)
     {
-        if (!$plugin instanceof Resource) {
-            throw new \InvalidArgumentException('Bootstrap resources must implement Zend\Application\Resource');
+        if (! $plugin instanceof Resource) {
+            throw new \InvalidArgumentException(
+            'Bootstrap resources must implement Zend\Application\Resource');
         }
         return true;
     }
-    
+
     /**
      * Mark a resource as having run
      *
      * @param  string $resource
      * @return void
      */
-    public function markRun($resource)
+    public function markRun ($resource)
     {
-        if (!in_array($resource, $this->run)) {
+        if (! in_array($resource, $this->run)) {
             $this->run[] = $resource;
         }
     }
-    
+
     /**
      * Check if resource has run
      *
      * @param  string $resource
      * @return void
      */
-    public function isRun($resource)
+    public function isRun ($resource)
     {
         return in_array($resource, $this->run);
     }

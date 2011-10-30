@@ -33,9 +33,10 @@ require_once 'Zend/Cloud/DocumentService/QueryAdapter.php';
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query
-    implements Zend_Cloud_DocumentService_QueryAdapter
+class Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query implements 
+Zend_Cloud_DocumentService_QueryAdapter
 {
+
     /**
      * Azure concrete query
      *
@@ -49,9 +50,9 @@ class Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query
      * @param  null|Zend_Service_WindowsAzure_Storage_TableEntityQuery $select Table select object
      * @return void
      */
-    public function __construct($select = null)
+    public function __construct ($select = null)
     {
-        if (!$select instanceof Zend_Service_WindowsAzure_Storage_TableEntityQuery) {
+        if (! $select instanceof Zend_Service_WindowsAzure_Storage_TableEntityQuery) {
             require_once 'Zend/Service/WindowsAzure/Storage/TableEntityQuery.php';
             $select = new Zend_Service_WindowsAzure_Storage_TableEntityQuery();
         }
@@ -66,7 +67,7 @@ class Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query
      * @param  string $select
      * @return Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query
      */
-    public function select($select)
+    public function select ($select)
     {
         return $this;
     }
@@ -77,7 +78,7 @@ class Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query
      * @param string $from
      * @return Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query
      */
-    public function from($from)
+    public function from ($from)
     {
         $this->_azureSelect->from($from);
         return $this;
@@ -91,9 +92,9 @@ class Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query
      * @param string $op Operation to use to join where clauses (AND/OR)
      * @return Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query
      */
-    public function where($where, $value = null, $op = 'and')
+    public function where ($where, $value = null, $op = 'and')
     {
-        if (!empty($value) && !is_array($value)) {
+        if (! empty($value) && ! is_array($value)) {
             // fix buglet in Azure - numeric values are quoted unless passed as an array
             $value = array($value);
         }
@@ -110,13 +111,15 @@ class Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query
      * @param  array $value Row ID for the document (PartitionKey, RowKey)
      * @return Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query
      */
-    public function whereId($value)
+    public function whereId ($value)
     {
-        if (!is_array($value)) {
+        if (! is_array($value)) {
             require_once 'Zend/Cloud/DocumentService/Exception.php';
-            throw new Zend_Cloud_DocumentService_Exception('Invalid document key');
+            throw new Zend_Cloud_DocumentService_Exception(
+            'Invalid document key');
         }
-        $this->_azureSelect->wherePartitionKey($value[0])->whereRowKey($value[1]);
+        $this->_azureSelect->wherePartitionKey($value[0])->whereRowKey(
+        $value[1]);
         return $this;
     }
 
@@ -126,7 +129,7 @@ class Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query
      * @param  int $limit
      * @return Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query
      */
-    public function limit($limit)
+    public function limit ($limit)
     {
         $this->_azureSelect->top($limit);
         return $this;
@@ -141,10 +144,11 @@ class Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query
      * @return Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query
      * @throws Zend_Cloud_OperationNotAvailableException
      */
-    public function order($sort, $direction = 'asc')
+    public function order ($sort, $direction = 'asc')
     {
         require_once 'Zend/Cloud/OperationNotAvailableException.php';
-        throw new Zend_Cloud_OperationNotAvailableException('No support for sorting for Azure yet');
+        throw new Zend_Cloud_OperationNotAvailableException(
+        'No support for sorting for Azure yet');
     }
 
     /**
@@ -152,9 +156,9 @@ class Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query
      *
      * @return Zend_Service_WindowsAzure_Storage_TableEntityQuery
      */
-    public function getAzureSelect()
+    public function getAzureSelect ()
     {
-        return  $this->_azureSelect;
+        return $this->_azureSelect;
     }
 
     /**
@@ -164,7 +168,7 @@ class Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query
      *
      * @return Zend_Service_WindowsAzure_Storage_TableEntityQuery
      */
-    public function assemble()
+    public function assemble ()
     {
         return $this->getAzureSelect();
     }

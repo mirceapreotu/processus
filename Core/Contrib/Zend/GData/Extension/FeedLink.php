@@ -41,14 +41,19 @@ class FeedLink extends Extension
 {
 
     protected $_rootElement = 'feedLink';
+
     protected $_countHint = null;
+
     protected $_href = null;
+
     protected $_readOnly = null;
+
     protected $_rel = null;
+
     protected $_feed = null;
 
-    public function __construct($href = null, $rel = null,
-            $countHint = null, $readOnly = null, $feed = null)
+    public function __construct ($href = null, $rel = null, $countHint = null, 
+    $readOnly = null, $feed = null)
     {
         parent::__construct();
         $this->_countHint = $countHint;
@@ -58,7 +63,7 @@ class FeedLink extends Extension
         $this->_feed = $feed;
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_countHint !== null) {
@@ -68,7 +73,8 @@ class FeedLink extends Extension
             $element->setAttribute('href', $this->_href);
         }
         if ($this->_readOnly !== null) {
-            $element->setAttribute('readOnly', ($this->_readOnly ? "true" : "false"));
+            $element->setAttribute('readOnly', 
+            ($this->_readOnly ? "true" : "false"));
         }
         if ($this->_rel !== null) {
             $element->setAttribute('rel', $this->_rel);
@@ -79,91 +85,91 @@ class FeedLink extends Extension
         return $element;
     }
 
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-            case $this->lookupNamespace('atom') . ':' . 'feed';
+            case $this->lookupNamespace('atom') . ':' . 'feed':
                 $feed = new \Zend\GData\Feed();
                 $feed->transferFromDOM($child);
                 $this->_feed = $feed;
                 break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'countHint':
-            $this->_countHint = $attribute->nodeValue;
-            break;
-        case 'href':
-            $this->_href = $attribute->nodeValue;
-            break;
-        case 'readOnly':
-            if ($attribute->nodeValue == "true") {
-                $this->_readOnly = true;
-            }
-            else if ($attribute->nodeValue == "false") {
-                $this->_readOnly = false;
-            }
-            else {
-                throw new \Zend\GData\App\InvalidArgumentException("Expected 'true' or 'false' for gCal:selected#value.");
-            }
-            break;
-        case 'rel':
-            $this->_rel = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'countHint':
+                $this->_countHint = $attribute->nodeValue;
+                break;
+            case 'href':
+                $this->_href = $attribute->nodeValue;
+                break;
+            case 'readOnly':
+                if ($attribute->nodeValue == "true") {
+                    $this->_readOnly = true;
+                } else 
+                    if ($attribute->nodeValue == "false") {
+                        $this->_readOnly = false;
+                    } else {
+                        throw new \Zend\GData\App\InvalidArgumentException(
+                        "Expected 'true' or 'false' for gCal:selected#value.");
+                    }
+                break;
+            case 'rel':
+                $this->_rel = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
     /**
      * @return string
      */
-    public function getHref()
+    public function getHref ()
     {
         return $this->_href;
     }
 
-    public function setHref($value)
+    public function setHref ($value)
     {
         $this->_href = $value;
         return $this;
     }
 
-    public function getReadOnly()
+    public function getReadOnly ()
     {
         return $this->_readOnly;
     }
 
-    public function setReadOnly($value)
+    public function setReadOnly ($value)
     {
         $this->_readOnly = $value;
         return $this;
     }
 
-    public function getRel()
+    public function getRel ()
     {
         return $this->_rel;
     }
 
-    public function setRel($value)
+    public function setRel ($value)
     {
         $this->_rel = $value;
         return $this;
     }
 
-    public function getFeed()
+    public function getFeed ()
     {
         return $this->_feed;
     }
 
-    public function setFeed($value)
+    public function setFeed ($value)
     {
         $this->_feed = $value;
         return $this;

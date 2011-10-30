@@ -12,9 +12,7 @@
  */
 namespace Zend\Cloud\Infrastructure;
 
-use Countable,
-    Iterator,
-    ArrayAccess;
+use Countable, Iterator, ArrayAccess;
 
 /**
  * List of instances
@@ -26,6 +24,7 @@ use Countable,
  */
 class InstanceList implements Countable, Iterator, ArrayAccess
 {
+
     /**
      * @var array Array of Zend\Cloud\Infrastructure\Instance
      */
@@ -48,15 +47,17 @@ class InstanceList implements Countable, Iterator, ArrayAccess
      * @param  array $instances
      * @return void
      */
-    public function __construct(Adapter $adapter, array $instances = null)
+    public function __construct (Adapter $adapter, array $instances = null)
     {
-        if (!($adapter instanceof Adapter)) {
-            throw new Exception\InvalidArgumentException('You must pass a Zend\Cloud\Infrastructure\Adapter');
+        if (! ($adapter instanceof Adapter)) {
+            throw new Exception\InvalidArgumentException(
+            'You must pass a Zend\Cloud\Infrastructure\Adapter');
         }
         if (empty($instances)) {
-            throw new Exception\InvalidArgumentException('You must pass an array of Instances');
+            throw new Exception\InvalidArgumentException(
+            'You must pass an array of Instances');
         }
-
+        
         $this->adapter = $adapter;
         $this->constructFromArray($instances);
     }
@@ -67,10 +68,10 @@ class InstanceList implements Countable, Iterator, ArrayAccess
      * @param  array $list
      * @return void
      */
-    protected function constructFromArray(array $list)
+    protected function constructFromArray (array $list)
     {
         foreach ($list as $instance) {
-            $this->addInstance(new Instance($this->adapter,$instance));
+            $this->addInstance(new Instance($this->adapter, $instance));
         }
     }
 
@@ -80,7 +81,7 @@ class InstanceList implements Countable, Iterator, ArrayAccess
      * @param  Instance
      * @return InstanceList
      */
-    protected function addInstance(Instance $instance)
+    protected function addInstance (Instance $instance)
     {
         $this->instances[] = $instance;
         return $this;
@@ -93,7 +94,7 @@ class InstanceList implements Countable, Iterator, ArrayAccess
      *
      * @return int
      */
-    public function count()
+    public function count ()
     {
         return count($this->instances);
     }
@@ -105,7 +106,7 @@ class InstanceList implements Countable, Iterator, ArrayAccess
      *
      * @return Instance
      */
-    public function current()
+    public function current ()
     {
         return $this->instances[$this->iteratorKey];
     }
@@ -117,7 +118,7 @@ class InstanceList implements Countable, Iterator, ArrayAccess
      *
      * @return int
      */
-    public function key()
+    public function key ()
     {
         return $this->iteratorKey;
     }
@@ -129,9 +130,9 @@ class InstanceList implements Countable, Iterator, ArrayAccess
      *
      * @return void
      */
-    public function next()
+    public function next ()
     {
-        $this->iteratorKey++;
+        $this->iteratorKey ++;
     }
 
     /**
@@ -141,7 +142,7 @@ class InstanceList implements Countable, Iterator, ArrayAccess
      *
      * @return void
      */
-    public function rewind()
+    public function rewind ()
     {
         $this->iteratorKey = 0;
     }
@@ -153,7 +154,7 @@ class InstanceList implements Countable, Iterator, ArrayAccess
      *
      * @return bool
      */
-    public function valid()
+    public function valid ()
     {
         $numItems = $this->count();
         if ($numItems > 0 && $this->iteratorKey < $numItems) {
@@ -170,7 +171,7 @@ class InstanceList implements Countable, Iterator, ArrayAccess
      * @param  int $offset
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists ($offset)
     {
         return ($offset < $this->count());
     }
@@ -184,9 +185,9 @@ class InstanceList implements Countable, Iterator, ArrayAccess
      * @return Instance
      * @throws Exception\OutOfBoundsException
      */
-    public function offsetGet($offset)
+    public function offsetGet ($offset)
     {
-        if (!$this->offsetExists($offset)) {
+        if (! $this->offsetExists($offset)) {
             throw new Exception\OutOfBoundsException('Illegal index');
         }
         return $this->instances[$offset];
@@ -201,9 +202,10 @@ class InstanceList implements Countable, Iterator, ArrayAccess
      * @param   string  $value
      * @throws  Exception\InvalidArgumentException
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet ($offset, $value)
     {
-        throw new Exception\InvalidArgumentException('You are trying to set read-only property');
+        throw new Exception\InvalidArgumentException(
+        'You are trying to set read-only property');
     }
 
     /**
@@ -214,8 +216,9 @@ class InstanceList implements Countable, Iterator, ArrayAccess
      * @param   int     $offset
      * @throws  Exception\InvalidArgumentException
      */
-    public function offsetUnset($offset)
+    public function offsetUnset ($offset)
     {
-        throw new Exception\InvalidArgumentException('You are trying to unset read-only property');
+        throw new Exception\InvalidArgumentException(
+        'You are trying to unset read-only property');
     }
 }

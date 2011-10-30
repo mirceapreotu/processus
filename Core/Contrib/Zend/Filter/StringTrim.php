@@ -32,6 +32,7 @@ namespace Zend\Filter;
  */
 class StringTrim extends AbstractFilter
 {
+
     /**
      * List of characters provided to the trim() function
      *
@@ -48,16 +49,16 @@ class StringTrim extends AbstractFilter
      * @param  string|array|\Zend\Config\Config $options
      * @return void
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         if ($options instanceof \Zend\Config\Config) {
             $options = $options->toArray();
-        } elseif (!is_array($options)) {
-            $options          = func_get_args();
+        } elseif (! is_array($options)) {
+            $options = func_get_args();
             $temp['charlist'] = array_shift($options);
-            $options          = $temp;
+            $options = $temp;
         }
-
+        
         if (array_key_exists('charlist', $options)) {
             $this->setCharList($options['charlist']);
         }
@@ -68,7 +69,7 @@ class StringTrim extends AbstractFilter
      *
      * @return string|null
      */
-    public function getCharList()
+    public function getCharList ()
     {
         return $this->_charList;
     }
@@ -79,7 +80,7 @@ class StringTrim extends AbstractFilter
      * @param  string|null $charList
      * @return \Zend\Filter\StringTrim Provides a fluent interface
      */
-    public function setCharList($charList)
+    public function setCharList ($charList)
     {
         $this->_charList = $charList;
         return $this;
@@ -93,12 +94,12 @@ class StringTrim extends AbstractFilter
      * @param  string $value
      * @return string
      */
-    public function filter($value)
+    public function filter ($value)
     {
         if (null === $this->_charList) {
             return $this->_unicodeTrim((string) $value);
         }
-
+        
         return $this->_unicodeTrim((string) $value, $this->_charList);
     }
 
@@ -110,14 +111,11 @@ class StringTrim extends AbstractFilter
      * @param string $charlist
      * @return string
      */
-    protected function _unicodeTrim($value, $charlist = '\\\\s')
+    protected function _unicodeTrim ($value, $charlist = '\\\\s')
     {
-        $chars = preg_replace(
-            array( '/[\^\-\]\\\]/S', '/\\\{4}/S', '/\//'),
-            array( '\\\\\\0', '\\', '\/' ),
-            $charlist
-        );
-
+        $chars = preg_replace(array('/[\^\-\]\\\]/S', '/\\\{4}/S', '/\//'), 
+        array('\\\\\\0', '\\', '\/'), $charlist);
+        
         $pattern = '^[' . $chars . ']*|[' . $chars . ']*$';
         return preg_replace("/$pattern/usSD", '', $value);
     }

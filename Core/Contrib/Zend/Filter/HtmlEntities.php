@@ -32,6 +32,7 @@ namespace Zend\Filter;
  */
 class HtmlEntities extends AbstractFilter
 {
+
     /**
      * Corresponds to the second htmlentities() argument
      *
@@ -60,35 +61,35 @@ class HtmlEntities extends AbstractFilter
      * @param  string  $charSet
      * @return void
      */
-    public function __construct($options = array())
+    public function __construct ($options = array())
     {
         if ($options instanceof \Zend\Config\Config) {
             $options = $options->toArray();
-        } elseif (!is_array($options)) {
+        } elseif (! is_array($options)) {
             $options = func_get_args();
             $temp['quotestyle'] = array_shift($options);
-            if (!empty($options)) {
+            if (! empty($options)) {
                 $temp['charset'] = array_shift($options);
             }
-
+            
             $options = $temp;
         }
-
-        if (!isset($options['quotestyle'])) {
+        
+        if (! isset($options['quotestyle'])) {
             $options['quotestyle'] = ENT_COMPAT;
         }
-
-        if (!isset($options['encoding'])) {
+        
+        if (! isset($options['encoding'])) {
             $options['encoding'] = 'UTF-8';
         }
         if (isset($options['charset'])) {
             $options['encoding'] = $options['charset'];
         }
-
-        if (!isset($options['doublequote'])) {
+        
+        if (! isset($options['doublequote'])) {
             $options['doublequote'] = true;
         }
-
+        
         $this->setQuoteStyle($options['quotestyle']);
         $this->setEncoding($options['encoding']);
         $this->setDoubleQuote($options['doublequote']);
@@ -99,7 +100,7 @@ class HtmlEntities extends AbstractFilter
      *
      * @return integer
      */
-    public function getQuoteStyle()
+    public function getQuoteStyle ()
     {
         return $this->_quoteStyle;
     }
@@ -110,21 +111,20 @@ class HtmlEntities extends AbstractFilter
      * @param  integer $quoteStyle
      * @return \Zend\Filter\HtmlEntities Provides a fluent interface
      */
-    public function setQuoteStyle($quoteStyle)
+    public function setQuoteStyle ($quoteStyle)
     {
         $this->_quoteStyle = $quoteStyle;
         return $this;
     }
-
 
     /**
      * Get encoding
      *
      * @return string
      */
-    public function getEncoding()
+    public function getEncoding ()
     {
-         return $this->_encoding;
+        return $this->_encoding;
     }
 
     /**
@@ -133,7 +133,7 @@ class HtmlEntities extends AbstractFilter
      * @param  string $value
      * @return \Zend\Filter\HtmlEntities
      */
-    public function setEncoding($value)
+    public function setEncoding ($value)
     {
         $this->_encoding = (string) $value;
         return $this;
@@ -146,7 +146,7 @@ class HtmlEntities extends AbstractFilter
      *
      * @return string
      */
-    public function getCharSet()
+    public function getCharSet ()
     {
         return $this->getEncoding();
     }
@@ -159,7 +159,7 @@ class HtmlEntities extends AbstractFilter
      * @param  string $charSet
      * @return \Zend\Filter\HtmlEntities Provides a fluent interface
      */
-    public function setCharSet($charSet)
+    public function setCharSet ($charSet)
     {
         return $this->setEncoding($charSet);
     }
@@ -169,7 +169,7 @@ class HtmlEntities extends AbstractFilter
      *
      * @return boolean
      */
-    public function getDoubleQuote()
+    public function getDoubleQuote ()
     {
         return $this->_doubleQuote;
     }
@@ -180,7 +180,7 @@ class HtmlEntities extends AbstractFilter
      * @param boolean $doubleQuote
      * @return \Zend\Filter\HtmlEntities Provides a fluent interface
      */
-    public function setDoubleQuote($doubleQuote)
+    public function setDoubleQuote ($doubleQuote)
     {
         $this->_doubleQuote = (boolean) $doubleQuote;
         return $this;
@@ -195,13 +195,9 @@ class HtmlEntities extends AbstractFilter
      * @param  string $value
      * @return string
      */
-    public function filter($value)
+    public function filter ($value)
     {
-        return htmlentities(
-            (string) $value, 
-            $this->getQuoteStyle(), 
-            $this->getEncoding(), 
-            $this->getDoubleQuote()
-        );
+        return htmlentities((string) $value, $this->getQuoteStyle(), 
+        $this->getEncoding(), $this->getDoubleQuote());
     }
 }

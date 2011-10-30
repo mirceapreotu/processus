@@ -72,35 +72,37 @@ class Feed extends App\Feed
      */
     protected $_itemsPerPage = null;
 
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(GData::$namespaces);
         parent::__construct($element);
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_totalResults != null) {
-            $element->appendChild($this->_totalResults->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_totalResults->getDOM($element->ownerDocument));
         }
         if ($this->_startIndex != null) {
-            $element->appendChild($this->_startIndex->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_startIndex->getDOM($element->ownerDocument));
         }
         if ($this->_itemsPerPage != null) {
-            $element->appendChild($this->_itemsPerPage->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_itemsPerPage->getDOM($element->ownerDocument));
         }
-
+        
         // ETags are special. We only support them in protocol >= 2.X.
         // This will be duplicated by the HTTP ETag header.
         if ($majorVersion >= 2) {
             if ($this->_etag != null) {
-                $element->setAttributeNS($this->lookupNamespace('gd'),
-                                         'gd:etag',
-                                         $this->_etag);
+                $element->setAttributeNS($this->lookupNamespace('gd'), 
+                'gd:etag', $this->_etag);
             }
         }
-
+        
         return $element;
     }
 
@@ -110,28 +112,28 @@ class Feed extends App\Feed
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('openSearch') . ':' . 'totalResults':
-            $totalResults = new Extension\OpenSearchTotalResults();
-            $totalResults->transferFromDOM($child);
-            $this->_totalResults = $totalResults;
-            break;
-        case $this->lookupNamespace('openSearch') . ':' . 'startIndex':
-            $startIndex = new Extension\OpenSearchStartIndex();
-            $startIndex->transferFromDOM($child);
-            $this->_startIndex = $startIndex;
-            break;
-        case $this->lookupNamespace('openSearch') . ':' . 'itemsPerPage':
-            $itemsPerPage = new Extension\OpenSearchItemsPerPage();
-            $itemsPerPage->transferFromDOM($child);
-            $this->_itemsPerPage = $itemsPerPage;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('openSearch') . ':' . 'totalResults':
+                $totalResults = new Extension\OpenSearchTotalResults();
+                $totalResults->transferFromDOM($child);
+                $this->_totalResults = $totalResults;
+                break;
+            case $this->lookupNamespace('openSearch') . ':' . 'startIndex':
+                $startIndex = new Extension\OpenSearchStartIndex();
+                $startIndex->transferFromDOM($child);
+                $this->_startIndex = $startIndex;
+                break;
+            case $this->lookupNamespace('openSearch') . ':' . 'itemsPerPage':
+                $itemsPerPage = new Extension\OpenSearchItemsPerPage();
+                $itemsPerPage->transferFromDOM($child);
+                $this->_itemsPerPage = $itemsPerPage;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
@@ -142,34 +144,34 @@ class Feed extends App\Feed
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'etag':
-            // ETags are special, since they can be conveyed by either the
-            // HTTP ETag header or as an XML attribute.
-            $etag = $attribute->nodeValue;
-            if ($this->_etag === null) {
-                $this->_etag = $etag;
-            }
-            elseif ($this->_etag != $etag) {
-                throw new App\IOException("ETag mismatch");
-            }
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
-            break;
+            case 'etag':
+                // ETags are special, since they can be conveyed by either the
+                // HTTP ETag header or as an XML attribute.
+                $etag = $attribute->nodeValue;
+                if ($this->_etag === null) {
+                    $this->_etag = $etag;
+                } elseif ($this->_etag != $etag) {
+                    throw new App\IOException("ETag mismatch");
+                }
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
+                break;
         }
     }
 
     /**
-     *  Set the value of the totalResults property.
+     * Set the value of the totalResults property.
      *
      * @param \Zend\GData\Extension\OpenSearchTotalResults|null $value The
-     *        value of the totalResults property. Use null to unset.
+     * value of the totalResults property. Use null to unset.
      * @return \Zend\GData\Feed Provides a fluent interface.
      */
-    function setTotalResults($value) {
+    function setTotalResults ($value)
+    {
         $this->_totalResults = $value;
         return $this;
     }
@@ -178,9 +180,10 @@ class Feed extends App\Feed
      * Get the value of the totalResults property.
      *
      * @return \Zend\GData\Extension\OpenSearchTotalResults|null The value of
-     *         the totalResults property, or null if unset.
+     * the totalResults property, or null if unset.
      */
-    function getTotalResults() {
+    function getTotalResults ()
+    {
         return $this->_totalResults;
     }
 
@@ -188,10 +191,11 @@ class Feed extends App\Feed
      * Set the start index property for feed paging.
      *
      * @param \Zend\GData\Extension\OpenSearchStartIndex|null $value The value
-     *        for the startIndex property. Use null to unset.
+     * for the startIndex property. Use null to unset.
      * @return \Zend\GData\Feed Provides a fluent interface.
      */
-    function setStartIndex($value) {
+    function setStartIndex ($value)
+    {
         $this->_startIndex = $value;
         return $this;
     }
@@ -200,9 +204,10 @@ class Feed extends App\Feed
      * Get the value of the startIndex property.
      *
      * @return \Zend\GData\Extension\OpenSearchStartIndex|null The value of the
-     *         startIndex property, or null if unset.
+     * startIndex property, or null if unset.
      */
-    function getStartIndex() {
+    function getStartIndex ()
+    {
         return $this->_startIndex;
     }
 
@@ -210,10 +215,11 @@ class Feed extends App\Feed
      * Set the itemsPerPage property.
      *
      * @param \Zend\GData\Extension\OpenSearchItemsPerPage|null $value The
-     *        value for the itemsPerPage property. Use nul to unset.
+     * value for the itemsPerPage property. Use nul to unset.
      * @return \Zend\GData\Feed Provides a fluent interface.
      */
-    function setItemsPerPage($value) {
+    function setItemsPerPage ($value)
+    {
         $this->_itemsPerPage = $value;
         return $this;
     }
@@ -222,9 +228,10 @@ class Feed extends App\Feed
      * Get the value of the itemsPerPage property.
      *
      * @return \Zend\GData\Extension\OpenSearchItemsPerPage|null The value of
-     *         the itemsPerPage property, or null if unset.
+     * the itemsPerPage property, or null if unset.
      */
-    function getItemsPerPage() {
+    function getItemsPerPage ()
+    {
         return $this->_itemsPerPage;
     }
 

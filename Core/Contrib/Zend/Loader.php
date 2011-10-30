@@ -30,6 +30,7 @@ namespace Zend;
  */
 class Loader
 {
+
     /**
      * Loads a PHP file.  This is a wrapper for PHP's include() function.
      *
@@ -48,27 +49,27 @@ class Loader
      *
      * @param  string        $filename
      * @param  string|array  $dirs - OPTIONAL either a path or array of paths
-     *                       to search.
+     * to search.
      * @param  boolean       $once
      * @return boolean
      * @throws Zend\Loader\Exception\SecurityException
      */
-    public static function loadFile($filename, $dirs = null, $once = false)
+    public static function loadFile ($filename, $dirs = null, $once = false)
     {
         self::_securityCheck($filename);
-
+        
         /**
          * Search in provided directories, as well as include_path
          */
         $incPath = false;
-        if (!empty($dirs) && (is_array($dirs) || is_string($dirs))) {
+        if (! empty($dirs) && (is_array($dirs) || is_string($dirs))) {
             if (is_array($dirs)) {
                 $dirs = implode(PATH_SEPARATOR, $dirs);
             }
             $incPath = get_include_path();
             set_include_path($dirs . PATH_SEPARATOR . $incPath);
         }
-
+        
         /**
          * Try finding for the plain filename in the include_path.
          */
@@ -77,14 +78,14 @@ class Loader
         } else {
             include $filename;
         }
-
+        
         /**
          * If searching in directories, reset include_path
          */
         if ($incPath) {
             set_include_path($incPath);
         }
-
+        
         return true;
     }
 
@@ -96,9 +97,9 @@ class Loader
      * @param string   $filename
      * @return boolean
      */
-    public static function isReadable($filename)
+    public static function isReadable ($filename)
     {
-        return (bool)stream_resolve_include_path($filename);
+        return (bool) stream_resolve_include_path($filename);
     }
 
     /**
@@ -110,17 +111,18 @@ class Loader
      * @param  string|null $path
      * @return array
      */
-    public static function explodeIncludePath($path = null)
+    public static function explodeIncludePath ($path = null)
     {
         if (null === $path) {
             $path = get_include_path();
         }
-
+        
         if (PATH_SEPARATOR == ':') {
             // On *nix systems, include_paths which include paths with a stream
             // schema cannot be safely explode'd, so we have to be a bit more
             // intelligent in the approach.
-            $paths = preg_split('#:(?!//)#', $path);
+            $paths = preg_split('#:(?!//)#', 
+            $path);
         } else {
             $paths = explode(PATH_SEPARATOR, $path);
         }
@@ -134,14 +136,15 @@ class Loader
      * @return void
      * @throws Zend\Loader\Exception\SecurityException
      */
-    protected static function _securityCheck($filename)
+    protected static function _securityCheck ($filename)
     {
         /**
          * Security check
          */
         if (preg_match('/[^a-z0-9\\/\\\\_.:-]/i', $filename)) {
             require_once __DIR__ . '/Loader/Exception/SecurityException.php';
-            throw new Loader\Exception\SecurityException('Illegal character in filename');
+            throw new Loader\Exception\SecurityException(
+            'Illegal character in filename');
         }
     }
 
@@ -159,12 +162,12 @@ class Loader
      * @return boolean
      * @deprecated Since 1.5.0; use loadFile() instead
      */
-    protected static function _includeFile($filespec, $once = false)
+    protected static function _includeFile ($filespec, $once = false)
     {
         if ($once) {
             return include_once $filespec;
         } else {
-            return include $filespec ;
+            return include $filespec;
         }
     }
 }

@@ -37,6 +37,7 @@ use Zend\Controller\Request\Http as HttpRequest;
  */
 interface Route
 {
+
     /**
      * Create a new route
      * 
@@ -44,6 +45,7 @@ interface Route
      * @return void
      */
     //public function __construct(array $options);
+    
 
     /**
      * Match a request
@@ -52,7 +54,7 @@ interface Route
      * @param  integer     $pathOffset
      * @return boolean
      */
-    public function match(HttpRequest $request, $pathOffset = null);
+    public function match (HttpRequest $request, $pathOffset = null);
 
     /**
      * Assemble an URL
@@ -61,5 +63,5 @@ interface Route
      * @param  array $options
      * @return string
      */
-    public function assemble(array $params = null, array $options = null);
+    public function assemble (array $params = null, array $options = null);
 }

@@ -34,6 +34,7 @@ namespace Zend\Amf\Value;
  */
 class TraitsInfo
 {
+
     /**
      * @var string Class name
      */
@@ -63,12 +64,13 @@ class TraitsInfo
      * @param  boolean $properties
      * @return void
      */
-    public function __construct($className, $dynamic=false, $externalizable=false, $properties=null)
+    public function __construct ($className, $dynamic = false, $externalizable = false, 
+    $properties = null)
     {
-        $this->_className      = $className;
-        $this->_dynamic        = $dynamic;
+        $this->_className = $className;
+        $this->_dynamic = $dynamic;
         $this->_externalizable = $externalizable;
-        $this->_properties     = $properties;
+        $this->_properties = $properties;
     }
 
     /**
@@ -76,7 +78,7 @@ class TraitsInfo
      *
      * @return boolean
      */
-    public function isDynamic()
+    public function isDynamic ()
     {
         return $this->_dynamic;
     }
@@ -86,7 +88,7 @@ class TraitsInfo
      *
      * @return boolean
      */
-    public function isExternalizable()
+    public function isExternalizable ()
     {
         return $this->_externalizable;
     }
@@ -96,7 +98,7 @@ class TraitsInfo
      *
      * @return int
      */
-    public function length()
+    public function length ()
     {
         return count($this->_properties);
     }
@@ -106,7 +108,7 @@ class TraitsInfo
      *
      * @return string
      */
-    public function getClassName()
+    public function getClassName ()
     {
         return $this->_className;
     }
@@ -117,7 +119,7 @@ class TraitsInfo
      * @param  string $name
      * @return \Zend\Amf\Value\TraitsInfo
      */
-    public function addProperty($name)
+    public function addProperty ($name)
     {
         $this->_properties[] = $name;
         return $this;
@@ -129,7 +131,7 @@ class TraitsInfo
      * @param  array $props
      * @return \Zend\Amf\Value\TraitsInfo
      */
-    public function addAllProperties(array $props)
+    public function addAllProperties (array $props)
     {
         $this->_properties = $props;
         return $this;
@@ -141,7 +143,7 @@ class TraitsInfo
      * @param  int $index
      * @return string
      */
-    public function getProperty($index)
+    public function getProperty ($index)
     {
         return $this->_properties[(int) $index];
     }
@@ -151,7 +153,7 @@ class TraitsInfo
      *
      * @return array
      */
-    public function getAllProperties()
+    public function getAllProperties ()
     {
         return $this->_properties;
     }

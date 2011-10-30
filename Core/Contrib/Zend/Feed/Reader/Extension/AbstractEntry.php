@@ -19,20 +19,21 @@
  */
 
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Reader\Extension;
 use Zend\Feed\Reader;
 
 /**
-* @uses \Zend\Feed\Reader\Reader
-* @category Zend
-* @package Reader\Reader
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @uses \Zend\Feed\Reader\Reader
+ * @category Zend
+ * @package Reader\Reader
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 abstract class AbstractEntry
 {
+
     /**
      * Feed entry data
      *
@@ -83,28 +84,27 @@ abstract class AbstractEntry
      * @param  string $type
      * @return void
      */
-    public function __construct(\DOMElement $entry, $entryKey, $type = null)
+    public function __construct (\DOMElement $entry, $entryKey, $type = null)
     {
-        $this->_entry       = $entry;
-        $this->_entryKey    = $entryKey;
+        $this->_entry = $entry;
+        $this->_entryKey = $entryKey;
         $this->_domDocument = $entry->ownerDocument;
-
+        
         if ($type !== null) {
             $this->_data['type'] = $type;
         } else {
-            $this->_data['type'] = Reader\Reader::detectType($entry->ownerDocument, true);
+            $this->_data['type'] = Reader\Reader::detectType(
+            $entry->ownerDocument, true);
         }
         // set the XPath query prefix for the entry being queried
-        if ($this->getType() == Reader\Reader::TYPE_RSS_10
-            || $this->getType() == Reader\Reader::TYPE_RSS_090
-        ) {
-            $this->setXpathPrefix('//rss:item[' . ($this->_entryKey+1) . ']');
-        } elseif ($this->getType() == Reader\Reader::TYPE_ATOM_10
-                  || $this->getType() == Reader\Reader::TYPE_ATOM_03
-        ) {
-            $this->setXpathPrefix('//atom:entry[' . ($this->_entryKey+1) . ']');
+        if ($this->getType() == Reader\Reader::TYPE_RSS_10 ||
+         $this->getType() == Reader\Reader::TYPE_RSS_090) {
+            $this->setXpathPrefix('//rss:item[' . ($this->_entryKey + 1) . ']');
+        } elseif ($this->getType() == Reader\Reader::TYPE_ATOM_10 ||
+         $this->getType() == Reader\Reader::TYPE_ATOM_03) {
+            $this->setXpathPrefix('//atom:entry[' . ($this->_entryKey + 1) . ']');
         } else {
-            $this->setXpathPrefix('//item[' . ($this->_entryKey+1) . ']');
+            $this->setXpathPrefix('//item[' . ($this->_entryKey + 1) . ']');
         }
     }
 
@@ -113,7 +113,7 @@ abstract class AbstractEntry
      *
      * @return \DOMDocument
      */
-    public function getDomDocument()
+    public function getDomDocument ()
     {
         return $this->_domDocument;
     }
@@ -123,7 +123,7 @@ abstract class AbstractEntry
      *
      * @return string
      */
-    public function getEncoding()
+    public function getEncoding ()
     {
         $assumed = $this->getDomDocument()->encoding;
         return $assumed;
@@ -134,7 +134,7 @@ abstract class AbstractEntry
      *
      * @return string
      */
-    public function getType()
+    public function getType ()
     {
         return $this->_data['type'];
     }
@@ -145,7 +145,7 @@ abstract class AbstractEntry
      * @param  DOMXPath $xpath
      * @return Reader\Reader_Extension_EntryAbstract
      */
-    public function setXpath(\DOMXPath $xpath)
+    public function setXpath (\DOMXPath $xpath)
     {
         $this->_xpath = $xpath;
         $this->_registerNamespaces();
@@ -157,9 +157,9 @@ abstract class AbstractEntry
      *
      * @return DOMXPath
      */
-    public function getXpath()
+    public function getXpath ()
     {
-        if (!$this->_xpath) {
+        if (! $this->_xpath) {
             $this->setXpath(new \DOMXPath($this->getDomDocument()));
         }
         return $this->_xpath;
@@ -170,7 +170,7 @@ abstract class AbstractEntry
      *
      * @return array
      */
-    public function toArray()
+    public function toArray ()
     {
         return $this->_data;
     }
@@ -180,7 +180,7 @@ abstract class AbstractEntry
      *
      * @return string
      */
-    public function getXpathPrefix()
+    public function getXpathPrefix ()
     {
         return $this->_xpathPrefix;
     }
@@ -191,7 +191,7 @@ abstract class AbstractEntry
      * @param  string $prefix
      * @return Reader\Reader_Extension_EntryAbstract
      */
-    public function setXpathPrefix($prefix)
+    public function setXpathPrefix ($prefix)
     {
         $this->_xpathPrefix = $prefix;
         return $this;
@@ -202,5 +202,5 @@ abstract class AbstractEntry
      *
      * @return void
      */
-    protected abstract function _registerNamespaces();
+    protected abstract function _registerNamespaces ();
 }

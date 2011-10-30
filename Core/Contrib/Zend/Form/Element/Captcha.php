@@ -24,10 +24,7 @@
  */
 namespace Zend\Form\Element;
 
-use ReflectionClass,
-    Zend\Captcha\Adapter as CaptchaAdapter,
-    Zend\View\Renderer as View,
-    Zend\Loader\PrefixPathLoader as PluginLoader;
+use ReflectionClass, Zend\Captcha\Adapter as CaptchaAdapter, Zend\View\Renderer as View, Zend\Loader\PrefixPathLoader as PluginLoader;
 
 /**
  * Generic captcha element
@@ -46,6 +43,7 @@ use ReflectionClass,
  */
 class Captcha extends Xhtml
 {
+
     /**
      * Captcha plugin type constant
      */
@@ -63,7 +61,7 @@ class Captcha extends Xhtml
      *
      * @return \Zend\Captcha\Adapter
      */
-    public function getCaptcha()
+    public function getCaptcha ()
     {
         return $this->_captcha;
     }
@@ -74,7 +72,7 @@ class Captcha extends Xhtml
      * @param string|array|\Zend\Captcha\Adapter $captcha
      * @param array $options
      */
-    public function setCaptcha($captcha, $options = array())
+    public function setCaptcha ($captcha, $options = array())
     {
         if ($captcha instanceof CaptchaAdapter) {
             $instance = $captcha;
@@ -90,10 +88,10 @@ class Captcha extends Xhtml
             } else {
                 $name = $captcha;
             }
-
+            
             $name = $this->getPluginLoader(self::CAPTCHA)->load($name);
             if (empty($options)) {
-                $instance = new $name;
+                $instance = new $name();
             } else {
                 $r = new ReflectionClass($name);
                 if ($r->hasMethod('__construct')) {
@@ -103,7 +101,7 @@ class Captcha extends Xhtml
                 }
             }
         }
-
+        
         $this->_captcha = $instance;
         $this->_captcha->setName($this->getName());
         return $this;
@@ -120,13 +118,13 @@ class Captcha extends Xhtml
      * @param  string|array|\Zend\Config\Config $spec
      * @return void
      */
-    public function __construct($spec, $options = null)
+    public function __construct ($spec, $options = null)
     {
         parent::__construct($spec, $options);
         $this->setAllowEmpty(true)
-             ->setRequired(true)
-             ->setAutoInsertNotEmptyValidator(false)
-             ->addValidator($this->getCaptcha(), true);
+            ->setRequired(true)
+            ->setAutoInsertNotEmptyValidator(false)
+            ->addValidator($this->getCaptcha(), true);
     }
 
     /**
@@ -134,7 +132,7 @@ class Captcha extends Xhtml
      *
      * @return array
      */
-    public function getAttribs()
+    public function getAttribs ()
     {
         $attribs = get_object_vars($this);
         unset($attribs['helper']);
@@ -143,7 +141,7 @@ class Captcha extends Xhtml
                 unset($attribs[$key]);
             }
         }
-
+        
         return $attribs;
     }
 
@@ -155,11 +153,12 @@ class Captcha extends Xhtml
      * @param  array $options
      * @return \Zend\Form\Element\Captcha
      */
-    public function setOptions(array $options)
+    public function setOptions (array $options)
     {
         if (array_key_exists('captcha', $options)) {
             if (array_key_exists('captchaOptions', $options)) {
-                $this->setCaptcha($options['captcha'], $options['captchaOptions']);
+                $this->setCaptcha($options['captcha'], 
+                $options['captchaOptions']);
                 unset($options['captchaOptions']);
             } else {
                 $this->setCaptcha($options['captcha']);
@@ -176,25 +175,26 @@ class Captcha extends Xhtml
      * @param  \Zend\View\Renderer $view
      * @return string
      */
-    public function render(View $view = null)
+    public function render (View $view = null)
     {
-        $captcha    = $this->getCaptcha();
+        $captcha = $this->getCaptcha();
         $captcha->setName($this->getFullyQualifiedName());
-
+        
         $decorators = $this->getDecorators();
-
-        $decorator  = $captcha->getDecorator();
-        if (!empty($decorator)) {
+        
+        $decorator = $captcha->getDecorator();
+        if (! empty($decorator)) {
             array_unshift($decorators, $decorator);
         }
-
+        
         $decorator = array('Captcha', array('captcha' => $captcha));
         array_unshift($decorators, $decorator);
-
+        
         $this->setDecorators($decorators);
-
-        $this->setValue($this->getCaptcha()->generate());
-
+        
+        $this->setValue($this->getCaptcha()
+            ->generate());
+        
         return parent::render($view);
     }
 
@@ -207,14 +207,13 @@ class Captcha extends Xhtml
      * @return \Zend\Loader\PrefixPathMapper
      * @throws \Zend\Loader\Exception on invalid type.
      */
-    public function getPluginLoader($type)
+    public function getPluginLoader ($type)
     {
         $type = strtoupper($type);
         if ($type == self::CAPTCHA) {
-            if (!isset($this->_loaders[$type])) {
+            if (! isset($this->_loaders[$type])) {
                 $this->_loaders[$type] = new PluginLoader(
-                    array('Zend\\Captcha' => 'Zend/Captcha/')
-                );
+                array('Zend\\Captcha' => 'Zend/Captcha/'));
             }
             return $this->_loaders[$type];
         } else {
@@ -233,14 +232,14 @@ class Captcha extends Xhtml
      * @return \Zend\Form\Element
      * @see Zend_Form_Element::addPrefixPath
      */
-    public function addPrefixPath($prefix, $path, $type = null)
+    public function addPrefixPath ($prefix, $path, $type = null)
     {
         $type = strtoupper($type);
         switch ($type) {
             case null:
                 $loader = $this->getPluginLoader(self::CAPTCHA);
                 $cPrefix = rtrim($prefix, '\\') . '\Captcha';
-                $cPath   = rtrim($path, '/\\') . '/Captcha';
+                $cPath = rtrim($path, '/\\') . '/Captcha';
                 $loader->addPrefixPath($cPrefix, $cPath);
                 return parent::addPrefixPath($prefix, $path);
             case self::CAPTCHA:
@@ -257,18 +256,20 @@ class Captcha extends Xhtml
      *
      * @return \Zend\Form\Element\Captcha
      */
-    public function loadDefaultDecorators()
+    public function loadDefaultDecorators ()
     {
         if ($this->loadDefaultDecoratorsIsDisabled()) {
             return $this;
         }
-
+        
         $decorators = $this->getDecorators();
         if (empty($decorators)) {
             $this->addDecorator('Errors')
-                 ->addDecorator('Description', array('tag' => 'p', 'class' => 'description'))
-                 ->addDecorator('HtmlTag', array('tag' => 'dd', 'id' => $this->getName() . '-element'))
-                 ->addDecorator('Label', array('tag' => 'dt'));
+                ->addDecorator('Description', 
+            array('tag' => 'p', 'class' => 'description'))
+                ->addDecorator('HtmlTag', 
+            array('tag' => 'dd', 'id' => $this->getName() . '-element'))
+                ->addDecorator('Label', array('tag' => 'dt'));
         }
         return $this;
     }
@@ -280,16 +281,16 @@ class Captcha extends Xhtml
      * @param  mixed $context
      * @return boolean
      */
-    public function isValid($value, $context = null)
+    public function isValid ($value, $context = null)
     {
         $this->getCaptcha()->setName($this->getName());
         $belongsTo = $this->getBelongsTo();
-        if (empty($belongsTo) || !is_array($context)) {
+        if (empty($belongsTo) || ! is_array($context)) {
             return parent::isValid($value, $context);
         }
-
-        $name     = $this->getFullyQualifiedName();
-        $root     = substr($name, 0, strpos($name, '['));
+        
+        $name = $this->getFullyQualifiedName();
+        $root = substr($name, 0, strpos($name, '['));
         $segments = substr($name, strpos($name, '['));
         $segments = ltrim($segments, '[');
         $segments = rtrim($segments, ']');
@@ -302,7 +303,7 @@ class Captcha extends Xhtml
                 $newContext = $newContext[$segment];
             }
         }
-
+        
         return parent::isValid($value, $newContext);
     }
 }

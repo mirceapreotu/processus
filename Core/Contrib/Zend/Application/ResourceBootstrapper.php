@@ -37,18 +37,19 @@ use Zend\Loader\LazyLoadingBroker;
  */
 interface ResourceBootstrapper
 {
+
     /**
      * Set plugin broker to use to fetch resources
      *
      * @param  \Zend\Loader\LazyLoadingBroker $broker
      * @return \Zend\Application\ResourceBootstrapper
      */
-    public function setBroker($broker);
+    public function setBroker ($broker);
 
     /**
      * Retrieve plugin broker for resources
      *
      * @return \Zend\Loader\LazyLoadingBroker
      */
-    public function getBroker();
+    public function getBroker ();
 }

@@ -35,6 +35,7 @@ namespace Zend\File\Transfer;
  */
 class Transfer
 {
+
     /**
      * Array holding all directions
      *
@@ -50,7 +51,7 @@ class Transfer
      * @param  array   $options   OPTIONAL Options to set for this adapter
      * @throws \Zend\File\Transfer\Exception
      */
-    public function __construct($adapter = 'Http', $direction = false, $options = array())
+    public function __construct ($adapter = 'Http', $direction = false, $options = array())
     {
         $this->setAdapter($adapter, $direction, $options);
     }
@@ -63,22 +64,25 @@ class Transfer
      * @param  array   $options   OPTIONAL Options to set for this adapter
      * @throws \Zend\File\Transfer\Exception
      */
-    public function setAdapter($adapter, $direction = false, $options = array())
+    public function setAdapter ($adapter, $direction = false, $options = array())
     {
-        if (!is_string($adapter)) {
-            throw new Exception\InvalidArgumentException('Adapter must be a string');
+        if (! is_string($adapter)) {
+            throw new Exception\InvalidArgumentException(
+            'Adapter must be a string');
         }
         
         if ($adapter[0] != '\\') {
             $adapter = '\Zend\File\Transfer\Adapter\\' . ucfirst($adapter);
         }
-
+        
         $direction = (integer) $direction;
         $this->_adapter[$direction] = new $adapter($options);
-        if (!$this->_adapter[$direction] instanceof Adapter\AbstractAdapter) {
-            throw new Exception\InvalidArgumentException("Adapter " . $adapter . " does not extend Zend_File_Transfer_Adapter_Abstract");
+        if (! $this->_adapter[$direction] instanceof Adapter\AbstractAdapter) {
+            throw new Exception\InvalidArgumentException(
+            "Adapter " . $adapter .
+             " does not extend Zend_File_Transfer_Adapter_Abstract");
         }
-
+        
         return $this;
     }
 
@@ -86,16 +90,16 @@ class Transfer
      * Returns all set adapters
      *
      * @param boolean $direction On null, all directions are returned
-     *                           On false, download direction is returned
-     *                           On true, upload direction is returned
+     * On false, download direction is returned
+     * On true, upload direction is returned
      * @return array|Zend_File_Transfer_Adapter
      */
-    public function getAdapter($direction = null)
+    public function getAdapter ($direction = null)
     {
         if ($direction === null) {
             return $this->_adapter;
         }
-
+        
         $direction = (integer) $direction;
         return $this->_adapter[$direction];
     }
@@ -107,18 +111,20 @@ class Transfer
      * @param  array  $options Options for this method
      * @return mixed
      */
-    public function __call($method, array $options)
+    public function __call ($method, array $options)
     {
         if (array_key_exists('direction', $options)) {
             $direction = (integer) $options['direction'];
         } else {
             $direction = 0;
         }
-
+        
         if (method_exists($this->_adapter[$direction], $method)) {
-            return call_user_func_array(array($this->_adapter[$direction], $method), $options);
+            return call_user_func_array(
+            array($this->_adapter[$direction], $method), $options);
         }
-
-        throw new Exception\BadMethodCallException("Unknown method '" . $method . "' called!");
+        
+        throw new Exception\BadMethodCallException(
+        "Unknown method '" . $method . "' called!");
     }
 }

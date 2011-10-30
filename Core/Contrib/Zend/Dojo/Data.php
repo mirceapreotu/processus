@@ -36,8 +36,9 @@ use Zend\Json\Json;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Data implements \ArrayAccess,\IteratorAggregate,\Countable
+class Data implements \ArrayAccess, ,\IteratorAggregate, ,\Countable
 {
+
     /**
      * Identifier field of item
      * @var string|int
@@ -70,7 +71,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  string|null $label
      * @return void
      */
-    public function __construct($identifier = null, $items = null, $label = null)
+    public function __construct ($identifier = null, $items = null, $label = null)
     {
         if (null !== $identifier) {
             $this->setIdentifier($identifier);
@@ -89,7 +90,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param array|Traversable $items
      * @return \Zend\Dojo\Data
      */
-    public function setItems($items)
+    public function setItems ($items)
     {
         $this->clearItems();
         return $this->addItems($items);
@@ -102,7 +103,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  string|null $identifier
      * @return \Zend\Dojo\Data
      */
-    public function setItem($item, $id = null)
+    public function setItem ($item, $id = null)
     {
         $item = $this->_normalizeItem($item, $id);
         $this->_items[$item['id']] = $item['data'];
@@ -116,16 +117,17 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  string|null $id
      * @return \Zend\Dojo\Data
      */
-    public function addItem($item, $id = null)
+    public function addItem ($item, $id = null)
     {
         $item = $this->_normalizeItem($item, $id);
-
+        
         if ($this->hasItem($item['id'])) {
-            throw new Exception\InvalidArgumentException('Overwriting items using addItem() is not allowed');
+            throw new Exception\InvalidArgumentException(
+            'Overwriting items using addItem() is not allowed');
         }
-
+        
         $this->_items[$item['id']] = $item['data'];
-
+        
         return $this;
     }
 
@@ -135,16 +137,18 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  array|Traversable $items
      * @return \Zend\Dojo\Data
      */
-    public function addItems($items)
+    public function addItems ($items)
     {
-        if (!is_array($items) && (!is_object($items) || !($items instanceof \Traversable))) {
-            throw new Exception\InvalidArgumentException('Only arrays and Traversable objects may be added to ' . __CLASS__);
+        if (! is_array($items) &&
+         (! is_object($items) || ! ($items instanceof \Traversable))) {
+            throw new Exception\InvalidArgumentException(
+            'Only arrays and Traversable objects may be added to ' . __CLASS__);
         }
-
+        
         foreach ($items as $item) {
             $this->addItem($item);
         }
-
+        
         return $this;
     }
 
@@ -155,7 +159,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      *
      * @return array
      */
-    public function getItems()
+    public function getItems ()
     {
         return $this->_items;
     }
@@ -166,7 +170,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  string|int $id
      * @return bool
      */
-    public function hasItem($id)
+    public function hasItem ($id)
     {
         return array_key_exists($id, $this->_items);
     }
@@ -179,12 +183,12 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  string $id
      * @return array
      */
-    public function getItem($id)
+    public function getItem ($id)
     {
-        if (!$this->hasItem($id)) {
+        if (! $this->hasItem($id)) {
             return null;
         }
-
+        
         return $this->_items[$id];
     }
 
@@ -194,12 +198,12 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  string $id
      * @return \Zend\Dojo\Data
      */
-    public function removeItem($id)
+    public function removeItem ($id)
     {
         if ($this->hasItem($id)) {
             unset($this->_items[$id]);
         }
-
+        
         return $this;
     }
 
@@ -208,12 +212,11 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      *
      * @return \Zend\Dojo\Data
      */
-    public function clearItems()
+    public function clearItems ()
     {
         $this->_items = array();
         return $this;
     }
-
 
     /**
      * Set identifier for item lookups
@@ -221,7 +224,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  string|int|null $identifier
      * @return \Zend\Dojo\Data
      */
-    public function setIdentifier($identifier)
+    public function setIdentifier ($identifier)
     {
         if (null === $identifier) {
             $this->_identifier = null;
@@ -230,9 +233,10 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
         } elseif (is_numeric($identifier)) {
             $this->_identifier = (int) $identifier;
         } else {
-            throw new Exception\InvalidArgumentException('Invalid identifier; please use a string or integer');
+            throw new Exception\InvalidArgumentException(
+            'Invalid identifier; please use a string or integer');
         }
-
+        
         return $this;
     }
 
@@ -241,11 +245,10 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      *
      * @return string|int|null
      */
-    public function getIdentifier()
+    public function getIdentifier ()
     {
         return $this->_identifier;
     }
-
 
     /**
      * Set label to use for displaying item associations
@@ -253,7 +256,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  string|null $label
      * @return \Zend\Dojo\Data
      */
-    public function setLabel($label)
+    public function setLabel ($label)
     {
         if (null === $label) {
             $this->_label = null;
@@ -268,7 +271,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      *
      * @return string|null
      */
-    public function getLabel()
+    public function getLabel ()
     {
         return $this->_label;
     }
@@ -280,7 +283,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  mixed $value
      * @return \Zend\Dojo\Data
      */
-    public function setMetadata($spec, $value = null)
+    public function setMetadata ($spec, $value = null)
     {
         if (is_string($spec) && (null !== $value)) {
             $this->_metadata[$spec] = $value;
@@ -298,16 +301,16 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  null|string $key Metadata key when pulling single metadata item
      * @return mixed
      */
-    public function getMetadata($key = null)
+    public function getMetadata ($key = null)
     {
         if (null === $key) {
             return $this->_metadata;
         }
-
+        
         if (array_key_exists($key, $this->_metadata)) {
             return $this->_metadata[$key];
         }
-
+        
         return null;
     }
 
@@ -317,7 +320,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  null|string $key
      * @return \Zend\Dojo\Data
      */
-    public function clearMetadata($key = null)
+    public function clearMetadata ($key = null)
     {
         if (null === $key) {
             $this->_metadata = array();
@@ -333,7 +336,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  array $data
      * @return \Zend\Dojo\Data
      */
-    public function fromArray(array $data)
+    public function fromArray (array $data)
     {
         if (array_key_exists('identifier', $data)) {
             $this->setIdentifier($data['identifier']);
@@ -355,10 +358,11 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  string $json
      * @return \Zend\Dojo\Data
      */
-    public function fromJson($json)
+    public function fromJson ($json)
     {
-        if (!is_string($json)) {
-            throw new Exception\InvalidArgumentException('fromJson() expects JSON input');
+        if (! is_string($json)) {
+            throw new Exception\InvalidArgumentException(
+            'fromJson() expects JSON input');
         }
         $data = Json::decode($json, Json::TYPE_ARRAY);
         return $this->fromArray($data);
@@ -369,28 +373,27 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      *
      * @return array
      */
-    public function toArray()
+    public function toArray ()
     {
         if (null === ($identifier = $this->getIdentifier())) {
-            throw new Exception\RuntimeException('Serialization requires that an identifier be present in the object; first call setIdentifier()');
+            throw new Exception\RuntimeException(
+            'Serialization requires that an identifier be present in the object; first call setIdentifier()');
         }
-
-        $array = array(
-            'identifier' => $identifier,
-            'items'      => array_values($this->getItems()),
-        );
-
+        
+        $array = array('identifier' => $identifier, 
+        'items' => array_values($this->getItems()));
+        
         $metadata = $this->getMetadata();
-        if (!empty($metadata)) {
+        if (! empty($metadata)) {
             foreach ($metadata as $key => $value) {
                 $array[$key] = $value;
             }
         }
-
+        
         if (null !== ($label = $this->getLabel())) {
             $array['label'] = $label;
         }
-
+        
         return $array;
     }
 
@@ -399,7 +402,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      *
      * @return string
      */
-    public function toJson()
+    public function toJson ()
     {
         return Json::encode($this->toArray());
     }
@@ -409,7 +412,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->toJson();
     }
@@ -420,7 +423,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  string|int $offset
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists ($offset)
     {
         return (null !== $this->getItem($offset));
     }
@@ -431,7 +434,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  string|int $offset
      * @return array
      */
-    public function offsetGet($offset)
+    public function offsetGet ($offset)
     {
         return $this->getItem($offset);
     }
@@ -443,7 +446,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  array|object|null $value
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet ($offset, $value)
     {
         $this->setItem($value, $offset);
     }
@@ -454,7 +457,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  string $offset
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset ($offset)
     {
         $this->removeItem($offset);
     }
@@ -464,7 +467,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * 
      * @return Traversable
      */
-    public function getIterator()
+    public function getIterator ()
     {
         return new \ArrayIterator($this->_items);
     }
@@ -474,7 +477,7 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      *
      * @return int
      */
-    public function count()
+    public function count ()
     {
         return count($this->_items);
     }
@@ -486,14 +489,16 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
      * @param  string|int|null $id
      * @return array
      */
-    protected function _normalizeItem($item, $id)
+    protected function _normalizeItem ($item, $id)
     {
-        if (!is_object($item) && !is_array($item)) {
-            throw new Exception\InvalidArgumentException('Only arrays and objects may be attached');
+        if (! is_object($item) && ! is_array($item)) {
+            throw new Exception\InvalidArgumentException(
+            'Only arrays and objects may be attached');
         }
-
+        
         if (null === ($identifier = $this->getIdentifier())) {
-            throw new Exception\RuntimeException('You must set an identifier prior to adding items');
+            throw new Exception\RuntimeException(
+            'You must set an identifier prior to adding items');
         }
         
         if (is_object($item)) {
@@ -503,18 +508,16 @@ class Data implements \ArrayAccess,\IteratorAggregate,\Countable
                 $item = get_object_vars($item);
             }
         }
-
-        if ((null === $id) && !array_key_exists($identifier, $item)) {
-            throw new Exception\InvalidArgumentException('Item must contain a column matching the currently set identifier');
+        
+        if ((null === $id) && ! array_key_exists($identifier, $item)) {
+            throw new Exception\InvalidArgumentException(
+            'Item must contain a column matching the currently set identifier');
         } elseif (null === $id) {
             $id = $item[$identifier];
         } else {
             $item[$identifier] = $id;
         }
-
-        return array(
-            'id'   => $id,
-            'data' => $item,
-        );
+        
+        return array('id' => $id, 'data' => $item);
     }
 }

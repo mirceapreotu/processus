@@ -35,6 +35,7 @@ namespace Zend\Dojo\Form\Element;
  */
 class HorizontalSlider extends Slider
 {
+
     /**
      * Use HorizontalSlider dijit view helper
      * @var string
@@ -46,7 +47,7 @@ class HorizontalSlider extends Slider
      *
      * @return array
      */
-    public function getTopDecoration()
+    public function getTopDecoration ()
     {
         if ($this->hasDijitParam('topDecoration')) {
             return $this->getDijitParam('topDecoration');
@@ -60,7 +61,7 @@ class HorizontalSlider extends Slider
      * @param mixed $dijit
      * @return \Zend\Dojo\Form\Element\HorizontalSlider
      */
-    public function setTopDecorationDijit($dijit)
+    public function setTopDecorationDijit ($dijit)
     {
         $decoration = $this->getTopDecoration();
         $decoration['dijit'] = (string) $dijit;
@@ -74,7 +75,7 @@ class HorizontalSlider extends Slider
      * @param mixed $container
      * @return \Zend\Dojo\Form\Element\HorizontalSlider
      */
-    public function setTopDecorationContainer($container)
+    public function setTopDecorationContainer ($container)
     {
         $decoration = $this->getTopDecoration();
         $decoration['container'] = (string) $container;
@@ -88,7 +89,7 @@ class HorizontalSlider extends Slider
      * @param  array $labels
      * @return \Zend\Dojo\Form\Element\HorizontalSlider
      */
-    public function setTopDecorationLabels(array $labels)
+    public function setTopDecorationLabels (array $labels)
     {
         $decoration = $this->getTopDecoration();
         $decoration['labels'] = array_values($labels);
@@ -102,7 +103,7 @@ class HorizontalSlider extends Slider
      * @param  array $params
      * @return \Zend\Dojo\Form\Element\HorizontalSlider
      */
-    public function setTopDecorationParams(array $params)
+    public function setTopDecorationParams (array $params)
     {
         $decoration = $this->getTopDecoration();
         $decoration['params'] = $params;
@@ -116,7 +117,7 @@ class HorizontalSlider extends Slider
      * @param  array $attribs
      * @return \Zend\Dojo\Form\Element\HorizontalSlider
      */
-    public function setTopDecorationAttribs(array $attribs)
+    public function setTopDecorationAttribs (array $attribs)
     {
         $decoration = $this->getTopDecoration();
         $decoration['attribs'] = $attribs;
@@ -129,7 +130,7 @@ class HorizontalSlider extends Slider
      *
      * @return array
      */
-    public function getBottomDecoration()
+    public function getBottomDecoration ()
     {
         if ($this->hasDijitParam('bottomDecoration')) {
             return $this->getDijitParam('bottomDecoration');
@@ -143,7 +144,7 @@ class HorizontalSlider extends Slider
      * @param mixed $dijit
      * @return \Zend\Dojo\Form\Element\HorizontalSlider
      */
-    public function setBottomDecorationDijit($dijit)
+    public function setBottomDecorationDijit ($dijit)
     {
         $decoration = $this->getBottomDecoration();
         $decoration['dijit'] = (string) $dijit;
@@ -157,7 +158,7 @@ class HorizontalSlider extends Slider
      * @param mixed $container
      * @return \Zend\Dojo\Form\Element\HorizontalSlider
      */
-    public function setBottomDecorationContainer($container)
+    public function setBottomDecorationContainer ($container)
     {
         $decoration = $this->getBottomDecoration();
         $decoration['container'] = (string) $container;
@@ -171,7 +172,7 @@ class HorizontalSlider extends Slider
      * @param  array $labels
      * @return \Zend\Dojo\Form\Element\HorizontalSlider
      */
-    public function setBottomDecorationLabels(array $labels)
+    public function setBottomDecorationLabels (array $labels)
     {
         $decoration = $this->getBottomDecoration();
         $decoration['labels'] = array_values($labels);
@@ -185,7 +186,7 @@ class HorizontalSlider extends Slider
      * @param  array $params
      * @return \Zend\Dojo\Form\Element\HorizontalSlider
      */
-    public function setBottomDecorationParams(array $params)
+    public function setBottomDecorationParams (array $params)
     {
         $decoration = $this->getBottomDecoration();
         $decoration['params'] = $params;
@@ -199,7 +200,7 @@ class HorizontalSlider extends Slider
      * @param  array $attribs
      * @return \Zend\Dojo\Form\Element\HorizontalSlider
      */
-    public function setBottomDecorationAttribs(array $attribs)
+    public function setBottomDecorationAttribs (array $attribs)
     {
         $decoration = $this->getBottomDecoration();
         $decoration['attribs'] = $attribs;

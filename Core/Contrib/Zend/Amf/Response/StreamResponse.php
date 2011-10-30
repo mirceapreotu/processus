@@ -23,10 +23,7 @@
  */
 namespace Zend\Amf\Response;
 
-use Zend\Amf\Response as AMFResponse,
-    Zend\Amf\Parser,
-    Zend\Amf\Parser\Amf0,
-    Zend\Amf;
+use Zend\Amf\Response as AMFResponse, Zend\Amf\Parser, Zend\Amf\Parser\Amf0, Zend\Amf;
 
 /**
  * Handles converting the PHP object ready for response back into AMF
@@ -40,6 +37,7 @@ use Zend\Amf\Response as AMFResponse,
  */
 class StreamResponse implements AMFResponse
 {
+
     /**
      * @var int Object encoding for response
      */
@@ -67,7 +65,7 @@ class StreamResponse implements AMFResponse
      *
      * @return \Zend\Amf\Response\StreamResponse
      */
-    public function finalize()
+    public function finalize ()
     {
         $this->_outputStream = new Parser\OutputStream();
         $this->writeMessage($this->_outputStream);
@@ -81,14 +79,14 @@ class StreamResponse implements AMFResponse
      * @param  \Zend\Amf\Parser\OutputStream $stream
      * @return \Zend\Amf\Response\StreamResponse
      */
-    public function writeMessage(Parser\OutputStream $stream)
+    public function writeMessage (Parser\OutputStream $stream)
     {
         $objectEncoding = $this->_objectEncoding;
-
+        
         //Write encoding to start of stream. Preamble byte is written of two byte Unsigned Short
         $stream->writeByte(0x00);
         $stream->writeByte($objectEncoding);
-
+        
         // Loop through the AMF Headers that need to be returned.
         $headerCount = count($this->_headers);
         $stream->writeInt($headerCount);
@@ -106,7 +104,7 @@ class StreamResponse implements AMFResponse
                 $serializer->writeTypeMarker($header->data);
             }
         }
-
+        
         // loop through the AMF bodies that need to be returned.
         $bodyCount = count($this->_bodies);
         $stream->writeInt($bodyCount);
@@ -115,18 +113,20 @@ class StreamResponse implements AMFResponse
             $stream->writeUTF($body->getTargetURI());
             $stream->writeUTF($body->getResponseURI());
             $stream->writeLong(Amf\Constants::UNKNOWN_CONTENT_LENGTH);
-            $bodyData   = $body->getData();
-            $markerType = ($this->_objectEncoding == Amf\Constants::AMF0_OBJECT_ENCODING) ? null : Amf\Constants::AMF0_AMF3;
+            $bodyData = $body->getData();
+            $markerType = ($this->_objectEncoding ==
+             Amf\Constants::AMF0_OBJECT_ENCODING) ? null : Amf\Constants::AMF0_AMF3;
             if (is_object($bodyData)) {
                 // Workaround for PHP5 with E_STRICT enabled complaining about 
                 // "Only variables should be passed by reference"
                 $placeholder = null;
-                $serializer->writeTypeMarker($placeholder, $markerType, $bodyData);
+                $serializer->writeTypeMarker($placeholder, $markerType, 
+                $bodyData);
             } else {
                 $serializer->writeTypeMarker($bodyData, $markerType);
             }
         }
-
+        
         return $this;
     }
 
@@ -135,7 +135,7 @@ class StreamResponse implements AMFResponse
      *
      * @return string The contents of the output stream
      */
-    public function getResponse()
+    public function getResponse ()
     {
         return $this->_outputStream->getStream();
     }
@@ -145,7 +145,7 @@ class StreamResponse implements AMFResponse
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getResponse();
     }
@@ -156,7 +156,7 @@ class StreamResponse implements AMFResponse
      * @param  \Zend\Amf\Value\MessageBody $body
      * @return \Zend\Amf\Response\StreamResponse
      */
-    public function addAmfBody(Amf\Value\MessageBody $body)
+    public function addAmfBody (Amf\Value\MessageBody $body)
     {
         $this->_bodies[] = $body;
         return $this;
@@ -167,7 +167,7 @@ class StreamResponse implements AMFResponse
      *
      * @return array
      */
-    public function getAmfBodies()
+    public function getAmfBodies ()
     {
         return $this->_bodies;
     }
@@ -178,7 +178,7 @@ class StreamResponse implements AMFResponse
      * @param  \Zend\Amf\Value\MessageHeader $header
      * @return \Zend\Amf\Response\StreamResponse
      */
-    public function addAmfHeader(Amf\Value\MessageHeader $header)
+    public function addAmfHeader (Amf\Value\MessageHeader $header)
     {
         $this->_headers[] = $header;
         return $this;
@@ -189,7 +189,7 @@ class StreamResponse implements AMFResponse
      *
      * @return array Array of \Zend\Amf\Value\MessageHeader objects
      */
-    public function getAmfHeaders()
+    public function getAmfHeaders ()
     {
         return $this->_headers;
     }
@@ -200,7 +200,7 @@ class StreamResponse implements AMFResponse
      * @param  int $encoding
      * @return \Zend\Amf\Response\StreamResponse
      */
-    public function setObjectEncoding($encoding)
+    public function setObjectEncoding ($encoding)
     {
         $this->_objectEncoding = $encoding;
         return $this;

@@ -9,36 +9,37 @@ namespace Zend\Http\Header;
 class CacheControl implements HeaderDescription
 {
 
-    public static function fromString($headerLine)
+    public static function fromString ($headerLine)
     {
         $header = new static();
-
-        list($name, $value) = preg_split('#: #', $headerLine, 2);
-
+        
+        list ($name, $value) = preg_split('#: #', $headerLine, 2);
+        
         // check to ensure proper header type for this factory
         if (strtolower($name) !== 'cache-control') {
-            throw new Exception\InvalidArgumentException('Invalid header line for Cache-Control string');
+            throw new Exception\InvalidArgumentException(
+            'Invalid header line for Cache-Control string');
         }
-
+        
         // @todo implementation details
-        $header->value= $value;
+        $header->value = $value;
         
         return $header;
     }
 
-    public function getFieldName()
+    public function getFieldName ()
     {
         return 'Cache-Control';
     }
 
-    public function getFieldValue()
+    public function getFieldValue ()
     {
         return $this->value;
     }
 
-    public function toString()
+    public function toString ()
     {
         return 'Cache-Control: ' . $this->getFieldValue();
     }
-    
+
 }

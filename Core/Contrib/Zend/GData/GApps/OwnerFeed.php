@@ -27,6 +27,7 @@
 namespace Zend\GData\GApps;
 
 use Zend\GData\GApps;
+
 /**
  * Data model for a collection of Google Apps owner entries, usually
  * provided by the Google Apps servers.
@@ -44,6 +45,7 @@ class OwnerFeed extends \Zend\Gdata\Feed
 {
 
     protected $_entryClassName = '\Zend\Gdata\Gapps\OwnerEntry';
+
     protected $_feedClassName = '\Zend\Gdata\Gapps\OwnerFeed';
 
 }

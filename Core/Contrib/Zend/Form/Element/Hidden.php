@@ -36,6 +36,7 @@ namespace Zend\Form\Element;
  */
 class Hidden extends Xhtml
 {
+
     /**
      * Use formHidden view helper by default
      * @var string

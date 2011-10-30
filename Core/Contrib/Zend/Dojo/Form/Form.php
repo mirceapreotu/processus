@@ -37,19 +37,24 @@ use Zend\View\Renderer as View;
  */
 class Form extends \Zend\Form\Form
 {
+
     /**
      * Constructor
      *
      * @param  array|\Zend\Config\Config|null $options
      * @return void
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
-        $this->addPrefixPath('Zend\Dojo\Form\Decorator', 'Zend/Dojo/Form/Decorator', 'decorator')
-             ->addPrefixPath('Zend\Dojo\Form\Element', 'Zend/Dojo/Form/Element', 'element')
-             ->addElementPrefixPath('Zend\Dojo\Form\Decorator', 'Zend/Dojo/Form/Decorator', 'decorator')
-             ->addDisplayGroupPrefixPath('Zend\Dojo\Form\Decorator', 'Zend/Dojo/Form/Decorator')
-             ->setDefaultDisplayGroupClass('Zend\Dojo\Form\DisplayGroup');
+        $this->addPrefixPath('Zend\Dojo\Form\Decorator', 
+        'Zend/Dojo/Form/Decorator', 'decorator')
+            ->addPrefixPath('Zend\Dojo\Form\Element', 'Zend/Dojo/Form/Element', 
+        'element')
+            ->addElementPrefixPath('Zend\Dojo\Form\Decorator', 
+        'Zend/Dojo/Form/Decorator', 'decorator')
+            ->addDisplayGroupPrefixPath('Zend\Dojo\Form\Decorator', 
+        'Zend/Dojo/Form/Decorator')
+            ->setDefaultDisplayGroupClass('Zend\Dojo\Form\DisplayGroup');
         parent::__construct($options);
     }
 
@@ -58,17 +63,18 @@ class Form extends \Zend\Form\Form
      *
      * @return void
      */
-    public function loadDefaultDecorators()
+    public function loadDefaultDecorators ()
     {
         if ($this->loadDefaultDecoratorsIsDisabled()) {
             return;
         }
-
+        
         $decorators = $this->getDecorators();
         if (empty($decorators)) {
             $this->addDecorator('FormElements')
-                 ->addDecorator('HtmlTag', array('tag' => 'dl', 'class' => 'zend_form_dojo'))
-                 ->addDecorator('DijitForm');
+                ->addDecorator('HtmlTag', 
+            array('tag' => 'dl', 'class' => 'zend_form_dojo'))
+                ->addDecorator('DijitForm');
         }
     }
 
@@ -80,12 +86,14 @@ class Form extends \Zend\Form\Form
      * @param  \Zend\View\Renderer $view
      * @return \Zend\Dojo\Form\Element\Dijit
      */
-    public function setView(View $view = null)
+    public function setView (View $view = null)
     {
         if (null !== $view) {
-            if(false === $view->getBroker()->isLoaded('dojo')) {
+            if (false === $view->getBroker()->isLoaded('dojo')) {
                 $loader = new \Zend\Dojo\View\HelperLoader();
-                $view->getBroker()->getClassLoader()->registerPlugins($loader);
+                $view->getBroker()
+                    ->getClassLoader()
+                    ->registerPlugins($loader);
             }
         }
         return parent::setView($view);

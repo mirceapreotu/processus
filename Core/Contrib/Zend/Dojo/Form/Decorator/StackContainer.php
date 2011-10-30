@@ -36,6 +36,7 @@ namespace Zend\Dojo\Form\Decorator;
  */
 class StackContainer extends DijitContainer
 {
+
     /**
      * View helper
      * @var string

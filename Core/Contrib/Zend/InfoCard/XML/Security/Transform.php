@@ -35,6 +35,7 @@ namespace Zend\InfoCard\XML\Security;
  */
 interface Transform
 {
+
     /**
      * Transform the given XML string according to the transform rules
      * implemented by the object using this interface
@@ -43,5 +44,5 @@ interface Transform
      * @param string $strXmlData the input XML
      * @return string the output XML
      */
-    public function transform($strXmlData);
+    public function transform ($strXmlData);
 }

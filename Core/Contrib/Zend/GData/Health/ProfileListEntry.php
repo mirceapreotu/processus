@@ -38,6 +38,7 @@ namespace Zend\GData\Health;
  */
 class ProfileListEntry extends \Zend\GData\Entry
 {
+
     /**
      * The classname for individual profile list entry elements.
      *
@@ -49,7 +50,7 @@ class ProfileListEntry extends \Zend\GData\Entry
      * Constructs a new Zend_Gdata_Health_ProfileListEntry object.
      * @param DOMElement $element (optional) The DOMElement on which to base this object.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         parent::__construct($element);
     }
@@ -61,9 +62,9 @@ class ProfileListEntry extends \Zend\GData\Entry
      *
      * @param DOMDocument $doc The DOMDocument used to construct DOMElements
      * @return DOMElement The DOMElement representing this element and all
-     *          child properties.
+     * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         return $element;
@@ -75,7 +76,7 @@ class ProfileListEntry extends \Zend\GData\Entry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         parent::takeChildFromDOM($child);
     }
@@ -84,7 +85,8 @@ class ProfileListEntry extends \Zend\GData\Entry
      * Retrieves the profile ID for the entry, which is contained in <atom:content>
      * @return string The profile id
      */
-    public function getProfileID() {
+    public function getProfileID ()
+    {
         return $this->getContent()->text;
     }
 
@@ -92,7 +94,8 @@ class ProfileListEntry extends \Zend\GData\Entry
      * Retrieves the profile's title, which is contained in <atom:title>
      * @return string The profile name
      */
-    public function getProfileName() {
+    public function getProfileName ()
+    {
         return $this->getTitle()->text;
     }
 

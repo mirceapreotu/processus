@@ -50,15 +50,16 @@ class ParamTag extends \Zend\Code\Generator\Docblock\Tag
      * @param \Zend\Code\Reflection\ReflectionDocblockTag $reflectionTagParam
      * @return \Zend\Code\Generator\Docblock\Tag\ParamTag
      */
-    public static function fromReflection(\Zend\Code\Reflection\ReflectionDocblockTag $reflectionTagParam)
+    public static function fromReflection (
+    \Zend\Code\Reflection\ReflectionDocblockTag $reflectionTagParam)
     {
         $paramTag = new self();
-
+        
         $paramTag->setName('param');
         $paramTag->setDatatype($reflectionTagParam->getType()); // @todo rename
         $paramTag->setParamName($reflectionTagParam->getVariableName());
         $paramTag->setDescription($reflectionTagParam->getDescription());
-
+        
         return $paramTag;
     }
 
@@ -68,7 +69,7 @@ class ParamTag extends \Zend\Code\Generator\Docblock\Tag
      * @param string $datatype
      * @return \Zend\Code\Generator\Docblock\Tag\ParamTag
      */
-    public function setDatatype($datatype)
+    public function setDatatype ($datatype)
     {
         $this->_datatype = $datatype;
         return $this;
@@ -79,7 +80,7 @@ class ParamTag extends \Zend\Code\Generator\Docblock\Tag
      *
      * @return string
      */
-    public function getDatatype()
+    public function getDatatype ()
     {
         return $this->_datatype;
     }
@@ -90,7 +91,7 @@ class ParamTag extends \Zend\Code\Generator\Docblock\Tag
      * @param string $paramName
      * @return \Zend\Code\Generator\Docblock\Tag\ParamTag
      */
-    public function setParamName($paramName)
+    public function setParamName ($paramName)
     {
         $this->_paramName = $paramName;
         return $this;
@@ -101,7 +102,7 @@ class ParamTag extends \Zend\Code\Generator\Docblock\Tag
      *
      * @return string
      */
-    public function getParamName()
+    public function getParamName ()
     {
         return $this->_paramName;
     }
@@ -111,12 +112,12 @@ class ParamTag extends \Zend\Code\Generator\Docblock\Tag
      *
      * @return string
      */
-    public function generate()
+    public function generate ()
     {
-        $output = '@param '
-            . (($this->_datatype  != null) ? $this->_datatype : 'unknown')
-            . (($this->_paramName != null) ? ' $' . $this->_paramName : '')
-            . (($this->description != null) ? ' ' . $this->description : '');
+        $output = '@param ' .
+         (($this->_datatype != null) ? $this->_datatype : 'unknown') .
+         (($this->_paramName != null) ? ' $' . $this->_paramName : '') .
+         (($this->description != null) ? ' ' . $this->description : '');
         return $output;
     }
 

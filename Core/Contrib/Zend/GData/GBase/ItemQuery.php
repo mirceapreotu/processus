@@ -39,6 +39,7 @@ namespace Zend\GData\GBase;
  */
 class ItemQuery extends Query
 {
+
     /**
      * Path to the customer items feeds on the Google Base server.
      */
@@ -62,7 +63,7 @@ class ItemQuery extends Query
      * @param string $value
      * @return \Zend\GData\GBase\ItemQuery Provides a fluent interface
      */
-    public function setId($value)
+    public function setId ($value)
     {
         $this->_id = $value;
         return $this;
@@ -71,7 +72,7 @@ class ItemQuery extends Query
     /*
      * @return string id
      */
-    public function getId()
+    public function getId ()
     {
         return $this->_id;
     }
@@ -81,7 +82,7 @@ class ItemQuery extends Query
      *
      * @return string The query URL for this instance.
      */
-    public function getQueryUrl()
+    public function getQueryUrl ()
     {
         $uri = $this->_defaultFeedUri;
         if ($this->getId() !== null) {

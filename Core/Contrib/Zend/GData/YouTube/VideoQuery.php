@@ -24,8 +24,7 @@
  */
 namespace Zend\GData\YouTube;
 
-use Zend\GData\YouTube,
-    Zend\GData\App;
+use Zend\GData\YouTube, Zend\GData\App;
 
 /**
  * Assists in constructing queries for YouTube videos
@@ -49,7 +48,7 @@ class VideoQuery extends \Zend\GData\Query
     /**
      * Create Gdata_YouTube_VideoQuery object
      */
-    public function __construct($url = null)
+    public function __construct ($url = null)
     {
         parent::__construct($url);
     }
@@ -61,54 +60,54 @@ class VideoQuery extends \Zend\GData\Query
      * @param string $videoId The ID of the video associated with this query
      * @param string $entry The ID of the entry associated with this query
      */
-    public function setFeedType($feedType, $videoId = null, $entry = null)
+    public function setFeedType ($feedType, $videoId = null, $entry = null)
     {
         switch ($feedType) {
-        case 'top rated':
-            $this->_url = YouTube::STANDARD_TOP_RATED_URI;
-            break;
-        case 'most viewed':
-            $this->_url = YouTube::STANDARD_MOST_VIEWED_URI;
-            break;
-        case 'recently featured':
-            $this->_url = YouTube::STANDARD_RECENTLY_FEATURED_URI;
-            break;
-        case 'mobile':
-            $this->_url = YouTube::STANDARD_WATCH_ON_MOBILE_URI;
-            break;
-        case 'related':
-            if ($videoId === null) {
-                throw new App\InvalidArgumentException(
+            case 'top rated':
+                $this->_url = YouTube::STANDARD_TOP_RATED_URI;
+                break;
+            case 'most viewed':
+                $this->_url = YouTube::STANDARD_MOST_VIEWED_URI;
+                break;
+            case 'recently featured':
+                $this->_url = YouTube::STANDARD_RECENTLY_FEATURED_URI;
+                break;
+            case 'mobile':
+                $this->_url = YouTube::STANDARD_WATCH_ON_MOBILE_URI;
+                break;
+            case 'related':
+                if ($videoId === null) {
+                    throw new App\InvalidArgumentException(
                     'Video ID must be set for feed of type: ' . $feedType);
-            } else {
-                $this->_url = YouTube::VIDEO_URI . '/' . $videoId .
-                    '/related';
-            }
-            break;
-        case 'responses':
-            if ($videoId === null) {
-                throw new App\Exception(
-                    'Video ID must be set for feed of type: ' . $feedType);
-            } else {
-                $this->_url = YouTube::VIDEO_URI . '/' . $videoId .
-                    'responses';
-            }
-            break;
-        case 'comments':
-            if ($videoId === null) {
-                throw new App\Exception(
-                    'Video ID must be set for feed of type: ' . $feedType);
-            } else {
-                $this->_url = YouTube::VIDEO_URI . '/' .
-                    $videoId . 'comments';
-                if ($entry !== null) {
-                    $this->_url .= '/' . $entry;
+                } else {
+                    $this->_url = YouTube::VIDEO_URI . '/' . $videoId .
+                     '/related';
                 }
-            }
-            break;
-        default:
-            throw new App\Exception('Unknown feed type');
-            break;
+                break;
+            case 'responses':
+                if ($videoId === null) {
+                    throw new App\Exception(
+                    'Video ID must be set for feed of type: ' . $feedType);
+                } else {
+                    $this->_url = YouTube::VIDEO_URI . '/' . $videoId .
+                     'responses';
+                }
+                break;
+            case 'comments':
+                if ($videoId === null) {
+                    throw new App\Exception(
+                    'Video ID must be set for feed of type: ' . $feedType);
+                } else {
+                    $this->_url = YouTube::VIDEO_URI . '/' . $videoId .
+                     'comments';
+                    if ($entry !== null) {
+                        $this->_url .= '/' . $entry;
+                    }
+                }
+                break;
+            default:
+                throw new App\Exception('Unknown feed type');
+                break;
         }
     }
 
@@ -119,29 +118,29 @@ class VideoQuery extends \Zend\GData\Query
      * @throws \Zend\GData\App\InvalidArgumentException
      * @return \Zend\GData\YouTube\VideoQuery Provides a fluent interface
      */
-    public function setLocation($value)
+    public function setLocation ($value)
     {
-        switch($value) {
+        switch ($value) {
             case null:
                 unset($this->_params['location']);
             default:
                 $parameters = explode(',', $value);
                 if (count($parameters) != 2) {
                     throw new App\InvalidArgumentException(
-                        'You must provide 2 coordinates to the location ' .
-                        'URL parameter');
+                    'You must provide 2 coordinates to the location ' .
+                     'URL parameter');
                 }
-
-                foreach($parameters as $param) {
+                
+                foreach ($parameters as $param) {
                     $temp = trim($param);
                     // strip off the optional exclamation mark for numeric check
-                    if (substr($temp, -1) == '!') {
-                        $temp = substr($temp, 0, -1);
+                    if (substr($temp, - 1) == '!') {
+                        $temp = substr($temp, 0, - 1);
                     }
-                    if (!is_numeric($temp)) {
+                    if (! is_numeric($temp)) {
                         throw new App\InvalidArgumentException(
-                            'Value provided to location parameter must' .
-                            ' be in the form of two coordinates');
+                        'Value provided to location parameter must' .
+                         ' be in the form of two coordinates');
                     }
                 }
                 $this->_params['location'] = $value;
@@ -153,7 +152,7 @@ class VideoQuery extends \Zend\GData\Query
      *
      * @return string|null Return the location if it exists, null otherwise.
      */
-    public function getLocation()
+    public function getLocation ()
     {
         if (array_key_exists('location', $this->_params)) {
             return $this->_params['location'];
@@ -162,16 +161,15 @@ class VideoQuery extends \Zend\GData\Query
         }
     }
 
-
     /**
      * Sets the location-radius parameter for the query
      *
      * @param string $value
      * @return \Zend\GData\YouTube\VideoQuery Provides a fluent interface
      */
-    public function setLocationRadius($value)
+    public function setLocationRadius ($value)
     {
-        switch($value) {
+        switch ($value) {
             case null:
                 unset($this->_params['location-radius']);
             default:
@@ -185,7 +183,7 @@ class VideoQuery extends \Zend\GData\Query
      * @return string|null Return the location-radius if it exists,
      * null otherwise.
      */
-    public function getLocationRadius()
+    public function getLocationRadius ()
     {
         if (array_key_exists('location-radius', $this->_params)) {
             return $this->_params['location-radius'];
@@ -201,7 +199,7 @@ class VideoQuery extends \Zend\GData\Query
      * @throws \Zend\GData\App\InvalidArgumentException
      * @return \Zend\GData\YouTube\VideoQuery Provides a fluent interface
      */
-    public function setTime($value = null)
+    public function setTime ($value = null)
     {
         switch ($value) {
             case 'today':
@@ -219,8 +217,7 @@ class VideoQuery extends \Zend\GData\Query
             case null:
                 unset($this->_params['time']);
             default:
-                throw new App\InvalidArgumentException(
-                    'Unknown time value');
+                throw new App\InvalidArgumentException('Unknown time value');
                 break;
         }
         return $this;
@@ -230,11 +227,11 @@ class VideoQuery extends \Zend\GData\Query
      * Sets the value of the uploader parameter
      *
      * @param string $value The value of the uploader parameter. Currently this
-     *        can only be set to the value of 'partner'.
+     * can only be set to the value of 'partner'.
      * @throws \Zend\GData\App\InvalidArgumentException
      * @return \Zend\GData\YouTube\VideoQuery Provides a fluent interface
      */
-    public function setUploader($value = null)
+    public function setUploader ($value = null)
     {
         switch ($value) {
             case 'partner':
@@ -245,7 +242,7 @@ class VideoQuery extends \Zend\GData\Query
                 break;
             default:
                 throw new App\InvalidArgumentException(
-                    'Unknown value for uploader');
+                'Unknown value for uploader');
         }
         return $this;
     }
@@ -256,7 +253,7 @@ class VideoQuery extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\YouTube\VideoQuery Provides a fluent interface
      */
-    public function setVideoQuery($value = null)
+    public function setVideoQuery ($value = null)
     {
         if ($value != null) {
             $this->_params['vq'] = $value;
@@ -272,7 +269,7 @@ class VideoQuery extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\YouTube\VideoQuery Provides a fluent interface
      */
-    public function setFormat($value = null)
+    public function setFormat ($value = null)
     {
         if ($value != null) {
             $this->_params['format'] = $value;
@@ -288,7 +285,7 @@ class VideoQuery extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\YouTube\VideoQuery Provides a fluent interface
      */
-    public function setRacy($value = null)
+    public function setRacy ($value = null)
     {
         switch ($value) {
             case 'include':
@@ -309,7 +306,7 @@ class VideoQuery extends \Zend\GData\Query
      *
      * @return string|null The value of racy if it exists, null otherwise.
      */
-    public function getRacy()
+    public function getRacy ()
     {
         if (array_key_exists('racy', $this->_params)) {
             return $this->_params['racy'];
@@ -322,11 +319,11 @@ class VideoQuery extends \Zend\GData\Query
      * Set the safeSearch parameter
      *
      * @param string $value The value of the parameter, currently only 'none',
-     *        'moderate' or 'strict' are allowed values.
+     * 'moderate' or 'strict' are allowed values.
      * @throws \Zend\GData\App\InvalidArgumentException
      * @return \Zend\GData\YouTube\VideoQuery Provides a fluent interface
      */
-    public function setSafeSearch($value)
+    public function setSafeSearch ($value)
     {
         switch ($value) {
             case 'none':
@@ -342,8 +339,8 @@ class VideoQuery extends \Zend\GData\Query
                 unset($this->_params['safeSearch']);
             default:
                 throw new App\InvalidArgumentException(
-                    'The safeSearch parameter only supports the values '.
-                    '\'none\', \'moderate\' or \'strict\'.');
+                'The safeSearch parameter only supports the values ' .
+                 '\'none\', \'moderate\' or \'strict\'.');
         }
     }
 
@@ -351,9 +348,9 @@ class VideoQuery extends \Zend\GData\Query
      * Return the value of the safeSearch parameter
      *
      * @return string|null The value of the safeSearch parameter if it has been
-     *         set, null otherwise.
+     * set, null otherwise.
      */
-    public function getSafeSearch()
+    public function getSafeSearch ()
     {
         if (array_key_exists('safeSearch', $this->_params)) {
             return $this->_params['safeSearch'];
@@ -367,7 +364,7 @@ class VideoQuery extends \Zend\GData\Query
      * @param string $value
      * @return Zend_Gdata_YouTube_Query Provides a fluent interface
      */
-    public function setOrderBy($value)
+    public function setOrderBy ($value)
     {
         if ($value != null) {
             $this->_params['orderby'] = $value;
@@ -382,7 +379,7 @@ class VideoQuery extends \Zend\GData\Query
      *
      * @return string|null The value of format if it exists, null otherwise.
      */
-    public function getFormat()
+    public function getFormat ()
     {
         if (array_key_exists('format', $this->_params)) {
             return $this->_params['format'];
@@ -395,9 +392,9 @@ class VideoQuery extends \Zend\GData\Query
      * Return the value of the video query that has been set
      *
      * @return string|null The value of the video query if it exists,
-     *         null otherwise.
+     * null otherwise.
      */
-    public function getVideoQuery()
+    public function getVideoQuery ()
     {
         if (array_key_exists('vq', $this->_params)) {
             return $this->_params['vq'];
@@ -411,7 +408,7 @@ class VideoQuery extends \Zend\GData\Query
      *
      * @return string|null The time parameter if it exists, null otherwise.
      */
-    public function getTime()
+    public function getTime ()
     {
         if (array_key_exists('time', $this->_params)) {
             return $this->_params['time'];
@@ -425,7 +422,7 @@ class VideoQuery extends \Zend\GData\Query
      *
      * @return string|null The value of orderby if it exists, null otherwise.
      */
-    public function getOrderBy()
+    public function getOrderBy ()
     {
         if (array_key_exists('orderby', $this->_params)) {
             return $this->_params['orderby'];
@@ -443,56 +440,60 @@ class VideoQuery extends \Zend\GData\Query
      * @throws \Zend\GData\App\VersionException
      * @return string querystring
      */
-    public function getQueryString($majorProtocolVersion = null,
-        $minorProtocolVersion = null)
+    public function getQueryString ($majorProtocolVersion = null, 
+    $minorProtocolVersion = null)
     {
         $queryArray = array();
-
+        
         foreach ($this->_params as $name => $value) {
             if (substr($name, 0, 1) == '_') {
                 continue;
             }
-
-            switch($name) {
+            
+            switch ($name) {
                 case 'location-radius':
                     if ($majorProtocolVersion == 1) {
-                        throw new App\VersionException("The $name " .
-                            "parameter is only supported in version 2.");
+                        throw new App\VersionException(
+                        "The $name " .
+                         "parameter is only supported in version 2.");
                     }
                     break;
-
+                
                 case 'racy':
                     if ($majorProtocolVersion == 2) {
-                        throw new App\VersionException("The $name " .
-                            "parameter is not supported in version 2. " .
-                            "Please use 'safeSearch'.");
+                        throw new App\VersionException(
+                        "The $name " .
+                         "parameter is not supported in version 2. " .
+                         "Please use 'safeSearch'.");
                     }
                     break;
-
+                
                 case 'safeSearch':
                     if ($majorProtocolVersion == 1) {
-                        throw new App\VersionException("The $name " .
-                            "parameter is only supported in version 2. " .
-                            "Please use 'racy'.");
+                        throw new App\VersionException(
+                        "The $name " .
+                         "parameter is only supported in version 2. " .
+                         "Please use 'racy'.");
                     }
                     break;
-
+                
                 case 'uploader':
                     if ($majorProtocolVersion == 1) {
-                        throw new App\VersionException("The $name " .
-                            "parameter is only supported in version 2.");
+                        throw new App\VersionException(
+                        "The $name " .
+                         "parameter is only supported in version 2.");
                     }
                     break;
-
+                
                 case 'vq':
                     if ($majorProtocolVersion == 2) {
                         $name = 'q';
                     }
                     break;
             }
-
+            
             $queryArray[] = urlencode($name) . '=' . urlencode($value);
-
+        
         }
         if (count($queryArray) > 0) {
             return '?' . implode('&', $queryArray);
@@ -509,8 +510,8 @@ class VideoQuery extends \Zend\GData\Query
      * @param integer $minorProtocolVersion The minor protocol version
      * @return string The URL
      */
-    public function getQueryUrl($majorProtocolVersion = null,
-        $minorProtocolVersion = null)
+    public function getQueryUrl ($majorProtocolVersion = null, 
+    $minorProtocolVersion = null)
     {
         if (isset($this->_url)) {
             $url = $this->_url;
@@ -520,8 +521,8 @@ class VideoQuery extends \Zend\GData\Query
         if ($this->getCategory() !== null) {
             $url .= '/-/' . $this->getCategory();
         }
-        $url = $url . $this->getQueryString($majorProtocolVersion,
-            $minorProtocolVersion);
+        $url = $url . $this->getQueryString($majorProtocolVersion, 
+        $minorProtocolVersion);
         return $url;
     }
 

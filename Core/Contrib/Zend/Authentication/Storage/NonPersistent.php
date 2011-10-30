@@ -42,6 +42,7 @@ use Zend\Authentication\Storage as AuthenticationStorage;
  */
 class NonPersistent implements AuthenticationStorage
 {
+
     /**
      * Holds the actual auth data
      */
@@ -53,7 +54,7 @@ class NonPersistent implements AuthenticationStorage
      * @throws Zend\Authentication\Storage\Exception If it is impossible to determine whether storage is empty
      * @return boolean
      */
-    public function isEmpty()
+    public function isEmpty ()
     {
         return empty($this->_data);
     }
@@ -64,7 +65,7 @@ class NonPersistent implements AuthenticationStorage
      *
      * @return mixed
      */
-    public function read()
+    public function read ()
     {
         return $this->_data;
     }
@@ -75,7 +76,7 @@ class NonPersistent implements AuthenticationStorage
      * @param  mixed $contents
      * @return void
      */
-    public function write($contents)
+    public function write ($contents)
     {
         $this->_data = $contents;
     }
@@ -85,7 +86,7 @@ class NonPersistent implements AuthenticationStorage
      *
      * @return void
      */
-    public function clear()
+    public function clear ()
     {
         $this->_data = null;
     }

@@ -35,11 +35,12 @@ namespace Zend\Dojo\View\Helper;
  */
 class NumberSpinner extends Dijit
 {
+
     /**
      * Dijit being used
      * @var string
      */
-    protected $_dijit  = 'dijit.form.NumberSpinner';
+    protected $_dijit = 'dijit.form.NumberSpinner';
 
     /**
      * HTML element type
@@ -62,11 +63,12 @@ class NumberSpinner extends Dijit
      * @param  array $attribs HTML attributes
      * @return string
      */
-    public function __invoke($id = null, $value = null, array $params = array(), array $attribs = array())
+    public function __invoke ($id = null, $value = null, array $params = array(), 
+    array $attribs = array())
     {
         // Get constraints and serialize to JSON if necessary
         if (array_key_exists('constraints', $params)) {
-            if (!is_array($params['constraints'])) {
+            if (! is_array($params['constraints'])) {
                 unset($params['constraints']);
             }
         } else {
@@ -85,7 +87,7 @@ class NumberSpinner extends Dijit
             }
             $params['constraints'] = $constraints;
         }
-
+        
         return $this->_createFormElement($id, $value, $params, $attribs);
     }
 }

@@ -37,17 +37,20 @@ namespace Zend\GData\Health\Extension;
  */
 class Ccr extends \Zend\GData\App\Extension\Element
 {
+
     protected $_rootNamespace = 'ccr';
+
     protected $_rootElement = 'ContinuityOfCareRecord';
+
     protected $_ccrDom = null;
 
     /**
      * Creates a Zend_Gdata_Health_Extension_Ccr entry, representing CCR data
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         foreach (\Zend\GData\Health::$namespaces as $nsPrefix => $nsUri) {
             $this->registerNamespace($nsPrefix, $nsUri);
@@ -61,7 +64,7 @@ class Ccr extends \Zend\GData\App\Extension\Element
      *
      * @param DOMNode $node The DOMNode that represents this object's data
      */
-    public function transferFromDOM($node)
+    public function transferFromDOM ($node)
     {
         $this->_ccrDom = $node;
     }
@@ -76,7 +79,7 @@ class Ccr extends \Zend\GData\App\Extension\Element
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         if ($doc === null) {
             $doc = new \DOMDocument('1.0', 'utf-8');
@@ -96,11 +99,11 @@ class Ccr extends \Zend\GData\App\Extension\Element
      * @param unknown $args
      * @return array.<DOMElement> A list of the appropriate CCR data
      */
-    public function __call($name, $args)
+    public function __call ($name, $args)
     {
         if (substr($name, 0, 3) === 'get') {
             $category = substr($name, 3);
-
+            
             switch ($category) {
                 case 'Conditions':
                     $category = 'Problems';
@@ -109,15 +112,17 @@ class Ccr extends \Zend\GData\App\Extension\Element
                     $category = 'Alerts';
                     break;
                 case 'TestResults':
-                    // TestResults is an alias for LabResults
+                // TestResults is an alias for LabResults
                 case 'LabResults':
                     $category = 'Results';
                     break;
                 default:
-                    // $category is already well formatted
+            
+     // $category is already well formatted
             }
-
-            return $this->_ccrDom->getElementsByTagNameNS($this->lookupNamespace('ccr'), $category);
+            
+            return $this->_ccrDom->getElementsByTagNameNS(
+            $this->lookupNamespace('ccr'), $category);
         } else {
             return null;
         }

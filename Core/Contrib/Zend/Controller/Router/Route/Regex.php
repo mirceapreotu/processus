@@ -38,10 +38,15 @@ use Zend\Controller\Router;
  */
 class Regex extends AbstractRoute
 {
+
     protected $_regex = null;
+
     protected $_defaults = array();
+
     protected $_reverse = null;
+
     protected $_map = array();
+
     protected $_values = array();
 
     /**
@@ -49,7 +54,7 @@ class Regex extends AbstractRoute
      *
      * @param \Zend\Config\Config $config Configuration object
      */
-    public static function getInstance(Config\Config $config)
+    public static function getInstance (Config\Config $config)
     {
         $defs = ($config->defaults instanceof Config\Config) ? $config->defaults->toArray() : array();
         $map = ($config->map instanceof Config\Config) ? $config->map->toArray() : array();
@@ -57,15 +62,16 @@ class Regex extends AbstractRoute
         return new self($config->route, $defs, $map, $reverse);
     }
 
-    public function __construct($route, $defaults = array(), $map = array(), $reverse = null)
+    public function __construct ($route, $defaults = array(), $map = array(), $reverse = null)
     {
-        $this->_regex    = $route;
+        $this->_regex = $route;
         $this->_defaults = (array) $defaults;
-        $this->_map      = (array) $map;
-        $this->_reverse  = $reverse;
+        $this->_map = (array) $map;
+        $this->_reverse = $reverse;
     }
 
-    public function getVersion() {
+    public function getVersion ()
+    {
         return 1;
     }
 
@@ -76,38 +82,38 @@ class Regex extends AbstractRoute
      * @param  string $path Path used to match against this routing map
      * @return array|false  An array of assigned values or a false on a mismatch
      */
-    public function match($path, $partial = false)
+    public function match ($path, $partial = false)
     {
-        if (!$partial) {
+        if (! $partial) {
             $path = trim(urldecode($path), '/');
             $regex = '#^' . $this->_regex . '$#i';
         } else {
             $regex = '#^' . $this->_regex . '#i';
         }
-
+        
         $res = preg_match($regex, $path, $values);
-
+        
         if ($res === 0) {
             return false;
         }
-
+        
         if ($partial) {
             $this->setMatchedPath($values[0]);
         }
-
+        
         // array_filter_key()? Why isn't this in a standard PHP function set yet? :)
         foreach ($values as $i => $value) {
-            if (!is_int($i) || $i === 0) {
+            if (! is_int($i) || $i === 0) {
                 unset($values[$i]);
             }
         }
-
+        
         $this->_values = $values;
-
-        $values   = $this->_getMappedValues($values);
+        
+        $values = $this->_getMappedValues($values);
         $defaults = $this->_getMappedValues($this->_defaults, false, true);
-        $return   = $values + $defaults;
-
+        $return = $values + $defaults;
+        
         return $return;
     }
 
@@ -125,16 +131,17 @@ class Regex extends AbstractRoute
      * @param  boolean $preserve Should wrong type of keys be preserved or stripped.
      * @return array   An array of mapped values
      */
-    protected function _getMappedValues($values, $reversed = false, $preserve = false)
+    protected function _getMappedValues ($values, $reversed = false, 
+    $preserve = false)
     {
         if (count($this->_map) == 0) {
             return $values;
         }
-
+        
         $return = array();
-
+        
         foreach ($values as $key => $value) {
-            if (is_int($key) && !$reversed) {
+            if (is_int($key) && ! $reversed) {
                 if (array_key_exists($key, $this->_map)) {
                     $index = $this->_map[$key];
                 } elseif (false === ($index = array_search($key, $this->_map))) {
@@ -143,7 +150,7 @@ class Regex extends AbstractRoute
                 $return[$index] = $values[$key];
             } elseif ($reversed) {
                 $index = $key;
-                if (!is_int($key)) {
+                if (! is_int($key)) {
                     if (array_key_exists($key, $this->_map)) {
                         $index = $this->_map[$key];
                     } else {
@@ -157,7 +164,7 @@ class Regex extends AbstractRoute
                 $return[$key] = $value;
             }
         }
-
+        
         return $return;
     }
 
@@ -167,18 +174,22 @@ class Regex extends AbstractRoute
      * @param  array $data An array of name (or index) and value pairs used as parameters
      * @return string Route path with user submitted parameters
      */
-    public function assemble($data = array(), $reset = false, $encode = false, $partial = false)
+    public function assemble ($data = array(), $reset = false, $encode = false, $partial = false)
     {
         if ($this->_reverse === null) {
-            throw new Router\Exception('Cannot assemble. Reversed route is not specified.');
+            throw new Router\Exception(
+            'Cannot assemble. Reversed route is not specified.');
         }
-
-        $defaultValuesMapped  = $this->_getMappedValues($this->_defaults, true, false);
-        $matchedValuesMapped  = $this->_getMappedValues($this->_values, true, false);
-        $dataValuesMapped     = $this->_getMappedValues($data, true, false);
-
+        
+        $defaultValuesMapped = $this->_getMappedValues($this->_defaults, true, 
+        false);
+        $matchedValuesMapped = $this->_getMappedValues($this->_values, true, 
+        false);
+        $dataValuesMapped = $this->_getMappedValues($data, true, false);
+        
         // handle resets, if so requested (By null value) to do so
-        if (($resetKeys = array_search(null, $dataValuesMapped, true)) !== false) {
+        if (($resetKeys = array_search(null, $dataValuesMapped, true)) !==
+         false) {
             foreach ((array) $resetKeys as $resetKey) {
                 if (isset($matchedValuesMapped[$resetKey])) {
                     unset($matchedValuesMapped[$resetKey]);
@@ -186,28 +197,30 @@ class Regex extends AbstractRoute
                 }
             }
         }
-
+        
         // merge all the data together, first defaults, then values matched, then supplied
         $mergedData = $defaultValuesMapped;
-        $mergedData = $this->_arrayMergeNumericKeys($mergedData, $matchedValuesMapped);
-        $mergedData = $this->_arrayMergeNumericKeys($mergedData, $dataValuesMapped);
-
+        $mergedData = $this->_arrayMergeNumericKeys($mergedData, 
+        $matchedValuesMapped);
+        $mergedData = $this->_arrayMergeNumericKeys($mergedData, 
+        $dataValuesMapped);
+        
         if ($encode) {
             foreach ($mergedData as $key => &$value) {
                 $value = urlencode($value);
             }
         }
-
+        
         ksort($mergedData);
-
+        
         $return = @vsprintf($this->_reverse, $mergedData);
-
+        
         if ($return === false) {
             throw new Router\Exception('Cannot assemble. Too few arguments?');
         }
-
+        
         return $return;
-
+    
     }
 
     /**
@@ -216,7 +229,8 @@ class Regex extends AbstractRoute
      * @param string $name Array key of the parameter
      * @return string Previously set default
      */
-    public function getDefault($name) {
+    public function getDefault ($name)
+    {
         if (isset($this->_defaults[$name])) {
             return $this->_defaults[$name];
         }
@@ -227,7 +241,8 @@ class Regex extends AbstractRoute
      *
      * @return array Route defaults
      */
-    public function getDefaults() {
+    public function getDefaults ()
+    {
         return $this->_defaults;
     }
 
@@ -236,10 +251,10 @@ class Regex extends AbstractRoute
      *
      * @return array
      */
-    public function getVariables()
+    public function getVariables ()
     {
         $variables = array();
-
+        
         foreach ($this->_map as $key => $value) {
             if (is_numeric($key)) {
                 $variables[] = $value;
@@ -247,7 +262,7 @@ class Regex extends AbstractRoute
                 $variables[] = $key;
             }
         }
-
+        
         return $variables;
     }
 
@@ -259,7 +274,7 @@ class Regex extends AbstractRoute
      * @param array $array2
      * @return array
      */
-    protected function _arrayMergeNumericKeys(Array $array1, Array $array2)
+    protected function _arrayMergeNumericKeys (Array $array1, Array $array2)
     {
         $returnArray = $array1;
         foreach ($array2 as $array2Index => $array2Value) {
@@ -267,6 +282,5 @@ class Regex extends AbstractRoute
         }
         return $returnArray;
     }
-
 
 }

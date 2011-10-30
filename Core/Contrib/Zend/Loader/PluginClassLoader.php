@@ -24,9 +24,7 @@
  */
 namespace Zend\Loader;
 
-use ArrayIterator,
-    IteratorAggregate,
-    Traversable;
+use ArrayIterator, IteratorAggregate, Traversable;
 
 /**
  * Plugin class locator interface
@@ -38,6 +36,7 @@ use ArrayIterator,
  */
 class PluginClassLoader implements PluginClassLocator
 {
+
     /**
      * List of plugin name => class name pairs
      * @var array
@@ -56,13 +55,13 @@ class PluginClassLoader implements PluginClassLocator
      * @param  null|array|Traversable $map If provided, seeds the loader with a map
      * @return void
      */
-    public function __construct($map = null)
+    public function __construct ($map = null)
     {
         // Merge in static overrides
-        if (!empty(static::$staticMap)) {
+        if (! empty(static::$staticMap)) {
             $this->registerPlugins(static::$staticMap);
         }
-
+        
         // Merge in constructor arguments
         if ($map !== null) {
             $this->registerPlugins($map);
@@ -77,15 +76,16 @@ class PluginClassLoader implements PluginClassLocator
      * @param  null|array|Traversable $map 
      * @return void
      */
-    public static function addStaticMap($map)
+    public static function addStaticMap ($map)
     {
         if (null === $map) {
             static::$staticMap = array();
             return;
         }
-
-        if (!is_array($map) && !$map instanceof \Traversable) {
-            throw new Exception\InvalidArgumentException('Expects an array or Traversable object');
+        
+        if (! is_array($map) && ! $map instanceof \Traversable) {
+            throw new Exception\InvalidArgumentException(
+            'Expects an array or Traversable object');
         }
         foreach ($map as $key => $value) {
             static::$staticMap[$key] = $value;
@@ -99,7 +99,7 @@ class PluginClassLoader implements PluginClassLocator
      * @param  string $className 
      * @return PluginClassLoader
      */
-    public function registerPlugin($shortName, $className)
+    public function registerPlugin ($shortName, $className)
     {
         $this->plugins[strtolower($shortName)] = $className;
         return $this;
@@ -122,30 +122,32 @@ class PluginClassLoader implements PluginClassLocator
      * @return PluginClassLoader
      * @throws Exception\InvalidArgumentException
      */
-    public function registerPlugins($map)
+    public function registerPlugins ($map)
     {
         if (is_string($map)) {
-            if (!class_exists($map)) {
-                throw new Exception\InvalidArgumentException('Map class provided is invalid');
+            if (! class_exists($map)) {
+                throw new Exception\InvalidArgumentException(
+                'Map class provided is invalid');
             }
-            $map = new $map;
+            $map = new $map();
         }
         if (is_array($map)) {
             $map = new ArrayIterator($map);
         }
-        if (!$map instanceof Traversable) {
-            throw new Exception\InvalidArgumentException('Map provided is invalid; must be traversable');
+        if (! $map instanceof Traversable) {
+            throw new Exception\InvalidArgumentException(
+            'Map provided is invalid; must be traversable');
         }
-
+        
         // iterator_apply doesn't work as expected with IteratorAggregate
         if ($map instanceof IteratorAggregate) {
             $map = $map->getIterator();
         }
-
+        
         foreach ($map as $name => $class) {
             $this->registerPlugin($name, $class);
         }
-
+        
         return $this;
     }
 
@@ -155,7 +157,7 @@ class PluginClassLoader implements PluginClassLocator
      * @param mixed $shortName 
      * @return PluginClassLoader
      */
-    public function unregisterPlugin($shortName)
+    public function unregisterPlugin ($shortName)
     {
         $lookup = strtolower($shortName);
         if (array_key_exists($lookup, $this->plugins)) {
@@ -169,7 +171,7 @@ class PluginClassLoader implements PluginClassLocator
      * 
      * @return array|Traversable
      */
-    public function getRegisteredPlugins()
+    public function getRegisteredPlugins ()
     {
         return $this->plugins;
     }
@@ -180,7 +182,7 @@ class PluginClassLoader implements PluginClassLocator
      * @param  string $name
      * @return bool
      */
-    public function isLoaded($name)
+    public function isLoaded ($name)
     {
         $lookup = strtolower($name);
         return isset($this->plugins[$lookup]);
@@ -192,7 +194,7 @@ class PluginClassLoader implements PluginClassLocator
      * @param  string $name
      * @return string|false
      */
-    public function getClassName($name)
+    public function getClassName ($name)
     {
         return $this->load($name);
     }
@@ -203,9 +205,9 @@ class PluginClassLoader implements PluginClassLocator
      * @param  string $name
      * @return string|false
      */
-    public function load($name)
+    public function load ($name)
     {
-        if (!$this->isLoaded($name)) {
+        if (! $this->isLoaded($name)) {
             return false;
         }
         return $this->plugins[strtolower($name)];
@@ -219,7 +221,7 @@ class PluginClassLoader implements PluginClassLocator
      * 
      * @return Iterator
      */
-    public function getIterator()
+    public function getIterator ()
     {
         return new ArrayIterator($this->plugins);
     }

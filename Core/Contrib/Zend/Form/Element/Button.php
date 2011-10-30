@@ -36,6 +36,7 @@ namespace Zend\Form\Element;
  */
 class Button extends Submit
 {
+
     /**
      * Use formButton view helper by default
      * @var string

@@ -49,6 +49,7 @@ namespace Zend\Form\Decorator;
  */
 class Label extends AbstractDecorator
 {
+
     /**
      * Default placement: prepend
      * @var string
@@ -67,7 +68,7 @@ class Label extends AbstractDecorator
      * @param  string $id
      * @return \Zend\Form\Decorator\Label
      */
-    public function setId($id)
+    public function setId ($id)
     {
         $this->setOption('id', $id);
         return $this;
@@ -81,7 +82,7 @@ class Label extends AbstractDecorator
      *
      * @return string
      */
-    public function getId()
+    public function getId ()
     {
         $id = $this->getOption('id');
         if (null === $id) {
@@ -90,7 +91,7 @@ class Label extends AbstractDecorator
                 $this->setId($id);
             }
         }
-
+        
         return $id;
     }
 
@@ -100,16 +101,16 @@ class Label extends AbstractDecorator
      * @param  string $tag
      * @return \Zend\Form\Decorator\Label
      */
-    public function setTag($tag)
+    public function setTag ($tag)
     {
         if (empty($tag)) {
             $this->_tag = null;
         } else {
             $this->_tag = (string) $tag;
         }
-
+        
         $this->removeOption('tag');
-
+        
         return $this;
     }
 
@@ -118,7 +119,7 @@ class Label extends AbstractDecorator
      *
      * @return void
      */
-    public function getTag()
+    public function getTag ()
     {
         if (null === $this->_tag) {
             $tag = $this->getOption('tag');
@@ -128,7 +129,7 @@ class Label extends AbstractDecorator
             }
             return $tag;
         }
-
+        
         return $this->_tag;
     }
 
@@ -140,23 +141,23 @@ class Label extends AbstractDecorator
      *
      * @return string
      */
-    public function getClass()
+    public function getClass ()
     {
-        $class   = '';
+        $class = '';
         $element = $this->getElement();
-
+        
         $decoratorClass = $this->getOption('class');
-        if (!empty($decoratorClass)) {
+        if (! empty($decoratorClass)) {
             $class .= ' ' . $decoratorClass;
         }
-
-        $type  = $element->isRequired() ? 'required' : 'optional';
-
-        if (!strstr($class, $type)) {
+        
+        $type = $element->isRequired() ? 'required' : 'optional';
+        
+        if (! strstr($class, $type)) {
             $class .= ' ' . $type;
             $class = trim($class);
         }
-
+        
         return $class;
     }
 
@@ -166,9 +167,9 @@ class Label extends AbstractDecorator
      * @param  string $key
      * @return void
      */
-    protected function _loadOptReqKey($key)
+    protected function _loadOptReqKey ($key)
     {
-        if (!isset($this->$key)) {
+        if (! isset($this->$key)) {
             $value = $this->getOption($key);
             $this->$key = (string) $value;
             if (null !== $value) {
@@ -196,15 +197,14 @@ class Label extends AbstractDecorator
      * @return mixed
      * @throws \Zend\Form\Decorator\Exception for unsupported methods
      */
-    public function __call($method, $args)
+    public function __call ($method, $args)
     {
-        $tail = substr($method, -6);
+        $tail = substr($method, - 6);
         $head = substr($method, 0, 3);
-        if (in_array($head, array('get', 'set'))
-            && (('Prefix' == $tail) || ('Suffix' == $tail))
-        ) {
-            $position = substr($method, -6);
-            $type     = strtolower(substr($method, 3, 3));
+        if (in_array($head, array('get', 'set')) &&
+         (('Prefix' == $tail) || ('Suffix' == $tail))) {
+            $position = substr($method, - 6);
+            $type = strtolower(substr($method, 3, 3));
             switch ($type) {
                 case 'req':
                     $key = 'required' . $position;
@@ -213,13 +213,19 @@ class Label extends AbstractDecorator
                     $key = 'optional' . $position;
                     break;
                 default:
-                    throw new Exception\BadMethodCallException(sprintf('Invalid method "%s" called in Label decorator, and detected as type %s', $method, $type));
+                    throw new Exception\BadMethodCallException(
+                    sprintf(
+                    'Invalid method "%s" called in Label decorator, and detected as type %s', 
+                    $method, $type));
             }
-
+            
             switch ($head) {
                 case 'set':
                     if (0 === count($args)) {
-                        throw new Exception\InvalidArgumentException(sprintf('Method "%s" requires at least one argument; none provided', $method));
+                        throw new Exception\InvalidArgumentException(
+                        sprintf(
+                        'Method "%s" requires at least one argument; none provided', 
+                        $method));
                     }
                     $value = array_shift($args);
                     $this->$key = $value;
@@ -236,8 +242,9 @@ class Label extends AbstractDecorator
                     return $this->$key;
             }
         }
-
-        throw new Exception\BadMethodCallException(sprintf('Invalid method "%s" called in Label decorator', $method));
+        
+        throw new Exception\BadMethodCallException(
+        sprintf('Invalid method "%s" called in Label decorator', $method));
     }
 
     /**
@@ -245,40 +252,39 @@ class Label extends AbstractDecorator
      *
      * @return void
      */
-    public function getLabel()
+    public function getLabel ()
     {
         if (null === ($element = $this->getElement())) {
             return '';
         }
-
+        
         $label = $element->getLabel();
         $label = trim($label);
-
+        
         if (empty($label)) {
             return '';
         }
-
+        
         if (null !== ($translator = $element->getTranslator())) {
             $label = $translator->translate($label);
         }
-
+        
         $optPrefix = $this->getOptPrefix();
         $optSuffix = $this->getOptSuffix();
         $reqPrefix = $this->getReqPrefix();
         $reqSuffix = $this->getReqSuffix();
         $separator = $this->getSeparator();
-
-        if (!empty($label)) {
+        
+        if (! empty($label)) {
             if ($element->isRequired()) {
                 $label = $reqPrefix . $label . $reqSuffix;
             } else {
                 $label = $optPrefix . $label . $optSuffix;
             }
         }
-
+        
         return $label;
     }
-
 
     /**
      * Render a label
@@ -286,42 +292,42 @@ class Label extends AbstractDecorator
      * @param  string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
         $element = $this->getElement();
-        $view    = $element->getView();
+        $view = $element->getView();
         if (null === $view) {
             return $content;
         }
-
-        $label     = $this->getLabel();
+        
+        $label = $this->getLabel();
         $separator = $this->getSeparator();
         $placement = $this->getPlacement();
-        $tag       = $this->getTag();
-        $id        = $this->getId();
-        $class     = $this->getClass();
-        $options   = $this->getOptions();
-
-
+        $tag = $this->getTag();
+        $id = $this->getId();
+        $class = $this->getClass();
+        $options = $this->getOptions();
+        
         if (empty($label) && empty($tag)) {
             return $content;
         }
-
-        if (!empty($label)) {
+        
+        if (! empty($label)) {
             $options['class'] = $class;
-            $label = $view->formLabel($element->getFullyQualifiedName(), trim($label), $options);
+            $label = $view->formLabel($element->getFullyQualifiedName(), 
+            trim($label), $options);
         } else {
             $label = '&#160;';
         }
-
+        
         if (null !== $tag) {
             $decorator = new HtmlTag();
-            $decorator->setOptions(array('tag' => $tag,
-                                         'id'  => $id . '-label'));
-
+            $decorator->setOptions(
+            array('tag' => $tag, 'id' => $id . '-label'));
+            
             $label = $decorator->render($label);
         }
-
+        
         switch ($placement) {
             case self::APPEND:
                 return $content . $separator . $label;

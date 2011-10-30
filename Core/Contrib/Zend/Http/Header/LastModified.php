@@ -9,36 +9,37 @@ namespace Zend\Http\Header;
 class LastModified implements HeaderDescription
 {
 
-    public static function fromString($headerLine)
+    public static function fromString ($headerLine)
     {
         $header = new static();
-
-        list($name, $value) = preg_split('#: #', $headerLine, 2);
-
+        
+        list ($name, $value) = preg_split('#: #', $headerLine, 2);
+        
         // check to ensure proper header type for this factory
         if (strtolower($name) !== 'last-modified') {
-            throw new Exception\InvalidArgumentException('Invalid header line for Last-Modified string');
+            throw new Exception\InvalidArgumentException(
+            'Invalid header line for Last-Modified string');
         }
-
+        
         // @todo implementation details
-        $header->value= $value;
+        $header->value = $value;
         
         return $header;
     }
 
-    public function getFieldName()
+    public function getFieldName ()
     {
         return 'Last-Modified';
     }
 
-    public function getFieldValue()
+    public function getFieldValue ()
     {
         return $this->value;
     }
 
-    public function toString()
+    public function toString ()
     {
         return 'Last-Modified: ' . $this->getFieldValue();
     }
-    
+
 }

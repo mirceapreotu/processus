@@ -32,14 +32,15 @@ namespace Zend\Dojo\View\Helper;
  * @subpackage View
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
-  */
+ */
 class Textarea extends Dijit
 {
+
     /**
      * Dijit being used
      * @var string
      */
-    protected $_dijit  = 'dijit.form.Textarea';
+    protected $_dijit = 'dijit.form.Textarea';
 
     /**
      * HTML element type
@@ -62,19 +63,19 @@ class Textarea extends Dijit
      * @param  array $attribs HTML attributes
      * @return string
      */
-    public function __invoke($id = null, $value = null, array $params = array(), array $attribs = array())
+    public function __invoke ($id = null, $value = null, array $params = array(), 
+    array $attribs = array())
     {
-        if (!array_key_exists('id', $attribs)) {
-            $attribs['id']    = $id;
+        if (! array_key_exists('id', $attribs)) {
+            $attribs['id'] = $id;
         }
-        $attribs['name']  = $id;
-
+        $attribs['name'] = $id;
+        
         $attribs = $this->_prepareDijit($attribs, $params, 'textarea');
-
-        $html = '<textarea' . $this->_htmlAttribs($attribs) . '>'
-              . $value
-              . "</textarea>\n";
-
+        
+        $html = '<textarea' . $this->_htmlAttribs($attribs) . '>' . $value .
+         "</textarea>\n";
+        
         return $html;
     }
 }

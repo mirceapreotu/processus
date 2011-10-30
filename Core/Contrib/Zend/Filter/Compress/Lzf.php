@@ -36,13 +36,15 @@ use Zend\Filter\Exception;
  */
 class Lzf implements CompressionAlgorithm
 {
+
     /**
      * Class constructor
      */
-    public function __construct()
+    public function __construct ()
     {
-        if (!extension_loaded('lzf')) {
-            throw new Exception\ExtensionNotLoadedException('This filter needs the lzf extension');
+        if (! extension_loaded('lzf')) {
+            throw new Exception\ExtensionNotLoadedException(
+            'This filter needs the lzf extension');
         }
     }
 
@@ -52,13 +54,13 @@ class Lzf implements CompressionAlgorithm
      * @param  string $content
      * @return string
      */
-    public function compress($content)
+    public function compress ($content)
     {
         $compressed = lzf_compress($content);
-        if (!$compressed) {
+        if (! $compressed) {
             throw new Exception\RuntimeException('Error during compression');
         }
-
+        
         return $compressed;
     }
 
@@ -68,13 +70,13 @@ class Lzf implements CompressionAlgorithm
      * @param  string $content
      * @return string
      */
-    public function decompress($content)
+    public function decompress ($content)
     {
         $compressed = lzf_decompress($content);
-        if (!$compressed) {
+        if (! $compressed) {
             throw new Exception\RuntimeException('Error during compression');
         }
-
+        
         return $compressed;
     }
 
@@ -83,7 +85,7 @@ class Lzf implements CompressionAlgorithm
      *
      * @return string
      */
-    public function toString()
+    public function toString ()
     {
         return 'Lzf';
     }

@@ -61,7 +61,7 @@ class Entry extends \Zend\GData\Entry
      * Constructs a new Zend_Gdata_GBase_ItemEntry object.
      * @param DOMElement $element (optional) The DOMElement on which to base this object.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(GBase::$namespaces);
         parent::__construct($element);
@@ -74,13 +74,14 @@ class Entry extends \Zend\GData\Entry
      *
      * @param DOMDocument $doc The DOMDocument used to construct DOMElements
      * @return DOMElement The DOMElement representing this element and all
-     *          child properties.
+     * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         foreach ($this->_baseAttributes as $baseAttribute) {
-            $element->appendChild($baseAttribute->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $baseAttribute->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -91,10 +92,10 @@ class Entry extends \Zend\GData\Entry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
-
+        
         if (strstr($absoluteNodeName, $this->lookupNamespace('g') . ':')) {
             $baseAttribute = new Extension\BaseAttribute();
             $baseAttribute->transferFromDOM($child);
@@ -109,13 +110,13 @@ class Entry extends \Zend\GData\Entry
      *
      * @return Zend_Gdata_GBase_Extension_ItemType The requested object.
      */
-    public function getItemType()
+    public function getItemType ()
     {
         $itemType = $this->getGBaseAttribute('item_type');
         if (is_object($itemType[0])) {
-          return $itemType[0];
+            return $itemType[0];
         } else {
-          return null;
+            return null;
         }
     }
 
@@ -123,7 +124,8 @@ class Entry extends \Zend\GData\Entry
      * Return all the Base attributes
      * @return \Zend\GData\GBase\Extension\BaseAttribute
      */
-    public function getGBaseAttributes() {
+    public function getGBaseAttributes ()
+    {
         return $this->_baseAttributes;
     }
 
@@ -133,13 +135,13 @@ class Entry extends \Zend\GData\Entry
      * @param string $name The name of the Base attribute to look for
      * @return array $matches Array that contains the matching list of Base attributes
      */
-    public function getGBaseAttribute($name)
+    public function getGBaseAttribute ($name)
     {
         $matches = array();
-        for ($i = 0; $i < count($this->_baseAttributes); $i++) {
+        for ($i = 0; $i < count($this->_baseAttributes); $i ++) {
             $baseAttribute = $this->_baseAttributes[$i];
             if ($baseAttribute->rootElement == $name &&
-                $baseAttribute->rootNamespaceURI == $this->lookupNamespace('g')) {
+             $baseAttribute->rootNamespaceURI == $this->lookupNamespace('g')) {
                 $matches[] = &$this->_baseAttributes[$i];
             }
         }

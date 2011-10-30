@@ -36,6 +36,7 @@ namespace Zend\Ldap\Filter;
  */
 class NotFilter extends AbstractFilter
 {
+
     /**
      * The underlying filter.
      *
@@ -48,7 +49,7 @@ class NotFilter extends AbstractFilter
      *
      * @param \Zend\Ldap\Filter\AbstractFilter $filter
      */
-    public function __construct(AbstractFilter $filter)
+    public function __construct (AbstractFilter $filter)
     {
         $this->_filter = $filter;
     }
@@ -58,7 +59,7 @@ class NotFilter extends AbstractFilter
      *
      * @return \Zend\Ldap\Filter\AbstractFilter
      */
-    public function negate()
+    public function negate ()
     {
         return $this->_filter;
     }
@@ -68,7 +69,7 @@ class NotFilter extends AbstractFilter
      *
      * @return string
      */
-    public function toString()
+    public function toString ()
     {
         return '(!' . $this->_filter->toString() . ')';
     }

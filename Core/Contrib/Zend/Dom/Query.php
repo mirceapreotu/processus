@@ -35,14 +35,18 @@ namespace Zend\Dom;
  */
 class Query
 {
+
     /**#@+
      * Document types
      */
-    const DOC_XML   = 'docXml';
-    const DOC_HTML  = 'docHtml';
-    const DOC_XHTML = 'docXhtml';
-    /**#@-*/
+    const DOC_XML = 'docXml';
 
+    const DOC_HTML = 'docHtml';
+
+    const DOC_XHTML = 'docXhtml';
+
+    /**#@-*/
+    
     /**
      * @var string
      */
@@ -78,7 +82,7 @@ class Query
      * @param  null|string $document
      * @return void
      */
-    public function __construct($document = null, $encoding = null)
+    public function __construct ($document = null, $encoding = null)
     {
         $this->setEncoding($encoding);
         $this->setDocument($document);
@@ -90,7 +94,7 @@ class Query
      * @param  string $encoding
      * @return \Zend\Dom\Query
      */
-    public function setEncoding($encoding)
+    public function setEncoding ($encoding)
     {
         $this->_encoding = (null === $encoding) ? null : (string) $encoding;
         return $this;
@@ -101,7 +105,7 @@ class Query
      *
      * @return null|string
      */
-    public function getEncoding()
+    public function getEncoding ()
     {
         return $this->_encoding;
     }
@@ -113,7 +117,7 @@ class Query
      * @param  null|string $encoding Document encoding
      * @return \Zend\Dom\Query
      */
-    public function setDocument($document, $encoding = null)
+    public function setDocument ($document, $encoding = null)
     {
         if (0 === strlen($document)) {
             return $this;
@@ -135,10 +139,10 @@ class Query
      * @param  null|string $encoding Document encoding
      * @return \Zend\Dom\Query
      */
-    public function setDocumentHtml($document, $encoding = null)
+    public function setDocumentHtml ($document, $encoding = null)
     {
         $this->_document = (string) $document;
-        $this->_docType  = self::DOC_HTML;
+        $this->_docType = self::DOC_HTML;
         if (null !== $encoding) {
             $this->setEncoding($encoding);
         }
@@ -152,10 +156,10 @@ class Query
      * @param  null|string $encoding Document encoding
      * @return \Zend\Dom\Query
      */
-    public function setDocumentXhtml($document, $encoding = null)
+    public function setDocumentXhtml ($document, $encoding = null)
     {
         $this->_document = (string) $document;
-        $this->_docType  = self::DOC_XHTML;
+        $this->_docType = self::DOC_XHTML;
         if (null !== $encoding) {
             $this->setEncoding($encoding);
         }
@@ -169,10 +173,10 @@ class Query
      * @param  null|string $encoding Document encoding
      * @return \Zend\Dom\Query
      */
-    public function setDocumentXml($document, $encoding = null)
+    public function setDocumentXml ($document, $encoding = null)
     {
         $this->_document = (string) $document;
-        $this->_docType  = self::DOC_XML;
+        $this->_docType = self::DOC_XML;
         if (null !== $encoding) {
             $this->setEncoding($encoding);
         }
@@ -184,7 +188,7 @@ class Query
      *
      * @return string
      */
-    public function getDocument()
+    public function getDocument ()
     {
         return $this->_document;
     }
@@ -194,7 +198,7 @@ class Query
      *
      * @return string
      */
-    public function getDocumentType()
+    public function getDocumentType ()
     {
         return $this->_docType;
     }
@@ -204,7 +208,7 @@ class Query
      *
      * @return false|array
      */
-    public function getDocumentErrors()
+    public function getDocumentErrors ()
     {
         return $this->_documentErrors;
     }
@@ -215,7 +219,7 @@ class Query
      * @param  string $query
      * @return \Zend\Dom\NodeList
      */
-    public function execute($query)
+    public function execute ($query)
     {
         $xpathQuery = Css2Xpath::transform($query);
         return $this->queryXpath($xpathQuery, $query);
@@ -228,12 +232,13 @@ class Query
      * @param  string|null  $query      CSS selector query
      * @return \Zend\Dom\NodeList
      */
-    public function queryXpath($xpathQuery, $query = null)
+    public function queryXpath ($xpathQuery, $query = null)
     {
         if (null === ($document = $this->getDocument())) {
-            throw new Exception\RuntimeException('Cannot query; no document registered');
+            throw new Exception\RuntimeException(
+            'Cannot query; no document registered');
         }
-
+        
         $encoding = $this->getEncoding();
         libxml_use_internal_errors(true);
         if (null === $encoding) {
@@ -241,8 +246,8 @@ class Query
         } else {
             $domDoc = new \DOMDocument('1.0', $encoding);
         }
-
-        $type   = $this->getDocumentType();
+        
+        $type = $this->getDocumentType();
         switch ($type) {
             case self::DOC_XML:
                 $success = $domDoc->loadXML($document);
@@ -254,17 +259,18 @@ class Query
                 break;
         }
         $errors = libxml_get_errors();
-        if (!empty($errors)) {
+        if (! empty($errors)) {
             $this->_documentErrors = $errors;
             libxml_clear_errors();
         }
         libxml_use_internal_errors(false);
-
-        if (!$success) {
-            throw new Exception\RuntimeException(sprintf('Error parsing document (type == %s)', $type));
+        
+        if (! $success) {
+            throw new Exception\RuntimeException(
+            sprintf('Error parsing document (type == %s)', $type));
         }
-
-        $nodeList   = $this->_getNodeList($domDoc, $xpathQuery);
+        
+        $nodeList = $this->_getNodeList($domDoc, $xpathQuery);
         return new NodeList($query, $xpathQuery, $domDoc, $nodeList);
     }
 
@@ -274,7 +280,7 @@ class Query
      * @param   array $xpathNamespaces
      * @return  void
      */
-    public function registerXpathNamespaces($xpathNamespaces)
+    public function registerXpathNamespaces ($xpathNamespaces)
     {
         $this->_xpathNamespaces = $xpathNamespaces;
     }
@@ -286,9 +292,9 @@ class Query
      * @param  string|array $xpathQuery
      * @return array
      */
-    protected function _getNodeList($document, $xpathQuery)
+    protected function _getNodeList ($document, $xpathQuery)
     {
-        $xpath      = new \DOMXPath($document);
+        $xpath = new \DOMXPath($document);
         foreach ($this->_xpathNamespaces as $prefix => $namespaceUri) {
             $xpath->registerNamespace($prefix, $namespaceUri);
         }

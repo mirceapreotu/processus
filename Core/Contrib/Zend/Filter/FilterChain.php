@@ -23,8 +23,7 @@
  */
 namespace Zend\Filter;
 
-use Zend\Loader\Broker,
-    Zend\Stdlib\SplPriorityQueue;
+use Zend\Loader\Broker, Zend\Stdlib\SplPriorityQueue;
 
 /**
  * @uses       Zend\Filter\Exception
@@ -37,6 +36,7 @@ use Zend\Loader\Broker,
  */
 class FilterChain extends AbstractFilter
 {
+
     /**
      * Default priority at which filters are added
      */
@@ -59,24 +59,23 @@ class FilterChain extends AbstractFilter
      * 
      * @return void
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         $this->filters = new SplPriorityQueue();
-
+        
         if (null !== $options) {
             $this->setOptions($options);
         }
     }
 
-    public function setOptions($options)
+    public function setOptions ($options)
     {
-        if (!is_array($options) && !$options instanceof \Traversable) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Expected array or Traversable; received "%s"',
-                (is_object($options) ? get_class($options) : gettype($options))
-            ));
+        if (! is_array($options) && ! $options instanceof \Traversable) {
+            throw new Exception\InvalidArgumentException(
+            sprintf('Expected array or Traversable; received "%s"', 
+            (is_object($options) ? get_class($options) : gettype($options))));
         }
-
+        
         foreach ($options as $key => $value) {
             switch (strtolower($key)) {
                 case 'callbacks':
@@ -90,8 +89,8 @@ class FilterChain extends AbstractFilter
                     break;
                 case 'filters':
                     foreach ($value as $spec) {
-                        $name     = isset($spec['name'])     ? $spec['name']     : false;
-                        $options  = isset($spec['options'])  ? $spec['options']  : array();
+                        $name = isset($spec['name']) ? $spec['name'] : false;
+                        $options = isset($spec['options']) ? $spec['options'] : array();
                         $priority = isset($spec['priority']) ? $spec['priority'] : static::DEFAULT_PRIORITY;
                         if ($name) {
                             $this->attachByName($name, $options, $priority);
@@ -103,7 +102,7 @@ class FilterChain extends AbstractFilter
                     break;
             }
         }
-
+        
         return $this;
     }
 
@@ -125,21 +124,21 @@ class FilterChain extends AbstractFilter
      * @param array $options 
      * @return Broker|Filter
      */
-    public function broker($name = null, $options = array())
+    public function broker ($name = null, $options = array())
     {
         if ($name instanceof Broker) {
             $this->broker = $broker;
             return $this->broker;
-        } 
-
+        }
+        
         if (null === $this->broker) {
             $this->broker = new FilterBroker();
         }
-
+        
         if (null === $name) {
             return $this->broker;
         }
-
+        
         return $this->broker->load($name, $options);
     }
 
@@ -150,14 +149,14 @@ class FilterChain extends AbstractFilter
      * @param  int $priority Priority at which to enqueue filter; defaults to 1000 (higher executes earlier)
      * @return FilterChain
      */
-    public function attach($callback, $priority = self::DEFAULT_PRIORITY)
+    public function attach ($callback, $priority = self::DEFAULT_PRIORITY)
     {
-        if (!is_callable($callback)) {
-            if (!$callback instanceof Filter) {
-                throw new Exception\InvalidArgumentException(sprintf(
-                    'Expected a valid PHP callback; received "%s"',
-                    (is_object($callback) ? get_class($callback) : gettype($callback))
-                ));
+        if (! is_callable($callback)) {
+            if (! $callback instanceof Filter) {
+                throw new Exception\InvalidArgumentException(
+                sprintf('Expected a valid PHP callback; received "%s"', 
+                (is_object($callback) ? get_class($callback) : gettype(
+                $callback))));
             }
             $callback = array($callback, 'filter');
         }
@@ -176,9 +175,10 @@ class FilterChain extends AbstractFilter
      * @param  int $priority Priority at which to enqueue filter; defaults to 1000 (higher executes earlier)
      * @return FilterChain
      */
-    public function attachByName($name, $options = array(), $priority = self::DEFAULT_PRIORITY)
+    public function attachByName ($name, $options = array(), 
+    $priority = self::DEFAULT_PRIORITY)
     {
-        if (!is_array($options)) {
+        if (! is_array($options)) {
             $options = (array) $options;
         } else {
             if (range(0, count($options) - 1) != array_keys($options)) {
@@ -194,7 +194,7 @@ class FilterChain extends AbstractFilter
      *
      * @return SplPriorityQueue
      */
-    public function getFilters()
+    public function getFilters ()
     {
         return $this->filters;
     }
@@ -207,15 +207,15 @@ class FilterChain extends AbstractFilter
      * @param  mixed $value
      * @return mixed
      */
-    public function filter($value)
+    public function filter ($value)
     {
         $chain = clone $this->filters;
-
+        
         $valueFiltered = $value;
         foreach ($chain as $filter) {
             $valueFiltered = call_user_func($filter, $valueFiltered);
         }
-
+        
         return $valueFiltered;
     }
 }

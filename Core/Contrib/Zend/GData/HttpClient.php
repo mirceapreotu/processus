@@ -93,19 +93,20 @@ class HttpClient extends \Zend\Http\Client
      * @param string $file The location of the file containing the PEM key
      * @param string $passphrase The optional private key passphrase
      * @param bool $useIncludePath Whether to search the include_path
-     *                             for the file
+     * for the file
      * @return void
      */
-    public function setAuthSubPrivateKeyFile($file, $passphrase = null,
-        $useIncludePath = false
-    ) {
+    public function setAuthSubPrivateKeyFile ($file, $passphrase = null, 
+    $useIncludePath = false)
+    {
         $fp = @fopen($file, "r", $useIncludePath);
-        if (!$fp) {
-            throw new App\InvalidArgumentException('Failed to open private key file for AuthSub.');
+        if (! $fp) {
+            throw new App\InvalidArgumentException(
+            'Failed to open private key file for AuthSub.');
         }
-
+        
         $key = '';
-        while (!feof($fp)) {
+        while (! feof($fp)) {
             $key .= fread($fp, 8192);
         }
         $this->setAuthSubPrivateKey($key, $passphrase);
@@ -124,15 +125,15 @@ class HttpClient extends \Zend\Http\Client
      * @throws \Zend\GData\App\InvalidArgumentException
      * @return \Zend\GData\HttpClient Provides a fluent interface
      */
-    public function setAuthSubPrivateKey($key, $passphrase = null) 
+    public function setAuthSubPrivateKey ($key, $passphrase = null)
     {
-        if ($key != null && !function_exists('openssl_pkey_get_private')) {
+        if ($key != null && ! function_exists('openssl_pkey_get_private')) {
             throw new App\InvalidArgumentException(
-                    'You cannot enable secure AuthSub if the openssl module ' .
-                    'is not enabled in your PHP installation.');
+            'You cannot enable secure AuthSub if the openssl module ' .
+             'is not enabled in your PHP installation.');
         }
-        $this->_authSubPrivateKeyId = openssl_pkey_get_private(
-                $key, $passphrase);
+        $this->_authSubPrivateKeyId = openssl_pkey_get_private($key, 
+        $passphrase);
         return $this;
     }
 
@@ -141,7 +142,8 @@ class HttpClient extends \Zend\Http\Client
      *
      * @return string The private key
      */
-    public function getAuthSubPrivateKeyId() {
+    public function getAuthSubPrivateKeyId ()
+    {
         return $this->_authSubPrivateKeyId;
     }
 
@@ -150,7 +152,8 @@ class HttpClient extends \Zend\Http\Client
      *
      * @return string The token
      */
-    public function getAuthSubToken() {
+    public function getAuthSubToken ()
+    {
         return $this->_authSubToken;
     }
 
@@ -160,7 +163,8 @@ class HttpClient extends \Zend\Http\Client
      * @param string $token The token
      * @return \Zend\GData\HttpClient Provides a fluent interface
      */
-    public function setAuthSubToken($token) {
+    public function setAuthSubToken ($token)
+    {
         $this->_authSubToken = $token;
         return $this;
     }
@@ -170,7 +174,8 @@ class HttpClient extends \Zend\Http\Client
      *
      * @return string The token
      */
-    public function getClientLoginToken() {
+    public function getClientLoginToken ()
+    {
         return $this->_clientLoginToken;
     }
 
@@ -180,7 +185,8 @@ class HttpClient extends \Zend\Http\Client
      * @param string $token The token
      * @return \Zend\GData\HttpClient Provides a fluent interface
      */
-    public function setClientLoginToken($token) {
+    public function setClientLoginToken ($token)
+    {
         $this->_clientLoginToken = $token;
         return $this;
     }
@@ -199,14 +205,16 @@ class HttpClient extends \Zend\Http\Client
      * @param string $method The HTTP method
      * @param string $url The URL
      * @param array $headers An associate array of headers to be
-     *                       sent with the request or null
+     * sent with the request or null
      * @param string $body The body of the request or null
      * @param string $contentType The MIME content type of the body or null
      * @throws \Zend\GData\App\Exception if there was a signing failure
      * @return array The processed values in an associative array,
-     *               using the same names as the params
+     * using the same names as the params
      */
-    public function filterHttpRequest($method, $url, $headers = array(), $body = null, $contentType = null) {
+    public function filterHttpRequest ($method, $url, $headers = array(), $body = null, 
+    $contentType = null)
+    {
         if ($this->getAuthSubToken() != null) {
             // AuthSub authentication
             if ($this->getAuthSubPrivateKeyId() != null) {
@@ -214,31 +222,33 @@ class HttpClient extends \Zend\Http\Client
                 $time = time();
                 $nonce = mt_rand(0, 999999999);
                 $dataToSign = $method . ' ' . $url . ' ' . $time . ' ' . $nonce;
-
+                
                 // compute signature
                 $pKeyId = $this->getAuthSubPrivateKeyId();
-                $signSuccess = openssl_sign($dataToSign, $signature, $pKeyId,
-                                            OPENSSL_ALGO_SHA1);
-                if (!$signSuccess) {
+                $signSuccess = openssl_sign($dataToSign, $signature, $pKeyId, 
+                OPENSSL_ALGO_SHA1);
+                if (! $signSuccess) {
                     throw new App\Exception(
-                            'openssl_signing failure - returned false');
+                    'openssl_signing failure - returned false');
                 }
                 // encode signature
                 $encodedSignature = base64_encode($signature);
-
+                
                 // final header
-                $headers['authorization'] = 'AuthSub token="' . $this->getAuthSubToken() . '" ' .
-                                            'data="' . $dataToSign . '" ' .
-                                            'sig="' . $encodedSignature . '" ' .
-                                            'sigalg="rsa-sha1"';
+                $headers['authorization'] = 'AuthSub token="' .
+                 $this->getAuthSubToken() . '" ' . 'data="' . $dataToSign . '" ' .
+                 'sig="' . $encodedSignature . '" ' . 'sigalg="rsa-sha1"';
             } else {
                 // AuthSub without secure tokens
-                $headers['authorization'] = 'AuthSub token="' . $this->getAuthSubToken() . '"';
+                $headers['authorization'] = 'AuthSub token="' .
+                 $this->getAuthSubToken() . '"';
             }
         } elseif ($this->getClientLoginToken() != null) {
-            $headers['authorization'] = 'GoogleLogin auth=' . $this->getClientLoginToken();
+            $headers['authorization'] = 'GoogleLogin auth=' .
+             $this->getClientLoginToken();
         }
-        return array('method' => $method, 'url' => $url, 'body' => $body, 'headers' => $headers, 'contentType' => $contentType);
+        return array('method' => $method, 'url' => $url, 'body' => $body, 
+        'headers' => $headers, 'contentType' => $contentType);
     }
 
     /**
@@ -248,7 +258,8 @@ class HttpClient extends \Zend\Http\Client
      * @param \Zend\Http\Response $response The response object to filter
      * @return \Zend\Http\Response The filterd response object
      */
-    public function filterHttpResponse($response) {
+    public function filterHttpResponse ($response)
+    {
         return $response;
     }
 
@@ -257,23 +268,23 @@ class HttpClient extends \Zend\Http\Client
      *
      * @return \Zend\Http\Client\Adapter|string $adapter
      */
-    public function getAdapter()
+    public function getAdapter ()
     {
         return $this->adapter;
     }
 
-   /**
+    /**
      * Load the connection adapter
      *
      * @param \Zend\Http\Client\Adapter $adapter
      * @return void
      */
-    public function setAdapter($adapter)
+    public function setAdapter ($adapter)
     {
         if ($adapter == null) {
             $this->adapter = $adapter;
         } else {
-              parent::setAdapter($adapter);
+            parent::setAdapter($adapter);
         }
     }
 
@@ -284,7 +295,7 @@ class HttpClient extends \Zend\Http\Client
      * @param boolean $value The value to set.
      * @return void
      */
-    public function setStreamingRequest($value)
+    public function setStreamingRequest ($value)
     {
         $this->_streamingRequest = $value;
     }
@@ -294,7 +305,7 @@ class HttpClient extends \Zend\Http\Client
      *
      * @return boolean True if yes, false otherwise.
      */
-    public function getStreamingRequest()
+    public function getStreamingRequest ()
     {
         if ($this->_streamingRequest()) {
             return true;
@@ -309,14 +320,13 @@ class HttpClient extends \Zend\Http\Client
      * @return string
      * @throws \Zend\Http\Client\Exception
      */
-    protected function _prepareBody()
+    protected function _prepareBody ()
     {
-        if($this->_streamingRequest) {
-            $this->setHeaders(self::CONTENT_LENGTH,
-                $this->raw_post_data->getTotalSize());
+        if ($this->_streamingRequest) {
+            $this->setHeaders(self::CONTENT_LENGTH, 
+            $this->raw_post_data->getTotalSize());
             return $this->raw_post_data;
-        }
-        else {
+        } else {
             return parent::_prepareBody();
         }
     }
@@ -326,10 +336,10 @@ class HttpClient extends \Zend\Http\Client
      *
      * @return \Zend\Http\Client
      */
-    public function resetParameters($clearAll = false)
+    public function resetParameters ($clearAll = false)
     {
         $this->_streamingRequest = false;
-
+        
         return parent::resetParameters($clearAll);
     }
 
@@ -344,7 +354,7 @@ class HttpClient extends \Zend\Http\Client
      * @param string $enctype The encoding type
      * @return \Zend\Http\Client
      */
-    public function setRawDataStream($data, $enctype = null)
+    public function setRawDataStream ($data, $enctype = null)
     {
         $this->_streamingRequest = true;
         return $this->setRawData($data, $enctype);

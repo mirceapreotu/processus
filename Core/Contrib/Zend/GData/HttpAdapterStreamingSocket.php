@@ -57,48 +57,48 @@ class HttpAdapterStreamingSocket extends Adapter\Socket
      * @param string        $body
      * @return string Request as string
      */
-    public function write($method, $uri, $http_ver = '1.1', $headers = array(),
-        $body = '')
+    public function write ($method, $uri, $http_ver = '1.1', $headers = array(), $body = '')
     {
         // Make sure we're properly connected
         if (! $this->socket) {
             throw new Adapter\Exception(
-                'Trying to write but we are not connected');
+            'Trying to write but we are not connected');
         }
-
+        
         $host = $uri->getHost();
-        $host = (strtolower($uri->getScheme()) == 'https' ? $this->config['ssltransport'] : 'tcp') . '://' . $host;
-        if ($this->connected_to[0] != $host || $this->connected_to[1] != $uri->getPort()) {
+        $host = (strtolower($uri->getScheme()) == 'https' ? $this->config['ssltransport'] : 'tcp') .
+         '://' . $host;
+        if ($this->connected_to[0] != $host ||
+         $this->connected_to[1] != $uri->getPort()) {
             throw new Adapter\Exception(
-                'Trying to write but we are connected to the wrong host');
+            'Trying to write but we are connected to the wrong host');
         }
-
+        
         // Save request method for later
         $this->method = $method;
-
+        
         // Build request headers
         $path = $uri->getPath();
-        if ($uri->getQuery()) $path .= '?' . $uri->getQuery();
+        if ($uri->getQuery())
+            $path .= '?' . $uri->getQuery();
         $request = "{$method} {$path} HTTP/{$http_ver}\r\n";
         foreach ($headers as $k => $v) {
-            if (is_string($k)) $v = ucfirst($k) . ": $v";
+            if (is_string($k))
+                $v = ucfirst($k) . ": $v";
             $request .= "$v\r\n";
         }
-
+        
         // Send the headers over
         $request .= "\r\n";
         if (! @fwrite($this->socket, $request)) {
-            throw new Adapter\Exception(
-                'Error writing request to server');
+            throw new Adapter\Exception('Error writing request to server');
         }
-
-
+        
         //read from $body, write to socket
         $chunk = $body->read(self::CHUNK_SIZE);
         while ($chunk !== FALSE) {
             if (! @fwrite($this->socket, $chunk)) {
-                throw new Adapter\Exception(
-                    'Error writing request to server');
+                throw new Adapter\Exception('Error writing request to server');
             }
             $chunk = $body->read(self::CHUNK_SIZE);
         }

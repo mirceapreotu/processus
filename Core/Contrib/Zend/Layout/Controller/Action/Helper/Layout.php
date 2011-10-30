@@ -24,7 +24,6 @@
  */
 namespace Zend\Layout\Controller\Action\Helper;
 
-
 /**
  * Helper for interacting with Zend_Layout objects
  *
@@ -40,6 +39,7 @@ namespace Zend\Layout\Controller\Action\Helper;
  */
 class Layout extends \Zend\Controller\Action\Helper\AbstractHelper
 {
+
     /**
      * @var \Zend\Controller\Front
      */
@@ -61,14 +61,14 @@ class Layout extends \Zend\Controller\Action\Helper\AbstractHelper
      * @param  \Zend\Layout\Layout $layout
      * @return void
      */
-    public function __construct(\Zend\Layout\Layout $layout = null)
+    public function __construct (\Zend\Layout\Layout $layout = null)
     {
         if (null !== $layout) {
             $this->setLayoutInstance($layout);
         } else {
             $layout = \Zend\Layout\Layout::getMvcInstance();
         }
-
+        
         if (null !== $layout) {
             $pluginClass = $layout->getPluginClass();
             $front = $this->getFrontController();
@@ -79,7 +79,7 @@ class Layout extends \Zend\Controller\Action\Helper\AbstractHelper
         }
     }
 
-    public function init()
+    public function init ()
     {
         $this->_isActionControllerSuccessful = false;
     }
@@ -89,12 +89,12 @@ class Layout extends \Zend\Controller\Action\Helper\AbstractHelper
      *
      * @return \Zend\Controller\Front
      */
-    public function getFrontController()
+    public function getFrontController ()
     {
         if (null === $this->_frontController) {
             $this->_frontController = \Zend\Controller\Front::getInstance();
         }
-
+        
         return $this->_frontController;
     }
 
@@ -103,14 +103,14 @@ class Layout extends \Zend\Controller\Action\Helper\AbstractHelper
      *
      * @return \Zend\Layout\Layout
      */
-    public function getLayoutInstance()
+    public function getLayoutInstance ()
     {
         if (null === $this->_layout) {
             if (null === ($this->_layout = \Zend\Layout\Layout::getMvcInstance())) {
                 $this->_layout = new \Zend\Layout\Layout();
             }
         }
-
+        
         return $this->_layout;
     }
 
@@ -120,7 +120,7 @@ class Layout extends \Zend\Controller\Action\Helper\AbstractHelper
      * @param  \Zend\Layout\Layout $layout
      * @return \Zend\Layout\Controller\Action\Helper\Layout
      */
-    public function setLayoutInstance(\Zend\Layout\Layout $layout)
+    public function setLayoutInstance (\Zend\Layout\Layout $layout)
     {
         $this->_layout = $layout;
         return $this;
@@ -131,7 +131,7 @@ class Layout extends \Zend\Controller\Action\Helper\AbstractHelper
      *
      * @return \Zend\Layout\Controller\Action\Helper\Layout
      */
-    public function postDispatch()
+    public function postDispatch ()
     {
         $this->_isActionControllerSuccessful = true;
         return $this;
@@ -142,7 +142,7 @@ class Layout extends \Zend\Controller\Action\Helper\AbstractHelper
      *
      * @return bool
      */
-    public function isActionControllerSuccessful()
+    public function isActionControllerSuccessful ()
     {
         return $this->_isActionControllerSuccessful;
     }
@@ -154,7 +154,7 @@ class Layout extends \Zend\Controller\Action\Helper\AbstractHelper
      *
      * @return \Zend\Layout\Layout
      */
-    public function direct()
+    public function direct ()
     {
         return $this->getLayoutInstance();
     }
@@ -166,13 +166,14 @@ class Layout extends \Zend\Controller\Action\Helper\AbstractHelper
      * @param  array $args
      * @return mixed
      */
-    public function __call($method, $args)
+    public function __call ($method, $args)
     {
         $layout = $this->getLayoutInstance();
         if (method_exists($layout, $method)) {
             return call_user_func_array(array($layout, $method), $args);
         }
-
-        throw new Layout\Exception(sprintf("Invalid method '%s' called on layout action helper", $method));
+        
+        throw new Layout\Exception(
+        sprintf("Invalid method '%s' called on layout action helper", $method));
     }
 }

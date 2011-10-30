@@ -40,10 +40,15 @@ class Rating extends Extension
 {
 
     protected $_rootElement = 'rating';
+
     protected $_min = null;
+
     protected $_max = null;
+
     protected $_numRaters = null;
+
     protected $_average = null;
+
     protected $_value = null;
 
     /**
@@ -55,8 +60,8 @@ class Rating extends Extension
      * @param integer $numRaters (optional) Number of raters.
      * @param integer $value (optional) The value of the rating.
      */
-    public function __construct($average = null, $min = null,
-            $max = null, $numRaters = null, $value = null)
+    public function __construct ($average = null, $min = null, $max = null, 
+    $numRaters = null, $value = null)
     {
         parent::__construct();
         $this->_average = $average;
@@ -74,9 +79,9 @@ class Rating extends Extension
      *
      * @param DOMDocument $doc The DOMDocument used to construct DOMElements
      * @return DOMElement The DOMElement representing this element and all
-     *          child properties.
+     * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_min !== null) {
@@ -94,7 +99,7 @@ class Rating extends Extension
         if ($this->_value !== null) {
             $element->setAttribute('value', $this->_value);
         }
-
+        
         return $element;
     }
 
@@ -105,7 +110,7 @@ class Rating extends Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
             case 'min':
@@ -132,7 +137,7 @@ class Rating extends Extension
      *
      * @return integer The requested attribute.
      */
-    public function getMin()
+    public function getMin ()
     {
         return $this->_min;
     }
@@ -143,7 +148,7 @@ class Rating extends Extension
      * @param bool $value The desired value for this attribute.
      * @return \Zend\GData\Extension\Rating The element being modified.
      */
-    public function setMin($value)
+    public function setMin ($value)
     {
         $this->_min = $value;
         return $this;
@@ -154,7 +159,7 @@ class Rating extends Extension
      *
      * @return integer The requested attribute.
      */
-    public function getNumRaters()
+    public function getNumRaters ()
     {
         return $this->_numRaters;
     }
@@ -165,7 +170,7 @@ class Rating extends Extension
      * @param bool $value The desired value for this attribute.
      * @return \Zend\GData\Extension\Rating The element being modified.
      */
-    public function setNumRaters($value)
+    public function setNumRaters ($value)
     {
         $this->_numRaters = $value;
         return $this;
@@ -176,7 +181,7 @@ class Rating extends Extension
      *
      * @return integer The requested attribute.
      */
-    public function getAverage()
+    public function getAverage ()
     {
         return $this->_average;
     }
@@ -187,7 +192,7 @@ class Rating extends Extension
      * @param bool $value The desired value for this attribute.
      * @return \Zend\GData\Extension\Rating The element being modified.
      */
-    public function setAverage($value)
+    public function setAverage ($value)
     {
         $this->_average = $value;
         return $this;
@@ -198,7 +203,7 @@ class Rating extends Extension
      *
      * @return integer The requested attribute.
      */
-    public function getMax()
+    public function getMax ()
     {
         return $this->_max;
     }
@@ -209,7 +214,7 @@ class Rating extends Extension
      * @param bool $value The desired value for this attribute.
      * @return \Zend\GData\Extension\Rating The element being modified.
      */
-    public function setMax($value)
+    public function setMax ($value)
     {
         $this->_max = $value;
         return $this;
@@ -220,7 +225,7 @@ class Rating extends Extension
      *
      * @return integer The requested attribute.
      */
-    public function getValue()
+    public function getValue ()
     {
         return $this->_value;
     }
@@ -231,7 +236,7 @@ class Rating extends Extension
      * @param bool $value The desired value for this attribute.
      * @return \Zend\GData\Extension\Rating The element being modified.
      */
-    public function setValue($value)
+    public function setValue ($value)
     {
         $this->_value = $value;
         return $this;

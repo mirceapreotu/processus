@@ -45,15 +45,15 @@ class Source extends AbstractAtom implements \Zend\Feed\Writer\Renderer
     {
         parent::__construct($container);
     }
-    
+
     /**
      * Render Atom Feed Metadata (Source element)
      * 
      * @return \Zend\Feed\Writer\Renderer\Feed\Atom
      */
-    public function render()
+    public function render ()
     {
-        if (!$this->_container->getEncoding()) {
+        if (! $this->_container->getEncoding()) {
             $this->_container->setEncoding('UTF-8');
         }
         $this->_dom = new \DOMDocument('1.0', $this->_container->getEncoding());
@@ -83,7 +83,7 @@ class Source extends AbstractAtom implements \Zend\Feed\Writer\Renderer
         }
         return $this;
     }
-    
+
     /**
      * Set feed generator string
      * 
@@ -91,12 +91,12 @@ class Source extends AbstractAtom implements \Zend\Feed\Writer\Renderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setGenerator(\DOMDocument $dom, \DOMElement $root)
+    protected function _setGenerator (\DOMDocument $dom,\DOMElement $root)
     {
-        if(!$this->getDataContainer()->getGenerator()) {
+        if (! $this->getDataContainer()->getGenerator()) {
             return;
         }
-
+        
         $gdata = $this->getDataContainer()->getGenerator();
         $generator = $dom->createElement('generator');
         $root->appendChild($generator);

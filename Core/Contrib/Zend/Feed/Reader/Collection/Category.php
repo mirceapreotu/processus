@@ -17,19 +17,19 @@
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
- 
+
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Reader\Collection;
 
 /**
-* @uses \Zend\Feed\Reader\Collection\CollectionAbstract
-* @category Zend
-* @package Zend_Feed_Reader
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @uses \Zend\Feed\Reader\Collection\CollectionAbstract
+ * @category Zend
+ * @package Zend_Feed_Reader
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 class Category extends AbstractCollection
 {
 
@@ -41,10 +41,11 @@ class Category extends AbstractCollection
      *
      * @return array
      */
-    public function getValues() {
+    public function getValues ()
+    {
         $categories = array();
         foreach ($this->getIterator() as $element) {
-            if (isset($element['label']) && !empty($element['label'])) {
+            if (isset($element['label']) && ! empty($element['label'])) {
                 $categories[] = $element['label'];
             } else {
                 $categories[] = $element['term'];

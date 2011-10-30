@@ -37,9 +37,9 @@ use Zend\Application\Bootstrap as ApplicationBootstrap;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-abstract class Bootstrap
-    extends ApplicationBootstrap
+abstract class Bootstrap extends ApplicationBootstrap
 {
+
     /**
      * Set this explicitly to reduce impact of determining module name
      * @var string
@@ -52,32 +52,31 @@ abstract class Bootstrap
      * @param  Zend_Application|\Zend\Application\Bootstrapper $application
      * @return void
      */
-    public function __construct($application)
+    public function __construct ($application)
     {
         $this->setApplication($application);
-
+        
         // Use same plugin broker as parent bootstrap
         if ($application instanceof \Zend\Application\ResourceBootstrapper) {
             $this->setBroker($application->getBroker());
         }
-
+        
         $key = strtolower($this->getModuleName());
         if ($application->hasOption($key)) {
             // Don't run via setOptions() to prevent duplicate initialization
             $this->setOptions($application->getOption($key));
         }
-
+        
         if ($application->hasOption('resourceloader')) {
-            $this->setOptions(array(
-                'resourceloader' => $application->getOption('resourceloader')
-            ));
+            $this->setOptions(
+            array('resourceloader' => $application->getOption('resourceloader')));
         }
         $this->initResourceLoader();
-
+        
         $broker = $this->getBroker();
-
+        
         // ZF-6545: ensure front controller resource is loaded
-        if (!$broker->hasPlugin('frontcontroller')) {
+        if (! $broker->hasPlugin('frontcontroller')) {
             $broker->registerSpec('frontcontroller');
         }
     }
@@ -87,7 +86,7 @@ abstract class Bootstrap
      *
      * @return void
      */
-    public function initResourceLoader()
+    public function initResourceLoader ()
     {
         $this->getResourceLoader();
     }
@@ -100,7 +99,7 @@ abstract class Bootstrap
      * 
      * @return string
      */
-    public function getAppNamespace()
+    public function getAppNamespace ()
     {
         return $this->getModuleName();
     }
@@ -110,7 +109,7 @@ abstract class Bootstrap
      *
      * @return string
      */
-    public function getModuleName()
+    public function getModuleName ()
     {
         if (empty($this->_moduleName)) {
             $class = get_class($this);

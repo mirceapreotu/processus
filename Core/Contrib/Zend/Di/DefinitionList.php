@@ -4,20 +4,22 @@ namespace Zend\Di;
 
 use SplDoublyLinkedList;
 
-class DefinitionList extends SplDoublyLinkedList implements Definition\Definition
+class DefinitionList extends SplDoublyLinkedList implements 
+Definition\Definition
 {
 
-    public function __construct($definitions)
+    public function __construct ($definitions)
     {
-        if (!is_array($definitions)) {
+        if (! is_array($definitions)) {
             $definitions = array($definitions);
         }
         foreach ($definitions as $definition) {
             $this->push($definition);
         }
     }
-    
-    public function addDefinition(Definition\Definition $definition, $addToBackOfList = true)
+
+    public function addDefinition (Definition\Definition $definition, 
+    $addToBackOfList = true)
     {
         if ($addToBackOfList) {
             $this->push($definition);
@@ -30,7 +32,7 @@ class DefinitionList extends SplDoublyLinkedList implements Definition\Definitio
      * @param string $type
      * @return Definition[]
      */
-    public function getDefinitionsByType($type)
+    public function getDefinitionsByType ($type)
     {
         $definitions = array();
         foreach ($this as $definition) {
@@ -45,7 +47,7 @@ class DefinitionList extends SplDoublyLinkedList implements Definition\Definitio
      * @param string $type
      * @return Definition
      */
-    public function getDefinitionByType($type)
+    public function getDefinitionByType ($type)
     {
         foreach ($this as $definition) {
             if ($definition instanceof $type) {
@@ -55,7 +57,7 @@ class DefinitionList extends SplDoublyLinkedList implements Definition\Definitio
         return false;
     }
 
-    public function getDefinitionForClass($class)
+    public function getDefinitionForClass ($class)
     {
         /** @var $definition Definition\Definition */
         foreach ($this as $definition) {
@@ -66,13 +68,12 @@ class DefinitionList extends SplDoublyLinkedList implements Definition\Definitio
         return false;
     }
 
-    public function forClass($class)
+    public function forClass ($class)
     {
         return $this->getDefinitionForClass($class);
     }
 
-
-    public function getClasses()
+    public function getClasses ()
     {
         $classes = array();
         /** @var $definition Definition\Definition */
@@ -81,8 +82,8 @@ class DefinitionList extends SplDoublyLinkedList implements Definition\Definitio
         }
         return $classes;
     }
-    
-    public function hasClass($class)
+
+    public function hasClass ($class)
     {
         /** @var $definition Definition\Definition */
         foreach ($this as $definition) {
@@ -92,25 +93,27 @@ class DefinitionList extends SplDoublyLinkedList implements Definition\Definitio
         }
         return false;
     }
-    
-    public function getClassSupertypes($class)
+
+    public function getClassSupertypes ($class)
     {
         $superTypes = array();
         /** @var $definition Definition\Definition */
         foreach ($this as $definition) {
-            $superTypes = array_merge($definition->getClassSupertypes($class), $superTypes);
+            $superTypes = array_merge($definition->getClassSupertypes($class), 
+            $superTypes);
         }
         // @todo remove duplicates?
         return $superTypes;
     }
-    
-    public function getInstantiator($class)
+
+    public function getInstantiator ($class)
     {
         /** @var $definition Definition\Definition */
         foreach ($this as $definition) {
             if ($definition->hasClass($class)) {
                 $value = $definition->getInstantiator($class);
-                if ($value === null && $definition instanceof Definition\PartialMarker) {
+                if ($value === null &&
+                 $definition instanceof Definition\PartialMarker) {
                     continue;
                 } else {
                     return $value;
@@ -119,13 +122,14 @@ class DefinitionList extends SplDoublyLinkedList implements Definition\Definitio
         }
         return false;
     }
-    
-    public function hasMethods($class)
+
+    public function hasMethods ($class)
     {
         /** @var $definition Definition\Definition */
         foreach ($this as $definition) {
             if ($definition->hasClass($class)) {
-                if ($definition->hasMethods($class) === false && $definition instanceof Definition\PartialMarker) {
+                if ($definition->hasMethods($class) === false &&
+                 $definition instanceof Definition\PartialMarker) {
                     continue;
                 } else {
                     return $definition->hasMethods($class);
@@ -134,13 +138,14 @@ class DefinitionList extends SplDoublyLinkedList implements Definition\Definitio
         }
         return false;
     }
-    
-    public function hasMethod($class, $method)
+
+    public function hasMethod ($class, $method)
     {
         /** @var $definition Definition\Definition */
         foreach ($this as $definition) {
             if ($definition->hasClass($class)) {
-                if ($definition->hasMethods($class) === false && $definition instanceof Definition\PartialMarker) {
+                if ($definition->hasMethods($class) === false &&
+                 $definition instanceof Definition\PartialMarker) {
                     continue;
                 } else {
                     return $definition->hasMethods($class);
@@ -149,38 +154,42 @@ class DefinitionList extends SplDoublyLinkedList implements Definition\Definitio
         }
         return false;
     }
-    
-    public function getMethods($class)
+
+    public function getMethods ($class)
     {
         /** @var $definition Definition\Definition */
         $methods = array();
         foreach ($this as $definition) {
             if ($definition->hasClass($class)) {
                 if ($definition instanceof Definition\PartialMarker) {
-                    $methods = array_merge($definition->getMethods($class), $methods);
+                    $methods = array_merge($definition->getMethods($class), 
+                    $methods);
                 } else {
-                    return array_merge($definition->getMethods($class), $methods);
+                    return array_merge($definition->getMethods($class), 
+                    $methods);
                 }
             }
         }
         return $methods;
     }
 
-    public function hasMethodParameters($class, $method)
+    public function hasMethodParameters ($class, $method)
     {
         $methodParameters = $this->getMethodParameters($class, $method);
         return ($methodParameters !== array());
     }
 
-    public function getMethodParameters($class, $method)
+    public function getMethodParameters ($class, $method)
     {
         /** @var $definition Definition\Definition */
         foreach ($this as $definition) {
-            if ($definition->hasClass($class) && $definition->hasMethod($class, $method) && $definition->hasMethodParameters($class, $method)) {
+            if ($definition->hasClass($class) &&
+             $definition->hasMethod($class, $method) &&
+             $definition->hasMethodParameters($class, $method)) {
                 return $definition->getMethodParameters($class, $method);
             }
         }
         return array();
     }
-    
+
 }

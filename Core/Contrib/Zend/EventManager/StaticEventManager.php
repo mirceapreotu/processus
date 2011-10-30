@@ -35,6 +35,7 @@ use Zend\Stdlib\CallbackHandler;
  */
 class StaticEventManager implements StaticEventCollection
 {
+
     /**
      * @var StaticEventManager
      */
@@ -51,25 +52,23 @@ class StaticEventManager implements StaticEventCollection
      * 
      * @return void
      */
-    protected function __construct()
-    {
-    }
+    protected function __construct ()
+    {}
 
     /**
      * Singleton
      *
      * @return void
      */
-    private function __clone()
-    {
-    }
+    private function __clone ()
+    {}
 
     /**
      * Retrieve instance
      * 
      * @return EventManager
      */
-    public static function getInstance()
+    public static function getInstance ()
     {
         if (null === self::$instance) {
             self::$instance = new self();
@@ -82,7 +81,7 @@ class StaticEventManager implements StaticEventCollection
      * 
      * @return void
      */
-    public static function resetInstance()
+    public static function resetInstance ()
     {
         self::$instance = null;
     }
@@ -96,17 +95,17 @@ class StaticEventManager implements StaticEventCollection
      *
      * <code>
      * StaticEventManager::getInstance()->connect(
-     *     array('My\Resource\AbstractResource', 'My\Resource\EntityResource'),
-     *     'getOne',
-     *     function ($e) use ($cache) {
-     *         if (!$id = $e->getParam('id', false)) {
-     *             return;
-     *         }
-     *         if (!$data = $cache->load(get_class($resource) . '::getOne::' . $id )) {
-     *             return;
-     *         }
-     *         return $data;
-     *     }
+     * array('My\Resource\AbstractResource', 'My\Resource\EntityResource'),
+     * 'getOne',
+     * function ($e) use ($cache) {
+     * if (!$id = $e->getParam('id', false)) {
+     * return;
+     * }
+     * if (!$data = $cache->load(get_class($resource) . '::getOne::' . $id )) {
+     * return;
+     * }
+     * return $data;
+     * }
      * );
      * </code>
      * 
@@ -116,11 +115,11 @@ class StaticEventManager implements StaticEventCollection
      * @param  int $priority Priority at which listener should execute
      * @return void
      */
-    public function attach($id, $event, $callback, $priority = 1)
+    public function attach ($id, $event, $callback, $priority = 1)
     {
         $ids = (array) $id;
         foreach ($ids as $id) {
-            if (!array_key_exists($id, $this->identifiers)) {
+            if (! array_key_exists($id, $this->identifiers)) {
                 $this->identifiers[$id] = new EventManager();
             }
             $this->identifiers[$id]->attach($event, $callback, $priority);
@@ -134,9 +133,9 @@ class StaticEventManager implements StaticEventCollection
      * @param  CallbackHandler $listener 
      * @return bool Returns true if event and listener found, and unsubscribed; returns false if either event or listener not found
      */
-    public function detach($id, CallbackHandler $listener)
+    public function detach ($id, CallbackHandler $listener)
     {
-        if (!array_key_exists($id, $this->identifiers)) {
+        if (! array_key_exists($id, $this->identifiers)) {
             return false;
         }
         return $this->identifiers[$id]->detach($listener);
@@ -148,9 +147,9 @@ class StaticEventManager implements StaticEventCollection
      * @param  string|int $id
      * @return array
      */
-    public function getEvents($id)
+    public function getEvents ($id)
     {
-        if (!array_key_exists($id, $this->identifiers)) {
+        if (! array_key_exists($id, $this->identifiers)) {
             return false;
         }
         return $this->identifiers[$id]->getEvents();
@@ -163,9 +162,9 @@ class StaticEventManager implements StaticEventCollection
      * @param  string|int $event 
      * @return false|\Zend\Stdlib\PriorityQueue
      */
-    public function getListeners($id, $event)
+    public function getListeners ($id, $event)
     {
-        if (!array_key_exists($id, $this->identifiers)) {
+        if (! array_key_exists($id, $this->identifiers)) {
             return false;
         }
         return $this->identifiers[$id]->getListeners($event);
@@ -178,17 +177,17 @@ class StaticEventManager implements StaticEventCollection
      * @param  null|string $event 
      * @return bool
      */
-    public function clearListeners($id, $event = null)
+    public function clearListeners ($id, $event = null)
     {
-        if (!array_key_exists($id, $this->identifiers)) {
+        if (! array_key_exists($id, $this->identifiers)) {
             return false;
         }
-
+        
         if (null === $event) {
             unset($this->identifiers[$id]);
             return true;
         }
-
+        
         return $this->identifiers[$id]->clearListeners($event);
     }
 }

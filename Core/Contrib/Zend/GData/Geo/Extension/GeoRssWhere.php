@@ -40,6 +40,7 @@ class GeoRssWhere extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'georss';
+
     protected $_rootElement = 'where';
 
     /**
@@ -53,9 +54,9 @@ class GeoRssWhere extends \Zend\GData\Extension
      * Create a new instance.
      *
      * @param \Zend\GData\Geo\Extension\GmlPoint $point (optional) Point to which
-     *          object should be initialized.
+     * object should be initialized.
      */
-    public function __construct($point = null)
+    public function __construct ($point = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Geo::$namespaces);
         parent::__construct();
@@ -69,13 +70,14 @@ class GeoRssWhere extends \Zend\GData\Extension
      *
      * @param DOMDocument $doc The DOMDocument used to construct DOMElements
      * @return DOMElement The DOMElement representing this element and all
-     *          child properties.
+     * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_point !== null) {
-            $element->appendChild($this->_point->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_point->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -86,12 +88,12 @@ class GeoRssWhere extends \Zend\GData\Extension
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
-
+        
         switch ($absoluteNodeName) {
-            case $this->lookupNamespace('gml') . ':' . 'Point';
+            case $this->lookupNamespace('gml') . ':' . 'Point':
                 $point = new GmlPoint();
                 $point->transferFromDOM($child);
                 $this->_point = $point;
@@ -105,7 +107,7 @@ class GeoRssWhere extends \Zend\GData\Extension
      * @see setPoint
      * @return \Zend\GData\Geo\Extension\GmlPoint The requested attribute.
      */
-    public function getPoint()
+    public function getPoint ()
     {
         return $this->_point;
     }
@@ -116,7 +118,7 @@ class GeoRssWhere extends \Zend\GData\Extension
      * @param \Zend\GData\Geo\Extension\GmlPoint $value The desired value for this attribute.
      * @return \Zend\GData\Geo\Extension\GeoRssWhere Provides a fluent interface
      */
-    public function setPoint($value)
+    public function setPoint ($value)
     {
         $this->_point = $value;
         return $this;

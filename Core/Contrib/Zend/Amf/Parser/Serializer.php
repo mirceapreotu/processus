@@ -34,13 +34,14 @@ namespace Zend\Amf\Parser;
  */
 interface Serializer
 {
+
     /**
      * Constructor
      *
      * @param  Zend\Amf\Parser\OutputStream $stream
      * @return void
      */
-    public function __construct(OutputStream $stream);
+    public function __construct (OutputStream $stream);
 
     /**
      * Find the PHP object type and convert it into an AMF object type
@@ -49,5 +50,5 @@ interface Serializer
      * @param  int $markerType
      * @return void
      */
-    public function writeTypeMarker(&$content, $markerType = null);
+    public function writeTypeMarker (&$content, $markerType = null);
 }

@@ -17,19 +17,19 @@
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
- 
+
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Reader\Collection;
 
 /**
-* @uses \Zend\Feed\Reader\Collection\AbstractCollection
-* @category Zend
-* @package Zend_Feed_Reader
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @uses \Zend\Feed\Reader\Collection\AbstractCollection
+ * @category Zend
+ * @package Zend_Feed_Reader
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 class Author extends AbstractCollection
 {
 
@@ -39,7 +39,8 @@ class Author extends AbstractCollection
      *
      * @return array
      */
-    public function getValues() {
+    public function getValues ()
+    {
         $authors = array();
         foreach ($this->getIterator() as $element) {
             $authors[] = $element['name'];

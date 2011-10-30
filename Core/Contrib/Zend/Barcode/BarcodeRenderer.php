@@ -36,26 +36,27 @@ use Zend\Config\Config;
  */
 interface BarcodeRenderer
 {
+
     /**
      * Constructor
      * @param array|\Zend\Config\Config $options
      * @return void
      */
-    public function __construct($options = null);
+    public function __construct ($options = null);
 
     /**
      * Set renderer state from options array
      * @param  array $options
      * @return \Zend\Barcode\Renderer
      */
-    public function setOptions($options);
+    public function setOptions ($options);
 
     /**
      * Set renderer state from config object
      * @param \Zend\Config\Config $config
      * @return \Zend\Barcode\Renderer
      */
-    public function setConfig(Config $config);
+    public function setConfig (Config $config);
 
     /**
      * Set renderer namespace for autoloading
@@ -63,126 +64,126 @@ interface BarcodeRenderer
      * @param string $namespace
      * @return \Zend\Barcode\Renderer
      */
-    public function setRendererNamespace($namespace);
+    public function setRendererNamespace ($namespace);
 
     /**
      * Retrieve renderer namespace
      *
      * @return string
      */
-    public function getRendererNamespace();
+    public function getRendererNamespace ();
 
     /**
      * Retrieve renderer type
      * @return string
      */
-    public function getType();
+    public function getType ();
 
     /**
      * Manually adjust top position
      * @param integer $value
      * @return \Zend\Barcode\Renderer
      */
-    public function setTopOffset($value);
+    public function setTopOffset ($value);
 
     /**
      * Retrieve vertical adjustment
      * @return integer
      */
-    public function getTopOffset();
+    public function getTopOffset ();
 
     /**
      * Manually adjust left position
      * @param integer $value
      * @return \Zend\Barcode\Renderer
      */
-    public function setLeftOffset($value);
+    public function setLeftOffset ($value);
 
     /**
      * Retrieve vertical adjustment
      * @return integer
      */
-    public function getLeftOffset();
+    public function getLeftOffset ();
 
     /**
      * Activate/Deactivate the automatic rendering of exception
      * @param boolean $value
      */
-    public function setAutomaticRenderError($value);
+    public function setAutomaticRenderError ($value);
 
     /**
      * Horizontal position of the barcode in the rendering resource
      * @param string $value
      * @return \Zend\Barcode\Renderer
      */
-    public function setHorizontalPosition($value);
+    public function setHorizontalPosition ($value);
 
     /**
      * Horizontal position of the barcode in the rendering resource
      * @return string
      */
-    public function getHorizontalPosition();
+    public function getHorizontalPosition ();
 
     /**
      * Vertical position of the barcode in the rendering resource
      * @param string $value
      * @return \Zend\Barcode\Renderer
      */
-    public function setVerticalPosition($value);
+    public function setVerticalPosition ($value);
 
     /**
      * Vertical position of the barcode in the rendering resource
      * @return string
      */
-    public function getVerticalPosition();
+    public function getVerticalPosition ();
 
     /**
      * Set the size of a module
      * @param float $value
      * @return \Zend\Barcode\Renderer
      */
-    public function setModuleSize($value);
+    public function setModuleSize ($value);
 
     /**
      * Set the size of a module
      * @return float
      */
-    public function getModuleSize();
+    public function getModuleSize ();
 
     /**
      * Retrieve the automatic rendering of exception
      * @return boolean
      */
-    public function getAutomaticRenderError();
+    public function getAutomaticRenderError ();
 
     /**
      * Set the barcode object
      * @param \Zend\Barcode\BarcodeObject $barcode
      * @return \Zend\Barcode\Renderer
      */
-    public function setBarcode($barcode);
+    public function setBarcode ($barcode);
 
     /**
      * Retrieve the barcode object
      * @return \Zend\Barcode\BarcodeObject
      */
-    public function getBarcode();
+    public function getBarcode ();
 
     /**
      * Checking of parameters after all settings
      * @return boolean
      */
-    public function checkParams();
+    public function checkParams ();
 
     /**
      * Draw the barcode in the rendering resource
      * @return mixed
      */
-    public function draw();
+    public function draw ();
 
     /**
      * Render the resource by sending headers and drawed resource
      * @return mixed
      */
-    public function render();
+    public function render ();
 }

@@ -22,10 +22,7 @@
  * @namespace
  */
 namespace Zend\Cache\Frontend;
-use Zend\Cache\Cache,
-    Zend\Cache\Frontend,
-    Zend\Config,
-    Zend\Log;
+use Zend\Cache\Cache, Zend\Cache\Frontend, Zend\Config, Zend\Log;
 
 /**
  * @uses       \Zend\Cache\Cache
@@ -37,10 +34,12 @@ use Zend\Cache\Cache,
  */
 class Core implements Frontend
 {
+
     /**
      * Messages
      */
-    const BACKEND_NOT_SUPPORTS_TAG           = 'tags are not supported by the current backend';
+    const BACKEND_NOT_SUPPORTS_TAG = 'tags are not supported by the current backend';
+
     const BACKEND_NOT_IMPLEMENTS_EXTENDED_IF = 'Current backend doesn\'t implement the Zend\\Cache\\Backend\\ExtendedBackend, so this method is not available';
 
     /**
@@ -72,10 +71,10 @@ class Core implements Frontend
      * ====> (int) automatic_cleaning_factor :
      * - Disable / Tune the automatic cleaning process
      * - The automatic cleaning process destroy too old (for the given life time)
-     *   cache files when a new cache file is written :
-     *     0               => no automatic cache cleaning
-     *     1               => systematic cache cleaning
-     *     x (integer) > 1 => automatic cleaning randomly 1 times on x cache write
+     * cache files when a new cache file is written :
+     * 0               => no automatic cache cleaning
+     * 1               => systematic cache cleaning
+     * x (integer) > 1 => automatic cleaning randomly 1 times on x cache write
      *
      * ====> (int) lifetime :
      * - Cache lifetime (in seconds)
@@ -86,21 +85,15 @@ class Core implements Frontend
      *
      * ====> (boolean) ignore_user_abort
      * - If set to true, the core will set the ignore_user_abort PHP flag inside the
-     *   save() method to avoid cache corruptions in some cases (default false)
+     * save() method to avoid cache corruptions in some cases (default false)
      *
      * @var array $_options available options
      */
-    protected $_options = array(
-        'write_control'             => true,
-        'caching'                   => true,
-        'cache_id_prefix'           => null,
-        'automatic_serialization'   => false,
-        'automatic_cleaning_factor' => 10,
-        'lifetime'                  => 3600,
-        'logging'                   => false,
-        'logger'                    => null,
-        'ignore_user_abort'         => false
-    );
+    protected $_options = array('write_control' => true, 
+    'caching' => true, 'cache_id_prefix' => null, 
+    'automatic_serialization' => false, 'automatic_cleaning_factor' => 10, 
+    'lifetime' => 3600, 'logging' => false, 'logger' => null, 
+    'ignore_user_abort' => false);
 
     /**
      * Array of options which have to be transfered to backend
@@ -144,16 +137,16 @@ class Core implements Frontend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    public function __construct($options = array())
+    public function __construct ($options = array())
     {
         if ($options instanceof Config\Config) {
             $options = $options->toArray();
         }
-        if (!is_array($options)) {
-            Cache::throwException("Options passed were not an array"
-            . " or Zend_Config instance.");
+        if (! is_array($options)) {
+            Cache::throwException(
+            "Options passed were not an array" . " or Zend_Config instance.");
         }
-        while (list($name, $value) = each($options)) {
+        while (list ($name, $value) = each($options)) {
             $this->setOption($name, $value);
         }
         $this->_loggerSanity();
@@ -165,10 +158,10 @@ class Core implements Frontend
      * @param \Zend\Config\Config $config
      * @return \Zend\Cache\Frontend\Core
      */
-    public function setConfig(Config\Config $config)
+    public function setConfig (Config\Config $config)
     {
         $options = $config->toArray();
-        while (list($name, $value) = each($options)) {
+        while (list ($name, $value) = each($options)) {
             $this->setOption($name, $value);
         }
         return $this;
@@ -181,9 +174,9 @@ class Core implements Frontend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    public function setBackend(\Zend\Cache\Backend $backendObject)
+    public function setBackend (\Zend\Cache\Backend $backendObject)
     {
-        $this->_backend= $backendObject;
+        $this->_backend = $backendObject;
         // some options (listed in $_directivesList) have to be given
         // to the backend too (even if they are not "backend specific")
         $directives = array();
@@ -191,11 +184,12 @@ class Core implements Frontend
             $directives[$directive] = $this->_options[$directive];
         }
         $this->_backend->setDirectives($directives);
-        if (in_array('Zend\\Cache\\Backend\\ExtendedBackend', class_implements($this->_backend))) {
+        if (in_array('Zend\\Cache\\Backend\\ExtendedBackend', 
+        class_implements($this->_backend))) {
             $this->_extendedBackend = true;
             $this->_backendCapabilities = $this->_backend->getCapabilities();
         }
-
+    
     }
 
     /**
@@ -203,7 +197,7 @@ class Core implements Frontend
      *
      * @return object backend object
      */
-    public function getBackend()
+    public function getBackend ()
     {
         return $this->_backend;
     }
@@ -218,9 +212,9 @@ class Core implements Frontend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    public function setOption($name, $value)
+    public function setOption ($name, $value)
     {
-        if (!is_string($name)) {
+        if (! is_string($name)) {
             Cache::throwException("Incorrect option name : $name");
         }
         $name = strtolower($name);
@@ -243,7 +237,7 @@ class Core implements Frontend
      * @throws \Zend\Cache\Exception
      * @return mixed option value
      */
-    public function getOption($name = array())
+    public function getOption ($name = array())
     {
         if (is_string($name)) {
             $name = strtolower($name);
@@ -251,15 +245,15 @@ class Core implements Frontend
                 // This is a Core option
                 return $this->_options[$name];
             }
-
+            
             if (array_key_exists($name, $this->_specificOptions)) {
                 // This a specic option of this frontend
                 return $this->_specificOptions[$name];
             }
-
+            
             Cache::throwException("Incorrect option name : $name");
         }
-
+        
         return array_merge($this->_options, $this->_specificOptions);
     }
 
@@ -271,9 +265,9 @@ class Core implements Frontend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    private function _setOption($name, $value)
+    private function _setOption ($name, $value)
     {
-        if (!is_string($name) || !array_key_exists($name, $this->_options)) {
+        if (! is_string($name) || ! array_key_exists($name, $this->_options)) {
             Cache::throwException("Incorrect option name : $name");
         }
         if ($name == 'lifetime' && empty($value)) {
@@ -290,12 +284,11 @@ class Core implements Frontend
      * @param  int $newLifetime New lifetime (in seconds)
      * @return void
      */
-    public function setLifetime($newLifetime)
+    public function setLifetime ($newLifetime)
     {
         $this->_options['lifetime'] = $newLifetime;
-        $this->_backend->setDirectives(array(
-            'lifetime' => $newLifetime
-        ));
+        $this->_backend->setDirectives(
+        array('lifetime' => $newLifetime));
     }
 
     /**
@@ -306,20 +299,21 @@ class Core implements Frontend
      * @param  boolean $doNotUnserialize       Do not serialize (even if automatic_serialization is true) => for internal use
      * @return mixed|false Cached datas
      */
-    public function load($id, $doNotTestCacheValidity = false, $doNotUnserialize = false)
+    public function load ($id, $doNotTestCacheValidity = false, 
+    $doNotUnserialize = false)
     {
-        if (!$this->_options['caching']) {
+        if (! $this->_options['caching']) {
             return false;
         }
         $id = $this->_id($id); // cache id may need prefix
         $this->_lastId = $id;
         self::_validateIdOrTag($id);
         $data = $this->_backend->load($id, $doNotTestCacheValidity);
-        if ($data===false) {
+        if ($data === false) {
             // no cache available
             return false;
         }
-        if ((!$doNotUnserialize) && $this->_options['automatic_serialization']) {
+        if ((! $doNotUnserialize) && $this->_options['automatic_serialization']) {
             // we need to unserialize before sending the result
             return unserialize($data);
         }
@@ -332,9 +326,9 @@ class Core implements Frontend
      * @param  string $id Cache id
      * @return int|false Last modified time of cache entry if it is available, false otherwise
      */
-    public function test($id)
+    public function test ($id)
     {
-        if (!$this->_options['caching']) {
+        if (! $this->_options['caching']) {
             return false;
         }
         $id = $this->_id($id); // cache id may need prefix
@@ -354,9 +348,10 @@ class Core implements Frontend
      * @throws \Zend\Cache\Exception
      * @return boolean True if no problem
      */
-    public function save($data, $id = null, $tags = array(), $specificLifetime = false, $priority = 8)
+    public function save ($data, $id = null, $tags = array(), $specificLifetime = false, 
+    $priority = 8)
     {
-        if (!$this->_options['caching']) {
+        if (! $this->_options['caching']) {
             return true;
         }
         if ($id === null) {
@@ -370,27 +365,32 @@ class Core implements Frontend
             // we need to serialize datas before storing them
             $data = serialize($data);
         } else {
-            if (!is_string($data)) {
-                Cache::throwException("Datas must be string or set automatic_serialization = true");
+            if (! is_string($data)) {
+                Cache::throwException(
+                "Datas must be string or set automatic_serialization = true");
             }
         }
         // automatic cleaning
         if ($this->_options['automatic_cleaning_factor'] > 0) {
             $rand = rand(1, $this->_options['automatic_cleaning_factor']);
-            if ($rand==1) {
+            if ($rand == 1) {
                 if ($this->_extendedBackend) {
                     // New way
                     if ($this->_backendCapabilities['automatic_cleaning']) {
                         $this->clean(Cache::CLEANING_MODE_OLD);
                     } else {
-                        $this->_log('Zend\\Cache\\Frontend\\Core::save() / automatic cleaning is not available/necessary with this backend');
+                        $this->_log(
+                        'Zend\\Cache\\Frontend\\Core::save() / automatic cleaning is not available/necessary with this backend');
                     }
                 } else {
                     // Deprecated way (will be removed in next major version)
-                    if (method_exists($this->_backend, 'isAutomaticCleaningAvailable') && ($this->_backend->isAutomaticCleaningAvailable())) {
+                    if (method_exists($this->_backend, 
+                    'isAutomaticCleaningAvailable') &&
+                     ($this->_backend->isAutomaticCleaningAvailable())) {
                         $this->clean(Cache::CLEANING_MODE_OLD);
                     } else {
-                        $this->_log('Zend\\Cache\\Frontend\\Core::save() / automatic cleaning is not available/necessary with this backend');
+                        $this->_log(
+                        'Zend\\Cache\\Frontend\\Core::save() / automatic cleaning is not available/necessary with this backend');
                     }
                 }
             }
@@ -398,26 +398,31 @@ class Core implements Frontend
         if ($this->_options['ignore_user_abort']) {
             $abort = ignore_user_abort(true);
         }
-        if (($this->_extendedBackend) && ($this->_backendCapabilities['priority'])) {
-            $result = $this->_backend->save($data, $id, $tags, $specificLifetime, $priority);
+        if (($this->_extendedBackend) &&
+         ($this->_backendCapabilities['priority'])) {
+            $result = $this->_backend->save($data, $id, $tags, 
+            $specificLifetime, $priority);
         } else {
-            $result = $this->_backend->save($data, $id, $tags, $specificLifetime);
+            $result = $this->_backend->save($data, $id, $tags, 
+            $specificLifetime);
         }
         if ($this->_options['ignore_user_abort']) {
             ignore_user_abort($abort);
         }
-        if (!$result) {
+        if (! $result) {
             // maybe the cache is corrupted, so we remove it !
             if ($this->_options['logging']) {
-                $this->_log("Zend\Cache\Frontend\Core::save() : impossible to save cache (id=$id)");
+                $this->_log(
+                "Zend\Cache\Frontend\Core::save() : impossible to save cache (id=$id)");
             }
             $this->remove($id);
             return false;
         }
         if ($this->_options['write_control']) {
             $data2 = $this->_backend->load($id, true);
-            if ($data!=$data2) {
-                $this->_log('Zend\Cache\Frontend\Core::save() / write_control : written and read data do not match');
+            if ($data != $data2) {
+                $this->_log(
+                'Zend\Cache\Frontend\Core::save() / write_control : written and read data do not match');
                 $this->_backend->remove($id);
                 return false;
             }
@@ -431,9 +436,9 @@ class Core implements Frontend
      * @param  string $id Cache id to remove
      * @return boolean True if ok
      */
-    public function remove($id)
+    public function remove ($id)
     {
-        if (!$this->_options['caching']) {
+        if (! $this->_options['caching']) {
             return true;
         }
         $id = $this->_id($id); // cache id may need prefix
@@ -448,27 +453,26 @@ class Core implements Frontend
      * 'all' (default)  => remove all cache entries ($tags is not used)
      * 'old'            => remove too old cache entries ($tags is not used)
      * 'matchingTag'    => remove cache entries matching all given tags
-     *                     ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      * 'notMatchingTag' => remove cache entries not matching one of the given tags
-     *                     ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      * 'matchingAnyTag' => remove cache entries matching any given tags
-     *                     ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      *
      * @param  string       $mode
      * @param  array|string $tags
      * @throws \Zend\Cache\Exception
      * @return boolean True if ok
      */
-    public function clean($mode = 'all', $tags = array())
+    public function clean ($mode = 'all', $tags = array())
     {
-        if (!$this->_options['caching']) {
+        if (! $this->_options['caching']) {
             return true;
         }
-        if (!in_array($mode, array(Cache::CLEANING_MODE_ALL,
-                                   Cache::CLEANING_MODE_OLD,
-                                   Cache::CLEANING_MODE_MATCHING_TAG,
-                                   Cache::CLEANING_MODE_NOT_MATCHING_TAG,
-                                   Cache::CLEANING_MODE_MATCHING_ANY_TAG))) {
+        if (! in_array($mode, 
+        array(Cache::CLEANING_MODE_ALL, Cache::CLEANING_MODE_OLD, 
+        Cache::CLEANING_MODE_MATCHING_TAG, Cache::CLEANING_MODE_NOT_MATCHING_TAG, 
+        Cache::CLEANING_MODE_MATCHING_ANY_TAG))) {
             Cache::throwException('Invalid cleaning mode');
         }
         self::_validateTagsArray($tags);
@@ -483,20 +487,21 @@ class Core implements Frontend
      * @param array $tags array of tags
      * @return array array of matching cache ids (string)
      */
-    public function getIdsMatchingTags($tags = array())
+    public function getIdsMatchingTags ($tags = array())
     {
-        if (!$this->_extendedBackend) {
+        if (! $this->_extendedBackend) {
             Cache::throwException(self::BACKEND_NOT_IMPLEMENTS_EXTENDED_IF);
         }
-        if (!($this->_backendCapabilities['tags'])) {
+        if (! ($this->_backendCapabilities['tags'])) {
             Cache::throwException(self::BACKEND_NOT_SUPPORTS_TAG);
         }
-
+        
         $ids = $this->_backend->getIdsMatchingTags($tags);
-
+        
         // we need to remove cache_id_prefix from ids (see #ZF-6178, #ZF-7600)
-        if (isset($this->_options['cache_id_prefix']) && $this->_options['cache_id_prefix'] !== '') {
-            $prefix    = & $this->_options['cache_id_prefix'];
+        if (isset($this->_options['cache_id_prefix']) &&
+         $this->_options['cache_id_prefix'] !== '') {
+            $prefix = & $this->_options['cache_id_prefix'];
             $prefixLen = strlen($prefix);
             foreach ($ids as &$id) {
                 if (strpos($id, $prefix) === 0) {
@@ -504,7 +509,7 @@ class Core implements Frontend
                 }
             }
         }
-
+        
         return $ids;
     }
 
@@ -516,20 +521,21 @@ class Core implements Frontend
      * @param array $tags array of tags
      * @return array array of not matching cache ids (string)
      */
-    public function getIdsNotMatchingTags($tags = array())
+    public function getIdsNotMatchingTags ($tags = array())
     {
-        if (!$this->_extendedBackend) {
+        if (! $this->_extendedBackend) {
             Cache::throwException(self::BACKEND_NOT_IMPLEMENTS_EXTENDED_IF);
         }
-        if (!($this->_backendCapabilities['tags'])) {
+        if (! ($this->_backendCapabilities['tags'])) {
             Cache::throwException(self::BACKEND_NOT_SUPPORTS_TAG);
         }
-
+        
         $ids = $this->_backend->getIdsNotMatchingTags($tags);
-
+        
         // we need to remove cache_id_prefix from ids (see #ZF-6178, #ZF-7600)
-        if (isset($this->_options['cache_id_prefix']) && $this->_options['cache_id_prefix'] !== '') {
-            $prefix    = & $this->_options['cache_id_prefix'];
+        if (isset($this->_options['cache_id_prefix']) &&
+         $this->_options['cache_id_prefix'] !== '') {
+            $prefix = & $this->_options['cache_id_prefix'];
             $prefixLen = strlen($prefix);
             foreach ($ids as &$id) {
                 if (strpos($id, $prefix) === 0) {
@@ -537,7 +543,7 @@ class Core implements Frontend
                 }
             }
         }
-
+        
         return $ids;
     }
 
@@ -549,20 +555,21 @@ class Core implements Frontend
      * @param array $tags array of tags
      * @return array array of matching any cache ids (string)
      */
-    public function getIdsMatchingAnyTags($tags = array())
+    public function getIdsMatchingAnyTags ($tags = array())
     {
-        if (!$this->_extendedBackend) {
+        if (! $this->_extendedBackend) {
             Cache::throwException(self::BACKEND_NOT_IMPLEMENTS_EXTENDED_IF);
         }
-        if (!($this->_backendCapabilities['tags'])) {
+        if (! ($this->_backendCapabilities['tags'])) {
             Cache::throwException(self::BACKEND_NOT_SUPPORTS_TAG);
         }
-
+        
         $ids = $this->_backend->getIdsMatchingAnyTags($tags);
-
+        
         // we need to remove cache_id_prefix from ids (see #ZF-6178, #ZF-7600)
-        if (isset($this->_options['cache_id_prefix']) && $this->_options['cache_id_prefix'] !== '') {
-            $prefix    = & $this->_options['cache_id_prefix'];
+        if (isset($this->_options['cache_id_prefix']) &&
+         $this->_options['cache_id_prefix'] !== '') {
+            $prefix = & $this->_options['cache_id_prefix'];
             $prefixLen = strlen($prefix);
             foreach ($ids as &$id) {
                 if (strpos($id, $prefix) === 0) {
@@ -570,7 +577,7 @@ class Core implements Frontend
                 }
             }
         }
-
+        
         return $ids;
     }
 
@@ -579,17 +586,18 @@ class Core implements Frontend
      *
      * @return array array of stored cache ids (string)
      */
-    public function getIds()
+    public function getIds ()
     {
-        if (!$this->_extendedBackend) {
+        if (! $this->_extendedBackend) {
             Cache::throwException(self::BACKEND_NOT_IMPLEMENTS_EXTENDED_IF);
         }
-
+        
         $ids = $this->_backend->getIds();
-
+        
         // we need to remove cache_id_prefix from ids (see #ZF-6178, #ZF-7600)
-        if (isset($this->_options['cache_id_prefix']) && $this->_options['cache_id_prefix'] !== '') {
-            $prefix    = & $this->_options['cache_id_prefix'];
+        if (isset($this->_options['cache_id_prefix']) &&
+         $this->_options['cache_id_prefix'] !== '') {
+            $prefix = & $this->_options['cache_id_prefix'];
             $prefixLen = strlen($prefix);
             foreach ($ids as &$id) {
                 if (strpos($id, $prefix) === 0) {
@@ -597,7 +605,7 @@ class Core implements Frontend
                 }
             }
         }
-
+        
         return $ids;
     }
 
@@ -606,12 +614,12 @@ class Core implements Frontend
      *
      * @return array array of stored tags (string)
      */
-    public function getTags()
+    public function getTags ()
     {
-        if (!$this->_extendedBackend) {
+        if (! $this->_extendedBackend) {
             Cache::throwException(self::BACKEND_NOT_IMPLEMENTS_EXTENDED_IF);
         }
-        if (!($this->_backendCapabilities['tags'])) {
+        if (! ($this->_backendCapabilities['tags'])) {
             Cache::throwException(self::BACKEND_NOT_SUPPORTS_TAG);
         }
         return $this->_backend->getTags();
@@ -622,9 +630,9 @@ class Core implements Frontend
      *
      * @return int integer between 0 and 100
      */
-    public function getFillingPercentage()
+    public function getFillingPercentage ()
     {
-        if (!$this->_extendedBackend) {
+        if (! $this->_extendedBackend) {
             Cache::throwException(self::BACKEND_NOT_IMPLEMENTS_EXTENDED_IF);
         }
         return $this->_backend->getFillingPercentage();
@@ -641,9 +649,9 @@ class Core implements Frontend
      * @param string $id cache id
      * @return array array of metadatas (false if the cache id is not found)
      */
-    public function getMetadatas($id)
+    public function getMetadatas ($id)
     {
-        if (!$this->_extendedBackend) {
+        if (! $this->_extendedBackend) {
             Cache::throwException(self::BACKEND_NOT_IMPLEMENTS_EXTENDED_IF);
         }
         $id = $this->_id($id); // cache id may need prefix
@@ -657,9 +665,9 @@ class Core implements Frontend
      * @param int $extraLifetime
      * @return boolean true if ok
      */
-    public function touch($id, $extraLifetime)
+    public function touch ($id, $extraLifetime)
     {
-        if (!$this->_extendedBackend) {
+        if (! $this->_extendedBackend) {
             Cache::throwException(self::BACKEND_NOT_IMPLEMENTS_EXTENDED_IF);
         }
         $id = $this->_id($id); // cache id may need prefix
@@ -675,16 +683,17 @@ class Core implements Frontend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    protected static function _validateIdOrTag($string)
+    protected static function _validateIdOrTag ($string)
     {
-        if (!is_string($string)) {
+        if (! is_string($string)) {
             Cache::throwException('Invalid id or tag : must be a string');
         }
         if (substr($string, 0, 9) == 'internal-') {
             Cache::throwException('"internal-*" ids or tags are reserved');
         }
-        if (!preg_match('~^[a-zA-Z0-9_]+$~D', $string)) {
-            Cache::throwException("Invalid id or tag '$string' : must use only [a-zA-Z0-9_]");
+        if (! preg_match('~^[a-zA-Z0-9_]+$~D', $string)) {
+            Cache::throwException(
+            "Invalid id or tag '$string' : must use only [a-zA-Z0-9_]");
         }
     }
 
@@ -697,12 +706,12 @@ class Core implements Frontend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    protected static function _validateTagsArray($tags)
+    protected static function _validateTagsArray ($tags)
     {
-        if (!is_array($tags)) {
+        if (! is_array($tags)) {
             Cache::throwException('Invalid tags array : must be an array');
         }
-        foreach($tags as $tag) {
+        foreach ($tags as $tag) {
             self::_validateIdOrTag($tag);
         }
         reset($tags);
@@ -716,16 +725,17 @@ class Core implements Frontend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    protected function _loggerSanity()
+    protected function _loggerSanity ()
     {
-        if (!isset($this->_options['logging']) || !$this->_options['logging']) {
+        if (! isset($this->_options['logging']) || ! $this->_options['logging']) {
             return;
         }
-
-        if (isset($this->_options['logger']) && $this->_options['logger'] instanceof Log\Logger) {
+        
+        if (isset($this->_options['logger']) &&
+         $this->_options['logger'] instanceof Log\Logger) {
             return;
         }
-
+        
         // Create a default logger to the standard output stream
         $logger = new Log\Logger(new Log\Writer\Stream('php://output'));
         $this->_options['logger'] = $logger;
@@ -738,12 +748,13 @@ class Core implements Frontend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    protected function _log($message, $priority = 4)
+    protected function _log ($message, $priority = 4)
     {
-        if (!$this->_options['logging']) {
+        if (! $this->_options['logging']) {
             return;
         }
-        if (!(isset($this->_options['logger']) || $this->_options['logger'] instanceof Log\Logger)) {
+        if (! (isset($this->_options['logger']) ||
+         $this->_options['logger'] instanceof Log\Logger)) {
             Cache::throwException('Logging is enabled but logger is not set');
         }
         $logger = $this->_options['logger'];
@@ -758,7 +769,7 @@ class Core implements Frontend
      * @param  string $id Cache id
      * @return string Cache id (with or without prefix)
      */
-    protected function _id($id)
+    protected function _id ($id)
     {
         if (($id !== null) && isset($this->_options['cache_id_prefix'])) {
             return $this->_options['cache_id_prefix'] . $id; // return with prefix

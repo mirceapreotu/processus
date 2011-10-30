@@ -36,6 +36,7 @@ namespace Zend\Form\Element;
  */
 class Text extends Xhtml
 {
+
     /**
      * Default form view helper to use for rendering
      * @var string

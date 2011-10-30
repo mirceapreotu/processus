@@ -56,9 +56,9 @@ abstract class Query extends \Zend\GData\Query
      * Create a new instance.
      *
      * @param string $domain (optional) The Google Apps-hosted domain to use
-     *          when constructing query URIs.
+     * when constructing query URIs.
      */
-    public function __construct($domain = null)
+    public function __construct ($domain = null)
     {
         parent::__construct();
         $this->_domain = $domain;
@@ -75,7 +75,7 @@ abstract class Query extends \Zend\GData\Query
      *
      * @param string $value The domain to be used for this session.
      */
-    public function setDomain($value)
+    public function setDomain ($value)
     {
         $this->_domain = $value;
     }
@@ -87,9 +87,9 @@ abstract class Query extends \Zend\GData\Query
      *
      * @see setDomain
      * @return string The domain to be used for this session, or null if not
-     *          set.
+     * set.
      */
-    public function getDomain()
+    public function getDomain ()
     {
         return $this->_domain;
     }
@@ -101,20 +101,19 @@ abstract class Query extends \Zend\GData\Query
      *
      * @see setDomain
      * @param string $domain (optional) A fully-qualified domain to use
-     *          instead of the default domain for this service instance.
+     * instead of the default domain for this service instance.
      */
-     public function getBaseUrl($domain = null)
-     {
-         if ($domain !== null) {
-             return GApps::APPS_BASE_FEED_URI . '/' . $domain;
-         }
-         else if ($this->_domain !== null) {
-             return GApps::APPS_BASE_FEED_URI . '/' . $this->_domain;
-         }
-         else {
-             throw new \Zend\GData\App\InvalidArgumentException(
-                 'Domain must be specified.');
-         }
-     }
+    public function getBaseUrl ($domain = null)
+    {
+        if ($domain !== null) {
+            return GApps::APPS_BASE_FEED_URI . '/' . $domain;
+        } else 
+            if ($this->_domain !== null) {
+                return GApps::APPS_BASE_FEED_URI . '/' . $this->_domain;
+            } else {
+                throw new \Zend\GData\App\InvalidArgumentException(
+                'Domain must be specified.');
+            }
+    }
 
 }

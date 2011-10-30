@@ -40,22 +40,26 @@ namespace Zend\InfoCard\XML\KeyInfo;
  */
 class DefaultKeyInfo extends AbstractKeyInfo
 {
+
     /**
      * Returns the object representation of the SecurityTokenReference block
      *
      * @throws \Zend\InfoCard\XML\Exception
      * @return \Zend\InfoCard\XML\SecurityTokenReference
      */
-    public function getSecurityTokenReference()
+    public function getSecurityTokenReference ()
     {
-        $this->registerXPathNamespace('o', 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd');
-
-        list($sectokenref) = $this->xpath('//o:SecurityTokenReference');
-
-        if(!($sectokenref instanceof \Zend\InfoCard\XML\AbstractElement)) {
-            throw new \Zend\InfoCard\XML\Exception\RuntimeException('Could not locate the Security Token Reference');
+        $this->registerXPathNamespace('o', 
+        'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd');
+        
+        list ($sectokenref) = $this->xpath('//o:SecurityTokenReference');
+        
+        if (! ($sectokenref instanceof \Zend\InfoCard\XML\AbstractElement)) {
+            throw new \Zend\InfoCard\XML\Exception\RuntimeException(
+            'Could not locate the Security Token Reference');
         }
-
-        return \Zend\InfoCard\XML\SecurityTokenReference::getInstance($sectokenref);
+        
+        return \Zend\InfoCard\XML\SecurityTokenReference::getInstance(
+        $sectokenref);
     }
 }

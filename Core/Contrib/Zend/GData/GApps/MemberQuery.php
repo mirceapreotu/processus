@@ -64,14 +64,14 @@ class MemberQuery extends \Zend\Gdata\Gapps\Query
      * Create a new instance.
      *
      * @param string $domain (optional) The Google Apps-hosted domain to use
-     *          when constructing query URIs.
+     * when constructing query URIs.
      * @param string $groupId (optional) Value for the groupId property.
      * @param string $memberId (optional) Value for the memberId property.
      * @param string $startMemberId (optional) Value for the
-     *          startMemberId property.
+     * startMemberId property.
      */
-    public function __construct($domain = null, $groupId = null, $memberId = null,
-            $startMemberId = null)
+    public function __construct ($domain = null, $groupId = null, $memberId = null, 
+    $startMemberId = null)
     {
         parent::__construct($domain);
         $this->setGroupId($groupId);
@@ -84,9 +84,9 @@ class MemberQuery extends \Zend\Gdata\Gapps\Query
      *
      * @see getGroupId
      * @param string $value The group id to filter search results by, or null to
-     *              disable.
+     * disable.
      */
-    public function setGroupId($value)
+    public function setGroupId ($value)
     {
         $this->_groupId = $value;
     }
@@ -96,14 +96,13 @@ class MemberQuery extends \Zend\Gdata\Gapps\Query
      * returned.
      *
      * @param string $value The group id to filter search results by, or
-     *          null if disabled.
+     * null if disabled.
      * @return string The group id
      */
-    public function getGroupId()
+    public function getGroupId ()
     {
         return $this->_groupId;
     }
-
 
     /**
      * Set the member id to query for. When set, only users with a member id
@@ -112,9 +111,9 @@ class MemberQuery extends \Zend\Gdata\Gapps\Query
      *
      * @see getMemberId
      * @param string $value The member id to filter search results by, or null to
-     *              disable.
+     * disable.
      */
-    public function setMemberId($value)
+    public function setMemberId ($value)
     {
         $this->_memberId = $value;
     }
@@ -124,10 +123,10 @@ class MemberQuery extends \Zend\Gdata\Gapps\Query
      * returned.
      *
      * @param string $value The member id to filter search results by, or
-     *          null if disabled.
+     * null if disabled.
      * @return The member id
      */
-    public function getMemberId()
+    public function getMemberId ()
     {
         return $this->_memberId;
     }
@@ -137,9 +136,9 @@ class MemberQuery extends \Zend\Gdata\Gapps\Query
      * a list of members.
      *
      * @param string $value The first member id to be returned, or null to
-     *          disable.
+     * disable.
      */
-    public function setStartMemberId($value)
+    public function setStartMemberId ($value)
     {
         if ($value !== null) {
             $this->_params['start'] = $value;
@@ -154,9 +153,9 @@ class MemberQuery extends \Zend\Gdata\Gapps\Query
      *
      * @see setStartUsername
      * @return string The first username to be returned, or null if
-     *          disabled.
+     * disabled.
      */
-    public function getStartMemberId()
+    public function getStartMemberId ()
     {
         if (array_key_exists('start', $this->_params)) {
             return $this->_params['start'];
@@ -170,9 +169,9 @@ class MemberQuery extends \Zend\Gdata\Gapps\Query
      *
      * @return string The query URL for this instance.
      */
-    public function getQueryUrl()
+    public function getQueryUrl ()
     {
-
+        
         $uri = \Zend\Gdata\Gapps::APPS_BASE_FEED_URI;
         $uri .= \Zend\Gdata\Gapps::APPS_GROUP_PATH;
         $uri .= '/' . $this->_domain;
@@ -180,11 +179,11 @@ class MemberQuery extends \Zend\Gdata\Gapps\Query
             $uri .= '/' . $this->_groupId;
         } else {
             throw new \Zend\Gdata\App\InvalidArgumentException(
-                    'groupId must not be null');
+            'groupId must not be null');
         }
-
+        
         $uri .= '/member';
-
+        
         if ($this->_memberId !== null) {
             $uri .= '/' . $this->_memberId;
         }

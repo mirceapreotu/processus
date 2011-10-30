@@ -40,9 +40,10 @@ class OpenSearchItemsPerPage extends Extension
 {
 
     protected $_rootElement = 'itemsPerPage';
+
     protected $_rootNamespace = 'openSearch';
 
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         parent::__construct();
         $this->_text = $text;

@@ -23,8 +23,7 @@
  */
 namespace Zend\EventManager;
 
-use Zend\Stdlib\CallbackHandler,
-    Zend\Stdlib\Exception\InvalidCallbackException;
+use Zend\Stdlib\CallbackHandler, Zend\Stdlib\Exception\InvalidCallbackException;
 
 /**
  * FilterChain: intercepting filter manager
@@ -36,6 +35,7 @@ use Zend\Stdlib\CallbackHandler,
  */
 class FilterChain implements Filter
 {
+
     /**
      * @var Filter\FilterIterator All filters
      */
@@ -48,7 +48,7 @@ class FilterChain implements Filter
      * 
      * @return void
      */
-    public function __construct()
+    public function __construct ()
     {
         $this->filters = new Filter\FilterIterator();
     }
@@ -62,19 +62,19 @@ class FilterChain implements Filter
      * @param  mixed $argv Associative array of arguments
      * @return mixed
      */
-    public function run($context, array $argv = array())
+    public function run ($context, array $argv = array())
     {
         $chain = clone $this->getFilters();
-
+        
         if ($chain->isEmpty()) {
             return;
         }
-
+        
         $next = $chain->extract();
-        if (!$next instanceof CallbackHandler) {
+        if (! $next instanceof CallbackHandler) {
             return;
         }
-
+        
         return call_user_func($next->getCallback(), $context, $argv, $chain);
     }
 
@@ -85,12 +85,13 @@ class FilterChain implements Filter
      * @param  int $priority Priority in the queue at which to execute; defaults to 1 (higher numbers == higher priority)
      * @return CallbackHandler (to allow later unsubscribe)
      */
-    public function attach($callback, $priority = 1)
+    public function attach ($callback, $priority = 1)
     {
         if (empty($callback)) {
             throw new InvalidCallbackException('No callback provided');
         }
-        $filter = new CallbackHandler(null, $callback, array('priority' => $priority));
+        $filter = new CallbackHandler(null, $callback, 
+        array('priority' => $priority));
         $this->filters->insert($filter, $priority);
         return $filter;
     }
@@ -101,7 +102,7 @@ class FilterChain implements Filter
      * @param  CallbackHandler $filter 
      * @return bool Returns true if filter found and unsubscribed; returns false otherwise
      */
-    public function detach(CallbackHandler $filter)
+    public function detach (CallbackHandler $filter)
     {
         return $this->filters->remove($filter);
     }
@@ -111,7 +112,7 @@ class FilterChain implements Filter
      * 
      * @return FilterIterator
      */
-    public function getFilters()
+    public function getFilters ()
     {
         return $this->filters;
     }
@@ -121,7 +122,7 @@ class FilterChain implements Filter
      * 
      * @return void
      */
-    public function clearFilters()
+    public function clearFilters ()
     {
         $this->filters = new Filter\FilterIterator();
     }
@@ -134,7 +135,7 @@ class FilterChain implements Filter
      * 
      * @return null|ResponseCollection
      */
-    public function getResponses()
+    public function getResponses ()
     {
         return $this->responses;
     }

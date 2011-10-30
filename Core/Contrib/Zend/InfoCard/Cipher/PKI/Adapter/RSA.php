@@ -46,14 +46,16 @@ class RSA extends AbstractAdapter implements Cipher\PKI\RSA
      *
      * @param integer $padding The type of Padding to use
      */
-    public function __construct($padding = AbstractAdapter::NO_PADDING)
+    public function __construct ($padding = AbstractAdapter::NO_PADDING)
     {
         // Can't test this..
         // @codeCoverageIgnoreStart
-        if(!extension_loaded('openssl')) {
-            throw new Cipher\Exception\ExtensionNotLoadedException("Use of this PKI RSA Adapter requires the openssl extension loaded");
+        if (! extension_loaded('openssl')) {
+            throw new Cipher\Exception\ExtensionNotLoadedException(
+            "Use of this PKI RSA Adapter requires the openssl extension loaded");
         }
         // @codeCoverageIgnoreEnd
+        
 
         $this->setPadding($padding);
     }
@@ -68,24 +70,26 @@ class RSA extends AbstractAdapter implements Cipher\PKI\RSA
      * @param integer $padding The padding to use during decryption (of not provided object value will be used)
      * @return string The decrypted data
      */
-    public function decrypt($encryptedData, $privateKey, $password = null, $padding = null)
+    public function decrypt ($encryptedData, $privateKey, $password = null, 
+    $padding = null)
     {
         $private_key = openssl_pkey_get_private(array($privateKey, $password));
-
-        if(!$private_key) {
-            throw new Cipher\Exception\RuntimeException("Failed to load private key");
+        
+        if (! $private_key) {
+            throw new Cipher\Exception\RuntimeException(
+            "Failed to load private key");
         }
-
-        if($padding !== null) {
+        
+        if ($padding !== null) {
             try {
                 $this->setPadding($padding);
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 openssl_free_key($private_key);
                 throw $e;
             }
         }
-
-        switch($this->getPadding()) {
+        
+        switch ($this->getPadding()) {
             case self::NO_PADDING:
                 $openssl_padding = OPENSSL_NO_PADDING;
                 break;
@@ -93,21 +97,23 @@ class RSA extends AbstractAdapter implements Cipher\PKI\RSA
                 $openssl_padding = OPENSSL_PKCS1_OAEP_PADDING;
                 break;
         }
-
-        $result = openssl_private_decrypt($encryptedData, $decryptedData, $private_key, $openssl_padding);
-
+        
+        $result = openssl_private_decrypt($encryptedData, $decryptedData, 
+        $private_key, $openssl_padding);
+        
         openssl_free_key($private_key);
-
-        if(!$result) {
-            throw new Cipher\Exception\RuntimeException("Unable to Decrypt Value using provided private key");
+        
+        if (! $result) {
+            throw new Cipher\Exception\RuntimeException(
+            "Unable to Decrypt Value using provided private key");
         }
-
-        if($this->getPadding() == self::NO_PADDING) {
+        
+        if ($this->getPadding() == self::NO_PADDING) {
             $decryptedData = substr($decryptedData, 2);
             $start = strpos($decryptedData, 0) + 1;
             $decryptedData = substr($decryptedData, $start);
         }
-
+        
         return $decryptedData;
     }
 }

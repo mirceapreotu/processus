@@ -24,8 +24,7 @@
  */
 namespace Zend\GData\Photos;
 
-use Zend\GData\Photos,
-    Zend\GData\App;
+use Zend\GData\Photos, Zend\GData\App;
 
 /**
  * Assists in constructing queries for user entries.
@@ -75,7 +74,7 @@ class UserQuery extends \Zend\GData\Query
     /**
      * Create a new Query object with default values.
      */
-    public function __construct()
+    public function __construct ()
     {
         parent::__construct();
     }
@@ -87,7 +86,7 @@ class UserQuery extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\Photos\UserQuery Provides a fluent interface
      */
-    public function setProjection($value)
+    public function setProjection ($value)
     {
         $this->_projection = $value;
         return $this;
@@ -99,7 +98,7 @@ class UserQuery extends \Zend\GData\Query
      * @see setProjection
      * @return string projection
      */
-    public function getProjection()
+    public function getProjection ()
     {
         return $this->_projection;
     }
@@ -111,7 +110,7 @@ class UserQuery extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\Photos\UserQuery Provides a fluent interface
      */
-    public function setType($value)
+    public function setType ($value)
     {
         $this->_type = $value;
         return $this;
@@ -123,7 +122,7 @@ class UserQuery extends \Zend\GData\Query
      * @see setType
      * @return string type
      */
-    public function getType()
+    public function getType ()
     {
         return $this->_type;
     }
@@ -134,16 +133,16 @@ class UserQuery extends \Zend\GData\Query
      * instead.
      *
      * @param string $value The user to retrieve, or null for the default
-     *          user.
+     * user.
      */
-     public function setUser($value)
-     {
-         if ($value !== null) {
-             $this->_user = $value;
-         } else {
-             $this->_user = Photos::DEFAULT_USER;
-         }
-     }
+    public function setUser ($value)
+    {
+        if ($value !== null) {
+            $this->_user = $value;
+        } else {
+            $this->_user = Photos::DEFAULT_USER;
+        }
+    }
 
     /**
      * Get the user which is to be returned.
@@ -151,7 +150,7 @@ class UserQuery extends \Zend\GData\Query
      * @see setUser
      * @return string The visibility to retrieve.
      */
-    public function getUser()
+    public function getUser ()
     {
         return $this->_user;
     }
@@ -164,25 +163,25 @@ class UserQuery extends \Zend\GData\Query
      * Valid values are 'all' (default), 'public', and 'private'.
      *
      * @param string $value The visibility to filter by, or null to use the
-     *          default value.
+     * default value.
      */
-     public function setAccess($value)
-     {
-         if ($value !== null) {
-             $this->_params['access'] = $value;
-         } else {
-             unset($this->_params['access']);
-         }
-     }
+    public function setAccess ($value)
+    {
+        if ($value !== null) {
+            $this->_params['access'] = $value;
+        } else {
+            unset($this->_params['access']);
+        }
+    }
 
     /**
      * Get the visibility filter for entries returned.
      *
      * @see setAccess
      * @return string The visibility to filter by, or null for the default
-     *          user.
+     * user.
      */
-    public function getAccess()
+    public function getAccess ()
     {
         return $this->_params['access'];
     }
@@ -196,25 +195,25 @@ class UserQuery extends \Zend\GData\Query
      * for a list of valid values.
      *
      * @param string $value The tag to filter by, or null if no
-     *          filter is to be applied.
+     * filter is to be applied.
      */
-     public function setTag($value)
-     {
-         if ($value !== null) {
-             $this->_params['tag'] = $value;
-         } else {
-             unset($this->_params['tag']);
-         }
-     }
+    public function setTag ($value)
+    {
+        if ($value !== null) {
+            $this->_params['tag'] = $value;
+        } else {
+            unset($this->_params['tag']);
+        }
+    }
 
     /**
      * Get the tag filter for entries returned.
      *
      * @see setTag
      * @return string The tag to filter by, or null if no filter
-     *          is to be applied.
+     * is to be applied.
      */
-    public function getTag()
+    public function getTag ()
     {
         return $this->_params['tag'];
     }
@@ -228,25 +227,25 @@ class UserQuery extends \Zend\GData\Query
      * for a list of valid values.
      *
      * @param string $value The kind to filter by, or null if no
-     *          filter is to be applied.
+     * filter is to be applied.
      */
-     public function setKind($value)
-     {
-         if ($value !== null) {
-             $this->_params['kind'] = $value;
-         } else {
-             unset($this->_params['kind']);
-         }
-     }
+    public function setKind ($value)
+    {
+        if ($value !== null) {
+            $this->_params['kind'] = $value;
+        } else {
+            unset($this->_params['kind']);
+        }
+    }
 
     /**
      * Get the kind of entries to be returned.
      *
      * @see setKind
      * @return string The kind to filter by, or null if no filter
-     *          is to be applied.
+     * is to be applied.
      */
-    public function getKind()
+    public function getKind ()
     {
         return $this->_params['kind'];
     }
@@ -260,25 +259,25 @@ class UserQuery extends \Zend\GData\Query
      * for a list of valid values.
      *
      * @param string $value The image size to filter by, or null if no
-     *          filter is to be applied.
+     * filter is to be applied.
      */
-     public function setImgMax($value)
-     {
-         if ($value !== null) {
-             $this->_params['imgmax'] = $value;
-         } else {
-             unset($this->_params['imgmax']);
-         }
-     }
+    public function setImgMax ($value)
+    {
+        if ($value !== null) {
+            $this->_params['imgmax'] = $value;
+        } else {
+            unset($this->_params['imgmax']);
+        }
+    }
 
     /**
      * Get the maximum image size filter for entries returned.
      *
      * @see setImgMax
      * @return string The image size size to filter by, or null if no filter
-     *          is to be applied.
+     * is to be applied.
      */
-    public function getImgMax()
+    public function getImgMax ()
     {
         return $this->_params['imgmax'];
     }
@@ -292,25 +291,25 @@ class UserQuery extends \Zend\GData\Query
      * for a list of valid values.
      *
      * @param string $value The thumbnail size to filter by, or null if no
-     *          filter is to be applied.
+     * filter is to be applied.
      */
-     public function setThumbsize($value)
-     {
-         if ($value !== null) {
-             $this->_params['thumbsize'] = $value;
-         } else {
-             unset($this->_params['thumbsize']);
-         }
-     }
+    public function setThumbsize ($value)
+    {
+        if ($value !== null) {
+            $this->_params['thumbsize'] = $value;
+        } else {
+            unset($this->_params['thumbsize']);
+        }
+    }
 
     /**
      * Get the thumbnail size filter for entries returned.
      *
      * @see setThumbsize
      * @return string The thumbnail size to filter by, or null if no filter
-     *          is to be applied.
+     * is to be applied.
      */
-    public function getThumbsize()
+    public function getThumbsize ()
     {
         return $this->_params['thumbsize'];
     }
@@ -322,32 +321,31 @@ class UserQuery extends \Zend\GData\Query
      * @return string A URL generated based on the state of this query.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function getQueryUrl($incomingUri = null)
+    public function getQueryUrl ($incomingUri = null)
     {
         $uri = Photos::PICASA_BASE_URI;
-
+        
         if ($this->getType() !== null) {
             $uri .= '/' . $this->getType();
         } else {
             throw new App\InvalidArgumentException(
-                    'Type must be feed or entry, not null');
+            'Type must be feed or entry, not null');
         }
-
+        
         if ($this->getProjection() !== null) {
             $uri .= '/' . $this->getProjection();
         } else {
-            throw new App\InvalidArgumentException(
-                    'Projection must not be null');
+            throw new App\InvalidArgumentException('Projection must not be null');
         }
-
+        
         if ($this->getUser() !== null) {
             $uri .= '/user/' . $this->getUser();
         } else {
             // Should never occur due to setter behavior
             throw new App\InvalidArgumentException(
-                    'User must not be null');
+            'User must not be null');
         }
-
+        
         $uri .= $incomingUri;
         $uri .= $this->getQueryString();
         return $uri;

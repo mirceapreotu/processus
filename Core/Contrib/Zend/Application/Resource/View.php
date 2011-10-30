@@ -37,6 +37,7 @@ use Zend\Controller\Action\Helper\ViewRenderer;
  */
 class View extends AbstractResource
 {
+
     /**
      * @var \Zend\View\Renderer
      */
@@ -47,16 +48,16 @@ class View extends AbstractResource
      *
      * @return \Zend\View\View
      */
-    public function init()
+    public function init ()
     {
-        $front     = false;
+        $front = false;
         $bootstrap = $this->getBootstrap();
         if ($bootstrap->getBroker()->hasPlugin('frontcontroller')) {
             $bootstrap->bootstrap('frontcontroller');
             $front = $bootstrap->getResource('frontcontroller');
         }
         $view = $this->getView();
-
+        
         if ($front) {
             $viewRenderer = new ViewRenderer();
             $viewRenderer->setView($view);
@@ -70,14 +71,15 @@ class View extends AbstractResource
      *
      * @return \Zend\View\View
      */
-    public function getView()
+    public function getView ()
     {
         if (null === $this->_view) {
             $options = $this->getOptions();
             $this->_view = new \Zend\View\PhpRenderer($options);
-
-            if(isset($options['doctype'])) {
-                $this->_view->plugin('doctype')->setDoctype(strtoupper($options['doctype']));
+            
+            if (isset($options['doctype'])) {
+                $this->_view->plugin('doctype')->setDoctype(
+                strtoupper($options['doctype']));
             }
         }
         return $this->_view;

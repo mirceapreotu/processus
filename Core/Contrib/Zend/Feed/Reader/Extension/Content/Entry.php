@@ -19,31 +19,32 @@
  */
 
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Reader\Extension\Content;
 use Zend\Feed\Reader;
 use Zend\Feed\Reader\Extension;
 
 /**
-* @uses \Zend\Feed\Reader\Reader
-* @uses Reader\Reader_Entry_EntryAbstract
-* @category Zend
-* @package Reader\Reader
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @uses \Zend\Feed\Reader\Reader
+ * @uses Reader\Reader_Entry_EntryAbstract
+ * @category Zend
+ * @package Reader\Reader
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 class Entry extends Extension\AbstractEntry
 {
 
-    public function getContent()
+    public function getContent ()
     {
-        if ($this->getType() !== Reader\Reader::TYPE_RSS_10
-            && $this->getType() !== Reader\Reader::TYPE_RSS_090
-        ) {
-            $content = $this->_xpath->evaluate('string('.$this->getXpathPrefix().'/content:encoded)');
+        if ($this->getType() !== Reader\Reader::TYPE_RSS_10 &&
+         $this->getType() !== Reader\Reader::TYPE_RSS_090) {
+            $content = $this->_xpath->evaluate(
+            'string(' . $this->getXpathPrefix() . '/content:encoded)');
         } else {
-            $content = $this->_xpath->evaluate('string('.$this->getXpathPrefix().'/content:encoded)');
+            $content = $this->_xpath->evaluate(
+            'string(' . $this->getXpathPrefix() . '/content:encoded)');
         }
         return $content;
     }
@@ -51,8 +52,9 @@ class Entry extends Extension\AbstractEntry
     /**
      * Register RSS Content Module namespace
      */
-    protected function _registerNamespaces()
+    protected function _registerNamespaces ()
     {
-        $this->_xpath->registerNamespace('content', 'http://purl.org/rss/1.0/modules/content/');
+        $this->_xpath->registerNamespace('content', 
+        'http://purl.org/rss/1.0/modules/content/');
     }
 }

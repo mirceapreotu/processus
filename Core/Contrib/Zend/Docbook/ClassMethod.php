@@ -2,11 +2,11 @@
 
 namespace Zend\Docbook;
 
-use Zend\Filter\Word\CamelCaseToDash as CamelCaseToDashFilter,
-    Zend\Reflection\ReflectionMethod;
+use Zend\Filter\Word\CamelCaseToDash as CamelCaseToDashFilter, Zend\Reflection\ReflectionMethod;
 
 class ClassMethod
 {
+
     /**
      * @var ReflectionMethod
      */
@@ -16,21 +16,9 @@ class ClassMethod
      * PHP internal types
      * @var array
      */
-    protected $internalTypes = array(
-        'boolean',
-        'bool',
-        'true',
-        'false',
-        'integer',
-        'int',
-        'double',
-        'float',
-        'string',
-        'array',
-        'object',
-        'resource',
-        'null',
-    );
+    protected $internalTypes = array('boolean', 'bool', 'true', 'false', 
+    'integer', 'int', 'double', 'float', 'string', 'array', 'object', 'resource', 
+    'null');
 
     /**
      * @var array Imports in play for this method
@@ -63,7 +51,7 @@ class ClassMethod
      * @param  ReflectionMethod $reflection 
      * @return void
      */
-    public function __construct(ReflectionMethod $reflection)
+    public function __construct (ReflectionMethod $reflection)
     {
         $this->reflection = $reflection;
     }
@@ -73,7 +61,7 @@ class ClassMethod
      * 
      * @return string
      */
-    public function getName()
+    public function getName ()
     {
         return $this->reflection->getName();
     }
@@ -83,25 +71,23 @@ class ClassMethod
      * 
      * @return string
      */
-    public function getId()
+    public function getId ()
     {
         if (null !== $this->id) {
             return $this->id;
         }
-
+        
         $namespace = $this->getNamespace();
-        $class     = $this->getClass();
-        $name      = $this->getName();
-        $id        = '';
-        $filter    = new CamelCaseToDashFilter();
-
+        $class = $this->getClass();
+        $name = $this->getName();
+        $id = '';
+        $filter = new CamelCaseToDashFilter();
+        
         foreach (explode('\\', $namespace) as $segment) {
             $id .= $filter->filter($segment) . '.';
         }
-        $id .= $filter->filter($class) 
-            . '.methods.'
-            . $filter->filter($name);
-
+        $id .= $filter->filter($class) . '.methods.' . $filter->filter($name);
+        
         $this->id = strtolower($id);
         return $this->id;
     }
@@ -111,7 +97,7 @@ class ClassMethod
      * 
      * @return string
      */
-    public function getShortDescription()
+    public function getShortDescription ()
     {
         return $this->reflection->getDocblock()->getShortDescription();
     }
@@ -121,7 +107,7 @@ class ClassMethod
      * 
      * @return string
      */
-    public function getLongDescription()
+    public function getLongDescription ()
     {
         return $this->reflection->getDocblock()->getLongDescription();
     }
@@ -131,14 +117,14 @@ class ClassMethod
      * 
      * @return string
      */
-    public function getReturnType()
+    public function getReturnType ()
     {
         $return = $this->reflection->getDocblock()->getTag('return');
-
-        if (!$return) {
+        
+        if (! $return) {
             return 'void';
         }
-
+        
         return $this->resolveTypes($return->getType());
     }
 
@@ -147,34 +133,34 @@ class ClassMethod
      * 
      * @return string
      */
-    public function getPrototype()
+    public function getPrototype ()
     {
         $params = array();
-
+        
         $reflectionParams = $this->getParameterAnnotations();
-
+        
         foreach ($this->reflection->getParameters() as $index => $param) {
             $types = '';
             if (isset($reflectionParams[$index])) {
-                $type  = $reflectionParams[$index]->getType();
+                $type = $reflectionParams[$index]->getType();
                 $types = $this->resolveTypes($type);
             }
-
+            
             $default = '';
             if ($param->isOptional()) {
                 $defaultValue = var_export($param->getDefaultValue(), 1);
                 $defaultValue = $this->resolveTypes($defaultValue);
-
+                
                 // Skip null values, but report all others
                 if ('null' != strtolower($defaultValue)) {
                     $default = ' = ' . $this->resolveTypes($defaultValue);
                 }
             }
-
+            
             $proto = sprintf('%s $%s%s', $types, $param->getName(), $default);
             $params[] = $proto;
         }
-
+        
         return implode(', ', $params);
     }
 
@@ -184,23 +170,23 @@ class ClassMethod
      * @param  string $value 
      * @return string
      */
-    protected function resolveTypes($value)
+    protected function resolveTypes ($value)
     {
         $values = explode('|', trim($value));
         array_walk($values, 'trim');
-
+        
         foreach ($values as $index => $value) {
             // Is it an internal type?
             if (in_array(strtolower($value), $this->internalTypes)) {
                 continue;
             }
-
+            
             // Does it match the class name?
             if ($value == $this->getClass()) {
                 $values[$index] = $this->getNamespace() . '\\' . $value;
                 continue;
             }
-
+            
             // Does it contain a namespace separator?
             $pos = strpos($value, '\\');
             if (false !== $pos) {
@@ -209,30 +195,31 @@ class ClassMethod
                     $values[$index] = substr($value, 1);
                     continue;
                 }
-
+                
                 // Resolve class based on uses
                 $namespace = substr($value, 0, $pos);
-                $resolved  = $this->resolveClass($namespace);
+                $resolved = $this->resolveClass($namespace);
                 if (false !== $resolved) {
                     $values[$index] = $resolved . '\\' . substr($value, $pos);
                     continue;
                 }
-
+                
                 // Must be from current namespace
-                $values[$index] = $this->getNamespace() . '\\' . $value;
+                $values[$index] = $this->getNamespace() . '\\' .
+                 $value;
                 continue;
             }
-
+            
             // Can we resolve it via an import?
             $resolved = $this->resolveClass($value);
             if (false !== $resolved) {
                 $values[$index] = $resolved;
                 continue;
             }
-
-            // Otherwise, use as-is
+        
+     // Otherwise, use as-is
         }
-
+        
         return implode('|', $values);
     }
 
@@ -242,19 +229,19 @@ class ClassMethod
      * @param  string $class 
      * @return false|string False if unmatched, string namespace/classname on match
      */
-    protected function resolveClass($class)
+    protected function resolveClass ($class)
     {
         $uses = $this->getUses();
-
+        
         foreach ($uses as $use) {
             $namespace = $use['namespace'];
-
-            if (!empty($use['as'])) {
+            
+            if (! empty($use['as'])) {
                 $as = $use['as'];
             } else {
                 $as = $use['asResolved'];
             }
-
+            
             if ($as && $class == $as) {
                 return $namespace;
             }
@@ -262,7 +249,7 @@ class ClassMethod
                 return $namespace;
             }
         }
-
+        
         return false;
     }
 
@@ -271,12 +258,12 @@ class ClassMethod
      * 
      * @return string
      */
-    protected function getNamespace()
+    protected function getNamespace ()
     {
         if (null !== $this->namespace) {
             return $this->namespace;
         }
-
+        
         $r = $this->reflection->getDeclaringClass();
         $this->namespace = $r->getNamespaceName();
         return $this->namespace;
@@ -287,22 +274,22 @@ class ClassMethod
      * 
      * @return string
      */
-    protected function getClass()
+    protected function getClass ()
     {
         if (null !== $this->class) {
             return $this->class;
         }
-
+        
         $r = $this->reflection->getDeclaringClass();
-
-        $class     = $r->getName();
+        
+        $class = $r->getName();
         $namespace = $r->getNamespaceName();
-
+        
         $class = substr($class, strlen($namespace) + 1);
-
-        $this->class     = $class;
+        
+        $this->class = $class;
         $this->namespace = $namespace;
-
+        
         return $this->class;
     }
 
@@ -311,15 +298,15 @@ class ClassMethod
      * 
      * @return array
      */
-    protected function getUses()
+    protected function getUses ()
     {
         if (null !== $this->uses) {
             return $this->uses;
         }
-
+        
         $rClass = $this->reflection->getDeclaringClass();
-        $rFile  = $rClass->getDeclaringFile();
-
+        $rFile = $rClass->getDeclaringFile();
+        
         $this->uses = $rFile->getUses();
         return $this->uses;
     }
@@ -329,15 +316,15 @@ class ClassMethod
      * 
      * @return array
      */
-    protected function getParameterAnnotations()
+    protected function getParameterAnnotations ()
     {
         if (null !== $this->parameterAnnotations) {
             return $this->parameterAnnotations;
         }
-
+        
         $rDocblock = $this->reflection->getDocblock();
-        $params    = $rDocblock->getTags('param');
-
+        $params = $rDocblock->getTags('param');
+        
         $this->parameterAnnotations = $params;
         return $this->parameterAnnotations;
     }

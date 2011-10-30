@@ -32,13 +32,14 @@ namespace Zend\Filter\Word;
  */
 class DashToSeparator extends AbstractSeparator
 {
+
     /**
      * Defined by Zend\Filter\Filter
      * 
      * @param  string $value 
      * @return string
      */
-    public function filter($value)
+    public function filter ($value)
     {
         $this->setMatchPattern('#-#');
         $this->setReplacement($this->_separator);

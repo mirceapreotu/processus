@@ -63,11 +63,11 @@ class OwnerQuery extends Zend\Gdata\Gapps\Query
      * Create a new instance.
      *
      * @param string $domain (optional) The Google Apps-hosted domain to use
-     *          when constructing query URIs.
+     * when constructing query URIs.
      * @param string $groupId (optional) Value for the groupId property.
      * @param string $ownerEmail (optional) Value for the OwnerEmail property.
      */
-    public function __construct($domain = null, $groupId = null, $ownerEmail = null)
+    public function __construct ($domain = null, $groupId = null, $ownerEmail = null)
     {
         parent::__construct($domain);
         $this->setGroupId($groupId);
@@ -80,7 +80,7 @@ class OwnerQuery extends Zend\Gdata\Gapps\Query
      * @see getGroupId
      * @param string $value
      */
-    public function setGroupId($value)
+    public function setGroupId ($value)
     {
         $this->_groupId = $value;
     }
@@ -91,7 +91,7 @@ class OwnerQuery extends Zend\Gdata\Gapps\Query
      * @return string
      *
      */
-    public function getGroupId()
+    public function getGroupId ()
     {
         return $this->_groupId;
     }
@@ -102,7 +102,7 @@ class OwnerQuery extends Zend\Gdata\Gapps\Query
      * @see getOwnerEmail
      * @param string $value
      */
-    public function setOwnerEmail($value)
+    public function setOwnerEmail ($value)
     {
         $this->_ownerEmail = $value;
     }
@@ -113,7 +113,7 @@ class OwnerQuery extends Zend\Gdata\Gapps\Query
      * @return string
      *
      */
-    public function getOwnerEmail()
+    public function getOwnerEmail ()
     {
         return $this->_ownerEmail;
     }
@@ -123,7 +123,7 @@ class OwnerQuery extends Zend\Gdata\Gapps\Query
      *
      * @return string The query URL for this instance.
      */
-    public function getQueryUrl()
+    public function getQueryUrl ()
     {
         $uri = \Zend\Gdata\Gapps::APPS_BASE_FEED_URI;
         $uri .= \Zend\Gdata\Gapps::APPS_GROUP_PATH;
@@ -132,15 +132,15 @@ class OwnerQuery extends Zend\Gdata\Gapps\Query
             $uri .= '/' . $this->_groupId;
         } else {
             throw new \Zend\Gdata\App\InvalidArgumentException(
-                    'groupId must not be null');
+            'groupId must not be null');
         }
-
+        
         $uri .= '/owner';
-
+        
         if ($this->_ownerEmail !== null) {
             $uri .= '/' . $this->_ownerEmail;
         }
-
+        
         $uri .= $this->getQueryString();
         return $uri;
     }

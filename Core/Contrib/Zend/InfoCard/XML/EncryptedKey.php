@@ -40,6 +40,7 @@ namespace Zend\InfoCard\XML;
  */
 class EncryptedKey extends AbstractElement implements KeyInfo
 {
+
     /**
      * Return an instance of the object based on input XML Data
      *
@@ -47,23 +48,27 @@ class EncryptedKey extends AbstractElement implements KeyInfo
      * @param string $xmlData The EncryptedKey XML Block
      * @return \Zend\InfoCard\XML\EncryptedKey
      */
-    static public function getInstance($xmlData)
+    static public function getInstance ($xmlData)
     {
-        if($xmlData instanceof AbstractElement) {
+        if ($xmlData instanceof AbstractElement) {
             $strXmlData = $xmlData->asXML();
-        } else if (is_string($xmlData)) {
-            $strXmlData = $xmlData;
-        } else {
-            throw new Exception\InvalidArgumentException("Invalid Data provided to create instance");
-        }
-
+        } else 
+            if (is_string($xmlData)) {
+                $strXmlData = $xmlData;
+            } else {
+                throw new Exception\InvalidArgumentException(
+                "Invalid Data provided to create instance");
+            }
+        
         $sxe = simplexml_load_string($strXmlData);
-
-        if($sxe->getName() != "EncryptedKey") {
-            throw new Exception\InvalidArgumentException("Invalid XML Block provided for EncryptedKey");
+        
+        if ($sxe->getName() != "EncryptedKey") {
+            throw new Exception\InvalidArgumentException(
+            "Invalid XML Block provided for EncryptedKey");
         }
-
-        return simplexml_load_string($strXmlData, 'Zend\InfoCard\XML\EncryptedKey');
+        
+        return simplexml_load_string($strXmlData, 
+        'Zend\InfoCard\XML\EncryptedKey');
     }
 
     /**
@@ -72,24 +77,26 @@ class EncryptedKey extends AbstractElement implements KeyInfo
      * @throws \Zend\InfoCard\XML\Exception
      * @return string the Encryption method algorithm URI
      */
-    public function getEncryptionMethod()
+    public function getEncryptionMethod ()
     {
-
+        
         $this->registerXPathNamespace('e', 'http://www.w3.org/2001/04/xmlenc#');
-        list($encryption_method) = $this->xpath("//e:EncryptionMethod");
-
-        if(!($encryption_method instanceof AbstractElement)) {
-            throw new Exception\RuntimeException("Unable to find the e:EncryptionMethod KeyInfo encryption block");
+        list ($encryption_method) = $this->xpath("//e:EncryptionMethod");
+        
+        if (! ($encryption_method instanceof AbstractElement)) {
+            throw new Exception\RuntimeException(
+            "Unable to find the e:EncryptionMethod KeyInfo encryption block");
         }
-
+        
         $dom = self::convertToDOM($encryption_method);
-
-        if(!$dom->hasAttribute('Algorithm')) {
-            throw new Exception\RuntimeException("Unable to determine the encryption algorithm in the Symmetric enc:EncryptionMethod XML block");
+        
+        if (! $dom->hasAttribute('Algorithm')) {
+            throw new Exception\RuntimeException(
+            "Unable to determine the encryption algorithm in the Symmetric enc:EncryptionMethod XML block");
         }
-
+        
         return $dom->getAttribute('Algorithm');
-
+    
     }
 
     /**
@@ -98,27 +105,30 @@ class EncryptedKey extends AbstractElement implements KeyInfo
      * @throws \Zend\InfoCard\XML\Exception
      * @return string the Digest Method Algorithm URI
      */
-    public function getDigestMethod()
+    public function getDigestMethod ()
     {
         $this->registerXPathNamespace('e', 'http://www.w3.org/2001/04/xmlenc#');
-        list($encryption_method) = $this->xpath("//e:EncryptionMethod");
-
-        if(!($encryption_method instanceof AbstractElement)) {
-            throw new Exception\RuntimeException("Unable to find the e:EncryptionMethod KeyInfo encryption block");
+        list ($encryption_method) = $this->xpath("//e:EncryptionMethod");
+        
+        if (! ($encryption_method instanceof AbstractElement)) {
+            throw new Exception\RuntimeException(
+            "Unable to find the e:EncryptionMethod KeyInfo encryption block");
         }
-
-        if(!($encryption_method->DigestMethod instanceof AbstractElement)) {
-            throw new Exception\RuntimeException("Unable to find the DigestMethod block");
+        
+        if (! ($encryption_method->DigestMethod instanceof AbstractElement)) {
+            throw new Exception\RuntimeException(
+            "Unable to find the DigestMethod block");
         }
-
+        
         $dom = self::convertToDOM($encryption_method->DigestMethod);
-
-        if(!$dom->hasAttribute('Algorithm')) {
-            throw new Exception\RuntimeException("Unable to determine the digest algorithm for the symmetric Keyinfo");
+        
+        if (! $dom->hasAttribute('Algorithm')) {
+            throw new Exception\RuntimeException(
+            "Unable to determine the digest algorithm for the symmetric Keyinfo");
         }
-
+        
         return $dom->getAttribute('Algorithm');
-
+    
     }
 
     /**
@@ -127,13 +137,13 @@ class EncryptedKey extends AbstractElement implements KeyInfo
      * @throws \Zend\InfoCard\XML\Exception
      * @return \Zend\InfoCard\XML\KeyInfo\AbstractKeyInfo
      */
-    public function getKeyInfo()
+    public function getKeyInfo ()
     {
-
-        if(isset($this->KeyInfo)) {
+        
+        if (isset($this->KeyInfo)) {
             return KeyInfo\Factory::getInstance($this->KeyInfo);
         }
-
+        
         throw new Exception\RuntimeException("Unable to locate a KeyInfo block");
     }
 
@@ -143,24 +153,27 @@ class EncryptedKey extends AbstractElement implements KeyInfo
      * @throws \Zend\InfoCard\XML\Exception
      * @return string The Value of the CipherValue block in base64 format
      */
-    public function getCipherValue()
+    public function getCipherValue ()
     {
-
+        
         $this->registerXPathNamespace('e', 'http://www.w3.org/2001/04/xmlenc#');
-
-        list($cipherdata) = $this->xpath("//e:CipherData");
-
-        if(!($cipherdata instanceof AbstractElement)) {
-            throw new Exception\RuntimeException("Unable to find the e:CipherData block");
+        
+        list ($cipherdata) = $this->xpath("//e:CipherData");
+        
+        if (! ($cipherdata instanceof AbstractElement)) {
+            throw new Exception\RuntimeException(
+            "Unable to find the e:CipherData block");
         }
-
-        $cipherdata->registerXPathNameSpace('enc', 'http://www.w3.org/2001/04/xmlenc#');
-        list($ciphervalue) = $cipherdata->xpath("//enc:CipherValue");
-
-        if(!($ciphervalue instanceof AbstractElement)) {
-            throw new Exception\RuntimeException("Unable to fidn the enc:CipherValue block");
+        
+        $cipherdata->registerXPathNameSpace('enc', 
+        'http://www.w3.org/2001/04/xmlenc#');
+        list ($ciphervalue) = $cipherdata->xpath("//enc:CipherValue");
+        
+        if (! ($ciphervalue instanceof AbstractElement)) {
+            throw new Exception\RuntimeException(
+            "Unable to fidn the enc:CipherValue block");
         }
-
-        return (string)$ciphervalue;
+        
+        return (string) $ciphervalue;
     }
 }

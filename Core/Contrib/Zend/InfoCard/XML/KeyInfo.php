@@ -33,10 +33,11 @@ namespace Zend\InfoCard\XML;
  */
 interface KeyInfo
 {
+
     /**
      * Return an object representing a KeyInfo data type
      *
      * @return \Zend\InfoCard\XML\KeyInfo
      */
-    public function getKeyInfo();
+    public function getKeyInfo ();
 }

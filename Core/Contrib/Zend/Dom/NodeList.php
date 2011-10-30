@@ -33,8 +33,9 @@ namespace Zend\Dom;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class NodeList implements \Iterator,\Countable
+class NodeList implements \Iterator, ,\Countable
 {
+
     /**
      * Number of results
      * @var int
@@ -83,12 +84,13 @@ class NodeList implements \Iterator,\Countable
      * @param  DOMNodeList $nodeList
      * @return void
      */
-    public function  __construct($cssQuery, $xpathQuery, \DOMDocument $document, \DOMNodeList $nodeList)
+    public function __construct ($cssQuery, $xpathQuery,\DOMDocument $document, 
+    DOMNodeList $nodeList)
     {
-        $this->_cssQuery   = $cssQuery;
+        $this->_cssQuery = $cssQuery;
         $this->_xpathQuery = $xpathQuery;
-        $this->_document   = $document;
-        $this->_nodeList   = $nodeList;
+        $this->_document = $document;
+        $this->_nodeList = $nodeList;
     }
 
     /**
@@ -96,7 +98,7 @@ class NodeList implements \Iterator,\Countable
      *
      * @return string
      */
-    public function getCssQuery()
+    public function getCssQuery ()
     {
         return $this->_cssQuery;
     }
@@ -106,7 +108,7 @@ class NodeList implements \Iterator,\Countable
      *
      * @return string
      */
-    public function getXpathQuery()
+    public function getXpathQuery ()
     {
         return $this->_xpathQuery;
     }
@@ -116,7 +118,7 @@ class NodeList implements \Iterator,\Countable
      *
      * @return DOMDocument
      */
-    public function getDocument()
+    public function getDocument ()
     {
         return $this->_document;
     }
@@ -126,7 +128,7 @@ class NodeList implements \Iterator,\Countable
      *
      * @return void
      */
-    public function rewind()
+    public function rewind ()
     {
         $this->_position = 0;
         return $this->_nodeList->item(0);
@@ -137,9 +139,10 @@ class NodeList implements \Iterator,\Countable
      *
      * @return bool
      */
-    public function valid()
+    public function valid ()
     {
-        if (in_array($this->_position, range(0, $this->_nodeList->length - 1)) && $this->_nodeList->length > 0) {
+        if (in_array($this->_position, range(0, $this->_nodeList->length - 1)) &&
+         $this->_nodeList->length > 0) {
             return true;
         }
         return false;
@@ -150,7 +153,7 @@ class NodeList implements \Iterator,\Countable
      *
      * @return DOMElement
      */
-    public function current()
+    public function current ()
     {
         return $this->_nodeList->item($this->_position);
     }
@@ -160,7 +163,7 @@ class NodeList implements \Iterator,\Countable
      *
      * @return int
      */
-    public function key()
+    public function key ()
     {
         return $this->_position;
     }
@@ -170,9 +173,9 @@ class NodeList implements \Iterator,\Countable
      *
      * @return void
      */
-    public function next()
+    public function next ()
     {
-        ++$this->_position;
+        ++ $this->_position;
         return $this->_nodeList->item($this->_position);
     }
 
@@ -181,7 +184,7 @@ class NodeList implements \Iterator,\Countable
      *
      * @return int
      */
-    public function count()
+    public function count ()
     {
         return $this->_nodeList->length;
     }

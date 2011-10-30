@@ -40,6 +40,7 @@ use Zend\GData\App;
  */
 class ItemEntry extends Entry
 {
+
     /**
      * The classname for individual item entry elements.
      *
@@ -53,7 +54,7 @@ class ItemEntry extends Entry
      * @param Zend_Gdata_GBase_Extension_ItemType $value The desired value for the item_type
      * @return \Zend\GData\GBase\ItemEntry Provides a fluent interface
      */
-    public function setItemType($value)
+    public function setItemType ($value)
     {
         $this->addGBaseAttribute('item_type', $value, 'text');
         return $this;
@@ -66,11 +67,12 @@ class ItemEntry extends Entry
      * @param string $name The name of the attribute
      * @param string $value The text value of the attribute
      * @param string $type (optional) The type of the attribute.
-     *          e.g.: 'text', 'number', 'floatUnit'
+     * e.g.: 'text', 'number', 'floatUnit'
      * @return \Zend\GData\GBase\ItemEntry Provides a fluent interface
      */
-    public function addGBaseAttribute($name, $text, $type = null) {
-        $newBaseAttribute =  new Extension\BaseAttribute($name, $text, $type);
+    public function addGBaseAttribute ($name, $text, $type = null)
+    {
+        $newBaseAttribute = new Extension\BaseAttribute($name, $text, $type);
         $this->_baseAttributes[] = $newBaseAttribute;
         return $this;
     }
@@ -81,9 +83,10 @@ class ItemEntry extends Entry
      * @param \Zend\GData\GBase\Extension\BaseAttribute $baseAttribute The attribute to be removed
      * @return \Zend\GData\GBase\ItemEntry Provides a fluent interface
      */
-    public function removeGBaseAttribute($baseAttribute) {
+    public function removeGBaseAttribute ($baseAttribute)
+    {
         $baseAttributes = $this->_baseAttributes;
-        for ($i = 0; $i < count($this->_baseAttributes); $i++) {
+        for ($i = 0; $i < count($this->_baseAttributes); $i ++) {
             if ($this->_baseAttributes[$i] == $baseAttribute) {
                 array_splice($baseAttributes, $i, 1);
                 break;
@@ -98,19 +101,17 @@ class ItemEntry extends Entry
      *
      * @param boolean $dryRun Whether the transaction is dry run or not.
      * @param string|null $uri The URI to send requests to, or null if $data
-     *        contains the URI.
+     * contains the URI.
      * @param string|null $className The name of the class that should we
-     *        deserializing the server response. If null, then
-     *        'Zend_Gdata_App_Entry' will be used.
+     * deserializing the server response. If null, then
+     * 'Zend_Gdata_App_Entry' will be used.
      * @param array $extraHeaders Extra headers to add to the request, as an
-     *        array of string-based key/value pairs.
+     * array of string-based key/value pairs.
      * @return \Zend\GData\App\Entry The updated entry
      * @throws \Zend\GData\App\Exception
      */
-    public function save($dryRun = false,
-                         $uri = null,
-                         $className = null,
-                         $extraHeaders = array())
+    public function save ($dryRun = false, $uri = null, $className = null, 
+    $extraHeaders = array())
     {
         if ($dryRun == true) {
             $editLink = $this->getEditLink();
@@ -118,13 +119,11 @@ class ItemEntry extends Entry
                 $uri = $editLink->getHref() . '?dry-run=true';
             }
             if ($uri === null) {
-                throw new App\InvalidArgumentException('You must specify an URI which needs deleted.');
+                throw new App\InvalidArgumentException(
+                'You must specify an URI which needs deleted.');
             }
             $service = new App($this->getHttpClient());
-            return $service->updateEntry($this,
-                                         $uri,
-                                         $className,
-                                         $extraHeaders);
+            return $service->updateEntry($this, $uri, $className, $extraHeaders);
         } else {
             parent::save($uri, $className, $extraHeaders);
         }
@@ -139,17 +138,18 @@ class ItemEntry extends Entry
      * @return void
      * @throws \Zend\GData\App\Exception
      */
-    public function delete($dryRun = false)
+    public function delete ($dryRun = false)
     {
         $uri = null;
-
+        
         if ($dryRun == true) {
             $editLink = $this->getEditLink();
             if ($editLink !== null) {
                 $uri = $editLink->getHref() . '?dry-run=true';
             }
             if ($uri === null) {
-                throw new App\InvalidArgumentException('You must specify an URI which needs deleted.');
+                throw new App\InvalidArgumentException(
+                'You must specify an URI which needs deleted.');
             }
             parent::delete($uri);
         } else {

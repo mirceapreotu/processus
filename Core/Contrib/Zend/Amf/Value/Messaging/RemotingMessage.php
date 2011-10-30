@@ -62,14 +62,14 @@ class RemotingMessage extends AbstractMessage
      *
      * @return void
      */
-    public function __construct()
+    public function __construct ()
     {
-        $this->clientId    = $this->generateId();
+        $this->clientId = $this->generateId();
         $this->destination = null;
-        $this->messageId   = $this->generateId();
-        $this->timestamp   = time().'00';
-        $this->timeToLive  = 0;
-        $this->headers     = new \stdClass();
-        $this->body        = null;
+        $this->messageId = $this->generateId();
+        $this->timestamp = time() . '00';
+        $this->timeToLive = 0;
+        $this->headers = new \stdClass();
+        $this->body = null;
     }
 }

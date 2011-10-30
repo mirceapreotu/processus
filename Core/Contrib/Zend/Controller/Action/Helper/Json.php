@@ -35,6 +35,7 @@ namespace Zend\Controller\Action\Helper;
  */
 class Json extends AbstractHelper
 {
+
     /**
      * Suppress exit when sendJson() called
      * @var boolean
@@ -52,23 +53,25 @@ class Json extends AbstractHelper
      * @param  boolean $keepLayouts
      * @param  boolean|array $keepLayouts
      * NOTE:   if boolean, establish $keepLayouts to true|false
-     *         if array, admit params for Zend_Json::encode as enableJsonExprFinder=>true|false
-     *         if $keepLayouts and parmas for Zend_Json::encode are required
-     *         then, the array can contains a 'keepLayout'=>true|false
-     *         that will not be passed to Zend_Json::encode method but will be passed
-     *         to Zend_View_Helper_Json
+     * if array, admit params for Zend_Json::encode as enableJsonExprFinder=>true|false
+     * if $keepLayouts and parmas for Zend_Json::encode are required
+     * then, the array can contains a 'keepLayout'=>true|false
+     * that will not be passed to Zend_Json::encode method but will be passed
+     * to Zend_View_Helper_Json
      * @throws \Zend\Controller\Action\Helper\Json
      * @return string
      */
-    public function encodeJson($data, $keepLayouts = false)
+    public function encodeJson ($data, $keepLayouts = false)
     {
         $jsonHelper = new \Zend\View\Helper\Json();
         $data = $jsonHelper($data, $keepLayouts);
-
-        if (!$keepLayouts) {
-            $this->getBroker()->load('viewRenderer')->setNoRender(true);
+        
+        if (! $keepLayouts) {
+            $this->getBroker()
+                ->load('viewRenderer')
+                ->setNoRender(true);
         }
-
+        
         return $data;
     }
 
@@ -78,24 +81,24 @@ class Json extends AbstractHelper
      * @param  mixed   $data
      * @param  boolean|array $keepLayouts
      * NOTE:   if boolean, establish $keepLayouts to true|false
-     *         if array, admit params for Zend_Json::encode as enableJsonExprFinder=>true|false
-     *         if $keepLayouts and parmas for Zend_Json::encode are required
-     *         then, the array can contains a 'keepLayout'=>true|false
-     *         that will not be passed to Zend_Json::encode method but will be passed
-     *         to Zend_View_Helper_Json
+     * if array, admit params for Zend_Json::encode as enableJsonExprFinder=>true|false
+     * if $keepLayouts and parmas for Zend_Json::encode are required
+     * then, the array can contains a 'keepLayout'=>true|false
+     * that will not be passed to Zend_Json::encode method but will be passed
+     * to Zend_View_Helper_Json
      * @return string|void
      */
-    public function sendJson($data, $keepLayouts = false)
+    public function sendJson ($data, $keepLayouts = false)
     {
         $data = $this->encodeJson($data, $keepLayouts);
         $response = $this->getResponse();
         $response->setBody($data);
-
-        if (!$this->suppressExit) {
+        
+        if (! $this->suppressExit) {
             $response->sendResponse();
-            exit;
+            exit();
         }
-
+        
         return $data;
     }
 
@@ -110,7 +113,7 @@ class Json extends AbstractHelper
      * @param  boolean $keepLayouts
      * @return string|void
      */
-    public function direct($data, $sendNow = true, $keepLayouts = false)
+    public function direct ($data, $sendNow = true, $keepLayouts = false)
     {
         if ($sendNow) {
             return $this->sendJson($data, $keepLayouts);

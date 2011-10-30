@@ -35,6 +35,7 @@ namespace Zend\Dojo\Form\Element;
  */
 class FilteringSelect extends ComboBox
 {
+
     /**
      * Use FilteringSelect dijit view helper
      * @var string

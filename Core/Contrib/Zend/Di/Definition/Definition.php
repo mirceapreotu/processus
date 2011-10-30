@@ -4,46 +4,47 @@ namespace Zend\Di\Definition;
 
 interface Definition
 {
+
     /**
      * @abstract
      * @return string[]
      */
-    public function getClasses();
+    public function getClasses ();
 
     /**
      * @abstract
      * @param string $class
      * @return bool
      */
-    public function hasClass($class);
+    public function hasClass ($class);
 
     /**
      * @abstract
      * @param string $class
      * @return string[]
      */
-    public function getClassSupertypes($class);
+    public function getClassSupertypes ($class);
 
     /**
      * @abstract
      * @param string $class
      * @return string|array
      */
-    public function getInstantiator($class);
+    public function getInstantiator ($class);
 
     /**
      * @abstract
      * @param string $class
      * @return bool
      */
-    public function hasMethods($class);
+    public function hasMethods ($class);
 
     /**
      * @abstract
      * @param string $class
      * @return string[]
      */
-    public function getMethods($class);
+    public function getMethods ($class);
 
     /**
      * @abstract
@@ -51,7 +52,7 @@ interface Definition
      * @param string $method
      * @return bool
      */
-    public function hasMethod($class, $method);
+    public function hasMethod ($class, $method);
 
     /**
      * @abstract
@@ -59,7 +60,7 @@ interface Definition
      * @param $method
      * @return bool
      */
-    public function hasMethodParameters($class, $method);
+    public function hasMethodParameters ($class, $method);
 
     /**
      * getMethodParameters() return information about a methods parameters.
@@ -68,9 +69,9 @@ interface Definition
      * Each value should be an array, of length 4 with the following information:
      *
      * array(
-     *     0, // string|null: Type Name (if it exists)
-     *     1, // bool: whether this param is required
-     *     2, // string: fully qualified path to this parameter
+     * 0, // string|null: Type Name (if it exists)
+     * 1, // bool: whether this param is required
+     * 2, // string: fully qualified path to this parameter
      * );
      *
      *
@@ -79,6 +80,6 @@ interface Definition
      * @param $method
      * @return array[]
      */
-    public function getMethodParameters($class, $method);
+    public function getMethodParameters ($class, $method);
 }
 

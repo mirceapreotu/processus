@@ -41,10 +41,14 @@ use Zend\Ldap;
  */
 class RootDse extends AbstractNode
 {
-    const SERVER_TYPE_GENERIC         = 1;
-    const SERVER_TYPE_OPENLDAP        = 2;
+
+    const SERVER_TYPE_GENERIC = 1;
+
+    const SERVER_TYPE_OPENLDAP = 2;
+
     const SERVER_TYPE_ACTIVEDIRECTORY = 3;
-    const SERVER_TYPE_EDIRECTORY      = 4;
+
+    const SERVER_TYPE_EDIRECTORY = 4;
 
     /**
      * Factory method to create the RootDSE.
@@ -53,20 +57,22 @@ class RootDse extends AbstractNode
      * @return \Zend\Ldap\Node\RootDse
      * @throws \Zend\Ldap\Exception
      */
-    public static function create(Ldap\Ldap $ldap)
+    public static function create (Ldap\Ldap $ldap)
     {
         $dn = Ldap\Dn::fromString('');
         $data = $ldap->getEntry($dn, array('*', '+'), true);
         if (isset($data['domainfunctionality'])) {
             return new RootDse\ActiveDirectory($dn, $data);
-        } else if (isset($data['dsaname'])) {
-            return new RootDse\eDirectory($dn, $data);
-        } else if (isset($data['structuralobjectclass']) &&
-                $data['structuralobjectclass'][0] === 'OpenLDAProotDSE') {
-            return new RootDse\OpenLdap($dn, $data);
-        } else {
-            return new self($dn, $data);
-        }
+        } else 
+            if (isset($data['dsaname'])) {
+                return new RootDse\eDirectory($dn, $data);
+            } else 
+                if (isset($data['structuralobjectclass']) &&
+                 $data['structuralobjectclass'][0] === 'OpenLDAProotDSE') {
+                    return new RootDse\OpenLdap($dn, $data);
+                } else {
+                    return new self($dn, $data);
+                }
     }
 
     /**
@@ -77,7 +83,7 @@ class RootDse extends AbstractNode
      * @param  \Zend\Ldap\Dn $dn
      * @param  array        $data
      */
-    protected function __construct(Ldap\Dn $dn, array $data)
+    protected function __construct (Ldap\Dn $dn, array $data)
     {
         parent::__construct($dn, $data, true);
     }
@@ -87,7 +93,7 @@ class RootDse extends AbstractNode
      *
      * @return array
      */
-    public function getNamingContexts()
+    public function getNamingContexts ()
     {
         return $this->getAttribute('namingContexts', null);
     }
@@ -97,7 +103,7 @@ class RootDse extends AbstractNode
      *
      * @return string|null
      */
-    public function getSubschemaSubentry()
+    public function getSubschemaSubentry ()
     {
         return $this->getAttribute('subschemaSubentry', 0);
     }
@@ -108,7 +114,7 @@ class RootDse extends AbstractNode
      * @param  string|int|array $versions version(s) to check
      * @return boolean
      */
-    public function supportsVersion($versions)
+    public function supportsVersion ($versions)
     {
         return $this->attributeHasValue('supportedLDAPVersion', $versions);
     }
@@ -119,7 +125,7 @@ class RootDse extends AbstractNode
      * @param  string|array $mechlist SASL mechanisms to check
      * @return boolean
      */
-    public function supportsSaslMechanism($mechlist)
+    public function supportsSaslMechanism ($mechlist)
     {
         return $this->attributeHasValue('supportedSASLMechanisms', $mechlist);
     }
@@ -129,7 +135,7 @@ class RootDse extends AbstractNode
      *
      * @return int
      */
-    public function getServerType()
+    public function getServerType ()
     {
         return self::SERVER_TYPE_GENERIC;
     }
@@ -139,7 +145,7 @@ class RootDse extends AbstractNode
      *
      * @return \Zend\Ldap\Dn
      */
-    public function getSchemaDn()
+    public function getSchemaDn ()
     {
         $schemaDn = $this->getSubschemaSubentry();
         return Ldap\Dn::fromString($schemaDn);

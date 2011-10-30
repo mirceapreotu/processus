@@ -47,19 +47,18 @@ class Geo extends GData
      * @var array
      */
     public static $namespaces = array(
-        array('georss', 'http://www.georss.org/georss', 1, 0),
-        array('gml', 'http://www.opengis.net/gml', 1, 0)
-    );
-
+    array('georss', 'http://www.georss.org/georss', 1, 0), 
+    array('gml', 'http://www.opengis.net/gml', 1, 0));
 
     /**
      * Create Zend_Gdata_Geo object
      *
      * @param \Zend\Http\Client $client (optional) The HTTP client to use when
-     *          when communicating with the Google Apps servers.
+     * when communicating with the Google Apps servers.
      * @param string $applicationId The identity of the app in the form of Company-AppName-Version
      */
-    public function __construct($client = null, $applicationId = 'MyCompany-MyApp-1.0')
+    public function __construct ($client = null, 
+    $applicationId = 'MyCompany-MyApp-1.0')
     {
         $this->registerPackage('Zend\GData\Geo');
         $this->registerPackage('Zend\GData\Geo\Extension');

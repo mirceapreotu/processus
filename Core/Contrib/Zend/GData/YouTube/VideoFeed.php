@@ -52,9 +52,9 @@ class VideoFeed extends \Zend\GData\Media\Feed
      * Creates a Video feed, representing a list of videos
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(YouTube::$namespaces);
         parent::__construct($element);

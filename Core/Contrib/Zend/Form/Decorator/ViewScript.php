@@ -54,6 +54,7 @@ namespace Zend\Form\Decorator;
  */
 class ViewScript extends AbstractDecorator
 {
+
     /**
      * Default placement: append
      * @var string
@@ -72,7 +73,7 @@ class ViewScript extends AbstractDecorator
      * @param  string $script
      * @return \Zend\Form\Decorator\ViewScript
      */
-    public function setViewScript($script)
+    public function setViewScript ($script)
     {
         $this->_viewScript = (string) $script;
         return $this;
@@ -83,7 +84,7 @@ class ViewScript extends AbstractDecorator
      *
      * @return string|null
      */
-    public function getViewScript()
+    public function getViewScript ()
     {
         if (null === $this->_viewScript) {
             if (null !== ($element = $this->getElement())) {
@@ -92,13 +93,12 @@ class ViewScript extends AbstractDecorator
                     return $viewScript;
                 }
             }
-
+            
             if (null !== ($viewScript = $this->getOption('viewScript'))) {
-                $this->setViewScript($viewScript)
-                     ->removeOption('viewScript');
+                $this->setViewScript($viewScript)->removeOption('viewScript');
             }
         }
-
+        
         return $this->_viewScript;
     }
 
@@ -108,32 +108,33 @@ class ViewScript extends AbstractDecorator
      * @param  string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
         $element = $this->getElement();
-        $view    = $element->getView();
+        $view = $element->getView();
         if (null === $view) {
             return $content;
         }
-
+        
         $viewScript = $this->getViewScript();
         if (empty($viewScript)) {
-            throw new Exception\UnexpectedValueException('No view script registered with ViewScript decorator');
+            throw new Exception\UnexpectedValueException(
+            'No view script registered with ViewScript decorator');
         }
-
+        
         $separator = $this->getSeparator();
         $placement = $this->getPlacement();
-
-        $vars              = $this->getOptions();
-        $vars['element']   = $element;
-        $vars['content']   = $content;
+        
+        $vars = $this->getOptions();
+        $vars['element'] = $element;
+        $vars['content'] = $content;
         $vars['decorator'] = $this;
-
+        
         $renderedContent = $view->partial($viewScript, $vars);
-
+        
         // Get placement again to see if it has changed
         $placement = $this->getPlacement();
-
+        
         switch ($placement) {
             case self::PREPEND:
                 return $renderedContent . $separator . $content;

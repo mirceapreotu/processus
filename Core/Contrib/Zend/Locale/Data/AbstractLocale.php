@@ -24,10 +24,7 @@
  */
 namespace Zend\Locale\Data;
 
-use Zend\Cache\Cache,
-    Zend\Cache\Frontend as CacheFrontend,
-    Zend\Locale\Locale,
-    Zend\Locale\Exception\InvalidArgumentException;
+use Zend\Cache\Cache, Zend\Cache\Frontend as CacheFrontend, Zend\Locale\Locale, Zend\Locale\Exception\InvalidArgumentException;
 
 /**
  * Locale data reader, handles the CLDR
@@ -43,6 +40,7 @@ use Zend\Cache\Cache,
  */
 abstract class AbstractLocale
 {
+
     /**
      * Internal cache for ldml values
      *
@@ -71,7 +69,7 @@ abstract class AbstractLocale
      *
      * @return \Zend\Cache\Core The set cache
      */
-    public static function getCache()
+    public static function getCache ()
     {
         return self::$_cache;
     }
@@ -81,7 +79,7 @@ abstract class AbstractLocale
      *
      * @param \Zend\Cache\Frontend $cache A cache frontend
      */
-    public static function setCache(CacheFrontend $cache)
+    public static function setCache (CacheFrontend $cache)
     {
         self::$_cache = $cache;
         self::_getTagSupportForCache();
@@ -92,12 +90,12 @@ abstract class AbstractLocale
      *
      * @return boolean
      */
-    public static function hasCache()
+    public static function hasCache ()
     {
         if (self::$_cache !== null) {
             return true;
         }
-
+        
         return false;
     }
 
@@ -106,7 +104,7 @@ abstract class AbstractLocale
      *
      * @return void
      */
-    public static function removeCache()
+    public static function removeCache ()
     {
         self::$_cache = null;
     }
@@ -117,14 +115,15 @@ abstract class AbstractLocale
      * @param string $tag Tag to clear when the default tag name is not used
      * @return void
      */
-    public static function clearCache($tag = null)
+    public static function clearCache ($tag = null)
     {
         if (self::$_cacheTags) {
             if ($tag == null) {
                 $tag = 'Zend_Locale';
             }
-
-            self::$_cache->clean(\Zend\Cache\Cache::CLEANING_MODE_MATCHING_TAG, array($tag));
+            
+            self::$_cache->clean(\Zend\Cache\Cache::CLEANING_MODE_MATCHING_TAG, 
+            array($tag));
         } else {
             self::$_cache->clean(\Zend\Cache\Cache::CLEANING_MODE_ALL);
         }
@@ -135,7 +134,7 @@ abstract class AbstractLocale
      *
      * @param boolean $flag
      */
-    public static function disableCache($flag)
+    public static function disableCache ($flag)
     {
         self::$_cacheDisabled = (boolean) $flag;
     }
@@ -145,7 +144,7 @@ abstract class AbstractLocale
      *
      * @return boolean
      */
-    public static function isCacheDisabled()
+    public static function isCacheDisabled ()
     {
         return self::$_cacheDisabled;
     }
@@ -155,9 +154,9 @@ abstract class AbstractLocale
      *
      * @return boolean
      */
-    public static function hasCacheTagSupport()
+    public static function hasCacheTagSupport ()
     {
-      return self::$_cacheTags;
+        return self::$_cacheTags;
     }
 
     /**
@@ -165,7 +164,7 @@ abstract class AbstractLocale
      *
      * @return false|string
      */
-    protected static function _getTagSupportForCache()
+    protected static function _getTagSupportForCache ()
     {
         $backend = self::$_cache->getBackend();
         if ($backend instanceof \Zend\Cache\Backend\ExtendedInterface) {
@@ -174,7 +173,7 @@ abstract class AbstractLocale
         } else {
             self::$_cacheTags = false;
         }
-
+        
         return self::$_cacheTags;
     }
 
@@ -187,9 +186,11 @@ abstract class AbstractLocale
      * @param string|array $detail Detail to return information for
      * @return array
      */
-    public static function getDisplayLanguage($locale, $invert = false, $detail = null)
+    public static function getDisplayLanguage ($locale, $invert = false, 
+    $detail = null)
     {
-        throw new UnsupportedMethod('This implementation does not support the selected locale information');
+        throw new UnsupportedMethod(
+        'This implementation does not support the selected locale information');
     }
 
     /**
@@ -201,9 +202,10 @@ abstract class AbstractLocale
      * @param string|array $detail Detail to return information for
      * @return array
      */
-    public static function getDisplayScript($locale, $invert = false, $detail = null)
+    public static function getDisplayScript ($locale, $invert = false, $detail = null)
     {
-        throw new UnsupportedMethod('This implementation does not support the selected locale information');
+        throw new UnsupportedMethod(
+        'This implementation does not support the selected locale information');
     }
 
     /**
@@ -215,9 +217,11 @@ abstract class AbstractLocale
      * @param string|array $detail Detail to return information for
      * @return array
      */
-    public static function getDisplayTerritory($locale, $invert = false, $detail = null)
+    public static function getDisplayTerritory ($locale, $invert = false, 
+    $detail = null)
     {
-        throw new UnsupportedMethod('This implementation does not support the selected locale information');
+        throw new UnsupportedMethod(
+        'This implementation does not support the selected locale information');
     }
 
     /**
@@ -229,18 +233,20 @@ abstract class AbstractLocale
      * @param string|array $detail Detail to return information for
      * @return array
      */
-    public static function getDisplayVariant($locale, $invert = false, $detail = null)
+    public static function getDisplayVariant ($locale, $invert = false, 
+    $detail = null)
     {
-        throw new UnsupportedMethod('This implementation does not support the selected locale information');
+        throw new UnsupportedMethod(
+        'This implementation does not support the selected locale information');
     }
 
 /**
- *   public static function toInteger();
- *   public static function toFloat();
- *   public static function toDecimal();
- *   public static function toScientific();
- *   public static function toCurrency();
- *   public static function toArray();
- *   public static function toDateString();
+ * public static function toInteger();
+ * public static function toFloat();
+ * public static function toDecimal();
+ * public static function toScientific();
+ * public static function toCurrency();
+ * public static function toArray();
+ * public static function toDateString();
  */
 }

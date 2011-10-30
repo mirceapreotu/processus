@@ -24,9 +24,7 @@
  */
 namespace Zend\InfoCard\XML\Assertion;
 
-use Zend\InfoCard\XML\Assertion as XMLAssertion,
-    Zend\InfoCard\XML\AbstractElement,
-    Zend\InfoCard\XML\Exception;
+use Zend\InfoCard\XML\Assertion as XMLAssertion, Zend\InfoCard\XML\AbstractElement, Zend\InfoCard\XML\Exception;
 
 /**
  * A Xml Assertion Document in SAML Token format
@@ -59,11 +57,14 @@ class SAML extends AbstractElement implements XMLAssertion
      */
     const CONDITION_TIME_ADJ = 3600; // +- 5 minutes
 
-    protected function _getServerName() {
+    
+    protected function _getServerName ()
+    {
         return $_SERVER['SERVER_NAME'];
     }
 
-    protected function _getServerPort() {
+    protected function _getServerPort ()
+    {
         return $_SERVER['SERVER_PORT'];
     }
 
@@ -73,61 +74,66 @@ class SAML extends AbstractElement implements XMLAssertion
      * @param array $conditions An array of condtions for the assertion taken from getConditions()
      * @return mixed Boolean true on success, an array of condition, error message on failure
      */
-    public function validateConditions(Array $conditions)
+    public function validateConditions (Array $conditions)
     {
-
+        
         $currentTime = time();
-
-        if(!empty($conditions)) {
-
-            foreach($conditions as $condition => $conditionValue) {
-                switch(strtolower($condition)) {
+        
+        if (! empty($conditions)) {
+            
+            foreach ($conditions as $condition => $conditionValue) {
+                switch (strtolower($condition)) {
                     case 'audiencerestrictioncondition':
-
+                        
                         $serverName = $this->_getServerName();
                         $serverPort = $this->_getServerPort();
-
+                        
                         $self_aliases[] = $serverName;
                         $self_aliases[] = "{{$serverName}:{$serverPort}";
-
+                        
                         $found = false;
-                        if(is_array($conditionValue)) {
-                            foreach($conditionValue as $audience) {
-
-                                list(,,$audience) = explode('/', $audience);
-                                if(in_array($audience, $self_aliases)) {
+                        if (is_array($conditionValue)) {
+                            foreach ($conditionValue as $audience) {
+                                
+                                list (, , $audience) = explode('/', $audience);
+                                if (in_array($audience, $self_aliases)) {
                                     $found = true;
                                     break;
                                 }
                             }
                         }
-
-                        if(!$found) {
-                            return array($condition, 'Could not find self in allowed audience list');
+                        
+                        if (! $found) {
+                            return array($condition, 
+                            'Could not find self in allowed audience list');
                         }
-
+                        
                         break;
                     case 'notbefore':
                         $notbeforetime = strtotime($conditionValue);
-
-                        if($currentTime < $notbeforetime) {
-                            if($currentTime + self::CONDITION_TIME_ADJ < $notbeforetime) {
-                                return array($condition, 'Current time is before specified window');
+                        
+                        if ($currentTime < $notbeforetime) {
+                            if ($currentTime + self::CONDITION_TIME_ADJ <
+                             $notbeforetime) {
+                                return array($condition, 
+                                'Current time is before specified window');
                             }
                         }
-
+                        
                         break;
                     case 'notonorafter':
                         $notonoraftertime = strtotime($conditionValue);
-
-                        if($currentTime >= $notonoraftertime) {
-                            if($currentTime - self::CONDITION_TIME_ADJ >= $notonoraftertime) {
-                                return array($condition, 'Current time is after specified window');
+                        
+                        if ($currentTime >= $notonoraftertime) {
+                            if ($currentTime - self::CONDITION_TIME_ADJ >=
+                             $notonoraftertime) {
+                                return array($condition, 
+                                'Current time is after specified window');
                             }
                         }
-
+                        
                         break;
-
+                
                 }
             }
         }
@@ -139,7 +145,7 @@ class SAML extends AbstractElement implements XMLAssertion
      *
      * @return string the Assertion URI
      */
-    public function getAssertionURI()
+    public function getAssertionURI ()
     {
         return XMLAssertion\Factory::TYPE_SAML;
     }
@@ -149,9 +155,9 @@ class SAML extends AbstractElement implements XMLAssertion
      *
      * @return integer The major version number
      */
-    public function getMajorVersion()
+    public function getMajorVersion ()
     {
-        return (int)(string)$this['MajorVersion'];
+        return (int) (string) $this['MajorVersion'];
     }
 
     /**
@@ -159,9 +165,9 @@ class SAML extends AbstractElement implements XMLAssertion
      *
      * @return integer The minor version number
      */
-    public function getMinorVersion()
+    public function getMinorVersion ()
     {
-        return (int)(string)$this['MinorVersion'];
+        return (int) (string) $this['MinorVersion'];
     }
 
     /**
@@ -169,9 +175,9 @@ class SAML extends AbstractElement implements XMLAssertion
      *
      * @return string The Assertion ID
      */
-    public function getAssertionID()
+    public function getAssertionID ()
     {
-        return (string)$this['AssertionID'];
+        return (string) $this['AssertionID'];
     }
 
     /**
@@ -179,9 +185,9 @@ class SAML extends AbstractElement implements XMLAssertion
      *
      * @return string the URI of the assertion Issuer
      */
-    public function getIssuer()
+    public function getIssuer ()
     {
-        return (string)$this['Issuer'];
+        return (string) $this['Issuer'];
     }
 
     /**
@@ -189,9 +195,9 @@ class SAML extends AbstractElement implements XMLAssertion
      *
      * @return integer a UNIX timestamp representing when the assertion was issued
      */
-    public function getIssuedTimestamp()
+    public function getIssuedTimestamp ()
     {
-        return strtotime((string)$this['IssueInstant']);
+        return strtotime((string) $this['IssueInstant']);
     }
 
     /**
@@ -200,32 +206,34 @@ class SAML extends AbstractElement implements XMLAssertion
      * @throws \Zend\InfoCard\XML\Exception
      * @return array an array of conditions
      */
-    public function getConditions()
+    public function getConditions ()
     {
-
-        list($conditions) = $this->xpath("//saml:Conditions");
-
-        if(!($conditions instanceof AbstractElement)) {
-            throw new Exception\RuntimeException("Unable to find the saml:Conditions block");
+        
+        list ($conditions) = $this->xpath("//saml:Conditions");
+        
+        if (! ($conditions instanceof AbstractElement)) {
+            throw new Exception\RuntimeException(
+            "Unable to find the saml:Conditions block");
         }
-
+        
         $retval = array();
-
-        foreach($conditions->children('urn:oasis:names:tc:SAML:1.0:assertion') as $key => $value) {
-            switch($key) {
+        
+        foreach ($conditions->children('urn:oasis:names:tc:SAML:1.0:assertion') as $key => $value) {
+            switch ($key) {
                 case self::CONDITION_AUDIENCE:
-                    foreach($value->children('urn:oasis:names:tc:SAML:1.0:assertion') as $audience_key => $audience_value) {
-                        if($audience_key == 'Audience') {
-                            $retval[$key][] = (string)$audience_value;
+                    foreach ($value->children(
+                    'urn:oasis:names:tc:SAML:1.0:assertion') as $audience_key => $audience_value) {
+                        if ($audience_key == 'Audience') {
+                            $retval[$key][] = (string) $audience_value;
                         }
                     }
                     break;
             }
         }
-
-        $retval['NotBefore'] = (string)$conditions['NotBefore'];
-        $retval['NotOnOrAfter'] = (string)$conditions['NotOnOrAfter'];
-
+        
+        $retval['NotBefore'] = (string) $conditions['NotBefore'];
+        $retval['NotOnOrAfter'] = (string) $conditions['NotOnOrAfter'];
+        
         return $retval;
     }
 
@@ -235,14 +243,15 @@ class SAML extends AbstractElement implements XMLAssertion
      * @todo Not Yet Implemented
      * @ignore
      */
-    public function getSubjectKeyInfo()
+    public function getSubjectKeyInfo ()
     {
         /**
          * @todo Not sure if this is part of the scope for now..
          */
-
-        if($this->getConfirmationMethod() == self::CONFIRMATION_BEARER) {
-            throw new Exception\RuntimeException("Cannot get Subject Key Info when Confirmation Method was Bearer");
+        
+        if ($this->getConfirmationMethod() == self::CONFIRMATION_BEARER) {
+            throw new Exception\RuntimeException(
+            "Cannot get Subject Key Info when Confirmation Method was Bearer");
         }
     }
 
@@ -251,10 +260,10 @@ class SAML extends AbstractElement implements XMLAssertion
      *
      * @return string The confirmation method URI
      */
-    public function getConfirmationMethod()
+    public function getConfirmationMethod ()
     {
-        list($confirmation) = $this->xPath("//saml:ConfirmationMethod");
-        return (string)$confirmation;
+        list ($confirmation) = $this->xPath("//saml:ConfirmationMethod");
+        return (string) $confirmation;
     }
 
     /**
@@ -262,22 +271,24 @@ class SAML extends AbstractElement implements XMLAssertion
      *
      * @return array An array of attributes / claims within the assertion
      */
-    public function getAttributes()
+    public function getAttributes ()
     {
         $attributes = $this->xPath('//saml:Attribute');
-
+        
         $retval = array();
-        foreach($attributes as $key => $value) {
-
-            $retkey = (string)$value['AttributeNamespace'].'/'.(string)$value['AttributeName'];
-
-            $retval[$retkey]['name'] = (string)$value['AttributeName'];
-            $retval[$retkey]['namespace'] = (string)$value['AttributeNamespace'];
-
-            list($aValue) = $value->children('urn:oasis:names:tc:SAML:1.0:assertion');
-            $retval[$retkey]['value'] = (string)$aValue;
+        foreach ($attributes as $key => $value) {
+            
+            $retkey = (string) $value['AttributeNamespace'] . '/' .
+             (string) $value['AttributeName'];
+            
+            $retval[$retkey]['name'] = (string) $value['AttributeName'];
+            $retval[$retkey]['namespace'] = (string) $value['AttributeNamespace'];
+            
+            list ($aValue) = $value->children(
+            'urn:oasis:names:tc:SAML:1.0:assertion');
+            $retval[$retkey]['value'] = (string) $aValue;
         }
-
+        
         return $retval;
     }
 }

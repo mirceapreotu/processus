@@ -23,8 +23,8 @@
  * @namespace
  */
 namespace Zend\Dojo\Form\Element;
-use Zend\Form,
-    Zend\Form\Element\Exception;;
+use Zend\Form, Zend\Form\Element\Exception;
+;
 
 /**
  * DateTextBox dijit
@@ -38,6 +38,7 @@ use Zend\Form,
  */
 class DateTextBox extends ValidationTextBox
 {
+
     /**
      * Use DateTextBox dijit view helper
      * @var string
@@ -48,21 +49,13 @@ class DateTextBox extends ValidationTextBox
      * Allowed formatLength types
      * @var array
      */
-    protected $_allowedFormatTypes = array(
-        'long',
-        'short',
-        'medium',
-        'full',
-    );
+    protected $_allowedFormatTypes = array('long', 'short', 'medium', 'full');
 
     /**
      * Allowed selector types
      * @var array
      */
-    protected $_allowedSelectorTypes = array(
-        'time',
-        'date',
-    );
+    protected $_allowedSelectorTypes = array('time', 'date');
 
     /**
      * Set am,pm flag
@@ -70,7 +63,7 @@ class DateTextBox extends ValidationTextBox
      * @param  bool $am,pm
      * @return \Zend\Dojo\Form\Element\DateTextBox
      */
-    public function setAmPm($flag)
+    public function setAmPm ($flag)
     {
         $this->setConstraint('am,pm', (bool) $flag);
         return $this;
@@ -81,12 +74,12 @@ class DateTextBox extends ValidationTextBox
      *
      * @return bool
      */
-    public function getAmPm()
+    public function getAmPm ()
     {
-        if (!$this->hasConstraint('am,pm')) {
+        if (! $this->hasConstraint('am,pm')) {
             return false;
         }
-        return ('true' ==$this->getConstraint('am,pm'));
+        return ('true' == $this->getConstraint('am,pm'));
     }
 
     /**
@@ -95,7 +88,7 @@ class DateTextBox extends ValidationTextBox
      * @param  bool $strict
      * @return \Zend\Dojo\Form\Element\DateTextBox
      */
-    public function setStrict($flag)
+    public function setStrict ($flag)
     {
         $this->setConstraint('strict', (bool) $flag);
         return $this;
@@ -106,9 +99,9 @@ class DateTextBox extends ValidationTextBox
      *
      * @return bool
      */
-    public function getStrict()
+    public function getStrict ()
     {
-        if (!$this->hasConstraint('strict')) {
+        if (! $this->hasConstraint('strict')) {
             return false;
         }
         return ('true' == $this->getConstraint('strict'));
@@ -120,7 +113,7 @@ class DateTextBox extends ValidationTextBox
      * @param  string $locale
      * @return \Zend\Dojo\Form\Element\DateTextBox
      */
-    public function setLocale($locale)
+    public function setLocale ($locale)
     {
         $this->setConstraint('locale', (string) $locale);
         return $this;
@@ -131,7 +124,7 @@ class DateTextBox extends ValidationTextBox
      *
      * @return string|null
      */
-    public function getLocale()
+    public function getLocale ()
     {
         return $this->getConstraint('locale');
     }
@@ -142,7 +135,7 @@ class DateTextBox extends ValidationTextBox
      * @param  string $pattern
      * @return \Zend\Dojo\Form\Element\NumberTextBox
      */
-    public function setDatePattern($pattern)
+    public function setDatePattern ($pattern)
     {
         $this->setConstraint('datePattern', (string) $pattern);
         return $this;
@@ -153,7 +146,7 @@ class DateTextBox extends ValidationTextBox
      *
      * @return string|null
      */
-    public function getDatePattern()
+    public function getDatePattern ()
     {
         return $this->getConstraint('datePattern');
     }
@@ -165,13 +158,14 @@ class DateTextBox extends ValidationTextBox
      * @param  string $formatLength
      * @return \Zend\Dojo\Form\Element\NumberTextBox
      */
-    public function setFormatLength($formatLength)
+    public function setFormatLength ($formatLength)
     {
         $formatLength = strtolower($formatLength);
-        if (!in_array($formatLength, $this->_allowedFormatTypes)) {
-            throw new Exception\InvalidArgumentException(sprintf('Invalid formatLength "%s" specified', $formatLength));
+        if (! in_array($formatLength, $this->_allowedFormatTypes)) {
+            throw new Exception\InvalidArgumentException(
+            sprintf('Invalid formatLength "%s" specified', $formatLength));
         }
-
+        
         $this->setConstraint('formatLength', $formatLength);
         return $this;
     }
@@ -181,7 +175,7 @@ class DateTextBox extends ValidationTextBox
      *
      * @return string|null
      */
-    public function getFormatLength()
+    public function getFormatLength ()
     {
         return $this->getConstraint('formatLength');
     }
@@ -193,13 +187,14 @@ class DateTextBox extends ValidationTextBox
      * @param  string $selector
      * @return \Zend\Dojo\Form\Element\NumberTextBox
      */
-    public function setSelector($selector)
+    public function setSelector ($selector)
     {
         $selector = strtolower($selector);
-        if (!in_array($selector, $this->_allowedSelectorTypes)) {
-            throw new Exception\InvalidArgumentException(sprintf('Invalid Selector "%s" specified', $selector));
+        if (! in_array($selector, $this->_allowedSelectorTypes)) {
+            throw new Exception\InvalidArgumentException(
+            sprintf('Invalid Selector "%s" specified', $selector));
         }
-
+        
         $this->setConstraint('selector', $selector);
         return $this;
     }
@@ -209,7 +204,7 @@ class DateTextBox extends ValidationTextBox
      *
      * @return string|null
      */
-    public function getSelector()
+    public function getSelector ()
     {
         return $this->getConstraint('selector');
     }

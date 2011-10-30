@@ -33,13 +33,14 @@ namespace Zend\Loader;
  */
 interface ShortNameLocator
 {
+
     /**
      * Whether or not a Helper by a specific name
      *
      * @param  string $name
      * @return bool
      */
-    public function isLoaded($name);
+    public function isLoaded ($name);
 
     /**
      * Return full class name for a named helper
@@ -47,7 +48,7 @@ interface ShortNameLocator
      * @param  string $name
      * @return string
      */
-    public function getClassName($name);
+    public function getClassName ($name);
 
     /**
      * Load a helper via the name provided
@@ -55,5 +56,5 @@ interface ShortNameLocator
      * @param  string $name
      * @return string
      */
-    public function load($name);
+    public function load ($name);
 }

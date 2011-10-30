@@ -42,6 +42,7 @@ class Quota extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'apps';
+
     protected $_rootElement = 'quota';
 
     /**
@@ -56,7 +57,7 @@ class Quota extends \Zend\GData\Extension
      *
      * @param string $limit (optional) The limit, in bytes, for this quota.
      */
-    public function __construct($limit = null)
+    public function __construct ($limit = null)
     {
         $this->registerAllNamespaces(\Zend\GData\GApps::$namespaces);
         parent::__construct();
@@ -73,7 +74,7 @@ class Quota extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_limit !== null) {
@@ -89,14 +90,14 @@ class Quota extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'limit':
-            $this->_limit = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'limit':
+                $this->_limit = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -106,7 +107,7 @@ class Quota extends \Zend\GData\Extension
      * @see setLimit
      * @return string The requested attribute.
      */
-    public function getLimit()
+    public function getLimit ()
     {
         return $this->_limit;
     }
@@ -119,7 +120,7 @@ class Quota extends \Zend\GData\Extension
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\GApps\Extension\Quota Provides a fluent interface.
      */
-    public function setLimit($value)
+    public function setLimit ($value)
     {
         $this->_limit = $value;
         return $this;
@@ -129,7 +130,7 @@ class Quota extends \Zend\GData\Extension
      * Magic toString method allows using this directly via echo
      * Works best in PHP >= 4.2.0
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getLimit();
     }

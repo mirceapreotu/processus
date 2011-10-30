@@ -33,6 +33,7 @@ namespace Zend\Cloud\DocumentService;
  */
 class DocumentSet implements \Countable, \IteratorAggregate
 {
+
     /** @var int */
     protected $_documentCount;
 
@@ -45,10 +46,10 @@ class DocumentSet implements \Countable, \IteratorAggregate
      * @param  array $documents
      * @return void
      */
-    public function __construct(array $documents)
+    public function __construct (array $documents)
     {
         $this->_documentCount = count($documents);
-        $this->_documents     = new \ArrayIterator($documents);
+        $this->_documents = new \ArrayIterator($documents);
     }
 
     /**
@@ -56,7 +57,7 @@ class DocumentSet implements \Countable, \IteratorAggregate
      *
      * @return int
      */
-    public function count()
+    public function count ()
     {
         return $this->_documentCount;
     }
@@ -66,7 +67,7 @@ class DocumentSet implements \Countable, \IteratorAggregate
      *
      * @return Traversable
      */
-    public function getIterator()
+    public function getIterator ()
     {
         return $this->_documents;
     }

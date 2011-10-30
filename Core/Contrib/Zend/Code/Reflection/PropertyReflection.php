@@ -23,8 +23,7 @@
  */
 namespace Zend\Code\Reflection;
 
-use ReflectionProperty as PhpReflectionProperty,
-    Zend\Code\Reflection;
+use ReflectionProperty as PhpReflectionProperty, Zend\Code\Reflection;
 
 /**
  * @todo       implement line numbers
@@ -37,14 +36,15 @@ use ReflectionProperty as PhpReflectionProperty,
  */
 class PropertyReflection extends PhpReflectionProperty implements Reflection
 {
+
     /**
      * Get declaring class reflection object
      *
      * @return ClassReflection
      */
-    public function getDeclaringClass()
+    public function getDeclaringClass ()
     {
-        $phpReflection  = parent::getDeclaringClass();
+        $phpReflection = parent::getDeclaringClass();
         $zendReflection = new ClassReflection($phpReflection->getName());
         unset($phpReflection);
         return $zendReflection;
@@ -55,7 +55,7 @@ class PropertyReflection extends PhpReflectionProperty implements Reflection
      *
      * @return string|false False if no docblock defined
      */
-    public function getDocComment()
+    public function getDocComment ()
     {
         return parent::getDocComment();
     }
@@ -63,16 +63,16 @@ class PropertyReflection extends PhpReflectionProperty implements Reflection
     /**
      * @return false|DocBlockReflection
      */
-    public function getDocBlock()
+    public function getDocBlock ()
     {
-        if (!($docComment = $this->getDocComment())) {
+        if (! ($docComment = $this->getDocComment())) {
             return false;
         }
         $r = new DocBlockReflection($docComment);
         return $r;
     }
 
-    public function toString()
+    public function toString ()
     {
         return $this->__toString();
     }

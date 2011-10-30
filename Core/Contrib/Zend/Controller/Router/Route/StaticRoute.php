@@ -40,9 +40,11 @@ class StaticRoute extends AbstractRoute
 {
 
     protected $_route = null;
+
     protected $_defaults = array();
 
-    public function getVersion() {
+    public function getVersion ()
+    {
         return 1;
     }
 
@@ -51,7 +53,7 @@ class StaticRoute extends AbstractRoute
      *
      * @param Zend\Config\Config $config Configuration object
      */
-    public static function getInstance(Config\Config $config)
+    public static function getInstance (Config\Config $config)
     {
         $defs = ($config->defaults instanceof Config\Config) ? $config->defaults->toArray() : array();
         return new self($config->route, $defs);
@@ -63,7 +65,7 @@ class StaticRoute extends AbstractRoute
      * @param string $route Map used to match with later submitted URL path
      * @param array $defaults Defaults for map variables with keys as variable names
      */
-    public function __construct($route, $defaults = array())
+    public function __construct ($route, $defaults = array())
     {
         $this->_route = trim($route, '/');
         $this->_defaults = (array) $defaults;
@@ -76,7 +78,7 @@ class StaticRoute extends AbstractRoute
      * @param string $path Path used to match against this routing map
      * @return array|false An array of assigned values or a false on a mismatch
      */
-    public function match($path, $partial = false)
+    public function match ($path, $partial = false)
     {
         if ($partial) {
             if (substr($path, 0, strlen($this->_route)) === $this->_route) {
@@ -88,7 +90,7 @@ class StaticRoute extends AbstractRoute
                 return $this->_defaults;
             }
         }
-
+        
         return false;
     }
 
@@ -98,7 +100,7 @@ class StaticRoute extends AbstractRoute
      * @param array $data An array of variable and value pairs used as parameters
      * @return string Route path with user submitted parameters
      */
-    public function assemble($data = array(), $reset = false, $encode = false, $partial = false)
+    public function assemble ($data = array(), $reset = false, $encode = false, $partial = false)
     {
         return $this->_route;
     }
@@ -109,7 +111,8 @@ class StaticRoute extends AbstractRoute
      * @param string $name Array key of the parameter
      * @return string Previously set default
      */
-    public function getDefault($name) {
+    public function getDefault ($name)
+    {
         if (isset($this->_defaults[$name])) {
             return $this->_defaults[$name];
         }
@@ -121,7 +124,8 @@ class StaticRoute extends AbstractRoute
      *
      * @return array Route defaults
      */
-    public function getDefaults() {
+    public function getDefaults ()
+    {
         return $this->_defaults;
     }
 

@@ -38,13 +38,14 @@ use Zend\Loader\ResourceAutoloader;
  */
 class Autoloader extends ResourceAutoloader
 {
+
     /**
      * Constructor
      *
      * @param  array|\Zend\Config\Config $options
      * @return void
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         parent::__construct($options);
         $this->initDefaultResourceTypes();
@@ -55,43 +56,23 @@ class Autoloader extends ResourceAutoloader
      *
      * @return void
      */
-    public function initDefaultResourceTypes()
+    public function initDefaultResourceTypes ()
     {
         $basePath = $this->getBasePath();
-        $this->addResourceTypes(array(
-            'dbtable' => array(
-                'namespace' => 'Model\\DbTable',
-                'path'      => 'models/DbTable',
-            ),
-            'mappers' => array(
-                'namespace' => 'Model\\Mapper',
-                'path'      => 'models/mappers',
-            ),
-            'form'    => array(
-                'namespace' => 'Form',
-                'path'      => 'forms',
-            ),
-            'model'   => array(
-                'namespace' => 'Model',
-                'path'      => 'models',
-            ),
-            'plugin'  => array(
-                'namespace' => 'Plugin',
-                'path'      => 'plugins',
-            ),
-            'service' => array(
-                'namespace' => 'Service',
-                'path'      => 'services',
-            ),
-            'viewhelper' => array(
-                'namespace' => 'View\\Helper',
-                'path'      => 'views/helpers',
-            ),
-            'viewfilter' => array(
-                'namespace' => 'View\\Filter',
-                'path'      => 'views/filters',
-            ),
-        ));
+        $this->addResourceTypes(
+        array(
+        'dbtable' => array('namespace' => 'Model\\DbTable', 
+        'path' => 'models/DbTable'), 
+        'mappers' => array('namespace' => 'Model\\Mapper', 
+        'path' => 'models/mappers'), 
+        'form' => array('namespace' => 'Form', 'path' => 'forms'), 
+        'model' => array('namespace' => 'Model', 'path' => 'models'), 
+        'plugin' => array('namespace' => 'Plugin', 'path' => 'plugins'), 
+        'service' => array('namespace' => 'Service', 'path' => 'services'), 
+        'viewhelper' => array('namespace' => 'View\\Helper', 
+        'path' => 'views/helpers'), 
+        'viewfilter' => array('namespace' => 'View\\Filter', 
+        'path' => 'views/filters')));
         $this->setDefaultResourceType('model');
     }
 }

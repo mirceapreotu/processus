@@ -43,6 +43,7 @@ class NicknameFeed extends \Zend\GData\Feed
 {
 
     protected $_entryClassName = '\Zend\GData\GApps\NicknameEntry';
+
     protected $_feedClassName = '\Zend\GData\GApps\NicknameFeed';
 
 }

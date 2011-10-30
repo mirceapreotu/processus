@@ -48,6 +48,7 @@ use Zend\GData\App;
  */
 abstract class FeedEntryParent extends Base
 {
+
     /**
      * Service instance used to make network requests.
      *
@@ -64,40 +65,47 @@ abstract class FeedEntryParent extends Base
     protected $_etag = NULL;
 
     protected $_author = array();
+
     protected $_category = array();
+
     protected $_contributor = array();
+
     protected $_id = null;
+
     protected $_link = array();
+
     protected $_rights = null;
+
     protected $_title = null;
+
     protected $_updated = null;
 
     /**
-      * Indicates the major protocol version that should be used.
-      * At present, recognized values are either 1 or 2. However, any integer
-      * value >= 1 is considered valid.
-      *
-      * @see setMajorProtocolVersion()
-      * @see getMajorProtocolVersion()
-      */
+     * Indicates the major protocol version that should be used.
+     * At present, recognized values are either 1 or 2. However, any integer
+     * value >= 1 is considered valid.
+     *
+     * @see setMajorProtocolVersion()
+     * @see getMajorProtocolVersion()
+     */
     protected $_majorProtocolVersion = 1;
 
     /**
-      * Indicates the minor protocol version that should be used. Can be set
-      * to either an integer >= 0, or NULL if no minor version should be sent
-      * to the server.
-      *
-      * @see setMinorProtocolVersion()
-      * @see getMinorProtocolVersion()
-      */
+     * Indicates the minor protocol version that should be used. Can be set
+     * to either an integer >= 0, or NULL if no minor version should be sent
+     * to the server.
+     *
+     * @see setMinorProtocolVersion()
+     * @see getMinorProtocolVersion()
+     */
     protected $_minorProtocolVersion = null;
 
     /**
      * Constructs a Feed or Entry
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
-        if (!($element instanceof \DOMElement)) {
+        if (! ($element instanceof \DOMElement)) {
             if ($element) {
                 $this->transferFromXML($element);
             }
@@ -112,13 +120,13 @@ abstract class FeedEntryParent extends Base
      * Sets the HTTP client object to use for retrieving the feed.
      *
      * @deprecated Deprecated as of Zend Framework 1.7. Use
-     *             setService() instead.
+     * setService() instead.
      * @param  \Zend\Http\Client $httpClient
      * @return \Zend\GData\App\FeedEntryParent Provides a fluent interface
      */
-    public function setHttpClient(\Zend\Http\Client $httpClient)
+    public function setHttpClient (\Zend\Http\Client $httpClient)
     {
-        if (!$this->_service) {
+        if (! $this->_service) {
             $this->_service = new App();
         }
         $this->_service->setHttpClient($httpClient);
@@ -130,12 +138,12 @@ abstract class FeedEntryParent extends Base
      * will be used.
      *
      * @deprecated Deprecated as of Zend Framework 1.7. Use
-     *             getService() instead.
+     * getService() instead.
      * @return Zend_Http_Client_Abstract
      */
-    public function getHttpClient()
+    public function getHttpClient ()
     {
-        if (!$this->_service) {
+        if (! $this->_service) {
             $this->_service = new App();
         }
         $client = $this->_service->getHttpClient();
@@ -149,7 +157,7 @@ abstract class FeedEntryParent extends Base
      * @param \Zend\GData\App $instance The new service instance.
      * @return \Zend\GData\App\FeedEntryParent Provides a fluent interface.
      */
-    public function setService($instance)
+    public function setService ($instance)
     {
         $this->_service = $instance;
         return $this;
@@ -160,14 +168,14 @@ abstract class FeedEntryParent extends Base
      * perform network requests, such as when calling save() and delete().
      *
      * @return \Zend\GData\App|null The current service instance, or null if
-     *         not set.
+     * not set.
      */
-    public function getService()
+    public function getService ()
     {
         return $this->_service;
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         foreach ($this->_author as $author) {
@@ -186,71 +194,74 @@ abstract class FeedEntryParent extends Base
             $element->appendChild($link->getDOM($element->ownerDocument));
         }
         if ($this->_rights != null) {
-            $element->appendChild($this->_rights->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_rights->getDOM($element->ownerDocument));
         }
         if ($this->_title != null) {
-            $element->appendChild($this->_title->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_title->getDOM($element->ownerDocument));
         }
         if ($this->_updated != null) {
-            $element->appendChild($this->_updated->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_updated->getDOM($element->ownerDocument));
         }
         return $element;
     }
 
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('atom') . ':' . 'author':
-            $author = new Extension\Author();
-            $author->transferFromDOM($child);
-            $this->_author[] = $author;
-            break;
-        case $this->lookupNamespace('atom') . ':' . 'category':
-            $category = new Extension\Category();
-            $category->transferFromDOM($child);
-            $this->_category[] = $category;
-            break;
-        case $this->lookupNamespace('atom') . ':' . 'contributor':
-            $contributor = new Extension\Contributor();
-            $contributor->transferFromDOM($child);
-            $this->_contributor[] = $contributor;
-            break;
-        case $this->lookupNamespace('atom') . ':' . 'id':
-            $id = new Extension\Id();
-            $id->transferFromDOM($child);
-            $this->_id = $id;
-            break;
-        case $this->lookupNamespace('atom') . ':' . 'link':
-            $link = new Extension\Link();
-            $link->transferFromDOM($child);
-            $this->_link[] = $link;
-            break;
-        case $this->lookupNamespace('atom') . ':' . 'rights':
-            $rights = new Extension\Rights();
-            $rights->transferFromDOM($child);
-            $this->_rights = $rights;
-            break;
-        case $this->lookupNamespace('atom') . ':' . 'title':
-            $title = new Extension\Title();
-            $title->transferFromDOM($child);
-            $this->_title = $title;
-            break;
-        case $this->lookupNamespace('atom') . ':' . 'updated':
-            $updated = new Extension\Updated();
-            $updated->transferFromDOM($child);
-            $this->_updated = $updated;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('atom') . ':' . 'author':
+                $author = new Extension\Author();
+                $author->transferFromDOM($child);
+                $this->_author[] = $author;
+                break;
+            case $this->lookupNamespace('atom') . ':' . 'category':
+                $category = new Extension\Category();
+                $category->transferFromDOM($child);
+                $this->_category[] = $category;
+                break;
+            case $this->lookupNamespace('atom') . ':' . 'contributor':
+                $contributor = new Extension\Contributor();
+                $contributor->transferFromDOM($child);
+                $this->_contributor[] = $contributor;
+                break;
+            case $this->lookupNamespace('atom') . ':' . 'id':
+                $id = new Extension\Id();
+                $id->transferFromDOM($child);
+                $this->_id = $id;
+                break;
+            case $this->lookupNamespace('atom') . ':' . 'link':
+                $link = new Extension\Link();
+                $link->transferFromDOM($child);
+                $this->_link[] = $link;
+                break;
+            case $this->lookupNamespace('atom') . ':' . 'rights':
+                $rights = new Extension\Rights();
+                $rights->transferFromDOM($child);
+                $this->_rights = $rights;
+                break;
+            case $this->lookupNamespace('atom') . ':' . 'title':
+                $title = new Extension\Title();
+                $title->transferFromDOM($child);
+                $this->_title = $title;
+                break;
+            case $this->lookupNamespace('atom') . ':' . 'updated':
+                $updated = new Extension\Updated();
+                $updated->transferFromDOM($child);
+                $this->_updated = $updated;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
     /**
      * @return \Zend\GData\App\Extension\Author
      */
-    public function getAuthor()
+    public function getAuthor ()
     {
         return $this->_author;
     }
@@ -262,7 +273,7 @@ abstract class FeedEntryParent extends Base
      * @param array $value
      * @return \Zend\GData\App\FeedEntryParent Provides a fluent interface
      */
-    public function setAuthor($value)
+    public function setAuthor ($value)
     {
         $this->_author = $value;
         return $this;
@@ -274,7 +285,7 @@ abstract class FeedEntryParent extends Base
      *
      * @return array Array of \Zend\GData\App\Extension\Category
      */
-    public function getCategory()
+    public function getCategory ()
     {
         return $this->_category;
     }
@@ -286,7 +297,7 @@ abstract class FeedEntryParent extends Base
      * @param array $value Array of \Zend\GData\App\Extension\Category
      * @return \Zend\GData\App\FeedEntryParent Provides a fluent interface
      */
-    public function setCategory($value)
+    public function setCategory ($value)
     {
         $this->_category = $value;
         return $this;
@@ -298,7 +309,7 @@ abstract class FeedEntryParent extends Base
      *
      * @return array An array of \Zend\GData\App\Extension\Contributor
      */
-    public function getContributor()
+    public function getContributor ()
     {
         return $this->_contributor;
     }
@@ -310,7 +321,7 @@ abstract class FeedEntryParent extends Base
      * @param array $value
      * @return \Zend\GData\App\FeedEntryParent Provides a fluent interface
      */
-    public function setContributor($value)
+    public function setContributor ($value)
     {
         $this->_contributor = $value;
         return $this;
@@ -319,7 +330,7 @@ abstract class FeedEntryParent extends Base
     /**
      * @return \Zend\GData\App\Extension\Id
      */
-    public function getId()
+    public function getId ()
     {
         return $this->_id;
     }
@@ -328,7 +339,7 @@ abstract class FeedEntryParent extends Base
      * @param \Zend\GData\App\Extension\Id $value
      * @return \Zend\GData\App\FeedEntryParent Provides a fluent interface
      */
-    public function setId($value)
+    public function setId ($value)
     {
         $this->_id = $value;
         return $this;
@@ -344,12 +355,12 @@ abstract class FeedEntryParent extends Base
      * 'edit', and 'alternate'.
      *
      * @param string $rel The rel value of the link to be found.  If null,
-     *     the array of \Zend\Gdata\App\Extension\link elements is returned
+     * the array of \Zend\Gdata\App\Extension\link elements is returned
      * @return mixed Either a single \Zend\Gdata\App\Extension\link element,
-     *     an array of the same or null is returned depending on the rel value
-     *     supplied as the argument to this function
+     * an array of the same or null is returned depending on the rel value
+     * supplied as the argument to this function
      */
-    public function getLink($rel = null)
+    public function getLink ($rel = null)
     {
         if ($rel == null) {
             return $this->_link;
@@ -370,7 +381,7 @@ abstract class FeedEntryParent extends Base
      *
      * @return \Zend\GData\App\Extension\Link The link, or null if not found
      */
-    public function getEditLink()
+    public function getEditLink ()
     {
         return $this->getLink('edit');
     }
@@ -383,7 +394,7 @@ abstract class FeedEntryParent extends Base
      *
      * @return \Zend\GData\App\Extension\Link The link, or null if not found
      */
-    public function getNextLink()
+    public function getNextLink ()
     {
         return $this->getLink('next');
     }
@@ -396,7 +407,7 @@ abstract class FeedEntryParent extends Base
      *
      * @return \Zend\GData\App\Extension\Link The link, or null if not found
      */
-    public function getPreviousLink()
+    public function getPreviousLink ()
     {
         return $this->getLink('previous');
     }
@@ -404,7 +415,7 @@ abstract class FeedEntryParent extends Base
     /**
      * @return \Zend\GData\App\Extension\Link
      */
-    public function getLicenseLink()
+    public function getLicenseLink ()
     {
         return $this->getLink('license');
     }
@@ -417,7 +428,7 @@ abstract class FeedEntryParent extends Base
      *
      * @return \Zend\GData\App\Extension\Link The link, or null if not found
      */
-    public function getSelfLink()
+    public function getSelfLink ()
     {
         return $this->getLink('self');
     }
@@ -433,7 +444,7 @@ abstract class FeedEntryParent extends Base
      *
      * @return \Zend\GData\App\Extension\Link The link, or null if not found
      */
-    public function getAlternateLink()
+    public function getAlternateLink ()
     {
         return $this->getLink('alternate');
     }
@@ -442,7 +453,7 @@ abstract class FeedEntryParent extends Base
      * @param array $value The array of \Zend\GData\App\Extension\Link elements
      * @return \Zend\GData\App\FeedEntryParent Provides a fluent interface
      */
-    public function setLink($value)
+    public function setLink ($value)
     {
         $this->_link = $value;
         return $this;
@@ -451,7 +462,7 @@ abstract class FeedEntryParent extends Base
     /**
      * @return \Zend\Gdata\AppExtension\Rights
      */
-    public function getRights()
+    public function getRights ()
     {
         return $this->_rights;
     }
@@ -460,7 +471,7 @@ abstract class FeedEntryParent extends Base
      * @param \Zend\GData\App\Extension\Rights $value
      * @return \Zend\GData\App\FeedEntryParent Provides a fluent interface
      */
-    public function setRights($value)
+    public function setRights ($value)
     {
         $this->_rights = $value;
         return $this;
@@ -473,7 +484,7 @@ abstract class FeedEntryParent extends Base
      *
      * @return \Zend\GData\App\Extension\Title
      */
-    public function getTitle()
+    public function getTitle ()
     {
         return $this->_title;
     }
@@ -485,7 +496,7 @@ abstract class FeedEntryParent extends Base
      *
      * @return string
      */
-    public function getTitleValue()
+    public function getTitleValue ()
     {
         if (($titleObj = $this->getTitle()) != null) {
             return $titleObj->getText();
@@ -502,7 +513,7 @@ abstract class FeedEntryParent extends Base
      * @param \Zend\GData\App\Extension\Title $value
      * @return \Zend\GData\App\FeedEntryParent Provides a fluent interface
      */
-    public function setTitle($value)
+    public function setTitle ($value)
     {
         $this->_title = $value;
         return $this;
@@ -511,7 +522,7 @@ abstract class FeedEntryParent extends Base
     /**
      * @return \Zend\GData\App\Extension\Updated
      */
-    public function getUpdated()
+    public function getUpdated ()
     {
         return $this->_updated;
     }
@@ -520,7 +531,7 @@ abstract class FeedEntryParent extends Base
      * @param \Zend\GData\App\Extension\Updated $value
      * @return \Zend\GData\App\FeedEntryParent Provides a fluent interface
      */
-    public function setUpdated($value)
+    public function setUpdated ($value)
     {
         $this->_updated = $value;
         return $this;
@@ -533,7 +544,8 @@ abstract class FeedEntryParent extends Base
      * @param string|null $value
      * @return \Zend\GData\App\Entry Provides a fluent interface
      */
-    public function setEtag($value) {
+    public function setEtag ($value)
+    {
         $this->_etag = $value;
         return $this;
     }
@@ -543,7 +555,8 @@ abstract class FeedEntryParent extends Base
      *
      * @return string|null
      */
-    public function getEtag() {
+    public function getEtag ()
+    {
         return $this->_etag;
     }
 
@@ -556,11 +569,11 @@ abstract class FeedEntryParent extends Base
      * @param (int|NULL) $value The major protocol version to use.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function setMajorProtocolVersion($value)
+    public function setMajorProtocolVersion ($value)
     {
-        if (!($value >= 1) && ($value !== null)) {
+        if (! ($value >= 1) && ($value !== null)) {
             throw new InvalidArgumentException(
-                    'Major protocol version must be >= 1');
+            'Major protocol version must be >= 1');
         }
         $this->_majorProtocolVersion = $value;
     }
@@ -571,7 +584,7 @@ abstract class FeedEntryParent extends Base
      * @see _majorProtocolVersion
      * @return (int|NULL) The major protocol version in use.
      */
-    public function getMajorProtocolVersion()
+    public function getMajorProtocolVersion ()
     {
         return $this->_majorProtocolVersion;
     }
@@ -585,11 +598,11 @@ abstract class FeedEntryParent extends Base
      * @param (int|NULL) $value The minor protocol version to use.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function setMinorProtocolVersion($value)
+    public function setMinorProtocolVersion ($value)
     {
-        if (!($value >= 0)) {
+        if (! ($value >= 0)) {
             throw new InvalidArgumentException(
-                    'Minor protocol version must be >= 0 or null');
+            'Minor protocol version must be >= 0 or null');
         }
         $this->_minorProtocolVersion = $value;
     }
@@ -599,9 +612,9 @@ abstract class FeedEntryParent extends Base
      *
      * @see _minorProtocolVersion
      * @return (int|NULL) The major protocol version in use, or NULL if no
-     *         minor version is specified.
+     * minor version is specified.
      */
-    public function getMinorProtocolVersion()
+    public function getMinorProtocolVersion ()
     {
         return $this->_minorProtocolVersion;
     }
@@ -621,14 +634,13 @@ abstract class FeedEntryParent extends Base
      *
      * @param string $prefix The namespace prefix to lookup.
      * @param integer $majorVersion The major protocol version in effect.
-     *        Defaults to null (auto-select).
+     * Defaults to null (auto-select).
      * @param integer $minorVersion The minor protocol version in effect.
-     *        Defaults to null (auto-select).
+     * Defaults to null (auto-select).
      * @return string
      */
-    public function lookupNamespace($prefix,
-                                    $majorVersion = null,
-                                    $minorVersion = null)
+    public function lookupNamespace ($prefix, $majorVersion = null, 
+    $minorVersion = null)
     {
         // Auto-select current version
         if ($majorVersion === null) {
@@ -637,9 +649,10 @@ abstract class FeedEntryParent extends Base
         if ($minorVersion === null) {
             $minorVersion = $this->getMinorProtocolVersion();
         }
-
+        
         // Perform lookup
-        return parent::lookupNamespace($prefix, $majorVersion, $minorVersion);
+        return parent::lookupNamespace($prefix, $majorVersion, 
+        $minorVersion);
     }
 
 }

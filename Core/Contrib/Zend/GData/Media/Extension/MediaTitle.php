@@ -39,6 +39,7 @@ class MediaTitle extends \Zend\GData\Extension
 {
 
     protected $_rootElement = 'title';
+
     protected $_rootNamespace = 'media';
 
     /**
@@ -52,7 +53,7 @@ class MediaTitle extends \Zend\GData\Extension
      * @param string $text
      * @param string $type
      */
-    public function __construct($text = null, $type = null)
+    public function __construct ($text = null, $type = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Media::$namespaces);
         parent::__construct();
@@ -70,7 +71,7 @@ class MediaTitle extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_type !== null) {
@@ -86,21 +87,21 @@ class MediaTitle extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'type':
-            $this->_type = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'type':
+                $this->_type = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
     /**
      * @return string
      */
-    public function getType()
+    public function getType ()
     {
         return $this->_type;
     }
@@ -109,7 +110,7 @@ class MediaTitle extends \Zend\GData\Extension
      * @param string $value
      * @return \Zend\GData\Media\Extension\MediaTitle Provides a fluent interface
      */
-    public function setType($value)
+    public function setType ($value)
     {
         $this->_type = $value;
         return $this;

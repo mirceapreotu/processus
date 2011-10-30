@@ -36,4 +36,5 @@ namespace Zend\Feed\Writer;
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class InvalidMethodException extends \Exception
-{}
+{
+}

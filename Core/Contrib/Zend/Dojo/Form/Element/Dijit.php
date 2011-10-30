@@ -38,6 +38,7 @@ use Zend\View\Renderer as View;
  */
 abstract class Dijit extends \Zend\Form\Element
 {
+
     /**
      * Dijit parameters
      * @var array
@@ -58,9 +59,10 @@ abstract class Dijit extends \Zend\Form\Element
      * @param  mixed $options
      * @return void
      */
-    public function __construct($spec, $options = null)
+    public function __construct ($spec, $options = null)
     {
-        $this->addPrefixPath('Zend\Dojo\Form\Decorator', 'Zend/Dojo/Form/Decorator', 'decorator');
+        $this->addPrefixPath('Zend\Dojo\Form\Decorator', 
+        'Zend/Dojo/Form/Decorator', 'decorator');
         parent::__construct($spec, $options);
     }
 
@@ -71,7 +73,7 @@ abstract class Dijit extends \Zend\Form\Element
      * @param  mixed $value
      * @return \Zend\Dojo\Form\Element\Dijit
      */
-    public function setDijitParam($key, $value)
+    public function setDijitParam ($key, $value)
     {
         $key = (string) $key;
         $this->dijitParams[$key] = $value;
@@ -84,7 +86,7 @@ abstract class Dijit extends \Zend\Form\Element
      * @param  array $params
      * @return \Zend\Dojo\Form\Element\Dijit
      */
-    public function setDijitParams(array $params)
+    public function setDijitParams (array $params)
     {
         $this->dijitParams = array_merge($this->dijitParams, $params);
         return $this;
@@ -96,7 +98,7 @@ abstract class Dijit extends \Zend\Form\Element
      * @param  string $key
      * @return bool
      */
-    public function hasDijitParam($key)
+    public function hasDijitParam ($key)
     {
         return array_key_exists($key, $this->dijitParams);
     }
@@ -107,7 +109,7 @@ abstract class Dijit extends \Zend\Form\Element
      * @param  string $key
      * @return mixed
      */
-    public function getDijitParam($key)
+    public function getDijitParam ($key)
     {
         $key = (string) $key;
         if ($this->hasDijitParam($key)) {
@@ -121,7 +123,7 @@ abstract class Dijit extends \Zend\Form\Element
      *
      * @return array
      */
-    public function getDijitParams()
+    public function getDijitParams ()
     {
         return $this->dijitParams;
     }
@@ -132,7 +134,7 @@ abstract class Dijit extends \Zend\Form\Element
      * @param  string $key
      * @return \Zend\Dojo\Form\Element\Dijit
      */
-    public function removeDijitParam($key)
+    public function removeDijitParam ($key)
     {
         $key = (string) $key;
         if (array_key_exists($key, $this->dijitParams)) {
@@ -146,7 +148,7 @@ abstract class Dijit extends \Zend\Form\Element
      *
      * @return \Zend\Dojo\Form\Element\Dijit
      */
-    public function clearDijitParams()
+    public function clearDijitParams ()
     {
         $this->dijitParams = array();
         return $this;
@@ -157,19 +159,20 @@ abstract class Dijit extends \Zend\Form\Element
      *
      * @return void
      */
-    public function loadDefaultDecorators()
+    public function loadDefaultDecorators ()
     {
         if ($this->loadDefaultDecoratorsIsDisabled()) {
             return;
         }
-
+        
         $decorators = $this->getDecorators();
         if (empty($decorators)) {
             $this->addDecorator('DijitElement')
-                 ->addDecorator('Errors')
-                 ->addDecorator('Description', array('tag' => 'p', 'class' => 'description'))
-                 ->addDecorator('HtmlTag', array('tag' => 'dd'))
-                 ->addDecorator('Label', array('tag' => 'dt'));
+                ->addDecorator('Errors')
+                ->addDecorator('Description', 
+            array('tag' => 'p', 'class' => 'description'))
+                ->addDecorator('HtmlTag', array('tag' => 'dd'))
+                ->addDecorator('Label', array('tag' => 'dt'));
         }
     }
 
@@ -181,12 +184,14 @@ abstract class Dijit extends \Zend\Form\Element
      * @param  \Zend\View\Renderer $view
      * @return \Zend\Dojo\Form\Element\Dijit
      */
-    public function setView(View $view = null)
+    public function setView (View $view = null)
     {
         if (null !== $view) {
-            if(false === $view->getBroker()->isLoaded('dojo')) {
+            if (false === $view->getBroker()->isLoaded('dojo')) {
                 $loader = new \Zend\Dojo\View\HelperLoader();
-                $view->getBroker()->getClassLoader()->registerPlugins($loader);
+                $view->getBroker()
+                    ->getClassLoader()
+                    ->registerPlugins($loader);
             }
         }
         return parent::setView($view);

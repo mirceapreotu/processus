@@ -21,8 +21,7 @@
  * namespace
  */
 namespace Zend\Cloud\DocumentService;
-use Zend\Cloud\Exception\InvalidArgumentException,
-    Zend\Cloud\Exception\OperationNotAvailableException;
+use Zend\Cloud\Exception\InvalidArgumentException, Zend\Cloud\Exception\OperationNotAvailableException;
 
 /**
  * Class encapsulating documents. Fields are stored in a name/value
@@ -36,9 +35,9 @@ use Zend\Cloud\Exception\InvalidArgumentException,
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Document
-    implements \ArrayAccess, \IteratorAggregate, \Countable
+class Document implements \ArrayAccess, \IteratorAggregate, \Countable
 {
+
     /** key in document denoting identifier */
     const KEY_FIELD = '_id';
 
@@ -64,17 +63,18 @@ class Document
      * @param  mixed $id Document identifier
      * @return void
      */
-    public function __construct($fields, $id = null)
+    public function __construct ($fields, $id = null)
     {
-        if (!is_array($fields) && !$fields instanceof \ArrayAccess) {
-            throw new InvalidArgumentException('Fields must be an array or implement ArrayAccess');
+        if (! is_array($fields) && ! $fields instanceof \ArrayAccess) {
+            throw new InvalidArgumentException(
+            'Fields must be an array or implement ArrayAccess');
         }
-
+        
         if (isset($fields[self::KEY_FIELD])) {
             $id = $fields[self::KEY_FIELD];
             unset($fields[self::KEY_FIELD]);
         }
-
+        
         $this->_fields = $fields;
         $this->setId($id);
     }
@@ -85,7 +85,7 @@ class Document
      * @param  mixed $id
      * @return Zend_Cloud_DocumentService_Document
      */
-    public function setId($id)
+    public function setId ($id)
     {
         $this->_id = $id;
         return $this;
@@ -96,7 +96,7 @@ class Document
      *
      * @return string
      */
-    public function getId()
+    public function getId ()
     {
         return $this->_id;
     }
@@ -106,7 +106,7 @@ class Document
      *
      * @return array
      */
-    public function getFields()
+    public function getFields ()
     {
         return $this->_fields;
     }
@@ -117,7 +117,7 @@ class Document
      * @param  string $name
      * @return mixed
      */
-    public function getField($name)
+    public function getField ($name)
     {
         if (isset($this->_fields[$name])) {
             return $this->_fields[$name];
@@ -132,7 +132,7 @@ class Document
      * @param  mixed $value
      * @return Zend_Cloud_DocumentService_Document
      */
-    public function setField($name, $value)
+    public function setField ($name, $value)
     {
         $this->_fields[$name] = $value;
         return $this;
@@ -144,7 +144,7 @@ class Document
      * @param  string $name
      * @return mixed
      */
-    public function __get($name)
+    public function __get ($name)
     {
         return $this->getField($name);
     }
@@ -156,7 +156,7 @@ class Document
      * @param  mixed $value
      * @return void
      */
-    public function __set($name, $value)
+    public function __set ($name, $value)
     {
         $this->setField($name, $value);
     }
@@ -167,7 +167,7 @@ class Document
      * @param  string $name
      * @return bool
      */
-    public function offsetExists($name)
+    public function offsetExists ($name)
     {
         return isset($this->_fields[$name]);
     }
@@ -178,7 +178,7 @@ class Document
      * @param  string $name
      * @return mixed
      */
-    public function offsetGet($name)
+    public function offsetGet ($name)
     {
         return $this->getField($name);
     }
@@ -190,7 +190,7 @@ class Document
      * @param  mixed $value
      * @return void
      */
-    public function offsetSet($name, $value)
+    public function offsetSet ($name, $value)
     {
         $this->setField($name, $value);
     }
@@ -201,7 +201,7 @@ class Document
      * @param  string $name
      * @return void
      */
-    public function offsetUnset($name)
+    public function offsetUnset ($name)
     {
         if ($this->offsetExists($name)) {
             unset($this->_fields[$name]);
@@ -215,7 +215,7 @@ class Document
      * @param  mixed $args
      * @return mixed
      */
-    public function __call($name, $args)
+    public function __call ($name, $args)
     {
         $prefix = substr($name, 0, 3);
         if ($prefix == 'get') {
@@ -227,7 +227,7 @@ class Document
             $option = substr($name, 3);
             return $this->setField($option, $args[0]);
         }
-
+        
         throw new OperationNotAvailableException("Unknown operation $name");
     }
 
@@ -236,7 +236,7 @@ class Document
      *
      * @return int
      */
-    public function count()
+    public function count ()
     {
         return count($this->_fields);
     }
@@ -246,7 +246,7 @@ class Document
      *
      * @return Iterator
      */
-    public function getIterator()
+    public function getIterator ()
     {
         return new \ArrayIterator($this->_fields);
     }

@@ -33,6 +33,7 @@ use Zend\Loader\Broker;
  */
 class StaticFilter
 {
+
     /**
      * @var Broker
      */
@@ -44,7 +45,7 @@ class StaticFilter
      * @param  Broker $broker 
      * @return void
      */
-    public static function setBroker(Broker $broker = null)
+    public static function setBroker (Broker $broker = null)
     {
         self::$broker = $broker;
     }
@@ -54,7 +55,7 @@ class StaticFilter
      * 
      * @return Broker
      */
-    public static function getBroker()
+    public static function getBroker ()
     {
         if (null === self::$broker) {
             static::setBroker(new FilterBroker());
@@ -78,16 +79,17 @@ class StaticFilter
      * @return mixed
      * @throws \Zend\Filter\Exception
      */
-    public static function execute($value, $classBaseName, array $args = array())
+    public static function execute ($value, $classBaseName, 
+    array $args = array())
     {
         $broker = static::getBroker();
-
+        
         $filter = $broker->load($classBaseName, $args);
         $filteredValue = $filter->filter($value);
-
+        
         // Unregistering filter to allow different arguments on subsequent calls
         $broker->unregister($classBaseName);
-
+        
         return $filteredValue;
     }
 }

@@ -35,14 +35,15 @@ namespace Zend\Amf\Response;
  */
 class HttpResponse extends StreamResponse
 {
+
     /**
      * Create the application response header for AMF and sends the serialized AMF string
      *
      * @return string
      */
-    public function getResponse()
+    public function getResponse ()
     {
-        if (!headers_sent()) {
+        if (! headers_sent()) {
             header('Cache-Control: no-cache, must-revalidate');
             header('Expires: Thu, 19 Nov 1981 08:52:00 GMT');
             header('Pragma: no-cache');

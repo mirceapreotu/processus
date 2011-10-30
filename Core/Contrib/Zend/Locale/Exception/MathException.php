@@ -30,15 +30,16 @@ namespace Zend\Locale\Exception;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class MathException 
-	extends \LogicException
-	implements \Zend\Locale\Exception
+class MathException extends \LogicException implements \Zend\Locale\Exception
 {
+
     protected $op1 = null;
+
     protected $op2 = null;
+
     protected $result = null;
 
-    public function __construct($message, $op1 = null, $op2 = null, $result = null)
+    public function __construct ($message, $op1 = null, $op2 = null, $result = null)
     {
         $this->op1 = $op1;
         $this->op2 = $op2;
@@ -46,7 +47,7 @@ class MathException
         parent::__construct($message);
     }
 
-    public function getResults()
+    public function getResults ()
     {
         return array($this->op1, $this->op2, $this->result);
     }

@@ -45,6 +45,7 @@ class MemberFeed extends \Zend\Gdata\Feed
 {
 
     protected $_entryClassName = '\Zend\Gdata\Gapps\MemberEntry';
+
     protected $_feedClassName = '\Zend\Gdata\Gapps\MemberFeed';
 
 }

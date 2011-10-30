@@ -24,10 +24,7 @@
  */
 namespace Zend\Form\Decorator;
 
-use Zend\File\Transfer\Adapter,
-    Zend\Loader\Pluggable,
-    Zend\Form\Element,
-    Zend\View\Renderer;
+use Zend\File\Transfer\Adapter, Zend\Loader\Pluggable, Zend\Form\Element, Zend\View\Renderer;
 
 /**
  * Zend_Form_Decorator_File
@@ -45,11 +42,13 @@ use Zend\File\Transfer\Adapter,
  */
 class File extends AbstractDecorator implements FileDecorator
 {
+
     /**
      * Attributes that should not be passed to helper
      * @var array
      */
-    protected $_attribBlacklist = array('helper', 'placement', 'separator', 'value');
+    protected $_attribBlacklist = array('helper', 'placement', 'separator', 
+    'value');
 
     /**
      * Default placement: append
@@ -62,20 +61,20 @@ class File extends AbstractDecorator implements FileDecorator
      *
      * @return array
      */
-    public function getAttribs()
+    public function getAttribs ()
     {
-        $attribs   = $this->getOptions();
-
+        $attribs = $this->getOptions();
+        
         if (null !== ($element = $this->getElement())) {
             $attribs = array_merge($attribs, $element->getAttribs());
         }
-
+        
         foreach ($this->_attribBlacklist as $key) {
             if (array_key_exists($key, $attribs)) {
                 unset($attribs[$key]);
             }
         }
-
+        
         return $attribs;
     }
 
@@ -85,53 +84,56 @@ class File extends AbstractDecorator implements FileDecorator
      * @param  string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
         $element = $this->getElement();
-        if (!$element instanceof Element) {
+        if (! $element instanceof Element) {
             return $content;
         }
-
+        
         $view = $element->getView();
-        if (!$view instanceof Renderer || !$view instanceof Pluggable) {
+        if (! $view instanceof Renderer || ! $view instanceof Pluggable) {
             return $content;
         }
-
-        $name      = $element->getName();
-        $attribs   = $this->getAttribs();
-        if (!array_key_exists('id', $attribs)) {
+        
+        $name = $element->getName();
+        $attribs = $this->getAttribs();
+        if (! array_key_exists('id', $attribs)) {
             $attribs['id'] = $name;
         }
-
+        
         $separator = $this->getSeparator();
         $placement = $this->getPlacement();
-        $markup    = array();
-        $size      = $element->getMaxFileSize();
+        $markup = array();
+        $size = $element->getMaxFileSize();
         if ($size > 0) {
             $element->setMaxFileSize(0);
             $markup[] = $view->formHidden('MAX_FILE_SIZE', $size);
         }
-
+        
         if (Adapter\Http::isApcAvailable()) {
-            $markup[] = $view->formHidden(ini_get('apc.rfc1867_name'), uniqid(), array('id' => 'progress_key'));
-        } else if (Adapter\Http::isUploadProgressAvailable()) {
-            $markup[] = $view->formHidden('UPLOAD_IDENTIFIER', uniqid(), array('id' => 'progress_key'));
-        }
-
+            $markup[] = $view->formHidden(ini_get('apc.rfc1867_name'), uniqid(), 
+            array('id' => 'progress_key'));
+        } else 
+            if (Adapter\Http::isUploadProgressAvailable()) {
+                $markup[] = $view->formHidden('UPLOAD_IDENTIFIER', uniqid(), 
+                array('id' => 'progress_key'));
+            }
+        
         if ($element->isArray()) {
             $name .= "[]";
             $count = $element->getMultiFile();
-            for ($i = 0; $i < $count; ++$i) {
-                $htmlAttribs        = $attribs;
+            for ($i = 0; $i < $count; ++ $i) {
+                $htmlAttribs = $attribs;
                 $htmlAttribs['id'] .= '-' . $i;
                 $markup[] = $view->formFile($name, $htmlAttribs);
             }
         } else {
             $markup[] = $view->formFile($name, $attribs);
         }
-
+        
         $markup = implode($separator, $markup);
-
+        
         switch ($placement) {
             case self::PREPEND:
                 return $markup . $separator . $content;

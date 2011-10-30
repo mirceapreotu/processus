@@ -33,13 +33,14 @@ namespace Zend\Feed\PubSubHubbub\Model;
  */
 class AbstractModel
 {
+
     /**
      * Zend_Db_Table instance to host database methods
      *
      * @var \Zend\Db\Table\Table
      */
     protected $_db = null;
- 
+
     /**
      * Constructor
      * 
@@ -47,7 +48,8 @@ class AbstractModel
      * @param  \Zend\Db\Table\AbstractTable $tableGateway 
      * @return void
      */
-    public function __construct(\Zend\Db\Table\AbstractTable $tableGateway = null)
+    public function __construct (
+    \Zend\Db\Table\AbstractTable $tableGateway = null)
     {
         if ($tableGateway === null) {
             $parts = explode('\\', get_class($this));

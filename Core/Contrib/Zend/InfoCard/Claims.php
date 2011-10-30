@@ -35,6 +35,7 @@ namespace Zend\InfoCard;
  */
 class Claims
 {
+
     /**
      * Successful validation and extraion of claims
      */
@@ -55,7 +56,7 @@ class Claims
      *
      * @var string
      */
-    protected $_defaultNamespace  = null;
+    protected $_defaultNamespace = null;
 
     /**
      * A boolean indicating if the claims should be consider "valid" or not based on processing
@@ -91,9 +92,11 @@ class Claims
      *
      * @return \Zend\InfoCard\Claims
      */
-    public function forceValid()
+    public function forceValid ()
     {
-        trigger_error("Forcing Claims to be valid although it is a security risk", E_USER_WARNING);
+        trigger_error(
+        "Forcing Claims to be valid although it is a security risk", 
+        E_USER_WARNING);
         $this->_isValid = true;
         return $this;
     }
@@ -103,9 +106,10 @@ class Claims
      *
      * @return string the private personal identifier
      */
-    public function getCardID()
+    public function getCardID ()
     {
-        return $this->getClaim('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/privatepersonalidentifier');
+        return $this->getClaim(
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/privatepersonalidentifier');
     }
 
     /**
@@ -116,30 +120,31 @@ class Claims
      * @throws \Zend\InfoCard\Exception
      * @return string The default namespace
      */
-    public function getDefaultNamespace()
+    public function getDefaultNamespace ()
     {
-        if($this->_defaultNamespace === null) {
+        if ($this->_defaultNamespace === null) {
             $namespaces = array();
             $leader = '';
-            foreach($this->_claims as $claim) {
-                if(!isset($namespaces[$claim['namespace']])) {
+            foreach ($this->_claims as $claim) {
+                if (! isset($namespaces[$claim['namespace']])) {
                     $namespaces[$claim['namespace']] = 1;
                 } else {
-                    $namespaces[$claim['namespace']]++;
+                    $namespaces[$claim['namespace']] ++;
                 }
-
-                if(empty($leader) || ($namespaces[$claim['namespace']] > $leader)) {
+                
+                if (empty($leader) ||
+                 ($namespaces[$claim['namespace']] > $leader)) {
                     $leader = $claim['namespace'];
                 }
             }
-
-            if(empty($leader)) {
+            
+            if (empty($leader)) {
                 throw new Exception("Failed to determine default namespace");
             }
-
+            
             $this->setDefaultNamespace($leader);
         }
-
+        
         return $this->_defaultNamespace;
     }
 
@@ -150,17 +155,18 @@ class Claims
      * @param string $namespace The default namespace to use
      * @return \Zend\InfoCard\Claims
      */
-    public function setDefaultNamespace($namespace)
+    public function setDefaultNamespace ($namespace)
     {
-
-        foreach($this->_claims as $claim) {
-            if($namespace == $claim['namespace']) {
+        
+        foreach ($this->_claims as $claim) {
+            if ($namespace == $claim['namespace']) {
                 $this->_defaultNamespace = $namespace;
                 return $this;
             }
         }
-
-        throw new Exception\InvalidArgumentException("At least one claim must exist in specified namespace to make it the default namespace");
+        
+        throw new Exception\InvalidArgumentException(
+        "At least one claim must exist in specified namespace to make it the default namespace");
     }
 
     /**
@@ -168,7 +174,7 @@ class Claims
      *
      * @return bool
      */
-    public function isValid()
+    public function isValid ()
     {
         return $this->_isValid;
     }
@@ -179,7 +185,7 @@ class Claims
      * @param string $error The error message
      * @return \Zend\InfoCard\Claims
      */
-    public function setError($error)
+    public function setError ($error)
     {
         $this->_error = $error;
         $this->_isValid = false;
@@ -191,7 +197,7 @@ class Claims
      *
      * @return string The error message
      */
-    public function getErrorMsg()
+    public function getErrorMsg ()
     {
         return $this->_error;
     }
@@ -204,12 +210,13 @@ class Claims
      * @param array $claims
      * @return \Zend\InfoCard\Claims
      */
-    public function setClaims(Array $claims)
+    public function setClaims (Array $claims)
     {
-        if($this->_claims !== null) {
-            throw new Exception\InvalidArgumentException("Claim objects are read-only");
+        if ($this->_claims !== null) {
+            throw new Exception\InvalidArgumentException(
+            "Claim objects are read-only");
         }
-
+        
         $this->_claims = $claims;
         return $this;
     }
@@ -221,17 +228,18 @@ class Claims
      * @param int $code The result code
      * @return \Zend\InfoCard\Claims
      */
-    public function setCode($code)
+    public function setCode ($code)
     {
-        switch($code) {
+        switch ($code) {
             case self::RESULT_PROCESSING_FAILURE:
             case self::RESULT_SUCCESS:
             case self::RESULT_VALIDATION_FAILURE:
                 $this->_code = $code;
                 return $this;
         }
-
-        throw new Exception\InvalidArgumentException("Attempted to set unknown error code");
+        
+        throw new Exception\InvalidArgumentException(
+        "Attempted to set unknown error code");
     }
 
     /**
@@ -239,7 +247,7 @@ class Claims
      *
      * @return integer The result code
      */
-    public function getCode()
+    public function getCode ()
     {
         return $this->_code;
     }
@@ -250,12 +258,12 @@ class Claims
      * @param string $claimURI The complete claim URI to retrieve
      * @return mixed The claim matching that specific URI or null if not found
      */
-    public function getClaim($claimURI)
+    public function getClaim ($claimURI)
     {
-        if($this->claimExists($claimURI)) {
+        if ($this->claimExists($claimURI)) {
             return $this->_claims[$claimURI]['value'];
         }
-
+        
         return null;
     }
 
@@ -265,7 +273,7 @@ class Claims
      * @param string $claimURI The complete claim URI to check
      * @return bool true if the claim exists, false if not found
      */
-    public function claimExists($claimURI)
+    public function claimExists ($claimURI)
     {
         return isset($this->_claims[$claimURI]);
     }
@@ -274,15 +282,16 @@ class Claims
      * Magic helper function
      * @throws \Zend\InfoCard\Exception
      */
-    public function __unset($k)
+    public function __unset ($k)
     {
-        throw new Exception\InvalidArgumentException("Claim objects are read-only");
+        throw new Exception\InvalidArgumentException(
+        "Claim objects are read-only");
     }
 
     /**
      * Magic helper function
      */
-    public function __isset($k)
+    public function __isset ($k)
     {
         return $this->claimExists("{$this->getDefaultNamespace()}/$k");
     }
@@ -290,7 +299,7 @@ class Claims
     /**
      * Magic helper function
      */
-    public function __get($k)
+    public function __get ($k)
     {
         return $this->getClaim("{$this->getDefaultNamespace()}/$k");
     }
@@ -299,8 +308,9 @@ class Claims
      * Magic helper function
      * @throws \Zend\InfoCard\Exception
      */
-    public function __set($k, $v)
+    public function __set ($k, $v)
     {
-        throw new Exception\InvalidArgumentException("Claim objects are read-only");
+        throw new Exception\InvalidArgumentException(
+        "Claim objects are read-only");
     }
 }

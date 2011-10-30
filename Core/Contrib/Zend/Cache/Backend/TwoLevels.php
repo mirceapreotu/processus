@@ -36,6 +36,7 @@ use Zend\Cache;
  */
 class TwoLevels extends AbstractBackend implements ExtendedBackend
 {
+
     /**
      * Available options
      *
@@ -58,8 +59,8 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      * =====> (int) stats_update_factor :
      * - Disable / Tune the computation of the fast backend filling percentage
      * - When saving a record into cache :
-     *     1               => systematic computation of the fast backend filling percentage
-     *     x (integer) > 1 => computation of the fast backend filling percentage randomly 1 times on x cache write
+     * 1               => systematic computation of the fast backend filling percentage
+     * x (integer) > 1 => computation of the fast backend filling percentage randomly 1 times on x cache write
      *
      * =====> (boolean) slow_backend_custom_naming :
      * =====> (boolean) fast_backend_custom_naming :
@@ -72,18 +73,12 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      *
      * @var array available options
      */
-    protected $_options = array(
-        'slow_backend' => 'File',
-        'fast_backend' => 'Apc',
-        'slow_backend_options' => array(),
-        'fast_backend_options' => array(),
-        'stats_update_factor' => 10,
-        'slow_backend_custom_naming' => false,
-        'fast_backend_custom_naming' => false,
-        'slow_backend_autoload' => false,
-        'fast_backend_autoload' => false,
-        'auto_refresh_fast_cache' => true
-    );
+    protected $_options = array('slow_backend' => 'File', 
+    'fast_backend' => 'Apc', 'slow_backend_options' => array(), 
+    'fast_backend_options' => array(), 'stats_update_factor' => 10, 
+    'slow_backend_custom_naming' => false, 'fast_backend_custom_naming' => false, 
+    'slow_backend_autoload' => false, 'fast_backend_autoload' => false, 
+    'auto_refresh_fast_cache' => true);
 
     /**
      * Slow Backend
@@ -113,42 +108,44 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    public function __construct(array $options = array())
+    public function __construct (array $options = array())
     {
         parent::__construct($options);
-
+        
         if ($this->_options['slow_backend'] === null) {
             Cache\Cache::throwException('slow_backend option has to set');
         } elseif ($this->_options['slow_backend'] instanceof ExtendedBackend) {
             $this->_slowBackend = $this->_options['slow_backend'];
         } else {
             $this->_slowBackend = Cache\Cache::_makeBackend(
-                $this->_options['slow_backend'],
-                $this->_options['slow_backend_options'],
-                $this->_options['slow_backend_custom_naming'],
-                $this->_options['slow_backend_autoload']
-            );
-            if (!in_array('Zend\Cache\Backend\ExtendedBackend', class_implements($this->_slowBackend))) {
-                Cache\Cache::throwException('slow_backend must implement the Zend\Cache\Backend\ExtendedBackend interface');
+            $this->_options['slow_backend'], 
+            $this->_options['slow_backend_options'], 
+            $this->_options['slow_backend_custom_naming'], 
+            $this->_options['slow_backend_autoload']);
+            if (! in_array('Zend\Cache\Backend\ExtendedBackend', 
+            class_implements($this->_slowBackend))) {
+                Cache\Cache::throwException(
+                'slow_backend must implement the Zend\Cache\Backend\ExtendedBackend interface');
             }
         }
-
+        
         if ($this->_options['fast_backend'] === null) {
             Cache\Cache::throwException('fast_backend option has to set');
         } elseif ($this->_options['fast_backend'] instanceof ExtendedBackend) {
             $this->_fastBackend = $this->_options['fast_backend'];
         } else {
             $this->_fastBackend = Cache\Cache::_makeBackend(
-                $this->_options['fast_backend'],
-                $this->_options['fast_backend_options'],
-                $this->_options['fast_backend_custom_naming'],
-                $this->_options['fast_backend_autoload']
-            );
-            if (!in_array('Zend\Cache\Backend\ExtendedBackend', class_implements($this->_fastBackend))) {
-                Zend_Cache::throwException('fast_backend must implement the Zend\Cache\Backend\ExtendedBackend interface');
+            $this->_options['fast_backend'], 
+            $this->_options['fast_backend_options'], 
+            $this->_options['fast_backend_custom_naming'], 
+            $this->_options['fast_backend_autoload']);
+            if (! in_array('Zend\Cache\Backend\ExtendedBackend', 
+            class_implements($this->_fastBackend))) {
+                Zend_Cache::throwException(
+                'fast_backend must implement the Zend\Cache\Backend\ExtendedBackend interface');
             }
         }
-
+        
         $this->_slowBackend->setDirectives($this->_directives);
         $this->_fastBackend->setDirectives($this->_directives);
     }
@@ -159,7 +156,7 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      * @param  string $id cache id
      * @return mixed|false (a cache is not available) or "last modified" timestamp (int) of the available cache record
      */
-    public function test($id)
+    public function test ($id)
     {
         $fastTest = $this->_fastBackend->test($id);
         if ($fastTest) {
@@ -182,7 +179,8 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      * @param  int   $priority         integer between 0 (very low priority) and 10 (maximum priority) used by some particular backends
      * @return boolean true if no problem
      */
-    public function save($data, $id, $tags = array(), $specificLifetime = false, $priority = 8)
+    public function save ($data, $id, $tags = array(), $specificLifetime = false, 
+    $priority = 8)
     {
         $usage = $this->_getFastFillingPercentage('saving');
         $boolFast = true;
@@ -190,15 +188,18 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
         $preparedData = $this->_prepareData($data, $lifetime, $priority);
         if (($priority > 0) && (10 * $priority >= $usage)) {
             $fastLifetime = $this->_getFastLifetime($lifetime, $priority);
-            $boolFast = $this->_fastBackend->save($preparedData, $id, array(), $fastLifetime);
-            $boolSlow = $this->_slowBackend->save($preparedData, $id, $tags, $lifetime);
+            $boolFast = $this->_fastBackend->save($preparedData, $id, array(), 
+            $fastLifetime);
+            $boolSlow = $this->_slowBackend->save($preparedData, $id, $tags, 
+            $lifetime);
         } else {
-            $boolSlow = $this->_slowBackend->save($preparedData, $id, $tags, $lifetime);
+            $boolSlow = $this->_slowBackend->save($preparedData, $id, $tags, 
+            $lifetime);
             if ($boolSlow === true) {
                 $boolFast = $this->_fastBackend->remove($id);
             }
         }
-
+        
         return ($boolFast && $boolSlow);
     }
 
@@ -211,7 +212,7 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      * @param  boolean $doNotTestCacheValidity If set to true, the cache validity won't be tested
      * @return string|false cached datas
      */
-    public function load($id, $doNotTestCacheValidity = false)
+    public function load ($id, $doNotTestCacheValidity = false)
     {
         $res = $this->_fastBackend->load($id, $doNotTestCacheValidity);
         if ($res === false) {
@@ -228,13 +229,16 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
                 // no need to refresh the fast cache with priority = 10
                 return $array['data'];
             }
-            $newFastLifetime = $this->_getFastLifetime($array['lifetime'], $array['priority'], time() - $array['expire']);
+            $newFastLifetime = $this->_getFastLifetime($array['lifetime'], 
+            $array['priority'], time() - $array['expire']);
             // we have the time to refresh the fast cache
             $usage = $this->_getFastFillingPercentage('loading');
             if (($array['priority'] > 0) && (10 * $array['priority'] >= $usage)) {
                 // we can refresh the fast cache
-                $preparedData = $this->_prepareData($array['data'], $array['lifetime'], $array['priority']);
-                $this->_fastBackend->save($preparedData, $id, array(), $newFastLifetime);
+                $preparedData = $this->_prepareData(
+                $array['data'], $array['lifetime'], $array['priority']);
+                $this->_fastBackend->save($preparedData, $id, array(), 
+                $newFastLifetime);
             }
         }
         return $array['data'];
@@ -246,7 +250,7 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      * @param  string $id Cache id
      * @return boolean True if no problem
      */
-    public function remove($id)
+    public function remove ($id)
     {
         $boolFast = $this->_fastBackend->remove($id);
         $boolSlow = $this->_slowBackend->remove($id);
@@ -260,27 +264,30 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      * Zend_Cache::CLEANING_MODE_ALL (default)    => remove all cache entries ($tags is not used)
      * Zend_Cache::CLEANING_MODE_OLD              => remove too old cache entries ($tags is not used)
      * Zend_Cache::CLEANING_MODE_MATCHING_TAG     => remove cache entries matching all given tags
-     *                                               ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      * Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG => remove cache entries not {matching one of the given tags}
-     *                                               ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      * Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG => remove cache entries matching any given tags
-     *                                               ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      *
      * @param  string $mode Clean mode
      * @param  array  $tags Array of tags
      * @throws \Zend\Cache\Exception
      * @return boolean true if no problem
      */
-    public function clean($mode = Cache\CacheCache\Cache::CLEANING_MODE_ALL, $tags = array())
+    public function clean ($mode = Cache\CacheCache\Cache::CLEANING_MODE_ALL, $tags = array())
     {
-        switch($mode) {
+        switch ($mode) {
             case Cache\Cache::CLEANING_MODE_ALL:
-                $boolFast = $this->_fastBackend->clean(Cache\Cache::CLEANING_MODE_ALL);
-                $boolSlow = $this->_slowBackend->clean(Cache\Cache::CLEANING_MODE_ALL);
+                $boolFast = $this->_fastBackend->clean(
+                Cache\Cache::CLEANING_MODE_ALL);
+                $boolSlow = $this->_slowBackend->clean(
+                Cache\Cache::CLEANING_MODE_ALL);
                 return $boolFast && $boolSlow;
                 break;
             case Cache\Cache::CLEANING_MODE_OLD:
-                return $this->_slowBackend->clean(Cache\Cache::CLEANING_MODE_OLD);
+                return $this->_slowBackend->clean(
+                Cache\Cache::CLEANING_MODE_OLD);
             case Cache\Cache::CLEANING_MODE_MATCHING_TAG:
                 $ids = $this->_slowBackend->getIdsMatchingTags($tags);
                 $res = true;
@@ -319,7 +326,7 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      *
      * @return array array of stored cache ids (string)
      */
-    public function getIds()
+    public function getIds ()
     {
         return $this->_slowBackend->getIds();
     }
@@ -329,7 +336,7 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      *
      * @return array array of stored tags (string)
      */
-    public function getTags()
+    public function getTags ()
     {
         return $this->_slowBackend->getTags();
     }
@@ -342,7 +349,7 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      * @param array $tags array of tags
      * @return array array of matching cache ids (string)
      */
-    public function getIdsMatchingTags($tags = array())
+    public function getIdsMatchingTags ($tags = array())
     {
         return $this->_slowBackend->getIdsMatchingTags($tags);
     }
@@ -355,7 +362,7 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      * @param array $tags array of tags
      * @return array array of not matching cache ids (string)
      */
-    public function getIdsNotMatchingTags($tags = array())
+    public function getIdsNotMatchingTags ($tags = array())
     {
         return $this->_slowBackend->getIdsNotMatchingTags($tags);
     }
@@ -368,18 +375,17 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      * @param array $tags array of tags
      * @return array array of any matching cache ids (string)
      */
-    public function getIdsMatchingAnyTags($tags = array())
+    public function getIdsMatchingAnyTags ($tags = array())
     {
         return $this->_slowBackend->getIdsMatchingAnyTags($tags);
     }
-
 
     /**
      * Return the filling percentage of the backend storage
      *
      * @return int integer between 0 and 100
      */
-    public function getFillingPercentage()
+    public function getFillingPercentage ()
     {
         return $this->_slowBackend->getFillingPercentage();
     }
@@ -395,7 +401,7 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      * @param string $id cache id
      * @return array array of metadatas (false if the cache id is not found)
      */
-    public function getMetadatas($id)
+    public function getMetadatas ($id)
     {
         return $this->_slowBackend->getMetadatas($id);
     }
@@ -407,7 +413,7 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      * @param int $extraLifetime
      * @return boolean true if ok
      */
-    public function touch($id, $extraLifetime)
+    public function touch ($id, $extraLifetime)
     {
         return $this->_slowBackend->touch($id, $extraLifetime);
     }
@@ -419,24 +425,23 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      * - automatic_cleaning (is automating cleaning necessary)
      * - tags (are tags supported)
      * - expired_read (is it possible to read expired cache records
-     *                 (for doNotTestCacheValidity option for example))
+     * (for doNotTestCacheValidity option for example))
      * - priority does the backend deal with priority when saving
      * - infinite_lifetime (is infinite lifetime can work with this backend)
      * - get_list (is it possible to get the list of cache ids and the complete list of tags)
      *
      * @return array associative of with capabilities
      */
-    public function getCapabilities()
+    public function getCapabilities ()
     {
         $slowBackendCapabilities = $this->_slowBackend->getCapabilities();
         return array(
-            'automatic_cleaning' => $slowBackendCapabilities['automatic_cleaning'],
-            'tags' => $slowBackendCapabilities['tags'],
-            'expired_read' => $slowBackendCapabilities['expired_read'],
-            'priority' => $slowBackendCapabilities['priority'],
-            'infinite_lifetime' => $slowBackendCapabilities['infinite_lifetime'],
-            'get_list' => $slowBackendCapabilities['get_list']
-        );
+        'automatic_cleaning' => $slowBackendCapabilities['automatic_cleaning'], 
+        'tags' => $slowBackendCapabilities['tags'], 
+        'expired_read' => $slowBackendCapabilities['expired_read'], 
+        'priority' => $slowBackendCapabilities['priority'], 
+        'infinite_lifetime' => $slowBackendCapabilities['infinite_lifetime'], 
+        'get_list' => $slowBackendCapabilities['get_list']);
     }
 
     /**
@@ -447,18 +452,15 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      * @param int $priority priority
      * @return string serialize array to store into cache
      */
-    private function _prepareData($data, $lifetime, $priority)
+    private function _prepareData ($data, $lifetime, $priority)
     {
         $lt = $lifetime;
         if ($lt === null) {
             $lt = 9999999999;
         }
-        return serialize(array(
-            'data' => $data,
-            'lifetime' => $lifetime,
-            'expire' => time() + $lt,
-            'priority' => $priority
-        ));
+        return serialize(
+        array('data' => $data, 'lifetime' => $lifetime, 
+        'expire' => time() + $lt, 'priority' => $priority));
     }
 
     /**
@@ -469,12 +471,13 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      * @param int $maxLifetime maximum lifetime
      * @return int lifetime for the fast backend
      */
-    private function _getFastLifetime($lifetime, $priority, $maxLifetime = null)
+    private function _getFastLifetime ($lifetime, $priority, $maxLifetime = null)
     {
         if ($lifetime === null) {
             // if lifetime is null, we have an infinite lifetime
             // we need to use arbitrary lifetimes
-            $fastLifetime = (int) (2592000 / (11 - $priority));
+            $fastLifetime = (int) (2592000 /
+             (11 - $priority));
         } else {
             $fastLifetime = (int) ($lifetime / (11 - $priority));
         }
@@ -493,15 +496,15 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
      *
      * @param string $id cache id
      */
-    public function ___expire($id)
+    public function ___expire ($id)
     {
         $this->_fastBackend->remove($id);
         $this->_slowBackend->___expire($id);
     }
 
-    private function _getFastFillingPercentage($mode)
+    private function _getFastFillingPercentage ($mode)
     {
-
+        
         if ($mode == 'saving') {
             // mode saving
             if ($this->_fastBackendFillingPercentage === null) {
@@ -516,7 +519,8 @@ class TwoLevels extends AbstractBackend implements ExtendedBackend
         } else {
             // mode loading
             // we compute the percentage only if it's not available in cache
-            if ($this->_fastBackendFillingPercentage === null) {
+            if ($this->_fastBackendFillingPercentage ===
+             null) {
                 $this->_fastBackendFillingPercentage = $this->_fastBackend->getFillingPercentage();
             }
         }

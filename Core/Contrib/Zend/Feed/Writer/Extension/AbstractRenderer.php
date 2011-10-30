@@ -19,49 +19,50 @@
  */
 
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Writer\Extension;
 
 /**
-* @uses \Zend\Feed\Writer\Extension\RendererInterface
-* @category Zend
-* @package Zend_Feed_Writer_Entry_Rss
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @uses \Zend\Feed\Writer\Extension\RendererInterface
+ * @category Zend
+ * @package Zend_Feed_Writer_Entry_Rss
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 abstract class AbstractRenderer implements Renderer
 {
+
     /**
      * @var \DOMDocument
      */
     protected $_dom = null;
-    
+
     /**
      * @var mixed
      */
     protected $_entry = null;
-    
+
     /**
      * @var DOMElement
      */
     protected $_base = null;
-    
+
     /**
      * @var mixed
      */
     protected $_container = null;
-    
+
     /**
      * @var string
      */
     protected $_type = null;
-    
+
     /**
      * @var \DOMElement
      */
     protected $_rootElement = null;
-    
+
     /**
      * Encoding of all text values
      *
@@ -75,33 +76,33 @@ abstract class AbstractRenderer implements Renderer
      * @param  mixed $container 
      * @return void
      */
-    public function __construct($container)
+    public function __construct ($container)
     {
         $this->_container = $container;
     }
-    
+
     /**
      * Set feed encoding
      * 
      * @param  string $enc 
      * @return Zend_Feed_Writer_Extension_RendererAbstract
      */
-    public function setEncoding($enc)
+    public function setEncoding ($enc)
     {
         $this->_encoding = $enc;
         return $this;
     }
-    
+
     /**
      * Get feed encoding
      * 
      * @return void
      */
-    public function getEncoding()
+    public function getEncoding ()
     {
         return $this->_encoding;
     }
-    
+
     /**
      * Set DOMDocument and DOMElement on which to operate
      * 
@@ -109,71 +110,71 @@ abstract class AbstractRenderer implements Renderer
      * @param  \DOMElement $base 
      * @return Zend_Feed_Writer_Extension_RendererAbstract
      */
-    public function setDomDocument(\DOMDocument $dom, \DOMElement $base)
+    public function setDomDocument (\DOMDocument $dom,\DOMElement $base)
     {
-        $this->_dom  = $dom;
+        $this->_dom = $dom;
         $this->_base = $base;
         return $this;
     }
-    
+
     /**
      * Get data container being rendered
      * 
      * @return mixed
      */
-    public function getDataContainer()
+    public function getDataContainer ()
     {
         return $this->_container;
     }
-    
+
     /**
      * Set feed type
      * 
      * @param  string $type 
      * @return Zend_Feed_Writer_Extension_RendererAbstract
      */
-    public function setType($type)
+    public function setType ($type)
     {
         $this->_type = $type;
         return $this;
     }
-    
+
     /**
      * Get feedtype
      * 
      * @return string
      */
-    public function getType()
+    public function getType ()
     {
         return $this->_type;
     }
-    
+
     /**
      * Set root element of document 
      * 
      * @param  DOMElement $root 
      * @return Zend_Feed_Writer_Extension_RendererAbstract
      */
-    public function setRootElement(\DOMElement $root)
+    public function setRootElement (\DOMElement $root)
     {
         $this->_rootElement = $root;
         return $this;
     }
-    
+
     /**
      * Get root element
      * 
      * @return DOMElement
      */
-    public function getRootElement()
+    public function getRootElement ()
     {
         return $this->_rootElement;
     }
-    
+
     /**
      * Append namespaces to feed
      * 
      * @return void
      */
-    abstract protected function _appendNamespaces();
+    abstract protected function _appendNamespaces ();
 }

@@ -34,17 +34,18 @@ namespace Zend\Filter\Compress;
  */
 abstract class AbstractCompressionAlgorithm implements CompressionAlgorithm
 {
+
     /**
      * Class constructor
      *
      * @param array|\Zend\Config\Config $options (Optional) Options to set
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         if ($options instanceof \Zend\Config\Config) {
             $options = $options->toArray();
         }
-
+        
         if (is_array($options)) {
             $this->setOptions($options);
         }
@@ -56,16 +57,16 @@ abstract class AbstractCompressionAlgorithm implements CompressionAlgorithm
      * @param string $option (Optional) Option to return
      * @return mixed
      */
-    public function getOptions($option = null)
+    public function getOptions ($option = null)
     {
         if ($option === null) {
             return $this->_options;
         }
-
-        if (!array_key_exists($option, $this->_options)) {
+        
+        if (! array_key_exists($option, $this->_options)) {
             return null;
         }
-
+        
         return $this->_options[$option];
     }
 
@@ -75,7 +76,7 @@ abstract class AbstractCompressionAlgorithm implements CompressionAlgorithm
      * @param  array $options
      * @return \Zend\Filter\Compress\Bz2
      */
-    public function setOptions(array $options)
+    public function setOptions (array $options)
     {
         foreach ($options as $key => $option) {
             $method = 'set' . $key;
@@ -83,7 +84,7 @@ abstract class AbstractCompressionAlgorithm implements CompressionAlgorithm
                 $this->$method($option);
             }
         }
-
+        
         return $this;
     }
 }

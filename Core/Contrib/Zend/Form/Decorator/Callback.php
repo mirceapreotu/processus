@@ -53,6 +53,7 @@ namespace Zend\Form\Decorator;
  */
 class Callback extends AbstractDecorator
 {
+
     /**
      * Callback
      * @var string|array
@@ -66,10 +67,11 @@ class Callback extends AbstractDecorator
      * @return \Zend\Form\Decorator\Callback
      * @throws \Zend\Form\Decorator\Exception
      */
-    public function setCallback($callback)
+    public function setCallback ($callback)
     {
-        if (!is_callable($callback)) {
-            throw new Exception\InvalidArgumentException('Invalid callback provided to callback decorator');
+        if (! is_callable($callback)) {
+            throw new Exception\InvalidArgumentException(
+            'Invalid callback provided to callback decorator');
         }
         $this->_callback = $callback;
         return $this;
@@ -83,7 +85,7 @@ class Callback extends AbstractDecorator
      *
      * @return null|string|array
      */
-    public function getCallback()
+    public function getCallback ()
     {
         if (null === $this->_callback) {
             if (null !== ($callback = $this->getOption('callback'))) {
@@ -91,7 +93,7 @@ class Callback extends AbstractDecorator
                 $this->removeOption('callback');
             }
         }
-
+        
         return $this->_callback;
     }
 
@@ -105,18 +107,19 @@ class Callback extends AbstractDecorator
      * @param  string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
         $callback = $this->getCallback();
         if (null === $callback) {
             return $content;
         }
-
+        
         $placement = $this->getPlacement();
         $separator = $this->getSeparator();
-
-        $response = call_user_func($callback, $content, $this->getElement(), $this->getOptions());
-
+        
+        $response = call_user_func($callback, $content, $this->getElement(), 
+        $this->getOptions());
+        
         switch ($placement) {
             case self::APPEND:
                 return $content . $separator . $response;

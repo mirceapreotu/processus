@@ -19,24 +19,25 @@
  */
 
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Writer\Renderer\Entry;
 use Zend\Feed\Writer\Renderer;
 use Zend\Feed\Writer;
 
 /**
-* @uses DOMDocument
-* @uses \Zend\Date\Date
-* @uses \Zend\Feed\Writer\Renderer\RendererAbstract
-* @uses \Zend\Feed\Writer\Renderer\RendererInterface
-* @category Zend
-* @package Zend_Feed_Writer
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @uses DOMDocument
+ * @uses \Zend\Date\Date
+ * @uses \Zend\Feed\Writer\Renderer\RendererAbstract
+ * @uses \Zend\Feed\Writer\Renderer\RendererInterface
+ * @category Zend
+ * @package Zend_Feed_Writer
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 class AtomDeleted extends Renderer\AbstractRenderer implements Renderer\Renderer
 {
+
     /**
      * Constructor
      * 
@@ -53,7 +54,7 @@ class AtomDeleted extends Renderer\AbstractRenderer implements Renderer\Renderer
      *
      * @return \Zend\Feed\Writer\Renderer\Entry\Atom
      */
-    public function render()
+    public function render ()
     {
         $this->_dom = new \DOMDocument('1.0', $this->_container->getEncoding());
         $this->_dom->formatOutput = true;
@@ -61,14 +62,16 @@ class AtomDeleted extends Renderer\AbstractRenderer implements Renderer\Renderer
         $this->_dom->appendChild($entry);
         
         $entry->setAttribute('ref', $this->_container->getReference());
-        $entry->setAttribute('when', $this->_container->getWhen()->get(Date\Date::ISO_8601));
+        $entry->setAttribute('when', 
+        $this->_container->getWhen()
+            ->get(Date\Date::ISO_8601));
         
         $this->_setBy($this->_dom, $entry);
         $this->_setComment($this->_dom, $entry);
         
         return $this;
     }
-    
+
     /**
      * Set tombstone comment
      * 
@@ -76,18 +79,20 @@ class AtomDeleted extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setComment(\DOMDocument $dom, \DOMElement $root)
+    protected function _setComment (\DOMDocument $dom,\DOMElement $root)
     {
-        if(!$this->getDataContainer()->getComment()) {
+        if (! $this->getDataContainer()->getComment()) {
             return;
         }
         $c = $dom->createElement('at:comment');
         $root->appendChild($c);
         $c->setAttribute('type', 'html');
-        $cdata = $dom->createCDATASection($this->getDataContainer()->getComment());
+        $cdata = $dom->createCDATASection(
+        $this->getDataContainer()
+            ->getComment());
         $c->appendChild($cdata);
     }
-    
+
     /**
      * Set entry authors 
      * 
@@ -95,10 +100,10 @@ class AtomDeleted extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setBy(\DOMDocument $dom, \DOMElement $root)
+    protected function _setBy (\DOMDocument $dom,\DOMElement $root)
     {
         $data = $this->_container->getBy();
-        if ((!$data || empty($data))) {
+        if ((! $data || empty($data))) {
             return;
         }
         $author = $this->_dom->createElement('at:by');
@@ -120,5 +125,5 @@ class AtomDeleted extends Renderer\AbstractRenderer implements Renderer\Renderer
             $uri->appendChild($text);
         }
     }
-    
+
 }

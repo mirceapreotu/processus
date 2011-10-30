@@ -32,13 +32,14 @@ namespace Zend\Filter\Word;
  */
 class DashToUnderscore extends SeparatorToSeparator
 {
+
     /**
      * Constructor
      *
      * @param  string $separator Space by default
      * @return void
      */
-    public function __construct()
+    public function __construct ()
     {
         parent::__construct('-', '_');
     }

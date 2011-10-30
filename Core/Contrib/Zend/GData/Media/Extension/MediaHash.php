@@ -39,7 +39,9 @@ class MediaHash extends \Zend\GData\Extension
 {
 
     protected $_rootElement = 'hash';
+
     protected $_rootNamespace = 'media';
+
     protected $_algo = null;
 
     /**
@@ -48,7 +50,7 @@ class MediaHash extends \Zend\GData\Extension
      * @param string $text
      * @param string $algo
      */
-    public function __construct($text = null, $algo = null)
+    public function __construct ($text = null, $algo = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Media::$namespaces);
         parent::__construct();
@@ -66,7 +68,7 @@ class MediaHash extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_algo !== null) {
@@ -83,21 +85,21 @@ class MediaHash extends \Zend\GData\Extension
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'algo':
-            $this->_algo = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'algo':
+                $this->_algo = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
     /**
      * @return string The algo
      */
-    public function getAlgo()
+    public function getAlgo ()
     {
         return $this->_algo;
     }
@@ -106,7 +108,7 @@ class MediaHash extends \Zend\GData\Extension
      * @param string $value
      * @return \Zend\GData\Media\Extension\MediaHash Provides a fluent interface
      */
-    public function setAlgo($value)
+    public function setAlgo ($value)
     {
         $this->_algo = $value;
         return $this;

@@ -39,14 +39,16 @@ class AccessLevel extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'gCal';
+
     protected $_rootElement = 'accesslevel';
+
     protected $_value = null;
 
     /**
      * Constructs a new Zend_Gdata_Calendar_Extension_AccessLevel object.
      * @param string $value (optional) The text content of the element.
      */
-    public function __construct($value = null)
+    public function __construct ($value = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Calendar::$namespaces);
         parent::__construct();
@@ -63,7 +65,7 @@ class AccessLevel extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_value != null) {
@@ -79,14 +81,14 @@ class AccessLevel extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'value':
-            $this->_value = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'value':
+                $this->_value = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -95,11 +97,10 @@ class AccessLevel extends \Zend\GData\Extension
      *
      * @return string The attribute being modified.
      */
-    public function getValue()
+    public function getValue ()
     {
         return $this->_value;
     }
-
 
     /**
      * Set the value for this element's value attribute.
@@ -107,7 +108,7 @@ class AccessLevel extends \Zend\GData\Extension
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\Calendar\Extension\Selected The element being modified.
      */
-    public function setValue($value)
+    public function setValue ($value)
     {
         $this->_value = $value;
         return $this;
@@ -117,7 +118,7 @@ class AccessLevel extends \Zend\GData\Extension
      * Magic toString method allows using this directly via echo
      * Works best in PHP >= 4.2.0
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getValue();
     }

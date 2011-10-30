@@ -41,7 +41,7 @@ class Icon extends Extension
 
     protected $_rootElement = 'icon';
 
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         parent::__construct();
         $this->_text = $text;

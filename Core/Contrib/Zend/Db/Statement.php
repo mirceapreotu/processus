@@ -40,13 +40,13 @@ interface Statement
      * Bind a column of the statement result set to a PHP variable.
      *
      * @param string $column Name the column in the result set, either by
-     *                       position or by name.
+     * position or by name.
      * @param mixed  $param  Reference to the PHP variable containing the value.
      * @param mixed  $type   OPTIONAL
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function bindColumn($column, &$param, $type = null);
+    public function bindColumn ($column, &$param, $type = null);
 
     /**
      * Binds a parameter to the specified variable name.
@@ -59,7 +59,8 @@ interface Statement
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function bindParam($parameter, &$variable, $type = null, $length = null, $options = null);
+    public function bindParam ($parameter, &$variable, $type = null, $length = null, 
+    $options = null);
 
     /**
      * Binds a value to a parameter.
@@ -70,7 +71,7 @@ interface Statement
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function bindValue($parameter, $value, $type = null);
+    public function bindValue ($parameter, $value, $type = null);
 
     /**
      * Closes the cursor, allowing the statement to be executed again.
@@ -78,7 +79,7 @@ interface Statement
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function closeCursor();
+    public function closeCursor ();
 
     /**
      * Returns the number of columns in the result set.
@@ -87,7 +88,7 @@ interface Statement
      * @return int The number of columns.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function columnCount();
+    public function columnCount ();
 
     /**
      * Retrieves the error code, if any, associated with the last operation on
@@ -96,7 +97,7 @@ interface Statement
      * @return string error code.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function errorCode();
+    public function errorCode ();
 
     /**
      * Retrieves an array of error information, if any, associated with the
@@ -105,7 +106,7 @@ interface Statement
      * @return array
      * @throws \Zend\Db\Statement\Exception
      */
-    public function errorInfo();
+    public function errorInfo ();
 
     /**
      * Executes a prepared statement.
@@ -114,7 +115,7 @@ interface Statement
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function execute(array $params = array());
+    public function execute (array $params = array());
 
     /**
      * Fetches a row from the result set.
@@ -125,7 +126,7 @@ interface Statement
      * @return mixed Array, object, or scalar depending on fetch mode.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function fetch($style = null, $cursor = null, $offset = null);
+    public function fetch ($style = null, $cursor = null, $offset = null);
 
     /**
      * Returns an array containing all of the result set rows.
@@ -135,7 +136,7 @@ interface Statement
      * @return array Collection of rows, each in a format by the fetch mode.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function fetchAll($style = null, $col = null);
+    public function fetchAll ($style = null, $col = null);
 
     /**
      * Returns a single column from the next row of a result set.
@@ -144,7 +145,7 @@ interface Statement
      * @return string
      * @throws \Zend\Db\Statement\Exception
      */
-    public function fetchColumn($col = 0);
+    public function fetchColumn ($col = 0);
 
     /**
      * Fetches the next row and returns it as an object.
@@ -154,7 +155,7 @@ interface Statement
      * @return mixed One object instance of the specified class.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function fetchObject($class = 'stdClass', array $config = array());
+    public function fetchObject ($class = 'stdClass', array $config = array());
 
     /**
      * Retrieve a statement attribute.
@@ -163,7 +164,7 @@ interface Statement
      * @return mixed      Attribute value.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function getAttribute($key);
+    public function getAttribute ($key);
 
     /**
      * Retrieves the next rowset (result set) for a SQL statement that has
@@ -173,7 +174,7 @@ interface Statement
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function nextRowset();
+    public function nextRowset ();
 
     /**
      * Returns the number of rows affected by the execution of the
@@ -183,7 +184,7 @@ interface Statement
      * @return int     The number of rows affected.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function rowCount();
+    public function rowCount ();
 
     /**
      * Set a statement attribute.
@@ -193,7 +194,7 @@ interface Statement
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function setAttribute($key, $val);
+    public function setAttribute ($key, $val);
 
     /**
      * Set the default fetch mode for this statement.
@@ -202,6 +203,6 @@ interface Statement
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function setFetchMode($mode);
+    public function setFetchMode ($mode);
 
 }

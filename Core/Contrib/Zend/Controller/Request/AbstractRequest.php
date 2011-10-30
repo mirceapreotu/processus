@@ -31,6 +31,7 @@ namespace Zend\Controller\Request;
  */
 abstract class AbstractRequest
 {
+
     /**
      * Has the action been dispatched?
      * @var boolean
@@ -84,12 +85,12 @@ abstract class AbstractRequest
      *
      * @return string
      */
-    public function getModuleName()
+    public function getModuleName ()
     {
         if (null === $this->_module) {
             $this->_module = $this->getParam($this->getModuleKey());
         }
-
+        
         return $this->_module;
     }
 
@@ -99,7 +100,7 @@ abstract class AbstractRequest
      * @param string $value
      * @return \Zend\Controller\Request\AbstractRequest
      */
-    public function setModuleName($value)
+    public function setModuleName ($value)
     {
         $this->_module = $value;
         return $this;
@@ -110,12 +111,12 @@ abstract class AbstractRequest
      *
      * @return string
      */
-    public function getControllerName()
+    public function getControllerName ()
     {
         if (null === $this->_controller) {
             $this->_controller = $this->getParam($this->getControllerKey());
         }
-
+        
         return $this->_controller;
     }
 
@@ -125,7 +126,7 @@ abstract class AbstractRequest
      * @param string $value
      * @return \Zend\Controller\Request\AbstractRequest
      */
-    public function setControllerName($value)
+    public function setControllerName ($value)
     {
         $this->_controller = $value;
         return $this;
@@ -136,12 +137,12 @@ abstract class AbstractRequest
      *
      * @return string
      */
-    public function getActionName()
+    public function getActionName ()
     {
         if (null === $this->_action) {
             $this->_action = $this->getParam($this->getActionKey());
         }
-
+        
         return $this->_action;
     }
 
@@ -151,7 +152,7 @@ abstract class AbstractRequest
      * @param string $value
      * @return \Zend\Controller\Request\AbstractRequest
      */
-    public function setActionName($value)
+    public function setActionName ($value)
     {
         $this->_action = $value;
         /**
@@ -168,7 +169,7 @@ abstract class AbstractRequest
      *
      * @return string
      */
-    public function getModuleKey()
+    public function getModuleKey ()
     {
         return $this->_moduleKey;
     }
@@ -179,7 +180,7 @@ abstract class AbstractRequest
      * @param string $key
      * @return \Zend\Controller\Request\AbstractRequest
      */
-    public function setModuleKey($key)
+    public function setModuleKey ($key)
     {
         $this->_moduleKey = (string) $key;
         return $this;
@@ -190,7 +191,7 @@ abstract class AbstractRequest
      *
      * @return string
      */
-    public function getControllerKey()
+    public function getControllerKey ()
     {
         return $this->_controllerKey;
     }
@@ -201,7 +202,7 @@ abstract class AbstractRequest
      * @param string $key
      * @return \Zend\Controller\Request\AbstractRequest
      */
-    public function setControllerKey($key)
+    public function setControllerKey ($key)
     {
         $this->_controllerKey = (string) $key;
         return $this;
@@ -212,7 +213,7 @@ abstract class AbstractRequest
      *
      * @return string
      */
-    public function getActionKey()
+    public function getActionKey ()
     {
         return $this->_actionKey;
     }
@@ -223,7 +224,7 @@ abstract class AbstractRequest
      * @param string $key
      * @return \Zend\Controller\Request\AbstractRequest
      */
-    public function setActionKey($key)
+    public function setActionKey ($key)
     {
         $this->_actionKey = (string) $key;
         return $this;
@@ -236,13 +237,13 @@ abstract class AbstractRequest
      * @param mixed $default Default value to use if key not found
      * @return mixed
      */
-    public function getParam($key, $default = null)
+    public function getParam ($key, $default = null)
     {
         $key = (string) $key;
         if (isset($this->_params[$key])) {
             return $this->_params[$key];
         }
-
+        
         return $default;
     }
 
@@ -251,7 +252,7 @@ abstract class AbstractRequest
      *
      * @return array
      */
-    public function getUserParams()
+    public function getUserParams ()
     {
         return $this->_params;
     }
@@ -263,12 +264,12 @@ abstract class AbstractRequest
      * @param string $default Default value to use if key not found
      * @return mixed
      */
-    public function getUserParam($key, $default = null)
+    public function getUserParam ($key, $default = null)
     {
         if (isset($this->_params[$key])) {
             return $this->_params[$key];
         }
-
+        
         return $default;
     }
 
@@ -281,16 +282,16 @@ abstract class AbstractRequest
      * @param mixed $value
      * @return \Zend\Controller\Request\AbstractRequest
      */
-    public function setParam($key, $value)
+    public function setParam ($key, $value)
     {
         $key = (string) $key;
-
+        
         if ((null === $value) && isset($this->_params[$key])) {
             unset($this->_params[$key]);
         } elseif (null !== $value) {
             $this->_params[$key] = $value;
         }
-
+        
         return $this;
     }
 
@@ -299,10 +300,10 @@ abstract class AbstractRequest
      *
      * @return array
      */
-     public function getParams()
-     {
-         return $this->_params;
-     }
+    public function getParams ()
+    {
+        return $this->_params;
+    }
 
     /**
      * Set action parameters en masse; does not overwrite
@@ -312,16 +313,16 @@ abstract class AbstractRequest
      * @param array $array
      * @return \Zend\Controller\Request\AbstractRequest
      */
-    public function setParams(array $array)
+    public function setParams (array $array)
     {
         $this->_params = $this->_params + (array) $array;
-
+        
         foreach ($this->_params as $key => $value) {
             if (null === $value) {
                 unset($this->_params[$key]);
             }
         }
-
+        
         return $this;
     }
 
@@ -330,7 +331,7 @@ abstract class AbstractRequest
      *
      * @return \Zend\Controller\Request\AbstractRequest
      */
-    public function clearParams()
+    public function clearParams ()
     {
         $this->_params = array();
         return $this;
@@ -342,7 +343,7 @@ abstract class AbstractRequest
      * @param boolean $flag
      * @return \Zend\Controller\Request\AbstractRequest
      */
-    public function setDispatched($flag = true)
+    public function setDispatched ($flag = true)
     {
         $this->_dispatched = $flag ? true : false;
         return $this;
@@ -353,7 +354,7 @@ abstract class AbstractRequest
      *
      * @return boolean
      */
-    public function isDispatched()
+    public function isDispatched ()
     {
         return $this->_dispatched;
     }

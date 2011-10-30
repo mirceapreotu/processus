@@ -35,9 +35,9 @@ namespace Zend\Application\Resource;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Router
-    extends AbstractResource
+class Router extends AbstractResource
 {
+
     /**
      * @var \Zend\Controller\Router\Rewrite
      */
@@ -48,7 +48,7 @@ class Router
      *
      * @return \Zend\Controller\Router\Rewrite
      */
-    public function init()
+    public function init ()
     {
         return $this->getRouter();
     }
@@ -58,29 +58,32 @@ class Router
      *
      * @return \Zend\Controller\Router\Rewrite
      */
-    public function getRouter()
+    public function getRouter ()
     {
         if (null === $this->_router) {
             $bootstrap = $this->getBootstrap();
             $bootstrap->bootstrap('frontcontroller');
             $this->_router = $bootstrap->getContainer()->frontcontroller->getRouter();
-
+            
             $options = $this->getOptions();
-            if (!isset($options['routes'])) {
+            if (! isset($options['routes'])) {
                 $options['routes'] = array();
             }
-
+            
             if (isset($options['chainNameSeparator'])) {
-                $this->_router->setChainNameSeparator($options['chainNameSeparator']);
+                $this->_router->setChainNameSeparator(
+                $options['chainNameSeparator']);
             }
-
+            
             if (isset($options['useRequestParametersAsGlobal'])) {
-                $this->_router->useRequestParametersAsGlobal($options['useRequestParametersAsGlobal']);
+                $this->_router->useRequestParametersAsGlobal(
+                $options['useRequestParametersAsGlobal']);
             }
-
-            $this->_router->addConfig(new \Zend\Config\Config($options['routes']));
+            
+            $this->_router->addConfig(
+            new \Zend\Config\Config($options['routes']));
         }
-
+        
         return $this->_router;
     }
 }

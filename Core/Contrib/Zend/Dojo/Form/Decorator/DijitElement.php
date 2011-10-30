@@ -23,8 +23,7 @@
  */
 namespace Zend\Dojo\Form\Decorator;
 
-use Zend\Form\Decorator\ViewHelper as ViewHelperDecorator,
-    Zend\Form\Decorator\Exception\RunTimeException as DecoratorException;
+use Zend\Form\Decorator\ViewHelper as ViewHelperDecorator, Zend\Form\Decorator\Exception\RunTimeException as DecoratorException;
 
 /**
  * Zend_Dojo_Form_Decorator_DijitElement
@@ -48,6 +47,7 @@ use Zend\Form\Decorator\ViewHelper as ViewHelperDecorator,
  */
 class DijitElement extends ViewHelperDecorator
 {
+
     /**
      * Element attributes
      * @var array
@@ -58,12 +58,9 @@ class DijitElement extends ViewHelperDecorator
      * Element types that represent buttons
      * @var array
      */
-    protected $_buttonTypes = array(
-        'Zend\Dojo\Form\Element\Button',
-        'Zend\Form\Element\Button',
-        'Zend\Form\Element\Reset',
-        'Zend\Form\Element\Submit',
-    );
+    protected $_buttonTypes = array('Zend\Dojo\Form\Element\Button', 
+    'Zend\Form\Element\Button', 'Zend\Form\Element\Reset', 
+    'Zend\Form\Element\Submit');
 
     /**
      * Dijit option parameters
@@ -76,7 +73,7 @@ class DijitElement extends ViewHelperDecorator
      *
      * @return array
      */
-    public function getElementAttribs()
+    public function getElementAttribs ()
     {
         if (null === $this->_attribs) {
             $this->_attribs = parent::getElementAttribs();
@@ -85,7 +82,7 @@ class DijitElement extends ViewHelperDecorator
                 unset($this->_attribs['dijitParams']);
             }
         }
-
+        
         return $this->_attribs;
     }
 
@@ -96,7 +93,7 @@ class DijitElement extends ViewHelperDecorator
      * @param  mixed $value
      * @return \Zend\Dojo\Form\Decorator\DijitContainer
      */
-    public function setDijitParam($key, $value)
+    public function setDijitParam ($key, $value)
     {
         $this->_dijitParams[(string) $key] = $value;
         return $this;
@@ -108,7 +105,7 @@ class DijitElement extends ViewHelperDecorator
      * @param  array $params
      * @return \Zend\Dojo\Form\Decorator\DijitContainer
      */
-    public function setDijitParams(array $params)
+    public function setDijitParams (array $params)
     {
         $this->_dijitParams = array_merge($this->_dijitParams, $params);
         return $this;
@@ -120,14 +117,14 @@ class DijitElement extends ViewHelperDecorator
      * @param  string $key
      * @return mixed|null
      */
-    public function getDijitParam($key)
+    public function getDijitParam ($key)
     {
         $this->getElementAttribs();
         $key = (string) $key;
         if (array_key_exists($key, $this->_dijitParams)) {
             return $this->_dijitParams[$key];
         }
-
+        
         return null;
     }
 
@@ -136,7 +133,7 @@ class DijitElement extends ViewHelperDecorator
      *
      * @return array
      */
-    public function getDijitParams()
+    public function getDijitParams ()
     {
         $this->getElementAttribs();
         return $this->_dijitParams;
@@ -153,40 +150,45 @@ class DijitElement extends ViewHelperDecorator
      * @return string
      * @throws \Zend\Form\Decorator\Exception if element or view are not registered
      */
-    public function render($content)
+    public function render ($content)
     {
         $element = $this->getElement();
         $view = $element->getView();
         if (null === $view) {
-            throw new DecoratorException('DijitElement decorator cannot render without a registered view object');
+            throw new DecoratorException(
+            'DijitElement decorator cannot render without a registered view object');
         }
-
+        
         $options = null;
-        $helper    = $this->getHelper();
+        $helper = $this->getHelper();
         $separator = $this->getSeparator();
-        $value     = $this->getValue($element);
-        $attribs   = $this->getElementAttribs();
-        $name      = $element->getFullyQualifiedName();
-
+        $value = $this->getValue($element);
+        $attribs = $this->getElementAttribs();
+        $name = $element->getFullyQualifiedName();
+        
         $dijitParams = $this->getDijitParams();
         $dijitParams['required'] = $element->isRequired();
-
+        
         $id = $element->getId();
         if ($view->plugin('dojo')->hasDijit($id)) {
-            trigger_error(sprintf('Duplicate dijit ID detected for id "%s; temporarily generating uniqid"', $id), E_USER_NOTICE);
+            trigger_error(
+            sprintf(
+            'Duplicate dijit ID detected for id "%s; temporarily generating uniqid"', 
+            $id), E_USER_NOTICE);
             $base = $id;
             do {
                 $id = $base . '-' . uniqid();
             } while ($view->plugin('dojo')->hasDijit($id));
         }
         $attribs['id'] = $id;
-
+        
         if (array_key_exists('options', $attribs)) {
-               $options = $attribs['options'];
+            $options = $attribs['options'];
         }
-
+        
         $helper = $view->plugin($helper);
-        $elementContent = $helper($name, $value, $dijitParams, $attribs, $options);
+        $elementContent = $helper($name, $value, $dijitParams, $attribs, 
+        $options);
         switch ($this->getPlacement()) {
             case self::APPEND:
                 return $content . $separator . $elementContent;

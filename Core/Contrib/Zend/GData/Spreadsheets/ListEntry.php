@@ -63,16 +63,16 @@ class ListEntry extends \Zend\GData\Entry
      * Constructs a new Zend_Gdata_Spreadsheets_ListEntry object.
      * @param DOMElement $element An existing XML element on which to base this new object.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(Spreadsheets::$namespaces);
         parent::__construct($element);
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
-        if (!empty($this->_custom)) {
+        if (! empty($this->_custom)) {
             foreach ($this->_custom as $custom) {
                 $element->appendChild($custom->getDOM($element->ownerDocument));
             }
@@ -80,17 +80,17 @@ class ListEntry extends \Zend\GData\Entry
         return $element;
     }
 
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         switch ($child->namespaceURI) {
-        case $this->lookupNamespace('gsx');
-            $custom = new Extension\Custom($child->localName);
-            $custom->transferFromDOM($child);
-            $this->addCustom($custom);
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('gsx'):
+                $custom = new Extension\Custom($child->localName);
+                $custom->transferFromDOM($child);
+                $this->addCustom($custom);
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
@@ -98,7 +98,7 @@ class ListEntry extends \Zend\GData\Entry
      * Gets the row elements contained by this list entry.
      * @return array The custom row elements in this list entry
      */
-    public function getCustom()
+    public function getCustom ()
     {
         return $this->_custom;
     }
@@ -106,15 +106,15 @@ class ListEntry extends \Zend\GData\Entry
     /**
      * Gets a single row element contained by this list entry using its name.
      * @param string $name The name of a custom element to return. If null
-     *          or not defined, an array containing all custom elements
-     *          indexed by name will be returned.
+     * or not defined, an array containing all custom elements
+     * indexed by name will be returned.
      * @return mixed If a name is specified, the
-     *          Zend_Gdata_Spreadsheets_Extension_Custom element requested,
-     *          is returned or null if not found. Otherwise, an array of all
-     *          Zend_Gdata_Spreadsheets_Extension_Custom elements is returned
-     *          indexed by name.
+     * Zend_Gdata_Spreadsheets_Extension_Custom element requested,
+     * is returned or null if not found. Otherwise, an array of all
+     * Zend_Gdata_Spreadsheets_Extension_Custom elements is returned
+     * indexed by name.
      */
-    public function getCustomByName($name = null)
+    public function getCustomByName ($name = null)
     {
         if ($name === null) {
             return $this->_customByName;
@@ -131,10 +131,10 @@ class ListEntry extends \Zend\GData\Entry
      * Sets the row elements contained by this list entry. If any
      * custom row elements were previously stored, they will be overwritten.
      * @param array $custom The custom row elements to be contained in this
-     *          list entry.
+     * list entry.
      * @return \Zend\GData\Spreadsheets\ListEntry Provides a fluent interface.
      */
-    public function setCustom($custom)
+    public function setCustom ($custom)
     {
         $this->_custom = array();
         foreach ($custom as $c) {
@@ -146,10 +146,10 @@ class ListEntry extends \Zend\GData\Entry
     /**
      * Add an individual custom row element to this list entry.
      * @param \Zend\GData\Spreadsheets\Extension\Custom $custom The custom
-     *             element to be added.
+     * element to be added.
      * @return \Zend\GData\Spreadsheets\ListEntry Provides a fluent interface.
      */
-    public function addCustom($custom)
+    public function addCustom ($custom)
     {
         $this->_custom[] = $custom;
         $this->_customByName[$custom->getColumnName()] = $custom;
@@ -163,7 +163,7 @@ class ListEntry extends \Zend\GData\Entry
      * @return \Zend\GData\Spreadsheets\ListEntry Provides a fluent interface.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function removeCustom($index)
+    public function removeCustom ($index)
     {
         if (array_key_exists($index, $this->_custom)) {
             $element = $this->_custom[$index];
@@ -175,8 +175,7 @@ class ListEntry extends \Zend\GData\Entry
             $key = array_search($element, $this->_customByName);
             unset($this->_customByName[$key]);
         } else {
-            throw new App\InvalidArgumentException(
-                'Element does not exist.');
+            throw new App\InvalidArgumentException('Element does not exist.');
         }
         return $this;
     }
@@ -187,7 +186,7 @@ class ListEntry extends \Zend\GData\Entry
      * @return \Zend\GData\Spreadsheets\ListEntry Provides a fluent interface.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function removeCustomByName($name)
+    public function removeCustomByName ($name)
     {
         if (array_key_exists($name, $this->_customByName)) {
             $element = $this->_customByName[$name];
@@ -197,8 +196,7 @@ class ListEntry extends \Zend\GData\Entry
             $key = array_search($element, $this->_custom);
             unset($this->_custom[$key]);
         } else {
-            throw new App\InvalidArgumentException(
-                'Element does not exist.');
+            throw new App\InvalidArgumentException('Element does not exist.');
         }
         return $this;
     }

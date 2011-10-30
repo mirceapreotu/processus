@@ -33,6 +33,7 @@ namespace Zend\Filter;
  */
 class Callback extends AbstractFilter
 {
+
     /**
      * Callback in a call_user_func format
      *
@@ -53,24 +54,26 @@ class Callback extends AbstractFilter
      * @param string|array $callback Callback in a call_user_func format
      * @param mixed        $options  (Optional) Default options for this filter
      */
-    public function __construct($options)
+    public function __construct ($options)
     {
         if ($options instanceof \Zend\Config\Config) {
             $options = $options->toArray();
-        } else if (!is_array($options) || !array_key_exists('callback', $options)) {
-            $options          = func_get_args();
-            $temp['callback'] = array_shift($options);
-            if (!empty($options)) {
-                $temp['options'] = array_shift($options);
+        } else 
+            if (! is_array($options) || ! array_key_exists('callback', $options)) {
+                $options = func_get_args();
+                $temp['callback'] = array_shift($options);
+                if (! empty($options)) {
+                    $temp['options'] = array_shift($options);
+                }
+                
+                $options = $temp;
             }
-
-            $options = $temp;
+        
+        if (! array_key_exists('callback', $options)) {
+            throw new Exception\InvalidArgumentException(
+            'Missing callback to use');
         }
-
-        if (!array_key_exists('callback', $options)) {
-            throw new Exception\InvalidArgumentException('Missing callback to use');
-        }
-
+        
         $this->setCallback($options['callback']);
         if (array_key_exists('options', $options)) {
             $this->setOptions($options['options']);
@@ -82,7 +85,7 @@ class Callback extends AbstractFilter
      *
      * @return string|array Set callback
      */
-    public function getCallback()
+    public function getCallback ()
     {
         return $this->_callback;
     }
@@ -93,12 +96,13 @@ class Callback extends AbstractFilter
      * @param unknown_type $callback
      * @return unknown
      */
-    public function setCallback($callback, $options = null)
+    public function setCallback ($callback, $options = null)
     {
-        if (!is_callable($callback)) {
-            throw new Exception\InvalidArgumentException('Callback can not be accessed');
+        if (! is_callable($callback)) {
+            throw new Exception\InvalidArgumentException(
+            'Callback can not be accessed');
         }
-
+        
         $this->_callback = $callback;
         $this->setOptions($options);
         return $this;
@@ -109,7 +113,7 @@ class Callback extends AbstractFilter
      *
      * @return mixed
      */
-    public function getOptions()
+    public function getOptions ()
     {
         return $this->_options;
     }
@@ -120,7 +124,7 @@ class Callback extends AbstractFilter
      * @param mixed $options Default options to set
      * @return \Zend\Filter\Callback
      */
-    public function setOptions($options)
+    public function setOptions ($options)
     {
         $this->_options = $options;
         return $this;
@@ -132,20 +136,20 @@ class Callback extends AbstractFilter
      * @param  mixed $value Options for the set callback
      * @return mixed Result from the filter which was callbacked
      */
-    public function filter($value)
+    public function filter ($value)
     {
         $options = array();
-
+        
         if ($this->_options !== null) {
-            if (!is_array($this->_options)) {
+            if (! is_array($this->_options)) {
                 $options = array($this->_options);
             } else {
                 $options = $this->_options;
             }
         }
-
+        
         array_unshift($options, $value);
-
+        
         return call_user_func_array($this->_callback, $options);
     }
 }

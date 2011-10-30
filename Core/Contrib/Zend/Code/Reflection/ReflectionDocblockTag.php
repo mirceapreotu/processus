@@ -38,25 +38,17 @@ class ReflectionDocblockTag implements Reflection
 {
 
     const TRIM_WHITESPACE = 'trimWhitespace';
-    
+
     /**
      * @var array Rules and regexs to parse tags
      */
     protected static $typeRules = array(
-        array(
-            'param',
-            '#^@(?<name>param)\s(?<type>\s*[\w|\\\|]+)(?:\s(?<variable>\s*\$\S*))?(?:\s(?<description>.*))?#s'
-            ),
-        array(
-            'return',
-            '#^@(?<name>return)\s(?<type>\s*[\w|\\\|]+)(?:\s(?<description>.*))?#'
-            ),
-        array(
-            'tag',
-            '#^@(?<name>\w+)(?:\s(?<description>(?:.*)+))?#'
-            )
-        );
-    
+    array('param', 
+    '#^@(?<name>param)\s(?<type>\s*[\w|\\\|]+)(?:\s(?<variable>\s*\$\S*))?(?:\s(?<description>.*))?#s'), 
+    array('return', 
+    '#^@(?<name>return)\s(?<type>\s*[\w|\\\|]+)(?:\s(?<description>.*))?#'), 
+    array('tag', '#^@(?<name>\w+)(?:\s(?<description>(?:.*)+))?#'));
+
     /**
      * @var string
      */
@@ -75,9 +67,8 @@ class ReflectionDocblockTag implements Reflection
      * @todo   What should this do?
      * @return void
      */
-    public static function export()
-    {
-    }
+    public static function export ()
+    {}
 
     /**
      * Constructor
@@ -85,7 +76,7 @@ class ReflectionDocblockTag implements Reflection
      * @param string $tagDocblockLine
      * @return ReflectionDocblockTag
      */
-    public function __construct($tagDocblockLine)
+    public function __construct ($tagDocblockLine)
     {
         $this->parse($tagDocblockLine);
     }
@@ -95,7 +86,7 @@ class ReflectionDocblockTag implements Reflection
      *
      * @return string
      */
-    public function getName()
+    public function getName ()
     {
         return $this->name;
     }
@@ -105,10 +96,11 @@ class ReflectionDocblockTag implements Reflection
      *
      * @return string
      */
-    public function __call($methodName, $params)
+    public function __call ($methodName, $params)
     {
         if (strtolower(substr($methodName, 0, 3)) !== 'get') {
-            throw new Exception\BadMethodCallException('Method ' . $methodName . ' is not supported');
+            throw new Exception\BadMethodCallException(
+            'Method ' . $methodName . ' is not supported');
         }
         
         $name = substr($methodName, 3);
@@ -118,17 +110,18 @@ class ReflectionDocblockTag implements Reflection
         }
         return $value;
     }
-    
+
     /**
      * __get()
      * 
      * @param string $name
      * @return multitype:
      */
-    public function __get($name)
+    public function __get ($name)
     {
-        if (!$this->__isset($name)) {
-            throw new Exception\InvalidArgumentException('Property by name ' . $name . ' does not exist');
+        if (! $this->__isset($name)) {
+            throw new Exception\InvalidArgumentException(
+            'Property by name ' . $name . ' does not exist');
         }
         
         return $this->values[strtolower($name)];
@@ -140,17 +133,15 @@ class ReflectionDocblockTag implements Reflection
      * @param $name
      * @return bool
      */
-    public function __isset($name)
+    public function __isset ($name)
     {
         return array_key_exists(strtolower($name), $this->values);
     }
 
-    public function toString()
+    public function toString ()
     {
-        $str = "Docblock Tag [ * @"
-            . $this->name
-            . " ]".PHP_EOL;
-
+        $str = "Docblock Tag [ * @" . $this->name . " ]" . PHP_EOL;
+        
         return $str;
     }
 
@@ -162,12 +153,12 @@ class ReflectionDocblockTag implements Reflection
      * @todo   What should this do?
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->toString();
     }
-    
-    protected function parse($docblockLine)
+
+    protected function parse ($docblockLine)
     {
         foreach (self::$typeRules as $typeRule) {
             $name = $typeRule[0];
@@ -177,11 +168,12 @@ class ReflectionDocblockTag implements Reflection
                 break;
             }
         }
-
-        if (!$matches) {
-            throw new Exception\RuntimeException('Could not parse the supplied tag line (' . $docblockLine . ')');
+        
+        if (! $matches) {
+            throw new Exception\RuntimeException(
+            'Could not parse the supplied tag line (' . $docblockLine . ')');
         }
-
+        
         foreach ($matches as $name => $value) {
             if (is_string($name)) {
                 if ($name == 'name') {
@@ -192,5 +184,5 @@ class ReflectionDocblockTag implements Reflection
             }
         }
     }
-    
+
 }

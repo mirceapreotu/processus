@@ -30,6 +30,7 @@ namespace Zend\Loader;
  */
 interface SplAutoloader
 {
+
     /**
      * Constructor
      *
@@ -38,7 +39,7 @@ interface SplAutoloader
      * @param  null|array|Traversable $options 
      * @return void
      */
-    public function __construct($options = null);
+    public function __construct ($options = null);
 
     /**
      * Configure the autoloader
@@ -49,17 +50,17 @@ interface SplAutoloader
      * @param  array|Traversable $options 
      * @return SplAutoloader
      */
-    public function setOptions($options);
+    public function setOptions ($options);
 
     /**
      * Autoload a class
      *
      * @param   $class
      * @return  mixed
-     *          False [if unable to load $class]
-     *          get_class($class) [if $class is successfully loaded]
+     * False [if unable to load $class]
+     * get_class($class) [if $class is successfully loaded]
      */
-    public function autoload($class);
+    public function autoload ($class);
 
     /**
      * Register the autoloader with spl_autoload registry
@@ -71,5 +72,5 @@ interface SplAutoloader
      * 
      * @return void
      */
-    public function register();
+    public function register ();
 }

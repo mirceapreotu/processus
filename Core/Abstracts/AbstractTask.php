@@ -2,6 +2,7 @@
 
 namespace Core\Abstracts
 {
+
     /**
      * User: francis
      * Date: 9/26/11

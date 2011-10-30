@@ -23,11 +23,7 @@
  */
 namespace Zend\Code\Reflection;
 
-use ReflectionMethod,
-    Zend\Code\Reflection,
-    Zend\Code\Annotation,
-    Zend\Code\Scanner\FileScanner,
-    Zend\Code\Scanner\AnnotationScanner;
+use ReflectionMethod, Zend\Code\Reflection, Zend\Code\Annotation, Zend\Code\Scanner\FileScanner, Zend\Code\Scanner\AnnotationScanner;
 
 /**
  * @uses       ReflectionMethod
@@ -53,13 +49,14 @@ class MethodReflection extends ReflectionMethod implements Reflection
      *
      * @return DocBlockReflection
      */
-    public function getDocBlock()
+    public function getDocBlock ()
     {
         if ('' == $this->getDocComment()) {
             return false;
-            //throw new Exception\InvalidArgumentException($this->getName() . ' does not have a DocComment');
+        
+     //throw new Exception\InvalidArgumentException($this->getName() . ' does not have a DocComment');
         }
-
+        
         $instance = new DocBlockReflection($this);
         return $instance;
     }
@@ -67,19 +64,23 @@ class MethodReflection extends ReflectionMethod implements Reflection
     /**
      * @return AnnotationCollection
      */
-    public function getAnnotations(Annotation\AnnotationManager $annotationManager)
+    public function getAnnotations (
+    Annotation\AnnotationManager $annotationManager)
     {
         if (($docComment = $this->getDocComment()) == '') {
             return false;
         }
-
-        if (!$this->annotations) {
+        
+        if (! $this->annotations) {
             $fileScanner = new FileScanner($this->getFileName());
-            $nameInformation = $fileScanner->getClassNameInformation($this->getDeclaringClass()->getName());
-
-            $this->annotations = new AnnotationScanner($annotationManager, $docComment, $nameInformation);
+            $nameInformation = $fileScanner->getClassNameInformation(
+            $this->getDeclaringClass()
+                ->getName());
+            
+            $this->annotations = new AnnotationScanner($annotationManager, 
+            $docComment, $nameInformation);
         }
-
+        
         return $this->annotations;
     }
 
@@ -89,14 +90,14 @@ class MethodReflection extends ReflectionMethod implements Reflection
      * @param  bool $includeDocComment
      * @return int
      */
-    public function getStartLine($includeDocComment = false)
+    public function getStartLine ($includeDocComment = false)
     {
         if ($includeDocComment) {
             if ($this->getDocComment() != '') {
                 return $this->getDocblock()->getStartLine();
             }
         }
-
+        
         return parent::getStartLine();
     }
 
@@ -106,9 +107,9 @@ class MethodReflection extends ReflectionMethod implements Reflection
      * @param  string $reflectionClass Name of reflection class to use
      * @return ClassReflection
      */
-    public function getDeclaringClass()
+    public function getDeclaringClass ()
     {
-        $phpReflection  = parent::getDeclaringClass();
+        $phpReflection = parent::getDeclaringClass();
         $zendReflection = new ClassReflection($phpReflection->getName());
         unset($phpReflection);
         return $zendReflection;
@@ -120,12 +121,14 @@ class MethodReflection extends ReflectionMethod implements Reflection
      * @param  string $reflectionClass Name of reflection class to use
      * @return array of \Zend\Code\Reflection\ReflectionParameter objects
      */
-    public function getParameters()
+    public function getParameters ()
     {
-        $phpReflections  = parent::getParameters();
+        $phpReflections = parent::getParameters();
         $zendReflections = array();
         while ($phpReflections && ($phpReflection = array_shift($phpReflections))) {
-            $instance = new ParameterReflection(array($this->getDeclaringClass()->getName(), $this->getName()), $phpReflection->getName());
+            $instance = new ParameterReflection(
+            array($this->getDeclaringClass()->getName(), $this->getName()), 
+            $phpReflection->getName());
             $zendReflections[] = $instance;
             unset($phpReflection);
         }
@@ -139,13 +142,14 @@ class MethodReflection extends ReflectionMethod implements Reflection
      * @param  bool $includeDocblock
      * @return string
      */
-    public function getContents($includeDocblock = true)
+    public function getContents ($includeDocblock = true)
     {
         $fileContents = file($this->getFileName());
         $startNum = $this->getStartLine($includeDocblock);
         $endNum = ($this->getEndLine() - $this->getStartLine());
-
-        return implode("\n", array_splice($fileContents, $startNum, $endNum, true));
+        
+        return implode("\n", 
+        array_splice($fileContents, $startNum, $endNum, true));
     }
 
     /**
@@ -153,37 +157,35 @@ class MethodReflection extends ReflectionMethod implements Reflection
      *
      * @return string
      */
-    public function getBody()
+    public function getBody ()
     {
         $lines = array_slice(
-            file($this->getDeclaringClass()->getFileName(), FILE_IGNORE_NEW_LINES),
-            $this->getStartLine(),
-            ($this->getEndLine() - $this->getStartLine()),
-            true
-        );
-
+        file($this->getDeclaringClass()->getFileName(), FILE_IGNORE_NEW_LINES), 
+        $this->getStartLine(), ($this->getEndLine() - $this->getStartLine()), 
+        true);
+        
         $firstLine = array_shift($lines);
-
+        
         if (trim($firstLine) !== '{') {
             array_unshift($lines, $firstLine);
         }
-
+        
         $lastLine = array_pop($lines);
-
+        
         if (trim($lastLine) !== '}') {
             array_push($lines, $lastLine);
         }
-
+        
         // just in case we had code on the bracket lines
         return rtrim(ltrim(implode("\n", $lines), '{'), '}');
     }
 
-    public function toString()
+    public function toString ()
     {
         return parent::__toString();
     }
 
-    public function __toString()
+    public function __toString ()
     {
         return parent::__toString();
     }

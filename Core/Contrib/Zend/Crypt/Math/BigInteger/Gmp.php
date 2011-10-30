@@ -38,6 +38,7 @@ namespace Zend\Crypt\Math\BigInteger;
  */
 class Gmp implements BigIntegerCapable
 {
+
     /**
      * Initialise a big integer into an extension specific type.
      *
@@ -45,7 +46,7 @@ class Gmp implements BigIntegerCapable
      * @param  int $base
      * @return string
      */
-    public function init($operand, $base = 10)
+    public function init ($operand, $base = 10)
     {
         return $operand;
     }
@@ -57,7 +58,7 @@ class Gmp implements BigIntegerCapable
      * @param  string $right_operand
      * @return string
      */
-    public function add($left_operand, $right_operand)
+    public function add ($left_operand, $right_operand)
     {
         $result = gmp_add($left_operand, $right_operand);
         return gmp_strval($result);
@@ -68,7 +69,7 @@ class Gmp implements BigIntegerCapable
      * @param  string $right_operand
      * @return string
      */
-    public function subtract($left_operand, $right_operand)
+    public function subtract ($left_operand, $right_operand)
     {
         $result = gmp_sub($left_operand, $right_operand);
         return gmp_strval($result);
@@ -83,7 +84,7 @@ class Gmp implements BigIntegerCapable
      * @param  string $right_operand
      * @return int
      */
-    public function compare($left_operand, $right_operand)
+    public function compare ($left_operand, $right_operand)
     {
         $result = gmp_cmp($left_operand, $right_operand);
         return gmp_strval($result);
@@ -96,7 +97,7 @@ class Gmp implements BigIntegerCapable
      * @param  string $right_operand
      * @return string|null
      */
-    public function divide($left_operand, $right_operand)
+    public function divide ($left_operand, $right_operand)
     {
         $result = gmp_div($left_operand, $right_operand);
         return gmp_strval($result);
@@ -107,7 +108,7 @@ class Gmp implements BigIntegerCapable
      * @param  string $right_operand
      * @return string
      */
-    public function modulus($left_operand, $modulus)
+    public function modulus ($left_operand, $modulus)
     {
         $result = gmp_mod($left_operand, $modulus);
         return gmp_strval($result);
@@ -118,7 +119,7 @@ class Gmp implements BigIntegerCapable
      * @param  string $right_operand
      * @return string
      */
-    public function multiply($left_operand, $right_operand)
+    public function multiply ($left_operand, $right_operand)
     {
         $result = gmp_mul($left_operand, $right_operand);
         return gmp_strval($result);
@@ -129,7 +130,7 @@ class Gmp implements BigIntegerCapable
      * @param  string $right_operand
      * @return string
      */
-    public function pow($left_operand, $right_operand)
+    public function pow ($left_operand, $right_operand)
     {
         $result = gmp_pow($left_operand, $right_operand);
         return gmp_strval($result);
@@ -140,7 +141,7 @@ class Gmp implements BigIntegerCapable
      * @param  string $right_operand
      * @return string
      */
-    public function powmod($left_operand, $right_operand, $modulus)
+    public function powmod ($left_operand, $right_operand, $modulus)
     {
         $result = gmp_powm($left_operand, $right_operand, $modulus);
         return gmp_strval($result);
@@ -151,7 +152,7 @@ class Gmp implements BigIntegerCapable
      * @param string $right_operand
      * @return string
      */
-    public function sqrt($operand)
+    public function sqrt ($operand)
     {
         $result = gmp_sqrt($operand);
         return gmp_strval($result);
@@ -161,7 +162,7 @@ class Gmp implements BigIntegerCapable
      * @param  string $operand 
      * @return integer
      */
-    public function binaryToInteger($operand)
+    public function binaryToInteger ($operand)
     {
         $result = '0';
         while (strlen($operand)) {
@@ -176,14 +177,15 @@ class Gmp implements BigIntegerCapable
      * @param  string|integer $operand 
      * @return string
      */
-    public function integerToBinary($operand)
+    public function integerToBinary ($operand)
     {
         $bigInt = gmp_strval($operand, 16);
         if (strlen($bigInt) % 2 != 0) {
             $bigInt = '0' . $bigInt;
-        } else if ($bigInt[0] > '7') {
-            $bigInt = '00' . $bigInt;
-        }
+        } else 
+            if ($bigInt[0] > '7') {
+                $bigInt = '00' . $bigInt;
+            }
         $return = pack("H*", $bigInt);
         return $return;
     }
@@ -192,10 +194,10 @@ class Gmp implements BigIntegerCapable
      * @param  string $operand 
      * @return string
      */
-    public function hexToDecimal($operand)
+    public function hexToDecimal ($operand)
     {
         $return = '0';
-        while(strlen($hex)) {
+        while (strlen($hex)) {
             $hex = hexdec(substr($operand, 0, 4));
             $dec = gmp_add(gmp_mul($return, 65536), $hex);
             $operand = substr($operand, 4);

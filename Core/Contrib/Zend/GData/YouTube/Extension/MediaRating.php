@@ -39,6 +39,7 @@ class MediaRating extends \Zend\GData\Extension
 {
 
     protected $_rootElement = 'rating';
+
     protected $_rootNamespace = 'media';
 
     /**
@@ -58,7 +59,7 @@ class MediaRating extends \Zend\GData\Extension
      * @param string $scheme
      * @param string $country
      */
-    public function __construct($text = null, $scheme = null, $country = null)
+    public function __construct ($text = null, $scheme = null, $country = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Media::$namespaces);
         parent::__construct();
@@ -75,9 +76,9 @@ class MediaRating extends \Zend\GData\Extension
      *
      * @param DOMDocument $doc The DOMDocument used to construct DOMElements
      * @return DOMElement The DOMElement representing this element and all
-     *         child properties.
+     * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_scheme !== null) {
@@ -96,24 +97,24 @@ class MediaRating extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'scheme':
-            $this->_scheme = $attribute->nodeValue;
-            break;
-        case 'country':
-            $this->_country = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'scheme':
+                $this->_scheme = $attribute->nodeValue;
+                break;
+            case 'country':
+                $this->_country = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
     /**
      * @return string
      */
-    public function getScheme()
+    public function getScheme ()
     {
         return $this->_scheme;
     }
@@ -122,7 +123,7 @@ class MediaRating extends \Zend\GData\Extension
      * @param string $value
      * @return \Zend\GData\YouTube\Extension\MediaRating Provides a fluent interface
      */
-    public function setScheme($value)
+    public function setScheme ($value)
     {
         $this->_scheme = $value;
         return $this;
@@ -131,7 +132,7 @@ class MediaRating extends \Zend\GData\Extension
     /**
      * @return string
      */
-    public function getCountry()
+    public function getCountry ()
     {
         return $this->_country;
     }
@@ -140,11 +141,10 @@ class MediaRating extends \Zend\GData\Extension
      * @param string $value
      * @return \Zend\GData\YouTube\Extension\MediaRating Provides a fluent interface
      */
-    public function setCountry($value)
+    public function setCountry ($value)
     {
         $this->_country = $value;
         return $this;
     }
-
 
 }

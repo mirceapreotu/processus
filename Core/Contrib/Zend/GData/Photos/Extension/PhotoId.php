@@ -39,6 +39,7 @@ class PhotoId extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'gphoto';
+
     protected $_rootElement = 'id';
 
     /**
@@ -46,7 +47,7 @@ class PhotoId extends \Zend\GData\Extension
      *
      * @param string $text (optional) The value to represent.
      */
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Photos::$namespaces);
         parent::__construct();

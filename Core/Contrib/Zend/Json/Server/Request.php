@@ -36,6 +36,7 @@ use Zend\Json;
  */
 class Request
 {
+
     /**
      * Request ID
      * @var mixed
@@ -78,7 +79,7 @@ class Request
      * @param  array $options
      * @return \Zend\Json\Server\Request
      */
-    public function setOptions(array $options)
+    public function setOptions (array $options)
     {
         $methods = get_class_methods($this);
         foreach ($options as $key => $value) {
@@ -99,15 +100,15 @@ class Request
      * @param  string $key
      * @return \Zend\Json\Server\Request
      */
-    public function addParam($value, $key = null)
+    public function addParam ($value, $key = null)
     {
-        if ((null === $key) || !is_string($key)) {
+        if ((null === $key) || ! is_string($key)) {
             $index = count($this->_params);
             $this->_params[$index] = $value;
         } else {
             $this->_params[$key] = $value;
         }
-
+        
         return $this;
     }
 
@@ -117,7 +118,7 @@ class Request
      * @param  array $params
      * @return \Zend\Json\Server\Request
      */
-    public function addParams(array $params)
+    public function addParams (array $params)
     {
         foreach ($params as $key => $value) {
             $this->addParam($value, $key);
@@ -131,7 +132,7 @@ class Request
      * @param  array $params
      * @return \Zend\Json\Server\Request
      */
-    public function setParams(array $params)
+    public function setParams (array $params)
     {
         $this->_params = array();
         return $this->addParams($params);
@@ -143,12 +144,12 @@ class Request
      * @param  int|string $index
      * @return mixed|null Null when not found
      */
-    public function getParam($index)
+    public function getParam ($index)
     {
         if (array_key_exists($index, $this->_params)) {
             return $this->_params[$index];
         }
-
+        
         return null;
     }
 
@@ -157,7 +158,7 @@ class Request
      *
      * @return array
      */
-    public function getParams()
+    public function getParams ()
     {
         return $this->_params;
     }
@@ -168,9 +169,9 @@ class Request
      * @param  string $name
      * @return \Zend\Json\Server\Request
      */
-    public function setMethod($name)
+    public function setMethod ($name)
     {
-        if (!preg_match($this->_methodRegex, $name)) {
+        if (! preg_match($this->_methodRegex, $name)) {
             $this->_isMethodError = true;
         } else {
             $this->_method = $name;
@@ -183,7 +184,7 @@ class Request
      *
      * @return string
      */
-    public function getMethod()
+    public function getMethod ()
     {
         return $this->_method;
     }
@@ -193,7 +194,7 @@ class Request
      *
      * @return bool
      */
-    public function isMethodError()
+    public function isMethodError ()
     {
         return $this->_isMethodError;
     }
@@ -204,7 +205,7 @@ class Request
      * @param  mixed $name
      * @return \Zend\Json\Server\Request
      */
-    public function setId($name)
+    public function setId ($name)
     {
         $this->_id = (string) $name;
         return $this;
@@ -215,7 +216,7 @@ class Request
      *
      * @return mixed
      */
-    public function getId()
+    public function getId ()
     {
         return $this->_id;
     }
@@ -226,7 +227,7 @@ class Request
      * @param  string $version
      * @return \Zend\Json\Server\Request
      */
-    public function setVersion($version)
+    public function setVersion ($version)
     {
         if ('2.0' == $version) {
             $this->_version = '2.0';
@@ -241,7 +242,7 @@ class Request
      *
      * @return string
      */
-    public function getVersion()
+    public function getVersion ()
     {
         return $this->_version;
     }
@@ -252,7 +253,7 @@ class Request
      * @param  string $json
      * @return void
      */
-    public function loadJson($json)
+    public function loadJson ($json)
     {
         $options = Json\Json::decode($json, Json\Json::TYPE_ARRAY);
         $this->setOptions($options);
@@ -263,22 +264,20 @@ class Request
      *
      * @return string
      */
-    public function toJson()
+    public function toJson ()
     {
-        $jsonArray = array(
-            'method' => $this->getMethod()
-        );
+        $jsonArray = array('method' => $this->getMethod());
         if (null !== ($id = $this->getId())) {
             $jsonArray['id'] = $id;
         }
         $params = $this->getParams();
-        if (!empty($params)) {
+        if (! empty($params)) {
             $jsonArray['params'] = $params;
         }
         if ('2.0' == $this->getVersion()) {
             $jsonArray['jsonrpc'] = '2.0';
         }
-
+        
         return Json\Json::encode($jsonArray);
     }
 
@@ -287,7 +286,7 @@ class Request
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->toJson();
     }

@@ -35,9 +35,9 @@ namespace Zend\Application\Resource;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Layout
-    extends AbstractResource
+class Layout extends AbstractResource
 {
+
     /**
      * @var \Zend\Layout\Layout
      */
@@ -48,7 +48,7 @@ class Layout
      *
      * @return \Zend\Layout\Layout
      */
-    public function init()
+    public function init ()
     {
         $this->getBootstrap()->bootstrap('frontcontroller');
         return $this->getLayout();
@@ -59,7 +59,7 @@ class Layout
      *
      * @return \Zend\Layout\Layout
      */
-    public function getLayout()
+    public function getLayout ()
     {
         if (null === $this->_layout) {
             $this->_layout = \Zend\Layout\Layout::startMvc($this->getOptions());

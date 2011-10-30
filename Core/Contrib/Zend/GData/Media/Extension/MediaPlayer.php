@@ -39,6 +39,7 @@ class MediaPlayer extends \Zend\GData\Extension
 {
 
     protected $_rootElement = 'player';
+
     protected $_rootNamespace = 'media';
 
     /**
@@ -63,7 +64,7 @@ class MediaPlayer extends \Zend\GData\Extension
      * @param int $width
      * @param int $height
      */
-    public function __construct($url = null, $width = null, $height = null)
+    public function __construct ($url = null, $width = null, $height = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Media::$namespaces);
         parent::__construct();
@@ -82,7 +83,7 @@ class MediaPlayer extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_url !== null) {
@@ -104,27 +105,27 @@ class MediaPlayer extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'url':
-            $this->_url = $attribute->nodeValue;
-            break;
-        case 'width':
-            $this->_width = $attribute->nodeValue;
-            break;
-        case 'height':
-            $this->_height = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'url':
+                $this->_url = $attribute->nodeValue;
+                break;
+            case 'width':
+                $this->_width = $attribute->nodeValue;
+                break;
+            case 'height':
+                $this->_height = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
     /**
      * @return string
      */
-    public function getUrl()
+    public function getUrl ()
     {
         return $this->_url;
     }
@@ -133,7 +134,7 @@ class MediaPlayer extends \Zend\GData\Extension
      * @param string $value
      * @return \Zend\GData\Media\Extension\MediaPlayer Provides a fluent interface
      */
-    public function setUrl($value)
+    public function setUrl ($value)
     {
         $this->_url = $value;
         return $this;
@@ -142,7 +143,7 @@ class MediaPlayer extends \Zend\GData\Extension
     /**
      * @return int
      */
-    public function getWidth()
+    public function getWidth ()
     {
         return $this->_width;
     }
@@ -151,7 +152,7 @@ class MediaPlayer extends \Zend\GData\Extension
      * @param int $value
      * @return \Zend\GData\Media\Extension\MediaPlayer Provides a fluent interface
      */
-    public function setWidth($value)
+    public function setWidth ($value)
     {
         $this->_width = $value;
         return $this;
@@ -160,7 +161,7 @@ class MediaPlayer extends \Zend\GData\Extension
     /**
      * @return int
      */
-    public function getHeight()
+    public function getHeight ()
     {
         return $this->_height;
     }
@@ -169,7 +170,7 @@ class MediaPlayer extends \Zend\GData\Extension
      * @param int $value
      * @return \Zend\GData\Media\Extension\MediaPlayer Provides a fluent interface
      */
-    public function setHeight($value)
+    public function setHeight ($value)
     {
         $this->_height = $value;
         return $this;

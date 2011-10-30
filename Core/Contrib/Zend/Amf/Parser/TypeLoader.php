@@ -43,6 +43,7 @@ use Zend\Loader\PluginBroker;
  */
 final class TypeLoader
 {
+
     /**
      * @var string callback class
      */
@@ -51,32 +52,29 @@ final class TypeLoader
     /**
      * @var array AMF class map
      */
-    public static $classMap = array (
-        'flex.messaging.messages.AcknowledgeMessage' => 'Zend\\Amf\\Value\\Messaging\\AcknowledgeMessage',
-        'flex.messaging.messages.ErrorMessage'       => 'Zend\\Amf\\Value\\Messaging\\AsyncMessage',
-        'flex.messaging.messages.CommandMessage'     => 'Zend\\Amf\\Value\\Messaging\\CommandMessage',
-        'flex.messaging.messages.ErrorMessage'       => 'Zend\\Amf\\Value\\Messaging\\ErrorMessage',
-        'flex.messaging.messages.RemotingMessage'    => 'Zend\\Amf\\Value\\Messaging\\RemotingMessage',
-        'flex.messaging.io.ArrayCollection'          => 'Zend\\Amf\\Value\\Messaging\\ArrayCollection',
-    );
+    public static $classMap = array(
+    'flex.messaging.messages.AcknowledgeMessage' => 'Zend\\Amf\\Value\\Messaging\\AcknowledgeMessage', 
+    'flex.messaging.messages.ErrorMessage' => 'Zend\\Amf\\Value\\Messaging\\AsyncMessage', 
+    'flex.messaging.messages.CommandMessage' => 'Zend\\Amf\\Value\\Messaging\\CommandMessage', 
+    'flex.messaging.messages.ErrorMessage' => 'Zend\\Amf\\Value\\Messaging\\ErrorMessage', 
+    'flex.messaging.messages.RemotingMessage' => 'Zend\\Amf\\Value\\Messaging\\RemotingMessage', 
+    'flex.messaging.io.ArrayCollection' => 'Zend\\Amf\\Value\\Messaging\\ArrayCollection');
 
     /**
      * @var array Default class map
      */
     protected static $_defaultClassMap = array(
-        'flex.messaging.messages.AcknowledgeMessage' => 'Zend\\Amf\\Value\\Messaging\\AcknowledgeMessage',
-        'flex.messaging.messages.ErrorMessage'       => 'Zend\\Amf\\Value\\Messaging\\AsyncMessage',
-        'flex.messaging.messages.CommandMessage'     => 'Zend\\Amf\\Value\\Messaging\\CommandMessage',
-        'flex.messaging.messages.ErrorMessage'       => 'Zend\\Amf\\Value\\Messaging\\ErrorMessage',
-        'flex.messaging.messages.RemotingMessage'    => 'Zend\\Amf\\Value\\Messaging\\RemotingMessage',
-        'flex.messaging.io.ArrayCollection'          => 'Zend\\Amf\\Value\\Messaging\\ArrayCollection',
-    );
+    'flex.messaging.messages.AcknowledgeMessage' => 'Zend\\Amf\\Value\\Messaging\\AcknowledgeMessage', 
+    'flex.messaging.messages.ErrorMessage' => 'Zend\\Amf\\Value\\Messaging\\AsyncMessage', 
+    'flex.messaging.messages.CommandMessage' => 'Zend\\Amf\\Value\\Messaging\\CommandMessage', 
+    'flex.messaging.messages.ErrorMessage' => 'Zend\\Amf\\Value\\Messaging\\ErrorMessage', 
+    'flex.messaging.messages.RemotingMessage' => 'Zend\\Amf\\Value\\Messaging\\RemotingMessage', 
+    'flex.messaging.io.ArrayCollection' => 'Zend\\Amf\\Value\\Messaging\\ArrayCollection');
 
     /**
      * @var \Zend\Loader\PluginBroker
      */
     protected static $_resourceBroker = null;
-
 
     /**
      * Load the mapped class type into a callback.
@@ -84,13 +82,13 @@ final class TypeLoader
      * @param  string $className
      * @return object|false
      */
-    public static function loadType($className)
+    public static function loadType ($className)
     {
-        $class    = self::getMappedClassName($className);
-        if(!$class) {
+        $class = self::getMappedClassName($className);
+        if (! $class) {
             $class = str_replace('.', '\\', $className);
         }
-        if (!class_exists($class)) {
+        if (! class_exists($class)) {
             return "stdClass";
         }
         return $class;
@@ -102,20 +100,20 @@ final class TypeLoader
      * @param  string $className
      * @return string
      */
-    public static function getMappedClassName($className)
+    public static function getMappedClassName ($className)
     {
         $mappedName = array_search($className, self::$classMap);
-
+        
         if ($mappedName) {
             return $mappedName;
         }
-
+        
         $mappedName = array_search($className, array_flip(self::$classMap));
-
+        
         if ($mappedName) {
             return $mappedName;
         }
-
+        
         return false;
     }
 
@@ -130,7 +128,7 @@ final class TypeLoader
      * @param  string $phpClassName
      * @return void
      */
-    public static function setMapping($asClassName, $phpClassName)
+    public static function setMapping ($asClassName, $phpClassName)
     {
         self::$classMap[$asClassName] = $phpClassName;
     }
@@ -140,7 +138,7 @@ final class TypeLoader
      *
      * @return void
      */
-    public static function resetMap()
+    public static function resetMap ()
     {
         self::$classMap = self::$_defaultClassMap;
     }
@@ -150,7 +148,7 @@ final class TypeLoader
      *
      * @param \Zend\Loader\PluginBroker $loader
      */
-    public static function setResourceBroker(PluginBroker $broker)
+    public static function setResourceBroker (PluginBroker $broker)
     {
         self::$_resourceBroker = $broker;
     }
@@ -161,11 +159,12 @@ final class TypeLoader
      * @param resource $resource Resource type
      * @return object Resource class
      */
-    public static function getResourceParser($resource)
+    public static function getResourceParser ($resource)
     {
         if (self::$_resourceBroker) {
-            $type = preg_replace("/[^A-Za-z0-9_]/", " ", get_resource_type($resource));
-            $type = str_replace(" ","", ucwords($type));
+            $type = preg_replace("/[^A-Za-z0-9_]/", " ", 
+            get_resource_type($resource));
+            $type = str_replace(" ", "", ucwords($type));
             return self::$_resourceBroker->load($type);
         }
         return false;
@@ -177,21 +176,25 @@ final class TypeLoader
      * @param resource $resource
      * @return mixed
      */
-    public static function handleResource($resource)
+    public static function handleResource ($resource)
     {
-        if (!self::$_resourceBroker) {
-            throw new Exception\InvalidArgumentException('Unable to handle resources - resource plugin broker not set');
+        if (! self::$_resourceBroker) {
+            throw new Exception\InvalidArgumentException(
+            'Unable to handle resources - resource plugin broker not set');
         }
         try {
             while (is_resource($resource)) {
-                $parser   = self::getResourceParser($resource);
+                $parser = self::getResourceParser($resource);
                 $resource = $parser->parse($resource);
             }
             return $resource;
-        } catch(Exception $e) {
-            throw new Exception\InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
-        } catch(\Exception $e) {
-            throw new Exception\RuntimeException('Can not serialize resource type: '. get_resource_type($resource), 0, $e);
+        } catch (Exception $e) {
+            throw new Exception\InvalidArgumentException($e->getMessage(), 
+            $e->getCode(), $e);
+        } catch (\Exception $e) {
+            throw new Exception\RuntimeException(
+            'Can not serialize resource type: ' . get_resource_type($resource), 
+            0, $e);
         }
     }
 }

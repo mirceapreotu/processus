@@ -40,7 +40,9 @@ namespace Zend\GData\YouTube\Extension;
  */
 class MediaContent extends \Zend\GData\Media\Extension\MediaContent
 {
+
     protected $_rootElement = 'content';
+
     protected $_rootNamespace = 'media';
 
     /*
@@ -51,8 +53,8 @@ class MediaContent extends \Zend\GData\Media\Extension\MediaContent
      */
     protected $_format = null;
 
-
-    function __construct() {
+    function __construct ()
+    {
         $this->registerAllNamespaces(\Zend\GData\YouTube::$namespaces);
         parent::__construct();
     }
@@ -67,11 +69,12 @@ class MediaContent extends \Zend\GData\Media\Extension\MediaContent
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
-        if ($this->_format!= null) {
-            $element->setAttributeNS($this->lookupNamespace('yt'), 'yt:format', $this->_format);
+        if ($this->_format != null) {
+            $element->setAttributeNS($this->lookupNamespace('yt'), 'yt:format', 
+            $this->_format);
         }
         return $element;
     }
@@ -83,9 +86,10 @@ class MediaContent extends \Zend\GData\Media\Extension\MediaContent
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
-        $absoluteAttrName = $attribute->namespaceURI . ':' . $attribute->localName;
+        $absoluteAttrName = $attribute->namespaceURI . ':' .
+         $attribute->localName;
         if ($absoluteAttrName == $this->lookupNamespace('yt') . ':' . 'format') {
             $this->_format = $attribute->nodeValue;
         } else {
@@ -99,7 +103,7 @@ class MediaContent extends \Zend\GData\Media\Extension\MediaContent
      *
      * @return int  The format of the media
      */
-    public function getFormat()
+    public function getFormat ()
     {
         return $this->_format;
     }
@@ -111,7 +115,7 @@ class MediaContent extends \Zend\GData\Media\Extension\MediaContent
      * @return \Zend\GData\YouTube\Extension\MediaContent  Provides a fluent interface
      *
      */
-    public function setFormat($value)
+    public function setFormat ($value)
     {
         $this->_format = $value;
         return $this;

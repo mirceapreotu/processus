@@ -39,6 +39,7 @@ use Zend\Dojo\Dojo as DojoConfigurator;
  */
 class Dojo extends AbstractResource
 {
+
     /**
      * @var \Zend\Dojo\View\Helper\Dojo\Container
      */
@@ -49,7 +50,7 @@ class Dojo extends AbstractResource
      *
      * @return \Zend\Dojo\View\Helper\Dojo\Container
      */
-    public function init()
+    public function init ()
     {
         return $this->getDojo();
     }
@@ -59,20 +60,20 @@ class Dojo extends AbstractResource
      *
      * @return Zend_Dojo_View_Dojo_Container
      */
-    public function getDojo()
+    public function getDojo ()
     {
         if (null === $this->_dojo) {
             $this->getBootstrap()->bootstrap('view');
             $view = $this->getBootstrap()->view;
-
+            
             DojoConfigurator::enableView($view);
-            $dojo          = $view->plugin('dojo');
+            $dojo = $view->plugin('dojo');
             $dojoContainer = $dojo();
             $dojoContainer->setOptions($this->getOptions());
-
+            
             $this->_dojo = $dojoContainer;
         }
-
+        
         return $this->_dojo;
     }
 }

@@ -38,8 +38,10 @@ namespace Zend\Ldap\Filter;
  */
 abstract class LogicalFilter extends AbstractFilter
 {
+
     const TYPE_AND = '&';
-    const TYPE_OR  = '|';
+
+    const TYPE_OR = '|';
 
     /**
      * All the sub-filters for this grouping filter.
@@ -61,13 +63,16 @@ abstract class LogicalFilter extends AbstractFilter
      * @param array  $subfilters
      * @param string $symbol
      */
-    protected function __construct(array $subfilters, $symbol)
+    protected function __construct (array $subfilters, $symbol)
     {
         foreach ($subfilters as $key => $s) {
-            if (is_string($s)) $subfilters[$key] = new StringFilter($s);
-            else if (!($s instanceof AbstractFilter)) {
-                throw new Exception('Only strings or Zend\Ldap\Filter\AbstractFilter allowed.');
-            }
+            if (is_string($s))
+                $subfilters[$key] = new StringFilter($s);
+            else 
+                if (! ($s instanceof AbstractFilter)) {
+                    throw new Exception(
+                    'Only strings or Zend\Ldap\Filter\AbstractFilter allowed.');
+                }
         }
         $this->_subfilters = $subfilters;
         $this->_symbol = $symbol;
@@ -79,7 +84,7 @@ abstract class LogicalFilter extends AbstractFilter
      * @param  \Zend\Ldap\Filter\AbstractFilter $filter
      * @return \Zend\Ldap\Filter\LogicalFilter
      */
-    public function addFilter(AbstractFilter $filter)
+    public function addFilter (AbstractFilter $filter)
     {
         $new = clone $this;
         $new->_subfilters[] = $filter;
@@ -91,10 +96,11 @@ abstract class LogicalFilter extends AbstractFilter
      *
      * @return string
      */
-    public function toString()
+    public function toString ()
     {
         $return = '(' . $this->_symbol;
-        foreach ($this->_subfilters as $sub) $return .= $sub->toString();
+        foreach ($this->_subfilters as $sub)
+            $return .= $sub->toString();
         $return .= ')';
         return $return;
     }

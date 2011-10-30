@@ -23,10 +23,7 @@
  */
 namespace Zend\Loader;
 
-use Zend\Stdlib\ArrayStack,
-    Zend\Stdlib\SplStack,
-    SplDoublyLinkedList,
-    SplFileInfo;
+use Zend\Stdlib\ArrayStack, Zend\Stdlib\SplStack, SplDoublyLinkedList, SplFileInfo;
 
 /**
  * Prefix/Path plugin loader
@@ -38,6 +35,7 @@ use Zend\Stdlib\ArrayStack,
  */
 class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
 {
+
     /**
      * Map of class names to files
      * @var array
@@ -73,7 +71,7 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
      * @param  array $options
      * @return void
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         // Allow extending classes to pre-set the prefix paths
         if (is_array($this->prefixPaths)) {
@@ -82,16 +80,16 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
             $prefixPaths = $this->prefixPaths;
             $this->prefixPaths = new ArrayStack();
             $this->addPrefixPaths($prefixPaths);
-        } elseif (!$this->prefixPaths instanceof ArrayStack) {
+        } elseif (! $this->prefixPaths instanceof ArrayStack) {
             // If we don't have an array stack, fix that!
             $this->prefixPaths = new ArrayStack();
         }
-
+        
         // Merge in static paths
-        if (!empty(static::$staticPaths)) {
+        if (! empty(static::$staticPaths)) {
             $this->addPrefixPaths(static::$staticPaths);
         }
-
+        
         if (null !== $options) {
             $this->setOptions($options);
         }
@@ -103,26 +101,26 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
      * @param  null|array|Traversable $paths 
      * @return void
      */
-    public static function addStaticPaths($paths)
+    public static function addStaticPaths ($paths)
     {
         if (null === $paths) {
             static::$staticPaths = array();
             return;
         }
-
-        if (!is_array($paths) && !$paths instanceof \Traversable) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Expected a null value, array, or Traversable object, received %s',
-                (is_object($paths) ? get_class($paths) : gettype($paths))
-            ));
+        
+        if (! is_array($paths) && ! $paths instanceof \Traversable) {
+            throw new Exception\InvalidArgumentException(
+            sprintf(
+            'Expected a null value, array, or Traversable object, received %s', 
+            (is_object($paths) ? get_class($paths) : gettype($paths))));
         }
-
+        
         foreach ($paths as $spec) {
-            if (!is_array($spec) && !is_object($spec)) {
-                throw new Exception\InvalidArgumentException(sprintf(
-                    'At least one item in the paths is not an array or object (received %s); aborting population of static prefix path map',
-                    (is_object($spec) ? get_class($spec) : gettype($spec))
-                ));
+            if (! is_array($spec) && ! is_object($spec)) {
+                throw new Exception\InvalidArgumentException(
+                sprintf(
+                'At least one item in the paths is not an array or object (received %s); aborting population of static prefix path map', 
+                (is_object($spec) ? get_class($spec) : gettype($spec))));
             }
             static::$staticPaths[] = $spec;
         }
@@ -136,7 +134,7 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
      * @param  array|Traversable $options 
      * @return PrefixPathLoader
      */
-    public function setOptions($options)
+    public function setOptions ($options)
     {
         $this->addPrefixPaths($options);
         return $this;
@@ -150,26 +148,26 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
      * @param  bool $namespaced Whether the paths are namespaced or prefixed; namespaced by default
      * @return \Zend\Loader\PrefixPathLoader
      */
-    public function addPrefixPath($prefix, $path, $namespaced = true)
+    public function addPrefixPath ($prefix, $path, $namespaced = true)
     {
-        if (!is_string($prefix) || !is_string($path)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Expected strings for prefix and path; received %s and %s, respectively',
-                (is_object($prefix) ? get_class($prefix) : gettype($prefix)),
-                (is_object($path)   ? get_class($path)   : gettype($path))
-            ));
+        if (! is_string($prefix) || ! is_string($path)) {
+            throw new Exception\InvalidArgumentException(
+            sprintf(
+            'Expected strings for prefix and path; received %s and %s, respectively', 
+            (is_object($prefix) ? get_class($prefix) : gettype($prefix)), 
+            (is_object($path) ? get_class($path) : gettype($path))));
         }
-
+        
         $prefix = $this->formatPrefix($prefix, $namespaced);
-        $path   = $this->formatPath($path);
-
-        if (!isset($this->prefixPaths[$prefix])) {
-            $this->prefixPaths[$prefix] = new SplStack;
+        $path = $this->formatPath($path);
+        
+        if (! isset($this->prefixPaths[$prefix])) {
+            $this->prefixPaths[$prefix] = new SplStack();
         }
-        if (!in_array($path, $this->prefixPaths[$prefix]->toArray())) {
+        if (! in_array($path, $this->prefixPaths[$prefix]->toArray())) {
             $this->prefixPaths[$prefix][] = $path;
         }
-
+        
         return $this;
     }
 
@@ -185,35 +183,33 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
      * @param  array|Traversable $prefixPaths 
      * @return PrefixPathLoader
      */
-    public function addPrefixPaths($prefixPaths)
+    public function addPrefixPaths ($prefixPaths)
     {
-        if (!is_array($prefixPaths) && !$prefixPaths instanceof \Traversable) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Expected an array or Traversable object; received %s', 
-                (is_object($prefixPaths) ? get_class($prefixPaths) : gettype($prefixPaths))
-            ));
+        if (! is_array($prefixPaths) && ! $prefixPaths instanceof \Traversable) {
+            throw new Exception\InvalidArgumentException(
+            sprintf('Expected an array or Traversable object; received %s', 
+            (is_object($prefixPaths) ? get_class($prefixPaths) : gettype(
+            $prefixPaths))));
         }
         foreach ($prefixPaths as $prefix => $spec) {
             if (is_object($spec)) {
-                $prefix     = $spec->prefix ?: $prefix;
-                $path       = $spec->path   ?: false;
+                $prefix = $spec->prefix ?  : $prefix;
+                $path = $spec->path ?  : false;
                 $namespaced = isset($spec->namespaced) ? (bool) $spec->namespaced : true;
             } elseif (is_array($spec)) {
-                $prefix     = $spec['prefix'] ?: $prefix;
-                $path       = $spec['path']   ?: false;
+                $prefix = $spec['prefix'] ?  : $prefix;
+                $path = $spec['path'] ?  : false;
                 $namespaced = isset($spec['namespaced']) ? (bool) $spec['namespaced'] : true;
             } elseif (is_string($spec)) {
-                $path       = $spec;
+                $path = $spec;
                 $namespaced = strstr($prefix, '_') ? false : true;
             } else {
                 throw new Exception\InvalidArgumentException(
-                    'Invalid prefix path array specification; must be an array or object'
-                );
+                'Invalid prefix path array specification; must be an array or object');
             }
-            if (!$prefix || !$path) {
+            if (! $prefix || ! $path) {
                 throw new Exception\InvalidArgumentException(
-                    'Invalid prefix path object specification; missing either prefix or path'
-                );
+                'Invalid prefix path object specification; missing either prefix or path');
             }
             $this->addPrefixPath($prefix, $path, $namespaced);
         }
@@ -228,18 +224,18 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
      * SplStack otherwise; if no prefix provide, ArrayStack of prefix/SplStack 
      * pairs
      */
-    public function getPaths($prefix = null)
+    public function getPaths ($prefix = null)
     {
         if ((null !== $prefix) && is_string($prefix)) {
             $prefix = $this->formatPrefix($prefix);
-
+            
             if (isset($this->prefixPaths[$prefix])) {
                 return $this->prefixPaths[$prefix];
             }
-
+            
             return false;
         }
-
+        
         return $this->prefixPaths;
     }
 
@@ -251,21 +247,21 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
      * @param  string $prefix
      * @return bool False only if $prefix does not exist
      */
-    public function clearPaths($prefix = null)
+    public function clearPaths ($prefix = null)
     {
         if ((null !== $prefix) && is_string($prefix)) {
             $prefix = $this->formatPrefix($prefix);
-
+            
             if (isset($this->prefixPaths[$prefix])) {
                 unset($this->prefixPaths[$prefix]);
                 return true;
             }
-
+            
             return false;
         }
-
+        
         $this->prefixPaths = new ArrayStack();
-
+        
         return true;
     }
 
@@ -276,17 +272,16 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
      * @param  string $path
      * @return Zend\Loader\PrefixPathLoader
      */
-    public function removePrefixPath($prefix, $path)
+    public function removePrefixPath ($prefix, $path)
     {
-        $prefix   = $this->formatPrefix($prefix);
-        $path     = $this->formatPath($path);
+        $prefix = $this->formatPrefix($prefix);
+        $path = $this->formatPath($path);
         $registry = $this->prefixPaths;
-
-        if (!isset($registry[$prefix])) {
+        
+        if (! isset($registry[$prefix])) {
             return false;
         }
-
-
+        
         // Find prefix path in stack
         $index = false;
         $stack = $registry[$prefix];
@@ -296,20 +291,20 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
                 break;
             }
         }
-
+        
         if (false === $index) {
             return false;
         }
-
+        
         // Re-calculate index, since this is a stack
         $index = count($stack) - $index - 1;
         unset($stack[$index]);
-
+        
         // If stack is now empty, remove prefix from ArrayStack
         if (0 === count($stack)) {
             unset($registry[$prefix]);
         }
-
+        
         return true;
     }
 
@@ -319,7 +314,7 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
      * @param string $name
      * @return \Zend\Loader\PrefixPathLoader
      */
-    public function isLoaded($name)
+    public function isLoaded ($name)
     {
         $name = $this->formatName($name);
         return isset($this->pluginMap[$name]);
@@ -331,14 +326,14 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
      * @param string $name
      * @return string|false False if class not found, class name otherwise
      */
-    public function getClassName($name)
+    public function getClassName ($name)
     {
         $name = $this->formatName($name);
-
+        
         if (isset($this->pluginMap[$name])) {
             return $this->pluginMap[$name];
         }
-
+        
         return false;
     }
 
@@ -348,26 +343,27 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
      * @param  string $name
      * @return string|false Class name of loaded class; false if no class found
      */
-    public function load($name)
+    public function load ($name)
     {
         $name = $this->formatName($name);
         if ($this->isLoaded($name)) {
             return $this->getClassName($name);
         }
-
-        $found     = false;
-        $classFile = str_replace(array('\\', '_'), DIRECTORY_SEPARATOR, $name) . '.php';
+        
+        $found = false;
+        $classFile = str_replace(array('\\', '_'), DIRECTORY_SEPARATOR, $name) .
+         '.php';
         foreach ($this->prefixPaths as $prefix => $paths) {
             // Initialize file and class variables
-            $loadFile  = false;
+            $loadFile = false;
             $className = $prefix . $name;
-
+            
             if (class_exists($className)) {
                 // Class already loaded or autoloaded; done
                 $found = true;
                 break;
             }
-
+            
             // Search path stack
             foreach ($paths as $path) {
                 // Is the class file readable?
@@ -385,12 +381,12 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
                 $loadFile = false;
             }
         }
-
+        
         // Plugin class not found -- return early
-        if (!$found) {
+        if (! $found) {
             return false;
         }
-
+        
         // Get class file for class map
         $fileName = null;
         if ($loadFile) {
@@ -401,11 +397,11 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
             $r = new \ReflectionClass($className);
             $fileName = $r->getFileName();
         }
-
+        
         // Seed plugin map and class map
-        $this->pluginMap[$name]     = $className;
+        $this->pluginMap[$name] = $className;
         $this->classMap[$className] = $fileName;
-
+        
         return $className;
     }
 
@@ -417,7 +413,7 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
      * 
      * @return array
      */
-    public function getPluginMap()
+    public function getPluginMap ()
     {
         return $this->pluginMap;
     }
@@ -432,7 +428,7 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
      * 
      * @return array
      */
-    public function getClassMap()
+    public function getClassMap ()
     {
         return $this->classMap;
     }
@@ -443,7 +439,7 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
      * @param  string $name
      * @return string
      */
-    protected function formatName($name)
+    protected function formatName ($name)
     {
         return ucfirst((string) $name);
     }
@@ -456,29 +452,30 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
      * namespaced by default
      * @return string
      */
-    protected function formatPrefix($prefix, $namespaced = true)
+    protected function formatPrefix ($prefix, $namespaced = true)
     {
-        if($prefix == "") {
+        if ($prefix == "") {
             return $prefix;
         }
-
+        
         switch ((bool) $namespaced) {
             case true:
                 $last = strlen($prefix) - 1;
                 if ($prefix{$last} == '\\') {
                     return $prefix;
                 }
-
+                
                 return $prefix . '\\';
             case false:
                 $last = strlen($prefix) - 1;
                 if ($prefix{$last} == '_') {
                     return $prefix;
                 }
-
+                
                 return $prefix . '_';
             default:
-                // do nothing; unknown value
+        
+     // do nothing; unknown value
         }
     }
 
@@ -491,10 +488,10 @@ class PrefixPathLoader implements ShortNameLocator, PrefixPathMapper
      * @param  string $path 
      * @return string
      */
-    protected function formatPath($path)
+    protected function formatPath ($path)
     {
-        $path  = rtrim($path, '/');
-        $path  = rtrim($path, '\\');
+        $path = rtrim($path, '/');
+        $path = rtrim($path, '\\');
         $path .= DIRECTORY_SEPARATOR;
         return $path;
     }

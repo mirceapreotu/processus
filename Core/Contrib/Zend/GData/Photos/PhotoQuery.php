@@ -56,12 +56,12 @@ class PhotoQuery extends AlbumQuery
      * returned instead.
      *
      * @param string $value The ID of the photo to retrieve, or null to
-     *          clear.
+     * clear.
      */
-     public function setPhotoId($value)
-     {
-         $this->_photoId = $value;
-     }
+    public function setPhotoId ($value)
+    {
+        $this->_photoId = $value;
+    }
 
     /**
      * Get the photo ID which is to be returned.
@@ -69,7 +69,7 @@ class PhotoQuery extends AlbumQuery
      * @see setPhoto
      * @return string The ID of the photo to retrieve.
      */
-    public function getPhotoId()
+    public function getPhotoId ()
     {
         return $this->_photoId;
     }
@@ -81,14 +81,14 @@ class PhotoQuery extends AlbumQuery
      * @return string A URL generated based on the state of this query.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function getQueryUrl($incomingUri = '')
+    public function getQueryUrl ($incomingUri = '')
     {
         $uri = '';
         if ($this->getPhotoId() !== null) {
             $uri .= '/photoid/' . $this->getPhotoId();
         } else {
             throw new \Zend\GData\App\InvalidArgumentException(
-                    'PhotoId cannot be null');
+            'PhotoId cannot be null');
         }
         $uri .= $incomingUri;
         return parent::getQueryUrl($uri);

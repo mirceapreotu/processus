@@ -35,6 +35,7 @@ namespace Zend\Application;
  */
 interface Resource extends BootstrapAware
 {
+
     /**
      * Constructor
      *
@@ -43,7 +44,7 @@ interface Resource extends BootstrapAware
      * @param  mixed $options
      * @return void
      */
-    public function __construct($options = null);
+    public function __construct ($options = null);
 
     /**
      * Set resource options
@@ -51,19 +52,19 @@ interface Resource extends BootstrapAware
      * @param  array $options
      * @return \Zend\Application\Resource
      */
-    public function setOptions(array $options);
+    public function setOptions (array $options);
 
     /**
      * Retrieve resource options
      *
      * @return array
      */
-    public function getOptions();
+    public function getOptions ();
 
     /**
      * Strategy pattern: initialize resource
      *
      * @return mixed
      */
-    public function init();
+    public function init ();
 }

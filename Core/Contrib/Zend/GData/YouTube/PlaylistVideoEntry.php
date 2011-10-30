@@ -55,9 +55,9 @@ class PlaylistVideoEntry extends VideoEntry
      * in a list of videos contained within a specific playlist
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(YouTube::$namespaces);
         parent::__construct($element);
@@ -73,11 +73,12 @@ class PlaylistVideoEntry extends VideoEntry
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_position !== null) {
-            $element->appendChild($this->_position->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_position->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -88,30 +89,29 @@ class PlaylistVideoEntry extends VideoEntry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('yt') . ':' . 'position':
-            $position = new Extension\Position();
-            $position->transferFromDOM($child);
-            $this->_position = $position;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('yt') . ':' . 'position':
+                $position = new Extension\Position();
+                $position->transferFromDOM($child);
+                $this->_position = $position;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
-
 
     /**
      * Sets the array of embedded feeds related to the video
      *
      * @param \Zend\GData\YouTube\Extension\Position $position
-     *     The position of the entry in the feed, as specified by the user.
+     * The position of the entry in the feed, as specified by the user.
      * @return \Zend\GData\YouTube\PlaylistVideoEntry Provides a fluent interface
      */
-    public function setPosition($position = null)
+    public function setPosition ($position = null)
     {
         $this->_position = $position;
         return $this;
@@ -122,7 +122,7 @@ class PlaylistVideoEntry extends VideoEntry
      *
      * @return \Zend\GData\YouTube\Extension\Position The position
      */
-    public function getPosition()
+    public function getPosition ()
     {
         return $this->_position;
     }

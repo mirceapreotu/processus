@@ -36,6 +36,7 @@ namespace Zend\Form\Element;
  */
 class Multiselect extends Select
 {
+
     /**
      * 'multiple' attribute
      * @var string

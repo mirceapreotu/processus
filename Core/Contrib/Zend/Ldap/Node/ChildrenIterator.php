@@ -40,8 +40,10 @@ use Zend\Ldap\Node;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class ChildrenIterator implements \Iterator, \Countable, \RecursiveIterator, \ArrayAccess
+class ChildrenIterator implements \Iterator, \Countable, \RecursiveIterator, 
+\ArrayAccess
 {
+
     /**
      * An array of Zend_Ldap_Node objects
      *
@@ -55,7 +57,7 @@ class ChildrenIterator implements \Iterator, \Countable, \RecursiveIterator, \Ar
      * @param  array $data
      * @return void
      */
-    public function __construct(array $data)
+    public function __construct (array $data)
     {
         $this->_data = $data;
     }
@@ -66,7 +68,7 @@ class ChildrenIterator implements \Iterator, \Countable, \RecursiveIterator, \Ar
      *
      * @return int
      */
-    public function count()
+    public function count ()
     {
         return count($this->_data);
     }
@@ -77,7 +79,7 @@ class ChildrenIterator implements \Iterator, \Countable, \RecursiveIterator, \Ar
      *
      * @return \Zend\Ldap\Node
      */
-    public function current()
+    public function current ()
     {
         return current($this->_data);
     }
@@ -88,7 +90,7 @@ class ChildrenIterator implements \Iterator, \Countable, \RecursiveIterator, \Ar
      *
      * @return string
      */
-    public function key()
+    public function key ()
     {
         return key($this->_data);
     }
@@ -97,7 +99,7 @@ class ChildrenIterator implements \Iterator, \Countable, \RecursiveIterator, \Ar
      * Move forward to next child.
      * Implements Iterator
      */
-    public function next()
+    public function next ()
     {
         next($this->_data);
     }
@@ -106,7 +108,7 @@ class ChildrenIterator implements \Iterator, \Countable, \RecursiveIterator, \Ar
      * Rewind the Iterator to the first child.
      * Implements Iterator
      */
-    public function rewind()
+    public function rewind ()
     {
         reset($this->_data);
     }
@@ -118,9 +120,9 @@ class ChildrenIterator implements \Iterator, \Countable, \RecursiveIterator, \Ar
      *
      * @return boolean
      */
-    public function valid()
+    public function valid ()
     {
-        return (current($this->_data)!==false);
+        return (current($this->_data) !== false);
     }
 
     /**
@@ -129,7 +131,7 @@ class ChildrenIterator implements \Iterator, \Countable, \RecursiveIterator, \Ar
      *
      * @return boolean
      */
-    public function hasChildren()
+    public function hasChildren ()
     {
         if ($this->current() instanceof Node) {
             return $this->current()->hasChildren();
@@ -143,7 +145,7 @@ class ChildrenIterator implements \Iterator, \Countable, \RecursiveIterator, \Ar
      *
      * @return \Zend\Ldap\Node\ChildrenIterator
      */
-    public function getChildren()
+    public function getChildren ()
     {
         if ($this->current() instanceof Node) {
             return $this->current()->getChildren();
@@ -159,7 +161,7 @@ class ChildrenIterator implements \Iterator, \Countable, \RecursiveIterator, \Ar
      * @param  string $rdn
      * @return Zend_Ldap_node
      */
-    public function offsetGet($rdn)
+    public function offsetGet ($rdn)
     {
         if ($this->offsetExists($rdn)) {
             return $this->_data[$rdn];
@@ -175,7 +177,7 @@ class ChildrenIterator implements \Iterator, \Countable, \RecursiveIterator, \Ar
      * @param  string $rdn
      * @return boolean
      */
-    public function offsetExists($rdn)
+    public function offsetExists ($rdn)
     {
         return (array_key_exists($rdn, $this->_data));
     }
@@ -187,7 +189,8 @@ class ChildrenIterator implements \Iterator, \Countable, \RecursiveIterator, \Ar
      * @param  string $name
      * @return null
      */
-    public function offsetUnset($name) { }
+    public function offsetUnset ($name)
+    {}
 
     /**
      * Does nothing.
@@ -197,14 +200,15 @@ class ChildrenIterator implements \Iterator, \Countable, \RecursiveIterator, \Ar
      * @param  mixed $value
      * @return null
      */
-    public function offsetSet($name, $value) { }
+    public function offsetSet ($name, $value)
+    {}
 
     /**
      * Get all children as an array
      *
      * @return array
      */
-    public function toArray()
+    public function toArray ()
     {
         $data = array();
         foreach ($this as $rdn => $node) {

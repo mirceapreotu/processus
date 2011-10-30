@@ -45,14 +45,13 @@ class CollectionEntry extends \Zend\GData\Entry
      * Describes an entry in a feed of collections
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(Books::$namespaces);
         parent::__construct($element);
     }
-
 
 }
 

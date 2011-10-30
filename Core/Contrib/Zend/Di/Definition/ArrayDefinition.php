@@ -4,83 +4,83 @@ namespace Zend\Di\Definition;
 
 class ArrayDefinition implements Definition
 {
-    
+
     protected $dataArray = array();
-    
-    public function __construct(Array $dataArray)
+
+    public function __construct (Array $dataArray)
     {
         $this->dataArray = $dataArray;
     }
-    
-    public function getClasses()
+
+    public function getClasses ()
     {
         return array_keys($this->dataArray);
     }
-    
-    public function hasClass($class)
+
+    public function hasClass ($class)
     {
         return array_key_exists($class, $this->dataArray);
     }
-    
-    public function getClassSupertypes($class)
+
+    public function getClassSupertypes ($class)
     {
-        if (!isset($this->dataArray[$class])) {
+        if (! isset($this->dataArray[$class])) {
             return array();
         }
         
-        if (!isset($this->dataArray[$class]['supertypes'])) {
+        if (! isset($this->dataArray[$class]['supertypes'])) {
             return array();
         }
         
         return $this->dataArray[$class]['supertypes'];
     }
-    
-    public function getInstantiator($class)
+
+    public function getInstantiator ($class)
     {
-        if (!isset($this->dataArray[$class])) {
+        if (! isset($this->dataArray[$class])) {
             return null;
         }
         
-        if (!isset($this->dataArray[$class]['instantiator'])) {
+        if (! isset($this->dataArray[$class]['instantiator'])) {
             return '__construct';
         }
         
         return $this->dataArray[$class]['instantiator'];
     }
-    
-    public function hasMethods($class)
+
+    public function hasMethods ($class)
     {
-        if (!isset($this->dataArray[$class])) {
+        if (! isset($this->dataArray[$class])) {
             return array();
         }
         
-        if (!isset($this->dataArray[$class]['methods'])) {
+        if (! isset($this->dataArray[$class]['methods'])) {
             return array();
         }
         
         return (count($this->dataArray[$class]['methods']) > 0);
     }
-    
-    public function hasMethod($class, $method)
+
+    public function hasMethod ($class, $method)
     {
-        if (!isset($this->dataArray[$class])) {
+        if (! isset($this->dataArray[$class])) {
             return false;
         }
         
-        if (!isset($this->dataArray[$class]['methods'])) {
+        if (! isset($this->dataArray[$class]['methods'])) {
             return false;
         }
         
         return array_key_exists($method, $this->dataArray[$class]['methods']);
     }
-    
-    public function getMethods($class)
+
+    public function getMethods ($class)
     {
-        if (!isset($this->dataArray[$class])) {
+        if (! isset($this->dataArray[$class])) {
             return array();
         }
         
-        if (!isset($this->dataArray[$class]['methods'])) {
+        if (! isset($this->dataArray[$class]['methods'])) {
             return array();
         }
         
@@ -92,29 +92,29 @@ class ArrayDefinition implements Definition
      * @param $method
      * @return bool
      */
-    public function hasMethodParameters($class, $method)
+    public function hasMethodParameters ($class, $method)
     {
         return isset($this->dataArray[$class]['parameters'][$method]);
     }
 
-    public function getMethodParameters($class, $method)
+    public function getMethodParameters ($class, $method)
     {
-        if (!isset($this->dataArray[$class])) {
+        if (! isset($this->dataArray[$class])) {
             return array();
         }
         
-        if (!isset($this->dataArray[$class]['parameters'])) {
+        if (! isset($this->dataArray[$class]['parameters'])) {
             return array();
         }
         
-        if (!isset($this->dataArray[$class]['parameters'][$method])) {
+        if (! isset($this->dataArray[$class]['parameters'][$method])) {
             return array();
         }
         
         return $this->dataArray[$class]['parameters'][$method];
     }
-    
-    public function toArray()
+
+    public function toArray ()
     {
         return $this->dataArray;
     }

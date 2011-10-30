@@ -34,7 +34,7 @@ use Zend\Form as ZendForm;
  * Accepts following options:
  * - separator: Separator to use between elements
  * - helper: which view helper to use when rendering form. Should accept three
- *   arguments, string content, a name, and an array of attributes.
+ * arguments, string content, a name, and an array of attributes.
  *
  * Any other options passed will be used as HTML attributes of the form tag.
  *
@@ -48,6 +48,7 @@ use Zend\Form as ZendForm;
  */
 class FormDecorator extends AbstractDecorator
 {
+
     /**
      * Default view helper
      * @var string
@@ -60,7 +61,7 @@ class FormDecorator extends AbstractDecorator
      * @param  string $helper
      * @return \Zend\Form\Decorator\Form
      */
-    public function setHelper($helper)
+    public function setHelper ($helper)
     {
         $this->_helper = (string) $helper;
         return $this;
@@ -71,7 +72,7 @@ class FormDecorator extends AbstractDecorator
      *
      * @return string
      */
-    public function getHelper()
+    public function getHelper ()
     {
         if (null !== ($helper = $this->getOption('helper'))) {
             $this->setHelper($helper);
@@ -88,14 +89,15 @@ class FormDecorator extends AbstractDecorator
      *
      * @return array
      */
-    public function getOptions()
+    public function getOptions ()
     {
         if (null !== ($element = $this->getElement())) {
             if ($element instanceof ZendForm\Form) {
                 $element->getAction();
                 $method = $element->getMethod();
                 if ($method == ZendForm\Form::METHOD_POST) {
-                    $this->setOption('enctype', 'application/x-www-form-urlencoded');
+                    $this->setOption('enctype', 
+                    'application/x-www-form-urlencoded');
                 }
                 foreach ($element->getAttribs() as $key => $value) {
                     $this->setOption($key, $value);
@@ -106,11 +108,11 @@ class FormDecorator extends AbstractDecorator
                 }
             }
         }
-
+        
         if (isset($this->_options['method'])) {
             $this->_options['method'] = strtolower($this->_options['method']);
         }
-
+        
         return $this->_options;
     }
 
@@ -122,19 +124,19 @@ class FormDecorator extends AbstractDecorator
      * @param  string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
-        $form    = $this->getElement();
-        $view    = $form->getView();
+        $form = $this->getElement();
+        $view = $form->getView();
         if (null === $view) {
             return $content;
         }
-
-        $helper        = $this->getHelper();
-        $attribs       = $this->getOptions();
-        $name          = $form->getFullyQualifiedName();
+        
+        $helper = $this->getHelper();
+        $attribs = $this->getOptions();
+        $name = $form->getFullyQualifiedName();
         $attribs['id'] = $form->getId();
-        $helper        = $view->plugin($helper);
+        $helper = $view->plugin($helper);
         return $helper($name, $attribs, $content);
     }
 }

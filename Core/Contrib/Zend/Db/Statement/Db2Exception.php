@@ -33,6 +33,7 @@ namespace Zend\Db\Statement;
  */
 class Db2Exception extends Exception
 {
+
     /**
      * @var string
      */
@@ -47,7 +48,7 @@ class Db2Exception extends Exception
      * @param string $msg
      * @param string $state
      */
-    function __construct($msg = 'unknown exception', $state = '00000')
+    function __construct ($msg = 'unknown exception', $state = '00000')
     {
         $this->message = $msg;
         $this->code = $state;

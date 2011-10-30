@@ -33,6 +33,7 @@ namespace Zend\Ldap;
  */
 class Converter
 {
+
     /**
      * Converts all ASCII chars < 32 to "\HEX"
      *
@@ -43,13 +44,14 @@ class Converter
      * @param  string $string String to convert
      * @return string
      */
-    public static function ascToHex32($string)
+    public static function ascToHex32 ($string)
     {
-        for ($i = 0; $i<strlen($string); $i++) {
+        for ($i = 0; $i < strlen($string); $i ++) {
             $char = substr($string, $i, 1);
-            if (ord($char)<32) {
+            if (ord($char) < 32) {
                 $hex = dechex(ord($char));
-                if (strlen($hex) == 1) $hex = '0' . $hex;
+                if (strlen($hex) == 1)
+                    $hex = '0' . $hex;
                 $string = str_replace($char, '\\' . $hex, $string);
             }
         }
@@ -67,9 +69,10 @@ class Converter
      * @param  string $string String to convert
      * @return string
      */
-    public static function hex32ToAsc($string)
+    public static function hex32ToAsc ($string)
     {
-        $string = preg_replace("/\\\([0-9A-Fa-f]{2})/e", "''.chr(hexdec('\\1')).''", $string);
+        $string = preg_replace("/\\\([0-9A-Fa-f]{2})/e", 
+        "''.chr(hexdec('\\1')).''", $string);
         return $string;
     }
 }

@@ -23,8 +23,7 @@
  * @namespace
  */
 namespace Zend\Cache\Backend;
-use Zend\Cache,
-    Zend\Cache\Backend;
+use Zend\Cache, Zend\Cache\Backend;
 
 /**
  * @uses       \Zend\Cache\Cache
@@ -42,7 +41,8 @@ class Xcache extends AbstractBackend implements Backend
      * Log message
      */
     const TAGS_UNSUPPORTED_BY_CLEAN_OF_XCACHE_BACKEND = 'Zend_Cache_Backend_Xcache::clean() : tags are unsupported by the Xcache backend';
-    const TAGS_UNSUPPORTED_BY_SAVE_OF_XCACHE_BACKEND =  'Zend_Cache_Backend_Xcache::save() : tags are unsupported by the Xcache backend';
+
+    const TAGS_UNSUPPORTED_BY_SAVE_OF_XCACHE_BACKEND = 'Zend_Cache_Backend_Xcache::save() : tags are unsupported by the Xcache backend';
 
     /**
      * Available options
@@ -55,10 +55,7 @@ class Xcache extends AbstractBackend implements Backend
      *
      * @var array available options
      */
-    protected $_options = array(
-        'user' => null,
-        'password' => null
-    );
+    protected $_options = array('user' => null, 'password' => null);
 
     /**
      * Constructor
@@ -67,10 +64,11 @@ class Xcache extends AbstractBackend implements Backend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    public function __construct(array $options = array())
+    public function __construct (array $options = array())
     {
-        if (!extension_loaded('xcache')) {
-            Cache\Cache::throwException('The xcache extension must be loaded for using this backend !');
+        if (! extension_loaded('xcache')) {
+            Cache\Cache::throwException(
+            'The xcache extension must be loaded for using this backend !');
         }
         parent::__construct($options);
     }
@@ -84,10 +82,11 @@ class Xcache extends AbstractBackend implements Backend
      * @param  boolean $doNotTestCacheValidity if set to true, the cache validity won't be tested
      * @return string cached datas (or false)
      */
-    public function load($id, $doNotTestCacheValidity = false)
+    public function load ($id, $doNotTestCacheValidity = false)
     {
         if ($doNotTestCacheValidity) {
-            $this->_log("Zend_Cache_Backend_Xcache::load() : \$doNotTestCacheValidity=true is unsupported by the Xcache backend");
+            $this->_log(
+            "Zend_Cache_Backend_Xcache::load() : \$doNotTestCacheValidity=true is unsupported by the Xcache backend");
         }
         $tmp = xcache_get($id);
         if (is_array($tmp)) {
@@ -102,7 +101,7 @@ class Xcache extends AbstractBackend implements Backend
      * @param  string $id cache id
      * @return mixed false (a cache is not available) or "last modified" timestamp (int) of the available cache record
      */
-    public function test($id)
+    public function test ($id)
     {
         if (xcache_isset($id)) {
             $tmp = xcache_get($id);
@@ -125,7 +124,7 @@ class Xcache extends AbstractBackend implements Backend
      * @param int $specificLifetime if != false, set a specific lifetime for this cache record (null => infinite lifetime)
      * @return boolean true if no problem
      */
-    public function save($data, $id, $tags = array(), $specificLifetime = false)
+    public function save ($data, $id, $tags = array(), $specificLifetime = false)
     {
         $lifetime = $this->getLifetime($specificLifetime);
         $result = xcache_set($id, array($data, time()), $lifetime);
@@ -141,7 +140,7 @@ class Xcache extends AbstractBackend implements Backend
      * @param  string $id cache id
      * @return boolean true if no problem
      */
-    public function remove($id)
+    public function remove ($id)
     {
         return xcache_unset($id);
     }
@@ -161,7 +160,7 @@ class Xcache extends AbstractBackend implements Backend
      * @throws \Zend\Cache\Exception
      * @return boolean true if no problem
      */
-    public function clean($mode = Cache\CacheCache\Cache::CLEANING_MODE_ALL, $tags = array())
+    public function clean ($mode = Cache\CacheCache\Cache::CLEANING_MODE_ALL, $tags = array())
     {
         switch ($mode) {
             case Cache\Cache::CLEANING_MODE_ALL:
@@ -187,7 +186,8 @@ class Xcache extends AbstractBackend implements Backend
                 return true;
                 break;
             case Cache\Cache::CLEANING_MODE_OLD:
-                $this->_log("Zend_Cache_Backend_Xcache::clean() : CLEANING_MODE_OLD is unsupported by the Xcache backend");
+                $this->_log(
+                "Zend_Cache_Backend_Xcache::clean() : CLEANING_MODE_OLD is unsupported by the Xcache backend");
                 break;
             case Cache\Cache::CLEANING_MODE_MATCHING_TAG:
             case Cache\Cache::CLEANING_MODE_NOT_MATCHING_TAG:
@@ -205,7 +205,7 @@ class Xcache extends AbstractBackend implements Backend
      *
      * @return boolean
      */
-    public function isAutomaticCleaningAvailable()
+    public function isAutomaticCleaningAvailable ()
     {
         return false;
     }

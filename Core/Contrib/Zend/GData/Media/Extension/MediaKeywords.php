@@ -37,13 +37,15 @@ namespace Zend\GData\Media\Extension;
  */
 class MediaKeywords extends \Zend\GData\Extension
 {
+
     protected $_rootElement = 'keywords';
+
     protected $_rootNamespace = 'media';
 
     /**
      * Constructs a new MediaKeywords element
      */
-    public function __construct()
+    public function __construct ()
     {
         $this->registerAllNamespaces(\Zend\GData\Media::$namespaces);
         parent::__construct();

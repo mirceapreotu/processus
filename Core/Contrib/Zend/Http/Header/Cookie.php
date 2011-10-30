@@ -24,8 +24,7 @@
  */
 namespace Zend\Http\Header;
 
-use Zend\Uri,
-    ArrayObject;
+use Zend\Uri, ArrayObject;
 
 /**
  * @see http://www.ietf.org/rfc/rfc2109.txt
@@ -36,84 +35,91 @@ class Cookie extends ArrayObject implements HeaderDescription
 
     protected $encodeValue = true;
 
-    public static function fromSetCookieArray(array $setCookies)
+    public static function fromSetCookieArray (array $setCookies)
     {
         $nvPairs = array();
         /* @var $setCookie SetCookie */
         foreach ($setCookies as $setCookie) {
-            if (!$setCookie instanceof SetCookie) {
-                throw new Exception\InvalidArgumentException(__CLASS__ . '::' . __METHOD__ . ' requires an array of SetCookie objects');
+            if (! $setCookie instanceof SetCookie) {
+                throw new Exception\InvalidArgumentException(
+                __CLASS__ . '::' . __METHOD__ .
+                 ' requires an array of SetCookie objects');
             }
             if (array_key_exists($setCookie->getName(), $nvPairs)) {
-                throw new Exception\InvalidArgumentException('Two cookies with the same name were provided to ' . __CLASS__ . '::' . __METHOD__);
+                throw new Exception\InvalidArgumentException(
+                'Two cookies with the same name were provided to ' . __CLASS__ .
+                 '::' . __METHOD__);
             }
-
+            
             $nvPairs[$setCookie->getName()] = $setCookie->getValue();
         }
         return new static($nvPairs);
     }
 
-    public static function fromString($headerLine)
+    public static function fromString ($headerLine)
     {
         $header = new static();
-
-        list($name, $value) = preg_split('#: #', $headerLine, 2);
-
+        
+        list ($name, $value) = preg_split('#: #', $headerLine, 2);
+        
         // check to ensure proper header type for this factory
         if (strtolower($name) !== 'cookie') {
-            throw new Exception\InvalidArgumentException('Invalid header line for Server string');
+            throw new Exception\InvalidArgumentException(
+            'Invalid header line for Server string');
         }
-
+        
         $nvPairs = preg_split('#;\s*#', $value);
-
+        
         $arrayInfo = array();
         foreach ($nvPairs as $nvPair) {
             $parts = explode('=', $nvPair, 2);
             if (count($parts) != 2) {
-                throw new Exception\RuntimeException('Malformed Cookie header found');
+                throw new Exception\RuntimeException(
+                'Malformed Cookie header found');
             }
-            list($name, $value) = $parts;
+            list ($name, $value) = $parts;
             $arrayInfo[$name] = urldecode($value);
         }
-
+        
         $header->exchangeArray($arrayInfo);
         
         return $header;
     }
 
-    public function __construct(array $array = array())
+    public function __construct (array $array = array())
     {
         parent::__construct($array, ArrayObject::ARRAY_AS_PROPS);
     }
 
-    public function setEncodeValue($encodeValue)
+    public function setEncodeValue ($encodeValue)
     {
         $this->encodeValue = (bool) $encodeValue;
         return $this;
     }
 
-    public function getEncodeValue()
+    public function getEncodeValue ()
     {
         return $this->encodeValue;
     }
 
-    public function getFieldName()
+    public function getFieldName ()
     {
         return 'Cookie';
     }
 
-    public function getFieldValue()
+    public function getFieldValue ()
     {
         $nvPairs = array();
-
+        
         foreach ($this as $name => $value) {
-            $nvPairs[] = $name . '=' . (($this->encodeValue) ? urlencode($value) : $value);
+            $nvPairs[] = $name . '=' .
+             (($this->encodeValue) ? urlencode($value) : $value);
         }
-
+        
         return implode('; ', $nvPairs);
     }
-    
-    public function toString()
+
+    public function toString ()
     {
         return 'Cookie: ' . $this->getFieldValue();
     }
@@ -124,10 +130,9 @@ class Cookie extends ArrayObject implements HeaderDescription
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->toString();
     }
-
 
 }

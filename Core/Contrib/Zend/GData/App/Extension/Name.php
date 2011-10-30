@@ -41,7 +41,7 @@ class Name extends Extension
 
     protected $_rootElement = 'name';
 
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         parent::__construct();
         $this->_text = $text;

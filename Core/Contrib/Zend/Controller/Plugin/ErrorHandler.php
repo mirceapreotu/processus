@@ -39,6 +39,7 @@ use Zend\Controller\Request;
  */
 class ErrorHandler extends AbstractPlugin
 {
+
     /**
      * Const - No controller exception; controller does not exist
      */
@@ -100,7 +101,7 @@ class ErrorHandler extends AbstractPlugin
      * @param  Array $options
      * @return void
      */
-    public function __construct(Array $options = array())
+    public function __construct (Array $options = array())
     {
         $this->setErrorHandler($options);
     }
@@ -111,7 +112,7 @@ class ErrorHandler extends AbstractPlugin
      * @param  array $options
      * @return \Zend\Controller\Plugin\ErrorHandler
      */
-    public function setErrorHandler(Array $options = array())
+    public function setErrorHandler (Array $options = array())
     {
         if (isset($options['module'])) {
             $this->setErrorHandlerModule($options['module']);
@@ -131,7 +132,7 @@ class ErrorHandler extends AbstractPlugin
      * @param  string $module
      * @return \Zend\Controller\Plugin\ErrorHandler
      */
-    public function setErrorHandlerModule($module)
+    public function setErrorHandlerModule ($module)
     {
         $this->_errorModule = (string) $module;
         return $this;
@@ -142,7 +143,7 @@ class ErrorHandler extends AbstractPlugin
      *
      * @return string
      */
-    public function getErrorHandlerModule()
+    public function getErrorHandlerModule ()
     {
         if (null === $this->_errorModule) {
             $this->_errorModule = Controller\Front::getInstance()->getDispatcher()->getDefaultModule();
@@ -156,7 +157,7 @@ class ErrorHandler extends AbstractPlugin
      * @param  string $controller
      * @return \Zend\Controller\Plugin\ErrorHandler
      */
-    public function setErrorHandlerController($controller)
+    public function setErrorHandlerController ($controller)
     {
         $this->_errorController = (string) $controller;
         return $this;
@@ -167,7 +168,7 @@ class ErrorHandler extends AbstractPlugin
      *
      * @return string
      */
-    public function getErrorHandlerController()
+    public function getErrorHandlerController ()
     {
         return $this->_errorController;
     }
@@ -178,7 +179,7 @@ class ErrorHandler extends AbstractPlugin
      * @param  string $action
      * @return \Zend\Controller\Plugin\ErrorHandler
      */
-    public function setErrorHandlerAction($action)
+    public function setErrorHandlerAction ($action)
     {
         $this->_errorAction = (string) $action;
         return $this;
@@ -189,7 +190,7 @@ class ErrorHandler extends AbstractPlugin
      *
      * @return string
      */
-    public function getErrorHandlerAction()
+    public function getErrorHandlerAction ()
     {
         return $this->_errorAction;
     }
@@ -199,7 +200,7 @@ class ErrorHandler extends AbstractPlugin
      * 
      * @param \Zend\Controller\Request\AbstractRequest $request 
      */
-    public function routeShutdown(Request\AbstractRequest $request)
+    public function routeShutdown (Request\AbstractRequest $request)
     {
         $this->_handleError($request);
     }
@@ -210,7 +211,7 @@ class ErrorHandler extends AbstractPlugin
      *
      * @param \Zend\Controller\Request\AbstractRequest $request
      */
-    public function postDispatch(Request\AbstractRequest $request)
+    public function postDispatch (Request\AbstractRequest $request)
     {
         $this->_handleError($request);
     }
@@ -224,15 +225,15 @@ class ErrorHandler extends AbstractPlugin
      * @param  \Zend\Controller\Request\AbstractRequest $request
      * @return void
      */
-    protected function _handleError(Request\AbstractRequest $request)
+    protected function _handleError (Request\AbstractRequest $request)
     {
         $frontController = Controller\Front::getInstance();
         if ($frontController->getParam('noErrorHandler')) {
             return;
         }
-
+        
         $response = $this->getResponse();
-
+        
         if ($this->_isInsideErrorHandlerLoop) {
             $exceptions = $response->getException();
             if (count($exceptions) > $this->_exceptionCountAtFirstEncounter) {
@@ -241,16 +242,18 @@ class ErrorHandler extends AbstractPlugin
                 throw array_pop($exceptions);
             }
         }
-
+        
         // check for an exception AND allow the error handler controller the option to forward
-        if (($response->isException()) && (!$this->_isInsideErrorHandlerLoop)) {
+        if (($response->isException()) &&
+         (! $this->_isInsideErrorHandlerLoop)) {
             $this->_isInsideErrorHandlerLoop = true;
-
+            
             // Get exception information
-            $error            = new \ArrayObject(array(), \ArrayObject::ARRAY_AS_PROPS);
-            $exceptions       = $response->getException();
-            $exception        = $exceptions[0];
-            $exceptionType    = get_class($exception);
+            $error = new \ArrayObject(array(), 
+            \ArrayObject::ARRAY_AS_PROPS);
+            $exceptions = $response->getException();
+            $exception = $exceptions[0];
+            $exceptionType = get_class($exception);
             $error->exception = $exception;
             switch ($exceptionType) {
                 case 'Zend\Controller\Router\Exception':
@@ -274,19 +277,20 @@ class ErrorHandler extends AbstractPlugin
                     $error->type = self::EXCEPTION_OTHER;
                     break;
             }
-
+            
             // Keep a copy of the original request
             $error->request = clone $request;
-
+            
             // get a count of the number of exceptions encountered
-            $this->_exceptionCountAtFirstEncounter = count($exceptions);
-
+            $this->_exceptionCountAtFirstEncounter = count(
+            $exceptions);
+            
             // Forward to the error handler
             $request->setParam('error_handler', $error)
-                    ->setModuleName($this->getErrorHandlerModule())
-                    ->setControllerName($this->getErrorHandlerController())
-                    ->setActionName($this->getErrorHandlerAction())
-                    ->setDispatched(false);
+                ->setModuleName($this->getErrorHandlerModule())
+                ->setControllerName($this->getErrorHandlerController())
+                ->setActionName($this->getErrorHandlerAction())
+                ->setDispatched(false);
         }
     }
 }

@@ -41,6 +41,7 @@ use Zend\InfoCard\Adapter;
  */
 class DefaultAdapter implements Adapter
 {
+
     /**
      * Store the assertion (pass-thru does nothing)
      *
@@ -49,7 +50,7 @@ class DefaultAdapter implements Adapter
      * @param array $conditions An array of claims to store associated with the assertion
      * @return bool Always returns true (would return false on store failure)
      */
-    public function storeAssertion($assertionURI, $assertionID, $conditions)
+    public function storeAssertion ($assertionURI, $assertionID, $conditions)
     {
         return true;
     }
@@ -60,9 +61,9 @@ class DefaultAdapter implements Adapter
      * @param string $assertionURI The assertion type URI
      * @param string $assertionID The assertion ID to retrieve
      * @return mixed False if the assertion ID was not found for that URI, or an array of
-     *               conditions associated with that assertion if found (always returns false)
+     * conditions associated with that assertion if found (always returns false)
      */
-    public function retrieveAssertion($assertionURI, $assertionID)
+    public function retrieveAssertion ($assertionURI, $assertionID)
     {
         return false;
     }
@@ -74,7 +75,7 @@ class DefaultAdapter implements Adapter
      * @param string $assertionID The assertion ID to remove
      * @return bool Always returns true (false on removal failure)
      */
-    public function removeAssertion($assertionURI, $assertionID)
+    public function removeAssertion ($assertionURI, $assertionID)
     {
         return null;
     }

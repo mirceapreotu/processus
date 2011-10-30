@@ -35,14 +35,15 @@ namespace Zend\InfoCard\XML;
  */
 interface Element
 {
+
     /**
      * Return the data within the object as an XML document
      */
-    public function asXML();
+    public function asXML ();
 
     /**
      * Magic function which allows us to treat the object as a string to return XML
      * (same as the asXML() method)
      */
-    public function __toString();
+    public function __toString ();
 }

@@ -22,8 +22,7 @@
  * @namespace
  */
 namespace Zend\Filter\File;
-use Zend\Filter,
-    Zend\Filter\Exception;
+use Zend\Filter, Zend\Filter\Exception;
 
 /**
  * Encrypts a given file and stores the encrypted file content
@@ -37,6 +36,7 @@ use Zend\Filter,
  */
 class Encrypt extends Filter\Encrypt
 {
+
     /**
      * New filename to set
      *
@@ -49,7 +49,7 @@ class Encrypt extends Filter\Encrypt
      *
      * @return string
      */
-    public function getFilename()
+    public function getFilename ()
     {
         return $this->_filename;
     }
@@ -60,7 +60,7 @@ class Encrypt extends Filter\Encrypt
      * @param  string $filename (Optional) New filename to set
      * @return Zend_Filter_File_Encryt
      */
-    public function setFilename($filename = null)
+    public function setFilename ($filename = null)
     {
         $this->_filename = $filename;
         return $this;
@@ -74,32 +74,36 @@ class Encrypt extends Filter\Encrypt
      * @param  string $value Full path of file to change
      * @return string The filename which has been set, or false when there were errors
      */
-    public function __invoke($value)
+    public function __invoke ($value)
     {
-        if (!file_exists($value)) {
-            throw new Exception\InvalidArgumentException("File '$value' not found");
+        if (! file_exists($value)) {
+            throw new Exception\InvalidArgumentException(
+            "File '$value' not found");
         }
-
-        if (!isset($this->_filename)) {
+        
+        if (! isset($this->_filename)) {
             $this->_filename = $value;
         }
-
-        if (file_exists($this->_filename) and !is_writable($this->_filename)) {
-            throw new Exception\RuntimeException("File '{$this->_filename}' is not writable");
+        
+        if (file_exists($this->_filename) and ! is_writable($this->_filename)) {
+            throw new Exception\RuntimeException(
+            "File '{$this->_filename}' is not writable");
         }
-
+        
         $content = file_get_contents($value);
-        if (!$content) {
-            throw new Exception\RuntimeException("Problem while reading file '$value'");
+        if (! $content) {
+            throw new Exception\RuntimeException(
+            "Problem while reading file '$value'");
         }
-
+        
         $encrypted = parent::__invoke($content);
-        $result    = file_put_contents($this->_filename, $encrypted);
-
-        if (!$result) {
-            throw new Exception\RuntimeException("Problem while writing file '{$this->_filename}'");
+        $result = file_put_contents($this->_filename, $encrypted);
+        
+        if (! $result) {
+            throw new Exception\RuntimeException(
+            "Problem while writing file '{$this->_filename}'");
         }
-
+        
         return $this->_filename;
     }
 }

@@ -35,6 +35,7 @@ namespace Zend\Dojo\Form\Element;
  */
 class ValidationTextBox extends TextBox
 {
+
     /**
      * Use ValidationTextBox dijit view helper
      * @var string
@@ -47,7 +48,7 @@ class ValidationTextBox extends TextBox
      * @param  string $message
      * @return \Zend\Dojo\Form\Element\ValidationTextBox
      */
-    public function setInvalidMessage($message)
+    public function setInvalidMessage ($message)
     {
         $this->setDijitParam('invalidMessage', (string) $message);
         return $this;
@@ -58,7 +59,7 @@ class ValidationTextBox extends TextBox
      *
      * @return string|null
      */
-    public function getInvalidMessage()
+    public function getInvalidMessage ()
     {
         return $this->getDijitParam('invalidMessage');
     }
@@ -69,7 +70,7 @@ class ValidationTextBox extends TextBox
      * @param  string $message
      * @return \Zend\Dojo\Form\Element\ValidationTextBox
      */
-    public function setPromptMessage($message)
+    public function setPromptMessage ($message)
     {
         $this->setDijitParam('promptMessage', (string) $message);
         return $this;
@@ -80,7 +81,7 @@ class ValidationTextBox extends TextBox
      *
      * @return string|null
      */
-    public function getPromptMessage()
+    public function getPromptMessage ()
     {
         return $this->getDijitParam('promptMessage');
     }
@@ -91,7 +92,7 @@ class ValidationTextBox extends TextBox
      * @param  string $regexp
      * @return \Zend\Dojo\Form\Element\ValidationTextBox
      */
-    public function setRegExp($regexp)
+    public function setRegExp ($regexp)
     {
         $this->setDijitParam('regExp', (string) $regexp);
         return $this;
@@ -102,7 +103,7 @@ class ValidationTextBox extends TextBox
      *
      * @return string|null
      */
-    public function getRegExp()
+    public function getRegExp ()
     {
         return $this->getDijitParam('regExp');
     }
@@ -114,7 +115,7 @@ class ValidationTextBox extends TextBox
      * @param  mixed $value
      * @return \Zend\Dojo\Form\Element\ValidationTextBox
      */
-    public function setConstraint($key, $value)
+    public function setConstraint ($key, $value)
     {
         $constraints = $this->getConstraints();
         $constraints[(string) $key] = $value;
@@ -131,7 +132,7 @@ class ValidationTextBox extends TextBox
      * @param  array $constraints
      * @return \Zend\Dojo\Form\Element\ValidationTextBox
      */
-    public function setConstraints(array $constraints)
+    public function setConstraints (array $constraints)
     {
         $tmp = $this->getConstraints();
         $constraints = array_merge($tmp, $constraints);
@@ -146,10 +147,10 @@ class ValidationTextBox extends TextBox
      * @param  string $key
      * @return bool
      */
-    public function hasConstraint($key)
+    public function hasConstraint ($key)
     {
         $constraints = $this->getConstraints();
-        return array_key_exists((string)$key, $constraints);
+        return array_key_exists((string) $key, $constraints);
     }
 
     /**
@@ -158,10 +159,10 @@ class ValidationTextBox extends TextBox
      * @param  string $key
      * @return mixed
      */
-    public function getConstraint($key)
+    public function getConstraint ($key)
     {
         $key = (string) $key;
-        if (!$this->hasConstraint($key)) {
+        if (! $this->hasConstraint($key)) {
             return null;
         }
         return $this->dijitParams['constraints'][$key];
@@ -172,7 +173,7 @@ class ValidationTextBox extends TextBox
      *
      * @return array
      */
-    public function getConstraints()
+    public function getConstraints ()
     {
         if ($this->hasDijitParam('constraints')) {
             return $this->getDijitParam('constraints');
@@ -186,7 +187,7 @@ class ValidationTextBox extends TextBox
      * @param  string $key
      * @return \Zend\Dojo\Form\Element\ValidationTextBox
      */
-    public function removeConstraint($key)
+    public function removeConstraint ($key)
     {
         $key = (string) $key;
         if ($this->hasConstraint($key)) {
@@ -200,7 +201,7 @@ class ValidationTextBox extends TextBox
      *
      * @return \Zend\Dojo\Form\Element\ValidationTextBox
      */
-    public function clearConstraints()
+    public function clearConstraints ()
     {
         return $this->removeDijitParam('constraints');
     }
@@ -212,7 +213,7 @@ class ValidationTextBox extends TextBox
      * @param  string $key
      * @return void
      */
-    protected function _castBoolToString(&$item, $key)
+    protected function _castBoolToString (&$item, $key)
     {
         if (is_bool($item)) {
             $item = ($item) ? 'true' : 'false';

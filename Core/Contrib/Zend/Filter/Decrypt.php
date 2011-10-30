@@ -34,6 +34,7 @@ namespace Zend\Filter;
  */
 class Decrypt extends Encrypt
 {
+
     /**
      * Defined by Zend\Filter\Filter
      *
@@ -42,7 +43,7 @@ class Decrypt extends Encrypt
      * @param  string $value Content to decrypt
      * @return string The decrypted content
      */
-    public function __invoke($value)
+    public function __invoke ($value)
     {
         return $this->_adapter->decrypt($value);
     }

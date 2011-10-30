@@ -38,6 +38,7 @@ use Zend\Validator\AbstractValidator;
  */
 class Password extends Xhtml
 {
+
     /**
      * Use formPassword view helper by default
      * @var string
@@ -55,7 +56,7 @@ class Password extends Xhtml
      * @param  bool $flag
      * @return \Zend\Form\Element\Password
      */
-    public function setRenderPassword($flag)
+    public function setRenderPassword ($flag)
     {
         $this->renderPassword = (bool) $flag;
         return $this;
@@ -66,7 +67,7 @@ class Password extends Xhtml
      *
      * @return bool
      */
-    public function renderPassword()
+    public function renderPassword ()
     {
         return $this->renderPassword;
     }
@@ -80,7 +81,7 @@ class Password extends Xhtml
      * @param  mixed $context
      * @return bool
      */
-    public function isValid($value, $context = null)
+    public function isValid ($value, $context = null)
     {
         foreach ($this->getValidators() as $validator) {
             if ($validator instanceof AbstractValidator) {

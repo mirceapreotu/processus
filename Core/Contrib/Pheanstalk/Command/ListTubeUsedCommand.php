@@ -8,25 +8,24 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Pheanstalk_Command_ListTubeUsedCommand
-	extends Pheanstalk_Command_AbstractCommand
-	implements Pheanstalk_ResponseParser
+class Pheanstalk_Command_ListTubeUsedCommand extends Pheanstalk_Command_AbstractCommand implements 
+Pheanstalk_ResponseParser
 {
-	/* (non-phpdoc)
+
+    /* (non-phpdoc)
 	 * @see Pheanstalk_Command::getCommandLine()
 	 */
-	public function getCommandLine()
-	{
-		return 'list-tube-used';
-	}
+    public function getCommandLine ()
+    {
+        return 'list-tube-used';
+    }
 
-	/* (non-phpdoc)
+    /* (non-phpdoc)
 	 * @see Pheanstalk_ResponseParser::parseRespose()
 	 */
-	public function parseResponse($responseLine, $responseData)
-	{
-		return $this->_createResponse('USING', array(
-			'tube' => preg_replace('#^USING (.+)$#', '$1', $responseLine)
-		));
-	}
+    public function parseResponse ($responseLine, $responseData)
+    {
+        return $this->_createResponse('USING', 
+        array('tube' => preg_replace('#^USING (.+)$#', '$1', $responseLine)));
+    }
 }

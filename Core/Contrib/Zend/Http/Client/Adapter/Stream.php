@@ -37,6 +37,7 @@ namespace Zend\Http\Client\Adapter;
  */
 interface Stream
 {
+
     /**
      * Set output stream
      * 
@@ -45,5 +46,5 @@ interface Stream
      * @param resource $stream Stream to write the output to
      * 
      */
-    function setOutputStream($stream);
+    function setOutputStream ($stream);
 }

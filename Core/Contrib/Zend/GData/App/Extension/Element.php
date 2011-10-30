@@ -40,7 +40,9 @@ use Zend\GData\App\Extension;
 class Element extends Extension
 {
 
-    public function __construct($rootElement=null, $rootNamespace=null, $rootNamespaceURI=null, $text=null){
+    public function __construct ($rootElement = null, $rootNamespace = null, 
+    $rootNamespaceURI = null, $text = null)
+    {
         parent::__construct();
         $this->_rootElement = $rootElement;
         $this->_rootNamespace = $rootNamespace;
@@ -48,7 +50,7 @@ class Element extends Extension
         $this->_text = $text;
     }
 
-    public function transferFromDOM($node)
+    public function transferFromDOM ($node)
     {
         parent::transferFromDOM($node);
         $this->_rootNamespace = null;

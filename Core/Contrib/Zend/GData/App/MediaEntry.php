@@ -39,6 +39,7 @@ namespace Zend\GData\App;
  */
 class MediaEntry extends Entry
 {
+
     /**
      * The attached MediaSource/file
      *
@@ -51,9 +52,9 @@ class MediaEntry extends Entry
      * file to upload
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null, $mediaSource = null)
+    public function __construct ($element = null, $mediaSource = null)
     {
         parent::__construct($element);
         $this->_mediaSource = $mediaSource;
@@ -63,10 +64,10 @@ class MediaEntry extends Entry
      * Return the MIME multipart representation of this MediaEntry.
      *
      * @return string|\Zend\GData\MediaMimeStream The MIME multipart
-     *         representation of this MediaEntry. If the entry consisted only
-     *         of XML, a string is returned.
+     * representation of this MediaEntry. If the entry consisted only
+     * of XML, a string is returned.
      */
-    public function encode()
+    public function encode ()
     {
         $xmlData = $this->saveXML();
         $mediaSource = $this->getMediaSource();
@@ -74,8 +75,8 @@ class MediaEntry extends Entry
             // No attachment, just send XML for entry
             return $xmlData;
         } else {
-            return new \Zend\GData\MediaMimeStream($xmlData,
-                $mediaSource->getFilename(), $mediaSource->getContentType());
+            return new \Zend\GData\MediaMimeStream($xmlData, 
+            $mediaSource->getFilename(), $mediaSource->getContentType());
         }
     }
 
@@ -85,7 +86,7 @@ class MediaEntry extends Entry
      *
      * @return \Zend\GData\App\MediaSource The attached MediaSource/file
      */
-    public function getMediaSource()
+    public function getMediaSource ()
     {
         return $this->_mediaSource;
     }
@@ -96,13 +97,13 @@ class MediaEntry extends Entry
      * @param \Zend\GData\App\MediaSource $value The attached MediaSource/file
      * @return \Zend\GData\App\MediaEntry Provides a fluent interface
      */
-    public function setMediaSource($value)
+    public function setMediaSource ($value)
     {
         if ($value instanceof MediaSource) {
             $this->_mediaSource = $value;
         } else {
             throw new InvalidArgumentException(
-                    'You must specify the media data as a class that conforms to \Zend\Gdata\App\MediaSource.');
+            'You must specify the media data as a class that conforms to \Zend\Gdata\App\MediaSource.');
         }
         return $this;
     }

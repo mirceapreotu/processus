@@ -23,15 +23,7 @@
  * @namespace
  */
 namespace Zend\Form;
-use Zend\Config\Config,
-    Zend\Controller\Front as FrontController,
-    Zend\Loader\PrefixPathLoader,
-    Zend\Loader\PrefixPathMapper,
-    Zend\Validator\Validator,
-    Zend\Filter\Filter,
-    Zend\Validator\AbstractValidator,
-    Zend\Form\Element\Exception as ElementException,
-    Zend\View\Renderer as View;
+use Zend\Config\Config, Zend\Controller\Front as FrontController, Zend\Loader\PrefixPathLoader, Zend\Loader\PrefixPathMapper, Zend\Validator\Validator, Zend\Filter\Filter, Zend\Validator\AbstractValidator, Zend\Form\Element\Exception as ElementException, Zend\View\Renderer as View;
 
 /**
  * Zend_Form_Element
@@ -47,12 +39,15 @@ use Zend\Config\Config,
  */
 class Element implements Validator
 {
+
     /**
      * Element Constants
      */
     const DECORATOR = 'DECORATOR';
-    const FILTER    = 'FILTER';
-    const VALIDATE  = 'VALIDATOR';
+
+    const FILTER = 'FILTER';
+
+    const VALIDATE = 'VALIDATOR';
 
     /**
      * Default view helper to use
@@ -244,7 +239,7 @@ class Element implements Validator
      * @return void
      * @throws \Zend\Form\ElementException if no element name after initialization
      */
-    public function __construct($spec, $options = null)
+    public function __construct ($spec, $options = null)
     {
         if (is_string($spec)) {
             $this->setName($spec);
@@ -253,22 +248,23 @@ class Element implements Validator
         } elseif ($spec instanceof Config) {
             $this->setConfig($spec);
         }
-
+        
         if (is_string($spec) && is_array($options)) {
             $this->setOptions($options);
         } elseif (is_string($spec) && ($options instanceof Config)) {
             $this->setConfig($options);
         }
-
+        
         if (null === $this->getName()) {
-            throw new ElementException\UnexpectedValueException('Zend_Form_Element requires each element to have a name');
+            throw new ElementException\UnexpectedValueException(
+            'Zend_Form_Element requires each element to have a name');
         }
-
+        
         /**
          * Extensions
          */
         $this->init();
-
+        
         /**
          * Register ViewHelper decorator by default
          */
@@ -280,9 +276,8 @@ class Element implements Validator
      *
      * @return void
      */
-    public function init()
-    {
-    }
+    public function init ()
+    {}
 
     /**
      * Set flag to disable loading default decorators
@@ -290,7 +285,7 @@ class Element implements Validator
      * @param  bool $flag
      * @return \Zend\Form\Element
      */
-    public function setDisableLoadDefaultDecorators($flag)
+    public function setDisableLoadDefaultDecorators ($flag)
     {
         $this->_disableLoadDefaultDecorators = (bool) $flag;
         return $this;
@@ -301,7 +296,7 @@ class Element implements Validator
      *
      * @return bool
      */
-    public function loadDefaultDecoratorsIsDisabled()
+    public function loadDefaultDecoratorsIsDisabled ()
     {
         return $this->_disableLoadDefaultDecorators;
     }
@@ -311,23 +306,25 @@ class Element implements Validator
      *
      * @return Zend_Form_Element
      */
-    public function loadDefaultDecorators()
+    public function loadDefaultDecorators ()
     {
         if ($this->loadDefaultDecoratorsIsDisabled()) {
             return $this;
         }
-
+        
         $decorators = $this->getDecorators();
         if (empty($decorators)) {
-            $getId = function(Decorator $decorator) {
+            $getId = function  (Decorator $decorator)
+            {
                 return $decorator->getElement()->getId() . '-element';
             };
             $this->addDecorator('ViewHelper')
-                 ->addDecorator('Errors')
-                 ->addDecorator('Description', array('tag' => 'p', 'class' => 'description'))
-                 ->addDecorator('HtmlTag', array('tag' => 'dd',
-                                                 'id'  => array('callback' => $getId)))
-                 ->addDecorator('Label', array('tag' => 'dt'));
+                ->addDecorator('Errors')
+                ->addDecorator('Description', 
+            array('tag' => 'p', 'class' => 'description'))
+                ->addDecorator('HtmlTag', 
+            array('tag' => 'dd', 'id' => array('callback' => $getId)))
+                ->addDecorator('Label', array('tag' => 'dt'));
         }
         return $this;
     }
@@ -338,30 +335,31 @@ class Element implements Validator
      * @param  array $options
      * @return \Zend\Form\Element
      */
-    public function setOptions(array $options)
+    public function setOptions (array $options)
     {
         if (isset($options['prefixPath'])) {
             $this->addPrefixPaths($options['prefixPath']);
             unset($options['prefixPath']);
         }
-
+        
         if (isset($options['disableTranslator'])) {
             $this->setDisableTranslator($options['disableTranslator']);
             unset($options['disableTranslator']);
         }
-
+        
         unset($options['options']);
         unset($options['config']);
-
+        
         foreach ($options as $key => $value) {
             $method = 'set' . ucfirst($key);
-
-            if (in_array($method, array('setTranslator', 'setPluginLoader', 'setView'))) {
-                if (!is_object($value)) {
+            
+            if (in_array($method, 
+            array('setTranslator', 'setPluginLoader', 'setView'))) {
+                if (! is_object($value)) {
                     continue;
                 }
             }
-
+            
             if (method_exists($this, $method)) {
                 // Setter exists; use it
                 $this->$method($value);
@@ -379,13 +377,13 @@ class Element implements Validator
      * @param  \Zend\Config\Config $config
      * @return \Zend\Form\Element
      */
-    public function setConfig(Config $config)
+    public function setConfig (Config $config)
     {
         return $this->setOptions($config->toArray());
     }
 
-
     // Localization:
+    
 
     /**
      * Set translator object for localization
@@ -393,7 +391,7 @@ class Element implements Validator
      * @param  \Zend\Translator\Translator|null $translator
      * @return \Zend\Form\Element
      */
-    public function setTranslator($translator = null)
+    public function setTranslator ($translator = null)
     {
         if (null === $translator) {
             $this->_translator = null;
@@ -402,7 +400,8 @@ class Element implements Validator
         } elseif ($translator instanceof \Zend\Translator\Translator) {
             $this->_translator = $translator->getAdapter();
         } else {
-            throw new ElementException\InvalidArgumentException('Invalid translator specified');
+            throw new ElementException\InvalidArgumentException(
+            'Invalid translator specified');
         }
         return $this;
     }
@@ -412,12 +411,12 @@ class Element implements Validator
      *
      * @return \Zend\Translator\Adapter\Adapter|null
      */
-    public function getTranslator()
+    public function getTranslator ()
     {
         if ($this->translatorIsDisabled()) {
             return null;
         }
-
+        
         if (null === $this->_translator) {
             return Form::getDefaultTranslator();
         }
@@ -429,9 +428,9 @@ class Element implements Validator
      *
      * @return bool
      */
-    public function hasTranslator()
+    public function hasTranslator ()
     {
-        return (bool)$this->_translator;
+        return (bool) $this->_translator;
     }
 
     /**
@@ -440,7 +439,7 @@ class Element implements Validator
      * @param  bool $flag
      * @return \Zend\Form\Element
      */
-    public function setDisableTranslator($flag)
+    public function setDisableTranslator ($flag)
     {
         $this->_translatorDisabled = (bool) $flag;
         return $this;
@@ -451,12 +450,13 @@ class Element implements Validator
      *
      * @return bool
      */
-    public function translatorIsDisabled()
+    public function translatorIsDisabled ()
     {
         return $this->_translatorDisabled;
     }
 
     // Metadata
+    
 
     /**
      * Filter a name to only allow valid variable characters
@@ -465,7 +465,7 @@ class Element implements Validator
      * @param  bool $allowBrackets
      * @return string
      */
-    public function filterName($value, $allowBrackets = false)
+    public function filterName ($value, $allowBrackets = false)
     {
         $charset = '^a-zA-Z0-9_\x7f-\xff';
         if ($allowBrackets) {
@@ -480,13 +480,14 @@ class Element implements Validator
      * @param  string $name
      * @return \Zend\Form\Element
      */
-    public function setName($name)
+    public function setName ($name)
     {
         $name = $this->filterName($name);
         if ('' === $name) {
-            throw new ElementException\InvalidArgumentException('Invalid name provided; must contain only valid variable characters and be non-empty');
+            throw new ElementException\InvalidArgumentException(
+            'Invalid name provided; must contain only valid variable characters and be non-empty');
         }
-
+        
         $this->_name = $name;
         return $this;
     }
@@ -496,7 +497,7 @@ class Element implements Validator
      *
      * @return string
      */
-    public function getName()
+    public function getName ()
     {
         return $this->_name;
     }
@@ -508,18 +509,18 @@ class Element implements Validator
      *
      * @return string
      */
-    public function getFullyQualifiedName()
+    public function getFullyQualifiedName ()
     {
         $name = $this->getName();
-
+        
         if (null !== ($belongsTo = $this->getBelongsTo())) {
             $name = $belongsTo . '[' . $name . ']';
         }
-
+        
         if ($this->isArray()) {
             $name .= '[]';
         }
-
+        
         return $name;
     }
 
@@ -528,27 +529,27 @@ class Element implements Validator
      *
      * @return string
      */
-    public function getId()
+    public function getId ()
     {
         if (isset($this->id)) {
             return $this->id;
         }
-
+        
         $id = $this->getFullyQualifiedName();
-
+        
         // Bail early if no array notation detected
-        if (!strstr($id, '[')) {
+        if (! strstr($id, '[')) {
             return $id;
         }
-
+        
         // Strip array notation
-        if ('[]' == substr($id, -2)) {
+        if ('[]' == substr($id, - 2)) {
             $id = substr($id, 0, strlen($id) - 2);
         }
         $id = str_replace('][', '-', $id);
         $id = str_replace(array(']', '['), '-', $id);
         $id = trim($id, '-');
-
+        
         return $id;
     }
 
@@ -558,7 +559,7 @@ class Element implements Validator
      * @param  mixed $value
      * @return \Zend\Form\Element
      */
-    public function setValue($value)
+    public function setValue ($value)
     {
         $this->_value = $value;
         return $this;
@@ -571,7 +572,7 @@ class Element implements Validator
      * @param  string $key
      * @return void
      */
-    protected function _filterValue(&$value, &$key)
+    protected function _filterValue (&$value, &$key)
     {
         foreach ($this->getFilters() as $filter) {
             $value = $filter->filter($value);
@@ -583,16 +584,16 @@ class Element implements Validator
      *
      * @return mixed
      */
-    public function getValue()
+    public function getValue ()
     {
         $valueFiltered = $this->_value;
-
+        
         if ($this->isArray() && is_array($valueFiltered)) {
             array_walk_recursive($valueFiltered, array($this, '_filterValue'));
         } else {
             $this->_filterValue($valueFiltered, $valueFiltered);
         }
-
+        
         return $valueFiltered;
     }
 
@@ -601,7 +602,7 @@ class Element implements Validator
      *
      * @return mixed
      */
-    public function getUnfilteredValue()
+    public function getUnfilteredValue ()
     {
         return $this->_value;
     }
@@ -612,7 +613,7 @@ class Element implements Validator
      * @param  string $label
      * @return \Zend\Form\Element
      */
-    public function setLabel($label)
+    public function setLabel ($label)
     {
         $this->_label = (string) $label;
         return $this;
@@ -623,13 +624,13 @@ class Element implements Validator
      *
      * @return string
      */
-    public function getLabel()
+    public function getLabel ()
     {
         $translator = $this->getTranslator();
         if (null !== $translator) {
             return $translator->translate($this->_label);
         }
-
+        
         return $this->_label;
     }
 
@@ -639,7 +640,7 @@ class Element implements Validator
      * @param  int $order
      * @return \Zend\Form\Element
      */
-    public function setOrder($order)
+    public function setOrder ($order)
     {
         $this->_order = (int) $order;
         return $this;
@@ -650,7 +651,7 @@ class Element implements Validator
      *
      * @return int
      */
-    public function getOrder()
+    public function getOrder ()
     {
         return $this->_order;
     }
@@ -661,7 +662,7 @@ class Element implements Validator
      * @param  bool $flag Default value is true
      * @return \Zend\Form\Element
      */
-    public function setRequired($flag = true)
+    public function setRequired ($flag = true)
     {
         $this->_required = (bool) $flag;
         return $this;
@@ -672,7 +673,7 @@ class Element implements Validator
      *
      * @return bool
      */
-    public function isRequired()
+    public function isRequired ()
     {
         return $this->_required;
     }
@@ -683,7 +684,7 @@ class Element implements Validator
      * @param  bool $flag
      * @return \Zend\Form\Element
      */
-    public function setAutoInsertNotEmptyValidator($flag)
+    public function setAutoInsertNotEmptyValidator ($flag)
     {
         $this->_autoInsertNotEmptyValidator = (bool) $flag;
         return $this;
@@ -694,7 +695,7 @@ class Element implements Validator
      *
      * @return bool
      */
-    public function autoInsertNotEmptyValidator()
+    public function autoInsertNotEmptyValidator ()
     {
         return $this->_autoInsertNotEmptyValidator;
     }
@@ -705,7 +706,7 @@ class Element implements Validator
      * @param  string $description
      * @return \Zend\Form\Element
      */
-    public function setDescription($description)
+    public function setDescription ($description)
     {
         $this->_description = (string) $description;
         return $this;
@@ -716,7 +717,7 @@ class Element implements Validator
      *
      * @return string
      */
-    public function getDescription()
+    public function getDescription ()
     {
         return $this->_description;
     }
@@ -730,7 +731,7 @@ class Element implements Validator
      * @param  bool $flag
      * @return \Zend\Form\Element
      */
-    public function setAllowEmpty($flag)
+    public function setAllowEmpty ($flag)
     {
         $this->_allowEmpty = (bool) $flag;
         return $this;
@@ -741,7 +742,7 @@ class Element implements Validator
      *
      * @return bool
      */
-    public function getAllowEmpty()
+    public function getAllowEmpty ()
     {
         return $this->_allowEmpty;
     }
@@ -752,7 +753,7 @@ class Element implements Validator
      * @param  bool $flag
      * @return \Zend\Form\Element
      */
-    public function setIgnore($flag)
+    public function setIgnore ($flag)
     {
         $this->_ignore = (bool) $flag;
         return $this;
@@ -763,7 +764,7 @@ class Element implements Validator
      *
      * @return bool
      */
-    public function getIgnore()
+    public function getIgnore ()
     {
         return $this->_ignore;
     }
@@ -774,7 +775,7 @@ class Element implements Validator
      * @param  bool $flag
      * @return \Zend\Form\Element
      */
-    public function setIsArray($flag)
+    public function setIsArray ($flag)
     {
         $this->_isArray = (bool) $flag;
         return $this;
@@ -785,7 +786,7 @@ class Element implements Validator
      *
      * @return bool
      */
-    public function isArray()
+    public function isArray ()
     {
         return $this->_isArray;
     }
@@ -796,13 +797,13 @@ class Element implements Validator
      * @param  string $array
      * @return \Zend\Form\Element
      */
-    public function setBelongsTo($array)
+    public function setBelongsTo ($array)
     {
         $array = $this->filterName($array, true);
-        if (!empty($array)) {
+        if (! empty($array)) {
             $this->_belongsTo = $array;
         }
-
+        
         return $this;
     }
 
@@ -811,7 +812,7 @@ class Element implements Validator
      *
      * @return string
      */
-    public function getBelongsTo()
+    public function getBelongsTo ()
     {
         return $this->_belongsTo;
     }
@@ -821,12 +822,12 @@ class Element implements Validator
      *
      * @return string
      */
-    public function getType()
+    public function getType ()
     {
         if (null === $this->_type) {
             $this->_type = get_class($this);
         }
-
+        
         return $this->_type;
     }
 
@@ -838,19 +839,22 @@ class Element implements Validator
      * @return \Zend\Form\Element
      * @throws \Zend\Form\ElementException for invalid $name values
      */
-    public function setAttrib($name, $value)
+    public function setAttrib ($name, $value)
     {
         $name = (string) $name;
         if ('_' == $name[0]) {
-            throw new ElementException\InvalidArgumentException(sprintf('Invalid attribute "%s"; must not contain a leading underscore', $name));
+            throw new ElementException\InvalidArgumentException(
+            sprintf(
+            'Invalid attribute "%s"; must not contain a leading underscore', 
+            $name));
         }
-
+        
         if (null === $value) {
             unset($this->$name);
         } else {
             $this->$name = $value;
         }
-
+        
         return $this;
     }
 
@@ -860,12 +864,12 @@ class Element implements Validator
      * @param  array $attribs
      * @return \Zend\Form\Element
      */
-    public function setAttribs(array $attribs)
+    public function setAttribs (array $attribs)
     {
         foreach ($attribs as $key => $value) {
             $this->setAttrib($key, $value);
         }
-
+        
         return $this;
     }
 
@@ -875,13 +879,13 @@ class Element implements Validator
      * @param  string $name
      * @return string
      */
-    public function getAttrib($name)
+    public function getAttrib ($name)
     {
         $name = (string) $name;
         if (isset($this->$name)) {
             return $this->$name;
         }
-
+        
         return null;
     }
 
@@ -890,7 +894,7 @@ class Element implements Validator
      *
      * @return array
      */
-    public function getAttribs()
+    public function getAttribs ()
     {
         $attribs = get_object_vars($this);
         foreach ($attribs as $key => $value) {
@@ -898,7 +902,7 @@ class Element implements Validator
                 unset($attribs[$key]);
             }
         }
-
+        
         return $attribs;
     }
 
@@ -910,16 +914,18 @@ class Element implements Validator
      * @param  string $key
      * @return mixed
      */
-    public function __get($key)
+    public function __get ($key)
     {
         if ('_' == $key[0]) {
-            throw new ElementException\RunTimeException(sprintf('Cannot retrieve value for protected/private property "%s"', $key));
+            throw new ElementException\RunTimeException(
+            sprintf('Cannot retrieve value for protected/private property "%s"', 
+            $key));
         }
-
-        if (!isset($this->$key)) {
+        
+        if (! isset($this->$key)) {
             return null;
         }
-
+        
         return $this->$key;
     }
 
@@ -930,7 +936,7 @@ class Element implements Validator
      * @param  mixed $value
      * @return voide
      */
-    public function __set($key, $value)
+    public function __set ($key, $value)
     {
         $this->setAttrib($key, $value);
     }
@@ -945,7 +951,7 @@ class Element implements Validator
      * @return string
      * @throws \Zend\Form\ElementException for invalid decorator or invalid method call
      */
-    public function __call($method, $args)
+    public function __call ($method, $args)
     {
         if ('render' == substr($method, 0, 6)) {
             $this->_isPartialRendering = true;
@@ -960,14 +966,17 @@ class Element implements Validator
                 }
                 return $decorator->render($seed);
             }
-
-            throw new ElementException\BadMethodCallException(sprintf('Decorator by name %s does not exist', $decoratorName));
+            
+            throw new ElementException\BadMethodCallException(
+            sprintf('Decorator by name %s does not exist', $decoratorName));
         }
-
-        throw new ElementException\BadMethodCallException(sprintf('Method %s does not exist', $method));
+        
+        throw new ElementException\BadMethodCallException(
+        sprintf('Method %s does not exist', $method));
     }
 
     // Loaders
+    
 
     /**
      * Set plugin loader to use for validator or filter chain
@@ -977,7 +986,7 @@ class Element implements Validator
      * @return \Zend\Form\Element
      * @throws \Zend\Form\ElementException on invalid type
      */
-    public function setPluginLoader(PrefixPathMapper $loader, $type)
+    public function setPluginLoader (PrefixPathMapper $loader, $type)
     {
         $type = strtoupper($type);
         switch ($type) {
@@ -987,7 +996,9 @@ class Element implements Validator
                 $this->_loaders[$type] = $loader;
                 return $this;
             default:
-                throw new ElementException\InvalidArgumentException(sprintf('Invalid type "%s" provided to setPluginLoader()', $type));
+                throw new ElementException\InvalidArgumentException(
+                sprintf('Invalid type "%s" provided to setPluginLoader()', 
+                $type));
         }
     }
 
@@ -1001,27 +1012,30 @@ class Element implements Validator
      * @return \Zend\Loader\PrefixPathMapper
      * @throws \Zend\Loader\Exception on invalid type.
      */
-    public function getPluginLoader($type)
+    public function getPluginLoader ($type)
     {
         $type = strtoupper($type);
         switch ($type) {
             case self::FILTER:
             case self::VALIDATE:
                 $prefixSegment = ucfirst(strtolower($type));
-                $pathSegment   = $prefixSegment;
+                $pathSegment = $prefixSegment;
             case self::DECORATOR:
-                if (!isset($prefixSegment)) {
+                if (! isset($prefixSegment)) {
                     $prefixSegment = 'Form\Decorator';
-                    $pathSegment   = 'Form/Decorator';
+                    $pathSegment = 'Form/Decorator';
                 }
-                if (!isset($this->_loaders[$type])) {
+                if (! isset($this->_loaders[$type])) {
                     $this->_loaders[$type] = new PrefixPathLoader(
-                        array('Zend\\' . $prefixSegment . '\\' => 'Zend/' . $pathSegment . '/')
-                    );
+                    array(
+                    'Zend\\' . $prefixSegment . '\\' => 'Zend/' . $pathSegment .
+                     '/'));
                 }
                 return $this->_loaders[$type];
             default:
-                throw new ElementException\InvalidArgumentException(sprintf('Invalid type "%s" provided to getPluginLoader()', $type));
+                throw new ElementException\InvalidArgumentException(
+                sprintf('Invalid type "%s" provided to getPluginLoader()', 
+                $type));
         }
     }
 
@@ -1042,7 +1056,7 @@ class Element implements Validator
      * @return \Zend\Form\Element
      * @throws \Zend\Form\ElementException for invalid type
      */
-    public function addPrefixPath($prefix, $path, $type = null)
+    public function addPrefixPath ($prefix, $path, $type = null)
     {
         $type = strtoupper($type);
         switch ($type) {
@@ -1058,17 +1072,20 @@ class Element implements Validator
                 return $this;
             case null:
                 $prefix = rtrim($prefix, '\\');
-                $path   = rtrim($path, DIRECTORY_SEPARATOR);
+                $path = rtrim($path, DIRECTORY_SEPARATOR);
                 foreach (array(self::DECORATOR, self::FILTER, self::VALIDATE) as $type) {
-                    $cType        = ucfirst(strtolower($type));
-                    $pluginPath   = $path . DIRECTORY_SEPARATOR . $cType . DIRECTORY_SEPARATOR;
+                    $cType = ucfirst(strtolower($type));
+                    $pluginPath = $path . DIRECTORY_SEPARATOR . $cType .
+                     DIRECTORY_SEPARATOR;
                     $pluginPrefix = $prefix . '\\' . $cType;
-                    $loader       = $this->getPluginLoader($type);
+                    $loader = $this->getPluginLoader($type);
                     $loader->addPrefixPath($pluginPrefix, $pluginPath);
                 }
                 return $this;
             default:
-                throw new ElementException\InvalidArgumentException(sprintf('Invalid type "%s" provided to getPluginLoader()', $type));
+                throw new ElementException\InvalidArgumentException(
+                sprintf('Invalid type "%s" provided to getPluginLoader()', 
+                $type));
         }
     }
 
@@ -1078,7 +1095,7 @@ class Element implements Validator
      * @param  array $spec
      * @return \Zend\Form\Element
      */
-    public function addPrefixPaths(array $spec)
+    public function addPrefixPaths (array $spec)
     {
         if (isset($spec['prefix']) && isset($spec['path'])) {
             return $this->addPrefixPath($spec['prefix'], $spec['path']);
@@ -1090,14 +1107,15 @@ class Element implements Validator
                     if (isset($paths['type'])) {
                         $type = $paths['type'];
                     }
-                    $this->addPrefixPath($paths['prefix'], $paths['path'], $type);
+                    $this->addPrefixPath($paths['prefix'], $paths['path'], 
+                    $type);
                 }
-            } elseif (!is_numeric($type)) {
-                if (!isset($paths['prefix']) || !isset($paths['path'])) {
+            } elseif (! is_numeric($type)) {
+                if (! isset($paths['prefix']) || ! isset($paths['path'])) {
                     foreach ($paths as $prefix => $spec) {
                         if (is_array($spec)) {
                             foreach ($spec as $path) {
-                                if (!is_string($path)) {
+                                if (! is_string($path)) {
                                     continue;
                                 }
                                 $this->addPrefixPath($prefix, $path, $type);
@@ -1107,7 +1125,8 @@ class Element implements Validator
                         }
                     }
                 } else {
-                    $this->addPrefixPath($paths['prefix'], $paths['path'], $type);
+                    $this->addPrefixPath($paths['prefix'], $paths['path'], 
+                    $type);
                 }
             }
         }
@@ -1115,6 +1134,7 @@ class Element implements Validator
     }
 
     // Validation
+    
 
     /**
      * Add validator to validation chain
@@ -1127,28 +1147,27 @@ class Element implements Validator
      * @return \Zend\Form\Element
      * @throws \Zend\Form\ElementException if invalid validator type
      */
-    public function addValidator($validator, $breakChainOnFailure = false, $options = array())
+    public function addValidator ($validator, $breakChainOnFailure = false, 
+    $options = array())
     {
         if ($validator instanceof Validator) {
             $name = get_class($validator);
-
-            if (!isset($validator->zfBreakChainOnFailure)) {
+            
+            if (! isset($validator->zfBreakChainOnFailure)) {
                 $validator->zfBreakChainOnFailure = $breakChainOnFailure;
             }
         } elseif (is_string($validator)) {
-            $name      = $validator;
-            $validator = array(
-                'validator' => $validator,
-                'breakChainOnFailure' => $breakChainOnFailure,
-                'options'             => $options,
-            );
+            $name = $validator;
+            $validator = array('validator' => $validator, 
+            'breakChainOnFailure' => $breakChainOnFailure, 
+            'options' => $options);
         } else {
-            throw new ElementException\InvalidArgumentException('Invalid validator provided to addValidator; must be string or Zend\Validator\Validator');
+            throw new ElementException\InvalidArgumentException(
+            'Invalid validator provided to addValidator; must be string or Zend\Validator\Validator');
         }
-
-
+        
         $this->_validators[$name] = $validator;
-
+        
         return $this;
     }
 
@@ -1158,7 +1177,7 @@ class Element implements Validator
      * @param  array $validators
      * @return \Zend\Form\Element
      */
-    public function addValidators(array $validators)
+    public function addValidators (array $validators)
     {
         foreach ($validators as $validatorInfo) {
             if (is_string($validatorInfo)) {
@@ -1166,9 +1185,9 @@ class Element implements Validator
             } elseif ($validatorInfo instanceof Validator) {
                 $this->addValidator($validatorInfo);
             } elseif (is_array($validatorInfo)) {
-                $argc                = count($validatorInfo);
+                $argc = count($validatorInfo);
                 $breakChainOnFailure = false;
-                $options             = array();
+                $options = array();
                 if (isset($validatorInfo['validator'])) {
                     $validator = $validatorInfo['validator'];
                     if (isset($validatorInfo['breakChainOnFailure'])) {
@@ -1177,27 +1196,30 @@ class Element implements Validator
                     if (isset($validatorInfo['options'])) {
                         $options = $validatorInfo['options'];
                     }
-                    $this->addValidator($validator, $breakChainOnFailure, $options);
+                    $this->addValidator($validator, $breakChainOnFailure, 
+                    $options);
                 } else {
                     switch (true) {
                         case (0 == $argc):
                             break;
                         case (1 <= $argc):
-                            $validator  = array_shift($validatorInfo);
+                            $validator = array_shift($validatorInfo);
                         case (2 <= $argc):
                             $breakChainOnFailure = array_shift($validatorInfo);
                         case (3 <= $argc):
                             $options = array_shift($validatorInfo);
                         default:
-                            $this->addValidator($validator, $breakChainOnFailure, $options);
+                            $this->addValidator($validator, 
+                            $breakChainOnFailure, $options);
                             break;
                     }
                 }
             } else {
-                throw new ElementException\InvalidArgumentException('Invalid validator passed to addValidators()');
+                throw new ElementException\InvalidArgumentException(
+                'Invalid validator passed to addValidators()');
             }
         }
-
+        
         return $this;
     }
 
@@ -1207,7 +1229,7 @@ class Element implements Validator
      * @param  array $validators
      * @return \Zend\Form\Element
      */
-    public function setValidators(array $validators)
+    public function setValidators (array $validators)
     {
         $this->clearValidators();
         return $this->addValidators($validators);
@@ -1219,15 +1241,15 @@ class Element implements Validator
      * @param  string $name
      * @return \Zend\Validator\Validator|false False if not found, validator otherwise
      */
-    public function getValidator($name)
+    public function getValidator ($name)
     {
-        if (!isset($this->_validators[$name])) {
+        if (! isset($this->_validators[$name])) {
             $len = strlen($name);
             foreach ($this->_validators as $localName => $validator) {
                 if ($len > strlen($localName)) {
                     continue;
                 }
-                if (0 === substr_compare($localName, $name, -$len, $len, true)) {
+                if (0 === substr_compare($localName, $name, - $len, $len, true)) {
                     if (is_array($validator)) {
                         return $this->_loadValidator($validator);
                     }
@@ -1236,11 +1258,11 @@ class Element implements Validator
             }
             return false;
         }
-
+        
         if (is_array($this->_validators[$name])) {
             return $this->_loadValidator($this->_validators[$name]);
         }
-
+        
         return $this->_validators[$name];
     }
 
@@ -1249,7 +1271,7 @@ class Element implements Validator
      *
      * @return array
      */
-    public function getValidators()
+    public function getValidators ()
     {
         $validators = array();
         foreach ($this->_validators as $key => $value) {
@@ -1269,7 +1291,7 @@ class Element implements Validator
      * @param  string $name
      * @return bool
      */
-    public function removeValidator($name)
+    public function removeValidator ($name)
     {
         if (isset($this->_validators[$name])) {
             unset($this->_validators[$name]);
@@ -1279,13 +1301,13 @@ class Element implements Validator
                 if ($len > strlen($validator)) {
                     continue;
                 }
-                if (0 === substr_compare($validator, $name, -$len, $len, true)) {
+                if (0 === substr_compare($validator, $name, - $len, $len, true)) {
                     unset($this->_validators[$validator]);
                     break;
                 }
             }
         }
-
+        
         return $this;
     }
 
@@ -1294,7 +1316,7 @@ class Element implements Validator
      *
      * @return \Zend\Form\Element
      */
-    public function clearValidators()
+    public function clearValidators ()
     {
         $this->_validators = array();
         return $this;
@@ -1314,34 +1336,30 @@ class Element implements Validator
      * @param  mixed $context
      * @return boolean
      */
-    public function isValid($value, $context = null)
+    public function isValid ($value, $context = null)
     {
         $this->setValue($value);
         $value = $this->getValue();
-
-        if ((('' === $value) || (null === $value))
-            && !$this->isRequired()
-            && $this->getAllowEmpty()
-        ) {
+        
+        if ((('' === $value) || (null === $value)) && ! $this->isRequired() &&
+         $this->getAllowEmpty()) {
             return true;
         }
-
-        if ($this->isRequired()
-            && $this->autoInsertNotEmptyValidator()
-            && !$this->getValidator('NotEmpty'))
-        {
+        
+        if ($this->isRequired() && $this->autoInsertNotEmptyValidator() &&
+         ! $this->getValidator('NotEmpty')) {
             $validators = $this->getValidators();
-            $notEmpty   = array('validator' => 'NotEmpty', 'breakChainOnFailure' => true);
+            $notEmpty = array('validator' => 'NotEmpty', 
+            'breakChainOnFailure' => true);
             array_unshift($validators, $notEmpty);
             $this->setValidators($validators);
         }
-
+        
         // Find the correct translator. Zend\Validator\AbstractValidator::getDefaultTranslator()
         // will get either the static translator attached to Zend\Validator\AbstractValidator
         // or the 'Zend_Translator' from Zend\Registry.
-        if (AbstractValidator::hasDefaultTranslator()
-            && !Form::hasDefaultTranslator())
-        {
+        if (AbstractValidator::hasDefaultTranslator() &&
+         ! Form::hasDefaultTranslator()) {
             $translator = AbstractValidator::getDefaultTranslator();
             if ($this->hasTranslator()) {
                 // only pick up this element's translator if it was attached directly.
@@ -1350,38 +1368,40 @@ class Element implements Validator
         } else {
             $translator = $this->getTranslator();
         }
-
+        
         $this->_messages = array();
-        $this->_errors   = array();
-        $result          = true;
-        $isArray         = $this->isArray();
+        $this->_errors = array();
+        $result = true;
+        $isArray = $this->isArray();
         foreach ($this->getValidators() as $key => $validator) {
             if (method_exists($validator, 'setTranslator')) {
                 if (method_exists($validator, 'hasTranslator')) {
-                    if (!$validator->hasTranslator()) {
+                    if (! $validator->hasTranslator()) {
                         $validator->setTranslator($translator);
                     }
                 } else {
                     $validator->setTranslator($translator);
                 }
             }
-
+            
             if (method_exists($validator, 'setDisableTranslator')) {
                 $validator->setDisableTranslator($this->translatorIsDisabled());
             }
-
+            
             if ($isArray && is_array($value)) {
                 $messages = array();
-                $errors   = array();
+                $errors = array();
                 foreach ($value as $val) {
-                    if (!$validator->isValid($val, $context)) {
+                    if (! $validator->isValid($val, $context)) {
                         $result = false;
                         if ($this->_hasErrorMessages()) {
                             $messages = $this->_getErrorMessages();
-                            $errors   = $messages;
+                            $errors = $messages;
                         } else {
-                            $messages = array_merge($messages, $validator->getMessages());
-                            $errors   = array_merge($errors,   $validator->getErrors());
+                            $messages = array_merge($messages, 
+                            $validator->getMessages());
+                            $errors = array_merge($errors, 
+                            $validator->getErrors());
                         }
                     }
                 }
@@ -1394,27 +1414,27 @@ class Element implements Validator
                 $result = false;
                 if ($this->_hasErrorMessages()) {
                     $messages = $this->_getErrorMessages();
-                    $errors   = $messages;
+                    $errors = $messages;
                 } else {
                     $messages = $validator->getMessages();
-                    $errors   = array_keys($messages);
+                    $errors = array_keys($messages);
                 }
             }
-
-            $result          = false;
+            
+            $result = false;
             $this->_messages = array_merge($this->_messages, $messages);
-            $this->_errors   = array_merge($this->_errors,   $errors);
-
+            $this->_errors = array_merge($this->_errors, $errors);
+            
             if ($validator->zfBreakChainOnFailure) {
                 break;
             }
         }
-
+        
         // If element manually flagged as invalid, return false
         if ($this->_isErrorForced) {
             return false;
         }
-
+        
         return $result;
     }
 
@@ -1424,7 +1444,7 @@ class Element implements Validator
      * @param  string $message
      * @return \Zend\Form\Element
      */
-    public function addErrorMessage($message)
+    public function addErrorMessage ($message)
     {
         $this->_errorMessages[] = (string) $message;
         return $this;
@@ -1436,7 +1456,7 @@ class Element implements Validator
      * @param  array $messages
      * @return \Zend\Form\Element
      */
-    public function addErrorMessages(array $messages)
+    public function addErrorMessages (array $messages)
     {
         foreach ($messages as $message) {
             $this->addErrorMessage($message);
@@ -1450,7 +1470,7 @@ class Element implements Validator
      * @param  array $messages
      * @return \Zend\Form\Element
      */
-    public function setErrorMessages(array $messages)
+    public function setErrorMessages (array $messages)
     {
         $this->clearErrorMessages();
         return $this->addErrorMessages($messages);
@@ -1461,7 +1481,7 @@ class Element implements Validator
      *
      * @return array
      */
-    public function getErrorMessages()
+    public function getErrorMessages ()
     {
         return $this->_errorMessages;
     }
@@ -1471,7 +1491,7 @@ class Element implements Validator
      *
      * @return \Zend\Form\Element
      */
-    public function clearErrorMessages()
+    public function clearErrorMessages ()
     {
         $this->_errorMessages = array();
         return $this;
@@ -1482,7 +1502,7 @@ class Element implements Validator
      *
      * @return string
      */
-    public function getErrorMessageSeparator()
+    public function getErrorMessageSeparator ()
     {
         return $this->_errorMessageSeparator;
     }
@@ -1493,7 +1513,7 @@ class Element implements Validator
      * @param  string $separator
      * @return \Zend\Form\Element
      */
-    public function setErrorMessageSeparator($separator)
+    public function setErrorMessageSeparator ($separator)
     {
         $this->_errorMessageSeparator = $separator;
         return $this;
@@ -1504,11 +1524,11 @@ class Element implements Validator
      *
      * @return \Zend\Form\Element
      */
-    public function markAsError()
+    public function markAsError ()
     {
-        $messages       = $this->getMessages();
+        $messages = $this->getMessages();
         $customMessages = $this->_getErrorMessages();
-        $messages       = $messages + $customMessages;
+        $messages = $messages + $customMessages;
         if (empty($messages)) {
             $this->_isError = true;
         } else {
@@ -1524,7 +1544,7 @@ class Element implements Validator
      * @param  string $message
      * @return \Zend\Form\Element
      */
-    public function addError($message)
+    public function addError ($message)
     {
         $this->addErrorMessage($message);
         $this->markAsError();
@@ -1537,7 +1557,7 @@ class Element implements Validator
      * @param  array $messages
      * @return \Zend\Form\Element
      */
-    public function addErrors(array $messages)
+    public function addErrors (array $messages)
     {
         foreach ($messages as $message) {
             $this->addError($message);
@@ -1551,7 +1571,7 @@ class Element implements Validator
      * @param  array $messages
      * @return \Zend\Form\Element
      */
-    public function setErrors(array $messages)
+    public function setErrors (array $messages)
     {
         $this->clearErrorMessages();
         return $this->addErrors($messages);
@@ -1562,9 +1582,9 @@ class Element implements Validator
      *
      * @return bool
      */
-    public function hasErrors()
+    public function hasErrors ()
     {
-        return (!empty($this->_messages) || $this->_isError);
+        return (! empty($this->_messages) || $this->_isError);
     }
 
     /**
@@ -1572,7 +1592,7 @@ class Element implements Validator
      *
      * @return array
      */
-    public function getErrors()
+    public function getErrors ()
     {
         return $this->_errors;
     }
@@ -1582,13 +1602,13 @@ class Element implements Validator
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages ()
     {
         return $this->_messages;
     }
 
-
     // Filtering
+    
 
     /**
      * Add a filter to the element
@@ -1596,23 +1616,21 @@ class Element implements Validator
      * @param  string|\Zend\Filter\Filter $filter
      * @return \Zend\Form\Element
      */
-    public function addFilter($filter, $options = array())
+    public function addFilter ($filter, $options = array())
     {
         if ($filter instanceof Filter) {
             $name = get_class($filter);
         } elseif (is_string($filter)) {
             $name = $filter;
-            $filter = array(
-                'filter'  => $filter,
-                'options' => $options,
-            );
+            $filter = array('filter' => $filter, 'options' => $options);
             $this->_filters[$name] = $filter;
         } else {
-            throw new ElementException\InvalidArgumentException('Invalid filter provided to addFilter; must be string or Zend_Filter_Interface');
+            throw new ElementException\InvalidArgumentException(
+            'Invalid filter provided to addFilter; must be string or Zend_Filter_Interface');
         }
-
+        
         $this->_filters[$name] = $filter;
-
+        
         return $this;
     }
 
@@ -1622,7 +1640,7 @@ class Element implements Validator
      * @param  array $filters
      * @return \Zend\Form\Element
      */
-    public function addFilters(array $filters)
+    public function addFilters (array $filters)
     {
         foreach ($filters as $filterInfo) {
             if (is_string($filterInfo)) {
@@ -1630,8 +1648,8 @@ class Element implements Validator
             } elseif ($filterInfo instanceof Filter) {
                 $this->addFilter($filterInfo);
             } elseif (is_array($filterInfo)) {
-                $argc                = count($filterInfo);
-                $options             = array();
+                $argc = count($filterInfo);
+                $options = array();
                 if (isset($filterInfo['filter'])) {
                     $filter = $filterInfo['filter'];
                     if (isset($filterInfo['options'])) {
@@ -1643,7 +1661,7 @@ class Element implements Validator
                         case (0 == $argc):
                             break;
                         case (1 <= $argc):
-                            $filter  = array_shift($filterInfo);
+                            $filter = array_shift($filterInfo);
                         case (2 <= $argc):
                             $options = array_shift($filterInfo);
                         default:
@@ -1652,10 +1670,11 @@ class Element implements Validator
                     }
                 }
             } else {
-                throw new ElementException\InvalidArgumentException('Invalid filter passed to addFilters()');
+                throw new ElementException\InvalidArgumentException(
+                'Invalid filter passed to addFilters()');
             }
         }
-
+        
         return $this;
     }
 
@@ -1665,7 +1684,7 @@ class Element implements Validator
      * @param  array $filters
      * @return \Zend\Form\Element
      */
-    public function setFilters(array $filters)
+    public function setFilters (array $filters)
     {
         $this->clearFilters();
         return $this->addFilters($filters);
@@ -1677,16 +1696,16 @@ class Element implements Validator
      * @param  string $name
      * @return \Zend\Filter\Filter
      */
-    public function getFilter($name)
+    public function getFilter ($name)
     {
-        if (!isset($this->_filters[$name])) {
+        if (! isset($this->_filters[$name])) {
             $len = strlen($name);
             foreach ($this->_filters as $localName => $filter) {
                 if ($len > strlen($localName)) {
                     continue;
                 }
-
-                if (0 === substr_compare($localName, $name, -$len, $len, true)) {
+                
+                if (0 === substr_compare($localName, $name, - $len, $len, true)) {
                     if (is_array($filter)) {
                         return $this->_loadFilter($filter);
                     }
@@ -1695,11 +1714,11 @@ class Element implements Validator
             }
             return false;
         }
-
+        
         if (is_array($this->_filters[$name])) {
             return $this->_loadFilter($this->_filters[$name]);
         }
-
+        
         return $this->_filters[$name];
     }
 
@@ -1708,7 +1727,7 @@ class Element implements Validator
      *
      * @return array
      */
-    public function getFilters()
+    public function getFilters ()
     {
         $filters = array();
         foreach ($this->_filters as $key => $value) {
@@ -1728,7 +1747,7 @@ class Element implements Validator
      * @param  string $name
      * @return \Zend\Form\Element
      */
-    public function removeFilter($name)
+    public function removeFilter ($name)
     {
         if (isset($this->_filters[$name])) {
             unset($this->_filters[$name]);
@@ -1738,13 +1757,13 @@ class Element implements Validator
                 if ($len > strlen($filter)) {
                     continue;
                 }
-                if (0 === substr_compare($filter, $name, -$len, $len, true)) {
+                if (0 === substr_compare($filter, $name, - $len, $len, true)) {
                     unset($this->_filters[$filter]);
                     break;
                 }
             }
         }
-
+        
         return $this;
     }
 
@@ -1753,13 +1772,14 @@ class Element implements Validator
      *
      * @return \Zend\Form\Element
      */
-    public function clearFilters()
+    public function clearFilters ()
     {
         $this->_filters = array();
         return $this;
     }
 
     // Rendering
+    
 
     /**
      * Set view object
@@ -1767,7 +1787,7 @@ class Element implements Validator
      * @param  \Zend\View\Renderer $view
      * @return \Zend\Form\Element
      */
-    public function setView(View $view = null)
+    public function setView (View $view = null)
     {
         $this->_view = $view;
         return $this;
@@ -1780,7 +1800,7 @@ class Element implements Validator
      *
      * @return null|\Zend\View\Renderer
      */
-    public function getView()
+    public function getView ()
     {
         if (null === $this->_view) {
             $front = FrontController::getInstance();
@@ -1797,15 +1817,15 @@ class Element implements Validator
      * @param  null|array $options
      * @return \Zend\Form\Decorator
      */
-    protected function _getDecorator($name, $options)
+    protected function _getDecorator ($name, $options)
     {
         $class = $this->getPluginLoader(self::DECORATOR)->load($name);
         if (null === $options) {
-            $decorator = new $class;
+            $decorator = new $class();
         } else {
             $decorator = new $class($options);
         }
-
+        
         return $decorator;
     }
 
@@ -1816,37 +1836,34 @@ class Element implements Validator
      * @param  array|\Zend\Config\Config $options Options with which to initialize decorator
      * @return \Zend\Form\Element
      */
-    public function addDecorator($decorator, $options = null)
+    public function addDecorator ($decorator, $options = null)
     {
         if ($decorator instanceof Decorator) {
             $name = get_class($decorator);
         } elseif (is_string($decorator)) {
-            $name      = $decorator;
-            $decorator = array(
-                'decorator' => $name,
-                'options'   => $options,
-            );
+            $name = $decorator;
+            $decorator = array('decorator' => $name, 'options' => $options);
         } elseif (is_array($decorator)) {
             foreach ($decorator as $name => $spec) {
                 break;
             }
             if (is_numeric($name)) {
-                throw new ElementException\InvalidArgumentException('Invalid alias provided to addDecorator; must be alphanumeric string');
+                throw new ElementException\InvalidArgumentException(
+                'Invalid alias provided to addDecorator; must be alphanumeric string');
             }
             if (is_string($spec)) {
-                $decorator = array(
-                    'decorator' => $spec,
-                    'options'   => $options,
-                );
+                $decorator = array('decorator' => $spec, 
+                'options' => $options);
             } elseif ($spec instanceof Decorator) {
                 $decorator = $spec;
             }
         } else {
-            throw new ElementException\InvalidArgumentException('Invalid decorator provided to addDecorator; must be string or Zend_Form_Decorator_Interface');
+            throw new ElementException\InvalidArgumentException(
+            'Invalid decorator provided to addDecorator; must be string or Zend_Form_Decorator_Interface');
         }
-
+        
         $this->_decorators[$name] = $decorator;
-
+        
         return $this;
     }
 
@@ -1856,18 +1873,17 @@ class Element implements Validator
      * @param  array $decorators
      * @return \Zend\Form\Element
      */
-    public function addDecorators(array $decorators)
+    public function addDecorators (array $decorators)
     {
         foreach ($decorators as $decoratorName => $decoratorInfo) {
-            if (is_string($decoratorInfo) ||
-                $decoratorInfo instanceof Decorator) {
-                if (!is_numeric($decoratorName)) {
+            if (is_string($decoratorInfo) || $decoratorInfo instanceof Decorator) {
+                if (! is_numeric($decoratorName)) {
                     $this->addDecorator(array($decoratorName => $decoratorInfo));
                 } else {
                     $this->addDecorator($decoratorInfo);
                 }
             } elseif (is_array($decoratorInfo)) {
-                $argc    = count($decoratorInfo);
+                $argc = count($decoratorInfo);
                 $options = array();
                 if (isset($decoratorInfo['decorator'])) {
                     $decorator = $decoratorInfo['decorator'];
@@ -1880,7 +1896,7 @@ class Element implements Validator
                         case (0 == $argc):
                             break;
                         case (1 <= $argc):
-                            $decorator  = array_shift($decoratorInfo);
+                            $decorator = array_shift($decoratorInfo);
                         case (2 <= $argc):
                             $options = array_shift($decoratorInfo);
                         default:
@@ -1889,10 +1905,11 @@ class Element implements Validator
                     }
                 }
             } else {
-                throw new ElementException\InvalidArgumentException('Invalid decorator passed to addDecorators()');
+                throw new ElementException\InvalidArgumentException(
+                'Invalid decorator passed to addDecorators()');
             }
         }
-
+        
         return $this;
     }
 
@@ -1902,7 +1919,7 @@ class Element implements Validator
      * @param  array $decorators
      * @return \Zend\Form\Element
      */
-    public function setDecorators(array $decorators)
+    public function setDecorators (array $decorators)
     {
         $this->clearDecorators();
         return $this->addDecorators($decorators);
@@ -1914,16 +1931,16 @@ class Element implements Validator
      * @param  string $name
      * @return false|\Zend\Form\Decorator\AbstractDecorator
      */
-    public function getDecorator($name)
+    public function getDecorator ($name)
     {
-        if (!isset($this->_decorators[$name])) {
+        if (! isset($this->_decorators[$name])) {
             $len = strlen($name);
             foreach ($this->_decorators as $localName => $decorator) {
                 if ($len > strlen($localName)) {
                     continue;
                 }
-
-                if (0 === substr_compare($localName, $name, -$len, $len, true)) {
+                
+                if (0 === substr_compare($localName, $name, - $len, $len, true)) {
                     if (is_array($decorator)) {
                         return $this->_loadDecorator($decorator, $localName);
                     }
@@ -1932,11 +1949,11 @@ class Element implements Validator
             }
             return false;
         }
-
+        
         if (is_array($this->_decorators[$name])) {
             return $this->_loadDecorator($this->_decorators[$name], $name);
         }
-
+        
         return $this->_decorators[$name];
     }
 
@@ -1945,7 +1962,7 @@ class Element implements Validator
      *
      * @return array
      */
-    public function getDecorators()
+    public function getDecorators ()
     {
         foreach ($this->_decorators as $key => $value) {
             if (is_array($value)) {
@@ -1961,7 +1978,7 @@ class Element implements Validator
      * @param  string $name
      * @return \Zend\Form\Element
      */
-    public function removeDecorator($name)
+    public function removeDecorator ($name)
     {
         if (isset($this->_decorators[$name])) {
             unset($this->_decorators[$name]);
@@ -1971,13 +1988,13 @@ class Element implements Validator
                 if ($len > strlen($decorator)) {
                     continue;
                 }
-                if (0 === substr_compare($decorator, $name, -$len, $len, true)) {
+                if (0 === substr_compare($decorator, $name, - $len, $len, true)) {
                     unset($this->_decorators[$decorator]);
                     break;
                 }
             }
         }
-
+        
         return $this;
     }
 
@@ -1986,7 +2003,7 @@ class Element implements Validator
      *
      * @return \Zend\Form\Element
      */
-    public function clearDecorators()
+    public function clearDecorators ()
     {
         $this->_decorators = array();
         return $this;
@@ -1998,16 +2015,16 @@ class Element implements Validator
      * @param  \Zend\View\Renderer $view
      * @return string
      */
-    public function render(View $view = null)
+    public function render (View $view = null)
     {
         if ($this->_isPartialRendering) {
             return '';
         }
-
+        
         if (null !== $view) {
             $this->setView($view);
         }
-
+        
         $content = '';
         foreach ($this->getDecorators() as $decorator) {
             $decorator->setElement($this);
@@ -2023,7 +2040,7 @@ class Element implements Validator
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         try {
             $return = $this->render();
@@ -2040,17 +2057,18 @@ class Element implements Validator
      * @param  array $filter
      * @return \Zend\Filter\Filter
      */
-    protected function _loadFilter(array $filter)
+    protected function _loadFilter (array $filter)
     {
         $origName = $filter['filter'];
-        $name     = $this->getPluginLoader(self::FILTER)->load($filter['filter']);
-
+        $name = $this->getPluginLoader(self::FILTER)->load($filter['filter']);
+        
         if (array_key_exists($name, $this->_filters)) {
-            throw new ElementException\RunTimeException(sprintf('Filter instance already exists for filter "%s"', $origName));
+            throw new ElementException\RunTimeException(
+            sprintf('Filter instance already exists for filter "%s"', $origName));
         }
-
+        
         if (empty($filter['options'])) {
-            $instance = new $name;
+            $instance = new $name();
         } else {
             $r = new \ReflectionClass($name);
             if ($r->hasMethod('__construct')) {
@@ -2059,10 +2077,10 @@ class Element implements Validator
                 $instance = $r->newInstance();
             }
         }
-
+        
         if ($origName != $name) {
-            $filterNames  = array_keys($this->_filters);
-            $order        = array_flip($filterNames);
+            $filterNames = array_keys($this->_filters);
+            $order = array_flip($filterNames);
             $order[$name] = $order[$origName];
             $filtersExchange = array();
             unset($order[$origName]);
@@ -2078,7 +2096,7 @@ class Element implements Validator
         } else {
             $this->_filters[$name] = $instance;
         }
-
+        
         return $instance;
     }
 
@@ -2088,39 +2106,44 @@ class Element implements Validator
      * @param  array $validator Validator definition
      * @return \Zend\Validator\Validator
      */
-    protected function _loadValidator(array $validator)
+    protected function _loadValidator (array $validator)
     {
         $origName = $validator['validator'];
-        $name     = $this->getPluginLoader(self::VALIDATE)->load($validator['validator']);
-
+        $name = $this->getPluginLoader(self::VALIDATE)->load(
+        $validator['validator']);
+        
         if (array_key_exists($name, $this->_validators)) {
-            throw new ElementException\RunTimeException(sprintf('Validator instance already exists for validator "%s"', $origName));
+            throw new ElementException\RunTimeException(
+            sprintf('Validator instance already exists for validator "%s"', 
+            $origName));
         }
-
+        
         $messages = false;
-        if (isset($validator['options']) && array_key_exists('messages', (array)$validator['options'])) {
+        if (isset($validator['options']) &&
+         array_key_exists('messages', (array) $validator['options'])) {
             $messages = $validator['options']['messages'];
             unset($validator['options']['messages']);
         }
-
+        
         if (empty($validator['options'])) {
-            $instance = new $name;
+            $instance = new $name();
         } else {
             $r = new \ReflectionClass($name);
             if ($r->hasMethod('__construct')) {
                 $numeric = false;
                 if (is_array($validator['options'])) {
-                    $keys    = array_keys($validator['options']);
-                    foreach($keys as $key) {
+                    $keys = array_keys($validator['options']);
+                    foreach ($keys as $key) {
                         if (is_numeric($key)) {
                             $numeric = true;
                             break;
                         }
                     }
                 }
-
+                
                 if ($numeric) {
-                    $instance = $r->newInstanceArgs((array) $validator['options']);
+                    $instance = $r->newInstanceArgs(
+                    (array) $validator['options']);
                 } else {
                     $instance = $r->newInstance($validator['options']);
                 }
@@ -2128,7 +2151,7 @@ class Element implements Validator
                 $instance = $r->newInstance();
             }
         }
-
+        
         if ($messages) {
             if (is_array($messages)) {
                 $instance->setMessages($messages);
@@ -2137,11 +2160,11 @@ class Element implements Validator
             }
         }
         $instance->zfBreakChainOnFailure = $validator['breakChainOnFailure'];
-
+        
         if ($origName != $name) {
-            $validatorNames     = array_keys($this->_validators);
-            $order              = array_flip($validatorNames);
-            $order[$name]       = $order[$origName];
+            $validatorNames = array_keys($this->_validators);
+            $order = array_flip($validatorNames);
+            $order[$name] = $order[$origName];
             $validatorsExchange = array();
             unset($order[$origName]);
             asort($order);
@@ -2156,7 +2179,7 @@ class Element implements Validator
         } else {
             $this->_validators[$name] = $instance;
         }
-
+        
         return $instance;
     }
 
@@ -2167,19 +2190,20 @@ class Element implements Validator
      * @param  mixed $name Decorator name or alias
      * @return \Zend\Form\Decorator
      */
-    protected function _loadDecorator(array $decorator, $name)
+    protected function _loadDecorator (array $decorator, $name)
     {
         $sameName = false;
         if ($name == $decorator['decorator']) {
             $sameName = true;
         }
-
-        $instance = $this->_getDecorator($decorator['decorator'], $decorator['options']);
+        
+        $instance = $this->_getDecorator($decorator['decorator'], 
+        $decorator['options']);
         if ($sameName) {
-            $newName            = get_class($instance);
-            $decoratorNames     = array_keys($this->_decorators);
-            $order              = array_flip($decoratorNames);
-            $order[$newName]    = $order[$name];
+            $newName = get_class($instance);
+            $decoratorNames = array_keys($this->_decorators);
+            $order = array_flip($decoratorNames);
+            $order[$newName] = $order[$name];
             $decoratorsExchange = array();
             unset($order[$name]);
             asort($order);
@@ -2194,7 +2218,7 @@ class Element implements Validator
         } else {
             $this->_decorators[$name] = $instance;
         }
-
+        
         return $instance;
     }
 
@@ -2203,23 +2227,23 @@ class Element implements Validator
      *
      * @return array
      */
-    protected function _getErrorMessages()
+    protected function _getErrorMessages ()
     {
         $translator = $this->getTranslator();
-        $messages   = $this->getErrorMessages();
-        $value      = $this->getValue();
+        $messages = $this->getErrorMessages();
+        $value = $this->getValue();
         foreach ($messages as $key => $message) {
             if (null !== $translator) {
                 $message = $translator->translate($message);
             }
-            if (($this->isArray() || is_array($value))
-                && !empty($value)
-            ) {
+            if (($this->isArray() || is_array($value)) && ! empty($value)) {
                 $aggregateMessages = array();
                 foreach ($value as $val) {
-                    $aggregateMessages[] = str_replace('%value%', $val, $message);
+                    $aggregateMessages[] = str_replace('%value%', $val, 
+                    $message);
                 }
-                $messages[$key] = implode($this->getErrorMessageSeparator(), $aggregateMessages);
+                $messages[$key] = implode($this->getErrorMessageSeparator(), 
+                $aggregateMessages);
             } else {
                 $messages[$key] = str_replace('%value%', $value, $message);
             }
@@ -2232,8 +2256,8 @@ class Element implements Validator
      *
      * @return bool
      */
-    protected function _hasErrorMessages()
+    protected function _hasErrorMessages ()
     {
-        return !empty($this->_errorMessages);
+        return ! empty($this->_errorMessages);
     }
 }

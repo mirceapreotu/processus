@@ -38,17 +38,13 @@ namespace Zend\Form\Decorator;
  */
 class Fieldset extends AbstractDecorator
 {
+
     /**
      * Attribs that should be removed prior to rendering
      * @var array
      */
-    public $stripAttribs = array(
-        'action',
-        'enctype',
-        'helper',
-        'method',
-        'name',
-    );
+    public $stripAttribs = array('action', 'enctype', 'helper', 'method', 
+    'name');
 
     /**
      * Fieldset legend
@@ -69,7 +65,7 @@ class Fieldset extends AbstractDecorator
      *
      * @return array
      */
-    public function getOptions()
+    public function getOptions ()
     {
         $options = parent::getOptions();
         if (null !== ($element = $this->getElement())) {
@@ -86,7 +82,7 @@ class Fieldset extends AbstractDecorator
      * @param  string $value
      * @return \Zend\Form\Decorator\Fieldset
      */
-    public function setLegend($value)
+    public function setLegend ($value)
     {
         $this->_legend = (string) $value;
         return $this;
@@ -97,7 +93,7 @@ class Fieldset extends AbstractDecorator
      *
      * @return string
      */
-    public function getLegend()
+    public function getLegend ()
     {
         $legend = $this->_legend;
         if ((null === $legend) && (null !== ($element = $this->getElement()))) {
@@ -106,11 +102,12 @@ class Fieldset extends AbstractDecorator
                 $this->setLegend($legend);
             }
         }
-        if ((null === $legend) && (null !== ($legend = $this->getOption('legend')))) {
+        if ((null === $legend) &&
+         (null !== ($legend = $this->getOption('legend')))) {
             $this->setLegend($legend);
             $this->removeOption('legend');
         }
-
+        
         return $legend;
     }
 
@@ -120,38 +117,38 @@ class Fieldset extends AbstractDecorator
      * @param  string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
         $element = $this->getElement();
-        $view    = $element->getView();
+        $view = $element->getView();
         if (null === $view) {
             return $content;
         }
-
-        $legend  = $this->getLegend();
+        
+        $legend = $this->getLegend();
         $attribs = $this->getOptions();
-        $name    = $element->getFullyQualifiedName();
-        $id      = (string)$element->getId();
-
-        if (!array_key_exists('id', $attribs) && '' !== $id) {
+        $name = $element->getFullyQualifiedName();
+        $id = (string) $element->getId();
+        
+        if (! array_key_exists('id', $attribs) && '' !== $id) {
             $attribs['id'] = 'fieldset-' . $id;
         }
-
+        
         if (null !== $legend) {
             if (null !== ($translator = $element->getTranslator())) {
                 $legend = $translator->translate($legend);
             }
-
+            
             $attribs['legend'] = $legend;
         }
-
+        
         foreach (array_keys($attribs) as $attrib) {
             $testAttrib = strtolower($attrib);
             if (in_array($testAttrib, $this->stripAttribs)) {
                 unset($attribs[$attrib]);
             }
         }
-
+        
         return $view->fieldset($name, $content, $attribs);
     }
 }

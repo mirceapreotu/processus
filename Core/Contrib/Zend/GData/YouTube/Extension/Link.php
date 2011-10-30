@@ -46,8 +46,8 @@ class Link extends \Zend\GData\App\Extension\Link
      * @see Zend_Gdata_App_Extension_Link#__construct
      * @param \Zend\GData\YouTube\Extension\Token $token
      */
-    public function __construct($href = null, $rel = null, $type = null,
-            $hrefLang = null, $title = null, $length = null, $token = null)
+    public function __construct ($href = null, $rel = null, $type = null, $hrefLang = null, 
+    $title = null, $length = null, $token = null)
     {
         $this->registerAllNamespaces(\Zend\GData\YouTube::$namespaces);
         parent::__construct($href, $rel, $type, $hrefLang, $title, $length);
@@ -64,11 +64,12 @@ class Link extends \Zend\GData\App\Extension\Link
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_token != null) {
-            $element->appendChild($this->_token->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_token->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -79,18 +80,18 @@ class Link extends \Zend\GData\App\Extension\Link
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('yt') . ':' . 'token':
-            $token = new Token();
-            $token->transferFromDOM($child);
-            $this->_token = $token;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('yt') . ':' . 'token':
+                $token = new Token();
+                $token->transferFromDOM($child);
+                $this->_token = $token;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
@@ -99,7 +100,7 @@ class Link extends \Zend\GData\App\Extension\Link
      *
      * @return \Zend\GData\YouTube\Extension\Token The token element.
      */
-    public function getToken()
+    public function getToken ()
     {
         return $this->_token;
     }
@@ -110,20 +111,20 @@ class Link extends \Zend\GData\App\Extension\Link
      * @param \Zend\GData\YouTube\Extension\Token $value The desired value for this attribute.
      * @return Zend_YouTube_Extension_Link The element being modified.
      */
-    public function setToken($value)
+    public function setToken ($value)
     {
         $this->_token = $value;
         return $this;
     }
 
     /**
-    * Get the value of this element's token attribute.
-    *
-    * @return string The token's text value
-    */
-    public function getTokenValue()
+     * Get the value of this element's token attribute.
+     *
+     * @return string The token's text value
+     */
+    public function getTokenValue ()
     {
-      return $this->getToken()->getText();
+        return $this->getToken()->getText();
     }
 
 }

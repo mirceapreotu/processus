@@ -32,4 +32,5 @@ namespace Zend\Json\Server;
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 interface Exception extends \Zend\Json\Exception
-{}
+{
+}

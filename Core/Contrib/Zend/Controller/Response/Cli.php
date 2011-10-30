@@ -36,6 +36,7 @@ namespace Zend\Controller\Response;
  */
 class Cli extends AbstractResponse
 {
+
     /**
      * Flag; if true, when header operations are called after headers have been
      * sent, an exception will be raised; otherwise, processing will continue
@@ -46,13 +47,12 @@ class Cli extends AbstractResponse
      */
     public $headersSentThrowsException = false;
 
-
     /**
      * Magic __toString functionality
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         if ($this->isException() && $this->renderExceptions()) {
             $exceptions = '';
@@ -61,7 +61,7 @@ class Cli extends AbstractResponse
             }
             return $exceptions;
         }
-
+        
         return $this->_body;
     }
 }

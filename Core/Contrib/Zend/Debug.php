@@ -45,7 +45,7 @@ class Debug
      *
      * @return string;
      */
-    public static function getSapi()
+    public static function getSapi ()
     {
         if (self::$_sapi === null) {
             self::$_sapi = PHP_SAPI;
@@ -60,7 +60,7 @@ class Debug
      * @param string $sapi
      * @return void;
      */
-    public static function setSapi($sapi)
+    public static function setSapi ($sapi)
     {
         self::$_sapi = $sapi;
     }
@@ -75,35 +75,30 @@ class Debug
      * @param  bool   $echo  OPTIONAL Echo output if true.
      * @return string
      */
-    public static function dump($var, $label=null, $echo=true)
+    public static function dump ($var, $label = null, $echo = true)
     {
         // format the label
-        $label = ($label===null) ? '' : rtrim($label) . ' ';
-
+        $label = ($label === null) ? '' : rtrim($label) . ' ';
+        
         // var_dump the variable into a buffer and keep the output
         ob_start();
         var_dump($var);
         $output = ob_get_clean();
-
+        
         // neaten the newlines and indents
         $output = preg_replace("/\]\=\>\n(\s+)/m", "] => ", $output);
         if (self::getSapi() == 'cli') {
-            $output = PHP_EOL . $label
-                    . PHP_EOL . $output
-                    . PHP_EOL;
+            $output = PHP_EOL . $label . PHP_EOL . $output . PHP_EOL;
         } else {
-            if(!extension_loaded('xdebug')) {
+            if (! extension_loaded('xdebug')) {
                 $output = htmlspecialchars($output, ENT_QUOTES);
             }
-
-            $output = '<pre>'
-                    . $label
-                    . $output
-                    . '</pre>';
+            
+            $output = '<pre>' . $label . $output . '</pre>';
         }
-
+        
         if ($echo) {
-            echo($output);
+            echo ($output);
         }
         return $output;
     }

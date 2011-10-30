@@ -24,8 +24,7 @@
  */
 namespace Zend\GData\YouTube;
 
-use Zend\GData\YouTube,
-    Zend\GData\App;
+use Zend\GData\YouTube, Zend\GData\App;
 
 /**
  * Represents the YouTube video playlist flavor of an Atom entry
@@ -82,9 +81,9 @@ class PlaylistListEntry extends \Zend\GData\Entry
      * in a list of playlists, usually associated with an individual user.
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(YouTube::$namespaces);
         parent::__construct($element);
@@ -100,21 +99,25 @@ class PlaylistListEntry extends \Zend\GData\Entry
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_description != null) {
-            $element->appendChild($this->_description->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_description->getDOM($element->ownerDocument));
         }
         if ($this->_countHint != null) {
-            $element->appendChild($this->_countHint->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_countHint->getDOM($element->ownerDocument));
         }
         if ($this->_playlistId != null) {
-            $element->appendChild($this->_playlistId->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_playlistId->getDOM($element->ownerDocument));
         }
         if ($this->_feedLink != null) {
             foreach ($this->_feedLink as $feedLink) {
-                $element->appendChild($feedLink->getDOM($element->ownerDocument));
+                $element->appendChild(
+                $feedLink->getDOM($element->ownerDocument));
             }
         }
         return $element;
@@ -126,33 +129,33 @@ class PlaylistListEntry extends \Zend\GData\Entry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('yt') . ':' . 'description':
-            $description = new Extension\Description();
-            $description->transferFromDOM($child);
-            $this->_description = $description;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'countHint':
-            $countHint = new Extension\CountHint();
-            $countHint->transferFromDOM($child);
-            $this->_countHint = $countHint;
-            break;
-        case $this->lookupNamespace('yt') . ':' . 'playlistId':
-            $playlistId = new Extension\PlaylistId();
-            $playlistId->transferFromDOM($child);
-            $this->_playlistId = $playlistId;
-            break;
-        case $this->lookupNamespace('gd') . ':' . 'feedLink':
-            $feedLink = new \Zend\GData\Extension\FeedLink();
-            $feedLink->transferFromDOM($child);
-            $this->_feedLink[] = $feedLink;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('yt') . ':' . 'description':
+                $description = new Extension\Description();
+                $description->transferFromDOM($child);
+                $this->_description = $description;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'countHint':
+                $countHint = new Extension\CountHint();
+                $countHint->transferFromDOM($child);
+                $this->_countHint = $countHint;
+                break;
+            case $this->lookupNamespace('yt') . ':' . 'playlistId':
+                $playlistId = new Extension\PlaylistId();
+                $playlistId->transferFromDOM($child);
+                $this->_playlistId = $playlistId;
+                break;
+            case $this->lookupNamespace('gd') . ':' . 'feedLink':
+                $feedLink = new \Zend\GData\Extension\FeedLink();
+                $feedLink->transferFromDOM($child);
+                $this->_feedLink[] = $feedLink;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
@@ -163,7 +166,7 @@ class PlaylistListEntry extends \Zend\GData\Entry
      * @param \Zend\GData\YouTube\Extension\Description $description The description relating to the video
      * @return \Zend\GData\YouTube\PlaylistListEntry Provides a fluent interface
      */
-    public function setDescription($description = null)
+    public function setDescription ($description = null)
     {
         if ($this->getMajorProtocolVersion() >= 2) {
             $this->setSummary($description);
@@ -177,9 +180,9 @@ class PlaylistListEntry extends \Zend\GData\Entry
      * Returns the description relating to the video.
      *
      * @return \Zend\GData\YouTube\Extension\Description  The description
-     *         relating to the video
+     * relating to the video
      */
-    public function getDescription()
+    public function getDescription ()
     {
         if ($this->getMajorProtocolVersion() >= 2) {
             return $this->getSummary();
@@ -195,14 +198,15 @@ class PlaylistListEntry extends \Zend\GData\Entry
      *
      * @throws \Zend\GData\App\VersionException
      * @return \Zend\GData\YouTube\Extension\CountHint  The count of videos on
-     *         a playlist.
+     * a playlist.
      */
-    public function getCountHint()
+    public function getCountHint ()
     {
         if (($this->getMajorProtocolVersion() == null) ||
-            ($this->getMajorProtocolVersion() == 1)) {
-            throw new App\VersionException('The yt:countHint ' .
-                'element is not supported in versions earlier than 2.');
+         ($this->getMajorProtocolVersion() == 1)) {
+            throw new App\VersionException(
+            'The yt:countHint ' .
+             'element is not supported in versions earlier than 2.');
         } else {
             return $this->_countHint;
         }
@@ -214,12 +218,13 @@ class PlaylistListEntry extends \Zend\GData\Entry
      * @throws \Zend\GData\App\VersionException
      * @return \Zend\GData\YouTube\Extension\PlaylistId  The id of this playlist.
      */
-    public function getPlaylistId()
+    public function getPlaylistId ()
     {
         if (($this->getMajorProtocolVersion() == null) ||
-            ($this->getMajorProtocolVersion() == 1)) {
-            throw new App\VersionException('The yt:playlistId ' .
-                'element is not supported in versions earlier than 2.');
+         ($this->getMajorProtocolVersion() == 1)) {
+            throw new App\VersionException(
+            'The yt:playlistId ' .
+             'element is not supported in versions earlier than 2.');
         } else {
             return $this->_playlistId;
         }
@@ -231,7 +236,7 @@ class PlaylistListEntry extends \Zend\GData\Entry
      * @param array $feedLink The array of embedded feeds relating to the video
      * @return \Zend\GData\YouTube\PlaylistListEntry Provides a fluent interface
      */
-    public function setFeedLink($feedLink = null)
+    public function setFeedLink ($feedLink = null)
     {
         $this->_feedLink = $feedLink;
         return $this;
@@ -242,15 +247,15 @@ class PlaylistListEntry extends \Zend\GData\Entry
      *
      * @see setFeedLink
      * @param string $rel (optional) The rel value of the link to be found.
-     *          If null, the array of links is returned.
+     * If null, the array of links is returned.
      * @return mixed If $rel is specified, a \Zend\GData\Extension\FeedLink
-     *          object corresponding to the requested rel value is returned
-     *          if found, or null if the requested value is not found. If
-     *          $rel is null or not specified, an array of all available
-     *          feed links for this entry is returned, or null if no feed
-     *          links are set.
+     * object corresponding to the requested rel value is returned
+     * if found, or null if the requested value is not found. If
+     * $rel is null or not specified, an array of all available
+     * feed links for this entry is returned, or null if no feed
+     * links are set.
      */
-    public function getFeedLink($rel = null)
+    public function getFeedLink ($rel = null)
     {
         if ($rel == null) {
             return $this->_feedLink;
@@ -269,7 +274,7 @@ class PlaylistListEntry extends \Zend\GData\Entry
      *
      * @return string The URL of the playlist video feed
      */
-    public function getPlaylistVideoFeedUrl()
+    public function getPlaylistVideoFeedUrl ()
     {
         if ($this->getMajorProtocolVersion() >= 2) {
             return $this->getContent()->getSrc();

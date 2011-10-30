@@ -35,6 +35,7 @@ namespace Zend\Application\Resource;
  */
 class FrontController extends AbstractResource
 {
+
     /**
      * @var \Zend\Controller\Front
      */
@@ -45,10 +46,10 @@ class FrontController extends AbstractResource
      *
      * @return \Zend\Controller\Front
      */
-    public function init()
+    public function init ()
     {
         $front = $this->getFrontController();
-
+        
         foreach ($this->getOptions() as $key => $value) {
             switch (strtolower($key)) {
                 case 'controllerdirectory':
@@ -60,76 +61,76 @@ class FrontController extends AbstractResource
                         }
                     }
                     break;
-
+                
                 case 'modulecontrollerdirectoryname':
                     $front->setModuleControllerDirectoryName($value);
                     break;
-
+                
                 case 'moduledirectory':
                     $front->addModuleDirectory($value);
                     break;
-
+                
                 case 'defaultcontrollername':
                     $front->setDefaultControllerName($value);
                     break;
-
+                
                 case 'defaultaction':
                     $front->setDefaultAction($value);
                     break;
-
+                
                 case 'defaultmodule':
                     $front->setDefaultModule($value);
                     break;
-
+                
                 case 'baseurl':
-                    if (!empty($value)) {
+                    if (! empty($value)) {
                         $front->setBaseUrl($value);
                     }
                     break;
-
+                
                 case 'params':
                     $front->setParams($value);
                     break;
-
+                
                 case 'plugins':
                     foreach ((array) $value as $pluginClass) {
-                    	$stackIndex = null;
-                    	if(is_array($pluginClass)) {
-                    	    $pluginClass = array_change_key_case($pluginClass, CASE_LOWER);
-                            if(isset($pluginClass['class']))
-                            {
-                                if(isset($pluginClass['stackindex'])) {
+                        $stackIndex = null;
+                        if (is_array($pluginClass)) {
+                            $pluginClass = array_change_key_case($pluginClass, 
+                            CASE_LOWER);
+                            if (isset($pluginClass['class'])) {
+                                if (isset($pluginClass['stackindex'])) {
                                     $stackIndex = $pluginClass['stackindex'];
                                 }
-
+                                
                                 $pluginClass = $pluginClass['class'];
                             }
                         }
-
+                        
                         $plugin = new $pluginClass();
                         $front->registerPlugin($plugin, $stackIndex);
                     }
                     break;
-
+                
                 case 'returnresponse':
                     $front->returnResponse((bool) $value);
                     break;
-
+                
                 case 'throwexceptions':
                     $front->throwExceptions((bool) $value);
                     break;
-
+                
                 case 'action_helper':
                 case 'actionhelper':
                     if (is_string($value)) {
                         $front->setHelperBroker($value);
                     } elseif (is_array($value)) {
                         if (isset($value['class'])) {
-                            if (!class_exists($value['class'])) {
-                                throw new Exception(sprintf(
-                                    'Could not resolve action helper class "%s"',
-                                    $value['class']
-                                ));
+                            if (! class_exists($value['class'])) {
+                                throw new Exception(
+                                sprintf(
+                                'Could not resolve action helper class "%s"', 
+                                $value['class']));
                             }
                             $class = $value['class'];
                             unset($value['class']);
@@ -138,17 +139,17 @@ class FrontController extends AbstractResource
                         }
                     }
                     break;
-
+                
                 default:
                     $front->setParam($key, $value);
                     break;
             }
         }
-
+        
         if (null !== ($bootstrap = $this->getBootstrap())) {
             $this->getBootstrap()->frontController = $front;
         }
-
+        
         return $front;
     }
 
@@ -157,7 +158,7 @@ class FrontController extends AbstractResource
      *
      * @return \Zend\Controller\Front
      */
-    public function getFrontController()
+    public function getFrontController ()
     {
         if (null === $this->_front) {
             $this->_front = \Zend\Controller\Front::getInstance();

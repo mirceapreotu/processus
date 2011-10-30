@@ -35,11 +35,12 @@ namespace Zend\Dojo\View\Helper;
  */
 class BorderContainer extends DijitContainer
 {
+
     /**
      * Dijit being used
      * @var string
      */
-    protected $_dijit  = 'dijit.layout.BorderContainer';
+    protected $_dijit = 'dijit.layout.BorderContainer';
 
     /**
      * Dojo module to use
@@ -62,19 +63,22 @@ class BorderContainer extends DijitContainer
      * @param  array $attribs HTML attributes
      * @return string
      */
-    public function __invoke($id = null, $content = '', array $params = array(), array $attribs = array())
+    public function __invoke ($id = null, $content = '', array $params = array(), 
+    array $attribs = array())
     {
         if (0 === func_num_args()) {
             return $this;
         }
-
+        
         // this will ensure that the border container is viewable:
-        if (!$this->_styleIsRegistered) {
-            $this->view->plugin('headStyle')->appendStyle('html, body { height: 100%; width: 100%; margin: 0; padding: 0; }');
+        if (! $this->_styleIsRegistered) {
+            $this->view->plugin('headStyle')->appendStyle(
+            'html, body { height: 100%; width: 100%; margin: 0; padding: 0; }');
             $this->_styleIsRegistered = true;
         }
-
+        
         // and now we create it:
-        return $this->_createLayoutContainer($id, $content, $params, $attribs);
+        return $this->_createLayoutContainer($id, $content, $params, 
+        $attribs);
     }
 }

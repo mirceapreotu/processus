@@ -33,26 +33,27 @@ namespace Zend\EventManager;
  */
 interface EventDescription
 {
+
     /**
      * Get event name
      * 
      * @return string
      */
-    public function getName();
+    public function getName ();
 
     /**
      * Get target/context from which event was triggered
      * 
      * @return null|string|object
      */
-    public function getTarget();
+    public function getTarget ();
 
     /**
      * Get parameters passed to the event
      * 
      * @return array|ArrayAccess
      */
-    public function getParams();
+    public function getParams ();
 
     /**
      * Get a single parameter by name
@@ -61,7 +62,7 @@ interface EventDescription
      * @param  mixed $default Default value to return if parameter does not exist
      * @return mixed
      */
-    public function getParam($name, $default = null);
+    public function getParam ($name, $default = null);
 
     /**
      * Set the event name
@@ -69,7 +70,7 @@ interface EventDescription
      * @param  string $name 
      * @return void
      */
-    public function setName($name);
+    public function setName ($name);
 
     /**
      * Set the event target/context
@@ -77,7 +78,7 @@ interface EventDescription
      * @param  null|string|object $target 
      * @return void
      */
-    public function setTarget($target);
+    public function setTarget ($target);
 
     /**
      * Set event parameters
@@ -85,7 +86,7 @@ interface EventDescription
      * @param  string $params 
      * @return void
      */
-    public function setParams($params);
+    public function setParams ($params);
 
     /**
      * Set a single parameter by key
@@ -94,7 +95,7 @@ interface EventDescription
      * @param  mixed $value 
      * @return void
      */
-    public function setParam($name, $value);
+    public function setParam ($name, $value);
 
     /**
      * Indicate whether or not the parent EventCollection should stop propagating events
@@ -102,12 +103,12 @@ interface EventDescription
      * @param  bool $flag 
      * @return void
      */
-    public function stopPropagation($flag = true);
+    public function stopPropagation ($flag = true);
 
     /**
      * Has this event indicated event propagation should stop?
      * 
      * @return bool
      */
-    public function propagationIsStopped();
+    public function propagationIsStopped ();
 }

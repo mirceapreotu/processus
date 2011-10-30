@@ -24,8 +24,7 @@
  */
 namespace Zend\Ldap\Node\Schema\ObjectClass;
 
-use Zend\Ldap\Node\Schema\ObjectClass,
-    Zend\Ldap\Node\Schema;
+use Zend\Ldap\Node\Schema\ObjectClass, Zend\Ldap\Node\Schema;
 
 /**
  * Zend\Ldap\Node\Schema\ObjectClass\OpenLdap provides access to the objectClass
@@ -42,12 +41,14 @@ use Zend\Ldap\Node\Schema\ObjectClass,
  */
 class OpenLdap extends Schema\Item implements ObjectClass
 {
+
     /**
      * All inherited "MUST" attributes
      *
      * @var array
      */
     protected $_inheritedMust = null;
+
     /**
      * All inherited "MAY" attributes
      *
@@ -55,13 +56,12 @@ class OpenLdap extends Schema\Item implements ObjectClass
      */
     protected $_inheritedMay = null;
 
-
     /**
      * Gets the objectClass name
      *
      * @return string
      */
-    public function getName()
+    public function getName ()
     {
         return $this->name;
     }
@@ -71,7 +71,7 @@ class OpenLdap extends Schema\Item implements ObjectClass
      *
      * @return string
      */
-    public function getOid()
+    public function getOid ()
     {
         return $this->oid;
     }
@@ -81,7 +81,7 @@ class OpenLdap extends Schema\Item implements ObjectClass
      *
      * @return array
      */
-    public function getMustContain()
+    public function getMustContain ()
     {
         if ($this->_inheritedMust === null) {
             $this->_resolveInheritance();
@@ -94,7 +94,7 @@ class OpenLdap extends Schema\Item implements ObjectClass
      *
      * @return array
      */
-    public function getMayContain()
+    public function getMayContain ()
     {
         if ($this->_inheritedMay === null) {
             $this->_resolveInheritance();
@@ -107,7 +107,7 @@ class OpenLdap extends Schema\Item implements ObjectClass
      *
      * @return void
      */
-    protected function _resolveInheritance()
+    protected function _resolveInheritance ()
     {
         $must = $this->must;
         $may = $this->may;
@@ -129,7 +129,7 @@ class OpenLdap extends Schema\Item implements ObjectClass
      *
      * @return string
      */
-    public function getDescription()
+    public function getDescription ()
     {
         return $this->desc;
     }
@@ -139,17 +139,19 @@ class OpenLdap extends Schema\Item implements ObjectClass
      *
      * @return integer
      */
-    public function getType()
+    public function getType ()
     {
         if ($this->structural) {
             return Schema::OBJECTCLASS_TYPE_STRUCTURAL;
-        } else if ($this->abstract) {
-            return Schema::OBJECTCLASS_TYPE_ABSTRACT;
-        } else if ($this->auxiliary) {
-            return Schema::OBJECTCLASS_TYPE_AUXILIARY;
-        } else {
-            return Schema::OBJECTCLASS_TYPE_UNKNOWN;
-        }
+        } else 
+            if ($this->abstract) {
+                return Schema::OBJECTCLASS_TYPE_ABSTRACT;
+            } else 
+                if ($this->auxiliary) {
+                    return Schema::OBJECTCLASS_TYPE_AUXILIARY;
+                } else {
+                    return Schema::OBJECTCLASS_TYPE_UNKNOWN;
+                }
     }
 
     /**
@@ -158,7 +160,7 @@ class OpenLdap extends Schema\Item implements ObjectClass
      *
      * @return array
      */
-    public function getParentClasses()
+    public function getParentClasses ()
     {
         return $this->sup;
     }
@@ -168,7 +170,7 @@ class OpenLdap extends Schema\Item implements ObjectClass
      *
      * @return array of \Zend\Ldap\Node\Schema\ObjectClass\OpenLdap
      */
-    public function getParents()
+    public function getParents ()
     {
         return $this->_parents;
     }

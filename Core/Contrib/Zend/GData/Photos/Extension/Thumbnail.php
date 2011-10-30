@@ -40,6 +40,7 @@ class Thumbnail extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'gphoto';
+
     protected $_rootElement = 'thumbnail';
 
     /**
@@ -47,7 +48,7 @@ class Thumbnail extends \Zend\GData\Extension
      *
      * @param string $text (optional) The thumbnail URI to represent.
      */
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Photos::$namespaces);
         parent::__construct();

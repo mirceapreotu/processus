@@ -42,10 +42,14 @@ use Zend\Ldap\Node\RootDSE;
  */
 class Schema extends AbstractNode
 {
-    const OBJECTCLASS_TYPE_UNKNOWN    = 0;
+
+    const OBJECTCLASS_TYPE_UNKNOWN = 0;
+
     const OBJECTCLASS_TYPE_STRUCTURAL = 1;
-    const OBJECTCLASS_TYPE_ABSTRACT   = 3;
-    const OBJECTCLASS_TYPE_AUXILIARY  = 4;
+
+    const OBJECTCLASS_TYPE_ABSTRACT = 3;
+
+    const OBJECTCLASS_TYPE_AUXILIARY = 4;
 
     /**
      * Factory method to create the Schema node.
@@ -54,7 +58,7 @@ class Schema extends AbstractNode
      * @return \Zend\Ldap\Node\Schema
      * @throws \Zend\Ldap\Exception
      */
-    public static function create(Ldap\Ldap $ldap)
+    public static function create (Ldap\Ldap $ldap)
     {
         $dn = $ldap->getRootDse()->getSchemaDn();
         $data = $ldap->getEntry($dn, array('*', '+'), true);
@@ -78,7 +82,7 @@ class Schema extends AbstractNode
      * @param  array        $data
      * @param  \Zend\Ldap\Ldap    $ldap
      */
-    protected function __construct(Ldap\Dn $dn, array $data, Ldap\Ldap $ldap)
+    protected function __construct (Ldap\Dn $dn, array $data, Ldap\Ldap $ldap)
     {
         parent::__construct($dn, $data, true);
         $this->_parseSchema($dn, $ldap);
@@ -91,7 +95,7 @@ class Schema extends AbstractNode
      * @param  \Zend\Ldap\Ldap    $ldap
      * @return \Zend\Ldap\Node\Schema Provides a fluid interface
      */
-    protected function _parseSchema(Ldap\Dn $dn, Ldap\Ldap $ldap)
+    protected function _parseSchema (Ldap\Dn $dn, Ldap\Ldap $ldap)
     {
         return $this;
     }
@@ -101,7 +105,7 @@ class Schema extends AbstractNode
      *
      * @return array
      */
-    public function getAttributeTypes()
+    public function getAttributeTypes ()
     {
         return array();
     }
@@ -111,7 +115,7 @@ class Schema extends AbstractNode
      *
      * @return array
      */
-    public function getObjectClasses()
+    public function getObjectClasses ()
     {
         return array();
     }

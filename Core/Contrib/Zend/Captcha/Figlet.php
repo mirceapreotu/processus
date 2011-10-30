@@ -39,6 +39,7 @@ namespace Zend\Captcha;
  */
 class Figlet extends Word
 {
+
     /**
      * Figlet text renderer
      *
@@ -52,7 +53,7 @@ class Figlet extends Word
      * @param  null|string|array|\Zend\Config\Config $options
      * @return void
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         parent::__construct($options);
         $this->_figlet = new \Zend\Text\Figlet\Figlet($options);
@@ -63,7 +64,7 @@ class Figlet extends Word
      *
      * @return string
      */
-    public function generate()
+    public function generate ()
     {
         $this->_useNumbers = false;
         return parent::generate();
@@ -76,10 +77,8 @@ class Figlet extends Word
      * @param mixed $element
      * @return string
      */
-    public function render(\Zend\View\Renderer $view = null, $element = null)
+    public function render (\Zend\View\Renderer $view = null, $element = null)
     {
-        return '<pre>'
-             . $this->_figlet->render($this->getWord())
-             . "</pre>\n";
+        return '<pre>' . $this->_figlet->render($this->getWord()) . "</pre>\n";
     }
 }

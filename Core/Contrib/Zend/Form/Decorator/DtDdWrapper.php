@@ -39,6 +39,7 @@ namespace Zend\Form\Decorator;
  */
 class DtDdWrapper extends AbstractDecorator
 {
+
     /**
      * Default placement: surround content
      * @var string
@@ -57,16 +58,16 @@ class DtDdWrapper extends AbstractDecorator
      * @param  string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
         $elementName = $this->getElement()->getName();
         
         $dtLabel = $this->getOption('dtLabel');
-        if( null === $dtLabel ) {
+        if (null === $dtLabel) {
             $dtLabel = '&#160;';
         }
-
+        
         return '<dt id="' . $elementName . '-label">' . $dtLabel . '</dt>' .
-               '<dd id="' . $elementName . '-element">' . $content . '</dd>';
+         '<dd id="' . $elementName . '-element">' . $content . '</dd>';
     }
 }

@@ -22,8 +22,7 @@
  */
 namespace Zend\Cloud\Infrastructure\Adapter;
 
-use Zend\Cloud\Infrastructure\Adapter,
-    Zend\Cloud\Infrastructure\Instance;
+use Zend\Cloud\Infrastructure\Adapter, Zend\Cloud\Infrastructure\Instance;
 
 /**
  * Abstract infrastructure service adapter
@@ -36,34 +35,30 @@ use Zend\Cloud\Infrastructure\Adapter,
  */
 abstract class AbstractAdapter implements Adapter
 {
+
     /**
      * Store the last response from the adpter
      * 
      * @var array
      */
     protected $adapterResult;
-    
+
     /**
      * Valid metrics for monitor
      * 
      * @var array
      */
-    protected $validMetrics = array(
-        Instance::MONITOR_CPU,
-        Instance::MONITOR_RAM,
-        Instance::MONITOR_DISK,
-        Instance::MONITOR_DISK_READ,
-        Instance::MONITOR_DISK_WRITE,
-        Instance::MONITOR_NETWORK_IN,
-        Instance::MONITOR_NETWORK_OUT,
-    );
+    protected $validMetrics = array(Instance::MONITOR_CPU, 
+    Instance::MONITOR_RAM, Instance::MONITOR_DISK, Instance::MONITOR_DISK_READ, 
+    Instance::MONITOR_DISK_WRITE, Instance::MONITOR_NETWORK_IN, 
+    Instance::MONITOR_NETWORK_OUT);
 
     /**
      * Get the last result of the adapter
      *
      * @return array
      */
-    public function getAdapterResult()
+    public function getAdapterResult ()
     {
         return $this->adapterResult;
     }
@@ -76,14 +71,15 @@ abstract class AbstractAdapter implements Adapter
      * @param  integer $timeout 
      * @return boolean
      */
-    public function waitStatusInstance($id, $status, $timeout = static::TIMEOUT_STATUS_CHANGE)
+    public function waitStatusInstance ($id, $status, 
+    $timeout = static::TIMEOUT_STATUS_CHANGE)
     {
         if (empty($id) || empty($status)) {
             return false;
         }
-
+        
         $num = 0;
-        while (($num<$timeout) && ($this->statusInstance($id) != $status)) {
+        while (($num < $timeout) && ($this->statusInstance($id) != $status)) {
             sleep(self::TIME_STEP_STATUS_CHANGE);
             $num += self::TIME_STEP_STATUS_CHANGE;
         }
@@ -97,53 +93,53 @@ abstract class AbstractAdapter implements Adapter
      * @param  array $param
      * @param  string|array $cmd
      * @return string|array
-     */ 
-    public function deployInstance($id, $params, $cmd)
+     */
+    public function deployInstance ($id, $params, $cmd)
     {
-        if (!function_exists("ssh2_connect")) {
-            throw new Exception\RuntimeException('Deployment requires the PHP "SSH" extension (ext/ssh2)');
+        if (! function_exists("ssh2_connect")) {
+            throw new Exception\RuntimeException(
+            'Deployment requires the PHP "SSH" extension (ext/ssh2)');
         }
-
+        
         if (empty($id)) {
-            throw new Exception\InvalidArgumentException('You must specify the instance where to deploy');
+            throw new Exception\InvalidArgumentException(
+            'You must specify the instance where to deploy');
         }
-
+        
         if (empty($cmd)) {
-            throw new Exception\InvalidArgumentException('You must specify the shell commands to run on the instance');
+            throw new Exception\InvalidArgumentException(
+            'You must specify the shell commands to run on the instance');
         }
-
-        if (empty($params) 
-            || empty($params[Instance::SSH_USERNAME]) 
-            || (empty($params[Instance::SSH_PASSWORD]) 
-                && empty($params[Instance::SSH_KEY]))
-        ) {
-            throw new Exception\InvalidArgumentException('You must specify the params for the SSH connection');
+        
+        if (empty($params) || empty($params[Instance::SSH_USERNAME]) || (empty(
+        $params[Instance::SSH_PASSWORD]) && empty($params[Instance::SSH_KEY]))) {
+            throw new Exception\InvalidArgumentException(
+            'You must specify the params for the SSH connection');
         }
-
+        
         $host = $this->publicDnsInstance($id);
         if (empty($host)) {
-            throw new Exception\RuntimeException(sprintf(
-                'The instance identified by "%s" does not exist', 
-                $id
-            ));
+            throw new Exception\RuntimeException(
+            sprintf('The instance identified by "%s" does not exist', $id));
         }
-
+        
         $conn = ssh2_connect($host);
-        if (!ssh2_auth_password($conn, $params[Instance::SSH_USERNAME], $params[Instance::SSH_PASSWORD])) {
+        if (! ssh2_auth_password($conn, $params[Instance::SSH_USERNAME], 
+        $params[Instance::SSH_PASSWORD])) {
             throw new Exception\RuntimeException('SSH authentication failed');
         }
-
+        
         if (is_array($cmd)) {
             $result = array();
             foreach ($cmd as $command) {
-                $stream      = ssh2_exec($conn, $command);
+                $stream = ssh2_exec($conn, $command);
                 $errorStream = ssh2_fetch_stream($stream, SSH2_STREAM_STDERR);
-
+                
                 stream_set_blocking($errorStream, true);
-                stream_set_blocking($stream, true); 
-
+                stream_set_blocking($stream, true);
+                
                 $output = stream_get_contents($stream);
-                $error  = stream_get_contents($errorStream);
+                $error = stream_get_contents($errorStream);
                 
                 if (empty($error)) {
                     $result[$command] = $output;
@@ -152,22 +148,22 @@ abstract class AbstractAdapter implements Adapter
                 }
             }
         } else {
-            $stream      = ssh2_exec($conn, $cmd);
-            $result      = stream_set_blocking($stream, true);
+            $stream = ssh2_exec($conn, $cmd);
+            $result = stream_set_blocking($stream, true);
             $errorStream = ssh2_fetch_stream($stream, SSH2_STREAM_STDERR);
-
+            
             stream_set_blocking($errorStream, true);
-            stream_set_blocking($stream, true); 
-
+            stream_set_blocking($stream, true);
+            
             $output = stream_get_contents($stream);
-            $error  = stream_get_contents($errorStream);
+            $error = stream_get_contents($errorStream);
             
             if (empty($error)) {
                 $result = $output;
             } else {
                 $result = $error;
             }
-        }    
+        }
         return $result;
     }
 }

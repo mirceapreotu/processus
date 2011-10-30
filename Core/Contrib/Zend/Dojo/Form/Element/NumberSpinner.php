@@ -35,6 +35,7 @@ namespace Zend\Dojo\Form\Element;
  */
 class NumberSpinner extends ValidationTextBox
 {
+
     /**
      * Use NumberSpinner dijit view helper
      * @var string
@@ -47,7 +48,7 @@ class NumberSpinner extends ValidationTextBox
      * @param  int $timeout
      * @return \Zend\Dojo\Form\Element\NumberSpinner
      */
-    public function setDefaultTimeout($timeout)
+    public function setDefaultTimeout ($timeout)
     {
         $this->setDijitParam('defaultTimeout', (int) $timeout);
         return $this;
@@ -58,7 +59,7 @@ class NumberSpinner extends ValidationTextBox
      *
      * @return int|null
      */
-    public function getDefaultTimeout()
+    public function getDefaultTimeout ()
     {
         return $this->getDijitParam('defaultTimeout');
     }
@@ -69,7 +70,7 @@ class NumberSpinner extends ValidationTextBox
      * @param  int $rate
      * @return \Zend\Dojo\Form\Element\NumberSpinner
      */
-    public function setTimeoutChangeRate($rate)
+    public function setTimeoutChangeRate ($rate)
     {
         $this->setDijitParam('timeoutChangeRate', (int) $rate);
         return $this;
@@ -80,7 +81,7 @@ class NumberSpinner extends ValidationTextBox
      *
      * @return int|null
      */
-    public function getTimeoutChangeRate()
+    public function getTimeoutChangeRate ()
     {
         return $this->getDijitParam('timeoutChangeRate');
     }
@@ -91,7 +92,7 @@ class NumberSpinner extends ValidationTextBox
      * @param  int $delta
      * @return \Zend\Dojo\Form\Element\NumberSpinner
      */
-    public function setLargeDelta($delta)
+    public function setLargeDelta ($delta)
     {
         $this->setDijitParam('largeDelta', (float) $delta);
         return $this;
@@ -102,7 +103,7 @@ class NumberSpinner extends ValidationTextBox
      *
      * @return int|null
      */
-    public function getLargeDelta()
+    public function getLargeDelta ()
     {
         return $this->getDijitParam('largeDelta');
     }
@@ -113,7 +114,7 @@ class NumberSpinner extends ValidationTextBox
      * @param  int $delta
      * @return \Zend\Dojo\Form\Element\NumberSpinner
      */
-    public function setSmallDelta($delta)
+    public function setSmallDelta ($delta)
     {
         $this->setDijitParam('smallDelta', (float) $delta);
         return $this;
@@ -124,7 +125,7 @@ class NumberSpinner extends ValidationTextBox
      *
      * @return int|null
      */
-    public function getSmallDelta()
+    public function getSmallDelta ()
     {
         return $this->getDijitParam('smallDelta');
     }
@@ -135,7 +136,7 @@ class NumberSpinner extends ValidationTextBox
      * @param  bool $flag
      * @return \Zend\Dojo\Form\Element\TextBox
      */
-    public function setIntermediateChanges($flag)
+    public function setIntermediateChanges ($flag)
     {
         $this->setDijitParam('intermediateChanges', (bool) $flag);
         return $this;
@@ -146,9 +147,9 @@ class NumberSpinner extends ValidationTextBox
      *
      * @return bool
      */
-    public function getIntermediateChanges()
+    public function getIntermediateChanges ()
     {
-        if (!$this->hasDijitParam('intermediateChanges')) {
+        if (! $this->hasDijitParam('intermediateChanges')) {
             return false;
         }
         return $this->getDijitParam('intermediateChanges');
@@ -160,7 +161,7 @@ class NumberSpinner extends ValidationTextBox
      * @param  string $message
      * @return \Zend\Dojo\Form\Element\NumberSpinner
      */
-    public function setRangeMessage($message)
+    public function setRangeMessage ($message)
     {
         $this->setDijitParam('rangeMessage', (string) $message);
         return $this;
@@ -171,7 +172,7 @@ class NumberSpinner extends ValidationTextBox
      *
      * @return string|null
      */
-    public function getRangeMessage()
+    public function getRangeMessage ()
     {
         return $this->getDijitParam('rangeMessage');
     }
@@ -182,7 +183,7 @@ class NumberSpinner extends ValidationTextBox
      * @param  int $value
      * @return \Zend\Dojo\Form\Element\NumberSpinner
      */
-    public function setMin($value)
+    public function setMin ($value)
     {
         $constraints = array();
         if ($this->hasDijitParam('constraints')) {
@@ -198,13 +199,13 @@ class NumberSpinner extends ValidationTextBox
      *
      * @return null|int
      */
-    public function getMin()
+    public function getMin ()
     {
-        if (!$this->hasDijitParam('constraints')) {
+        if (! $this->hasDijitParam('constraints')) {
             return null;
         }
         $constraints = $this->getDijitParam('constraints');
-        if (!array_key_exists('min', $constraints)) {
+        if (! array_key_exists('min', $constraints)) {
             return null;
         }
         return $constraints['min'];
@@ -216,7 +217,7 @@ class NumberSpinner extends ValidationTextBox
      * @param  int $value
      * @return \Zend\Dojo\Form\Element\NumberSpinner
      */
-    public function setMax($value)
+    public function setMax ($value)
     {
         $constraints = array();
         if ($this->hasDijitParam('constraints')) {
@@ -232,13 +233,13 @@ class NumberSpinner extends ValidationTextBox
      *
      * @return null|int
      */
-    public function getMax()
+    public function getMax ()
     {
-        if (!$this->hasDijitParam('constraints')) {
+        if (! $this->hasDijitParam('constraints')) {
             return null;
         }
         $constraints = $this->getDijitParam('constraints');
-        if (!array_key_exists('max', $constraints)) {
+        if (! array_key_exists('max', $constraints)) {
             return null;
         }
         return $constraints['max'];

@@ -24,9 +24,7 @@
  */
 namespace Zend\Application\Resource;
 
-use Zend\Application\ResourceException,
-    Zend\Session\SessionManager,
-    Zend\Session\SaveHandler;
+use Zend\Application\ResourceException, Zend\Session\SessionManager, Zend\Session\SaveHandler;
 
 /**
  * Resource for setting session options
@@ -42,6 +40,7 @@ use Zend\Application\ResourceException,
  */
 class Session extends AbstractResource
 {
+
     /**
      * Session manager
      * @var Zend\Session\Manager
@@ -60,7 +59,7 @@ class Session extends AbstractResource
      *
      * @return Zend\Session\Manager|null
      */
-    public function getManager()
+    public function getManager ()
     {
         return $this->_manager;
     }
@@ -72,7 +71,7 @@ class Session extends AbstractResource
      * @return \Zend\Application\Resource\Session
      * @throws \Zend\Application\ResourceException When $saveHandler is not a valid save handler
      */
-    public function setSaveHandler($saveHandler)
+    public function setSaveHandler ($saveHandler)
     {
         $this->_saveHandler = $saveHandler;
         return $this;
@@ -83,12 +82,13 @@ class Session extends AbstractResource
      *
      * @return \Zend\Session\SaveHandler
      */
-    public function getSaveHandler()
+    public function getSaveHandler ()
     {
-        if (!$this->_saveHandler instanceof SaveHandler) {
+        if (! $this->_saveHandler instanceof SaveHandler) {
             if (is_array($this->_saveHandler)) {
-                if (!array_key_exists('class', $this->_saveHandler)) {
-                    throw new Exception\InitializationException('Session save handler class not provided in options');
+                if (! array_key_exists('class', $this->_saveHandler)) {
+                    throw new Exception\InitializationException(
+                    'Session save handler class not provided in options');
                 }
                 $options = array();
                 if (array_key_exists('options', $this->_saveHandler)) {
@@ -97,13 +97,14 @@ class Session extends AbstractResource
                 $this->_saveHandler = $this->_saveHandler['class'];
                 $this->_saveHandler = new $this->_saveHandler($options);
             } elseif (is_string($this->_saveHandler)) {
-                $this->_saveHandler = new $this->_saveHandler;
+                $this->_saveHandler = new $this->_saveHandler();
             }
-
-            if (!$this->_saveHandler instanceof SaveHandler) {
-                throw new Exception\InitializationException('Invalid session save handler');
+            
+            if (! $this->_saveHandler instanceof SaveHandler) {
+                throw new Exception\InitializationException(
+                'Invalid session save handler');
             }
-
+            
             // Inject session manager
             $manager = $this->getManager();
             if ($manager instanceof \Zend\Session\Manager) {
@@ -116,7 +117,7 @@ class Session extends AbstractResource
     /**
      * @return bool
      */
-    protected function _hasSaveHandler()
+    protected function _hasSaveHandler ()
     {
         return ($this->_saveHandler !== null);
     }
@@ -126,26 +127,26 @@ class Session extends AbstractResource
      *
      * @return Zend\Session\Manager
      */
-    public function init()
+    public function init ()
     {
         $options = array_change_key_case($this->getOptions(), CASE_LOWER);
-
+        
         // AbstractResource proxies options to setters during construction.
         // This will set the savehandler as an array of options; we do not
         // need or want to pass those to session configuration.
         if (isset($options['savehandler'])) {
             unset($options['savehandler']);
         }
-
+        
         // Instantiate a session manager object, and store it locally
         $this->_manager = new SessionManager($options);
-
+        
         // Determine if we have a save handler to initialize
         $handler = false;
         if ($this->_hasSaveHandler()) {
             $handler = $this->getSaveHandler();
         }
-
+        
         return $this->_manager;
     }
 }

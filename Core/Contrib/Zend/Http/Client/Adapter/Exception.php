@@ -33,4 +33,5 @@ namespace Zend\Http\Client\Adapter;
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 interface Exception extends \Zend\Http\Client\Exception
-{}
+{
+}

@@ -44,13 +44,14 @@ namespace Zend\Cloud\DocumentService;
  */
 interface QueryAdapter
 {
+
     /**
      * SELECT clause (fields to be selected)
      *
      * @param string $select
      * @return Zend_Cloud_DocumentService_QueryAdapter
      */
-    public function select($select);
+    public function select ($select);
 
     /**
      * FROM clause (table name)
@@ -58,7 +59,7 @@ interface QueryAdapter
      * @param string $from
      * @return Zend_Cloud_DocumentService_QueryAdapter
      */
-    public function from($from);
+    public function from ($from);
 
     /**
      * WHERE clause (conditions to be used)
@@ -68,7 +69,7 @@ interface QueryAdapter
      * @param string $op Operation to use to join where clauses (AND/OR)
      * @return Zend_Cloud_DocumentService_QueryAdapter
      */
-    public function where($where, $value = null, $op = 'and');
+    public function where ($where, $value = null, $op = 'and');
 
     /**
      * WHERE clause for item ID
@@ -79,7 +80,7 @@ interface QueryAdapter
      * @param mixed $value Row ID for the document
      * @return Zend_Cloud_DocumentService_QueryAdapter
      */
-    public function whereId($value);
+    public function whereId ($value);
 
     /**
      * LIMIT clause (how many rows ot return)
@@ -87,7 +88,7 @@ interface QueryAdapter
      * @param int $limit
      * @return Zend_Cloud_DocumentService_QueryAdapter
      */
-    public function limit($limit);
+    public function limit ($limit);
 
     /**
      * ORDER BY clause (sorting)
@@ -96,12 +97,12 @@ interface QueryAdapter
      * @param string $direction Direction - asc/desc
      * @return Zend_Cloud_DocumentService_QueryAdapter
      */
-    public function order($sort, $direction = 'asc');
+    public function order ($sort, $direction = 'asc');
 
     /**
      * Assemble the query into a format the adapter can utilize
      *
      * @return mixed
      */
-    public function assemble();
+    public function assemble ();
 }

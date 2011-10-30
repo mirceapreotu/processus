@@ -43,11 +43,17 @@ class Who extends Extension
 {
 
     protected $_rootElement = 'who';
+
     protected $_email = null;
+
     protected $_rel = null;
+
     protected $_valueString = null;
+
     protected $_attendeeStatus = null;
+
     protected $_attendeeType = null;
+
     protected $_entryLink = null;
 
     /**
@@ -59,8 +65,8 @@ class Who extends Extension
      * @param \Zend\GData\Extension\AttendeeType $attendeeType (optional) The type of the attendee.
      * @param string $entryLink URL pointing to an associated entry (Contact kind) describing this person.
      */
-    public function __construct($email = null, $rel = null, $valueString = null,
-        $attendeeStatus = null, $attendeeType = null, $entryLink = null)
+    public function __construct ($email = null, $rel = null, $valueString = null, 
+    $attendeeStatus = null, $attendeeType = null, $entryLink = null)
     {
         parent::__construct();
         $this->_email = $email;
@@ -81,7 +87,7 @@ class Who extends Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_email !== null) {
@@ -94,13 +100,16 @@ class Who extends Extension
             $element->setAttribute('valueString', $this->_valueString);
         }
         if ($this->_attendeeStatus !== null) {
-            $element->appendChild($this->_attendeeStatus->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_attendeeStatus->getDOM($element->ownerDocument));
         }
         if ($this->_attendeeType !== null) {
-            $element->appendChild($this->_attendeeType->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_attendeeType->getDOM($element->ownerDocument));
         }
         if ($this->_entryLink !== null) {
-            $element->appendChild($this->_entryLink->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_entryLink->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -112,20 +121,20 @@ class Who extends Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'email':
-            $this->_email = $attribute->nodeValue;
-            break;
-        case 'rel':
-            $this->_rel = $attribute->nodeValue;
-            break;
-        case 'valueString':
-            $this->_valueString = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'email':
+                $this->_email = $attribute->nodeValue;
+                break;
+            case 'rel':
+                $this->_rel = $attribute->nodeValue;
+                break;
+            case 'valueString':
+                $this->_valueString = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -135,28 +144,28 @@ class Who extends Extension
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('gd') . ':' . 'attendeeStatus':
-            $attendeeStatus = new AttendeeStatus();
-            $attendeeStatus->transferFromDOM($child);
-            $this->_attendeeStatus = $attendeeStatus;
-            break;
-        case $this->lookupNamespace('gd') . ':' . 'attendeeType':
-            $attendeeType = new AttendeeType();
-            $attendeeType->transferFromDOM($child);
-            $this->_attendeeType = $attendeeType;
-            break;
-        case $this->lookupNamespace('gd') . ':' . 'entryLink':
-            $entryLink = new EntryLink();
-            $entryLink->transferFromDOM($child);
-            $this->_entryLink = $entryLink;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('gd') . ':' . 'attendeeStatus':
+                $attendeeStatus = new AttendeeStatus();
+                $attendeeStatus->transferFromDOM($child);
+                $this->_attendeeStatus = $attendeeStatus;
+                break;
+            case $this->lookupNamespace('gd') . ':' . 'attendeeType':
+                $attendeeType = new AttendeeType();
+                $attendeeType->transferFromDOM($child);
+                $this->_attendeeType = $attendeeType;
+                break;
+            case $this->lookupNamespace('gd') . ':' . 'entryLink':
+                $entryLink = new EntryLink();
+                $entryLink->transferFromDOM($child);
+                $this->_entryLink = $entryLink;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
@@ -165,12 +174,11 @@ class Who extends Extension
      *
      * @return string The attribute value.
      */
-    public function __toString()
+    public function __toString ()
     {
         if ($this->_valueString != null) {
             return $this->_valueString;
-        }
-        else {
+        } else {
             return parent::__toString();
         }
     }
@@ -180,7 +188,7 @@ class Who extends Extension
      *
      * @return string The requested attribute.
      */
-    public function getValueString()
+    public function getValueString ()
     {
         return $this->_valueString;
     }
@@ -191,7 +199,7 @@ class Who extends Extension
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\Extension\Who The element being modified.
      */
-    public function setValueString($value)
+    public function setValueString ($value)
     {
         $this->_valueString = $value;
         return $this;
@@ -202,7 +210,7 @@ class Who extends Extension
      *
      * @return string The requested attribute.
      */
-    public function getEmail()
+    public function getEmail ()
     {
         return $this->_email;
     }
@@ -213,7 +221,7 @@ class Who extends Extension
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\Extension\Who The element being modified.
      */
-    public function setEmail($value)
+    public function setEmail ($value)
     {
         $this->_email = $value;
         return $this;
@@ -224,7 +232,7 @@ class Who extends Extension
      *
      * @return string The requested attribute.
      */
-    public function getRel()
+    public function getRel ()
     {
         return $this->_rel;
     }
@@ -235,7 +243,7 @@ class Who extends Extension
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\Extension\Who The element being modified.
      */
-    public function setRel($value)
+    public function setRel ($value)
     {
         $this->_rel = $value;
         return $this;
@@ -246,7 +254,7 @@ class Who extends Extension
      *
      * @return \Zend\GData\Extension\AttendeeStatus The requested entry.
      */
-    public function getAttendeeStatus()
+    public function getAttendeeStatus ()
     {
         return $this->_attendeeStatus;
     }
@@ -257,7 +265,7 @@ class Who extends Extension
      * @param \Zend\GData\Extension\AttendeeStatus $value The desired value for this attribute.
      * @return \Zend\GData\Extension\Who The element being modified.
      */
-    public function setAttendeeStatus($value)
+    public function setAttendeeStatus ($value)
     {
         $this->_attendeeStatus = $value;
         return $this;
@@ -268,7 +276,7 @@ class Who extends Extension
      *
      * @return \Zend\GData\Extension\AttendeeType The requested entry.
      */
-    public function getAttendeeType()
+    public function getAttendeeType ()
     {
         return $this->_attendeeType;
     }
@@ -279,7 +287,7 @@ class Who extends Extension
      * @param \Zend\GData\Extension\AttendeeType $value The desired value for this attribute.
      * @return \Zend\GData\Extension\Who The element being modified.
      */
-    public function setAttendeeType($value)
+    public function setAttendeeType ($value)
     {
         $this->_attendeeType = $value;
         return $this;

@@ -35,13 +35,14 @@ namespace Zend\Amf\Parser;
  */
 interface Deserializer
 {
+
     /**
      * Constructor
      *
      * @param  Zend\Amf\Parser\InputStream $stream
      * @return void
      */
-    public function __construct(InputStream $stream);
+    public function __construct (InputStream $stream);
 
     /**
      * Checks for AMF marker types and calls the appropriate methods
@@ -51,5 +52,5 @@ interface Deserializer
      * @param  int $typeMarker
      * @return mixed Whatever the data type is of the marker in php
      */
-    public function readTypeMarker($markerType = null);
+    public function readTypeMarker ($markerType = null);
 }

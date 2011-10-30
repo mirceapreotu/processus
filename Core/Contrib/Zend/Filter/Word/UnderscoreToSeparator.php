@@ -32,13 +32,14 @@ namespace Zend\Filter\Word;
  */
 class UnderscoreToSeparator extends SeparatorToSeparator
 {
+
     /**
      * Constructor
      *
      * @param  string $separator Space by default
      * @return void
      */
-    public function __construct($replacementSeparator = ' ')
+    public function __construct ($replacementSeparator = ' ')
     {
         parent::__construct('_', $replacementSeparator);
     }

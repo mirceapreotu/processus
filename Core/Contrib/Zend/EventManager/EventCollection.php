@@ -35,6 +35,7 @@ use Zend\Stdlib\CallbackHandler;
  */
 interface EventCollection
 {
+
     /**
      * Trigger an event
      *
@@ -52,7 +53,7 @@ interface EventCollection
      * @param  null|callback $callback 
      * @return ResponseCollection
      */
-    public function trigger($event, $target = null, $argv = array(), $callback = null);
+    public function trigger ($event, $target = null, $argv = array(), $callback = null);
 
     /**
      * Trigger an event until the given callback returns a boolean false
@@ -69,7 +70,7 @@ interface EventCollection
      * @param  callback $callback 
      * @return ResponseCollection
      */
-    public function triggerUntil($event, $target, $argv = null, $callback = null);
+    public function triggerUntil ($event, $target, $argv = null, $callback = null);
 
     /**
      * Attach a listener to an event
@@ -79,7 +80,7 @@ interface EventCollection
      * @param  int $priority Priority at which to register listener
      * @return CallbackHandler
      */
-    public function attach($event, $callback, $priority = 1);
+    public function attach ($event, $callback, $priority = 1);
 
     /**
      * Detach an event listener
@@ -87,14 +88,14 @@ interface EventCollection
      * @param  CallbackHandler $listener 
      * @return void
      */
-    public function detach(CallbackHandler $listener);
+    public function detach (CallbackHandler $listener);
 
     /**
      * Get a list of events for which this collection has listeners
      * 
      * @return array
      */
-    public function getEvents();
+    public function getEvents ();
 
     /**
      * Retrieve a list of listeners registered to a given event
@@ -102,7 +103,7 @@ interface EventCollection
      * @param  string $event 
      * @return array|object
      */
-    public function getListeners($event);
+    public function getListeners ($event);
 
     /**
      * Clear all listeners for a given event
@@ -110,5 +111,5 @@ interface EventCollection
      * @param  string $event 
      * @return void
      */
-    public function clearListeners($event);
+    public function clearListeners ($event);
 }

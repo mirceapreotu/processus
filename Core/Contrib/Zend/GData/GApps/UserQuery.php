@@ -57,14 +57,13 @@ class UserQuery extends Query
      * Create a new instance.
      *
      * @param string $domain (optional) The Google Apps-hosted domain to use
-     *          when constructing query URIs.
+     * when constructing query URIs.
      * @param string $username (optional) Value for the username
-     *          property.
+     * property.
      * @param string $startUsername (optional) Value for the
-     *          startUsername property.
+     * startUsername property.
      */
-    public function __construct($domain = null, $username = null,
-            $startUsername = null)
+    public function __construct ($domain = null, $username = null, $startUsername = null)
     {
         parent::__construct($domain);
         $this->setUsername($username);
@@ -78,9 +77,9 @@ class UserQuery extends Query
      *
      * @see getUsername
      * @param string $value The username to filter search results by, or null to
-     *              disable.
+     * disable.
      */
-    public function setUsername($value)
+    public function setUsername ($value)
     {
         $this->_username = $value;
     }
@@ -90,9 +89,9 @@ class UserQuery extends Query
      * returned.
      *
      * @param string $value The username to filter search results by, or
-     *          null if disabled.
+     * null if disabled.
      */
-    public function getUsername()
+    public function getUsername ()
     {
         return $this->_username;
     }
@@ -102,9 +101,9 @@ class UserQuery extends Query
      * a list of users.
      *
      * @param string $value The first username to be returned, or null to
-     *          disable.
+     * disable.
      */
-    public function setStartUsername($value)
+    public function setStartUsername ($value)
     {
         if ($value !== null) {
             $this->_params['startUsername'] = $value;
@@ -119,9 +118,9 @@ class UserQuery extends Query
      *
      * @see setStartUsername
      * @return string The first username to be returned, or null if
-     *          disabled.
+     * disabled.
      */
-    public function getStartUsername()
+    public function getStartUsername ()
     {
         if (array_key_exists('startUsername', $this->_params)) {
             return $this->_params['startUsername'];
@@ -135,7 +134,7 @@ class UserQuery extends Query
      *
      * @return string The query URL for this instance.
      */
-    public function getQueryUrl()
+    public function getQueryUrl ()
     {
         $uri = $this->getBaseUrl();
         $uri .= GApps::APPS_USER_PATH;

@@ -33,6 +33,4 @@ namespace Zend\Feed\Reader;
 class Collection extends \ArrayObject
 {
 
-    
-
 }

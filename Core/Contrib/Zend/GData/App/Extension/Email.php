@@ -41,7 +41,7 @@ class Email extends Extension
 
     protected $_rootElement = 'email';
 
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         parent::__construct();
         $this->_text = $text;

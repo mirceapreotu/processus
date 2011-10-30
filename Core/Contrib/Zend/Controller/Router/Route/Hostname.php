@@ -40,9 +40,11 @@ use Zend\Config;
 class Hostname extends AbstractRoute
 {
 
-    protected $_hostVariable   = ':';
+    protected $_hostVariable = ':';
+
     protected $_regexDelimiter = '#';
-    protected $_defaultRegex   = null;
+
+    protected $_defaultRegex = null;
 
     /**
      * Holds names of all route's pattern variable names. Array index holds a position in host.
@@ -103,7 +105,8 @@ class Hostname extends AbstractRoute
      * @param  \Zend\Controller\Request\AbstractRequest|null $request
      * @return void
      */
-    public function setRequest(\Zend\Controller\Request\AbstractRequest $request = null)
+    public function setRequest (
+    \Zend\Controller\Request\AbstractRequest $request = null)
     {
         $this->_request = $request;
     }
@@ -113,12 +116,12 @@ class Hostname extends AbstractRoute
      *
      * @return \Zend\Controller\Request\AbstractRequest $request
      */
-    public function getRequest()
+    public function getRequest ()
     {
         if ($this->_request === null) {
             $this->_request = \Zend\Controller\Front::getInstance()->getRequest();
         }
-
+        
         return $this->_request;
     }
 
@@ -127,10 +130,10 @@ class Hostname extends AbstractRoute
      *
      * @param \Zend\Config\Config $config Configuration object
      */
-    public static function getInstance(Config\Config $config)
+    public static function getInstance (Config\Config $config)
     {
-        $reqs   = ($config->reqs instanceof Config\Config) ? $config->reqs->toArray() : array();
-        $defs   = ($config->defaults instanceof Config\Config) ? $config->defaults->toArray() : array();
+        $reqs = ($config->reqs instanceof Config\Config) ? $config->reqs->toArray() : array();
+        $defs = ($config->defaults instanceof Config\Config) ? $config->defaults->toArray() : array();
         $scheme = (isset($config->scheme)) ? $config->scheme : null;
         return new self($config->route, $defs, $reqs, $scheme);
     }
@@ -145,13 +148,13 @@ class Hostname extends AbstractRoute
      * @param array  $reqs Regular expression requirements for variables (keys as variable names)
      * @param string $scheme
      */
-    public function __construct($route, $defaults = array(), $reqs = array(), $scheme = null)
+    public function __construct ($route, $defaults = array(), $reqs = array(), $scheme = null)
     {
-        $route               = trim($route, '.');
-        $this->_defaults     = (array) $defaults;
+        $route = trim($route, '.');
+        $this->_defaults = (array) $defaults;
         $this->_requirements = (array) $reqs;
-        $this->_scheme       = $scheme;
-
+        $this->_scheme = $scheme;
+        
         if ($route != '') {
             foreach (explode('.', $route) as $pos => $part) {
                 if (substr($part, 0, 1) == $this->_hostVariable) {
@@ -160,7 +163,7 @@ class Hostname extends AbstractRoute
                     $this->_variables[$pos] = $name;
                 } else {
                     $this->_parts[$pos] = $part;
-                    $this->_staticCount++;
+                    $this->_staticCount ++;
                 }
             }
         }
@@ -173,77 +176,81 @@ class Hostname extends AbstractRoute
      * @param \Zend\Controller\Request\Http $request Request to get the host from
      * @return array|false An array of assigned values or a false on a mismatch
      */
-    public function match($request)
+    public function match ($request)
     {
         // Check the scheme if required
         if ($this->_scheme !== null) {
             $scheme = $request->getScheme();
-
+            
             if ($scheme !== $this->_scheme) {
                 return false;
             }
         }
-
+        
         // Get the host and remove unnecessary port information
         $host = $request->getHTTPHost();
         if (preg_match('#:\d+$#', $host, $result) === 1) {
-            $host = substr($host, 0, -strlen($result[0]));
+            $host = substr($host, 0, - strlen($result[0]));
         }
-
+        
         $hostStaticCount = 0;
         $values = array();
-
+        
         $host = trim($host, '.');
-
+        
         if ($host != '') {
             $host = explode('.', $host);
-
+            
             foreach ($host as $pos => $hostPart) {
                 // Host is longer than a route, it's not a match
-                if (!array_key_exists($pos, $this->_parts)) {
+                if (! array_key_exists($pos, $this->_parts)) {
                     return false;
                 }
-
+                
                 $name = isset($this->_variables[$pos]) ? $this->_variables[$pos] : null;
                 $hostPart = urldecode($hostPart);
-
+                
                 // If it's a static part, match directly
-                if ($name === null && $this->_parts[$pos] != $hostPart) {
+                if ($name === null &&
+                 $this->_parts[$pos] != $hostPart) {
                     return false;
                 }
-
+                
                 // If it's a variable with requirement, match a regex. If not - everything matches
-                if ($this->_parts[$pos] !== null && !preg_match($this->_regexDelimiter . '^' . $this->_parts[$pos] . '$' . $this->_regexDelimiter . 'iu', $hostPart)) {
+                if ($this->_parts[$pos] !== null &&
+                 ! preg_match(
+                $this->_regexDelimiter . '^' . $this->_parts[$pos] . '$' .
+                 $this->_regexDelimiter . 'iu', $hostPart)) {
                     return false;
                 }
-
+                
                 // If it's a variable store it's value for later
                 if ($name !== null) {
                     $values[$name] = $hostPart;
                 } else {
-                    $hostStaticCount++;
+                    $hostStaticCount ++;
                 }
             }
         }
-
+        
         // Check if all static mappings have been matched
         if ($this->_staticCount != $hostStaticCount) {
             return false;
         }
-
+        
         $return = $values + $this->_defaults;
-
+        
         // Check if all map variables have been initialized
         foreach ($this->_variables as $var) {
-            if (!array_key_exists($var, $return)) {
+            if (! array_key_exists($var, $return)) {
                 return false;
             }
         }
-
+        
         $this->_values = $values;
-
+        
         return $return;
-
+    
     }
 
     /**
@@ -253,47 +260,52 @@ class Hostname extends AbstractRoute
      * @param  boolean $reset Whether or not to set route defaults with those provided in $data
      * @return string Route path with user submitted parameters
      */
-    public function assemble($data = array(), $reset = false, $encode = false, $partial = false)
+    public function assemble ($data = array(), $reset = false, $encode = false, $partial = false)
     {
         $host = array();
         $flag = false;
-
+        
         foreach ($this->_parts as $key => $part) {
             $name = isset($this->_variables[$key]) ? $this->_variables[$key] : null;
-
+            
             $useDefault = false;
-            if (isset($name) && array_key_exists($name, $data) && $data[$name] === null) {
+            if (isset($name) && array_key_exists($name, $data) &&
+             $data[$name] === null) {
                 $useDefault = true;
             }
-
+            
             if (isset($name)) {
-                if (isset($data[$name]) && !$useDefault) {
+                if (isset($data[$name]) && ! $useDefault) {
                     $host[$key] = $data[$name];
                     unset($data[$name]);
-                } elseif (!$reset && !$useDefault && isset($this->_values[$name])) {
+                } elseif (! $reset && ! $useDefault &&
+                 isset($this->_values[$name])) {
                     $host[$key] = $this->_values[$name];
                 } elseif (isset($this->_defaults[$name])) {
                     $host[$key] = $this->_defaults[$name];
                 } else {
-                    throw new \Zend\Controller\Router\Exception($name . ' is not specified');
+                    throw new \Zend\Controller\Router\Exception(
+                    $name . ' is not specified');
                 }
             } else {
                 $host[$key] = $part;
             }
         }
-
+        
         $return = '';
-
+        
         foreach (array_reverse($host, true) as $key => $value) {
-            if ($flag || !isset($this->_variables[$key]) || $value !== $this->getDefault($this->_variables[$key]) || $partial) {
-                if ($encode) $value = urlencode($value);
+            if ($flag || ! isset($this->_variables[$key]) ||
+             $value !== $this->getDefault($this->_variables[$key]) || $partial) {
+                if ($encode)
+                    $value = urlencode($value);
                 $return = '.' . $value . $return;
                 $flag = true;
             }
         }
-
+        
         $url = trim($return, '.');
-
+        
         if ($this->_scheme !== null) {
             $scheme = $this->_scheme;
         } else {
@@ -304,10 +316,10 @@ class Hostname extends AbstractRoute
                 $scheme = 'http';
             }
         }
-
+        
         $hostname = implode('.', $host);
-        $url      = $scheme . '://' . $url;
-
+        $url = $scheme . '://' . $url;
+        
         return $url;
     }
 
@@ -317,7 +329,8 @@ class Hostname extends AbstractRoute
      * @param string $name Array key of the parameter
      * @return string Previously set default
      */
-    public function getDefault($name) {
+    public function getDefault ($name)
+    {
         if (isset($this->_defaults[$name])) {
             return $this->_defaults[$name];
         }
@@ -329,7 +342,8 @@ class Hostname extends AbstractRoute
      *
      * @return array Route defaults
      */
-    public function getDefaults() {
+    public function getDefaults ()
+    {
         return $this->_defaults;
     }
 
@@ -338,7 +352,7 @@ class Hostname extends AbstractRoute
      *
      * @return array
      */
-    public function getVariables()
+    public function getVariables ()
     {
         return $this->_variables;
     }

@@ -33,22 +33,22 @@ namespace Zend\Feed\PubSubHubbub\Model;
  */
 interface SubscriptionPersistence
 {
-    
+
     /**
      * Save subscription to RDMBS
      *
      * @param array $data The key must be stored here as a $data['id'] entry
      * @return bool
      */
-    public function setSubscription(array $data);
-    
+    public function setSubscription (array $data);
+
     /**
      * Get subscription by ID/key
      * 
      * @param  string $key 
      * @return array
      */
-    public function getSubscription($key);
+    public function getSubscription ($key);
 
     /**
      * Determine if a subscription matching the key exists
@@ -56,14 +56,14 @@ interface SubscriptionPersistence
      * @param  string $key 
      * @return bool
      */
-    public function hasSubscription($key);
-    
+    public function hasSubscription ($key);
+
     /**
      * Delete a subscription
      *
      * @param string $key
      * @return bool
      */
-    public function deleteSubscription($key);
-    
+    public function deleteSubscription ($key);
+
 }

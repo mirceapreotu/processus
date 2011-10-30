@@ -40,6 +40,7 @@ class User extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'gphoto';
+
     protected $_rootElement = 'user';
 
     /**
@@ -47,7 +48,7 @@ class User extends \Zend\GData\Extension
      *
      * @param string $text (optional) The username to represent.
      */
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Photos::$namespaces);
         parent::__construct();

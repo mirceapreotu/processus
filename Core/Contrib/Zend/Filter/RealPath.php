@@ -32,6 +32,7 @@ namespace Zend\Filter;
  */
 class RealPath extends AbstractFilter
 {
+
     /**
      * @var boolean $_pathExists
      */
@@ -42,7 +43,7 @@ class RealPath extends AbstractFilter
      *
      * @param boolean|\Zend\Config\Config $options Options to set
      */
-    public function __construct($options = true)
+    public function __construct ($options = true)
     {
         $this->setExists($options);
     }
@@ -52,7 +53,7 @@ class RealPath extends AbstractFilter
      *
      * @return boolean
      */
-    public function getExists()
+    public function getExists ()
     {
         return $this->_exists;
     }
@@ -65,18 +66,18 @@ class RealPath extends AbstractFilter
      * @param boolean|\Zend\Config\Config $exists Path must exist
      * @return \Zend\Filter\RealPath
      */
-    public function setExists($exists)
+    public function setExists ($exists)
     {
         if ($exists instanceof \Zend\Config\Config) {
             $exists = $exists->toArray();
         }
-
+        
         if (is_array($exists)) {
             if (isset($exists['exists'])) {
                 $exists = (boolean) $exists['exists'];
             }
         }
-
+        
         $this->_exists = (boolean) $exists;
         return $this;
     }
@@ -89,25 +90,25 @@ class RealPath extends AbstractFilter
      * @param  string $value
      * @return string
      */
-    public function filter($value)
+    public function filter ($value)
     {
         $path = (string) $value;
         if ($this->_exists) {
             return realpath($path);
         }
-
+        
         $realpath = @realpath($path);
         if ($realpath) {
             return $realpath;
         }
-
+        
         $drive = '';
         if (substr(PHP_OS, 0, 3) == 'WIN') {
             $path = preg_replace('/[\\\\\/]/', DIRECTORY_SEPARATOR, $path);
             if (preg_match('/([a-zA-Z]\:)(.*)/', $path, $matches)) {
-                list($fullMatch, $drive, $path) = $matches;
+                list ($fullMatch, $drive, $path) = $matches;
             } else {
-                $cwd   = getcwd();
+                $cwd = getcwd();
                 $drive = substr($cwd, 0, 2);
                 if (substr($path, 0, 1) != DIRECTORY_SEPARATOR) {
                     $path = substr($cwd, 3) . DIRECTORY_SEPARATOR . $path;
@@ -116,7 +117,7 @@ class RealPath extends AbstractFilter
         } elseif (substr($path, 0, 1) != DIRECTORY_SEPARATOR) {
             $path = getcwd() . DIRECTORY_SEPARATOR . $path;
         }
-
+        
         $stack = array();
         $parts = explode(DIRECTORY_SEPARATOR, $path);
         foreach ($parts as $dir) {
@@ -128,7 +129,8 @@ class RealPath extends AbstractFilter
                 }
             }
         }
-
-        return $drive . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $stack);
+        
+        return $drive . DIRECTORY_SEPARATOR .
+         implode(DIRECTORY_SEPARATOR, $stack);
     }
 }

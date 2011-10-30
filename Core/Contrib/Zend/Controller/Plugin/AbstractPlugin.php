@@ -24,8 +24,7 @@
  */
 namespace Zend\Controller\Plugin;
 
-use Zend\Controller\Request,
-    Zend\Loader\Broker;
+use Zend\Controller\Request, Zend\Loader\Broker;
 
 /**
  * @category   Zend
@@ -36,6 +35,7 @@ use Zend\Controller\Request,
  */
 abstract class AbstractPlugin
 {
+
     /**
      * Helper Broker instance
      * 
@@ -59,7 +59,7 @@ abstract class AbstractPlugin
      * @param  null|Broker $broker 
      * @return AbstractPlugin
      */
-    public function setHelperBroker(Broker $broker = null)
+    public function setHelperBroker (Broker $broker = null)
     {
         $this->broker = $broker;
         return $this;
@@ -70,7 +70,7 @@ abstract class AbstractPlugin
      * 
      * @return null|Broker
      */
-    public function getHelperBroker()
+    public function getHelperBroker ()
     {
         return $this->broker;
     }
@@ -81,7 +81,7 @@ abstract class AbstractPlugin
      * @param \Zend\Controller\Request\AbstractRequest $request
      * @return \Zend\Controller\Plugin\AbstractPlugin
      */
-    public function setRequest(Request\AbstractRequest $request)
+    public function setRequest (Request\AbstractRequest $request)
     {
         $this->_request = $request;
         return $this;
@@ -92,7 +92,7 @@ abstract class AbstractPlugin
      *
      * @return \Zend\Controller\Request\AbstractRequest $request
      */
-    public function getRequest()
+    public function getRequest ()
     {
         return $this->_request;
     }
@@ -103,7 +103,8 @@ abstract class AbstractPlugin
      * @param \Zend\Controller\Response\AbstractResponse $response
      * @return \Zend\Controller\Plugin\AbstractPlugin
      */
-    public function setResponse(\Zend\Controller\Response\AbstractResponse $response)
+    public function setResponse (
+    \Zend\Controller\Response\AbstractResponse $response)
     {
         $this->_response = $response;
         return $this;
@@ -114,7 +115,7 @@ abstract class AbstractPlugin
      *
      * @return \Zend\Controller\Response\AbstractResponse $response
      */
-    public function getResponse()
+    public function getResponse ()
     {
         return $this->_response;
     }
@@ -126,7 +127,7 @@ abstract class AbstractPlugin
      * @param \Zend\Controller\Request\AbstractRequest $request
      * @return void
      */
-    public function routeStartup(Request\AbstractRequest $request)
+    public function routeStartup (Request\AbstractRequest $request)
     {}
 
     /**
@@ -137,7 +138,7 @@ abstract class AbstractPlugin
      * @param  \Zend\Controller\Request\AbstractRequest $request
      * @return void
      */
-    public function routeShutdown(Request\AbstractRequest $request)
+    public function routeShutdown (Request\AbstractRequest $request)
     {}
 
     /**
@@ -146,7 +147,7 @@ abstract class AbstractPlugin
      * @param  \Zend\Controller\Request\AbstractRequest $request
      * @return void
      */
-    public function dispatchLoopStartup(Request\AbstractRequest $request)
+    public function dispatchLoopStartup (Request\AbstractRequest $request)
     {}
 
     /**
@@ -160,7 +161,7 @@ abstract class AbstractPlugin
      * @param  \Zend\Controller\Request\AbstractRequest $request
      * @return void
      */
-    public function preDispatch(Request\AbstractRequest $request)
+    public function preDispatch (Request\AbstractRequest $request)
     {}
 
     /**
@@ -174,7 +175,7 @@ abstract class AbstractPlugin
      * @param  \Zend\Controller\Request\AbstractRequest $request
      * @return void
      */
-    public function postDispatch(Request\AbstractRequest $request)
+    public function postDispatch (Request\AbstractRequest $request)
     {}
 
     /**
@@ -182,6 +183,6 @@ abstract class AbstractPlugin
      *
      * @return void
      */
-    public function dispatchLoopShutdown()
+    public function dispatchLoopShutdown ()
     {}
 }

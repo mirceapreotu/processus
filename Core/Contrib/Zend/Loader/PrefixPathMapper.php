@@ -33,6 +33,7 @@ namespace Zend\Loader;
  */
 interface PrefixPathMapper extends ShortNameLocator
 {
+
     /**
      * Add prefixed paths to the registry of paths
      *
@@ -40,7 +41,7 @@ interface PrefixPathMapper extends ShortNameLocator
      * @param string $path
      * @return \Zend\Loader\PrefixPathMapper
      */
-    public function addPrefixPath($prefix, $path);
+    public function addPrefixPath ($prefix, $path);
 
     /**
      * Remove a prefix (or prefixed-path) from the registry
@@ -49,5 +50,5 @@ interface PrefixPathMapper extends ShortNameLocator
      * @param string $path
      * @return \Zend\Loader\PrefixPathMapper
      */
-    public function removePrefixPath($prefix, $path);
+    public function removePrefixPath ($prefix, $path);
 }

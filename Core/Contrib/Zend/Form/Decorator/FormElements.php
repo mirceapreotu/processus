@@ -46,6 +46,7 @@ use Zend\Form;
  */
 class FormElements extends AbstractDecorator
 {
+
     /**
      * Merges given two belongsTo (array notation) strings
      *
@@ -53,17 +54,18 @@ class FormElements extends AbstractDecorator
      * @param  string $belongsTo
      * @return string
      */
-    public function mergeBelongsTo($baseBelongsTo, $belongsTo)
+    public function mergeBelongsTo ($baseBelongsTo, $belongsTo)
     {
         $endOfArrayName = strpos($belongsTo, '[');
-
+        
         if ($endOfArrayName === false) {
             return $baseBelongsTo . '[' . $belongsTo . ']';
         }
-
+        
         $arrayName = substr($belongsTo, 0, $endOfArrayName);
-
-        return $baseBelongsTo . '[' . $arrayName . ']' . substr($belongsTo, $endOfArrayName);
+        
+        return $baseBelongsTo . '[' . $arrayName . ']' .
+         substr($belongsTo, $endOfArrayName);
     }
 
     /**
@@ -72,45 +74,44 @@ class FormElements extends AbstractDecorator
      * @param  string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
-        $form    = $this->getElement();
-        if ((!$form instanceof Form\Form) && (!$form instanceof Form\DisplayGroup)) {
+        $form = $this->getElement();
+        if ((! $form instanceof Form\Form) &&
+         (! $form instanceof Form\DisplayGroup)) {
             return $content;
         }
-
-        $belongsTo      = ($form instanceof Form\Form) ? $form->getElementsBelongTo() : null;
+        
+        $belongsTo = ($form instanceof Form\Form) ? $form->getElementsBelongTo() : null;
         $elementContent = '';
-        $separator      = $this->getSeparator();
-        $translator     = $form->getTranslator();
-        $items          = array();
-        $view           = $form->getView();
+        $separator = $this->getSeparator();
+        $translator = $form->getTranslator();
+        $items = array();
+        $view = $form->getView();
         foreach ($form as $item) {
-            $item->setView($view)
-                 ->setTranslator($translator);
+            $item->setView($view)->setTranslator($translator);
             if ($item instanceof Form\Element) {
                 $item->setBelongsTo($belongsTo);
-            } elseif (!empty($belongsTo) && ($item instanceof Form\Form)) {
+            } elseif (! empty($belongsTo) && ($item instanceof Form\Form)) {
                 if ($item->isArray()) {
-                    $name = $this->mergeBelongsTo($belongsTo, $item->getElementsBelongTo());
+                    $name = $this->mergeBelongsTo($belongsTo, 
+                    $item->getElementsBelongTo());
                     $item->setElementsBelongTo($name, true);
                 } else {
                     $item->setElementsBelongTo($belongsTo, true);
                 }
-            } elseif (!empty($belongsTo) && ($item instanceof Form\DisplayGroup)) {
+            } elseif (! empty($belongsTo) && ($item instanceof Form\DisplayGroup)) {
                 foreach ($item as $element) {
                     $element->setBelongsTo($belongsTo);
                 }
             }
-
+            
             $items[] = $item->render();
-
-            if (($item instanceof Form\Element\File)
-                || (($item instanceof Form\Form)
-                    && (Form\Form::ENCTYPE_MULTIPART == $item->getEnctype()))
-                || (($item instanceof Form\DisplayGroup)
-                    && (Form\Form::ENCTYPE_MULTIPART == $item->getAttrib('enctype')))
-            ) {
+            
+            if (($item instanceof Form\Element\File) || (($item instanceof Form\Form) &&
+             (Form\Form::ENCTYPE_MULTIPART == $item->getEnctype())) ||
+             (($item instanceof Form\DisplayGroup) &&
+             (Form\Form::ENCTYPE_MULTIPART == $item->getAttrib('enctype')))) {
                 if ($form instanceof Form\Form) {
                     $form->setEnctype(Form\Form::ENCTYPE_MULTIPART);
                 } elseif ($form instanceof Form\DisplayGroup) {
@@ -119,7 +120,7 @@ class FormElements extends AbstractDecorator
             }
         }
         $elementContent = implode($separator, $items);
-
+        
         switch ($this->getPlacement()) {
             case self::PREPEND:
                 return $elementContent . $separator . $content;

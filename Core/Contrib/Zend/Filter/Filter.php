@@ -31,6 +31,7 @@ namespace Zend\Filter;
  */
 interface Filter
 {
+
     /**
      * Returns the result of filtering $value
      *
@@ -38,5 +39,5 @@ interface Filter
      * @throws Zend\Filter\Exception\RuntimeException If filtering $value is impossible
      * @return mixed
      */
-    public function filter($value);
+    public function filter ($value);
 }

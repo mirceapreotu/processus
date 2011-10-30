@@ -38,55 +38,57 @@ use Zend\Code\Reflection;
  */
 class FileReflection implements Reflection
 {
-    /**
-     * @var string
-     */
-    protected $filePath        = null;
 
     /**
      * @var string
      */
-    protected $docComment      = null;
+    protected $filePath = null;
+
+    /**
+     * @var string
+     */
+    protected $docComment = null;
 
     /**
      * @var int
      */
-    protected $startLine       = 1;
+    protected $startLine = 1;
 
     /**
      * @var int
      */
-    protected $endLine         = null;
+    protected $endLine = null;
 
     /**
      * @var string
      */
-    protected $namespace       = null;
+    protected $namespace = null;
 
     /**
      * @var string[]
      */
-    protected $uses            = array();
+    protected $uses = array();
 
     /**
      * @var string[]
      */
-    protected $requiredFiles   = array();
+    protected $requiredFiles = array();
 
     /**
      * @var ReflectionClass[]
      */
-    protected $classes         = array();
+    protected $classes = array();
 
     /**
      * @var FunctionReflection[]
      */
-    protected $functions       = array();
+    protected $functions = array();
 
     /**
      * @var string
      */
     //protected $contents        = null;
+    
 
     /**
      * Constructor
@@ -94,18 +96,19 @@ class FileReflection implements Reflection
      * @param string $file
      * @return FileReflection
      */
-    public function __construct($file)
+    public function __construct ($file)
     {
         $fileName = $file;
-
+        
         if (($fileRealPath = realpath($fileName)) === false) {
             $fileRealPath = stream_resolve_include_path($fileName);
         }
-
-        if (!$fileRealPath || !in_array($fileRealPath, get_included_files())) {
-            throw new Exception\RuntimeException('File ' . $file . ' must be required before it can be reflected');
+        
+        if (! $fileRealPath || ! in_array($fileRealPath, get_included_files())) {
+            throw new Exception\RuntimeException(
+            'File ' . $file . ' must be required before it can be reflected');
         }
-
+        
         $this->filePath = $fileRealPath;
         $this->reflect();
     }
@@ -118,7 +121,7 @@ class FileReflection implements Reflection
      * @todo   What should this do?
      * @return null
      */
-    public static function export()
+    public static function export ()
     {
         return null;
     }
@@ -128,7 +131,7 @@ class FileReflection implements Reflection
      *
      * @return string
      */
-    public function getFileName()
+    public function getFileName ()
     {
         // @todo get file name from path
         return $this->filePath;
@@ -139,7 +142,7 @@ class FileReflection implements Reflection
      *
      * @return int
      */
-    public function getStartLine()
+    public function getStartLine ()
     {
         return $this->startLine;
     }
@@ -149,7 +152,7 @@ class FileReflection implements Reflection
      *
      * @return int
      */
-    public function getEndLine()
+    public function getEndLine ()
     {
         return $this->endLine;
     }
@@ -159,7 +162,7 @@ class FileReflection implements Reflection
      *
      * @return string
      */
-    public function getDocComment()
+    public function getDocComment ()
     {
         return $this->docComment;
     }
@@ -169,9 +172,9 @@ class FileReflection implements Reflection
      *
      * @return DocBlockReflection
      */
-    public function getDocblock()
+    public function getDocblock ()
     {
-        if (!($docComment = $this->getDocComment())) {
+        if (! ($docComment = $this->getDocComment())) {
             return false;
         }
         $instance = new DocBlockReflection($docComment);
@@ -183,7 +186,7 @@ class FileReflection implements Reflection
      *
      * @return string
      */
-    public function getNamespace()
+    public function getNamespace ()
     {
         return $this->namespace;
     }
@@ -193,7 +196,7 @@ class FileReflection implements Reflection
      *
      * @return array
      */
-    public function getUses()
+    public function getUses ()
     {
         return $this->uses;
     }
@@ -203,7 +206,7 @@ class FileReflection implements Reflection
      *
      * @return array Array of \Zend\Code\Reflection\ReflectionClass instances
      */
-    public function getClasses()
+    public function getClasses ()
     {
         $classes = array();
         foreach ($this->classes as $class) {
@@ -218,7 +221,7 @@ class FileReflection implements Reflection
      *
      * @return array Array of Zend_Reflection_Functions
      */
-    public function getFunctions()
+    public function getFunctions ()
     {
         $functions = array();
         foreach ($this->functions as $function) {
@@ -235,7 +238,7 @@ class FileReflection implements Reflection
      * @return \Zend\Code\Reflection\ReflectionClass
      * @throws \Zend\Code\Reflection\Exception for invalid class name or invalid reflection class
      */
-    public function getClass($name = null)
+    public function getClass ($name = null)
     {
         if ($name === null) {
             reset($this->classes);
@@ -243,13 +246,14 @@ class FileReflection implements Reflection
             $instance = new ClassReflection($selected);
             return $instance;
         }
-
+        
         if (in_array($name, $this->classes)) {
             $instance = new ClassReflection($name);
             return $instance;
         }
-
-        throw new Exception\InvalidArgumentException('Class by name ' . $name . ' not found.');
+        
+        throw new Exception\InvalidArgumentException(
+        'Class by name ' . $name . ' not found.');
     }
 
     /**
@@ -257,12 +261,12 @@ class FileReflection implements Reflection
      *
      * @return string
      */
-    public function getContents()
+    public function getContents ()
     {
         return $this->contents;
     }
 
-    public function toString()
+    public function toString ()
     {
         return ''; // @todo
     }
@@ -275,7 +279,7 @@ class FileReflection implements Reflection
      * @todo   What should this serialization look like?
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return '';
     }
@@ -287,7 +291,7 @@ class FileReflection implements Reflection
      *
      * @return void
      */
-    protected function reflect()
+    protected function reflect ()
     {
         $scanner = new \Zend\Code\Scanner\FileScanner($this->filePath);
         $this->docComment = $scanner->getDocComment();
@@ -303,16 +307,17 @@ class FileReflection implements Reflection
      * @param  array $tokens Array of tokenizer tokens
      * @return void
      */
-    protected function checkFileDocBlock($tokens) {
+    protected function checkFileDocBlock ($tokens)
+    {
         foreach ($tokens as $token) {
-            $type    = $token[0];
-            $value   = $token[1];
+            $type = $token[0];
+            $value = $token[1];
             $lineNum = $token[2];
-            if(($type == T_OPEN_TAG) || ($type == T_WHITESPACE)) {
+            if (($type == T_OPEN_TAG) || ($type == T_WHITESPACE)) {
                 continue;
             } elseif ($type == T_DOC_COMMENT) {
                 $this->docComment = $value;
-                $this->startLine  = $lineNum + substr_count($value, "\n") + 1;
+                $this->startLine = $lineNum + substr_count($value, "\n") + 1;
                 return;
             } else {
                 // Only whitespace is allowed before file docblocks

@@ -38,11 +38,12 @@ use Zend\View\Helper\Form as FormHelper;
  */
 class DojoForm extends Dijit
 {
+
     /**
      * Dijit being used
      * @var string
      */
-    protected $_dijit  = 'dijit.form.Form';
+    protected $_dijit = 'dijit.form.Form';
 
     /**
      * Module being used
@@ -63,9 +64,9 @@ class DojoForm extends Dijit
      * @param  false|string $content
      * @return string
      */
-    public function __invoke($id = null, $attribs = null, $content = false)
+    public function __invoke ($id = null, $attribs = null, $content = false)
     {
-        if (!is_array($attribs)) {
+        if (! is_array($attribs)) {
             $attribs = (array) $attribs;
         }
         if (array_key_exists('id', $attribs)) {
@@ -73,9 +74,9 @@ class DojoForm extends Dijit
         } else {
             $attribs['id'] = $id;
         }
-
+        
         $attribs = $this->_prepareDijit($attribs, array(), 'layout');
-
+        
         $formHelper = $this->getFormHelper();
         return $formHelper($id, $attribs, $content);
     }
@@ -85,7 +86,7 @@ class DojoForm extends Dijit
      *
      * @return \Zend\View\Helper\Form
      */
-    public function getFormHelper()
+    public function getFormHelper ()
     {
         if (null === $this->_helper) {
             $this->_helper = new FormHelper();

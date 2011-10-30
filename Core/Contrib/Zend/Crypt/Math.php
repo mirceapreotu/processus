@@ -33,6 +33,7 @@ namespace Zend\Crypt;
  */
 class Math extends Math\BigInteger
 {
+
     /**
      * Generate a pseudorandom number within the given range.
      * Will attempt to read from a systems RNG if it exists or else utilises
@@ -43,7 +44,7 @@ class Math extends Math\BigInteger
      * @param string|int $maximum
      * @return string
      */
-    public function rand($minimum, $maximum)
+    public function rand ($minimum, $maximum)
     {
         if (file_exists('/dev/urandom')) {
             $frandom = fopen('/dev/urandom', 'r');
@@ -56,10 +57,10 @@ class Math extends Math\BigInteger
         }
         $rand = '';
         $i2 = strlen($maximum) - 1;
-        for ($i = 1;$i < $i2;$i++) {
-            $rand .= mt_rand(0,9);
+        for ($i = 1; $i < $i2; $i ++) {
+            $rand .= mt_rand(0, 9);
         }
-        $rand .= mt_rand(0,9);
+        $rand .= mt_rand(0, 9);
         return $rand;
     }
 
@@ -70,7 +71,7 @@ class Math extends Math\BigInteger
      * @param string $long
      * @return string
      */
-    public function btwoc($long)
+    public function btwoc ($long)
     {
         if (ord($long[0]) > 127) {
             return "\x00" . $long;
@@ -84,7 +85,7 @@ class Math extends Math\BigInteger
      * @param string $binary
      * @return string
      */
-    public function fromBinary($binary)
+    public function fromBinary ($binary)
     {
         return $this->_math->binaryToInteger($binary);
     }
@@ -95,7 +96,7 @@ class Math extends Math\BigInteger
      * @param string $integer
      * @return string
      */
-    public function toBinary($integer)
+    public function toBinary ($integer)
     {
         return $this->_math->integerToBinary($integer);
     }

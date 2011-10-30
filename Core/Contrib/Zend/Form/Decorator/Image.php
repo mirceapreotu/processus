@@ -44,11 +44,13 @@ namespace Zend\Form\Decorator;
  */
 class Image extends AbstractDecorator
 {
+
     /**
      * Attributes that should not be passed to helper
      * @var array
      */
-    protected $_attribBlacklist = array('helper', 'placement', 'separator', 'tag');
+    protected $_attribBlacklist = array('helper', 'placement', 'separator', 
+    'tag');
 
     /**
      * Default placement: append
@@ -68,7 +70,7 @@ class Image extends AbstractDecorator
      * @param  string $tag
      * @return \Zend\Form\Decorator\Image
      */
-    public function setTag($tag)
+    public function setTag ($tag)
     {
         $this->_tag = (string) $tag;
         return $this;
@@ -79,7 +81,7 @@ class Image extends AbstractDecorator
      *
      * @return void
      */
-    public function getTag()
+    public function getTag ()
     {
         if (null === $this->_tag) {
             $tag = $this->getOption('tag');
@@ -89,7 +91,7 @@ class Image extends AbstractDecorator
             }
             return $tag;
         }
-
+        
         return $this->_tag;
     }
 
@@ -98,21 +100,21 @@ class Image extends AbstractDecorator
      *
      * @return array
      */
-    public function getAttribs()
+    public function getAttribs ()
     {
         $attribs = $this->getOptions();
-
+        
         if (null !== ($element = $this->getElement())) {
             $attribs['alt'] = $element->getLabel();
             $attribs = array_merge($attribs, $element->getAttribs());
         }
-
+        
         foreach ($this->_attribBlacklist as $key) {
             if (array_key_exists($key, $attribs)) {
                 unset($attribs[$key]);
             }
         }
-
+        
         return $attribs;
     }
 
@@ -122,29 +124,29 @@ class Image extends AbstractDecorator
      * @param  string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
         $element = $this->getElement();
-        $view    = $element->getView();
+        $view = $element->getView();
         if (null === $view) {
             return $content;
         }
-
-        $tag           = $this->getTag();
-        $placement     = $this->getPlacement();
-        $separator     = $this->getSeparator();
-        $name          = $element->getFullyQualifiedName();
-        $attribs       = $this->getAttribs();
+        
+        $tag = $this->getTag();
+        $placement = $this->getPlacement();
+        $separator = $this->getSeparator();
+        $name = $element->getFullyQualifiedName();
+        $attribs = $this->getAttribs();
         $attribs['id'] = $element->getId();
-
+        
         $image = $view->formImage($name, $element->getImageValue(), $attribs);
-
+        
         if (null !== $tag) {
             $decorator = new HtmlTag();
             $decorator->setOptions(array('tag' => $tag));
             $image = $decorator->render($image);
         }
-
+        
         switch ($placement) {
             case self::PREPEND:
                 return $image . $separator . $content;

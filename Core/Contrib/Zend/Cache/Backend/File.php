@@ -36,6 +36,7 @@ use Zend\Cache;
  */
 class File extends AbstractBackend implements ExtendedBackend
 {
+
     /**
      * Available options
      *
@@ -54,10 +55,10 @@ class File extends AbstractBackend implements ExtendedBackend
      *
      * =====> (string) read_control_type :
      * - Type of read control (only if read control is enabled). Available values are :
-     *   'md5' for a md5 hash control (best but slowest)
-     *   'crc32' for a crc32 hash control (lightly less safe but faster, better choice)
-     *   'adler32' for an adler32 hash control (excellent choice too, faster than crc32)
-     *   'strlen' for a length only test (fastest)
+     * 'md5' for a md5 hash control (best but slowest)
+     * 'crc32' for a crc32 hash control (lightly less safe but faster, better choice)
+     * 'adler32' for an adler32 hash control (excellent choice too, faster than crc32)
+     * 'strlen' for a length only test (fastest)
      *
      * =====> (int) hashed_directory_level :
      * - Hashed directory level
@@ -73,28 +74,22 @@ class File extends AbstractBackend implements ExtendedBackend
      * =====> (string) file_name_prefix :
      * - prefix for cache files
      * - be really carefull with this option because a too generic value in a system cache dir
-     *   (like /tmp) can cause disasters when cleaning the cache
+     * (like /tmp) can cause disasters when cleaning the cache
      *
      * =====> (int) cache_file_umask :
      * - Umask for cache files
      *
      * =====> (int) metatadatas_array_max_size :
      * - max size for the metadatas array (don't change this value unless you
-     *   know what you are doing)
+     * know what you are doing)
      *
      * @var array available options
      */
-    protected $_options = array(
-        'cache_dir' => null,
-        'file_locking' => true,
-        'read_control' => true,
-        'read_control_type' => 'crc32',
-        'hashed_directory_level' => 0,
-        'hashed_directory_umask' => 0700,
-        'file_name_prefix' => 'zend_cache',
-        'cache_file_umask' => 0600,
-        'metadatas_array_max_size' => 100
-    );
+    protected $_options = array('cache_dir' => null, 'file_locking' => true, 
+    'read_control' => true, 'read_control_type' => 'crc32', 
+    'hashed_directory_level' => 0, 'hashed_directory_umask' => 0700, 
+    'file_name_prefix' => 'zend_cache', 'cache_file_umask' => 0600, 
+    'metadatas_array_max_size' => 100);
 
     /**
      * Array of metadatas (each item is an associative array)
@@ -103,7 +98,6 @@ class File extends AbstractBackend implements ExtendedBackend
      */
     protected $_metadatasArray = array();
 
-
     /**
      * Constructor
      *
@@ -111,7 +105,7 @@ class File extends AbstractBackend implements ExtendedBackend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    public function __construct(array $options = array())
+    public function __construct (array $options = array())
     {
         parent::__construct($options);
         if ($this->_options['cache_dir'] !== null) { // particular case for this option
@@ -120,20 +114,27 @@ class File extends AbstractBackend implements ExtendedBackend
             $this->setCacheDir(self::getTmpDir() . DIRECTORY_SEPARATOR, false);
         }
         if (isset($this->_options['file_name_prefix'])) { // particular case for this option
-            if (!preg_match('~^[a-zA-Z0-9_]+$~D', $this->_options['file_name_prefix'])) {
-                Cache\Cache::throwException('Invalid file_name_prefix : must use only [a-zA-Z0-9_]');
+            if (! preg_match('~^[a-zA-Z0-9_]+$~D', 
+            $this->_options['file_name_prefix'])) {
+                Cache\Cache::throwException(
+                'Invalid file_name_prefix : must use only [a-zA-Z0-9_]');
             }
         }
         if ($this->_options['metadatas_array_max_size'] < 10) {
-            Cache\Cache::throwException('Invalid metadatas_array_max_size, must be > 10');
+            Cache\Cache::throwException(
+            'Invalid metadatas_array_max_size, must be > 10');
         }
-        if (isset($options['hashed_directory_umask']) && is_string($options['hashed_directory_umask'])) {
+        if (isset($options['hashed_directory_umask']) &&
+         is_string($options['hashed_directory_umask'])) {
             // See #ZF-4422
-            $this->_options['hashed_directory_umask'] = octdec($this->_options['hashed_directory_umask']);
+            $this->_options['hashed_directory_umask'] = octdec(
+            $this->_options['hashed_directory_umask']);
         }
-        if (isset($options['cache_file_umask']) && is_string($options['cache_file_umask'])) {
+        if (isset($options['cache_file_umask']) &&
+         is_string($options['cache_file_umask'])) {
             // See #ZF-4422
-            $this->_options['cache_file_umask'] = octdec($this->_options['cache_file_umask']);
+            $this->_options['cache_file_umask'] = octdec(
+            $this->_options['cache_file_umask']);
         }
     }
 
@@ -145,17 +146,18 @@ class File extends AbstractBackend implements ExtendedBackend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    public function setCacheDir($value, $trailingSeparator = true)
+    public function setCacheDir ($value, $trailingSeparator = true)
     {
-        if (!is_dir($value)) {
+        if (! is_dir($value)) {
             Cache\Cache::throwException('cache_dir must be a directory');
         }
-        if (!is_writable($value)) {
+        if (! is_writable($value)) {
             Cache\Cache::throwException('cache_dir is not writable');
         }
         if ($trailingSeparator) {
             // add a trailing DIRECTORY_SEPARATOR if necessary
-            $value = rtrim(realpath($value), '\\/') . DIRECTORY_SEPARATOR;
+            $value = rtrim(realpath($value), '\\/') .
+             DIRECTORY_SEPARATOR;
         }
         $this->_options['cache_dir'] = $value;
     }
@@ -167,9 +169,9 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param boolean $doNotTestCacheValidity if set to true, the cache validity won't be tested
      * @return string|false cached datas
      */
-    public function load($id, $doNotTestCacheValidity = false)
+    public function load ($id, $doNotTestCacheValidity = false)
     {
-        if (!($this->_test($id, $doNotTestCacheValidity))) {
+        if (! ($this->_test($id, $doNotTestCacheValidity))) {
             // The cache is not hit !
             return false;
         }
@@ -177,11 +179,13 @@ class File extends AbstractBackend implements ExtendedBackend
         $file = $this->_file($id);
         $data = $this->_fileGetContents($file);
         if ($this->_options['read_control']) {
-            $hashData = $this->_hash($data, $this->_options['read_control_type']);
+            $hashData = $this->_hash($data, 
+            $this->_options['read_control_type']);
             $hashControl = $metadatas['hash'];
             if ($hashData != $hashControl) {
                 // Problem detected by the read control !
-                $this->_log('Zend_Cache_Backend_File::load() / read_control : stored hash and computed hash do not match');
+                $this->_log(
+                'Zend_Cache_Backend_File::load() / read_control : stored hash and computed hash do not match');
                 $this->remove($id);
                 return false;
             }
@@ -195,7 +199,7 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param string $id cache id
      * @return mixed false (a cache is not available) or "last modified" timestamp (int) of the available cache record
      */
-    public function test($id)
+    public function test ($id)
     {
         clearstatcache();
         return $this->_test($id, false);
@@ -213,17 +217,17 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  int    $specificLifetime If != false, set a specific lifetime for this cache record (null => infinite lifetime)
      * @return boolean true if no problem
      */
-    public function save($data, $id, $tags = array(), $specificLifetime = false)
+    public function save ($data, $id, $tags = array(), $specificLifetime = false)
     {
         clearstatcache();
         $file = $this->_file($id);
         $path = $this->_path($id);
         if ($this->_options['hashed_directory_level'] > 0) {
-            if (!is_writable($path)) {
+            if (! is_writable($path)) {
                 // maybe, we just have to build the directory structure
                 $this->_recursiveMkdirAndChmod($id);
             }
-            if (!is_writable($path)) {
+            if (! is_writable($path)) {
                 return false;
             }
         }
@@ -232,15 +236,13 @@ class File extends AbstractBackend implements ExtendedBackend
         } else {
             $hash = '';
         }
-        $metadatas = array(
-            'hash' => $hash,
-            'mtime' => time(),
-            'expire' => $this->_expireTime($this->getLifetime($specificLifetime)),
-            'tags' => $tags
-        );
+        $metadatas = array('hash' => $hash, 'mtime' => time(), 
+        'expire' => $this->_expireTime($this->getLifetime($specificLifetime)), 
+        'tags' => $tags);
         $res = $this->_setMetadatas($id, $metadatas);
-        if (!$res) {
-            $this->_log('Zend_Cache_Backend_File::save() / error on saving metadata');
+        if (! $res) {
+            $this->_log(
+            'Zend_Cache_Backend_File::save() / error on saving metadata');
             return false;
         }
         $res = $this->_filePutContents($file, $data);
@@ -253,10 +255,10 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  string $id cache id
      * @return boolean true if no problem
      */
-    public function remove($id)
+    public function remove ($id)
     {
         $file = $this->_file($id);
-        $boolRemove   = $this->_remove($file);
+        $boolRemove = $this->_remove($file);
         $boolMetadata = $this->_delMetadatas($id);
         return $boolMetadata && $boolRemove;
     }
@@ -268,17 +270,17 @@ class File extends AbstractBackend implements ExtendedBackend
      * 'all' (default)  => remove all cache entries ($tags is not used)
      * 'old'            => remove too old cache entries ($tags is not used)
      * 'matchingTag'    => remove cache entries matching all given tags
-     *                     ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      * 'notMatchingTag' => remove cache entries not matching one of the given tags
-     *                     ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      * 'matchingAnyTag' => remove cache entries matching any given tags
-     *                     ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      *
      * @param string $mode clean mode
      * @param tags array $tags array of tags
      * @return boolean true if no problem
      */
-    public function clean($mode = Cache\Cache::CLEANING_MODE_ALL, $tags = array())
+    public function clean ($mode = Cache\Cache::CLEANING_MODE_ALL, $tags = array())
     {
         // We use this protected method to hide the recursive stuff
         clearstatcache();
@@ -290,7 +292,7 @@ class File extends AbstractBackend implements ExtendedBackend
      *
      * @return array array of stored cache ids (string)
      */
-    public function getIds()
+    public function getIds ()
     {
         return $this->_get($this->_options['cache_dir'], 'ids', array());
     }
@@ -300,7 +302,7 @@ class File extends AbstractBackend implements ExtendedBackend
      *
      * @return array array of stored tags (string)
      */
-    public function getTags()
+    public function getTags ()
     {
         return $this->_get($this->_options['cache_dir'], 'tags', array());
     }
@@ -313,7 +315,7 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param array $tags array of tags
      * @return array array of matching cache ids (string)
      */
-    public function getIdsMatchingTags($tags = array())
+    public function getIdsMatchingTags ($tags = array())
     {
         return $this->_get($this->_options['cache_dir'], 'matching', $tags);
     }
@@ -326,7 +328,7 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param array $tags array of tags
      * @return array array of not matching cache ids (string)
      */
-    public function getIdsNotMatchingTags($tags = array())
+    public function getIdsNotMatchingTags ($tags = array())
     {
         return $this->_get($this->_options['cache_dir'], 'notMatching', $tags);
     }
@@ -339,7 +341,7 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param array $tags array of tags
      * @return array array of any matching cache ids (string)
      */
-    public function getIdsMatchingAnyTags($tags = array())
+    public function getIdsMatchingAnyTags ($tags = array())
     {
         return $this->_get($this->_options['cache_dir'], 'matchingAny', $tags);
     }
@@ -350,7 +352,7 @@ class File extends AbstractBackend implements ExtendedBackend
      * @throws \Zend\Cache\Exception
      * @return int integer between 0 and 100
      */
-    public function getFillingPercentage()
+    public function getFillingPercentage ()
     {
         $free = disk_free_space($this->_options['cache_dir']);
         $total = disk_total_space($this->_options['cache_dir']);
@@ -375,20 +377,17 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param string $id cache id
      * @return array array of metadatas (false if the cache id is not found)
      */
-    public function getMetadatas($id)
+    public function getMetadatas ($id)
     {
         $metadatas = $this->_getMetadatas($id);
-        if (!$metadatas) {
+        if (! $metadatas) {
             return false;
         }
         if (time() > $metadatas['expire']) {
             return false;
         }
-        return array(
-            'expire' => $metadatas['expire'],
-            'tags' => $metadatas['tags'],
-            'mtime' => $metadatas['mtime']
-        );
+        return array('expire' => $metadatas['expire'], 
+        'tags' => $metadatas['tags'], 'mtime' => $metadatas['mtime']);
     }
 
     /**
@@ -398,23 +397,20 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param int $extraLifetime
      * @return boolean true if ok
      */
-    public function touch($id, $extraLifetime)
+    public function touch ($id, $extraLifetime)
     {
         $metadatas = $this->_getMetadatas($id);
-        if (!$metadatas) {
+        if (! $metadatas) {
             return false;
         }
         if (time() > $metadatas['expire']) {
             return false;
         }
-        $newMetadatas = array(
-            'hash' => $metadatas['hash'],
-            'mtime' => time(),
-            'expire' => $metadatas['expire'] + $extraLifetime,
-            'tags' => $metadatas['tags']
-        );
+        $newMetadatas = array('hash' => $metadatas['hash'], 'mtime' => time(), 
+        'expire' => $metadatas['expire'] + $extraLifetime, 
+        'tags' => $metadatas['tags']);
         $res = $this->_setMetadatas($id, $newMetadatas);
-        if (!$res) {
+        if (! $res) {
             return false;
         }
         return true;
@@ -427,23 +423,18 @@ class File extends AbstractBackend implements ExtendedBackend
      * - automatic_cleaning (is automating cleaning necessary)
      * - tags (are tags supported)
      * - expired_read (is it possible to read expired cache records
-     *                 (for doNotTestCacheValidity option for example))
+     * (for doNotTestCacheValidity option for example))
      * - priority does the backend deal with priority when saving
      * - infinite_lifetime (is infinite lifetime can work with this backend)
      * - get_list (is it possible to get the list of cache ids and the complete list of tags)
      *
      * @return array associative of with capabilities
      */
-    public function getCapabilities()
+    public function getCapabilities ()
     {
-        return array(
-            'automatic_cleaning' => true,
-            'tags' => true,
-            'expired_read' => true,
-            'priority' => false,
-            'infinite_lifetime' => true,
-            'get_list' => true
-        );
+        return array('automatic_cleaning' => true, 'tags' => true, 
+        'expired_read' => true, 'priority' => false, 'infinite_lifetime' => true, 
+        'get_list' => true);
     }
 
     /**
@@ -453,7 +444,7 @@ class File extends AbstractBackend implements ExtendedBackend
      *
      * @param string $id cache id
      */
-    public function ___expire($id)
+    public function ___expire ($id)
     {
         $metadatas = $this->_getMetadatas($id);
         if ($metadatas) {
@@ -468,13 +459,13 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  string $id  Cache id
      * @return array|false Associative array of metadatas
      */
-    protected function _getMetadatas($id)
+    protected function _getMetadatas ($id)
     {
         if (isset($this->_metadatasArray[$id])) {
             return $this->_metadatasArray[$id];
         } else {
             $metadatas = $this->_loadMetadatas($id);
-            if (!$metadatas) {
+            if (! $metadatas) {
                 return false;
             }
             $this->_setMetadatas($id, $metadatas, false);
@@ -490,15 +481,16 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  boolean $save     optional pass false to disable saving to file
      * @return boolean True if no problem
      */
-    protected function _setMetadatas($id, $metadatas, $save = true)
+    protected function _setMetadatas ($id, $metadatas, $save = true)
     {
-        if (count($this->_metadatasArray) >= $this->_options['metadatas_array_max_size']) {
+        if (count($this->_metadatasArray) >=
+         $this->_options['metadatas_array_max_size']) {
             $n = (int) ($this->_options['metadatas_array_max_size'] / 10);
             $this->_metadatasArray = array_slice($this->_metadatasArray, $n);
         }
         if ($save) {
             $result = $this->_saveMetadatas($id, $metadatas);
-            if (!$result) {
+            if (! $result) {
                 return false;
             }
         }
@@ -512,7 +504,7 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  string $id Cache id
      * @return boolean True if no problem
      */
-    protected function _delMetadatas($id)
+    protected function _delMetadatas ($id)
     {
         if (isset($this->_metadatasArray[$id])) {
             unset($this->_metadatasArray[$id]);
@@ -526,7 +518,7 @@ class File extends AbstractBackend implements ExtendedBackend
      *
      * @return void
      */
-    protected function _cleanMetadatas()
+    protected function _cleanMetadatas ()
     {
         $this->_metadatasArray = array();
     }
@@ -537,11 +529,11 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  string $id Cache id
      * @return array|false Metadatas associative array
      */
-    protected function _loadMetadatas($id)
+    protected function _loadMetadatas ($id)
     {
         $file = $this->_metadatasFile($id);
         $result = $this->_fileGetContents($file);
-        if (!$result) {
+        if (! $result) {
             return false;
         }
         $tmp = @unserialize($result);
@@ -555,11 +547,11 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  array  $metadatas Associative array
      * @return boolean True if no problem
      */
-    protected function _saveMetadatas($id, $metadatas)
+    protected function _saveMetadatas ($id, $metadatas)
     {
         $file = $this->_metadatasFile($id);
         $result = $this->_filePutContents($file, serialize($metadatas));
-        if (!$result) {
+        if (! $result) {
             return false;
         }
         return true;
@@ -571,7 +563,7 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  string $id Cache id
      * @return string Metadatas file name (with path)
      */
-    protected function _metadatasFile($id)
+    protected function _metadatasFile ($id)
     {
         $path = $this->_path($id);
         $fileName = $this->_idToFileName('internal-metadatas---' . $id);
@@ -584,7 +576,7 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  string $fileName File name
      * @return boolean True if it's a metadatas one
      */
-    protected function _isMetadatasFile($fileName)
+    protected function _isMetadatasFile ($fileName)
     {
         $id = $this->_fileNameToId($fileName);
         if (substr($id, 0, 21) == 'internal-metadatas---') {
@@ -603,14 +595,15 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  string $file Complete file path
      * @return boolean True if ok
      */
-    protected function _remove($file)
+    protected function _remove ($file)
     {
-        if (!is_file($file)) {
+        if (! is_file($file)) {
             return false;
         }
-        if (!@unlink($file)) {
+        if (! @unlink($file)) {
             # we can't remove the file (because of locks or any problem)
-            $this->_log("Zend_Cache_Backend_File::_remove() : we can't remove $file");
+            $this->_log(
+            "Zend_Cache_Backend_File::_remove() : we can't remove $file");
             return false;
         }
         return true;
@@ -623,11 +616,11 @@ class File extends AbstractBackend implements ExtendedBackend
      * Zend_Cache::CLEANING_MODE_ALL (default)    => remove all cache entries ($tags is not used)
      * Zend_Cache::CLEANING_MODE_OLD              => remove too old cache entries ($tags is not used)
      * Zend_Cache::CLEANING_MODE_MATCHING_TAG     => remove cache entries matching all given tags
-     *                                               ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      * Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG => remove cache entries not {matching one of the given tags}
-     *                                               ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      * Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG => remove cache entries matching any given tags
-     *                                               ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      *
      * @param  string $dir  Directory to clean
      * @param  string $mode Clean mode
@@ -635,9 +628,9 @@ class File extends AbstractBackend implements ExtendedBackend
      * @throws \Zend\Cache\Exception
      * @return boolean True if no problem
      */
-    protected function _clean($dir, $mode = Cache\Cache::CLEANING_MODE_ALL, $tags = array())
+    protected function _clean ($dir, $mode = Cache\Cache::CLEANING_MODE_ALL, $tags = array())
     {
-        if (!is_dir($dir)) {
+        if (! is_dir($dir)) {
             return false;
         }
         $result = true;
@@ -647,12 +640,13 @@ class File extends AbstractBackend implements ExtendedBackend
             // On some systems it is impossible to distinguish between empty match and an error.
             return true;
         }
-        foreach ($glob as $file)  {
+        foreach ($glob as $file) {
             if (is_file($file)) {
                 $fileName = basename($file);
                 if ($this->_isMetadatasFile($fileName)) {
                     // in CLEANING_MODE_ALL, we drop anything, even remainings old metadatas files
-                    if ($mode != Cache\Cache::CLEANING_MODE_ALL) {
+                    if ($mode !=
+                     Cache\Cache::CLEANING_MODE_ALL) {
                         continue;
                     }
                 }
@@ -664,9 +658,10 @@ class File extends AbstractBackend implements ExtendedBackend
                 switch ($mode) {
                     case Cache\Cache::CLEANING_MODE_ALL:
                         $res = $this->remove($id);
-                        if (!$res) {
+                        if (! $res) {
                             // in this case only, we accept a problem with the metadatas file drop
-                            $res = $this->_remove($file);
+                            $res = $this->_remove(
+                            $file);
                         }
                         $result = $result && $res;
                         break;
@@ -678,7 +673,7 @@ class File extends AbstractBackend implements ExtendedBackend
                     case Cache\Cache::CLEANING_MODE_MATCHING_TAG:
                         $matching = true;
                         foreach ($tags as $tag) {
-                            if (!in_array($tag, $metadatas['tags'])) {
+                            if (! in_array($tag, $metadatas['tags'])) {
                                 $matching = false;
                                 break;
                             }
@@ -695,7 +690,7 @@ class File extends AbstractBackend implements ExtendedBackend
                                 break;
                             }
                         }
-                        if (!$matching) {
+                        if (! $matching) {
                             $result = $this->remove($id) && $result;
                         }
                         break;
@@ -712,14 +707,17 @@ class File extends AbstractBackend implements ExtendedBackend
                         }
                         break;
                     default:
-                        Cache\Cache::throwException('Invalid mode for clean() method');
+                        Cache\Cache::throwException(
+                        'Invalid mode for clean() method');
                         break;
                 }
             }
-            if ((is_dir($file)) and ($this->_options['hashed_directory_level']>0)) {
+            if ((is_dir($file)) and ($this->_options['hashed_directory_level'] >
+             0)) {
                 // Recursive call
-                $result = $this->_clean($file . DIRECTORY_SEPARATOR, $mode, $tags) && $result;
-                if ($mode=='all') {
+                $result = $this->_clean(
+                $file . DIRECTORY_SEPARATOR, $mode, $tags) && $result;
+                if ($mode == 'all') {
                     // if mode=='all', we try to drop the structure too
                     @rmdir($file);
                 }
@@ -728,9 +726,9 @@ class File extends AbstractBackend implements ExtendedBackend
         return $result;
     }
 
-    protected function _get($dir, $mode, $tags = array())
+    protected function _get ($dir, $mode, $tags = array())
     {
-        if (!is_dir($dir)) {
+        if (! is_dir($dir)) {
             return false;
         }
         $result = array();
@@ -740,7 +738,7 @@ class File extends AbstractBackend implements ExtendedBackend
             // On some systems it is impossible to distinguish between empty match and an error.
             return array();
         }
-        foreach ($glob as $file)  {
+        foreach ($glob as $file) {
             if (is_file($file)) {
                 $fileName = basename($file);
                 $id = $this->_fileNameToId($fileName);
@@ -756,12 +754,13 @@ class File extends AbstractBackend implements ExtendedBackend
                         $result[] = $id;
                         break;
                     case 'tags':
-                        $result = array_unique(array_merge($result, $metadatas['tags']));
+                        $result = array_unique(
+                        array_merge($result, $metadatas['tags']));
                         break;
                     case 'matching':
                         $matching = true;
                         foreach ($tags as $tag) {
-                            if (!in_array($tag, $metadatas['tags'])) {
+                            if (! in_array($tag, $metadatas['tags'])) {
                                 $matching = false;
                                 break;
                             }
@@ -778,7 +777,7 @@ class File extends AbstractBackend implements ExtendedBackend
                                 break;
                             }
                         }
-                        if (!$matching) {
+                        if (! $matching) {
                             $result[] = $id;
                         }
                         break;
@@ -795,15 +794,20 @@ class File extends AbstractBackend implements ExtendedBackend
                         }
                         break;
                     default:
-                        Cache\Cache::throwException('Invalid mode for _get() method');
+                        Cache\Cache::throwException(
+                        'Invalid mode for _get() method');
                         break;
                 }
             }
-            if ((is_dir($file)) and ($this->_options['hashed_directory_level']>0)) {
+            if ((is_dir($file)) and ($this->_options['hashed_directory_level'] >
+             0)) {
                 // Recursive call
-                $recursiveRs =  $this->_get($file . DIRECTORY_SEPARATOR, $mode, $tags);
+                $recursiveRs = $this->_get(
+                $file . DIRECTORY_SEPARATOR, $mode, $tags);
                 if ($recursiveRs === false) {
-                    $this->_log('Zend_Cache_Backend_File::_get() / recursive call : can\'t list entries of "'.$file.'"');
+                    $this->_log(
+                    'Zend_Cache_Backend_File::_get() / recursive call : can\'t list entries of "' .
+                     $file . '"');
                 } else {
                     $result = array_unique(array_merge($result, $recursiveRs));
                 }
@@ -817,7 +821,7 @@ class File extends AbstractBackend implements ExtendedBackend
      *
      * @return int expire time (unix timestamp)
      */
-    protected function _expireTime($lifetime)
+    protected function _expireTime ($lifetime)
     {
         if ($lifetime === null) {
             return 9999999999;
@@ -833,19 +837,20 @@ class File extends AbstractBackend implements ExtendedBackend
      * @throws \Zend\Cache\Exception
      * @return string Control key
      */
-    protected function _hash($data, $controlType)
+    protected function _hash ($data, $controlType)
     {
         switch ($controlType) {
-        case 'md5':
-            return md5($data);
-        case 'crc32':
-            return crc32($data);
-        case 'strlen':
-            return strlen($data);
-        case 'adler32':
-            return hash('adler32', $data);
-        default:
-            Cache\Cache::throwException("Incorrect hash function : $controlType");
+            case 'md5':
+                return md5($data);
+            case 'crc32':
+                return crc32($data);
+            case 'strlen':
+                return strlen($data);
+            case 'adler32':
+                return hash('adler32', $data);
+            default:
+                Cache\Cache::throwException(
+                "Incorrect hash function : $controlType");
         }
     }
 
@@ -855,7 +860,7 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  string $id Cache id
      * @return string File name
      */
-    protected function _idToFileName($id)
+    protected function _idToFileName ($id)
     {
         $prefix = $this->_options['file_name_prefix'];
         $result = $prefix . '---' . $id;
@@ -868,7 +873,7 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  string $id Cache id
      * @return string File name (with path)
      */
-    protected function _file($id)
+    protected function _file ($id)
     {
         $path = $this->_path($id);
         $fileName = $this->_idToFileName($id);
@@ -882,15 +887,16 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  boolean $parts if true, returns array of directory parts instead of single string
      * @return string Complete directory path
      */
-    protected function _path($id, $parts = false)
+    protected function _path ($id, $parts = false)
     {
         $partsArray = array();
         $root = $this->_options['cache_dir'];
         $prefix = $this->_options['file_name_prefix'];
-        if ($this->_options['hashed_directory_level']>0) {
+        if ($this->_options['hashed_directory_level'] > 0) {
             $hash = hash('adler32', $id);
-            for ($i=0 ; $i < $this->_options['hashed_directory_level'] ; $i++) {
-                $root = $root . $prefix . '--' . substr($hash, 0, $i + 1) . DIRECTORY_SEPARATOR;
+            for ($i = 0; $i < $this->_options['hashed_directory_level']; $i ++) {
+                $root = $root . $prefix . '--' . substr($hash, 0, $i + 1) .
+                 DIRECTORY_SEPARATOR;
                 $partsArray[] = $root;
             }
         }
@@ -907,14 +913,14 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param string $id cache id
      * @return boolean true
      */
-    protected function _recursiveMkdirAndChmod($id)
+    protected function _recursiveMkdirAndChmod ($id)
     {
-        if ($this->_options['hashed_directory_level'] <=0) {
+        if ($this->_options['hashed_directory_level'] <= 0) {
             return true;
         }
         $partsArray = $this->_path($id, true);
         foreach ($partsArray as $part) {
-            if (!is_dir($part)) {
+            if (! is_dir($part)) {
                 @mkdir($part, $this->_options['hashed_directory_umask']);
                 @chmod($part, $this->_options['hashed_directory_umask']); // see #ZF-320 (this line is required in some configurations)
             }
@@ -929,10 +935,10 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  boolean $doNotTestCacheValidity If set to true, the cache validity won't be tested
      * @return boolean|mixed false (a cache is not available) or "last modified" timestamp (int) of the available cache record
      */
-    protected function _test($id, $doNotTestCacheValidity)
+    protected function _test ($id, $doNotTestCacheValidity)
     {
         $metadatas = $this->_getMetadatas($id);
-        if (!$metadatas) {
+        if (! $metadatas) {
             return false;
         }
         if ($doNotTestCacheValidity || (time() <= $metadatas['expire'])) {
@@ -947,17 +953,19 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  string $file File complete path
      * @return string File content (or false if problem)
      */
-    protected function _fileGetContents($file)
+    protected function _fileGetContents ($file)
     {
         $result = false;
-        if (!is_file($file)) {
+        if (! is_file($file)) {
             return false;
         }
         $f = @fopen($file, 'rb');
         if ($f) {
-            if ($this->_options['file_locking']) @flock($f, LOCK_SH);
+            if ($this->_options['file_locking'])
+                @flock($f, LOCK_SH);
             $result = stream_get_contents($f);
-            if ($this->_options['file_locking']) @flock($f, LOCK_UN);
+            if ($this->_options['file_locking'])
+                @flock($f, LOCK_UN);
             @fclose($f);
         }
         return $result;
@@ -970,16 +978,17 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  string $string String to put in file
      * @return boolean true if no problem
      */
-    protected function _filePutContents($file, $string)
+    protected function _filePutContents ($file, $string)
     {
         $result = false;
         $f = @fopen($file, 'ab+');
         if ($f) {
-            if ($this->_options['file_locking']) @flock($f, LOCK_EX);
+            if ($this->_options['file_locking'])
+                @flock($f, LOCK_EX);
             fseek($f, 0);
             ftruncate($f, 0);
             $tmp = @fwrite($f, $string);
-            if (!($tmp === FALSE)) {
+            if (! ($tmp === FALSE)) {
                 $result = true;
             }
             @fclose($f);
@@ -994,7 +1003,7 @@ class File extends AbstractBackend implements ExtendedBackend
      * @param  string $fileName File name
      * @return string Cache id
      */
-    protected function _fileNameToId($fileName)
+    protected function _fileNameToId ($fileName)
     {
         $prefix = $this->_options['file_name_prefix'];
         return preg_replace('~^' . $prefix . '---(.*)$~', '$1', $fileName);

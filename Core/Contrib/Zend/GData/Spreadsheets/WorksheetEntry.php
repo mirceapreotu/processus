@@ -45,6 +45,7 @@ class WorksheetEntry extends \Zend\GData\Entry
     protected $_entryClassName = 'Zend\GData\Spreadsheets\WorksheetEntry';
 
     protected $_rowCount = null;
+
     protected $_colCount = null;
 
     /**
@@ -52,7 +53,7 @@ class WorksheetEntry extends \Zend\GData\Entry
      *
      * @param DOMElement $element (optional) The DOMElement on which to base this object.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(Spreadsheets::$namespaces);
         parent::__construct($element);
@@ -68,14 +69,16 @@ class WorksheetEntry extends \Zend\GData\Entry
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_rowCount != null) {
-            $element->appendChild($this->_rowCount->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_rowCount->getDOM($element->ownerDocument));
         }
         if ($this->_colCount != null) {
-            $element->appendChild($this->_colCount->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_colCount->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -86,16 +89,16 @@ class WorksheetEntry extends \Zend\GData\Entry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-            case $this->lookupNamespace('gs') . ':' . 'rowCount';
+            case $this->lookupNamespace('gs') . ':' . 'rowCount':
                 $rowCount = new Extension\RowCount();
                 $rowCount->transferFromDOM($child);
                 $this->_rowCount = $rowCount;
                 break;
-            case $this->lookupNamespace('gs') . ':' . 'colCount';
+            case $this->lookupNamespace('gs') . ':' . 'colCount':
                 $colCount = new Extension\ColCount();
                 $colCount->transferFromDOM($child);
                 $this->_colCount = $colCount;
@@ -106,13 +109,12 @@ class WorksheetEntry extends \Zend\GData\Entry
         }
     }
 
-
     /**
      * Gets the row count for this entry.
      *
      * @return string The row count for the entry.
      */
-    public function getRowCount()
+    public function getRowCount ()
     {
         return $this->_rowCount;
     }
@@ -122,7 +124,7 @@ class WorksheetEntry extends \Zend\GData\Entry
      *
      * @return string The column count for the entry.
      */
-    public function getColumnCount()
+    public function getColumnCount ()
     {
         return $this->_colCount;
     }
@@ -132,7 +134,7 @@ class WorksheetEntry extends \Zend\GData\Entry
      *
      * @param string $rowCount The new row count for the entry.
      */
-    public function setRowCount($rowCount)
+    public function setRowCount ($rowCount)
     {
         $this->_rowCount = $rowCount;
         return $this;
@@ -143,7 +145,7 @@ class WorksheetEntry extends \Zend\GData\Entry
      *
      * @param string $colCount The new column count for the entry.
      */
-    public function setColumnCount($colCount)
+    public function setColumnCount ($colCount)
     {
         $this->_colCount = $colCount;
         return $this;
@@ -154,7 +156,7 @@ class WorksheetEntry extends \Zend\GData\Entry
      *
      * @return array An array of rows.  Each element of the array is an associative array of data
      */
-    public function getContentsAsRows()
+    public function getContentsAsRows ()
     {
         $service = new Spreadsheets($this->getHttpClient());
         return $service->getSpreadsheetListFeedContents($this);
@@ -172,7 +174,7 @@ class WorksheetEntry extends \Zend\GData\Entry
      * @param boolean $empty Whether to retrieve empty cells
      * @return array An associative array of cells
      */
-    public function getContentsAsCells($range = null, $empty = false)
+    public function getContentsAsCells ($range = null, $empty = false)
     {
         $service = new Spreadsheets($this->getHttpClient());
         return $service->getSpreadsheetCellFeedContents($this, $range, $empty);

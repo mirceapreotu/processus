@@ -41,6 +41,7 @@ class Nickname extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'apps';
+
     protected $_rootElement = 'nickname';
 
     /**
@@ -55,7 +56,7 @@ class Nickname extends \Zend\GData\Extension
      * Constructs a new Zend_Gdata_GApps_Extension_Nickname object.
      * @param string $name (optional) The nickname being represented.
      */
-    public function __construct($name = null)
+    public function __construct ($name = null)
     {
         $this->registerAllNamespaces(\Zend\GData\GApps::$namespaces);
         parent::__construct();
@@ -72,7 +73,7 @@ class Nickname extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_name !== null) {
@@ -88,14 +89,14 @@ class Nickname extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'name':
-            $this->_name = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'name':
+                $this->_name = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -105,7 +106,7 @@ class Nickname extends \Zend\GData\Extension
      * @see setName
      * @return string The requested attribute.
      */
-    public function getName()
+    public function getName ()
     {
         return $this->_name;
     }
@@ -117,9 +118,9 @@ class Nickname extends \Zend\GData\Extension
      *
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\GApps\Extension\Nickname Provides a fluent
-     *          interface.
+     * interface.
      */
-    public function setName($value)
+    public function setName ($value)
     {
         $this->_name = $value;
         return $this;
@@ -129,7 +130,7 @@ class Nickname extends \Zend\GData\Extension
      * Magic toString method allows using this directly via echo
      * Works best in PHP >= 4.2.0
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getName();
     }

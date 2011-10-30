@@ -17,30 +17,31 @@
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
- 
+
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Writer\Renderer;
 use Zend\Feed\Writer;
 
 /**
-* @uses \Zend\Feed\Exception
-* @uses \Zend\Feed\Writer\Writer
-* @uses \Zend\Version
-* @category Zend
-* @package Zend_Feed_Writer
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @uses \Zend\Feed\Exception
+ * @uses \Zend\Feed\Writer\Writer
+ * @uses \Zend\Version
+ * @category Zend
+ * @package Zend_Feed_Writer
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 class AbstractRenderer
 {
+
     /**
      * Extensions
      * @var array
      */
     protected $_extensions = array();
-    
+
     /**
      * @var mixed
      */
@@ -60,14 +61,14 @@ class AbstractRenderer
      * @var array
      */
     protected $_exceptions = array();
-    
+
     /**
      * Encoding of all text values
      *
      * @var string
      */
     protected $_encoding = 'UTF-8';
-    
+
     /**
      * Holds the value "atom" or "rss" depending on the feed type set when
      * when last exported.
@@ -75,7 +76,7 @@ class AbstractRenderer
      * @var string
      */
     protected $_type = null;
-    
+
     /**
      * @var DOMElement
      */
@@ -87,19 +88,19 @@ class AbstractRenderer
      * @param  mixed $container 
      * @return void
      */
-    public function __construct($container)
+    public function __construct ($container)
     {
         $this->_container = $container;
         $this->setType($container->getType());
         $this->_loadExtensions();
     }
-    
+
     /**
      * Save XML to string
      * 
      * @return string
      */
-    public function saveXml()
+    public function saveXml ()
     {
         return $this->getDomDocument()->saveXml();
     }
@@ -109,7 +110,7 @@ class AbstractRenderer
      * 
      * @return DOMDocument
      */
-    public function getDomDocument()
+    public function getDomDocument ()
     {
         return $this->_dom;
     }
@@ -119,7 +120,7 @@ class AbstractRenderer
      * 
      * @return DOMElement
      */
-    public function getElement()
+    public function getElement ()
     {
         return $this->getDomDocument()->documentElement;
     }
@@ -129,29 +130,29 @@ class AbstractRenderer
      * 
      * @return mixed
      */
-    public function getDataContainer()
+    public function getDataContainer ()
     {
         return $this->_container;
     }
-    
+
     /**
      * Set feed encoding
      * 
      * @param  string $enc 
      * @return Zend_Feed_Writer_Renderer_RendererAbstract
      */
-    public function setEncoding($enc)
+    public function setEncoding ($enc)
     {
         $this->_encoding = $enc;
         return $this;
     }
-    
+
     /**
      * Get feed encoding
      * 
      * @return string
      */
-    public function getEncoding()
+    public function getEncoding ()
     {
         return $this->_encoding;
     }
@@ -162,10 +163,11 @@ class AbstractRenderer
      * @param  bool $bool 
      * @return Zend_Feed_Writer_Renderer_RendererAbstract
      */
-    public function ignoreExceptions($bool = true)
+    public function ignoreExceptions ($bool = true)
     {
-        if (!is_bool($bool)) {
-            throw new Writer\Exception('Invalid parameter: $bool. Should be TRUE or FALSE (defaults to TRUE if null)');
+        if (! is_bool($bool)) {
+            throw new Writer\Exception(
+            'Invalid parameter: $bool. Should be TRUE or FALSE (defaults to TRUE if null)');
         }
         $this->_ignoreExceptions = $bool;
         return $this;
@@ -176,11 +178,11 @@ class AbstractRenderer
      * 
      * @return array
      */
-    public function getExceptions()
+    public function getExceptions ()
     {
         return $this->_exceptions;
     }
-    
+
     /**
      * Set the current feed type being exported to "rss" or "atom". This allows
      * other objects to gracefully choose whether to execute or not, depending
@@ -188,21 +190,21 @@ class AbstractRenderer
      *
      * @param string $type
      */
-    public function setType($type)
+    public function setType ($type)
     {
         $this->_type = $type;
     }
-    
+
     /**
      * Retrieve the current or last feed type exported.
      *
      * @return string Value will be "rss" or "atom"
      */
-    public function getType()
+    public function getType ()
     {
         return $this->_type;
     }
-    
+
     /**
      * Sets the absolute root element for the XML feed being generated. This
      * helps simplify the appending of namespace declarations, but also ensures
@@ -211,27 +213,27 @@ class AbstractRenderer
      *
      * @param DOMElement $root
      */
-    public function setRootElement(\DOMElement $root)
+    public function setRootElement (\DOMElement $root)
     {
         $this->_rootElement = $root;
     }
-    
+
     /**
      * Retrieve the absolute root element for the XML feed being generated.
      *
      * @return DOMElement
      */
-    public function getRootElement()
+    public function getRootElement ()
     {
         return $this->_rootElement;
     }
-    
+
     /**
      * Load extensions from Zend_Feed_Writer
      *
      * @return void
      */
-    protected function _loadExtensions()
+    protected function _loadExtensions ()
     {
         Writer\Writer::registerCoreExtensions();
         $all = Writer\Writer::getExtensions();
@@ -241,10 +243,10 @@ class AbstractRenderer
             $exts = $all['feedRenderer'];
         }
         foreach ($exts as $extension) {
-            $className = Writer\Writer::getPluginLoader()->getClassName($extension);
+            $className = Writer\Writer::getPluginLoader()->getClassName(
+            $extension);
             $this->_extensions[$extension] = new $className(
-                $this->getDataContainer()
-            );
+            $this->getDataContainer());
             $this->_extensions[$extension]->setEncoding($this->getEncoding());
         }
     }

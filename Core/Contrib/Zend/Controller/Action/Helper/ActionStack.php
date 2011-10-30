@@ -41,6 +41,7 @@ use Zend\Controller\Action;
  */
 class ActionStack extends AbstractHelper
 {
+
     /**
      * @var \Zend\Controller\Plugin\ActionStack
      */
@@ -53,14 +54,15 @@ class ActionStack extends AbstractHelper
      *
      * @return void
      */
-    public function __construct()
+    public function __construct ()
     {
         $front = \Zend\Controller\Front::getInstance();
-        if (!$front->hasPlugin('Zend\Controller\Plugin\ActionStack')) {
+        if (! $front->hasPlugin('Zend\Controller\Plugin\ActionStack')) {
             $this->_actionStack = new \Zend\Controller\Plugin\ActionStack();
             $front->registerPlugin($this->_actionStack, 97);
         } else {
-            $this->_actionStack = $front->getPlugin('Zend\Controller\Plugin\ActionStack');
+            $this->_actionStack = $front->getPlugin(
+            'Zend\Controller\Plugin\ActionStack');
         }
     }
 
@@ -70,7 +72,7 @@ class ActionStack extends AbstractHelper
      * @param  \Zend\Controller\Request\AbstractRequest $next
      * @return \Zend\Controller\Action\Helper\ActionStack Provides a fluent interface
      */
-    public function pushStack(Request\AbstractRequest $next)
+    public function pushStack (Request\AbstractRequest $next)
     {
         $this->_actionStack->pushStack($next);
         return $this;
@@ -86,22 +88,24 @@ class ActionStack extends AbstractHelper
      * @throws \Zend\Controller\Action\Exception
      * @return \Zend\Controller\Action\Helper\ActionStack
      */
-    public function actionToStack($action, $controller = null, $module = null, array $params = array())
+    public function actionToStack ($action, $controller = null, $module = null, 
+    array $params = array())
     {
         if ($action instanceof Request\AbstractRequest) {
             return $this->pushStack($action);
-        } elseif (!is_string($action)) {
-            throw new Action\Exception('ActionStack requires either a request object or minimally a string action');
+        } elseif (! is_string($action)) {
+            throw new Action\Exception(
+            'ActionStack requires either a request object or minimally a string action');
         }
-
+        
         $request = $this->getRequest();
-
-        if ($request instanceof Request\AbstractRequest === false){
+        
+        if ($request instanceof Request\AbstractRequest === false) {
             throw new Action\Exception('Request object not set yet');
         }
-
+        
         $controller = (null === $controller) ? $request->getControllerName() : $controller;
-        $module     = (null === $module)     ? $request->getModuleName()     : $module;
+        $module = (null === $module) ? $request->getModuleName() : $module;
         $newRequest = new Request\Simple($action, $controller, $module, $params);
         return $this->pushStack($newRequest);
     }
@@ -117,7 +121,8 @@ class ActionStack extends AbstractHelper
      * @param  array $params
      * @return boolean
      */
-    public function direct($action, $controller = null, $module = null, array $params = array())
+    public function direct ($action, $controller = null, $module = null, 
+    array $params = array())
     {
         return $this->actionToStack($action, $controller, $module, $params);
     }

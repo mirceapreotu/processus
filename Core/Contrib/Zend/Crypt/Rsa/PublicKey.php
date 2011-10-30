@@ -37,7 +37,7 @@ class PublicKey extends Key
 
     protected $_certificateString = null;
 
-    public function __construct($string)
+    public function __construct ($string)
     {
         $this->_parse($string);
     }
@@ -46,24 +46,24 @@ class PublicKey extends Key
      * @param string $string
      * @throws Zend\Crypt\Exception
      */
-    protected function _parse($string)
+    protected function _parse ($string)
     {
         if (preg_match("/^-----BEGIN CERTIFICATE-----/", $string)) {
             $this->_certificateString = $string;
         } else {
             $this->_pemString = $string;
         }
-
+        
         $result = openssl_get_publickey($string);
-        if (!$result) {
+        if (! $result) {
             throw new \Zend\Crypt\Exception('Unable to load public key');
         }
-
+        
         $this->_opensslKeyResource = $result;
         $this->_details = openssl_pkey_get_details($this->_opensslKeyResource);
     }
 
-    public function getCertificate()
+    public function getCertificate ()
     {
         return $this->_certificateString;
     }

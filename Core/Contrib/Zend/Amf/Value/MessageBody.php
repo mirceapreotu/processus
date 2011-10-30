@@ -42,6 +42,7 @@ namespace Zend\Amf\Value;
  */
 class MessageBody
 {
+
     /**
      * A string describing which operation, function, or method
      * is to be remotley invoked.
@@ -90,7 +91,7 @@ class MessageBody
      * @param  string $data
      * @return void
      */
-    public function __construct($targetUri, $responseUri, $data)
+    public function __construct ($targetUri, $responseUri, $data)
     {
         $this->setTargetUri($targetUri);
         $this->setResponseUri($responseUri);
@@ -102,7 +103,7 @@ class MessageBody
      *
      * @return string
      */
-    public function getTargetUri()
+    public function getTargetUri ()
     {
         return $this->_targetUri;
     }
@@ -113,7 +114,7 @@ class MessageBody
      * @param  string $targetUri
      * @return \Zend\Amf\Value\MessageBody
      */
-    public function setTargetUri($targetUri)
+    public function setTargetUri ($targetUri)
     {
         if (null === $targetUri) {
             $targetUri = '';
@@ -127,7 +128,7 @@ class MessageBody
      *
      * @return string
      */
-    public function getResponseUri()
+    public function getResponseUri ()
     {
         return $this->_responseUri;
     }
@@ -138,7 +139,7 @@ class MessageBody
      * @param  string $responseUri
      * @return \Zend\Amf\Value\MessageBody
      */
-    public function setResponseUri($responseUri)
+    public function setResponseUri ($responseUri)
     {
         if (null === $responseUri) {
             $responseUri = '';
@@ -152,7 +153,7 @@ class MessageBody
      *
      * @return string
      */
-    public function getData()
+    public function getData ()
     {
         return $this->_data;
     }
@@ -163,7 +164,7 @@ class MessageBody
      * @param  mixed $data
      * @return \Zend\Amf\Value\MessageBody
      */
-    public function setData($data)
+    public function setData ($data)
     {
         $this->_data = $data;
         return $this;
@@ -175,9 +176,9 @@ class MessageBody
      * @param  string $methodName
      * @return \Zend\Amf\Value\MessageBody
      */
-    public function setReplyMethod($methodName)
+    public function setReplyMethod ($methodName)
     {
-        if (!preg_match('#^[/?]#', $methodName)) {
+        if (! preg_match('#^[/?]#', $methodName)) {
             $this->_targetUri = rtrim($this->_targetUri, '/') . '/';
         }
         $this->_targetUri = $this->_targetUri . $methodName;

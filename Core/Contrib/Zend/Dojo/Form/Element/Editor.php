@@ -39,6 +39,7 @@ use Zend\Form\Exception\InvalidArgumentException;
  */
 class Editor extends Dijit
 {
+
     /**
      * @var string View helper
      */
@@ -50,14 +51,14 @@ class Editor extends Dijit
      * @param  string $event
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function addCaptureEvent($event)
+    public function addCaptureEvent ($event)
     {
         $event = (string) $event;
         $captureEvents = $this->getCaptureEvents();
         if (in_array($event, $captureEvents)) {
             return $this;
         }
-
+        
         $captureEvents[] = (string) $event;
         $this->setDijitParam('captureEvents', $captureEvents);
         return $this;
@@ -69,7 +70,7 @@ class Editor extends Dijit
      * @param  array $events
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function addCaptureEvents(array $events)
+    public function addCaptureEvents (array $events)
     {
         foreach ($events as $event) {
             $this->addCaptureEvent($event);
@@ -83,7 +84,7 @@ class Editor extends Dijit
      * @param  array $events
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function setCaptureEvents(array $events)
+    public function setCaptureEvents (array $events)
     {
         $this->clearCaptureEvents();
         $this->addCaptureEvents($events);
@@ -95,9 +96,9 @@ class Editor extends Dijit
      *
      * @return array
      */
-    public function getCaptureEvents()
+    public function getCaptureEvents ()
     {
-        if (!$this->hasDijitParam('captureEvents')) {
+        if (! $this->hasDijitParam('captureEvents')) {
             return array();
         }
         return $this->getDijitParam('captureEvents');
@@ -109,7 +110,7 @@ class Editor extends Dijit
      * @param  string $event
      * @return bool
      */
-    public function hasCaptureEvent($event)
+    public function hasCaptureEvent ($event)
     {
         $captureEvents = $this->getCaptureEvents();
         return in_array((string) $event, $captureEvents);
@@ -121,7 +122,7 @@ class Editor extends Dijit
      * @param  string $event
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function removeCaptureEvent($event)
+    public function removeCaptureEvent ($event)
     {
         $event = (string) $event;
         $captureEvents = $this->getCaptureEvents();
@@ -138,7 +139,7 @@ class Editor extends Dijit
      *
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function clearCaptureEvents()
+    public function clearCaptureEvents ()
     {
         return $this->removeDijitParam('captureEvents');
     }
@@ -149,14 +150,14 @@ class Editor extends Dijit
      * @param  string $event
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function addEvent($event)
+    public function addEvent ($event)
     {
         $event = (string) $event;
         $events = $this->getEvents();
         if (in_array($event, $events)) {
             return $this;
         }
-
+        
         $events[] = (string) $event;
         $this->setDijitParam('events', $events);
         return $this;
@@ -168,7 +169,7 @@ class Editor extends Dijit
      * @param  array $events
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function addEvents(array $events)
+    public function addEvents (array $events)
     {
         foreach ($events as $event) {
             $this->addEvent($event);
@@ -182,7 +183,7 @@ class Editor extends Dijit
      * @param  array $events
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function setEvents(array $events)
+    public function setEvents (array $events)
     {
         $this->clearEvents();
         $this->addEvents($events);
@@ -194,9 +195,9 @@ class Editor extends Dijit
      *
      * @return array
      */
-    public function getEvents()
+    public function getEvents ()
     {
-        if (!$this->hasDijitParam('events')) {
+        if (! $this->hasDijitParam('events')) {
             return array();
         }
         return $this->getDijitParam('events');
@@ -208,7 +209,7 @@ class Editor extends Dijit
      * @param  string $event
      * @return bool
      */
-    public function hasEvent($event)
+    public function hasEvent ($event)
     {
         $events = $this->getEvents();
         return in_array((string) $event, $events);
@@ -220,7 +221,7 @@ class Editor extends Dijit
      * @param  string $event
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function removeEvent($event)
+    public function removeEvent ($event)
     {
         $events = $this->getEvents();
         if (false === ($index = array_search($event, $events))) {
@@ -236,7 +237,7 @@ class Editor extends Dijit
      *
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function clearEvents()
+    public function clearEvents ()
     {
         return $this->removeDijitParam('events');
     }
@@ -247,14 +248,14 @@ class Editor extends Dijit
      * @param  string $plugin
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function addPlugin($plugin)
+    public function addPlugin ($plugin)
     {
         $plugin = (string) $plugin;
         $plugins = $this->getPlugins();
         if (in_array($plugin, $plugins) && $plugin !== '|') {
             return $this;
         }
-
+        
         $plugins[] = (string) $plugin;
         $this->setDijitParam('plugins', $plugins);
         return $this;
@@ -266,7 +267,7 @@ class Editor extends Dijit
      * @param  array $plugins
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function addPlugins(array $plugins)
+    public function addPlugins (array $plugins)
     {
         foreach ($plugins as $plugin) {
             $this->addPlugin($plugin);
@@ -280,7 +281,7 @@ class Editor extends Dijit
      * @param  array $plugins
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function setPlugins(array $plugins)
+    public function setPlugins (array $plugins)
     {
         $this->clearPlugins();
         $this->addPlugins($plugins);
@@ -292,9 +293,9 @@ class Editor extends Dijit
      *
      * @return array
      */
-    public function getPlugins()
+    public function getPlugins ()
     {
-        if (!$this->hasDijitParam('plugins')) {
+        if (! $this->hasDijitParam('plugins')) {
             return array();
         }
         return $this->getDijitParam('plugins');
@@ -306,7 +307,7 @@ class Editor extends Dijit
      * @param  string $plugin
      * @return bool
      */
-    public function hasPlugin($plugin)
+    public function hasPlugin ($plugin)
     {
         $plugins = $this->getPlugins();
         return in_array((string) $plugin, $plugins);
@@ -318,7 +319,7 @@ class Editor extends Dijit
      * @param  string $plugin
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function removePlugin($plugin)
+    public function removePlugin ($plugin)
     {
         $plugins = $this->getPlugins();
         if (false === ($index = array_search($plugin, $plugins))) {
@@ -334,7 +335,7 @@ class Editor extends Dijit
      *
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function clearPlugins()
+    public function clearPlugins ()
     {
         return $this->removeDijitParam('plugins');
     }
@@ -345,7 +346,7 @@ class Editor extends Dijit
      * @param  int $interval
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function setEditActionInterval($interval)
+    public function setEditActionInterval ($interval)
     {
         return $this->setDijitParam('editActionInterval', (int) $interval);
     }
@@ -355,9 +356,9 @@ class Editor extends Dijit
      *
      * @return int
      */
-    public function getEditActionInterval()
+    public function getEditActionInterval ()
     {
-        if (!$this->hasDijitParam('editActionInterval')) {
+        if (! $this->hasDijitParam('editActionInterval')) {
             $this->setEditActionInterval(3);
         }
         return $this->getDijitParam('editActionInterval');
@@ -369,7 +370,7 @@ class Editor extends Dijit
      * @param  bool $flag
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function setFocusOnLoad($flag)
+    public function setFocusOnLoad ($flag)
     {
         return $this->setDijitParam('focusOnLoad', (bool) $flag);
     }
@@ -379,10 +380,10 @@ class Editor extends Dijit
      *
      * @return bool
      */
-    public function getFocusOnLoad()
+    public function getFocusOnLoad ()
     {
-        if (!$this->hasDijitParam('focusOnLoad')) {
-             return false;
+        if (! $this->hasDijitParam('focusOnLoad')) {
+            return false;
         }
         return $this->getDijitParam('focusOnLoad');
     }
@@ -393,12 +394,13 @@ class Editor extends Dijit
      * @param  string|int $height
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function setHeight($height)
+    public function setHeight ($height)
     {
-        if (!preg_match('/^\d+(em|px|%)?$/i', $height)) {
-            throw new InvalidArgumentException('Invalid height provided; must be integer or CSS measurement');
+        if (! preg_match('/^\d+(em|px|%)?$/i', $height)) {
+            throw new InvalidArgumentException(
+            'Invalid height provided; must be integer or CSS measurement');
         }
-        if (!preg_match('/(em|px|%)$/', $height)) {
+        if (! preg_match('/(em|px|%)$/', $height)) {
             $height .= 'px';
         }
         return $this->setDijitParam('height', $height);
@@ -409,9 +411,9 @@ class Editor extends Dijit
      *
      * @return string
      */
-    public function getHeight()
+    public function getHeight ()
     {
-        if (!$this->hasDijitParam('height')) {
+        if (! $this->hasDijitParam('height')) {
             return '300px';
         }
         return $this->getDijitParam('height');
@@ -423,7 +425,7 @@ class Editor extends Dijit
      * @param  bool $flag
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function setInheritWidth($flag)
+    public function setInheritWidth ($flag)
     {
         return $this->setDijitParam('inheritWidth', (bool) $flag);
     }
@@ -433,9 +435,9 @@ class Editor extends Dijit
      *
      * @return bool
      */
-    public function getInheritWidth()
+    public function getInheritWidth ()
     {
-        if (!$this->hasDijitParam('inheritWidth')) {
+        if (! $this->hasDijitParam('inheritWidth')) {
             return false;
         }
         return $this->getDijitParam('inheritWidth');
@@ -447,12 +449,13 @@ class Editor extends Dijit
      * @param  string|int $minHeight
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function setMinHeight($minHeight)
+    public function setMinHeight ($minHeight)
     {
-        if (!preg_match('/^[0-9.]+(em|px|%)?$/i', $minHeight)) {
-            throw new InvalidArgumentException('Invalid minHeight provided; must be integer or CSS measurement');
+        if (! preg_match('/^[0-9.]+(em|px|%)?$/i', $minHeight)) {
+            throw new InvalidArgumentException(
+            'Invalid minHeight provided; must be integer or CSS measurement');
         }
-        if (!preg_match('/(em|px|%)$/', $minHeight)) {
+        if (! preg_match('/(em|px|%)$/', $minHeight)) {
             $minHeight .= 'em';
         }
         return $this->setDijitParam('minHeight', $minHeight);
@@ -463,9 +466,9 @@ class Editor extends Dijit
      *
      * @return string
      */
-    public function getMinHeight()
+    public function getMinHeight ()
     {
-        if (!$this->hasDijitParam('minHeight')) {
+        if (! $this->hasDijitParam('minHeight')) {
             return '1em';
         }
         return $this->getDijitParam('minHeight');
@@ -477,17 +480,17 @@ class Editor extends Dijit
      * @param  string $styleSheet
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function addStyleSheet($styleSheet)
+    public function addStyleSheet ($styleSheet)
     {
         $stylesheets = $this->getStyleSheets();
         if (strstr($stylesheets, ';')) {
             $stylesheets = explode(';', $stylesheets);
-        } elseif (!empty($stylesheets)) {
+        } elseif (! empty($stylesheets)) {
             $stylesheets = (array) $stylesheets;
         } else {
             $stylesheets = array();
         }
-        if (!in_array($styleSheet, $stylesheets)) {
+        if (! in_array($styleSheet, $stylesheets)) {
             $stylesheets[] = (string) $styleSheet;
         }
         return $this->setDijitParam('styleSheets', implode(';', $stylesheets));
@@ -499,7 +502,7 @@ class Editor extends Dijit
      * @param  array $styleSheets
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function addStyleSheets(array $styleSheets)
+    public function addStyleSheets (array $styleSheets)
     {
         foreach ($styleSheets as $styleSheet) {
             $this->addStyleSheet($styleSheet);
@@ -513,7 +516,7 @@ class Editor extends Dijit
      * @param  array $styleSheets
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function setStyleSheets(array $styleSheets)
+    public function setStyleSheets (array $styleSheets)
     {
         $this->clearStyleSheets();
         return $this->addStyleSheets($styleSheets);
@@ -524,9 +527,9 @@ class Editor extends Dijit
      *
      * @return string
      */
-    public function getStyleSheets()
+    public function getStyleSheets ()
     {
-        if (!$this->hasDijitParam('styleSheets')) {
+        if (! $this->hasDijitParam('styleSheets')) {
             return '';
         }
         return $this->getDijitParam('styleSheets');
@@ -538,7 +541,7 @@ class Editor extends Dijit
      * @param  string $styleSheet
      * @return bool
      */
-    public function hasStyleSheet($styleSheet)
+    public function hasStyleSheet ($styleSheet)
     {
         $styleSheets = $this->getStyleSheets();
         $styleSheets = explode(';', $styleSheets);
@@ -551,7 +554,7 @@ class Editor extends Dijit
      * @param  string $styleSheet
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function removeStyleSheet($styleSheet)
+    public function removeStyleSheet ($styleSheet)
     {
         $styleSheets = $this->getStyleSheets();
         $styleSheets = explode(';', $styleSheets);
@@ -567,7 +570,7 @@ class Editor extends Dijit
      *
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function clearStyleSheets()
+    public function clearStyleSheets ()
     {
         if ($this->hasDijitParam('styleSheets')) {
             $this->removeDijitParam('styleSheets');
@@ -581,7 +584,7 @@ class Editor extends Dijit
      * @param  int $interval
      * @return \Zend\Dojo\Form\Element\Editor
      */
-    public function setUpdateInterval($interval)
+    public function setUpdateInterval ($interval)
     {
         return $this->setDijitParam('updateInterval', (int) $interval);
     }
@@ -591,92 +594,92 @@ class Editor extends Dijit
      *
      * @return int
      */
-    public function getUpdateInterval()
+    public function getUpdateInterval ()
     {
-        if (!$this->hasDijitParam('updateInterval')) {
-             return 200;
+        if (! $this->hasDijitParam('updateInterval')) {
+            return 200;
         }
         return $this->getDijitParam('updateInterval');
     }
-    
+
     /**
      * Add a single editor extra plugin.
      *
      * @param  string $plugin
      * @return Zend\Dojo\Form\Element\Editor
      */
-    public function addExtraPlugin($plugin)
+    public function addExtraPlugin ($plugin)
     {
         $plugin = (string) $plugin;
         $extraPlugins = $this->getExtraPlugins();
         if (in_array($plugin, $extraPlugins)) {
             return $this;
         }
-    
+        
         $extraPlugins[] = (string) $plugin;
         $this->setDijitParam('extraPlugins', $extraPlugins);
         return $this;
     }
-    
+
     /**
      * Add multiple extra plugins.
      *
      * @param  array $extraPlugins
      * @return Zend\Dojo\Form\Element\Editor
      */
-    public function addExtraPlugins(array $plugins)
+    public function addExtraPlugins (array $plugins)
     {
         foreach ($plugins as $plugin) {
             $this->addExtraPlugin($plugin);
         }
         return $this;
     }
-    
+
     /**
      * Overwrite many extra plugins at once.
      *
      * @param  array $plugins
      * @return Zend\Dojo\Form\Element\Editor
      */
-    public function setExtraPlugins(array $plugins)
+    public function setExtraPlugins (array $plugins)
     {
         $this->clearExtraPlugins();
         $this->addExtraPlugins($plugins);
         return $this;
     }
-    
+
     /**
      * Get all extra plugins.
      *
      * @return array
      */
-    public function getExtraPlugins()
+    public function getExtraPlugins ()
     {
-        if (!$this->hasDijitParam('extraPlugins')) {
+        if (! $this->hasDijitParam('extraPlugins')) {
             return array();
         }
         return $this->getDijitParam('extraPlugins');
     }
-    
+
     /**
      * Is a given extra plugin registered?
      *
      * @param  string $plugin
      * @return bool
      */
-    public function hasExtraPlugin($plugin)
+    public function hasExtraPlugin ($plugin)
     {
         $extraPlugins = $this->getExtraPlugins();
         return in_array((string) $plugin, $extraPlugins);
     }
-    
+
     /**
      * Remove a given extra plugin.
      *
      * @param  string $plugin
      * @return Zend\Dojo\Form\Element\Editor
      */
-    public function removeExtraPlugin($plugin)
+    public function removeExtraPlugin ($plugin)
     {
         $extraPlugins = $this->getExtraPlugins();
         if (false === ($index = array_search($plugin, $extraPlugins))) {
@@ -686,13 +689,13 @@ class Editor extends Dijit
         $this->setDijitParam('extraPlugins', $extraPlugins);
         return $this;
     }
-    
+
     /**
      * Clear all extra plugins.
      *
      * @return Zend\Dojo\Form\Element\Editor
      */
-    public function clearExtraPlugins()
+    public function clearExtraPlugins ()
     {
         return $this->removeDijitParam('extraPlugins');
     }

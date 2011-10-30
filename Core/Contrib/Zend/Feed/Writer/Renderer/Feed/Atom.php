@@ -19,29 +19,30 @@
  */
 
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Writer\Renderer\Feed;
 use Zend\Feed\Writer\Renderer;
 use Zend\Feed\Writer;
 
 /**
-* @uses DOMDocument
-* @uses \Zend\Feed\Writer\Writer
-* @uses \Zend\Feed\Writer\Feed\Feed
-* @uses \Zend\Feed\Writer\Renderer\Entry\Atom\Atom
-* @uses \Zend\Feed\Writer\Renderer\Entry\Atom\Deleted
-* @uses \Zend\Feed\Writer\Renderer\Feed\Atom\AtomAbstract
-* @uses \Zend\Feed\Writer\Renderer\RendererAbstract
-* @uses \Zend\Feed\Writer\Renderer\RendererInterface
-* @uses \Zend\Version
-* @category Zend
-* @package Zend_Feed_Writer
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @uses DOMDocument
+ * @uses \Zend\Feed\Writer\Writer
+ * @uses \Zend\Feed\Writer\Feed\Feed
+ * @uses \Zend\Feed\Writer\Renderer\Entry\Atom\Atom
+ * @uses \Zend\Feed\Writer\Renderer\Entry\Atom\Deleted
+ * @uses \Zend\Feed\Writer\Renderer\Feed\Atom\AtomAbstract
+ * @uses \Zend\Feed\Writer\Renderer\RendererAbstract
+ * @uses \Zend\Feed\Writer\Renderer\RendererInterface
+ * @uses \Zend\Version
+ * @category Zend
+ * @package Zend_Feed_Writer
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 class Atom extends AbstractAtom implements Renderer\Renderer
 {
+
     /**
      * Constructor
      * 
@@ -58,16 +59,15 @@ class Atom extends AbstractAtom implements Renderer\Renderer
      * 
      * @return Zend_Feed_Writer_Renderer_Feed_Atom
      */
-    public function render()
+    public function render ()
     {
-        if (!$this->_container->getEncoding()) {
+        if (! $this->_container->getEncoding()) {
             $this->_container->setEncoding('UTF-8');
         }
         $this->_dom = new \DOMDocument('1.0', $this->_container->getEncoding());
         $this->_dom->formatOutput = true;
-        $root = $this->_dom->createElementNS(
-            Writer\Writer::NAMESPACE_ATOM_10, 'feed'
-        );
+        $root = $this->_dom->createElementNS(Writer\Writer::NAMESPACE_ATOM_10, 
+        'feed');
         $this->setRootElement($root);
         $this->_dom->appendChild($root);
         $this->_setLanguage($this->_dom, $root);
@@ -95,15 +95,15 @@ class Atom extends AbstractAtom implements Renderer\Renderer
         
         foreach ($this->_container as $entry) {
             if ($this->getDataContainer()->getEncoding()) {
-                $entry->setEncoding($this->getDataContainer()->getEncoding());
+                $entry->setEncoding($this->getDataContainer()
+                    ->getEncoding());
             }
             if ($entry instanceof Writer\Entry) {
                 $renderer = new Renderer\Entry\Atom($entry);
             } else {
-                if (!$this->_dom->documentElement->hasAttribute('xmlns:at')) {
-                    $this->_dom->documentElement->setAttribute(
-                        'xmlns:at', 'http://purl.org/atompub/tombstones/1.0'
-                    );
+                if (! $this->_dom->documentElement->hasAttribute('xmlns:at')) {
+                    $this->_dom->documentElement->setAttribute('xmlns:at', 
+                    'http://purl.org/atompub/tombstones/1.0');
                 }
                 $renderer = new Renderer\Entry\AtomDeleted($entry);
             }

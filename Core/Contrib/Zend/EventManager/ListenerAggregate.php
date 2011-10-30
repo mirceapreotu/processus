@@ -38,17 +38,18 @@ namespace Zend\EventManager;
  */
 interface ListenerAggregate
 {
+
     /**
      * Attach one or more listeners
      *
      * @param EventCollection $events
      */
-    public function attach(EventCollection $events);
+    public function attach (EventCollection $events);
 
     /**
      * Detach all previously attached listeners
      *
      * @param EventCollection $events
      */
-    public function detach(EventCollection $events);
+    public function detach (EventCollection $events);
 }

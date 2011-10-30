@@ -34,6 +34,7 @@ namespace Zend\Json\Server;
  */
 class Response
 {
+
     /**
      * Response error
      * @var null|\Zend\Json\Server\Error
@@ -70,7 +71,7 @@ class Response
      * @param  mixed $value
      * @return \Zend\Json\Server\Response
      */
-    public function setResult($value)
+    public function setResult ($value)
     {
         $this->_result = $value;
         return $this;
@@ -81,7 +82,7 @@ class Response
      *
      * @return mixed
      */
-    public function getResult()
+    public function getResult ()
     {
         return $this->_result;
     }
@@ -93,7 +94,7 @@ class Response
      * @param  \Zend\Json\Server\Error $error
      * @return \Zend\Json\Server\Response
      */
-    public function setError(Error $error)
+    public function setError (Error $error)
     {
         $this->_error = $error;
         return $this;
@@ -104,7 +105,7 @@ class Response
      *
      * @return null|\Zend\Json\Server\Error
      */
-    public function getError()
+    public function getError ()
     {
         return $this->_error;
     }
@@ -114,7 +115,7 @@ class Response
      *
      * @return bool
      */
-    public function isError()
+    public function isError ()
     {
         return $this->getError() instanceof Error;
     }
@@ -125,7 +126,7 @@ class Response
      * @param  mixed $name
      * @return \Zend\Json\Server\Response
      */
-    public function setId($name)
+    public function setId ($name)
     {
         $this->_id = $name;
         return $this;
@@ -136,7 +137,7 @@ class Response
      *
      * @return mixed
      */
-    public function getId()
+    public function getId ()
     {
         return $this->_id;
     }
@@ -147,7 +148,7 @@ class Response
      * @param  string $version
      * @return \Zend\Json\Server\Response
      */
-    public function setVersion($version)
+    public function setVersion ($version)
     {
         $version = (string) $version;
         if ('2.0' == $version) {
@@ -155,7 +156,7 @@ class Response
         } else {
             $this->_version = null;
         }
-
+        
         return $this;
     }
 
@@ -164,7 +165,7 @@ class Response
      *
      * @return string
      */
-    public function getVersion()
+    public function getVersion ()
     {
         return $this->_version;
     }
@@ -174,24 +175,20 @@ class Response
      *
      * @return string
      */
-    public function toJson()
+    public function toJson ()
     {
         if ($this->isError()) {
-            $response = array(
-                'error'  => $this->getError()->toArray(),
-                'id'     => $this->getId(),
-            );
+            $response = array('error' => $this->getError()->toArray(), 
+            'id' => $this->getId());
         } else {
-            $response = array(
-                'result' => $this->getResult(),
-                'id'     => $this->getId(),
-            );
+            $response = array('result' => $this->getResult(), 
+            'id' => $this->getId());
         }
-
+        
         if (null !== ($version = $this->getVersion())) {
             $response['jsonrpc'] = $version;
         }
-
+        
         return \Zend\Json\Json::encode($response);
     }
 
@@ -200,7 +197,7 @@ class Response
      *
      * @return mixed
      */
-    public function getArgs()
+    public function getArgs ()
     {
         return $this->_args;
     }
@@ -211,7 +208,7 @@ class Response
      * @param mixed $args
      * @return self
      */
-    public function setArgs($args)
+    public function setArgs ($args)
     {
         $this->_args = $args;
         return $this;
@@ -223,7 +220,7 @@ class Response
      * @param  \Zend\Json\Server\Smd\Smd $serviceMap
      * @return \Zend\Json\Server\Response
      */
-    public function setServiceMap($serviceMap)
+    public function setServiceMap ($serviceMap)
     {
         $this->_serviceMap = $serviceMap;
         return $this;
@@ -234,7 +231,7 @@ class Response
      *
      * @return \Zend\Json\Server\Smd\Smd|null
      */
-    public function getServiceMap()
+    public function getServiceMap ()
     {
         return $this->_serviceMap;
     }
@@ -244,7 +241,7 @@ class Response
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->toJson();
     }

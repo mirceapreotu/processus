@@ -40,9 +40,10 @@ class Draft extends Extension
 {
 
     protected $_rootNamespace = 'app';
+
     protected $_rootElement = 'draft';
 
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         parent::__construct();
         $this->_text = $text;

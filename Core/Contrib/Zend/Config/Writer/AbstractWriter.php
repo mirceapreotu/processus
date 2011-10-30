@@ -31,14 +31,13 @@ namespace Zend\Config\Writer;
  */
 abstract class AbstractWriter
 {
+
     /**
      * Option keys to skip when calling setOptions()
      *
      * @var array
      */
-    protected $_skipOptions = array(
-        'options'
-    );
+    protected $_skipOptions = array('options');
 
     /**
      * Config object to write
@@ -54,7 +53,7 @@ abstract class AbstractWriter
      *
      * @param null|array $options
      */
-    public function __construct(array $options = null)
+    public function __construct (array $options = null)
     {
         if (is_array($options)) {
             $this->setOptions($options);
@@ -67,10 +66,10 @@ abstract class AbstractWriter
      * @param  \Zend\Config\Config $config
      * @return \Zend\Config\Writer\Writer
      */
-    public function setConfig(\Zend\Config\Config $config)
+    public function setConfig (\Zend\Config\Config $config)
     {
         $this->_config = $config;
-
+        
         return $this;
     }
 
@@ -80,19 +79,19 @@ abstract class AbstractWriter
      * @param  array $options
      * @return \Zend\Config\Writer\Writer
      */
-    public function setOptions(array $options)
+    public function setOptions (array $options)
     {
         foreach ($options as $key => $value) {
             if (in_array(strtolower($key), $this->_skipOptions)) {
                 continue;
             }
-
+            
             $method = 'set' . ucfirst($key);
             if (method_exists($this, $method)) {
                 $this->$method($value);
             }
         }
-
+        
         return $this;
     }
 
@@ -101,5 +100,5 @@ abstract class AbstractWriter
      *
      * @return void
      */
-    abstract public function write();
+    abstract public function write ();
 }

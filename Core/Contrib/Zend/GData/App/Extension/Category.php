@@ -40,11 +40,14 @@ class Category extends Extension
 {
 
     protected $_rootElement = 'category';
+
     protected $_term = null;
+
     protected $_scheme = null;
+
     protected $_label = null;
 
-    public function __construct($term = null, $scheme = null, $label=null)
+    public function __construct ($term = null, $scheme = null, $label = null)
     {
         parent::__construct();
         $this->_term = $term;
@@ -52,7 +55,7 @@ class Category extends Extension
         $this->_label = $label;
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_term !== null) {
@@ -67,27 +70,27 @@ class Category extends Extension
         return $element;
     }
 
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'term':
-            $this->_term = $attribute->nodeValue;
-            break;
-        case 'scheme':
-            $this->_scheme = $attribute->nodeValue;
-            break;
-        case 'label':
-            $this->_label = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'term':
+                $this->_term = $attribute->nodeValue;
+                break;
+            case 'scheme':
+                $this->_scheme = $attribute->nodeValue;
+                break;
+            case 'label':
+                $this->_label = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
     /**
      * @return string|null
      */
-    public function getTerm()
+    public function getTerm ()
     {
         return $this->_term;
     }
@@ -96,7 +99,7 @@ class Category extends Extension
      * @param string|null $value
      * @return \Zend\GData\App\Extension\Category Provides a fluent interface
      */
-    public function setTerm($value)
+    public function setTerm ($value)
     {
         $this->_term = $value;
         return $this;
@@ -105,7 +108,7 @@ class Category extends Extension
     /**
      * @return string|null
      */
-    public function getScheme()
+    public function getScheme ()
     {
         return $this->_scheme;
     }
@@ -114,7 +117,7 @@ class Category extends Extension
      * @param string|null $value
      * @return \Zend\GData\App\Extension\Category Provides a fluent interface
      */
-    public function setScheme($value)
+    public function setScheme ($value)
     {
         $this->_scheme = $value;
         return $this;
@@ -123,7 +126,7 @@ class Category extends Extension
     /**
      * @return string|null
      */
-    public function getLabel()
+    public function getLabel ()
     {
         return $this->_label;
     }
@@ -132,7 +135,7 @@ class Category extends Extension
      * @param string|null $value
      * @return \Zend\GData\App\Extension\Category Provides a fluent interface
      */
-    public function setLabel($value)
+    public function setLabel ($value)
     {
         $this->_label = $value;
         return $this;

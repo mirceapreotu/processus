@@ -40,6 +40,7 @@ use Zend\Controller\Router\Route;
  */
 abstract class AbstractRoute implements Route
 {
+
     /**
      * Wether this route is abstract or not
      *
@@ -59,7 +60,7 @@ abstract class AbstractRoute implements Route
      *
      * @return integer
      */
-    public function getVersion()
+    public function getVersion ()
     {
         return 2;
     }
@@ -70,7 +71,7 @@ abstract class AbstractRoute implements Route
      * @param  string $path
      * @return void
      */
-    public function setMatchedPath($path)
+    public function setMatchedPath ($path)
     {
         $this->_matchedPath = $path;
     }
@@ -80,7 +81,7 @@ abstract class AbstractRoute implements Route
      *
      * @return string
      */
-    public function getMatchedPath()
+    public function getMatchedPath ()
     {
         return $this->_matchedPath;
     }
@@ -91,12 +92,12 @@ abstract class AbstractRoute implements Route
      * @param  boolean $flag
      * @return boolean
      */
-    public function isAbstract($flag = null)
+    public function isAbstract ($flag = null)
     {
         if ($flag !== null) {
             $this->_isAbstract = $flag;
         }
-
+        
         return $this->_isAbstract;
     }
 
@@ -107,7 +108,7 @@ abstract class AbstractRoute implements Route
      * @param  string                                $separator
      * @return \Zend\Controller\Router\Route\Chain
      */
-    public function addChain(AbstractRoute $route, $separator = '/')
+    public function addChain (AbstractRoute $route, $separator = '/')
     {
         $chain = new Chain();
         $chain->addChain($this)->addChain($route, $separator);

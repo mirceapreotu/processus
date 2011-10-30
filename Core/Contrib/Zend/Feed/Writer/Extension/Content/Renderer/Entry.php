@@ -17,20 +17,20 @@
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
- 
+
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Writer\Extension\Content\Renderer;
 use Zend\Feed\Writer\Extension;
 
 /**
-* @uses \Zend\Feed\Writer\Extension\AbstractRenderer
-* @category Zend
-* @package Zend_Feed_Writer
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @uses \Zend\Feed\Writer\Extension\AbstractRenderer
+ * @category Zend
+ * @package Zend_Feed_Writer
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 class Entry extends Extension\AbstractRenderer
 {
 
@@ -42,13 +42,13 @@ class Entry extends Extension\AbstractRenderer
      * @var bool
      */
     protected $_called = false;
-    
+
     /**
      * Render entry
      * 
      * @return void
      */
-    public function render()
+    public function render ()
     {
         if (strtolower($this->getType()) == 'atom') {
             return;
@@ -58,16 +58,16 @@ class Entry extends Extension\AbstractRenderer
             $this->_appendNamespaces();
         }
     }
-    
+
     /**
      * Append namespaces to root element
      * 
      * @return void
      */
-    protected function _appendNamespaces()
+    protected function _appendNamespaces ()
     {
-        $this->getRootElement()->setAttribute('xmlns:content',
-            'http://purl.org/rss/1.0/modules/content/');  
+        $this->getRootElement()->setAttribute('xmlns:content', 
+        'http://purl.org/rss/1.0/modules/content/');
     }
 
     /**
@@ -77,10 +77,10 @@ class Entry extends Extension\AbstractRenderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setContent(\DOMDocument $dom, \DOMElement $root)
+    protected function _setContent (\DOMDocument $dom,\DOMElement $root)
     {
         $content = $this->getDataContainer()->getContent();
-        if (!$content) {
+        if (! $content) {
             return;
         }
         $element = $dom->createElement('content:encoded');

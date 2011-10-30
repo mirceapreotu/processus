@@ -40,12 +40,13 @@ use Zend\Ldap;
  */
 abstract class AbstractFilter
 {
+
     /**
      * Returns a string representation of the filter.
      *
      * @return string
      */
-    abstract public function toString();
+    abstract public function toString ();
 
     /**
      * Returns a string representation of the filter.
@@ -53,7 +54,7 @@ abstract class AbstractFilter
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->toString();
     }
@@ -63,7 +64,7 @@ abstract class AbstractFilter
      *
      * @return \Zend\Ldap\Filter\AbstractFilter
      */
-    public function negate()
+    public function negate ()
     {
         return new NotFilter($this);
     }
@@ -74,7 +75,7 @@ abstract class AbstractFilter
      * @param  \Zend\Ldap\Filter\AbstractFilter $filter,...
      * @return \Zend\Ldap\Filter\AndFilter
      */
-    public function addAnd($filter)
+    public function addAnd ($filter)
     {
         $fa = func_get_args();
         $args = array_merge(array($this), $fa);
@@ -87,7 +88,7 @@ abstract class AbstractFilter
      * @param  \Zend\Ldap\Filter\AbstractFilter $filter,...
      * @return \Zend\Ldap\Filter\OrFilter
      */
-    public function addOr($filter)
+    public function addOr ($filter)
     {
         $fa = func_get_args();
         $args = array_merge(array($this), $fa);
@@ -107,16 +108,18 @@ abstract class AbstractFilter
      * @param  string|array $values Array of values to escape
      * @return array Array $values, but escaped
      */
-    public static function escapeValue($values = array())
+    public static function escapeValue ($values = array())
     {
-        if (!is_array($values)) $values = array($values);
+        if (! is_array($values))
+            $values = array($values);
         foreach ($values as $key => $val) {
             // Escaping of filter meta characters
-            $val = str_replace(array('\\', '*', '(', ')'), array('\5c', '\2a', '\28', '\29'), $val);
+            $val = str_replace(array('\\', '*', '(', ')'), 
+            array('\5c', '\2a', '\28', '\29'), $val);
             // ASCII < 32 escaping
             $val = Ldap\Converter::ascToHex32($val);
             if (null === $val) {
-                $val = '\0';  // apply escaped "null" if string is empty
+                $val = '\0'; // apply escaped "null" if string is empty
             }
             $values[$key] = $val;
         }
@@ -134,9 +137,10 @@ abstract class AbstractFilter
      * @param  string|array $values Array of values to escape
      * @return array Array $values, but unescaped
      */
-    public static function unescapeValue($values = array())
+    public static function unescapeValue ($values = array())
     {
-        if (!is_array($values)) $values = array($values);
+        if (! is_array($values))
+            $values = array($values);
         foreach ($values as $key => $value) {
             // Translate hex code into ascii
             $values[$key] = Ldap\Converter::hex32ToAsc($value);

@@ -45,6 +45,7 @@ use Zend\Form\Decorator\Exception\RunTimeException as DecoratorException;
  */
 abstract class DijitContainer extends \Zend\Form\Decorator\AbstractDecorator
 {
+
     /**
      * View helper
      * @var string
@@ -74,10 +75,11 @@ abstract class DijitContainer extends \Zend\Form\Decorator\AbstractDecorator
      *
      * @return string
      */
-    public function getHelper()
+    public function getHelper ()
     {
         if (null === $this->_helper) {
-            throw new DecoratorException('No view helper specified fo DijitContainer decorator');
+            throw new DecoratorException(
+            'No view helper specified fo DijitContainer decorator');
         }
         return $this->_helper;
     }
@@ -87,7 +89,7 @@ abstract class DijitContainer extends \Zend\Form\Decorator\AbstractDecorator
      *
      * @return array
      */
-    public function getAttribs()
+    public function getAttribs ()
     {
         if (null === $this->_attribs) {
             $attribs = $this->getElement()->getAttribs();
@@ -104,7 +106,7 @@ abstract class DijitContainer extends \Zend\Form\Decorator\AbstractDecorator
      *
      * @return array
      */
-    public function getDijitParams()
+    public function getDijitParams ()
     {
         if (null === $this->_dijitParams) {
             $attribs = $this->getElement()->getAttribs();
@@ -113,19 +115,20 @@ abstract class DijitContainer extends \Zend\Form\Decorator\AbstractDecorator
             } else {
                 $this->_dijitParams = array();
             }
-
+            
             $options = $this->getOptions();
             if (array_key_exists('dijitParams', $options)) {
-                $this->_dijitParams = array_merge($this->_dijitParams, $options['dijitParams']);
+                $this->_dijitParams = array_merge($this->_dijitParams, 
+                $options['dijitParams']);
                 $this->removeOption('dijitParams');
             }
         }
-
+        
         // Ensure we have a title param
-        if (!array_key_exists('title', $this->_dijitParams)) {
+        if (! array_key_exists('title', $this->_dijitParams)) {
             $this->_dijitParams['title'] = $this->getTitle();
         }
-
+        
         return $this->_dijitParams;
     }
 
@@ -134,7 +137,7 @@ abstract class DijitContainer extends \Zend\Form\Decorator\AbstractDecorator
      *
      * @return string
      */
-    public function getTitle()
+    public function getTitle ()
     {
         if (null === $this->_title) {
             $title = null;
@@ -149,15 +152,15 @@ abstract class DijitContainer extends \Zend\Form\Decorator\AbstractDecorator
             if (empty($title) && (null !== ($title = $this->getOption('title')))) {
                 $this->removeOption('title');
             }
-
-            if (!empty($title)) {
+            
+            if (! empty($title)) {
                 if (null !== ($translator = $element->getTranslator())) {
                     $title = $translator->translate($title);
                 }
                 $this->_title = $title;
             }
         }
-
+        
         return (empty($this->_title) ? '' : $this->_title);
     }
 
@@ -169,35 +172,39 @@ abstract class DijitContainer extends \Zend\Form\Decorator\AbstractDecorator
      * @param  string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
         $element = $this->getElement();
-        $view    = $element->getView();
+        $view = $element->getView();
         if (null === $view) {
             return $content;
         }
-
+        
         $dijitParams = $this->getDijitParams();
-        $attribs     = array_merge($this->getAttribs(), $this->getOptions());
-
+        $attribs = array_merge($this->getAttribs(), $this->getOptions());
+        
         if (array_key_exists('legend', $attribs)) {
-            if (!array_key_exists('title', $dijitParams) || empty($dijitParams['title'])) {
+            if (! array_key_exists('title', $dijitParams) ||
+             empty($dijitParams['title'])) {
                 $dijitParams['title'] = $attribs['legend'];
             }
             unset($attribs['legend']);
         }
-
-        $helper      = $this->getHelper();
-        $id          = $element->getId() . '-' . $helper;
-
+        
+        $helper = $this->getHelper();
+        $id = $element->getId() . '-' . $helper;
+        
         if ($view->plugin('dojo')->hasDijit($id)) {
-            trigger_error(sprintf('Duplicate dijit ID detected for id "%s; temporarily generating uniqid"', $id), E_USER_WARNING);
+            trigger_error(
+            sprintf(
+            'Duplicate dijit ID detected for id "%s; temporarily generating uniqid"', 
+            $id), E_USER_WARNING);
             $base = $id;
             do {
                 $id = $base . '-' . uniqid();
             } while ($view->plugin('dojo')->hasDijit($id));
         }
-
+        
         $helper = $view->plugin($helper);
         return $helper($id, $content, $dijitParams, $attribs);
     }

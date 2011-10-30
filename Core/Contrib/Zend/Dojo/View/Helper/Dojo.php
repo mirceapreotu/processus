@@ -24,10 +24,7 @@
  */
 namespace Zend\Dojo\View\Helper;
 
-use Zend\Dojo\View\Exception,
-    Zend\Registry,
-    Zend\View\Renderer as View,
-    Zend\View\Helper\AbstractHelper as AbstractViewHelper;
+use Zend\Dojo\View\Exception, Zend\Registry, Zend\View\Renderer as View, Zend\View\Helper\AbstractHelper as AbstractViewHelper;
 
 /**
  * Zend_Dojo_View_Helper_Dojo: Dojo View Helper
@@ -45,13 +42,16 @@ use Zend\Dojo\View\Exception,
  */
 class Dojo extends AbstractViewHelper
 {
+
     /**#@+
      * Programmatic dijit creation style constants
      */
     const PROGRAMMATIC_SCRIPT = 1;
-    const PROGRAMMATIC_NOSCRIPT = -1;
-    /**#@-*/
 
+    const PROGRAMMATIC_NOSCRIPT = - 1;
+
+    /**#@-*/
+    
     /**
      * @var \Zend\View\Renderer
      */
@@ -75,11 +75,11 @@ class Dojo extends AbstractViewHelper
      *
      * @return void
      */
-    public function __construct()
+    public function __construct ()
     {
         $registry = Registry::getInstance();
-        $key      = __CLASS__;
-        if (!isset($registry[$key])) {
+        $key = __CLASS__;
+        if (! isset($registry[$key])) {
             $container = new Dojo\Container();
             $registry[$key] = $container;
         }
@@ -92,7 +92,7 @@ class Dojo extends AbstractViewHelper
      * @param  Zend\View\Renderer $view
      * @return void
      */
-    public function setView(View $view)
+    public function setView (View $view)
     {
         $this->view = $view;
         $this->_container->setView($view);
@@ -103,7 +103,7 @@ class Dojo extends AbstractViewHelper
      *
      * @return \Zend\Dojo\View\Helper\Dojo\Container
      */
-    public function __invoke()
+    public function __invoke ()
     {
         return $this->_container;
     }
@@ -116,12 +116,13 @@ class Dojo extends AbstractViewHelper
      * @return mixed
      * @throws \Zend\Dojo\View\Exception For invalid method calls
      */
-    public function __call($method, $args)
+    public function __call ($method, $args)
     {
-        if (!method_exists($this->_container, $method)) {
-            throw new Exception\BadMethodCallException(sprintf('Invalid method "%s" called on dojo view helper', $method));
+        if (! method_exists($this->_container, $method)) {
+            throw new Exception\BadMethodCallException(
+            sprintf('Invalid method "%s" called on dojo view helper', $method));
         }
-
+        
         return call_user_func_array(array($this->_container, $method), $args);
     }
 
@@ -130,7 +131,7 @@ class Dojo extends AbstractViewHelper
      *
      * @return void
      */
-    public static function setUseDeclarative()
+    public static function setUseDeclarative ()
     {
         self::$_useProgrammatic = false;
     }
@@ -144,9 +145,11 @@ class Dojo extends AbstractViewHelper
      * @param  int $style
      * @return void
      */
-    public static function setUseProgrammatic($style = self::PROGRAMMATIC_SCRIPT)
+    public static function setUseProgrammatic (
+    $style = self::PROGRAMMATIC_SCRIPT)
     {
-        if (!in_array($style, array(self::PROGRAMMATIC_SCRIPT, self::PROGRAMMATIC_NOSCRIPT))) {
+        if (! in_array($style, 
+        array(self::PROGRAMMATIC_SCRIPT, self::PROGRAMMATIC_NOSCRIPT))) {
             $style = self::PROGRAMMATIC_SCRIPT;
         }
         self::$_useProgrammatic = $style;
@@ -157,7 +160,7 @@ class Dojo extends AbstractViewHelper
      *
      * @return bool
      */
-    public static function useDeclarative()
+    public static function useDeclarative ()
     {
         return (false === self::$_useProgrammatic);
     }
@@ -167,7 +170,7 @@ class Dojo extends AbstractViewHelper
      *
      * @return bool
      */
-    public static function useProgrammatic()
+    public static function useProgrammatic ()
     {
         return (false !== self::$_useProgrammatic);
     }
@@ -177,7 +180,7 @@ class Dojo extends AbstractViewHelper
      *
      * @return bool
      */
-    public static function useProgrammaticNoScript()
+    public static function useProgrammaticNoScript ()
     {
         return (self::PROGRAMMATIC_NOSCRIPT === self::$_useProgrammatic);
     }

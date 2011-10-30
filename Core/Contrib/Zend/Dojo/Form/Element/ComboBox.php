@@ -35,6 +35,7 @@ namespace Zend\Dojo\Form\Element;
  */
 class ComboBox extends DijitMulti
 {
+
     /**
      * Use ComboBox dijit view helper
      * @var string
@@ -52,9 +53,9 @@ class ComboBox extends DijitMulti
      *
      * @return array
      */
-    public function getStoreInfo()
+    public function getStoreInfo ()
     {
-        if (!$this->hasDijitParam('store')) {
+        if (! $this->hasDijitParam('store')) {
             $this->dijitParams['store'] = array();
         }
         return $this->dijitParams['store'];
@@ -66,7 +67,7 @@ class ComboBox extends DijitMulti
      * @param  string $identifier
      * @return \Zend\Dojo\Form\Element\ComboBox
      */
-    public function setStoreId($identifier)
+    public function setStoreId ($identifier)
     {
         $store = $this->getStoreInfo();
         $store['store'] = (string) $identifier;
@@ -79,7 +80,7 @@ class ComboBox extends DijitMulti
      *
      * @return string|null
      */
-    public function getStoreId()
+    public function getStoreId ()
     {
         $store = $this->getStoreInfo();
         if (array_key_exists('store', $store)) {
@@ -94,7 +95,7 @@ class ComboBox extends DijitMulti
      * @param  string $dojoType
      * @return \Zend\Dojo\Form\Element\ComboBox
      */
-    public function setStoreType($dojoType)
+    public function setStoreType ($dojoType)
     {
         $store = $this->getStoreInfo();
         $store['type'] = (string) $dojoType;
@@ -107,7 +108,7 @@ class ComboBox extends DijitMulti
      *
      * @return string|null
      */
-    public function getStoreType()
+    public function getStoreType ()
     {
         $store = $this->getStoreInfo();
         if (array_key_exists('type', $store)) {
@@ -122,7 +123,7 @@ class ComboBox extends DijitMulti
      * @param  array $params
      * @return \Zend\Dojo\Form\Element\ComboBox
      */
-    public function setStoreParams(array $params)
+    public function setStoreParams (array $params)
     {
         $store = $this->getStoreInfo();
         $store['params'] = $params;
@@ -135,7 +136,7 @@ class ComboBox extends DijitMulti
      *
      * @return array
      */
-    public function getStoreParams()
+    public function getStoreParams ()
     {
         $store = $this->getStoreInfo();
         if (array_key_exists('params', $store)) {
@@ -150,7 +151,7 @@ class ComboBox extends DijitMulti
      * @param  bool $flag
      * @return \Zend\Dojo\Form\Element\ComboBox
      */
-    public function setAutocomplete($flag)
+    public function setAutocomplete ($flag)
     {
         $this->setDijitParam('autocomplete', (bool) $flag);
         return $this;
@@ -161,9 +162,9 @@ class ComboBox extends DijitMulti
      *
      * @return bool
      */
-    public function getAutocomplete()
+    public function getAutocomplete ()
     {
-        if (!$this->hasDijitParam('autocomplete')) {
+        if (! $this->hasDijitParam('autocomplete')) {
             return false;
         }
         return $this->getDijitParam('autocomplete');
@@ -176,10 +177,10 @@ class ComboBox extends DijitMulti
      * @param  mixed $context
      * @return bool
      */
-    public function isValid($value, $context = null)
+    public function isValid ($value, $context = null)
     {
         $storeInfo = $this->getStoreInfo();
-        if (!empty($storeInfo)) {
+        if (! empty($storeInfo)) {
             $this->setRegisterInArrayValidator(false);
         }
         return parent::isValid($value, $context);

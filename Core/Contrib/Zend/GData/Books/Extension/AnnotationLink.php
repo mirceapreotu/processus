@@ -35,8 +35,7 @@ namespace Zend\GData\Books\Extension;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class AnnotationLink extends
-    BooksLink
+class AnnotationLink extends BooksLink
 {
 
     /**
@@ -50,10 +49,10 @@ class AnnotationLink extends
      * @param string|null $title Human-readable resource title
      * @param string|null $length Resource length in octets
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($href = null, $rel = null, $type = null,
-            $hrefLang = null, $title = null, $length = null)
+    public function __construct ($href = null, $rel = null, $type = null, $hrefLang = null, 
+    $title = null, $length = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Books::$namespaces);
         parent::__construct($href, $rel, $type, $hrefLang, $title, $length);

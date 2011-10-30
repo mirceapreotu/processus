@@ -22,8 +22,7 @@
  * @namespace
  */
 namespace Zend\Controller;
-use Zend,
-    Zend\Loader\Broker;
+use Zend, Zend\Loader\Broker;
 
 /**
  * @category   Zend
@@ -33,6 +32,7 @@ use Zend,
  */
 class Front
 {
+
     /**
      * Base URL
      * @var string
@@ -129,7 +129,7 @@ class Front
      *
      * @return void
      */
-    protected function __construct()
+    protected function __construct ()
     {
         $this->_plugins = new Plugin\Broker();
     }
@@ -139,21 +139,20 @@ class Front
      *
      * @return void
      */
-    private function __clone()
-    {
-    }
+    private function __clone ()
+    {}
 
     /**
      * Singleton instance
      *
      * @return \Zend\Controller\Front
      */
-    public static function getInstance()
+    public static function getInstance ()
     {
         if (null === self::$_instance) {
             self::$_instance = new self();
         }
-
+        
         return self::$_instance;
     }
 
@@ -166,7 +165,7 @@ class Front
      *
      * @return void
      */
-    public function resetInstance()
+    public function resetInstance ()
     {
         $reflection = new \ReflectionObject($this);
         foreach ($reflection->getProperties() as $property) {
@@ -206,11 +205,9 @@ class Front
      * @return void
      * @throws \Zend\Controller\Exception if called from an object instance
      */
-    public static function run($controllerDirectory)
+    public static function run ($controllerDirectory)
     {
-        self::getInstance()
-            ->setControllerDirectory($controllerDirectory)
-            ->dispatch();
+        self::getInstance()->setControllerDirectory($controllerDirectory)->dispatch();
     }
 
     /**
@@ -224,7 +221,7 @@ class Front
      * @return \Zend\Controller\Front
      * @throws \Zend\Controller\Exception if directory not found or readable
      */
-    public function addControllerDirectory($directory, $module = null)
+    public function addControllerDirectory ($directory, $module = null)
     {
         $this->getDispatcher()->addControllerDirectory($directory, $module);
         return $this;
@@ -241,7 +238,7 @@ class Front
      * @param  string $module Optional module name to use with string $directory
      * @return \Zend\Controller\Front
      */
-    public function setControllerDirectory($directory, $module = null)
+    public function setControllerDirectory ($directory, $module = null)
     {
         $this->getDispatcher()->setControllerDirectory($directory, $module);
         return $this;
@@ -258,7 +255,7 @@ class Front
      * @param  string $name Default null
      * @return array|string|null
      */
-    public function getControllerDirectory($name = null)
+    public function getControllerDirectory ($name = null)
     {
         return $this->getDispatcher()->getControllerDirectory($name);
     }
@@ -269,7 +266,7 @@ class Front
      * @param  string $module
      * @return bool
      */
-    public function removeControllerDirectory($module)
+    public function removeControllerDirectory ($module)
     {
         return $this->getDispatcher()->removeControllerDirectory($module);
     }
@@ -284,29 +281,31 @@ class Front
      * @param  string $path
      * @return \Zend\Controller\Front
      */
-    public function addModuleDirectory($path)
+    public function addModuleDirectory ($path)
     {
-        try{
+        try {
             $dir = new \DirectoryIterator($path);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             throw new Exception("Directory $path not readable", 0, $e);
         }
         foreach ($dir as $file) {
-            if ($file->isDot() || !$file->isDir()) {
+            if ($file->isDot() || ! $file->isDir()) {
                 continue;
             }
-
-            $module    = $file->getFilename();
-
+            
+            $module = $file->getFilename();
+            
             // Don't use SCCS directories as modules
-            if (preg_match('/^[^a-z]/i', $module) || ('CVS' == $module)) {
+            if (preg_match('/^[^a-z]/i', $module) ||
+             ('CVS' == $module)) {
                 continue;
             }
-
-            $moduleDir = $file->getPathname() . DIRECTORY_SEPARATOR . $this->getModuleControllerDirectoryName();
+            
+            $moduleDir = $file->getPathname() . DIRECTORY_SEPARATOR .
+             $this->getModuleControllerDirectoryName();
             $this->addControllerDirectory($moduleDir, $module);
         }
-
+        
         return $this;
     }
 
@@ -316,7 +315,7 @@ class Front
      * @param  string $module
      * @return string|null
      */
-    public function getModuleDirectory($module = null)
+    public function getModuleDirectory ($module = null)
     {
         if (null === $module) {
             $request = $this->getRequest();
@@ -327,13 +326,13 @@ class Front
                 $module = $this->getDispatcher()->getDefaultModule();
             }
         }
-
+        
         $controllerDir = $this->getControllerDirectory($module);
-
-        if ((null === $controllerDir) || !is_string($controllerDir)) {
+        
+        if ((null === $controllerDir) || ! is_string($controllerDir)) {
             return null;
         }
-
+        
         return dirname($controllerDir);
     }
 
@@ -343,10 +342,10 @@ class Front
      * @param  string $name
      * @return \Zend\Controller\Front
      */
-    public function setModuleControllerDirectoryName($name = 'controllers')
+    public function setModuleControllerDirectoryName ($name = 'controllers')
     {
         $this->_moduleControllerDirectoryName = (string) $name;
-
+        
         return $this;
     }
 
@@ -355,7 +354,7 @@ class Front
      *
      * @return string
      */
-    public function getModuleControllerDirectoryName()
+    public function getModuleControllerDirectoryName ()
     {
         return $this->_moduleControllerDirectoryName;
     }
@@ -366,7 +365,7 @@ class Front
      * @param string $controller
      * @return \Zend\Controller\Front
      */
-    public function setDefaultControllerName($controller)
+    public function setDefaultControllerName ($controller)
     {
         $dispatcher = $this->getDispatcher();
         $dispatcher->setDefaultControllerName($controller);
@@ -378,7 +377,7 @@ class Front
      *
      * @return string
      */
-    public function getDefaultControllerName()
+    public function getDefaultControllerName ()
     {
         return $this->getDispatcher()->getDefaultControllerName();
     }
@@ -389,7 +388,7 @@ class Front
      * @param string $action
      * @return \Zend\Controller\Front
      */
-    public function setDefaultAction($action)
+    public function setDefaultAction ($action)
     {
         $dispatcher = $this->getDispatcher();
         $dispatcher->setDefaultAction($action);
@@ -401,7 +400,7 @@ class Front
      *
      * @return string
      */
-    public function getDefaultAction()
+    public function getDefaultAction ()
     {
         return $this->getDispatcher()->getDefaultAction();
     }
@@ -412,7 +411,7 @@ class Front
      * @param string $module
      * @return \Zend\Controller\Front
      */
-    public function setDefaultModule($module)
+    public function setDefaultModule ($module)
     {
         $dispatcher = $this->getDispatcher();
         $dispatcher->setDefaultModule($module);
@@ -424,7 +423,7 @@ class Front
      *
      * @return string
      */
-    public function getDefaultModule()
+    public function getDefaultModule ()
     {
         return $this->getDispatcher()->getDefaultModule();
     }
@@ -440,20 +439,20 @@ class Front
      * @throws \Zend\Controller\Exception if invalid request class
      * @return \Zend\Controller\Front
      */
-    public function setRequest($request)
+    public function setRequest ($request)
     {
         if (is_string($request)) {
-            if (!class_exists($request)) {
+            if (! class_exists($request)) {
                 \Zend\Loader::loadClass($request);
             }
             $request = new $request();
         }
-        if (!$request instanceof Request\AbstractRequest) {
+        if (! $request instanceof Request\AbstractRequest) {
             throw new Exception('Invalid request class');
         }
-
+        
         $this->_request = $request;
-
+        
         return $this;
     }
 
@@ -462,7 +461,7 @@ class Front
      *
      * @return null|\Zend\Controller\Request\AbstractRequest
      */
-    public function getRequest()
+    public function getRequest ()
     {
         return $this->_request;
     }
@@ -480,22 +479,22 @@ class Front
      * @throws \Zend\Controller\Exception if invalid router class
      * @return \Zend\Controller\Front
      */
-    public function setRouter($router)
+    public function setRouter ($router)
     {
         if (is_string($router)) {
-            if (!class_exists($router)) {
+            if (! class_exists($router)) {
                 \Zend\Loader::loadClass($router);
             }
             $router = new $router();
         }
-
-        if (!$router instanceof Router) {
+        
+        if (! $router instanceof Router) {
             throw new Exception('Invalid router class');
         }
-
+        
         $router->setFrontController($this);
         $this->_router = $router;
-
+        
         return $this;
     }
 
@@ -506,12 +505,12 @@ class Front
      *
      * @return \Zend\Controller\Router
      */
-    public function getRouter()
+    public function getRouter ()
     {
         if (null == $this->_router) {
             $this->setRouter(new Router\Rewrite());
         }
-
+        
         return $this->_router;
     }
 
@@ -535,18 +534,19 @@ class Front
      * @return \Zend\Controller\Front
      * @throws \Zend\Controller\Exception for non-string $base
      */
-    public function setBaseUrl($base = null)
+    public function setBaseUrl ($base = null)
     {
-        if (!is_string($base) && (null !== $base)) {
+        if (! is_string($base) && (null !== $base)) {
             throw new Exception('Rewrite base must be a string');
         }
-
+        
         $this->_baseUrl = $base;
-
-        if ((null !== ($request = $this->getRequest())) && (method_exists($request, 'setBaseUrl'))) {
+        
+        if ((null !== ($request = $this->getRequest())) &&
+         (method_exists($request, 'setBaseUrl'))) {
             $request->setBaseUrl($base);
         }
-
+        
         return $this;
     }
 
@@ -555,13 +555,13 @@ class Front
      *
      * @return string
      */
-    public function getBaseUrl()
+    public function getBaseUrl ()
     {
         $request = $this->getRequest();
         if ((null !== $request) && method_exists($request, 'getBaseUrl')) {
             return $request->getBaseUrl();
         }
-
+        
         return $this->_baseUrl;
     }
 
@@ -573,7 +573,7 @@ class Front
      * @param \Zend\Controller\Dispatcher $dispatcher
      * @return \Zend\Controller\Front
      */
-    public function setDispatcher(Dispatcher $dispatcher)
+    public function setDispatcher (Dispatcher $dispatcher)
     {
         $this->_dispatcher = $dispatcher;
         return $this;
@@ -584,12 +584,12 @@ class Front
      *
      * @return \Zend\Controller\Dispatcher
      */
-    public function getDispatcher()
+    public function getDispatcher ()
     {
         /**
          * Instantiate the default dispatcher if one was not set.
          */
-        if (!$this->_dispatcher instanceof Dispatcher) {
+        if (! $this->_dispatcher instanceof Dispatcher) {
             $this->_dispatcher = new Dispatcher\Standard();
         }
         return $this->_dispatcher;
@@ -607,20 +607,20 @@ class Front
      * @throws \Zend\Controller\Exception if invalid response class
      * @return \Zend\Controller\Front
      */
-    public function setResponse($response)
+    public function setResponse ($response)
     {
         if (is_string($response)) {
-            if (!class_exists($response)) {
+            if (! class_exists($response)) {
                 \Zend\Loader::loadClass($response);
             }
             $response = new $response();
         }
-        if (!$response instanceof Response\AbstractResponse) {
+        if (! $response instanceof Response\AbstractResponse) {
             throw new Exception('Invalid response class');
         }
-
+        
         $this->_response = $response;
-
+        
         return $this;
     }
 
@@ -629,7 +629,7 @@ class Front
      *
      * @return null|\Zend\Controller\Response\AbstractResponse
      */
-    public function getResponse()
+    public function getResponse ()
     {
         return $this->_response;
     }
@@ -641,7 +641,7 @@ class Front
      * @param mixed $value
      * @return \Zend\Controller\Front
      */
-    public function setParam($name, $value)
+    public function setParam ($name, $value)
     {
         $name = (string) $name;
         $this->_invokeParams[$name] = $value;
@@ -654,7 +654,7 @@ class Front
      * @param array $params
      * @return \Zend\Controller\Front
      */
-    public function setParams(array $params)
+    public function setParams (array $params)
     {
         $this->_invokeParams = array_merge($this->_invokeParams, $params);
         return $this;
@@ -666,12 +666,12 @@ class Front
      * @param string $name
      * @return mixed
      */
-    public function getParam($name)
+    public function getParam ($name)
     {
-        if(isset($this->_invokeParams[$name])) {
+        if (isset($this->_invokeParams[$name])) {
             return $this->_invokeParams[$name];
         }
-
+        
         return null;
     }
 
@@ -680,7 +680,7 @@ class Front
      *
      * @return array
      */
-    public function getParams()
+    public function getParams ()
     {
         return $this->_invokeParams;
     }
@@ -695,7 +695,7 @@ class Front
      * @param null|string|array single key or array of keys for params to clear
      * @return \Zend\Controller\Front
      */
-    public function clearParams($name = null)
+    public function clearParams ($name = null)
     {
         if (null === $name) {
             $this->_invokeParams = array();
@@ -708,7 +708,7 @@ class Front
                 }
             }
         }
-
+        
         return $this;
     }
 
@@ -719,7 +719,8 @@ class Front
      * @param  int $stackIndex Optional; stack index for plugin
      * @return \Zend\Controller\Front
      */
-    public function registerPlugin(Plugin\AbstractPlugin $plugin, $stackIndex = null)
+    public function registerPlugin (Plugin\AbstractPlugin $plugin, 
+    $stackIndex = null)
     {
         $this->_plugins->registerPlugin($plugin, $stackIndex);
         return $this;
@@ -731,7 +732,7 @@ class Front
      * @param  string|\Zend\Controller\Plugin\AbstractPlugin $plugin Plugin class or object to unregister
      * @return \Zend\Controller\Front
      */
-    public function unregisterPlugin($plugin)
+    public function unregisterPlugin ($plugin)
     {
         $this->_plugins->unregisterPlugin($plugin);
         return $this;
@@ -743,7 +744,7 @@ class Front
      * @param  string $class
      * @return bool
      */
-    public function hasPlugin($class)
+    public function hasPlugin ($class)
     {
         return $this->_plugins->hasPlugin($class);
     }
@@ -754,7 +755,7 @@ class Front
      * @param  string $class
      * @return false|\Zend\Controller\Plugin\AbstractPlugin|array
      */
-    public function getPlugin($class)
+    public function getPlugin ($class)
     {
         return $this->_plugins->getPlugin($class);
     }
@@ -764,7 +765,7 @@ class Front
      *
      * @return array
      */
-    public function getPlugins()
+    public function getPlugins ()
     {
         return $this->_plugins->getPlugins();
     }
@@ -775,22 +776,20 @@ class Front
      * @param  string|Broker $broker 
      * @return Front
      */
-    public function setHelperBroker($broker)
+    public function setHelperBroker ($broker)
     {
         if (is_string($broker)) {
-            if (!class_exists($broker)) {
-                throw new Exception(sprintf(
-                    'Could not find Action HelperBroker by name of "%s"',
-                    $broker
-                ));
+            if (! class_exists($broker)) {
+                throw new Exception(
+                sprintf('Could not find Action HelperBroker by name of "%s"', 
+                $broker));
             }
             $broker = new $broker();
         }
-        if (!$broker instanceof Broker) {
-            throw new Exception(sprintf(
-                'HelperBroker must implement Broker; received "%s"',
-                (is_object($broker) ? get_class($broker) : gettype($broker))
-            ));
+        if (! $broker instanceof Broker) {
+            throw new Exception(
+            sprintf('HelperBroker must implement Broker; received "%s"', 
+            (is_object($broker) ? get_class($broker) : gettype($broker))));
         }
         $this->helperBroker = $broker;
         return $this;
@@ -801,7 +800,7 @@ class Front
      * 
      * @return Broker
      */
-    public function getHelperBroker()
+    public function getHelperBroker ()
     {
         if (null === $this->helperBroker) {
             $this->setHelperBroker(new Action\HelperBroker());
@@ -825,13 +824,13 @@ class Front
      * @param boolean $flag Defaults to null (return flag state)
      * @return boolean|\Zend\Controller\Front Used as a setter, returns object; as a getter, returns boolean
      */
-    public function throwExceptions($flag = null)
+    public function throwExceptions ($flag = null)
     {
         if ($flag !== null) {
             $this->_throwExceptions = (bool) $flag;
             return $this;
         }
-
+        
         return $this->_throwExceptions;
     }
 
@@ -843,7 +842,7 @@ class Front
      * @param boolean $flag
      * @return boolean|\Zend\Controller\Front Used as a setter, returns object; as a getter, returns boolean
      */
-    public function returnResponse($flag = null)
+    public function returnResponse ($flag = null)
     {
         if (true === $flag) {
             $this->_returnResponse = true;
@@ -852,7 +851,7 @@ class Front
             $this->_returnResponse = false;
             return $this;
         }
-
+        
         return $this->_returnResponse;
     }
 
@@ -863,29 +862,34 @@ class Front
      * @param \Zend\Controller\Response\AbstractResponse|null $response
      * @return void|\Zend\Controller\Response\AbstractResponse Returns response object if returnResponse() is true
      */
-    public function dispatch(Request\AbstractRequest $request = null, Response\AbstractResponse $response = null)
+    public function dispatch (Request\AbstractRequest $request = null, 
+    Response\AbstractResponse $response = null)
     {
         $helperBroker = $this->getHelperBroker();
-        if (!$this->getParam('noErrorHandler') && !$this->_plugins->hasPlugin('\Zend\Controller\Plugin\ErrorHandler')) {
+        if (! $this->getParam('noErrorHandler') &&
+         ! $this->_plugins->hasPlugin('\Zend\Controller\Plugin\ErrorHandler')) {
             // Register with stack index of 100
-            $this->_plugins->registerPlugin(new Plugin\ErrorHandler(), 100);
+            $this->_plugins->registerPlugin(
+            new Plugin\ErrorHandler(), 100);
         }
-
-        if (!$this->getParam('noViewRenderer') && !$helperBroker->hasPlugin('viewRenderer')) {
+        
+        if (! $this->getParam('noViewRenderer') &&
+         ! $helperBroker->hasPlugin('viewRenderer')) {
             $viewRenderer = $helperBroker->load('viewrenderer');
-            $helperBroker->getStack()->offsetSet(-80, $viewRenderer);
+            $helperBroker->getStack()->offsetSet(- 80, $viewRenderer);
         }
-
+        
         /**
          * Instantiate default request object (HTTP version) if none provided
          */
         if (null !== $request) {
             $this->setRequest($request);
-        } elseif ((null === $request) && (null === ($request = $this->getRequest()))) {
+        } elseif ((null === $request) &&
+         (null === ($request = $this->getRequest()))) {
             $request = new Request\Http();
             $this->setRequest($request);
         }
-
+        
         /**
          * Set base URL of request object, if available
          */
@@ -894,90 +898,90 @@ class Front
                 $this->_request->setBaseUrl($this->_baseUrl);
             }
         }
-
+        
         /**
          * Instantiate default response object (HTTP version) if none provided
          */
         if (null !== $response) {
             $this->setResponse($response);
-        } elseif ((null === $this->_response) && (null === ($this->_response = $this->getResponse()))) {
+        } elseif ((null === $this->_response) &&
+         (null === ($this->_response = $this->getResponse()))) {
             $response = new Response\Http();
             $this->setResponse($response);
         }
-
+        
         /**
          * Register request and response objects with plugin broker
          */
-        $this->_plugins
-             ->setRequest($this->_request)
-             ->setResponse($this->_response)
-             ->setHelperBroker($helperBroker);
-
+        $this->_plugins->setRequest($this->_request)
+            ->setResponse($this->_response)
+            ->setHelperBroker($helperBroker);
+        
         /**
          * Initialize router
          */
         $router = $this->getRouter();
         $router->setParams($this->getParams());
-
+        
         /**
          * Initialize dispatcher
          */
         $dispatcher = $this->getDispatcher();
         $dispatcher->setParams($this->getParams())
-                   ->setResponse($this->_response)
-                   ->setHelperBroker($helperBroker);
-
+            ->setResponse($this->_response)
+            ->setHelperBroker($helperBroker);
+        
         // Begin dispatch
         try {
             /**
              * Route request to controller/action, if a router is provided
              */
-
+            
             /**
-            * Notify plugins of router startup
-            */
+             * Notify plugins of router startup
+             */
             $this->_plugins->routeStartup($this->_request);
-
+            
             try {
                 $router->route($this->_request);
-            }  catch (\Exception $e) {
+            } catch (\Exception $e) {
                 if ($this->throwExceptions()) {
                     throw $e;
                 }
-
+                
                 $this->_response->setException($e);
             }
-
+            
             /**
-            * Notify plugins of router completion
-            */
+             * Notify plugins of router completion
+             */
             $this->_plugins->routeShutdown($this->_request);
-
+            
             /**
              * Notify plugins of dispatch loop startup
              */
             $this->_plugins->dispatchLoopStartup($this->_request);
-
+            
             /**
-             *  Attempt to dispatch the controller/action. If the $this->_request
-             *  indicates that it needs to be dispatched, move to the next
-             *  action in the request.
+             * Attempt to dispatch the controller/action. If the $this->_request
+             * indicates that it needs to be dispatched, move to the next
+             * action in the request.
              */
             do {
                 $this->_request->setDispatched(true);
-
+                
                 /**
                  * Notify plugins of dispatch startup
                  */
                 $this->_plugins->preDispatch($this->_request);
-
+                
                 /**
                  * Skip requested action if preDispatch() has reset it
                  */
-                if (!$this->_request->isDispatched()) {
+                if (! $this->_request->isDispatched()) {
                     continue;
                 }
-
+                
                 /**
                  * Dispatch request
                  */
@@ -989,20 +993,20 @@ class Front
                     }
                     $this->_response->setException($e);
                 }
-
+                
                 /**
                  * Notify plugins of dispatch completion
                  */
                 $this->_plugins->postDispatch($this->_request);
-            } while (!$this->_request->isDispatched());
+            } while (! $this->_request->isDispatched());
         } catch (\Exception $e) {
             if ($this->throwExceptions()) {
                 throw $e;
             }
-
+            
             $this->_response->setException($e);
         }
-
+        
         /**
          * Notify plugins of dispatch loop completion
          */
@@ -1012,14 +1016,14 @@ class Front
             if ($this->throwExceptions()) {
                 throw $e;
             }
-
+            
             $this->_response->setException($e);
         }
-
+        
         if ($this->returnResponse()) {
             return $this->_response;
         }
-
+        
         $this->_response->sendResponse();
     }
 }

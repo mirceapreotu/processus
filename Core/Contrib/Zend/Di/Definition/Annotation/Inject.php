@@ -9,7 +9,7 @@ class Inject implements Annotation
 
     protected $content = null;
 
-    public function initialize($content)
+    public function initialize ($content)
     {
         $this->content = $content;
     }

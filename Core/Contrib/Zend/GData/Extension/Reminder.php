@@ -40,14 +40,19 @@ class Reminder extends Extension
 {
 
     protected $_rootElement = 'reminder';
+
     protected $_absoluteTime = null;
+
     protected $_method = null;
+
     protected $_days = null;
+
     protected $_hours = null;
+
     protected $_minutes = null;
 
-    public function __construct($absoluteTime = null, $method = null, $days = null,
-            $hours = null, $minutes = null)
+    public function __construct ($absoluteTime = null, $method = null, $days = null, 
+    $hours = null, $minutes = null)
     {
         parent::__construct();
         $this->_absoluteTime = $absoluteTime;
@@ -57,7 +62,7 @@ class Reminder extends Extension
         $this->_minutes = $minutes;
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_absoluteTime !== null) {
@@ -78,7 +83,7 @@ class Reminder extends Extension
         return $element;
     }
 
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
             case 'absoluteTime':
@@ -101,69 +106,73 @@ class Reminder extends Extension
         }
     }
 
-    public function __toString()
+    public function __toString ()
     {
         $s = '';
         if ($this->_absoluteTime)
             $s = " at " . $this->_absoluteTime;
-        else if ($this->_days)
-            $s = " in " . $this->_days . " days";
-        else if ($this->_hours)
-            $s = " in " . $this->_hours . " hours";
-        else if ($this->_minutes)
-            $s = " in " . $this->_minutes . " minutes";
+        else 
+            if ($this->_days)
+                $s = " in " . $this->_days . " days";
+            else 
+                if ($this->_hours)
+                    $s = " in " . $this->_hours . " hours";
+                else 
+                    if ($this->_minutes)
+                        $s = " in " . $this->_minutes . " minutes";
         return $this->_method . $s;
     }
 
-    public function getAbsoluteTime()
+    public function getAbsoluteTime ()
     {
         return $this->_absoluteTime;
     }
 
-    public function setAbsoluteTime($value)
+    public function setAbsoluteTime ($value)
     {
         $this->_absoluteTime = $value;
         return $this;
     }
 
-    public function getDays()
+    public function getDays ()
     {
         return $this->_days;
     }
 
-    public function setDays($value)
+    public function setDays ($value)
     {
         $this->_days = $value;
         return $this;
     }
-    public function getHours()
+
+    public function getHours ()
     {
         return $this->_hours;
     }
 
-    public function setHours($value)
+    public function setHours ($value)
     {
         $this->_hours = $value;
         return $this;
     }
 
-    public function getMinutes()
+    public function getMinutes ()
     {
         return $this->_minutes;
     }
 
-    public function setMinutes($value)
+    public function setMinutes ($value)
     {
         $this->_minutes = $value;
         return $this;
     }
 
-    public function getMethod()
+    public function getMethod ()
     {
         return $this->_method;
     }
 
-    public function setMethod($value)
+    public function setMethod ($value)
     {
         $this->_method = $value;
         return $this;

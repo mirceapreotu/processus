@@ -2,6 +2,7 @@
 
 namespace Core\Abstracts
 {
+
     /**
      * Created by JetBrains PhpStorm.
      * User: francis
@@ -11,13 +12,14 @@ namespace Core\Abstracts
      */
     abstract class AbstractModel extends AbstractManager
     {
+
         protected $_data = array();
 
         /**
          * @param $item
          * @return App_GaintS_Core_AbstractModel
          */
-        public function addItem($item)
+        public function addItem ($item)
         {
             $_data[] = $item;
             return $this;
@@ -27,7 +29,7 @@ namespace Core\Abstracts
          * @param $id
          * @return App_GaintS_Core_AbstractModel
          */
-        public function removeItemById($id)
+        public function removeItemById ($id)
         {
             unset($this->_data[$id]);
             return $this;
@@ -36,7 +38,7 @@ namespace Core\Abstracts
         /**
          * @return mixed
          */
-        public function fetchAll()
+        public function fetchAll ()
         {
             return $this->_data;
         }
@@ -45,7 +47,7 @@ namespace Core\Abstracts
          * @param $id
          * @return mixed
          */
-        public function fetchOneById($id)
+        public function fetchOneById ($id)
         {
             return $this->_data[$id];
         }

@@ -36,8 +36,7 @@ namespace Zend\GData\App;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Feed extends FeedSourceParent
-        implements \Iterator, \ArrayAccess
+class Feed extends FeedSourceParent implements \Iterator, \ArrayAccess
 {
 
     /**
@@ -72,7 +71,7 @@ class Feed extends FeedSourceParent
      * @param  string $var The property to get.
      * @return mixed
      */
-    public function __get($var)
+    public function __get ($var)
     {
         switch ($var) {
             case 'entries':
@@ -88,7 +87,7 @@ class Feed extends FeedSourceParent
      * @param DOMDocument $doc
      * @return DOMElement
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         foreach ($this->_entry as $entry) {
@@ -103,20 +102,22 @@ class Feed extends FeedSourceParent
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('atom') . ':' . 'entry':
-            $newEntry = new $this->entryClassName($child);
-            $newEntry->setHttpClient($this->getHttpClient());
-            $newEntry->setMajorProtocolVersion($this->getMajorProtocolVersion());
-            $newEntry->setMinorProtocolVersion($this->getMinorProtocolVersion());
-            $this->_entry[] = $newEntry;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('atom') . ':' . 'entry':
+                $newEntry = new $this->entryClassName($child);
+                $newEntry->setHttpClient($this->getHttpClient());
+                $newEntry->setMajorProtocolVersion(
+                $this->getMajorProtocolVersion());
+                $newEntry->setMinorProtocolVersion(
+                $this->getMinorProtocolVersion());
+                $this->_entry[] = $newEntry;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
@@ -125,7 +126,7 @@ class Feed extends FeedSourceParent
      *
      * @return integer Entry count.
      */
-    public function count()
+    public function count ()
     {
         return count($this->_entry);
     }
@@ -135,7 +136,7 @@ class Feed extends FeedSourceParent
      *
      * @return void
      */
-    public function rewind()
+    public function rewind ()
     {
         $this->_entryIndex = 0;
     }
@@ -145,7 +146,7 @@ class Feed extends FeedSourceParent
      *
      * @return mixed The current row, or null if no rows.
      */
-    public function current()
+    public function current ()
     {
         return $this->_entry[$this->_entryIndex];
     }
@@ -155,7 +156,7 @@ class Feed extends FeedSourceParent
      *
      * @return mixed The current row number (starts at 0), or NULL if no rows
      */
-    public function key()
+    public function key ()
     {
         return $this->_entryIndex;
     }
@@ -165,9 +166,9 @@ class Feed extends FeedSourceParent
      *
      * @return mixed The next row, or null if no more rows.
      */
-    public function next()
+    public function next ()
     {
-        ++$this->_entryIndex;
+        ++ $this->_entryIndex;
     }
 
     /**
@@ -175,7 +176,7 @@ class Feed extends FeedSourceParent
      *
      * @return boolean Whether the iteration is valid
      */
-    public function valid()
+    public function valid ()
     {
         return 0 <= $this->_entryIndex && $this->_entryIndex < $this->count();
     }
@@ -186,7 +187,7 @@ class Feed extends FeedSourceParent
      *
      * @return array \Zend\GData\App\Entry array
      */
-    public function getEntry()
+    public function getEntry ()
     {
         return $this->_entry;
     }
@@ -198,7 +199,7 @@ class Feed extends FeedSourceParent
      * @param array $value The array of \Zend\GData\App\Entry elements
      * @return \Zend\GData\App\Feed Provides a fluent interface
      */
-    public function setEntry($value)
+    public function setEntry ($value)
     {
         $this->_entry = $value;
         return $this;
@@ -211,7 +212,7 @@ class Feed extends FeedSourceParent
      * @param \Zend\GData\App\Entry An individual entry to add.
      * @return \Zend\GData\App\Feed Provides a fluent interface
      */
-    public function addEntry($value)
+    public function addEntry ($value)
     {
         $this->_entry[] = $value;
         return $this;
@@ -224,7 +225,7 @@ class Feed extends FeedSourceParent
      * @param \Zend\GData\App\Entry $value The value to set
      * @return void
      */
-    public function offsetSet($key, $value)
+    public function offsetSet ($key, $value)
     {
         $this->_entry[$key] = $value;
     }
@@ -235,7 +236,7 @@ class Feed extends FeedSourceParent
      * @param int $key The index to get
      * @param \Zend\GData\App\Entry $value The value to set
      */
-    public function offsetGet($key)
+    public function offsetGet ($key)
     {
         if (array_key_exists($key, $this->_entry)) {
             return $this->_entry[$key];
@@ -248,7 +249,7 @@ class Feed extends FeedSourceParent
      * @param int $key The index to set
      * @param \Zend\GData\App\Entry $value The value to set
      */
-    public function offsetUnset($key)
+    public function offsetUnset ($key)
     {
         if (array_key_exists($key, $this->_entry)) {
             unset($this->_entry[$key]);
@@ -261,48 +262,48 @@ class Feed extends FeedSourceParent
      * @param int $key The index to check for existence
      * @return boolean
      */
-    public function offsetExists($key)
+    public function offsetExists ($key)
     {
         return (array_key_exists($key, $this->_entry));
     }
 
-   /**
+    /**
      * Retrieve the next set of results from this feed.
      *
      * @throws \Zend\GData\App\Exception
      * @return mixed|null Returns the next set of results as a feed of the same
-     *          class as this feed, or null if no results exist.
+     * class as this feed, or null if no results exist.
      */
-    public function getNextFeed()
+    public function getNextFeed ()
     {
         $nextLink = $this->getNextLink();
-        if (!$nextLink) {
-            throw new Exception('No link to next set ' .
-            'of results found.');
+        if (! $nextLink) {
+            throw new Exception(
+            'No link to next set ' . 'of results found.');
         }
         $nextLinkHref = $nextLink->getHref();
         $service = new App($this->getHttpClient());
-
+        
         return $service->getFeed($nextLinkHref, get_class($this));
     }
 
-   /**
+    /**
      * Retrieve the previous set of results from this feed.
      *
      * @throws \Zend\GData\App\Exception
      * @return mixed|null Returns the previous set of results as a feed of
-     *          the same class as this feed, or null if no results exist.
+     * the same class as this feed, or null if no results exist.
      */
-    public function getPreviousFeed()
+    public function getPreviousFeed ()
     {
         $previousLink = $this->getPreviousLink();
-        if (!$previousLink) {
-            throw new Exception('No link to previous set ' .
-            'of results found.');
+        if (! $previousLink) {
+            throw new Exception(
+            'No link to previous set ' . 'of results found.');
         }
         $previousLinkHref = $previousLink->getHref();
         $service = new App($this->getHttpClient());
-
+        
         return $service->getFeed($previousLinkHref, get_class($this));
     }
 
@@ -316,7 +317,7 @@ class Feed extends FeedSourceParent
      * @param (int|NULL) $value The major protocol version to use.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function setMajorProtocolVersion($value)
+    public function setMajorProtocolVersion ($value)
     {
         parent::setMajorProtocolVersion($value);
         foreach ($this->entries as $entry) {
@@ -335,7 +336,7 @@ class Feed extends FeedSourceParent
      * @param (int|NULL) $value The minor protocol version to use.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function setMinorProtocolVersion($value)
+    public function setMinorProtocolVersion ($value)
     {
         parent::setMinorProtocolVersion($value);
         foreach ($this->entries as $entry) {

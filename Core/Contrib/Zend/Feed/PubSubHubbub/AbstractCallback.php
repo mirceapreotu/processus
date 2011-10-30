@@ -36,6 +36,7 @@ namespace Zend\Feed\PubSubHubbub;
  */
 abstract class AbstractCallback implements Callback
 {
+
     /**
      * An instance of Zend_Feed_Pubsubhubbub_Model_SubscriptionPersistence used 
      * to background save any verification tokens associated with a subscription
@@ -68,7 +69,7 @@ abstract class AbstractCallback implements Callback
      *
      * @param array|\Zend\Config\Config $options Options array or \Zend\Config\Config instance
      */
-    public function __construct($config = null)
+    public function __construct ($config = null)
     {
         if ($config !== null) {
             $this->setConfig($config);
@@ -81,13 +82,13 @@ abstract class AbstractCallback implements Callback
      * @param  array|\Zend\Config\Config $options Options array or \Zend\Config\Config instance
      * @return \Zend\Feed\PubSubHubbub\AbstractCallback
      */
-    public function setConfig($config)
+    public function setConfig ($config)
     {
         if ($config instanceof \Zend\Config\Config) {
             $config = $config->toArray();
-        } elseif (!is_array($config)) {
-            throw new Exception('Array or Zend_Config object'
-            . 'expected, got ' . gettype($config));
+        } elseif (! is_array($config)) {
+            throw new Exception(
+            'Array or Zend_Config object' . 'expected, got ' . gettype($config));
         }
         if (array_key_exists('storage', $config)) {
             $this->setStorage($config['storage']);
@@ -103,7 +104,7 @@ abstract class AbstractCallback implements Callback
      *
      * @return void
      */
-    public function sendResponse()
+    public function sendResponse ()
     {
         $this->getHttpResponse()->sendResponse();
     }
@@ -116,7 +117,7 @@ abstract class AbstractCallback implements Callback
      * @param  \Zend\Feed\PubSubHubbub\Model\SubscriptionPersistence $storage
      * @return \Zend\Feed\PubSubHubbub\AbstractCallback
      */
-    public function setStorage(Model\SubscriptionPersistence $storage)
+    public function setStorage (Model\SubscriptionPersistence $storage)
     {
         $this->_storage = $storage;
         return $this;
@@ -129,11 +130,12 @@ abstract class AbstractCallback implements Callback
      *
      * @return \Zend\Feed\PubSubHubbub\Model\SubscriptionPersistence
      */
-    public function getStorage()
+    public function getStorage ()
     {
         if ($this->_storage === null) {
-            throw new Exception('No storage object has been'
-                . ' set that subclasses Zend\Feed\Pubsubhubbub\Model\SubscriptionPersistence');
+            throw new Exception(
+            'No storage object has been' .
+             ' set that subclasses Zend\Feed\Pubsubhubbub\Model\SubscriptionPersistence');
         }
         return $this->_storage;
     }
@@ -146,15 +148,14 @@ abstract class AbstractCallback implements Callback
      * @param  Zend\Feed\Pubsubhubbub\HttpResponse|\Zend\Controller\Response\Http $httpResponse
      * @return \Zend\Feed\PubSubHubbub\AbstractCallback
      */
-    public function setHttpResponse($httpResponse)
+    public function setHttpResponse ($httpResponse)
     {
-        if (!is_object($httpResponse)
-            || (!$httpResponse instanceof HttpResponse
-                && !$httpResponse instanceof \Zend\Controller\Response\Http)
-        ) {
-            throw new Exception('HTTP Response object must'
-                . ' implement one of Zend\Feed\Pubsubhubbub\HttpResponse or'
-                . ' Zend\Controller\Response\Http');
+        if (! is_object($httpResponse) || (! $httpResponse instanceof HttpResponse &&
+         ! $httpResponse instanceof \Zend\Controller\Response\Http)) {
+            throw new Exception(
+            'HTTP Response object must' .
+             ' implement one of Zend\Feed\Pubsubhubbub\HttpResponse or' .
+             ' Zend\Controller\Response\Http');
         }
         $this->_httpResponse = $httpResponse;
         return $this;
@@ -167,10 +168,10 @@ abstract class AbstractCallback implements Callback
      *
      * @return Zend\Feed\Pubsubhubbub\HttpResponse|\Zend\Controller\Response\Http
      */
-    public function getHttpResponse()
+    public function getHttpResponse ()
     {
         if ($this->_httpResponse === null) {
-            $this->_httpResponse = new HttpResponse;
+            $this->_httpResponse = new HttpResponse();
         }
         return $this->_httpResponse;
     }
@@ -183,12 +184,12 @@ abstract class AbstractCallback implements Callback
      * @param  string|int $count
      * @return \Zend\Feed\PubSubHubbub\AbstractCallback
      */
-    public function setSubscriberCount($count)
+    public function setSubscriberCount ($count)
     {
         $count = intval($count);
         if ($count <= 0) {
-            throw new Exception('Subscriber count must be'
-                . ' greater than zero');
+            throw new Exception(
+            'Subscriber count must be' . ' greater than zero');
         }
         $this->_subscriberCount = $count;
         return $this;
@@ -200,7 +201,7 @@ abstract class AbstractCallback implements Callback
      *
      * @return int
      */
-    public function getSubscriberCount()
+    public function getSubscriberCount ()
     {
         return $this->_subscriberCount;
     }
@@ -208,7 +209,7 @@ abstract class AbstractCallback implements Callback
     /**
      * Attempt to detect the callback URL (specifically the path forward)
      */
-    protected function _detectCallbackUrl()
+    protected function _detectCallbackUrl ()
     {
         $callbackUrl = '';
         if (isset($_SERVER['HTTP_X_REWRITE_URL'])) {
@@ -224,8 +225,8 @@ abstract class AbstractCallback implements Callback
                 $callbackUrl = substr($callbackUrl, strlen($schemeAndHttpHost));
             }
         } elseif (isset($_SERVER['ORIG_PATH_INFO'])) {
-            $callbackUrl= $_SERVER['ORIG_PATH_INFO'];
-            if (!empty($_SERVER['QUERY_STRING'])) {
+            $callbackUrl = $_SERVER['ORIG_PATH_INFO'];
+            if (! empty($_SERVER['QUERY_STRING'])) {
                 $callbackUrl .= '?' . $_SERVER['QUERY_STRING'];
             }
         }
@@ -237,9 +238,9 @@ abstract class AbstractCallback implements Callback
      *
      * @return string
      */
-    protected function _getHttpHost()
+    protected function _getHttpHost ()
     {
-        if (!empty($_SERVER['HTTP_HOST'])) {
+        if (! empty($_SERVER['HTTP_HOST'])) {
             return $_SERVER['HTTP_HOST'];
         }
         $scheme = 'http';
@@ -248,9 +249,8 @@ abstract class AbstractCallback implements Callback
         }
         $name = $_SERVER['SERVER_NAME'];
         $port = $_SERVER['SERVER_PORT'];
-        if (($scheme == 'http' && $port == 80)
-            || ($scheme == 'https' && $port == 443)
-        ) {
+        if (($scheme == 'http' && $port == 80) ||
+         ($scheme == 'https' && $port == 443)) {
             return $name;
         } else {
             return $name . ':' . $port;
@@ -262,19 +262,19 @@ abstract class AbstractCallback implements Callback
      *
      * @param string $header
      */
-    protected function _getHeader($header)
+    protected function _getHeader ($header)
     {
         $temp = strtoupper(str_replace('-', '_', $header));
-        if (!empty($_SERVER[$temp])) {
+        if (! empty($_SERVER[$temp])) {
             return $_SERVER[$temp];
         }
         $temp = 'HTTP_' . strtoupper(str_replace('-', '_', $header));
-        if (!empty($_SERVER[$temp])) {
+        if (! empty($_SERVER[$temp])) {
             return $_SERVER[$temp];
         }
         if (function_exists('apache_request_headers')) {
             $headers = apache_request_headers();
-            if (!empty($headers[$header])) {
+            if (! empty($headers[$header])) {
                 return $headers[$header];
             }
         }
@@ -286,7 +286,7 @@ abstract class AbstractCallback implements Callback
      *
      * @return string|false Raw body, or false if not present
      */
-    protected function _getRawBody()
+    protected function _getRawBody ()
     {
         $body = file_get_contents('php://input');
         if (strlen(trim($body)) == 0 && isset($GLOBALS['HTTP_RAW_POST_DATA'])) {

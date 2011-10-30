@@ -45,45 +45,43 @@ use Zend\Form;
  */
 class PrepareElements extends FormElements
 {
+
     /**
      * Render form elements
      *
      * @param  string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
         $form = $this->getElement();
-        if ((!$form instanceof Form\Form)
-            && (!$form instanceof Form\DisplayGroup)
-        ) {
+        if ((! $form instanceof Form\Form) &&
+         (! $form instanceof Form\DisplayGroup)) {
             return $content;
         }
-
+        
         $this->_recursivelyPrepareForm($form);
-
+        
         return $content;
     }
 
-    protected function _recursivelyPrepareForm(Form\Form $form)
+    protected function _recursivelyPrepareForm (Form\Form $form)
     {
-        $belongsTo      = ($form instanceof Form\Form)
-                        ? $form->getElementsBelongTo()
-                        : null;
+        $belongsTo = ($form instanceof Form\Form) ? $form->getElementsBelongTo() : null;
         $elementContent = '';
-        $separator      = $this->getSeparator();
-        $translator     = $form->getTranslator();
-        $view           = $form->getView();
-
+        $separator = $this->getSeparator();
+        $translator = $form->getTranslator();
+        $view = $form->getView();
+        
         foreach ($form as $item) {
-            $item->setView($view)
-                 ->setTranslator($translator);
+            $item->setView($view)->setTranslator($translator);
             if ($item instanceof Form\Element) {
                 $item->setBelongsTo($belongsTo);
             } elseif ($item instanceof Form\Form) {
-                if (!empty($belongsTo)) {
+                if (! empty($belongsTo)) {
                     if ($item->isArray()) {
-                        $name = $this->mergeBelongsTo($belongsTo, $item->getElementsBelongTo());
+                        $name = $this->mergeBelongsTo($belongsTo, 
+                        $item->getElementsBelongTo());
                         $item->setElementsBelongTo($name, true);
                     } else {
                         $item->setElementsBelongTo($belongsTo, true);
@@ -91,7 +89,7 @@ class PrepareElements extends FormElements
                 }
                 $this->_recursivelyPrepareForm($item);
             } elseif ($item instanceof Form\DisplayGroup) {
-                if (!empty($belongsTo)) {
+                if (! empty($belongsTo)) {
                     foreach ($item as $element) {
                         $element->setBelongsTo($belongsTo);
                     }

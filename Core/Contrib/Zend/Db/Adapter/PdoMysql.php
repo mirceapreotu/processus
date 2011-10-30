@@ -59,24 +59,16 @@ class PdoMysql extends AbstractPdoAdapter
      *
      * @var array Associative array of datatypes to values 0, 1, or 2.
      */
-    protected $_numericDataTypes = array(
-        Db\Db::INT_TYPE    => Db\Db::INT_TYPE,
-        Db\Db::BIGINT_TYPE => Db\Db::BIGINT_TYPE,
-        Db\Db::FLOAT_TYPE  => Db\Db::FLOAT_TYPE,
-        'INT'                => Db\Db::INT_TYPE,
-        'INTEGER'            => Db\Db::INT_TYPE,
-        'MEDIUMINT'          => Db\Db::INT_TYPE,
-        'SMALLINT'           => Db\Db::INT_TYPE,
-        'TINYINT'            => Db\Db::INT_TYPE,
-        'BIGINT'             => Db\Db::BIGINT_TYPE,
-        'SERIAL'             => Db\Db::BIGINT_TYPE,
-        'DEC'                => Db\Db::FLOAT_TYPE,
-        'DECIMAL'            => Db\Db::FLOAT_TYPE,
-        'DOUBLE'             => Db\Db::FLOAT_TYPE,
-        'DOUBLE PRECISION'   => Db\Db::FLOAT_TYPE,
-        'FIXED'              => Db\Db::FLOAT_TYPE,
-        'FLOAT'              => Db\Db::FLOAT_TYPE
-    );
+    protected $_numericDataTypes = array(Db\Db::INT_TYPE => Db\Db::INT_TYPE, 
+    Db\Db::BIGINT_TYPE => Db\Db::BIGINT_TYPE, 
+    Db\Db::FLOAT_TYPE => Db\Db::FLOAT_TYPE, 
+    'INT' => Db\Db::INT_TYPE, 'INTEGER' => Db\Db::INT_TYPE, 
+    'MEDIUMINT' => Db\Db::INT_TYPE, 'SMALLINT' => Db\Db::INT_TYPE, 
+    'TINYINT' => Db\Db::INT_TYPE, 'BIGINT' => Db\Db::BIGINT_TYPE, 
+    'SERIAL' => Db\Db::BIGINT_TYPE, 'DEC' => Db\Db::FLOAT_TYPE, 
+    'DECIMAL' => Db\Db::FLOAT_TYPE, 'DOUBLE' => Db\Db::FLOAT_TYPE, 
+    'DOUBLE PRECISION' => Db\Db::FLOAT_TYPE, 
+    'FIXED' => Db\Db::FLOAT_TYPE, 'FLOAT' => Db\Db::FLOAT_TYPE);
 
     /**
      * Creates a Pdo object and connects to the database.
@@ -84,24 +76,24 @@ class PdoMysql extends AbstractPdoAdapter
      * @return void
      * @throws \Zend\Db\Adapter\Exception
      */
-    protected function _connect()
+    protected function _connect ()
     {
         if ($this->_connection) {
             return;
         }
-
-        if (!empty($this->_config['charset'])) {
+        
+        if (! empty($this->_config['charset'])) {
             $initCommand = "SET NAMES '" . $this->_config['charset'] . "'";
             $this->_config['driver_options'][1002] = $initCommand; // 1002 = Pdo::MYSQL_ATTR_INIT_COMMAND
         }
-
+        
         parent::_connect();
     }
 
     /**
      * @return string
      */
-    public function getQuoteIdentifierSymbol()
+    public function getQuoteIdentifierSymbol ()
     {
         return "`";
     }
@@ -111,7 +103,7 @@ class PdoMysql extends AbstractPdoAdapter
      *
      * @return array
      */
-    public function listTables()
+    public function listTables ()
     {
         return $this->fetchCol('SHOW TABLES');
     }
@@ -144,54 +136,64 @@ class PdoMysql extends AbstractPdoAdapter
      * @param string $schemaName OPTIONAL
      * @return array
      */
-    public function describeTable($tableName, $schemaName = null)
+    public function describeTable ($tableName, $schemaName = null)
     {
         // @todo  use INFORMATION_SCHEMA someday when PdoMysql's
         // implementation has reasonably good performance and
         // the version with this improvement is in wide use.
+        
 
         if ($schemaName) {
-            $sql = 'DESCRIBE ' . $this->quoteIdentifier("$schemaName.$tableName", true);
+            $sql = 'DESCRIBE ' .
+             $this->quoteIdentifier("$schemaName.$tableName", true);
         } else {
             $sql = 'DESCRIBE ' . $this->quoteIdentifier($tableName, true);
         }
         $stmt = $this->query($sql);
-
+        
         // Use FETCH_NUM so we are not dependent on the CASE attribute of the Pdo connection
         $result = $stmt->fetchAll(Db\Db::FETCH_NUM);
-
-        $field   = 0;
-        $type    = 1;
-        $null    = 2;
-        $key     = 3;
+        
+        $field = 0;
+        $type = 1;
+        $null = 2;
+        $key = 3;
         $default = 4;
-        $extra   = 5;
-
+        $extra = 5;
+        
         $desc = array();
         $i = 1;
         $p = 1;
         foreach ($result as $row) {
-            list($length, $scale, $precision, $unsigned, $primary, $primaryPosition, $identity)
-                = array(null, null, null, null, false, null, false);
+            list ($length, $scale, $precision, $unsigned, $primary, $primaryPosition, $identity) = array(
+            null, null, null, null, false, null, false);
             if (preg_match('/unsigned/', $row[$type])) {
                 $unsigned = true;
             }
             if (preg_match('/^((?:var)?char)\((\d+)\)/', $row[$type], $matches)) {
                 $row[$type] = $matches[1];
                 $length = $matches[2];
-            } else if (preg_match('/^decimal\((\d+),(\d+)\)/', $row[$type], $matches)) {
-                $row[$type] = 'decimal';
-                $precision = $matches[1];
-                $scale = $matches[2];
-            } else if (preg_match('/^float\((\d+),(\d+)\)/', $row[$type], $matches)) {
-                $row[$type] = 'float';
-                $precision = $matches[1];
-                $scale = $matches[2];
-            } else if (preg_match('/^((?:big|medium|small|tiny)?int)\((\d+)\)/', $row[$type], $matches)) {
-                $row[$type] = $matches[1];
-                // The optional argument of a PdoMysql int type is not precision
-                // or length; it is only a hint for display width.
-            }
+            } else 
+                if (preg_match('/^decimal\((\d+),(\d+)\)/', $row[$type], 
+                $matches)) {
+                    $row[$type] = 'decimal';
+                    $precision = $matches[1];
+                    $scale = $matches[2];
+                } else 
+                    if (preg_match('/^float\((\d+),(\d+)\)/', $row[$type], 
+                    $matches)) {
+                        $row[$type] = 'float';
+                        $precision = $matches[1];
+                        $scale = $matches[2];
+                    } else 
+                        if (preg_match(
+                        '/^((?:big|medium|small|tiny)?int)\((\d+)\)/', 
+                        $row[$type], $matches)) {
+                            $row[$type] = $matches[1];
+                        
+     // The optional argument of a PdoMysql int type is not precision
+                        // or length; it is only a hint for display width.
+                        }
             if (strtoupper($row[$key]) == 'PRI') {
                 $primary = true;
                 $primaryPosition = $p;
@@ -200,25 +202,20 @@ class PdoMysql extends AbstractPdoAdapter
                 } else {
                     $identity = false;
                 }
-                ++$p;
+                ++ $p;
             }
             $desc[$this->foldCase($row[$field])] = array(
-                'SCHEMA_NAME'      => null, // @todo
-                'TABLE_NAME'       => $this->foldCase($tableName),
-                'COLUMN_NAME'      => $this->foldCase($row[$field]),
-                'COLUMN_POSITION'  => $i,
-                'DATA_TYPE'        => $row[$type],
-                'DEFAULT'          => $row[$default],
-                'NULLABLE'         => (bool) ($row[$null] == 'YES'),
-                'LENGTH'           => $length,
-                'SCALE'            => $scale,
-                'PRECISION'        => $precision,
-                'UNSIGNED'         => $unsigned,
-                'PRIMARY'          => $primary,
-                'PRIMARY_POSITION' => $primaryPosition,
-                'IDENTITY'         => $identity
-            );
-            ++$i;
+            'SCHEMA_NAME' => null,  // @todo
+            'TABLE_NAME' => $this->foldCase($tableName), 
+            'COLUMN_NAME' => $this->foldCase($row[$field]), 
+            'COLUMN_POSITION' => $i, 'DATA_TYPE' => $row[$type], 
+            'DEFAULT' => $row[$default], 
+            'NULLABLE' => (bool) ($row[$null] == 'YES'), 
+            'LENGTH' => $length, 'SCALE' => $scale, 
+            'PRECISION' => $precision, 'UNSIGNED' => $unsigned, 
+            'PRIMARY' => $primary, 'PRIMARY_POSITION' => $primaryPosition, 
+            'IDENTITY' => $identity);
+            ++ $i;
         }
         return $desc;
     }
@@ -232,23 +229,25 @@ class PdoMysql extends AbstractPdoAdapter
      * @throws \Zend\Db\Adapter\Exception
      * @return string
      */
-     public function limit($sql, $count, $offset = 0)
-     {
+    public function limit ($sql, $count, $offset = 0)
+    {
         $count = intval($count);
         if ($count <= 0) {
-            throw new Adapter\Exception("LIMIT argument count=$count is not valid");
+            throw new Adapter\Exception(
+            "LIMIT argument count=$count is not valid");
         }
-
+        
         $offset = intval($offset);
         if ($offset < 0) {
-            throw new Adapter\Exception("LIMIT argument offset=$offset is not valid");
+            throw new Adapter\Exception(
+            "LIMIT argument offset=$offset is not valid");
         }
-
+        
         $sql .= " LIMIT $count";
         if ($offset > 0) {
             $sql .= " OFFSET $offset";
         }
-
+        
         return $sql;
     }
 

@@ -24,8 +24,7 @@
  */
 namespace Zend\Ldap\Node\Schema\ObjectClass;
 
-use Zend\Ldap\Node\Schema\ObjectClass,
-    Zend\Ldap\Node\Schema;
+use Zend\Ldap\Node\Schema\ObjectClass, Zend\Ldap\Node\Schema;
 
 /**
  * Zend_Ldap_Node_Schema_ObjectClass_ActiveDirectory provides access to the objectClass
@@ -41,12 +40,13 @@ use Zend\Ldap\Node\Schema\ObjectClass,
  */
 class ActiveDirectory extends Schema\Item implements ObjectClass
 {
+
     /**
      * Gets the objectClass name
      *
      * @return string
      */
-    public function getName()
+    public function getName ()
     {
         return $this->ldapdisplayname[0];
     }
@@ -56,7 +56,7 @@ class ActiveDirectory extends Schema\Item implements ObjectClass
      *
      * @return string
      */
-    public function getOid()
+    public function getOid ()
     {
 
     }
@@ -66,7 +66,7 @@ class ActiveDirectory extends Schema\Item implements ObjectClass
      *
      * @return array
      */
-    public function getMustContain()
+    public function getMustContain ()
     {
 
     }
@@ -76,7 +76,7 @@ class ActiveDirectory extends Schema\Item implements ObjectClass
      *
      * @return array
      */
-    public function getMayContain()
+    public function getMayContain ()
     {
 
     }
@@ -86,7 +86,7 @@ class ActiveDirectory extends Schema\Item implements ObjectClass
      *
      * @return string
      */
-    public function getDescription()
+    public function getDescription ()
     {
 
     }
@@ -96,7 +96,7 @@ class ActiveDirectory extends Schema\Item implements ObjectClass
      *
      * @return integer
      */
-    public function getType()
+    public function getType ()
     {
 
     }
@@ -107,7 +107,7 @@ class ActiveDirectory extends Schema\Item implements ObjectClass
      *
      * @return array
      */
-    public function getParentClasses()
+    public function getParentClasses ()
     {
 
     }

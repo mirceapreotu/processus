@@ -2,6 +2,7 @@
 
 namespace Core\Abstracts
 {
+
     /**
      * Created by JetBrains PhpStorm.
      * User: francis
@@ -19,10 +20,10 @@ namespace Core\Abstracts
          * @param $data
          * @return App_GaintS_Core_AbstractVO
          */
-        public function setData($data)
+        public function setData ($data)
         {
             /** @var $_data object */
-            $this->_data = (array)$data;
+            $this->_data = (array) $data;
             return $this;
         }
 
@@ -31,7 +32,7 @@ namespace Core\Abstracts
          * @param $value mixed
          * @return App_GaintS_Core_AbstractVO
          */
-        public function setValueByKey($key, $value)
+        public function setValueByKey ($key, $value)
         {
             $this->_data->$key = $value;
             return $this;
@@ -41,7 +42,7 @@ namespace Core\Abstracts
          * @param $key
          * @return mixed | object
          */
-        public function getValueByKey($key)
+        public function getValueByKey ($key)
         {
             return $this->_data[$key];
         }
@@ -49,14 +50,14 @@ namespace Core\Abstracts
         /**
          * @return object
          */
-        public function getData()
+        public function getData ()
         {
             if (is_null($this->_data)) {
                 throw new Exception("data is null");
             }
             return $this->_data;
         }
-
+    
     }
 }
 

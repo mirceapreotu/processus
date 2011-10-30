@@ -41,6 +41,7 @@ use Zend\Db\Adapter;
  */
 class Ibm extends Adapter\AbstractPdoAdapter
 {
+
     /**
      * Pdo type.
      *
@@ -66,20 +67,14 @@ class Ibm extends Adapter\AbstractPdoAdapter
      *
      * @var array Associative array of datatypes to values 0, 1, or 2.
      */
-    protected $_numericDataTypes = array(
-                        Db\Db::INT_TYPE    => Db\Db::INT_TYPE,
-                        Db\Db::BIGINT_TYPE => Db\Db::BIGINT_TYPE,
-                        Db\Db::FLOAT_TYPE  => Db\Db::FLOAT_TYPE,
-                        'INTEGER'            => Db\Db::INT_TYPE,
-                        'SMALLINT'           => Db\Db::INT_TYPE,
-                        'BIGINT'             => Db\Db::BIGINT_TYPE,
-                        'DECIMAL'            => Db\Db::FLOAT_TYPE,
-                        'DEC'                => Db\Db::FLOAT_TYPE,
-                        'REAL'               => Db\Db::FLOAT_TYPE,
-                        'NUMERIC'            => Db\Db::FLOAT_TYPE,
-                        'DOUBLE PRECISION'   => Db\Db::FLOAT_TYPE,
-                        'FLOAT'              => Db\Db::FLOAT_TYPE
-                        );
+    protected $_numericDataTypes = array(Db\Db::INT_TYPE => Db\Db::INT_TYPE, 
+    Db\Db::BIGINT_TYPE => Db\Db::BIGINT_TYPE, 
+    Db\Db::FLOAT_TYPE => Db\Db::FLOAT_TYPE, 
+    'INTEGER' => Db\Db::INT_TYPE, 'SMALLINT' => Db\Db::INT_TYPE, 
+    'BIGINT' => Db\Db::BIGINT_TYPE, 'DECIMAL' => Db\Db::FLOAT_TYPE, 
+    'DEC' => Db\Db::FLOAT_TYPE, 'REAL' => Db\Db::FLOAT_TYPE, 
+    'NUMERIC' => Db\Db::FLOAT_TYPE, 'DOUBLE PRECISION' => Db\Db::FLOAT_TYPE, 
+    'FLOAT' => Db\Db::FLOAT_TYPE);
 
     /**
      * Creates a Pdo object and connects to the database.
@@ -91,46 +86,52 @@ class Ibm extends Adapter\AbstractPdoAdapter
      * @return void
      * @throws \Zend\Db\Adapter\Exception
      */
-    public function _connect()
+    public function _connect ()
     {
         if ($this->_connection) {
             return;
         }
         parent::_connect();
-
-        $this->getConnection()->setAttribute(Db\Db::ATTR_STRINGIFY_FETCHES, true);
-
+        
+        $this->getConnection()->setAttribute(Db\Db::ATTR_STRINGIFY_FETCHES, 
+        true);
+        
         try {
             if ($this->_serverType === null) {
-                $server = substr($this->getConnection()->getAttribute(\Pdo::ATTR_SERVER_INFO), 0, 3);
-
+                $server = substr(
+                $this->getConnection()->getAttribute(\Pdo::ATTR_SERVER_INFO), 0, 
+                3);
+                
                 switch ($server) {
                     case 'Db2':
                         $this->_serverType = new Db2($this);
-
+                        
                         // Add Db2-specific numeric types
                         $this->_numericDataTypes['DECFLOAT'] = Db\Db::FLOAT_TYPE;
-                        $this->_numericDataTypes['DOUBLE']   = Db\Db::FLOAT_TYPE;
-                        $this->_numericDataTypes['NUM']      = Db\Db::FLOAT_TYPE;
-
+                        $this->_numericDataTypes['DOUBLE'] = Db\Db::FLOAT_TYPE;
+                        $this->_numericDataTypes['NUM'] = Db\Db::FLOAT_TYPE;
+                        
                         break;
                     case 'Ids':
                         $this->_serverType = new Ids($this);
-
+                        
                         // Add Ids-specific numeric types
-                        $this->_numericDataTypes['SERIAL']       = Db\Db::INT_TYPE;
-                        $this->_numericDataTypes['SERIAL8']      = Db\Db::BIGINT_TYPE;
-                        $this->_numericDataTypes['INT8']         = Db\Db::BIGINT_TYPE;
-                        $this->_numericDataTypes['SMALLFLOAT']   = Db\Db::FLOAT_TYPE;
-                        $this->_numericDataTypes['MONEY']        = Db\Db::FLOAT_TYPE;
-
+                        $this->_numericDataTypes['SERIAL'] = Db\Db::INT_TYPE;
+                        $this->_numericDataTypes['SERIAL8'] = Db\Db::BIGINT_TYPE;
+                        $this->_numericDataTypes['INT8'] = Db\Db::BIGINT_TYPE;
+                        $this->_numericDataTypes['SMALLFLOAT'] = Db\Db::FLOAT_TYPE;
+                        $this->_numericDataTypes['MONEY'] = Db\Db::FLOAT_TYPE;
+                        
                         break;
-                    }
+                }
             }
         } catch (\PDOException $e) {
-            $error = strpos($e->getMessage(), 'driver does not support that attribute');
+            $error = strpos($e->getMessage(), 
+            'driver does not support that attribute');
             if ($error) {
-                throw new Adapter\Exception("Pdo_Ibm driver extension is downlevel.  Please use driver release version 1.2.1 or later", 0, $e);
+                throw new Adapter\Exception(
+                "Pdo_Ibm driver extension is downlevel.  Please use driver release version 1.2.1 or later", 
+                0, $e);
             } else {
                 throw new Adapter\Exception($e->getMessage(), $e->getCode(), $e);
             }
@@ -142,17 +143,16 @@ class Ibm extends Adapter\AbstractPdoAdapter
      *
      * @return string
      */
-    protected function _dsn()
+    protected function _dsn ()
     {
         $this->_checkRequiredOptions($this->_config);
-
+        
         // check if using full connection string
         if (array_key_exists('host', $this->_config)) {
-            $dsn = ';DATABASE=' . $this->_config['dbname']
-            . ';HOSTNAME=' . $this->_config['host']
-            . ';PORT='     . $this->_config['port']
-            // Pdo_Ibm supports only Db2 TCPIP protocol
-            . ';PROTOCOL=' . 'TCPIP;';
+            $dsn = ';DATABASE=' . $this->_config['dbname'] . ';HOSTNAME=' .
+             $this->_config['host'] . ';PORT=' . $this->_config['port'] .
+             // Pdo_Ibm supports only Db2 TCPIP protocol
+            ';PROTOCOL=' . 'TCPIP;';
         } else {
             // catalogued connection
             $dsn = $this->_config['dbname'];
@@ -167,13 +167,14 @@ class Ibm extends Adapter\AbstractPdoAdapter
      * @throws \Zend\Db\Adapter\Exception
      * @return void
      */
-    protected function _checkRequiredOptions(array $config)
+    protected function _checkRequiredOptions (array $config)
     {
         parent::_checkRequiredOptions($config);
-
+        
         if (array_key_exists('host', $this->_config) &&
-        !array_key_exists('port', $config)) {
-            throw new Adapter\Exception("Configuration must have a key for 'port' when 'host' is specified");
+         ! array_key_exists('port', $config)) {
+            throw new Adapter\Exception(
+            "Configuration must have a key for 'port' when 'host' is specified");
         }
     }
 
@@ -184,7 +185,7 @@ class Ibm extends Adapter\AbstractPdoAdapter
      * @param array $bind An array of data to bind to the placeholders.
      * @return PdoStatement
      */
-    public function prepare($sql)
+    public function prepare ($sql)
     {
         $this->_connect();
         $stmtClass = $this->_defaultStmtClass;
@@ -198,7 +199,7 @@ class Ibm extends Adapter\AbstractPdoAdapter
      *
      * @return array
      */
-    public function listTables()
+    public function listTables ()
     {
         $this->_connect();
         return $this->_serverType->listTables();
@@ -233,7 +234,7 @@ class Ibm extends Adapter\AbstractPdoAdapter
      * @param string $schemaName OPTIONAL
      * @return array
      */
-    public function describeTable($tableName, $schemaName = null)
+    public function describeTable ($tableName, $schemaName = null)
     {
         $this->_connect();
         return $this->_serverType->describeTable($tableName, $schemaName);
@@ -248,18 +249,18 @@ class Ibm extends Adapter\AbstractPdoAdapter
      * @param array $bind Column-value pairs.
      * @return int The number of affected rows.
      */
-    public function insert($table, array $bind)
+    public function insert ($table, array $bind)
     {
         $this->_connect();
         $newbind = array();
         if (is_array($bind)) {
             foreach ($bind as $name => $value) {
-                if($value !== null) {
+                if ($value !== null) {
                     $newbind[$name] = $value;
                 }
             }
         }
-
+        
         return parent::insert($table, $newbind);
     }
 
@@ -271,10 +272,10 @@ class Ibm extends Adapter\AbstractPdoAdapter
      * @param integer $offset OPTIONAL
      * @return string
      */
-    public function limit($sql, $count, $offset = 0)
+    public function limit ($sql, $count, $offset = 0)
     {
-       $this->_connect();
-       return $this->_serverType->limit($sql, $count, $offset);
+        $this->_connect();
+        return $this->_serverType->limit($sql, $count, $offset);
     }
 
     /**
@@ -285,11 +286,11 @@ class Ibm extends Adapter\AbstractPdoAdapter
      * @param string $primaryKey OPTIONAL
      * @return integer
      */
-    public function lastInsertId($tableName = null, $primaryKey = null)
+    public function lastInsertId ($tableName = null, $primaryKey = null)
     {
         $this->_connect();
-
-         if ($tableName !== null) {
+        
+        if ($tableName !== null) {
             $sequenceName = $tableName;
             if ($primaryKey) {
                 $sequenceName .= "_$primaryKey";
@@ -297,9 +298,9 @@ class Ibm extends Adapter\AbstractPdoAdapter
             $sequenceName .= '_seq';
             return $this->lastSequenceId($sequenceName);
         }
-
+        
         $id = $this->getConnection()->lastInsertId();
-
+        
         return $id;
     }
 
@@ -309,7 +310,7 @@ class Ibm extends Adapter\AbstractPdoAdapter
      * @param string $sequenceName
      * @return integer
      */
-    public function lastSequenceId($sequenceName)
+    public function lastSequenceId ($sequenceName)
     {
         $this->_connect();
         return $this->_serverType->lastSequenceId($sequenceName);
@@ -322,7 +323,7 @@ class Ibm extends Adapter\AbstractPdoAdapter
      * @param string $sequenceName
      * @return integer
      */
-    public function nextSequenceId($sequenceName)
+    public function nextSequenceId ($sequenceName)
     {
         $this->_connect();
         return $this->_serverType->nextSequenceId($sequenceName);
@@ -333,14 +334,16 @@ class Ibm extends Adapter\AbstractPdoAdapter
      * Pdo_Idm doesn't support getAttribute(Pdo::ATTR_SERVER_VERSION)
      * @return string
      */
-    public function getServerVersion()
+    public function getServerVersion ()
     {
         try {
-            $stmt = $this->query('SELECT service_level, fixpack_num FROM TABLE (sysproc.env_get_inst_info()) as INSTANCEINFO');
+            $stmt = $this->query(
+            'SELECT service_level, fixpack_num FROM TABLE (sysproc.env_get_inst_info()) as INSTANCEINFO');
             $result = $stmt->fetchAll(Db\Db::FETCH_NUM);
             if (count($result)) {
                 $matches = null;
-                if (preg_match('/((?:[0-9]{1,2}\.){1,3}[0-9]{1,2})/', $result[0][0], $matches)) {
+                if (preg_match('/((?:[0-9]{1,2}\.){1,3}[0-9]{1,2})/', 
+                $result[0][0], $matches)) {
                     return $matches[1];
                 } else {
                     return null;

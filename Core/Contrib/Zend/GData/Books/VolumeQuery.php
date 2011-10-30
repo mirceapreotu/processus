@@ -44,9 +44,9 @@ class VolumeQuery extends \Zend\GData\Query
      * Create Gdata_Books_VolumeQuery object
      *
      * @param string|null $url If non-null, pre-initializes the instance to
-     *        use a given URL.
+     * use a given URL.
      */
-    public function __construct($url = null)
+    public function __construct ($url = null)
     {
         parent::__construct($url);
     }
@@ -57,7 +57,7 @@ class VolumeQuery extends \Zend\GData\Query
      * @param string|null $value The minimum viewability - 'full' or 'partial'
      * @return \Zend\GData\Books\VolumeQuery Provides a fluent interface
      */
-    public function setMinViewability($value = null)
+    public function setMinViewability ($value = null)
     {
         switch ($value) {
             case 'full_view':
@@ -78,7 +78,7 @@ class VolumeQuery extends \Zend\GData\Query
      *
      * @return string|null min-viewability
      */
-    public function getMinViewability()
+    public function getMinViewability ()
     {
         if (array_key_exists('min-viewability', $this->_params)) {
             return $this->_params['min-viewability'];
@@ -92,7 +92,7 @@ class VolumeQuery extends \Zend\GData\Query
      *
      * @return string The URL
      */
-    public function getQueryUrl()
+    public function getQueryUrl ()
     {
         if (isset($this->_url)) {
             $url = $this->_url;

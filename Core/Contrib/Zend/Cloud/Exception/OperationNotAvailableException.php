@@ -29,8 +29,8 @@ namespace Zend\Cloud\Exception;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class OperationNotAvailableException
-    extends \Exception
-    implements \Zend\Cloud\Exception
-{}
+class OperationNotAvailableException extends \Exception implements 
+\Zend\Cloud\Exception
+{
+}
 

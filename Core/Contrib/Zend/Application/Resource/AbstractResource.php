@@ -38,6 +38,7 @@ use Zend\Application\Resource;
  */
 abstract class AbstractResource implements Resource
 {
+
     /**
      * Parent bootstrap
      *
@@ -57,23 +58,21 @@ abstract class AbstractResource implements Resource
      *
      * @var array
      */
-    protected $_skipOptions = array(
-        'options',
-        'config',
-    );
+    protected $_skipOptions = array('options', 'config');
 
     /**
      * Create a instance with options
      *
      * @param mixed $options
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         if (is_array($options)) {
             $this->setOptions($options);
-        } else if ($options instanceof \Zend\Config\Config) {
-            $this->setOptions($options->toArray());
-        }
+        } else 
+            if ($options instanceof \Zend\Config\Config) {
+                $this->setOptions($options->toArray());
+            }
     }
 
     /**
@@ -82,13 +81,13 @@ abstract class AbstractResource implements Resource
      * @param  array $options Configuration for resource
      * @return \Zend\Application\Resource\AbstractResource
      */
-    public function setOptions(array $options)
+    public function setOptions (array $options)
     {
         foreach ($options as $key => $value) {
             if (in_array(strtolower($key), $this->_skipOptions)) {
                 continue;
             }
-
+            
             $method = 'set' . strtolower($key);
             if (method_exists($this, $method)) {
                 $this->$method($value);
@@ -97,9 +96,9 @@ abstract class AbstractResource implements Resource
                 unset($options[$key]);
             }
         }
-
+        
         $this->_options = $this->mergeOptions($this->_options, $options);
-
+        
         return $this;
     }
 
@@ -108,7 +107,7 @@ abstract class AbstractResource implements Resource
      *
      * @return array
      */
-    public function getOptions()
+    public function getOptions ()
     {
         return $this->_options;
     }
@@ -120,14 +119,14 @@ abstract class AbstractResource implements Resource
      * @param  mixed $array2
      * @return array
      */
-    public function mergeOptions(array $array1, $array2 = null)
+    public function mergeOptions (array $array1, $array2 = null)
     {
         if (is_array($array2)) {
             foreach ($array2 as $key => $val) {
                 if (is_array($array2[$key])) {
-                    $array1[$key] = (array_key_exists($key, $array1) && is_array($array1[$key]))
-                                  ? $this->mergeOptions($array1[$key], $array2[$key])
-                                  : $array2[$key];
+                    $array1[$key] = (array_key_exists($key, $array1) &&
+                     is_array($array1[$key])) ? $this->mergeOptions(
+                    $array1[$key], $array2[$key]) : $array2[$key];
                 } else {
                     $array1[$key] = $val;
                 }
@@ -142,7 +141,7 @@ abstract class AbstractResource implements Resource
      * @param  \Zend\Application\Bootstrapper $bootstrap
      * @return \Zend\Application\Resource
      */
-    public function setBootstrap(\Zend\Application\Bootstrapper $bootstrap)
+    public function setBootstrap (\Zend\Application\Bootstrapper $bootstrap)
     {
         $this->_bootstrap = $bootstrap;
         return $this;
@@ -153,7 +152,7 @@ abstract class AbstractResource implements Resource
      *
      * @return null|\Zend\Application\Bootstrapper
      */
-    public function getBootstrap()
+    public function getBootstrap ()
     {
         return $this->_bootstrap;
     }

@@ -36,6 +36,7 @@ namespace Zend\Dojo\Form\Decorator;
  */
 class TabContainer extends DijitContainer
 {
+
     /**
      * View helper
      * @var string

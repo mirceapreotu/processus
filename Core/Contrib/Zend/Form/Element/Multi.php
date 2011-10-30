@@ -36,6 +36,7 @@ namespace Zend\Form\Element;
  */
 abstract class Multi extends Xhtml
 {
+
     /**
      * Array of options for multi-item
      * @var array
@@ -65,7 +66,7 @@ abstract class Multi extends Xhtml
      *
      * @return mixed
      */
-    public function getSeparator()
+    public function getSeparator ()
     {
         return $this->_separator;
     }
@@ -76,7 +77,7 @@ abstract class Multi extends Xhtml
      * @param mixed $separator
      * @return self
      */
-    public function setSeparator($separator)
+    public function setSeparator ($separator)
     {
         $this->_separator = $separator;
         return $this;
@@ -87,12 +88,12 @@ abstract class Multi extends Xhtml
      *
      * @return array
      */
-    protected function _getMultiOptions()
+    protected function _getMultiOptions ()
     {
-        if (null === $this->options || !is_array($this->options)) {
+        if (null === $this->options || ! is_array($this->options)) {
             $this->options = array();
         }
-
+        
         return $this->options;
     }
 
@@ -103,14 +104,14 @@ abstract class Multi extends Xhtml
      * @param  string $value
      * @return \Zend\Form\Element\Multi
      */
-    public function addMultiOption($option, $value = '')
+    public function addMultiOption ($option, $value = '')
     {
-        $option  = (string) $option;
+        $option = (string) $option;
         $this->_getMultiOptions();
-        if (!$this->_translateOption($option, $value)) {
+        if (! $this->_translateOption($option, $value)) {
             $this->options[$option] = $value;
         }
-
+        
         return $this;
     }
 
@@ -120,13 +121,11 @@ abstract class Multi extends Xhtml
      * @param  array $options
      * @return \Zend\Form\Element\Multi
      */
-    public function addMultiOptions(array $options)
+    public function addMultiOptions (array $options)
     {
         foreach ($options as $option => $value) {
-            if (is_array($value)
-                && array_key_exists('key', $value)
-                && array_key_exists('value', $value)
-            ) {
+            if (is_array($value) && array_key_exists('key', $value) &&
+             array_key_exists('value', $value)) {
                 $this->addMultiOption($value['key'], $value['value']);
             } else {
                 $this->addMultiOption($option, $value);
@@ -141,7 +140,7 @@ abstract class Multi extends Xhtml
      * @param  array $options
      * @return \Zend\Form\Element\Multi
      */
-    public function setMultiOptions(array $options)
+    public function setMultiOptions (array $options)
     {
         $this->clearMultiOptions();
         return $this->addMultiOptions($options);
@@ -153,15 +152,15 @@ abstract class Multi extends Xhtml
      * @param  string $option
      * @return mixed
      */
-    public function getMultiOption($option)
+    public function getMultiOption ($option)
     {
-        $option  = (string) $option;
+        $option = (string) $option;
         $this->_getMultiOptions();
         if (isset($this->options[$option])) {
             $this->_translateOption($option, $this->options[$option]);
             return $this->options[$option];
         }
-
+        
         return null;
     }
 
@@ -170,7 +169,7 @@ abstract class Multi extends Xhtml
      *
      * @return array
      */
-    public function getMultiOptions()
+    public function getMultiOptions ()
     {
         $this->_getMultiOptions();
         foreach ($this->options as $option => $value) {
@@ -185,9 +184,9 @@ abstract class Multi extends Xhtml
      * @param  string $option
      * @return bool
      */
-    public function removeMultiOption($option)
+    public function removeMultiOption ($option)
     {
-        $option  = (string) $option;
+        $option = (string) $option;
         $this->_getMultiOptions();
         if (isset($this->options[$option])) {
             unset($this->options[$option]);
@@ -196,7 +195,7 @@ abstract class Multi extends Xhtml
             }
             return true;
         }
-
+        
         return false;
     }
 
@@ -205,7 +204,7 @@ abstract class Multi extends Xhtml
      *
      * @return \Zend\Form\Element\Multi
      */
-    public function clearMultiOptions()
+    public function clearMultiOptions ()
     {
         $this->options = array();
         $this->_translated = array();
@@ -218,7 +217,7 @@ abstract class Multi extends Xhtml
      * @param  bool $flag
      * @return \Zend\Form\Element\Multi
      */
-    public function setRegisterInArrayValidator($flag)
+    public function setRegisterInArrayValidator ($flag)
     {
         $this->_registerInArrayValidator = (bool) $flag;
         return $this;
@@ -229,7 +228,7 @@ abstract class Multi extends Xhtml
      *
      * @return bool
      */
-    public function registerInArrayValidator()
+    public function registerInArrayValidator ()
     {
         return $this->_registerInArrayValidator;
     }
@@ -243,28 +242,23 @@ abstract class Multi extends Xhtml
      * @param  mixed $context
      * @return bool
      */
-    public function isValid($value, $context = null)
+    public function isValid ($value, $context = null)
     {
         if ($this->registerInArrayValidator()) {
-            if (!$this->getValidator('InArray')) {
+            if (! $this->getValidator('InArray')) {
                 $multiOptions = $this->getMultiOptions();
-                $options      = array();
-
+                $options = array();
+                
                 foreach ($multiOptions as $opt_value => $opt_label) {
                     // optgroup instead of option label
                     if (is_array($opt_label)) {
                         $options = array_merge($options, array_keys($opt_label));
-                    }
-                    else {
+                    } else {
                         $options[] = $opt_value;
                     }
                 }
-
-                $this->addValidator(
-                    'InArray',
-                    true,
-                    array($options)
-                );
+                
+                $this->addValidator('InArray', true, array($options));
             }
         }
         return parent::isValid($value, $context);
@@ -277,13 +271,13 @@ abstract class Multi extends Xhtml
      * @param  string $value
      * @return bool
      */
-    protected function _translateOption($option, $value)
+    protected function _translateOption ($option, $value)
     {
         if ($this->translatorIsDisabled()) {
             return false;
         }
-
-        if (!isset($this->_translated[$option]) && !empty($value)) {
+        
+        if (! isset($this->_translated[$option]) && ! empty($value)) {
             $this->options[$option] = $this->_translateValue($value);
             if ($this->options[$option] === $value) {
                 return false;
@@ -291,7 +285,7 @@ abstract class Multi extends Xhtml
             $this->_translated[$option] = true;
             return true;
         }
-
+        
         return false;
     }
 
@@ -301,7 +295,7 @@ abstract class Multi extends Xhtml
      * @param  string $value
      * @return string
      */
-    protected function _translateValue($value)
+    protected function _translateValue ($value)
     {
         if (is_array($value)) {
             foreach ($value as $key => $val) {
@@ -312,7 +306,7 @@ abstract class Multi extends Xhtml
             if (null !== ($translator = $this->getTranslator())) {
                 return $translator->translate($value);
             }
-
+            
             return $value;
         }
     }

@@ -49,7 +49,7 @@ class Definition
      *
      * @param array|\Zend\Config\Config $options
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         if ($options instanceof Config) {
             $this->setConfig($options);
@@ -64,7 +64,7 @@ class Definition
      * @param \Zend\Config\Config $config
      * @return \Zend\Db\Table\Definition
      */
-    public function setConfig(Config $config)
+    public function setConfig (Config $config)
     {
         $this->setOptions($config->toArray());
         return $this;
@@ -76,7 +76,7 @@ class Definition
      * @param array $options
      * @return \Zend\Db\Table\Definition
      */
-    public function setOptions(Array $options)
+    public function setOptions (Array $options)
     {
         foreach ($options as $optionName => $optionValue) {
             $this->setTableConfig($optionName, $optionValue);
@@ -89,16 +89,16 @@ class Definition
      * @param array  $tableConfig
      * @return \Zend\Db\Table\Definition
      */
-    public function setTableConfig($tableName, array $tableConfig)
+    public function setTableConfig ($tableName, array $tableConfig)
     {
         // @todo logic here
         $tableConfig[Table::DEFINITION_CONFIG_NAME] = $tableName;
         $tableConfig[Table::DEFINITION] = $this;
-
-        if (!isset($tableConfig[Table::NAME])) {
+        
+        if (! isset($tableConfig[Table::NAME])) {
             $tableConfig[Table::NAME] = $tableName;
         }
-
+        
         $this->_tableConfigs[$tableName] = $tableConfig;
         return $this;
     }
@@ -109,7 +109,7 @@ class Definition
      * @param string $tableName
      * @return array
      */
-    public function getTableConfig($tableName)
+    public function getTableConfig ($tableName)
     {
         return $this->_tableConfigs[$tableName];
     }
@@ -119,7 +119,7 @@ class Definition
      *
      * @param string $tableName
      */
-    public function removeTableConfig($tableName)
+    public function removeTableConfig ($tableName)
     {
         unset($this->_tableConfigs[$tableName]);
     }
@@ -130,7 +130,7 @@ class Definition
      * @param string $tableName
      * @return bool
      */
-    public function hasTableConfig($tableName)
+    public function hasTableConfig ($tableName)
     {
         return (isset($this->_tableConfigs[$tableName]));
     }

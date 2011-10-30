@@ -40,6 +40,7 @@ use Zend\InfoCard\XML;
  */
 final class Factory
 {
+
     /**
      * The namespace for a SAML-formatted Assertion document
      */
@@ -50,9 +51,8 @@ final class Factory
      *
      * @return void
      */
-    private function __construct()
-    {
-    }
+    private function __construct ()
+    {}
 
     /**
      * Returns an instance of a InfoCard Assertion object based on the XML data provided
@@ -62,28 +62,32 @@ final class Factory
      * @return \Zend\InfoCard\XML\Assertion
      * @throws \Zend\InfoCard\XML\Exception
      */
-    static public function getInstance($xmlData)
+    static public function getInstance ($xmlData)
     {
-
-        if($xmlData instanceof XML\AbstractElement) {
+        
+        if ($xmlData instanceof XML\AbstractElement) {
             $strXmlData = $xmlData->asXML();
-        } else if (is_string($xmlData)) {
-            $strXmlData = $xmlData;
-        } else {
-            throw new XML\Exception\InvalidArgumentException("Invalid Data provided to create instance");
-        }
-
+        } else 
+            if (is_string($xmlData)) {
+                $strXmlData = $xmlData;
+            } else {
+                throw new XML\Exception\InvalidArgumentException(
+                "Invalid Data provided to create instance");
+            }
+        
         $sxe = simplexml_load_string($strXmlData);
-
+        
         $namespaces = $sxe->getDocNameSpaces();
-
-        foreach($namespaces as $namespace) {
-            switch($namespace) {
+        
+        foreach ($namespaces as $namespace) {
+            switch ($namespace) {
                 case self::TYPE_SAML:
-                    return simplexml_load_string($strXmlData, 'Zend\InfoCard\XML\Assertion\SAML', null);
+                    return simplexml_load_string($strXmlData, 
+                    'Zend\InfoCard\XML\Assertion\SAML', null);
             }
         }
-
-        throw new XML\Exception\InvalidArgumentException("Unable to determine Assertion type by Namespace");
+        
+        throw new XML\Exception\InvalidArgumentException(
+        "Unable to determine Assertion type by Namespace");
     }
 }

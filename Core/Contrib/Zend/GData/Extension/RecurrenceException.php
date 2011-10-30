@@ -42,8 +42,11 @@ class RecurrenceException extends Extension
 {
 
     protected $_rootElement = 'recurrenceException';
+
     protected $_specialized = null;
+
     protected $_entryLink = null;
+
     protected $_originalEvent = null;
 
     /**
@@ -52,8 +55,8 @@ class RecurrenceException extends Extension
      * @param Zend_Gdata_EntryLink (optional) An Event entry with details about the exception.
      * @param Zend_Gdata_OriginalEvent (optional) The origianl recurrent event this is an exeption to.
      */
-    public function __construct($specialized = null, $entryLink = null,
-            $originalEvent = null)
+    public function __construct ($specialized = null, $entryLink = null, 
+    $originalEvent = null)
     {
         parent::__construct();
         $this->_specialized = $specialized;
@@ -71,17 +74,20 @@ class RecurrenceException extends Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_specialized !== null) {
-            $element->setAttribute('specialized', ($this->_specialized ? "true" : "false"));
+            $element->setAttribute('specialized', 
+            ($this->_specialized ? "true" : "false"));
         }
         if ($this->_entryLink !== null) {
-            $element->appendChild($this->_entryLink->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_entryLink->getDOM($element->ownerDocument));
         }
         if ($this->_originalEvent !== null) {
-            $element->appendChild($this->_originalEvent->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_originalEvent->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -93,22 +99,22 @@ class RecurrenceException extends Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'specialized':
-            if ($attribute->nodeValue == "true") {
-                $this->_specialized = true;
-            }
-            else if ($attribute->nodeValue == "false") {
-                $this->_specialized = false;
-            }
-            else {
-                throw new \Zend\GData\App\InvalidArgumentException("Expected 'true' or 'false' for gCal:selected#value.");
-            }
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'specialized':
+                if ($attribute->nodeValue == "true") {
+                    $this->_specialized = true;
+                } else 
+                    if ($attribute->nodeValue == "false") {
+                        $this->_specialized = false;
+                    } else {
+                        throw new \Zend\GData\App\InvalidArgumentException(
+                        "Expected 'true' or 'false' for gCal:selected#value.");
+                    }
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -118,23 +124,23 @@ class RecurrenceException extends Extension
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('gd') . ':' . 'entryLink':
-            $entryLink = new EntryLink();
-            $entryLink->transferFromDOM($child);
-            $this->_entryLink = $entryLink;
-            break;
-        case $this->lookupNamespace('gd') . ':' . 'originalEvent':
-            $originalEvent = new OriginalEvent();
-            $originalEvent->transferFromDOM($child);
-            $this->_originalEvent = $originalEvent;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('gd') . ':' . 'entryLink':
+                $entryLink = new EntryLink();
+                $entryLink->transferFromDOM($child);
+                $this->_entryLink = $entryLink;
+                break;
+            case $this->lookupNamespace('gd') . ':' . 'originalEvent':
+                $originalEvent = new OriginalEvent();
+                $originalEvent->transferFromDOM($child);
+                $this->_originalEvent = $originalEvent;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
@@ -143,7 +149,7 @@ class RecurrenceException extends Extension
      *
      * @return bool The requested attribute.
      */
-    public function getSpecialized()
+    public function getSpecialized ()
     {
         return $this->_specialized;
     }
@@ -154,7 +160,7 @@ class RecurrenceException extends Extension
      * @param bool $value The desired value for this attribute.
      * @return \Zend\GData\Extension\RecurrenceException The element being modified.
      */
-    public function setSpecialized($value)
+    public function setSpecialized ($value)
     {
         $this->_specialized = $value;
         return $this;
@@ -165,7 +171,7 @@ class RecurrenceException extends Extension
      *
      * @return \Zend\GData\Extension\EntryLink The requested attribute.
      */
-    public function getEntryLink()
+    public function getEntryLink ()
     {
         return $this->_entryLink;
     }
@@ -176,7 +182,7 @@ class RecurrenceException extends Extension
      * @param \Zend\GData\Extension\EntryLink $value The desired value for this attribute.
      * @return \Zend\GData\Extension\RecurrenceException The element being modified.
      */
-    public function setEntryLink($value)
+    public function setEntryLink ($value)
     {
         $this->_entryLink = $value;
         return $this;
@@ -187,7 +193,7 @@ class RecurrenceException extends Extension
      *
      * @return \Zend\GData\Extension\OriginalEvent The requested attribute.
      */
-    public function getOriginalEvent()
+    public function getOriginalEvent ()
     {
         return $this->_originalEvent;
     }
@@ -198,7 +204,7 @@ class RecurrenceException extends Extension
      * @param \Zend\GData\Extension\OriginalEvent $value The desired value for this attribute.
      * @return \Zend\GData\Extension\RecurrenceException The element being modified.
      */
-    public function setOriginalEvent($value)
+    public function setOriginalEvent ($value)
     {
         $this->_originalEvent = $value;
         return $this;

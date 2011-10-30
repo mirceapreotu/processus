@@ -23,8 +23,7 @@
  */
 namespace Zend\Feed\PubSubHubbub;
 
-use Zend\Feed\Reader,
-    Zend\Http;
+use Zend\Feed\Reader, Zend\Http;
 
 /**
  * @category   Zend
@@ -34,18 +33,22 @@ use Zend\Feed\Reader,
  */
 class PubSubHubbub
 {
+
     /**
      * Verification Modes
      */
-    const VERIFICATION_MODE_SYNC  = 'sync';
+    const VERIFICATION_MODE_SYNC = 'sync';
+
     const VERIFICATION_MODE_ASYNC = 'async';
-    
+
     /**
      * Subscription States
      */
-    const SUBSCRIPTION_VERIFIED    = 'verified';
+    const SUBSCRIPTION_VERIFIED = 'verified';
+
     const SUBSCRIPTION_NOTVERIFIED = 'not_verified';
-    const SUBSCRIPTION_TODELETE    = 'to_delete';
+
+    const SUBSCRIPTION_TODELETE = 'to_delete';
 
     /**
      * Singleton instance if required of the HTTP client
@@ -63,16 +66,18 @@ class PubSubHubbub
      * @param  \Zend\Feed\Reader\AbstractFeed|string $source
      * @return array
      */
-    public static function detectHubs($source)
+    public static function detectHubs ($source)
     {
         if (is_string($source)) {
             $feed = Reader\Reader::import($source);
-        } elseif (is_object($source) && $source instanceof Reader\Feed\AbstractFeed) {
+        } elseif (is_object($source) &&
+         $source instanceof Reader\Feed\AbstractFeed) {
             $feed = $source;
         } else {
-            throw new Exception('The source parameter was'
-            . ' invalid, i.e. not a URL string or an instance of type'
-            . ' Zend\Feed\Reader\FeedAbstract or Zend\Feed\Abstract');
+            throw new Exception(
+            'The source parameter was' .
+             ' invalid, i.e. not a URL string or an instance of type' .
+             ' Zend\Feed\Reader\FeedAbstract or Zend\Feed\Abstract');
         }
         return $feed->getHubs();
     }
@@ -84,7 +89,7 @@ class PubSubHubbub
      * @param  \Zend\Http\Client $httpClient
      * @return void
      */
-    public static function setHttpClient(Http\Client $httpClient)
+    public static function setHttpClient (Http\Client $httpClient)
     {
         self::$httpClient = $httpClient;
     }
@@ -96,11 +101,11 @@ class PubSubHubbub
      *
      * @return \Zend\Http\Client
      */
-    public static function getHttpClient()
+    public static function getHttpClient ()
     {
-        if (!isset(self::$httpClient)):
-            self::$httpClient = new Http\Client;
-        else:
+        if (! isset(self::$httpClient)) :
+            self::$httpClient = new Http\Client();
+         else :
             self::$httpClient->resetParameters();
         endif;
         return self::$httpClient;
@@ -112,7 +117,7 @@ class PubSubHubbub
      *
      * @return void
      */
-    public static function clearHttpClient()
+    public static function clearHttpClient ()
     {
         self::$httpClient = null;
     }
@@ -123,7 +128,7 @@ class PubSubHubbub
      * @param  string $string
      * @return string
      */
-    public static function urlencode($string)
+    public static function urlencode ($string)
     {
         $rawencoded = rawurlencode($string);
         $rfcencoded = str_replace('%7E', '~', $rawencoded);

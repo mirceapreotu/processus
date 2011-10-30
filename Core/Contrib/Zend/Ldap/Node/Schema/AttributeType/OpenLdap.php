@@ -24,8 +24,7 @@
  */
 namespace Zend\Ldap\Node\Schema\AttributeType;
 
-use Zend\Ldap\Node\Schema\AttributeType,
-    Zend\Ldap\Node\Schema;
+use Zend\Ldap\Node\Schema\AttributeType, Zend\Ldap\Node\Schema;
 
 /**
  * Zend_Ldap_Node_Schema_AttributeType_OpenLdap provides access to the attribute type
@@ -41,12 +40,13 @@ use Zend\Ldap\Node\Schema\AttributeType,
  */
 class OpenLdap extends Schema\Item implements AttributeType
 {
+
     /**
      * Gets the attribute name
      *
      * @return string
      */
-    public function getName()
+    public function getName ()
     {
         return $this->name;
     }
@@ -56,7 +56,7 @@ class OpenLdap extends Schema\Item implements AttributeType
      *
      * @return string
      */
-    public function getOid()
+    public function getOid ()
     {
         return $this->oid;
     }
@@ -66,12 +66,14 @@ class OpenLdap extends Schema\Item implements AttributeType
      *
      * @return string
      */
-    public function getSyntax()
+    public function getSyntax ()
     {
         if ($this->syntax === null) {
             $parent = $this->getParent();
-            if ($parent === null) return null;
-            else return $parent->getSyntax();
+            if ($parent === null)
+                return null;
+            else
+                return $parent->getSyntax();
         } else {
             return $this->syntax;
         }
@@ -82,15 +84,17 @@ class OpenLdap extends Schema\Item implements AttributeType
      *
      * @return int|null
      */
-    public function getMaxLength()
+    public function getMaxLength ()
     {
         $maxLength = $this->{'max-length'};
         if ($maxLength === null) {
             $parent = $this->getParent();
-            if ($parent === null) return null;
-            else return $parent->getMaxLength();
+            if ($parent === null)
+                return null;
+            else
+                return $parent->getMaxLength();
         } else {
-            return (int)$maxLength;
+            return (int) $maxLength;
         }
     }
 
@@ -99,7 +103,7 @@ class OpenLdap extends Schema\Item implements AttributeType
      *
      * @return boolean
      */
-    public function isSingleValued()
+    public function isSingleValued ()
     {
         return $this->{'single-value'};
     }
@@ -109,7 +113,7 @@ class OpenLdap extends Schema\Item implements AttributeType
      *
      * @return string
      */
-    public function getDescription()
+    public function getDescription ()
     {
         return $this->desc;
     }
@@ -119,7 +123,7 @@ class OpenLdap extends Schema\Item implements AttributeType
      *
      * @return \Zend\Ldap\Node\Schema\AttributeType\OpenLdap|null
      */
-    public function getParent()
+    public function getParent ()
     {
         if (count($this->_parents) === 1) {
             return $this->_parents[0];

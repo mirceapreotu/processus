@@ -36,6 +36,7 @@ namespace Zend\Form\Element;
  */
 class Reset extends Submit
 {
+
     /**
      * Use formReset view helper by default
      * @var string

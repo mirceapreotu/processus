@@ -23,11 +23,7 @@
  */
 namespace Zend\Amf;
 
-use Zend\Amf\Exception,
-    Zend\Authentication\AuthenticationService,
-    Zend\Loader\Broker,
-    Zend\Loader\PluginBroker,
-    Zend\Server\Reflection;
+use Zend\Amf\Exception, Zend\Authentication\AuthenticationService, Zend\Loader\Broker, Zend\Loader\PluginBroker, Zend\Server\Reflection;
 
 /**
  * An AMF gateway server implementation to allow the connection of the Adobe Flash Player to
@@ -58,6 +54,7 @@ use Zend\Amf\Exception,
  */
 class Server implements \Zend\Server\Server
 {
+
     /**
      * Array of dispatchables
      * @var array
@@ -144,7 +141,7 @@ class Server implements \Zend\Server\Server
     /**
      * The server constructor
      */
-    public function __construct()
+    public function __construct ()
     {
         Parser\TypeLoader::setResourceBroker(new Parser\ParserBroker());
     }
@@ -155,18 +152,18 @@ class Server implements \Zend\Server\Server
      * @param  Zend\Authentication\AuthenticationService $auth
      * @return Zend\Amf\Server
      */
-    public function setAuthService(AuthenticationService $auth)
+    public function setAuthService (AuthenticationService $auth)
     {
         $this->_authService = $auth;
         return $this;
     }
 
-   /**
+    /**
      * Get authentication service
      *
      * @return Zend\Authentication\AuthenticationService
      */
-    public function getAuthService()
+    public function getAuthService ()
     {
         if (null === $this->_authService) {
             $this->setAuthService(new AuthenticationService());
@@ -180,18 +177,18 @@ class Server implements \Zend\Server\Server
      * @param  Zend\Amf\AbstractAuthentication $auth
      * @return Zend\Amf\Server
      */
-    public function setAuth(AbstractAuthentication $auth)
+    public function setAuth (AbstractAuthentication $auth)
     {
         $this->_auth = $auth;
         return $this;
     }
 
-   /**
+    /**
      * Get authentication adapter
      *
      * @return Zend\Amf\AbstractAuthentication
      */
-    public function getAuth()
+    public function getAuth ()
     {
         return $this->_auth;
     }
@@ -202,17 +199,18 @@ class Server implements \Zend\Server\Server
      * @param  Zend\Acl\Acl $acl
      * @return Zend\Amf\Server
      */
-    public function setAcl(\Zend\Acl\Acl $acl)
+    public function setAcl (\Zend\Acl\Acl $acl)
     {
         $this->_acl = $acl;
         return $this;
     }
-   /**
+
+    /**
      * Get ACL adapter
      *
      * @return Zend\Acl\Acl
      */
-    public function getAcl()
+    public function getAcl ()
     {
         return $this->_acl;
     }
@@ -223,7 +221,7 @@ class Server implements \Zend\Server\Server
      * @param  bool $flag
      * @return Zend\Amf\Server
      */
-    public function setProduction($flag)
+    public function setProduction ($flag)
     {
         $this->_production = (bool) $flag;
         return $this;
@@ -234,7 +232,7 @@ class Server implements \Zend\Server\Server
      *
      * @return bool
      */
-    public function isProduction()
+    public function isProduction ()
     {
         return $this->_production;
     }
@@ -243,7 +241,7 @@ class Server implements \Zend\Server\Server
      * @param namespace of all incoming sessions defaults to Zend_Amf
      * @return Zend\Amf\Server
      */
-    public function setSession($namespace = 'Zend_Amf')
+    public function setSession ($namespace = 'Zend_Amf')
     {
         $this->_session = true;
         $this->_sessionNamespace = new \Zend\Session\Container($namespace);
@@ -254,7 +252,7 @@ class Server implements \Zend\Server\Server
      * Whether of not the server is using sessions
      * @return bool
      */
-    public function isSession()
+    public function isSession ()
     {
         return $this->_session;
     }
@@ -266,16 +264,17 @@ class Server implements \Zend\Server\Server
      * @param string $function Function or method being accessed
      * @return unknown_type
      */
-    protected function _checkAcl($object, $function)
+    protected function _checkAcl ($object, $function)
     {
-        if(!$this->_acl) {
+        if (! $this->_acl) {
             return true;
         }
-        if($object) {
+        if ($object) {
             $isObject = is_object($object);
-            $class    = ($isObject) ? get_class($object) : $object;
-            if(!$this->_acl->hasResource($class)) {
-                $this->_acl->addResource(new \Zend\Acl\Resource\GenericResource($class));
+            $class = ($isObject) ? get_class($object) : $object;
+            if (! $this->_acl->hasResource($class)) {
+                $this->_acl->addResource(
+                new \Zend\Acl\Resource\GenericResource($class));
             }
             if (method_exists($object, 'initAcl')) {
                 // if initAcl returns false, no ACL check
@@ -288,18 +287,19 @@ class Server implements \Zend\Server\Server
         } else {
             $class = null;
         }
-
+        
         $auth = $this->getAuthService();
-        if($auth->hasIdentity()) {
+        if ($auth->hasIdentity()) {
             $role = $auth->getIdentity()->role;
         } else {
-            if($this->_acl->hasRole(Constants::GUEST_ROLE)) {
+            if ($this->_acl->hasRole(Constants::GUEST_ROLE)) {
                 $role = Constants::GUEST_ROLE;
             } else {
-                throw new Exception\RuntimeException("Unauthenticated access not allowed");
+                throw new Exception\RuntimeException(
+                "Unauthenticated access not allowed");
             }
         }
-        if($this->_acl->isAllowed($role, $class, $function)) {
+        if ($this->_acl->isAllowed($role, $class, $function)) {
             return true;
         } else {
             throw new Exception\RuntimeException("Access not allowed");
@@ -312,22 +312,21 @@ class Server implements \Zend\Server\Server
      * @param  string|Broker $broker 
      * @return Server
      */
-    public function setBroker($broker)
+    public function setBroker ($broker)
     {
         if (is_string($broker)) {
-            if (!class_exists($broker)) {
-                throw new Exception\InvalidArgumentException(sprintf(
-                    'Invalid broker class ("") provided; could not resolve class',
-                    $broker
-                ));
+            if (! class_exists($broker)) {
+                throw new Exception\InvalidArgumentException(
+                sprintf(
+                'Invalid broker class ("") provided; could not resolve class', 
+                $broker));
             }
-            $broker = new $broker;
+            $broker = new $broker();
         }
-        if (!$broker instanceof Broker) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Broker must implement Zend\Loader\Broker; received ""',
-                (is_object($broker) ? get_class($broker) : gettype($broker))
-            ));
+        if (! $broker instanceof Broker) {
+            throw new Exception\InvalidArgumentException(
+            sprintf('Broker must implement Zend\Loader\Broker; received ""', 
+            (is_object($broker) ? get_class($broker) : gettype($broker))));
         }
         $this->_broker = $broker;
         return $this;
@@ -338,7 +337,7 @@ class Server implements \Zend\Server\Server
      *
      * @return Zend\Loader\PluginBroker
      */
-    public function getBroker()
+    public function getBroker ()
     {
         if (empty($this->_broker)) {
             $this->setBroker(new PluginBroker());
@@ -355,41 +354,49 @@ class Server implements \Zend\Server\Server
      * @return mixed $response the result of executing the method
      * @throws Zend\Amf\Server\Exception
      */
-    protected function _dispatch($method, $params = null, $source = null)
+    protected function _dispatch ($method, $params = null, $source = null)
     {
-        if($source) {
-            if(($mapped = Parser\TypeLoader::getMappedClassName($source)) !== false) {
+        if ($source) {
+            if (($mapped = Parser\TypeLoader::getMappedClassName($source)) !==
+             false) {
                 $source = $mapped;
             }
         }
-        $qualifiedName = empty($source) ? $method : $source.".".$method;
-
-        if (!isset($this->_table[$qualifiedName])) {
+        $qualifiedName = empty($source) ? $method : $source . "." . $method;
+        
+        if (! isset($this->_table[$qualifiedName])) {
             // if source is null a method that was not defined was called.
             if ($source) {
                 $className = str_replace(".", "\\", $source);
-                if (class_exists($className, false) && !isset($this->_classAllowed[$className])) {
-                    throw new Exception\RuntimeException('Can not call "' . $className . '" - use setClass()');
+                if (class_exists($className, false) &&
+                 ! isset($this->_classAllowed[$className])) {
+                    throw new Exception\RuntimeException(
+                    'Can not call "' . $className . '" - use setClass()');
                 }
                 try {
-                    $this->getBroker()->getClassLoader()->load($className);
+                    $this->getBroker()
+                        ->getClassLoader()
+                        ->load($className);
                 } catch (\Exception $e) {
-                    throw new Exception\RuntimeException('Class "' . $className . '" does not exist: '.$e->getMessage(), 0, $e);
+                    throw new Exception\RuntimeException(
+                    'Class "' . $className . '" does not exist: ' .
+                     $e->getMessage(), 0, $e);
                 }
                 // Add the new loaded class to the server.
                 $this->setClass($className, $source);
             } else {
-                throw new Exception\BadMethodCallException('Method "' . $method . '" does not exist');
+                throw new Exception\BadMethodCallException(
+                'Method "' . $method . '" does not exist');
             }
         }
-
+        
         $info = $this->_table[$qualifiedName];
         $argv = $info->getInvokeArguments();
-
+        
         if (0 < count($argv)) {
             $params = array_merge($params, $argv);
         }
-
+        
         if ($info instanceof Reflection\ReflectionFunction) {
             $func = $info->getName();
             $this->_checkAcl(null, $func);
@@ -401,22 +408,27 @@ class Server implements \Zend\Server\Server
                 // for some reason, invokeArgs() does not work the same as
                 // invoke(), and expects the first argument to be an object.
                 // So, using a callback if the method is static.
-                $this->_checkAcl($class, $info->getName());
-                $return = call_user_func_array(array($class, $info->getName()), $params);
+                $this->_checkAcl(
+                $class, $info->getName());
+                $return = call_user_func_array(array($class, $info->getName()), 
+                $params);
             } else {
                 // Object methods
                 try {
                     $object = $info->getDeclaringClass()->newInstance();
                 } catch (\Exception $e) {
-                    throw new Exception\RuntimeException('Error instantiating class ' . $class . ' to invoke method ' . $info->getName() . ': '.$e->getMessage(), 621, $e);
+                    throw new Exception\RuntimeException(
+                    'Error instantiating class ' . $class . ' to invoke method ' .
+                     $info->getName() . ': ' . $e->getMessage(), 621, $e);
                 }
                 $this->_checkAcl($object, $info->getName());
                 $return = $info->invokeArgs($object, $params);
             }
         } else {
-            throw new Exception\BadMethodCallException('Method missing implementation ' . get_class($info));
+            throw new Exception\BadMethodCallException(
+            'Method missing implementation ' . get_class($info));
         }
-
+        
         return $return;
     }
 
@@ -429,33 +441,36 @@ class Server implements \Zend\Server\Server
      * @param  Zend\Amf\Value\Messaging\CommandMessage $message
      * @return Zend\Amf\Value\Messaging\AcknowledgeMessage
      */
-    protected function _loadCommandMessage(Value\Messaging\CommandMessage $message)
+    protected function _loadCommandMessage (
+    Value\Messaging\CommandMessage $message)
     {
-        switch($message->operation) {
-            case Value\Messaging\CommandMessage::DISCONNECT_OPERATION :
-            case Value\Messaging\CommandMessage::CLIENT_PING_OPERATION :
+        switch ($message->operation) {
+            case Value\Messaging\CommandMessage::DISCONNECT_OPERATION:
+            case Value\Messaging\CommandMessage::CLIENT_PING_OPERATION:
                 $return = new Value\Messaging\AcknowledgeMessage($message);
                 break;
-            case Value\Messaging\CommandMessage::LOGIN_OPERATION :
+            case Value\Messaging\CommandMessage::LOGIN_OPERATION:
                 $data = explode(':', base64_decode($message->body));
                 $userid = $data[0];
-                $password = isset($data[1])?$data[1]:"";
-                if(empty($userid)) {
-                    throw new Exception\RuntimeException('Login failed: username not supplied');
+                $password = isset($data[1]) ? $data[1] : "";
+                if (empty($userid)) {
+                    throw new Exception\RuntimeException(
+                    'Login failed: username not supplied');
                 }
-                if(!$this->_handleAuth($userid, $password)) {
+                if (! $this->_handleAuth($userid, $password)) {
                     throw new Exception\RuntimeException('Authentication failed');
                 }
                 $return = new Value\Messaging\AcknowledgeMessage($message);
                 break;
-           case Value\Messaging\CommandMessage::LOGOUT_OPERATION :
+            case Value\Messaging\CommandMessage::LOGOUT_OPERATION:
                 if ($this->_auth) {
                     $this->getAuthService()->clearIdentity();
                 }
                 $return = new Value\Messaging\AcknowledgeMessage($message);
                 break;
-            default :
-                throw new Exception\RuntimeException('CommandMessage::' . $message->operation . ' not implemented');
+            default:
+                throw new Exception\RuntimeException(
+                'CommandMessage::' . $message->operation . ' not implemented');
                 break;
         }
         return $return;
@@ -472,22 +487,21 @@ class Server implements \Zend\Server\Server
      * @param int $line Error line
      * @return Zend\Amf\Value\Messaging\ErrorMessage|array
      */
-    protected function _errorMessage($objectEncoding, $message, $description, $detail, $code, $line)
+    protected function _errorMessage ($objectEncoding, $message, $description, 
+    $detail, $code, $line)
     {
         $return = null;
         switch ($objectEncoding) {
-            case Constants::AMF0_OBJECT_ENCODING :
-                return array (
-                        'description' => ($this->isProduction ()) ? '' : $description,
-                        'detail' => ($this->isProduction ()) ? '' : $detail,
-                        'line' => ($this->isProduction ()) ? 0 : $line,
-                        'code' => $code
-                );
-            case Constants::AMF3_OBJECT_ENCODING :
-                $return = new Value\Messaging\ErrorMessage ( $message );
-                $return->faultString = $this->isProduction () ? '' : $description;
+            case Constants::AMF0_OBJECT_ENCODING:
+                return array(
+                'description' => ($this->isProduction()) ? '' : $description, 
+                'detail' => ($this->isProduction()) ? '' : $detail, 
+                'line' => ($this->isProduction()) ? 0 : $line, 'code' => $code);
+            case Constants::AMF3_OBJECT_ENCODING:
+                $return = new Value\Messaging\ErrorMessage($message);
+                $return->faultString = $this->isProduction() ? '' : $description;
                 $return->faultCode = $code;
-                $return->faultDetail = $this->isProduction () ? '' : $detail;
+                $return->faultDetail = $this->isProduction() ? '' : $detail;
                 break;
         }
         return $return;
@@ -500,26 +514,26 @@ class Server implements \Zend\Server\Server
      * @param string $password
      * @return boolean
      */
-    protected function _handleAuth( $userid,  $password)
+    protected function _handleAuth ($userid, $password)
     {
-        if (!$this->_auth) {
+        if (! $this->_auth) {
             return true;
         }
         $this->_auth->setCredentials($userid, $password);
-        $auth   = $this->getAuthService();
+        $auth = $this->getAuthService();
         $result = $auth->authenticate($this->_auth);
         if ($result->isValid()) {
-            if (!$this->isSession()) {
+            if (! $this->isSession()) {
                 $this->setSession();
             }
             return true;
         } else {
             // authentication failed, good bye
             throw new Exception\RuntimeException(
-                "Authentication failed: " . implode("\n",
-                    $result->getMessages()), $result->getCode());
+            "Authentication failed: " . implode("\n", $result->getMessages()), 
+            $result->getCode());
         }
-
+    
     }
 
     /**
@@ -531,119 +545,130 @@ class Server implements \Zend\Server\Server
      * @return Zend\Amf\Response\StreamResponse
      * @throws Zend\Amf\Server\Exception|Exception
      */
-    protected function _handle(Request\StreamRequest $request)
+    protected function _handle (Request\StreamRequest $request)
     {
         // Get the object encoding of the request.
         $objectEncoding = $request->getObjectEncoding();
-
+        
         // create a response object to place the output from the services.
         $response = $this->getResponse();
-
+        
         // set response encoding
         $response->setObjectEncoding($objectEncoding);
-
+        
         $responseBody = $request->getAmfBodies();
-
+        
         $handleAuth = false;
         if ($this->_auth) {
             $headers = $request->getAmfHeaders();
             if (isset($headers[Constants::CREDENTIALS_HEADER]) &&
-                isset($headers[Constants::CREDENTIALS_HEADER]->userid)) {
+             isset($headers[Constants::CREDENTIALS_HEADER]->userid)) {
                 $handleAuth = true;
             }
         }
-
+        
         // Iterate through each of the service calls in the AMF request
-        foreach($responseBody as $body)
-        {
+        foreach ($responseBody as $body) {
             try {
                 if ($handleAuth) {
                     if ($this->_handleAuth(
-                        $headers[Constants::CREDENTIALS_HEADER]->userid,
-                        $headers[Constants::CREDENTIALS_HEADER]->password)) {
+                    $headers[Constants::CREDENTIALS_HEADER]->userid, 
+                    $headers[Constants::CREDENTIALS_HEADER]->password)) {
                         // use RequestPersistentHeader to clear credentials
                         $response->addAmfHeader(
-                            new Value\MessageHeader(
-                                Constants::PERSISTENT_HEADER,
-                                false,
-                                new Value\MessageHeader(
-                                    Constants::CREDENTIALS_HEADER,
-                                    false, null)));
+                        new Value\MessageHeader(Constants::PERSISTENT_HEADER, 
+                        false, 
+                        new Value\MessageHeader(Constants::CREDENTIALS_HEADER, 
+                        false, null)));
                         $handleAuth = false;
                     }
                 }
-
+                
                 if ($objectEncoding == Constants::AMF0_OBJECT_ENCODING) {
                     // AMF0 Object Encoding
                     $targetURI = $body->getTargetURI();
                     $message = '';
-
+                    
                     // Split the target string into its values.
-                    $source = substr($targetURI, 0, strrpos($targetURI, '.'));
-
+                    $source = substr($targetURI, 0, 
+                    strrpos($targetURI, '.'));
+                    
                     if ($source) {
                         // Break off method name from namespace into source
-                        $method = substr(strrchr($targetURI, '.'), 1);
-                        $return = $this->_dispatch($method, $body->getData(), $source);
+                        $method = substr(
+                        strrchr($targetURI, '.'), 1);
+                        $return = $this->_dispatch($method, $body->getData(), 
+                        $source);
                     } else {
                         // Just have a method name.
-                        $return = $this->_dispatch($targetURI, $body->getData());
+                        $return = $this->_dispatch(
+                        $targetURI, $body->getData());
                     }
                 } else {
                     // AMF3 read message type
                     $message = $body->getData();
                     if ($message instanceof Value\Messaging\CommandMessage) {
                         // async call with command message
-                        $return = $this->_loadCommandMessage($message);
+                        $return = $this->_loadCommandMessage(
+                        $message);
                     } elseif ($message instanceof Value\Messaging\RemotingMessage) {
-                        $return = new Value\Messaging\AcknowledgeMessage($message);
-                        $return->body = $this->_dispatch($message->operation, $message->body, $message->source);
+                        $return = new Value\Messaging\AcknowledgeMessage(
+                        $message);
+                        $return->body = $this->_dispatch($message->operation, 
+                        $message->body, $message->source);
                     } else {
                         // Amf3 message sent with netConnection
                         $targetURI = $body->getTargetURI();
-
+                        
                         // Split the target string into its values.
-                        $source = substr($targetURI, 0, strrpos($targetURI, '.'));
-
+                        $source = substr($targetURI, 0, 
+                        strrpos($targetURI, '.'));
+                        
                         if ($source) {
                             // Break off method name from namespace into source
-                            $method = substr(strrchr($targetURI, '.'), 1);
-                            $return = $this->_dispatch($method, $body->getData(), $source);
+                            $method = substr(
+                            strrchr($targetURI, '.'), 1);
+                            $return = $this->_dispatch($method, 
+                            $body->getData(), $source);
                         } else {
                             // Just have a method name.
-                            $return = $this->_dispatch($targetURI, $body->getData());
+                            $return = $this->_dispatch(
+                            $targetURI, $body->getData());
                         }
                     }
                 }
                 $responseType = Constants::RESULT_METHOD;
             } catch (\Exception $e) {
-                $return = $this->_errorMessage($objectEncoding, $message,
-                    $e->getMessage(), $e->getTraceAsString(),$e->getCode(),  $e->getLine());
+                $return = $this->_errorMessage($objectEncoding, $message, 
+                $e->getMessage(), $e->getTraceAsString(), $e->getCode(), 
+                $e->getLine());
                 $responseType = Constants::STATUS_METHOD;
             }
-
+            
             $responseURI = $body->getResponseURI() . $responseType;
-            $newBody     = new Value\MessageBody($responseURI, null, $return);
+            $newBody = new Value\MessageBody($responseURI, null, $return);
             $response->addAmfBody($newBody);
         }
         // Add a session header to the body if session is requested.
-        if($this->isSession()) {
-           $currentID = session_id();
-           $joint = "?";
-           if(isset($_SERVER['QUERY_STRING'])) {
-               if(!strpos($_SERVER['QUERY_STRING'], $currentID) !== FALSE) {
-                   if(strrpos($_SERVER['QUERY_STRING'], "?") !== FALSE) {
-                       $joint = "&";
-                   }
-               }
-           }
-
+        if ($this->isSession()) {
+            $currentID = session_id();
+            $joint = "?";
+            if (isset($_SERVER['QUERY_STRING'])) {
+                if (! strpos($_SERVER['QUERY_STRING'], $currentID) !== FALSE) {
+                    if (strrpos($_SERVER['QUERY_STRING'], "?") !== FALSE) {
+                        $joint = "&";
+                    }
+                }
+            }
+            
             // create a new AMF message header with the session id as a variable.
-            $sessionValue = $joint . $this->_sessionName . "=" . $currentID;
-            $sessionHeader = new Value\MessageHeader(Constants::URL_APPEND_HEADER, false, $sessionValue);
+            $sessionValue = $joint . $this->_sessionName . "=" .
+             $currentID;
+            $sessionHeader = new Value\MessageHeader(
+            Constants::URL_APPEND_HEADER, false, $sessionValue);
             $response->addAmfHeader($sessionHeader);
         }
-
+        
         // serialize the response and return serialized body.
         $response->finalize();
     }
@@ -654,21 +679,22 @@ class Server implements \Zend\Server\Server
      * @param  null|Zend\Amf\Request\StreamRequest $request Optional
      * @return Zend\Amf\Response\StreamResponse
      */
-    public function handle($request = null)
+    public function handle ($request = null)
     {
         // Check if request was passed otherwise get it from the server
-        if ($request === null || !$request instanceof Request\StreamRequest) {
+        if ($request === null ||
+         ! $request instanceof Request\StreamRequest) {
             $request = $this->getRequest();
         } else {
             $this->setRequest($request);
         }
         if ($this->isSession()) {
-             // Check if a session is being sent from the amf call
-             if (isset($_COOKIE[$this->_sessionName])) {
-                 session_id($_COOKIE[$this->_sessionName]);
-             }
+            // Check if a session is being sent from the amf call
+            if (isset($_COOKIE[$this->_sessionName])) {
+                session_id($_COOKIE[$this->_sessionName]);
+            }
         }
-
+        
         // Check for errors that may have happend in deserialization of Request.
         try {
             // Take converted PHP objects and handle service call.
@@ -677,9 +703,10 @@ class Server implements \Zend\Server\Server
             $response = $this->getResponse();
         } catch (\Exception $e) {
             // Handle any errors in the serialization and service  calls.
-            throw new Exception\RuntimeException('Handle error: ' . $e->getMessage() . ' ' . $e->getLine(), 0, $e);
+            throw new Exception\RuntimeException(
+            'Handle error: ' . $e->getMessage() . ' ' . $e->getLine(), 0, $e);
         }
-
+        
         // Return the Amf serialized output string
         return $response;
     }
@@ -690,17 +717,19 @@ class Server implements \Zend\Server\Server
      * @param  string|Zend\Amf\Request\StreamRequest $request
      * @return Zend\Amf\Server
      */
-    public function setRequest($request)
+    public function setRequest ($request)
     {
         if (is_string($request) && class_exists($request)) {
             $request = new $request();
-            if (!$request instanceof Request\StreamRequest) {
-                throw new Exception\InvalidArgumentException('Invalid request class');
+            if (! $request instanceof Request\StreamRequest) {
+                throw new Exception\InvalidArgumentException(
+                'Invalid request class');
             }
-        } elseif (is_string($request) && !class_exists($request)) {
+        } elseif (is_string($request) && ! class_exists($request)) {
             throw new Exception\InvalidArgumentException('Invalid request class');
-        } elseif (!$request instanceof Request\StreamRequest) {
-            throw new Exception\InvalidArgumentException('Invalid request object');
+        } elseif (! $request instanceof Request\StreamRequest) {
+            throw new Exception\InvalidArgumentException(
+            'Invalid request object');
         }
         $this->_request = $request;
         return $this;
@@ -711,12 +740,12 @@ class Server implements \Zend\Server\Server
      *
      * @return null|Zend\Amf\Request\StreamRequest
      */
-    public function getRequest()
+    public function getRequest ()
     {
         if (null === $this->_request) {
             $this->setRequest(new Request\HttpRequest());
         }
-
+        
         return $this->_request;
     }
 
@@ -726,17 +755,20 @@ class Server implements \Zend\Server\Server
      * @param  string|Zend_Amf_Server_Response $response
      * @return Zend\Amf\Server
      */
-    public function setResponse($response)
+    public function setResponse ($response)
     {
         if (is_string($response) && class_exists($response)) {
             $response = new $response();
-            if (!$response instanceof Response\StreamResponse) {
-                throw new Exception\InvalidArgumentException('Invalid response class');
+            if (! $response instanceof Response\StreamResponse) {
+                throw new Exception\InvalidArgumentException(
+                'Invalid response class');
             }
-        } elseif (is_string($response) && !class_exists($response)) {
-            throw new Exception\InvalidArgumentException('Invalid response class');
-        } elseif (!$response instanceof Response\StreamResponse) {
-            throw new Exception\InvalidArgumentException('Invalid response object');
+        } elseif (is_string($response) && ! class_exists($response)) {
+            throw new Exception\InvalidArgumentException(
+            'Invalid response class');
+        } elseif (! $response instanceof Response\StreamResponse) {
+            throw new Exception\InvalidArgumentException(
+            'Invalid response object');
         }
         $this->_response = $response;
         return $this;
@@ -747,7 +779,7 @@ class Server implements \Zend\Server\Server
      *
      * @return Zend_Amf_Server_Response
      */
-    public function getResponse()
+    public function getResponse ()
     {
         if (null === $this->_response) {
             $this->setResponse(new Response\HttpResponse());
@@ -770,30 +802,33 @@ class Server implements \Zend\Server\Server
      * @return Zend\Amf\Server
      * @throws Zend\Amf\Server\Exception on invalid input
      */
-    public function setClass($class, $namespace = '', $argv = null)
+    public function setClass ($class, $namespace = '', $argv = null)
     {
-        if (is_string($class) && !class_exists($class)){
-            throw new Exception\InvalidArgumentException('Invalid method or class');
-        } elseif (!is_string($class) && !is_object($class)) {
-            throw new Exception\InvalidArgumentException('Invalid method or class; must be a classname or object');
+        if (is_string($class) && ! class_exists($class)) {
+            throw new Exception\InvalidArgumentException(
+            'Invalid method or class');
+        } elseif (! is_string($class) && ! is_object($class)) {
+            throw new Exception\InvalidArgumentException(
+            'Invalid method or class; must be a classname or object');
         }
-
+        
         $argv = null;
         if (2 < func_num_args()) {
             $argv = array_slice(func_get_args(), 2);
         }
-
+        
         // Use the class name as the name space by default.
+        
 
         if ($namespace == '') {
             $namespace = is_object($class) ? get_class($class) : $class;
         }
-
+        
         $this->_classAllowed[is_object($class) ? get_class($class) : $class] = true;
-
+        
         $this->_methods[] = Reflection::reflectClass($class, $argv, $namespace);
         $this->_buildDispatchTable();
-
+        
         return $this;
     }
 
@@ -809,25 +844,28 @@ class Server implements \Zend\Server\Server
      * @return Zend\Amf\Server
      * @throws Zend\Amf\Server\Exception
      */
-    public function addFunction($function, $namespace = '')
+    public function addFunction ($function, $namespace = '')
     {
-        if (!is_string($function) && !is_array($function)) {
-            throw new Exception\InvalidArgumentException('Unable to attach function');
+        if (! is_string($function) && ! is_array($function)) {
+            throw new Exception\InvalidArgumentException(
+            'Unable to attach function');
         }
-
+        
         $argv = null;
         if (2 < func_num_args()) {
             $argv = array_slice(func_get_args(), 2);
         }
-
+        
         $function = (array) $function;
         foreach ($function as $func) {
-            if (!is_string($func) || !function_exists($func)) {
-                throw new Exception\InvalidArgumentException('Unable to attach function');
+            if (! is_string($func) || ! function_exists($func)) {
+                throw new Exception\InvalidArgumentException(
+                'Unable to attach function');
             }
-            $this->_methods[] = Reflection::reflectFunction($func, $argv, $namespace);
+            $this->_methods[] = Reflection::reflectFunction($func, $argv, 
+            $namespace);
         }
-
+        
         $this->_buildDispatchTable();
         return $this;
     }
@@ -840,30 +878,32 @@ class Server implements \Zend\Server\Server
      *
      * @return void
      */
-    protected function _buildDispatchTable()
+    protected function _buildDispatchTable ()
     {
         $table = array();
         foreach ($this->_methods as $key => $dispatchable) {
             if ($dispatchable instanceof Reflection\AbstractFunction) {
-                $ns   = $dispatchable->getNamespace();
+                $ns = $dispatchable->getNamespace();
                 $name = $dispatchable->getName();
                 $name = empty($ns) ? $name : $ns . '.' . $name;
-
+                
                 if (isset($table[$name])) {
-                    throw new Exception\InvalidArgumentException('Duplicate method registered: ' . $name);
+                    throw new Exception\InvalidArgumentException(
+                    'Duplicate method registered: ' . $name);
                 }
                 $table[$name] = $dispatchable;
                 continue;
             }
-
+            
             if ($dispatchable instanceof Reflection\ReflectionClass) {
                 foreach ($dispatchable->getMethods() as $method) {
-                    $ns   = $method->getNamespace();
+                    $ns = $method->getNamespace();
                     $name = $method->getName();
                     $name = empty($ns) ? $name : $ns . '.' . $name;
-
+                    
                     if (isset($table[$name])) {
-                        throw new Exception\InvalidArgumentException('Duplicate method registered: ' . $name);
+                        throw new Exception\InvalidArgumentException(
+                        'Duplicate method registered: ' . $name);
                     }
                     $table[$name] = $method;
                     continue;
@@ -873,8 +913,6 @@ class Server implements \Zend\Server\Server
         $this->_table = $table;
     }
 
-
-
     /**
      * Raise a server fault
      *
@@ -883,9 +921,8 @@ class Server implements \Zend\Server\Server
      * @param  string|Exception $fault
      * @return void
      */
-    public function fault($fault = null, $code = 404)
-    {
-    }
+    public function fault ($fault = null, $code = 404)
+    {}
 
     /**
      * Returns a list of registered methods
@@ -895,7 +932,7 @@ class Server implements \Zend\Server\Server
      *
      * @return array
      */
-    public function getFunctions()
+    public function getFunctions ()
     {
         return $this->_table;
     }
@@ -908,9 +945,8 @@ class Server implements \Zend\Server\Server
      * @param  mixed $mode
      * @return void
      */
-    public function setPersistence($mode)
-    {
-    }
+    public function setPersistence ($mode)
+    {}
 
     /**
      * Load server definition
@@ -920,9 +956,8 @@ class Server implements \Zend\Server\Server
      * @param  array $definition
      * @return void
      */
-    public function loadFunctions($definition)
-    {
-    }
+    public function loadFunctions ($definition)
+    {}
 
     /**
      * Map ActionScript classes to PHP classes
@@ -931,7 +966,7 @@ class Server implements \Zend\Server\Server
      * @param  string $phpClass
      * @return Zend\Amf\Server
      */
-    public function setClassMap($asClass, $phpClass)
+    public function setClassMap ($asClass, $phpClass)
     {
         Parser\TypeLoader::setMapping($asClass, $phpClass);
         return $this;
@@ -944,7 +979,7 @@ class Server implements \Zend\Server\Server
      *
      * @return array
      */
-    public function listMethods()
+    public function listMethods ()
     {
         return array_keys($this->_table);
     }

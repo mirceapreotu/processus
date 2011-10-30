@@ -37,6 +37,7 @@ namespace Zend\Dojo\Form\Element;
  */
 class CheckBox extends Dijit
 {
+
     /**
      * Is the checkbox checked?
      * @var bool
@@ -53,10 +54,7 @@ class CheckBox extends Dijit
      * Options that will be passed to the view helper
      * @var array
      */
-    public $options = array(
-        'checkedValue'   => '1',
-        'uncheckedValue' => '0',
-    );
+    public $options = array('checkedValue' => '1', 'uncheckedValue' => '0');
 
     /**
      * Value when checked
@@ -85,7 +83,7 @@ class CheckBox extends Dijit
      * @param  array $options
      * @return \Zend\Form\Element\Checkbox
      */
-    public function setOptions(array $options)
+    public function setOptions (array $options)
     {
         if (array_key_exists('checkedValue', $options)) {
             $this->setCheckedValue($options['checkedValue']);
@@ -96,13 +94,13 @@ class CheckBox extends Dijit
             unset($options['uncheckedValue']);
         }
         parent::setOptions($options);
-
+        
         $curValue = $this->getValue();
-        $test     = array($this->getCheckedValue(), $this->getUncheckedValue());
-        if (!in_array($curValue, $test)) {
+        $test = array($this->getCheckedValue(), $this->getUncheckedValue());
+        if (! in_array($curValue, $test)) {
             $this->setValue($curValue);
         }
-
+        
         return $this;
     }
 
@@ -119,7 +117,7 @@ class CheckBox extends Dijit
      * @param  mixed $value
      * @return \Zend\Form\Element\Checkbox
      */
-    public function setValue($value)
+    public function setValue ($value)
     {
         if ($value == $this->getCheckedValue()) {
             parent::setValue($value);
@@ -137,7 +135,7 @@ class CheckBox extends Dijit
      * @param  string $value
      * @return \Zend\Form\Element\Checkbox
      */
-    public function setCheckedValue($value)
+    public function setCheckedValue ($value)
     {
         $this->_checkedValue = (string) $value;
         $this->options['checkedValue'] = $value;
@@ -149,7 +147,7 @@ class CheckBox extends Dijit
      *
      * @return string
      */
-    public function getCheckedValue()
+    public function getCheckedValue ()
     {
         return $this->_checkedValue;
     }
@@ -160,7 +158,7 @@ class CheckBox extends Dijit
      * @param  string $value
      * @return \Zend\Form\Element\Checkbox
      */
-    public function setUncheckedValue($value)
+    public function setUncheckedValue ($value)
     {
         $this->_uncheckedValue = (string) $value;
         $this->options['uncheckedValue'] = $value;
@@ -172,7 +170,7 @@ class CheckBox extends Dijit
      *
      * @return string
      */
-    public function getUncheckedValue()
+    public function getUncheckedValue ()
     {
         return $this->_uncheckedValue;
     }
@@ -183,7 +181,7 @@ class CheckBox extends Dijit
      * @param  bool $flag
      * @return \Zend\Form\Element\Checkbox
      */
-    public function setChecked($flag)
+    public function setChecked ($flag)
     {
         $this->checked = (bool) $flag;
         if ($this->checked) {
@@ -199,7 +197,7 @@ class CheckBox extends Dijit
      *
      * @return bool
      */
-    public function isChecked()
+    public function isChecked ()
     {
         return $this->checked;
     }

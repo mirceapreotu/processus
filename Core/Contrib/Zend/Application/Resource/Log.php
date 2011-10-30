@@ -39,6 +39,7 @@ use Zend\Log as ZendLog;
  */
 class Log extends AbstractResource
 {
+
     /**
      * @var \Zend\Log\Logger
      */
@@ -49,7 +50,7 @@ class Log extends AbstractResource
      *
      * @return \Zend\Log\Logger
      */
-    public function init()
+    public function init ()
     {
         return $this->getLog();
     }
@@ -60,7 +61,7 @@ class Log extends AbstractResource
      * @param  \Zend\Log\Logger $log 
      * @return \Zend\Application\Resource\Log
      */
-    public function setLog(ZendLog\Logger $log)
+    public function setLog (ZendLog\Logger $log)
     {
         $this->_log = $log;
         return $this;
@@ -71,7 +72,7 @@ class Log extends AbstractResource
      * 
      * @return \Zend\Log\Logger
      */
-    public function getLog()
+    public function getLog ()
     {
         if (null === $this->_log) {
             $options = $this->getOptions();

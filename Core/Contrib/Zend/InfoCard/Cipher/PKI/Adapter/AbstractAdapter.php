@@ -37,6 +37,7 @@ namespace Zend\InfoCard\Cipher\PKI\Adapter;
  */
 abstract class AbstractAdapter implements \Zend\InfoCard\Cipher\PKI
 {
+
     /**
      * OAEP Padding public key encryption
      */
@@ -61,18 +62,19 @@ abstract class AbstractAdapter implements \Zend\InfoCard\Cipher\PKI
      * @param integer $padding One of the constnats in this class
      * @return Zend_InfoCard_Pki_Adapter_Abstract
      */
-    public function setPadding($padding)
+    public function setPadding ($padding)
     {
-        switch($padding) {
+        switch ($padding) {
             case self::OAEP_PADDING:
             case self::NO_PADDING:
                 $this->_padding = $padding;
                 break;
             default:
-                throw new \Zend\InfoCard\Cipher\Exception\InvalidArgumentException("Invalid Padding Type Provided");
+                throw new \Zend\InfoCard\Cipher\Exception\InvalidArgumentException(
+                "Invalid Padding Type Provided");
                 break;
         }
-
+        
         return $this;
     }
 
@@ -81,7 +83,7 @@ abstract class AbstractAdapter implements \Zend\InfoCard\Cipher\PKI
      *
      * @return integer One of the padding constants in this class
      */
-    public function getPadding()
+    public function getPadding ()
     {
         return $this->_padding;
     }

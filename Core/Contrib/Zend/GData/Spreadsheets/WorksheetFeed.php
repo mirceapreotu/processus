@@ -42,7 +42,7 @@ class WorksheetFeed extends \Zend\GData\Feed
      * Constructs a new Zend_Gdata_Spreadsheets_WorksheetFeed object.
      * @param DOMElement $element (optional) The DOMElement on whick to base this element.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(Spreadsheets::$namespaces);
         parent::__construct($element);

@@ -39,6 +39,7 @@ class Publisher extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'dc';
+
     protected $_rootElement = 'publisher';
 
     /**
@@ -46,9 +47,9 @@ class Publisher extends \Zend\GData\Extension
      * Entity responsible for making the resource available
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($value = null)
+    public function __construct ($value = null)
     {
         $this->registerAllNamespaces(\Zend\GData\DublinCore::$namespaces);
         parent::__construct();

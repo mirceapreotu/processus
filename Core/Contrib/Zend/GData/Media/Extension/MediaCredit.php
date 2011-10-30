@@ -39,6 +39,7 @@ class MediaCredit extends \Zend\GData\Extension
 {
 
     protected $_rootElement = 'credit';
+
     protected $_rootNamespace = 'media';
 
     /**
@@ -58,7 +59,7 @@ class MediaCredit extends \Zend\GData\Extension
      * @param string $role
      * @param string $scheme
      */
-    public function __construct($text = null, $role = null,  $scheme = null)
+    public function __construct ($text = null, $role = null, $scheme = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Media::$namespaces);
         parent::__construct();
@@ -77,7 +78,7 @@ class MediaCredit extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_role !== null) {
@@ -96,24 +97,24 @@ class MediaCredit extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'role':
-            $this->_role = $attribute->nodeValue;
-            break;
-        case 'scheme':
-            $this->_scheme = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'role':
+                $this->_role = $attribute->nodeValue;
+                break;
+            case 'scheme':
+                $this->_scheme = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
     /**
      * @return string
      */
-    public function getRole()
+    public function getRole ()
     {
         return $this->_role;
     }
@@ -122,7 +123,7 @@ class MediaCredit extends \Zend\GData\Extension
      * @param string $value
      * @return \Zend\GData\Media\Extension\MediaCredit Provides a fluent interface
      */
-    public function setRole($value)
+    public function setRole ($value)
     {
         $this->_role = $value;
         return $this;
@@ -131,7 +132,7 @@ class MediaCredit extends \Zend\GData\Extension
     /**
      * @return string
      */
-    public function getScheme()
+    public function getScheme ()
     {
         return $this->_scheme;
     }
@@ -140,7 +141,7 @@ class MediaCredit extends \Zend\GData\Extension
      * @param string $value
      * @return \Zend\GData\Media\Extension\MediaCredit Provides a fluent interface
      */
-    public function setScheme($value)
+    public function setScheme ($value)
     {
         $this->_scheme = $value;
         return $this;

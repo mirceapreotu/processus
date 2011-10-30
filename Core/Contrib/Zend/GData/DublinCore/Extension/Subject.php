@@ -39,6 +39,7 @@ class Subject extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'dc';
+
     protected $_rootElement = 'subject';
 
     /**
@@ -46,9 +47,9 @@ class Subject extends \Zend\GData\Extension
      * Topic of the resource
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($value = null)
+    public function __construct ($value = null)
     {
         $this->registerAllNamespaces(\Zend\GData\DublinCore::$namespaces);
         parent::__construct();

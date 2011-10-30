@@ -38,12 +38,13 @@ namespace Zend\Captcha;
  */
 interface Adapter extends \Zend\Validator\Validator
 {
+
     /**
      * Generate a new captcha
      *
      * @return string new captcha ID
      */
-    public function generate();
+    public function generate ();
 
     /**
      * Display the captcha
@@ -52,7 +53,7 @@ interface Adapter extends \Zend\Validator\Validator
      * @param  mixed $element
      * @return string
      */
-    public function render(\Zend\View\Renderer $view = null, $element = null);
+    public function render (\Zend\View\Renderer $view = null, $element = null);
 
     /**
      * Set captcha name
@@ -60,19 +61,19 @@ interface Adapter extends \Zend\Validator\Validator
      * @param  string $name
      * @return \Zend\Captcha\Adapter
      */
-    public function setName($name);
+    public function setName ($name);
 
     /**
      * Get captcha name
      *
      * @return string
      */
-    public function getName();
+    public function getName ();
 
     /**
      * Get optional private decorator for this captcha type
      *
      * @return \Zend_Form_Decorator_Interface|string
      */
-    public function getDecorator();
+    public function getDecorator ();
 }

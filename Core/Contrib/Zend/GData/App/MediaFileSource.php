@@ -37,6 +37,7 @@ namespace Zend\GData\App;
  */
 class MediaFileSource extends BaseMediaSource
 {
+
     /**
      * The filename which is represented
      *
@@ -56,7 +57,7 @@ class MediaFileSource extends BaseMediaSource
      *
      * @param string $filename The name of the file to read from.
      */
-    public function __construct($filename)
+    public function __construct ($filename)
     {
         $this->setFilename($filename);
     }
@@ -67,23 +68,23 @@ class MediaFileSource extends BaseMediaSource
      * @return string
      * @throws \Zend\GData\App\IOException
      */
-    public function encode()
+    public function encode ()
     {
-        if ($this->getFilename() !== null &&
-            is_readable($this->getFilename())) {
-
+        if ($this->getFilename() !== null && is_readable($this->getFilename())) {
+            
             // Retrieves the file, using the include path
             $fileHandle = fopen($this->getFilename(), 'r', true);
             $result = fread($fileHandle, filesize($this->getFilename()));
             if ($result === false) {
-                throw new IOException("Error reading file - " .
-                        $this->getFilename() . '. Read failed.');
+                throw new IOException(
+                "Error reading file - " . $this->getFilename() . '. Read failed.');
             }
             fclose($fileHandle);
             return $result;
         } else {
-            throw new IOException("Error reading file - " .
-                    $this->getFilename() . '. File is not readable.');
+            throw new IOException(
+            "Error reading file - " . $this->getFilename() .
+             '. File is not readable.');
         }
     }
 
@@ -92,7 +93,7 @@ class MediaFileSource extends BaseMediaSource
      *
      * @return string
      */
-    public function getFilename()
+    public function getFilename ()
     {
         return $this->_filename;
     }
@@ -103,7 +104,7 @@ class MediaFileSource extends BaseMediaSource
      * @param string $value The desired file handle.
      * @return \Zend\GData\App\MediaFileSource Provides a fluent interface.
      */
-    public function setFilename($value)
+    public function setFilename ($value)
     {
         $this->_filename = $value;
         return $this;
@@ -114,7 +115,7 @@ class MediaFileSource extends BaseMediaSource
      *
      * @return string The content type
      */
-    public function getContentType()
+    public function getContentType ()
     {
         return $this->_contentType;
     }
@@ -125,7 +126,7 @@ class MediaFileSource extends BaseMediaSource
      * @param string $value The content type
      * @return \Zend\GData\App\MediaFileSource Provides a fluent interface
      */
-    public function setContentType($value)
+    public function setContentType ($value)
     {
         $this->_contentType = $value;
         return $this;
@@ -136,7 +137,7 @@ class MediaFileSource extends BaseMediaSource
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getFilename();
     }

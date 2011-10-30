@@ -39,6 +39,7 @@ class GmlPos extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'gml';
+
     protected $_rootElement = 'pos';
 
     /**
@@ -46,7 +47,7 @@ class GmlPos extends \Zend\GData\Extension
      *
      * @param string $text (optional) The value to use for this element.
      */
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Geo::$namespaces);
         parent::__construct();

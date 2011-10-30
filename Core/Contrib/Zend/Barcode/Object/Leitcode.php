@@ -40,7 +40,7 @@ class Leitcode extends Identcode
      * Default options for Leitcode barcode
      * @return void
      */
-    protected function _getDefaultOptions()
+    protected function _getDefaultOptions ()
     {
         $this->_barcodeLength = 14;
         $this->_mandatoryChecksum = true;
@@ -50,10 +50,9 @@ class Leitcode extends Identcode
      * Retrieve text to display
      * @return string
      */
-    public function getTextToDisplay()
+    public function getTextToDisplay ()
     {
-        return preg_replace('/([0-9]{5})([0-9]{3})([0-9]{3})([0-9]{2})([0-9])/',
-                            '$1.$2.$3.$4 $5',
-                            $this->getText());
+        return preg_replace('/([0-9]{5})([0-9]{3})([0-9]{3})([0-9]{2})([0-9])/', 
+        '$1.$2.$3.$4 $5', $this->getText());
     }
 }

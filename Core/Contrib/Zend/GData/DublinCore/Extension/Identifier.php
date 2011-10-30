@@ -39,6 +39,7 @@ class Identifier extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'dc';
+
     protected $_rootElement = 'identifier';
 
     /**
@@ -46,9 +47,9 @@ class Identifier extends \Zend\GData\Extension
      * An unambiguous reference to the resource within a given context
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($value = null)
+    public function __construct ($value = null)
     {
         $this->registerAllNamespaces(\Zend\GData\DublinCore::$namespaces);
         parent::__construct();

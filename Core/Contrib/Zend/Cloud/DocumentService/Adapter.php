@@ -41,6 +41,7 @@ namespace Zend\Cloud\DocumentService;
  */
 interface Adapter
 {
+
     // HTTP adapter to use for connections
     const HTTP_ADAPTER = 'http_adapter';
 
@@ -51,7 +52,7 @@ interface Adapter
      * @param  array  $options
      * @return array
      */
-    public function createCollection($name, $options = null);
+    public function createCollection ($name, $options = null);
 
     /**
      * Delete collection.
@@ -60,15 +61,15 @@ interface Adapter
      * @param  array  $options
      * @return void
      */
-    public function deleteCollection($name, $options = null);
+    public function deleteCollection ($name, $options = null);
 
-       /**
+    /**
      * List collections.
      *
      * @param  array  $options
      * @return array List of collection names
      */
-    public function listCollections($options = null);
+    public function listCollections ($options = null);
 
     /**
      * List all documents in a collection
@@ -77,7 +78,7 @@ interface Adapter
      * @param  null|array $options
      * @return Zend_Cloud_DocumentService_DocumentSet
      */
-    public function listDocuments($collectionName, array $options = null);
+    public function listDocuments ($collectionName, array $options = null);
 
     /**
      * Insert document
@@ -87,7 +88,7 @@ interface Adapter
      * @param  array $options
      * @return boolean
      */
-    public function insertDocument($collectionName, $document, $options = null);
+    public function insertDocument ($collectionName, $document, $options = null);
 
     /**
      * Replace document
@@ -97,7 +98,7 @@ interface Adapter
      * @param Zend_Cloud_DocumentService_Document $document
      * @param array $options
      */
-    public function replaceDocument($collectionName, $document, $options = null);
+    public function replaceDocument ($collectionName, $document, $options = null);
 
     /**
      * Update document
@@ -110,7 +111,8 @@ interface Adapter
      * @param  array                   $options
      * @return boolean
      */
-    public function updateDocument($collectionName, $documentID, $fieldset = null, $options = null);
+    public function updateDocument ($collectionName, $documentID, 
+    $fieldset = null, $options = null);
 
     /**
      * Delete document
@@ -120,7 +122,8 @@ interface Adapter
      * @param array  $options
      * @return void
      */
-    public function deleteDocument($collectionName, $documentID, $options = null);
+    public function deleteDocument ($collectionName, $documentID, 
+    $options = null);
 
     /**
      * Fetch single document by ID
@@ -132,7 +135,7 @@ interface Adapter
      * @param array $options
      * @return Zend_Cloud_DocumentService_Document
      */
-    public function fetchDocument($collectionName, $documentID, $options = null);
+    public function fetchDocument ($collectionName, $documentID, $options = null);
 
     /**
      * Query for documents stored in the document service. If a string is passed in
@@ -143,7 +146,7 @@ interface Adapter
      * @param  array $options
      * @return array Array of field sets
      */
-    public function query($collectionName, $query, $options = null);
+    public function query ($collectionName, $query, $options = null);
 
     /**
      * Create query statement
@@ -151,10 +154,10 @@ interface Adapter
      * @param string $fields
      * @return Zend_Cloud_DocumentService_Query
      */
-    public function select($fields = null);
+    public function select ($fields = null);
 
     /**
      * Get the concrete service client
      */
-    public function getClient();
+    public function getClient ();
 }

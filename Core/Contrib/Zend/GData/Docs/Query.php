@@ -76,7 +76,7 @@ class Query extends \Zend\GData\Query
     /**
      * Constructs a new instance of a Zend_Gdata_Docs_Query object.
      */
-    public function __construct()
+    public function __construct ()
     {
         parent::__construct();
     }
@@ -88,7 +88,7 @@ class Query extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\Docs\Query Provides a fluent interface
      */
-    public function setProjection($value)
+    public function setProjection ($value)
     {
         $this->_projection = $value;
         return $this;
@@ -100,7 +100,7 @@ class Query extends \Zend\GData\Query
      *
      * @return \Zend\GData\Docs\Query Provides a fluent interface
      */
-    public function setVisibility($value)
+    public function setVisibility ($value)
     {
         $this->_visibility = $value;
         return $this;
@@ -111,7 +111,7 @@ class Query extends \Zend\GData\Query
      *
      * @return string projection
      */
-    public function getProjection()
+    public function getProjection ()
     {
         return $this->_projection;
     }
@@ -121,7 +121,7 @@ class Query extends \Zend\GData\Query
      *
      * @return string visibility
      */
-    public function getVisibility()
+    public function getVisibility ()
     {
         return $this->_visibility;
     }
@@ -134,7 +134,7 @@ class Query extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\Docs\Query Provides a fluent interface
      */
-    public function setTitle($value)
+    public function setTitle ($value)
     {
         if ($value !== null) {
             $this->_params['title'] = $value;
@@ -149,7 +149,7 @@ class Query extends \Zend\GData\Query
      *
      * @return string title
      */
-    public function getTitle()
+    public function getTitle ()
     {
         if (array_key_exists('title', $this->_params)) {
             return $this->_params['title'];
@@ -167,7 +167,7 @@ class Query extends \Zend\GData\Query
      * @param boolean $value Use either true or false
      * @return \Zend\GData\Docs\Query Provides a fluent interface
      */
-    public function setTitleExact($value)
+    public function setTitleExact ($value)
     {
         if ($value) {
             $this->_params['title-exact'] = $value;
@@ -182,7 +182,7 @@ class Query extends \Zend\GData\Query
      *
      * @return string title-exact
      */
-    public function getTitleExact()
+    public function getTitleExact ()
     {
         if (array_key_exists('title-exact', $this->_params)) {
             return $this->_params['title-exact'];
@@ -196,24 +196,24 @@ class Query extends \Zend\GData\Query
      *
      * @return string url
      */
-    public function getQueryUrl()
+    public function getQueryUrl ()
     {
         $uri = $this->_defaultFeedUri;
-
+        
         if ($this->_visibility !== null) {
             $uri .= '/' . $this->_visibility;
         } else {
             throw new App\Exception(
-                'A visibility must be provided for cell queries.');
+            'A visibility must be provided for cell queries.');
         }
-
+        
         if ($this->_projection !== null) {
             $uri .= '/' . $this->_projection;
         } else {
             throw new App\Exception(
-                'A projection must be provided for cell queries.');
+            'A projection must be provided for cell queries.');
         }
-
+        
         $uri .= $this->getQueryString();
         return $uri;
     }

@@ -2,6 +2,7 @@
 
 namespace Core\Abstracts
 {
+
     /**
      * Created by JetBrains PhpStorm.
      * User: francis
@@ -11,26 +12,33 @@ namespace Core\Abstracts
      */
     abstract class AbstractDao extends AbstractVO
     {
+
         /**
          * @var Memcached
          */
         private $_memcachedClient = null;
+
         /**
          * mysql database connector
          */
         private $_database = null;
+
         /**
          * redis client
          */
         private $_redisClient;
+
         /** @var Zend_Db_Adapter_Abstract */
         private $_trackDB;
+
         /** @var Lib_Db_Xdb_Client */
         protected $_dbClient;
+
         /**
          * @var Mongo
          */
         private $_mongoClient;
+
         /**
          * @return string
          */
@@ -38,6 +46,7 @@ namespace Core\Abstracts
         {
             return __CLASS__ . "_";
         }
+
         /**
          * @return Zend_Db_Adapter_Abstract
          */
@@ -49,6 +58,7 @@ namespace Core\Abstracts
             }
             return $this->_trackDB;
         }
+
         /**
          * @return string
          */
@@ -56,6 +66,7 @@ namespace Core\Abstracts
         {
             return "crowdpark";
         }
+
         /**
          * @return Zend_Db_Adapter_Abstract
          */
@@ -67,6 +78,7 @@ namespace Core\Abstracts
             }
             return $this->_database;
         }
+
         /**
          * @return
          */
@@ -78,6 +90,7 @@ namespace Core\Abstracts
             }
             return $this->_redisClient;
         }
+
         /**
          * @return Mongo
          */
@@ -89,6 +102,7 @@ namespace Core\Abstracts
             }
             return $this->_mongoClient;
         }
+
         /**
          * @param $method
          * @return string
@@ -97,6 +111,7 @@ namespace Core\Abstracts
         {
             return $this->getClassName() . $method;
         }
+
         /**
          * @return Memcached
          */
@@ -120,10 +135,12 @@ namespace Core\Abstracts
             }
             return $this->_memcachedClient;
         }
+
         /**
          * @var Couch_Client
          */
         private $_couchDBClient = null;
+
         /**
          * @return Couch_Client
          */
@@ -135,6 +152,7 @@ namespace Core\Abstracts
             }
             return $this->_coucDBClient;
         }
+
         /**
          * @param $value
          * @return int
@@ -143,6 +161,7 @@ namespace Core\Abstracts
         {
             return $value;
         }
+
         /**
          * @param $value
          * @return int
@@ -152,6 +171,7 @@ namespace Core\Abstracts
             $expired = 60 * $value;
             return $expired;
         }
+
         /**
          * @param $value
          * @return int
@@ -161,6 +181,7 @@ namespace Core\Abstracts
             $expired = (60 * 60) * $value;
             return $expired;
         }
+
         /**
          * @param $value
          * @return int
@@ -170,6 +191,7 @@ namespace Core\Abstracts
             $expired = (60 * 60 * 24) * $value;
             return $expired;
         }
+
         /**
          * get data from database
          * @param $config App_GaintS_Vo_Core_GetDataConfigVo
@@ -185,17 +207,19 @@ namespace Core\Abstracts
             $sqlParams = $config->getSQLParamData();
             $expiredTime = $config->getExpiredTime();
             $getFromCache = $config->getFromCache();
-
+            
             if ($getFromCache) {
                 $rawData = $this->getMemcachedClient()->get($memKey);
             }
             if (! $rawData) {
                 $rawData = $this->getDbClient()->getRowsAndDontValidateParamsMissing(
                 $sqlStmt, $sqlParams);
-                $this->getMemcachedClient()->set($memKey, $rawData, $expiredTime);
+                $this->getMemcachedClient()->set($memKey, $rawData, 
+                $expiredTime);
             }
             return $rawData;
         }
+
         /**
          * Insert data into table
          * @param string $table
@@ -204,9 +228,10 @@ namespace Core\Abstracts
          */
         public function insertOrUpdate ($table, $rowInsert, $rowUpdate)
         {
-            return $this->getDbClient()->insertOrUpdate($table, $rowInsert,
+            return $this->getDbClient()->insertOrUpdate($table, $rowInsert, 
             $rowUpdate);
         }
+
         /**
          * @throws Exception
          * @param App_GaintS_Vo_Core_GetDataConfigVo $config
@@ -223,16 +248,18 @@ namespace Core\Abstracts
             $sqlParams = $config->getSQLParamData();
             $expiredTime = $config->getExpiredTime();
             $getFromCache = $config->getFromCache();
-
+            
             if ($getFromCache) {
                 $rawData = $this->getMemcachedClient()->get($memKey);
             }
             if (! $rawData) {
                 $rawData = $this->getDbClient()->getRows($sqlStmt, $sqlParams);
-                $this->getMemcachedClient()->set($memKey, $rawData, $expiredTime);
+                $this->getMemcachedClient()->set($memKey, $rawData, 
+                $expiredTime);
             }
             return $rawData;
         }
+
         /**
          * @throws Exception
          * @param App_GaintS_Vo_Core_GetDataConfigVo $config
@@ -249,18 +276,20 @@ namespace Core\Abstracts
             $sqlParams = $config->getSQLParamData();
             $expiredTime = $config->getExpiredTime();
             $getFromCache = $config->getFromCache();
-
+            
             if ($getFromCache) {
                 $rawData = $this->getMemcachedClient()->get($memKey);
             }
             if (! $rawData) {
                 $rawData = $this->getDbClient()->getRow($sqlStmt, $sqlParams);
-                $this->getMemcachedClient()->set($memKey, $rawData, $expiredTime);
+                $this->getMemcachedClient()->set($memKey, $rawData, 
+                $expiredTime);
             }
-
+            
             $rawData['debug'] = $config;
             return $rawData;
         }
+
         /**
          * @return Lib_Db_Xdb_Client
          */
@@ -272,13 +301,15 @@ namespace Core\Abstracts
             }
             return $this->_dbClient;
         }
+
         /**
          * @param $sqlStmt
          * @param $sqmParamData
          * @param $method
          * @return App_GaintS_Vo_Core_GetDataConfigVo
          */
-        protected function getDataConfig ($sqlStmt, $method, $sqmParamData = null)
+        protected function getDataConfig ($sqlStmt, $method, 
+        $sqmParamData = null)
         {
             $config = new Core_GaintS_Vo_Core_GetDataConfigVo();
             $config->setSQLStmt($sqlStmt)

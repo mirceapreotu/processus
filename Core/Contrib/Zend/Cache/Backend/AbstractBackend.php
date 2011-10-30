@@ -37,6 +37,7 @@ use Zend\Log;
  */
 abstract class AbstractBackend
 {
+
     /**
      * Frontend or Core directives
      *
@@ -49,11 +50,8 @@ abstract class AbstractBackend
      *
      * @var array directives
      */
-    protected $_directives = array(
-        'lifetime' => 3600,
-        'logging'  => false,
-        'logger'   => null
-    );
+    protected $_directives = array('lifetime' => 3600, 'logging' => false, 
+    'logger' => null);
 
     /**
      * Available options
@@ -69,9 +67,9 @@ abstract class AbstractBackend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    public function __construct(array $options = array())
+    public function __construct (array $options = array())
     {
-        while (list($name, $value) = each($options)) {
+        while (list ($name, $value) = each($options)) {
             $this->setOption($name, $value);
         }
     }
@@ -83,20 +81,21 @@ abstract class AbstractBackend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    public function setDirectives($directives)
+    public function setDirectives ($directives)
     {
-        if (!is_array($directives)) Cache\Cache::throwException('Directives parameter must be an array');
-        while (list($name, $value) = each($directives)) {
-            if (!is_string($name)) {
+        if (! is_array($directives))
+            Cache\Cache::throwException('Directives parameter must be an array');
+        while (list ($name, $value) = each($directives)) {
+            if (! is_string($name)) {
                 Cache\Cache::throwException("Incorrect option name : $name");
             }
             $name = strtolower($name);
             if (array_key_exists($name, $this->_directives)) {
                 $this->_directives[$name] = $value;
             }
-
+        
         }
-
+        
         $this->_loggerSanity();
     }
 
@@ -107,17 +106,17 @@ abstract class AbstractBackend
      * @throws Zend_Cache_Exceptions
      * @return mixed
      */
-    public function getOption($name = array())
+    public function getOption ($name = array())
     {
         if (is_string($name)) {
             $name = strtolower($name);
             if (array_key_exists($name, $this->_options)) {
                 return $this->_options[$name];
             }
-
+            
             Cache\Cache::throwException("Incorrect option name : $name");
         }
-
+        
         return $this->_options;
     }
 
@@ -129,9 +128,9 @@ abstract class AbstractBackend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    public function setOption($name, $value)
+    public function setOption ($name, $value)
     {
-        if (!is_string($name)) {
+        if (! is_string($name)) {
             Cache\Cache::throwException("Incorrect option name : $name");
         }
         $name = strtolower($name);
@@ -149,7 +148,7 @@ abstract class AbstractBackend
      * @param  int $specificLifetime
      * @return int Cache life time
      */
-    public function getLifetime($specificLifetime)
+    public function getLifetime ($specificLifetime)
     {
         if ($specificLifetime === false) {
             return $this->_directives['lifetime'];
@@ -165,7 +164,7 @@ abstract class AbstractBackend
      * @deprecated
      * @return boolean
      */
-    public function isAutomaticCleaningAvailable()
+    public function isAutomaticCleaningAvailable ()
     {
         return true;
     }
@@ -178,7 +177,7 @@ abstract class AbstractBackend
      * @return string
      * @throws \Zend\Cache\Exception if unable to determine directory
      */
-    public function getTmpDir()
+    public function getTmpDir ()
     {
         $tmpdir = array();
         foreach (array($_ENV, $_SERVER) as $tab) {
@@ -223,7 +222,8 @@ abstract class AbstractBackend
         if ($this->_isGoodTmpDir('\\temp')) {
             return '\\temp';
         }
-        Cache\Cache::throwException('Could not determine temp directory, please specify a cache_dir manually');
+        Cache\Cache::throwException(
+        'Could not determine temp directory, please specify a cache_dir manually');
     }
 
     /**
@@ -232,7 +232,7 @@ abstract class AbstractBackend
      * @param $dir temporary directory
      * @return boolean true if the directory is ok
      */
-    protected function _isGoodTmpDir($dir)
+    protected function _isGoodTmpDir ($dir)
     {
         if (is_readable($dir)) {
             if (is_writable($dir)) {
@@ -250,19 +250,21 @@ abstract class AbstractBackend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    protected function _loggerSanity()
+    protected function _loggerSanity ()
     {
-        if (!isset($this->_directives['logging']) || !$this->_directives['logging']) {
+        if (! isset($this->_directives['logging']) ||
+         ! $this->_directives['logging']) {
             return;
         }
-
+        
         if (isset($this->_directives['logger'])) {
             if ($this->_directives['logger'] instanceof Log\Logger) {
                 return;
             }
-            Cache\Cache::throwException('Logger object is not an instance of Zend_Log class.');
+            Cache\Cache::throwException(
+            'Logger object is not an instance of Zend_Log class.');
         }
-
+        
         // Create a default logger to the standard output stream
         $logger = new Log\Logger(new Log\Writer\Stream('php://output'));
         $this->_directives['logger'] = $logger;
@@ -275,18 +277,20 @@ abstract class AbstractBackend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    protected function _log($message, $priority = 4)
+    protected function _log ($message, $priority = 4)
     {
-        if (!$this->_directives['logging']) {
+        if (! $this->_directives['logging']) {
             return;
         }
-
-        if (!isset($this->_directives['logger'])) {
-            Cache\Cache::throwException('Logging is enabled but logger is not set.');
+        
+        if (! isset($this->_directives['logger'])) {
+            Cache\Cache::throwException(
+            'Logging is enabled but logger is not set.');
         }
         $logger = $this->_directives['logger'];
-        if (!$logger instanceof Log\Logger) {
-            Cache\Cache::throwException('Logger object is not an instance of Zend_Log class.');
+        if (! $logger instanceof Log\Logger) {
+            Cache\Cache::throwException(
+            'Logger object is not an instance of Zend_Log class.');
         }
         $logger->log($message, $priority);
     }

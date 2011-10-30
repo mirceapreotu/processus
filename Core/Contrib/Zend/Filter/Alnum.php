@@ -23,9 +23,7 @@
  */
 namespace Zend\Filter;
 
-use Zend\Config\Config,
-    Zend\Locale\Locale as ZendLocale,
-    Zend\Registry;
+use Zend\Config\Config, Zend\Locale\Locale as ZendLocale, Zend\Registry;
 
 /**
  * @uses       Zend\Filter\AbstractFilter
@@ -37,6 +35,7 @@ use Zend\Config\Config,
  */
 class Alnum extends AbstractFilter
 {
+
     /**
      * Whether to allow white space characters; off by default
      *
@@ -64,36 +63,36 @@ class Alnum extends AbstractFilter
      * @param  boolean $allowWhiteSpace
      * @return void
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         if ($options instanceof Config) {
             $options = $options->toArray();
-        } elseif (!is_array($options)) {
+        } elseif (! is_array($options)) {
             $options = func_get_args();
-            $temp    = array();
-            if (!empty($options)) {
+            $temp = array();
+            if (! empty($options)) {
                 $temp['allowwhitespace'] = array_shift($options);
             }
-
-            if (!empty($options)) {
+            
+            if (! empty($options)) {
                 $temp['locale'] = array_shift($options);
             }
-
+            
             $options = $temp;
         }
-
+        
         if (null === self::$unicodeEnabled) {
             self::$unicodeEnabled = (@preg_match('/\pL/u', 'a')) ? true : false;
         }
-
+        
         if (array_key_exists('allowwhitespace', $options)) {
             $this->setAllowWhiteSpace($options['allowwhitespace']);
         }
-
-        if (!array_key_exists('locale', $options)) {
+        
+        if (! array_key_exists('locale', $options)) {
             $options['locale'] = null;
         }
-
+        
         $this->setLocale($options['locale']);
     }
 
@@ -102,7 +101,7 @@ class Alnum extends AbstractFilter
      *
      * @return boolean
      */
-    public function getAllowWhiteSpace()
+    public function getAllowWhiteSpace ()
     {
         return $this->allowWhiteSpace;
     }
@@ -113,7 +112,7 @@ class Alnum extends AbstractFilter
      * @param boolean $allowWhiteSpace
      * @return \Zend\Filter\Alnum Provides a fluent interface
      */
-    public function setAllowWhiteSpace($allowWhiteSpace)
+    public function setAllowWhiteSpace ($allowWhiteSpace)
     {
         $this->allowWhiteSpace = (boolean) $allowWhiteSpace;
         return $this;
@@ -124,7 +123,7 @@ class Alnum extends AbstractFilter
      *
      * @return string
      */
-    public function getLocale()
+    public function getLocale ()
     {
         return $this->locale;
     }
@@ -135,7 +134,7 @@ class Alnum extends AbstractFilter
      * @param boolean $locale
      * @return \Zend\Filter\Alnum Provides a fluent interface
      */
-    public function setLocale($locale = null)
+    public function setLocale ($locale = null)
     {
         $this->locale = ZendLocale::findLocale($locale);
         return $this;
@@ -149,24 +148,22 @@ class Alnum extends AbstractFilter
      * @param  string $value
      * @return string
      */
-    public function filter($value)
+    public function filter ($value)
     {
         $whiteSpace = $this->allowWhiteSpace ? '\s' : '';
-
-        if (!self::$unicodeEnabled) {
+        
+        if (! self::$unicodeEnabled) {
             // POSIX named classes are not supported, use alternative a-zA-Z0-9 match
             $pattern = '/[^a-zA-Z0-9' . $whiteSpace . ']/';
-        } elseif (((string) $this->locale == 'ja') 
-                  || ((string) $this->locale == 'ko') 
-                  || ((string) $this->locale == 'zh')
-        ) {
+        } elseif (((string) $this->locale == 'ja') ||
+         ((string) $this->locale == 'ko') || ((string) $this->locale == 'zh')) {
             // The Alphabet means english alphabet.
-            $pattern = '/[^a-zA-Z0-9'  . $whiteSpace . ']/u';
+            $pattern = '/[^a-zA-Z0-9' . $whiteSpace . ']/u';
         } else {
             // The Alphabet means each language's alphabet.
             $pattern = '/[^\p{L}\p{N}' . $whiteSpace . ']/u';
         }
-
+        
         return preg_replace($pattern, '', (string) $value);
     }
 }

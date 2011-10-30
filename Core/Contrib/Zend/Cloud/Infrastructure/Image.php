@@ -20,18 +20,28 @@ namespace Zend\Cloud\Infrastructure;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Image 
+class Image
 {
-    const IMAGE_ID           = 'imageId';
-    const IMAGE_OWNERID      = 'ownerId';
-    const IMAGE_NAME         = 'name';
-    const IMAGE_DESCRIPTION  = 'description';
-    const IMAGE_PLATFORM     = 'platform';
+
+    const IMAGE_ID = 'imageId';
+
+    const IMAGE_OWNERID = 'ownerId';
+
+    const IMAGE_NAME = 'name';
+
+    const IMAGE_DESCRIPTION = 'description';
+
+    const IMAGE_PLATFORM = 'platform';
+
     const IMAGE_ARCHITECTURE = 'architecture';
-    const ARCH_32BIT         = 'i386';
-    const ARCH_64BIT         = 'x86_64';
-    const IMAGE_WINDOWS      = 'windows';
-    const IMAGE_LINUX        = 'linux';
+
+    const ARCH_32BIT = 'i386';
+
+    const ARCH_64BIT = 'x86_64';
+
+    const IMAGE_WINDOWS = 'windows';
+
+    const IMAGE_LINUX = 'linux';
 
     /**
      * Image's attributes
@@ -52,12 +62,8 @@ class Image
      * 
      * @var array
      */
-    protected $attributeRequired = array(
-        self::IMAGE_ID, 
-        self::IMAGE_DESCRIPTION, 
-        self::IMAGE_PLATFORM, 
-        self::IMAGE_ARCHITECTURE,
-    );
+    protected $attributeRequired = array(self::IMAGE_ID, 
+    self::IMAGE_DESCRIPTION, self::IMAGE_PLATFORM, self::IMAGE_ARCHITECTURE);
 
     /**
      * Constructor
@@ -65,32 +71,31 @@ class Image
      * @param array $data
      * @param object $adapter 
      */
-    public function __construct($data, $adapter = null) 
+    public function __construct ($data, $adapter = null)
     {
         if (is_object($data)) {
             if (method_exists($data, 'toArray')) {
-                $data= $data->toArray();
+                $data = $data->toArray();
             } elseif ($data instanceof \Traversable) {
                 $data = iterator_to_array($data);
             }
         }
         
-        if (empty($data) || !is_array($data)) {
-            throw new Exception\InvalidArgumentException('You must pass an array of parameters');
+        if (empty($data) || ! is_array($data)) {
+            throw new Exception\InvalidArgumentException(
+            'You must pass an array of parameters');
         }
-
+        
         foreach ($this->attributeRequired as $key) {
             if (empty($data[$key])) {
-                throw new Exception\InvalidArgumentException(sprintf(
-                    'The param "%s" is a required parameter for class %s',
-                    $key,
-                    __CLASS__
-                ));
+                throw new Exception\InvalidArgumentException(
+                sprintf('The param "%s" is a required parameter for class %s', 
+                $key, __CLASS__));
             }
         }
-
+        
         $this->attributes = $data;
-        $this->adapter    = $adapter;
+        $this->adapter = $adapter;
     }
 
     /**
@@ -99,9 +104,9 @@ class Image
      * @param array $data
      * @return misc|boolean
      */
-    public function getAttribute($key) 
+    public function getAttribute ($key)
     {
-        if (!empty($this->attributes[$key])) {
+        if (! empty($this->attributes[$key])) {
             return $this->attributes[$key];
         }
         return false;
@@ -112,7 +117,7 @@ class Image
      * 
      * @return array
      */
-    public function getAttributes()
+    public function getAttributes ()
     {
         return $this->attributes;
     }
@@ -122,7 +127,7 @@ class Image
      * 
      * @return string
      */
-    public function getId()
+    public function getId ()
     {
         return $this->attributes[self::IMAGE_ID];
     }
@@ -132,7 +137,7 @@ class Image
      * 
      * @return string
      */
-    public function getOwnerId()
+    public function getOwnerId ()
     {
         return $this->attributes[self::IMAGE_OWNERID];
     }
@@ -142,7 +147,7 @@ class Image
      * 
      * @return string 
      */
-    public function getName()
+    public function getName ()
     {
         return $this->attributes[self::IMAGE_NAME];
     }
@@ -152,7 +157,7 @@ class Image
      * 
      * @return string 
      */
-    public function getDescription()
+    public function getDescription ()
     {
         return $this->attributes[self::IMAGE_DESCRIPTION];
     }
@@ -162,7 +167,7 @@ class Image
      * 
      * @return string 
      */
-    public function getPlatform()
+    public function getPlatform ()
     {
         return $this->attributes[self::IMAGE_PLATFORM];
     }
@@ -172,7 +177,7 @@ class Image
      * 
      * @return string 
      */
-    public function getArchitecture()
+    public function getArchitecture ()
     {
         return $this->attributes[self::IMAGE_ARCHITECTURE];
     }

@@ -55,9 +55,9 @@ class PlaylistVideoFeed extends \Zend\GData\Media\Feed
      * within a single playlist.
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(YouTube::$namespaces);
         parent::__construct($element);

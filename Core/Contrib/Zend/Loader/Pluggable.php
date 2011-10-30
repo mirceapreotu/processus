@@ -34,12 +34,13 @@ namespace Zend\Loader;
  */
 interface Pluggable
 {
+
     /**
      * Get plugin broker instance
      * 
      * @return Zend\Loader\Broker
      */
-    public function getBroker();
+    public function getBroker ();
 
     /**
      * Set plugin broker instance
@@ -47,7 +48,7 @@ interface Pluggable
      * @param  string|Broker $broker Plugin broker to load plugins
      * @return Zend\Loader\Pluggable
      */
-    public function setBroker($broker);
+    public function setBroker ($broker);
 
     /**
      * Get plugin instance
@@ -56,5 +57,5 @@ interface Pluggable
      * @param  null|array $options Options to pass to plugin constructor (if not already instantiated)
      * @return mixed
      */
-    public function plugin($name, array $options = null);
+    public function plugin ($name, array $options = null);
 }

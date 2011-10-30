@@ -32,6 +32,7 @@ use Zend\Loader\PluginSpecBroker;
  */
 class FilterBroker extends PluginSpecBroker
 {
+
     /**
      * @var string Default plugin loading strategy
      */
@@ -44,9 +45,9 @@ class FilterBroker extends PluginSpecBroker
      * @return true
      * @throws Exception
      */
-    protected function validatePlugin($plugin)
+    protected function validatePlugin ($plugin)
     {
-        if (!$plugin instanceof Filter) {
+        if (! $plugin instanceof Filter) {
             throw new Exception('Filters must implement Zend\Filter\Filter');
         }
         return true;

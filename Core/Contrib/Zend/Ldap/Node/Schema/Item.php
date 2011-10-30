@@ -39,6 +39,7 @@ namespace Zend\Ldap\Node\Schema;
  */
 abstract class Item implements \ArrayAccess, \Countable
 {
+
     /**
      * The underlying data
      *
@@ -51,7 +52,7 @@ abstract class Item implements \ArrayAccess, \Countable
      *
      * @param array $data
      */
-    public function __construct(array $data)
+    public function __construct (array $data)
     {
         $this->setData($data);
     }
@@ -62,7 +63,7 @@ abstract class Item implements \ArrayAccess, \Countable
      * @param  array $data
      * @return \Zend\Ldap\Node\Schema\Item Provides a fluid interface
      */
-    public function setData(array $data)
+    public function setData (array $data)
     {
         $this->_data = $data;
         return $this;
@@ -73,7 +74,7 @@ abstract class Item implements \ArrayAccess, \Countable
      *
      * @return array
      */
-    public function getData()
+    public function getData ()
     {
         return $this->_data;
     }
@@ -84,7 +85,7 @@ abstract class Item implements \ArrayAccess, \Countable
      * @param  string $name
      * @return mixed
      */
-    public function __get($name)
+    public function __get ($name)
     {
         if (array_key_exists($name, $this->_data)) {
             return $this->_data[$name];
@@ -99,7 +100,7 @@ abstract class Item implements \ArrayAccess, \Countable
      * @param  string $name
      * @return boolean
      */
-    public function __isset($name)
+    public function __isset ($name)
     {
         return (array_key_exists($name, $this->_data));
     }
@@ -115,7 +116,7 @@ abstract class Item implements \ArrayAccess, \Countable
      * @return null
      * @throws BadMethodCallException
      */
-    public function offsetSet($name, $value)
+    public function offsetSet ($name, $value)
     {
         throw new \BadMethodCallException();
     }
@@ -126,7 +127,7 @@ abstract class Item implements \ArrayAccess, \Countable
      * @param  string $name
      * @return mixed
      */
-    public function offsetGet($name)
+    public function offsetGet ($name)
     {
         return $this->__get($name);
     }
@@ -141,7 +142,7 @@ abstract class Item implements \ArrayAccess, \Countable
      * @return null
      * @throws BadMethodCallException
      */
-    public function offsetUnset($name)
+    public function offsetUnset ($name)
     {
         throw new \BadMethodCallException();
     }
@@ -152,7 +153,7 @@ abstract class Item implements \ArrayAccess, \Countable
      * @param  string $name
      * @return boolean
      */
-    public function offsetExists($name)
+    public function offsetExists ($name)
     {
         return $this->__isset($name);
     }
@@ -163,7 +164,7 @@ abstract class Item implements \ArrayAccess, \Countable
      *
      * @return int
      */
-    public function count()
+    public function count ()
     {
         return count($this->_data);
     }

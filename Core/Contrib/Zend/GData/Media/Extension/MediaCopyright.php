@@ -39,6 +39,7 @@ class MediaCopyright extends \Zend\GData\Extension
 {
 
     protected $_rootElement = 'copyright';
+
     protected $_rootNamespace = 'media';
 
     /**
@@ -50,7 +51,7 @@ class MediaCopyright extends \Zend\GData\Extension
      * @param string $text
      * @param string $url
      */
-    public function __construct($text = null, $url = null)
+    public function __construct ($text = null, $url = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Media::$namespaces);
         parent::__construct();
@@ -68,7 +69,7 @@ class MediaCopyright extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_url !== null) {
@@ -84,21 +85,21 @@ class MediaCopyright extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'url':
-            $this->_url = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'url':
+                $this->_url = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
     /**
      * @return string
      */
-    public function getUrl()
+    public function getUrl ()
     {
         return $this->_url;
     }
@@ -107,7 +108,7 @@ class MediaCopyright extends \Zend\GData\Extension
      * @param string $value
      * @return \Zend\GData\Media\Extension\MediaCopyright Provides a fluent interface
      */
-    public function setUrl($value)
+    public function setUrl ($value)
     {
         $this->_url = $value;
         return $this;

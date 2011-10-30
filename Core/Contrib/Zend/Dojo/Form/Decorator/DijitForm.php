@@ -39,6 +39,7 @@ namespace Zend\Dojo\Form\Decorator;
  */
 class DijitForm extends DijitContainer
 {
+
     /**
      * Render a form
      *
@@ -47,17 +48,17 @@ class DijitForm extends DijitContainer
      * @param  string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
         $element = $this->getElement();
-        $view    = $element->getView();
+        $view = $element->getView();
         if (null === $view) {
             return $content;
         }
-
+        
         $dijitParams = $this->getDijitParams();
-        $attribs     = array_merge($this->getAttribs(), $this->getOptions());
-
+        $attribs = array_merge($this->getAttribs(), $this->getOptions());
+        
         return $view->dojoform($element->getName(), $attribs, $content);
     }
 }

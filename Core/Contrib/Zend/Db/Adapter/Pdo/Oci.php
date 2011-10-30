@@ -66,44 +66,42 @@ class Oci extends \Zend\Db\Adapter\AbstractPdoAdapter
      *
      * @var array Associative array of datatypes to values 0, 1, or 2.
      */
-    protected $_numericDataTypes = array(
-        Db\Db::INT_TYPE    => Db\Db::INT_TYPE,
-        Db\Db::BIGINT_TYPE => Db\Db::BIGINT_TYPE,
-        Db\Db::FLOAT_TYPE  => Db\Db::FLOAT_TYPE,
-        'BINARY_DOUBLE'      => Db\Db::FLOAT_TYPE,
-        'BINARY_FLOAT'       => Db\Db::FLOAT_TYPE,
-        'NUMBER'             => Db\Db::FLOAT_TYPE
-    );
+    protected $_numericDataTypes = array(Db\Db::INT_TYPE => Db\Db::INT_TYPE, 
+    Db\Db::BIGINT_TYPE => Db\Db::BIGINT_TYPE, 
+    Db\Db::FLOAT_TYPE => Db\Db::FLOAT_TYPE, 
+    'BINARY_DOUBLE' => Db\Db::FLOAT_TYPE, 
+    'BINARY_FLOAT' => Db\Db::FLOAT_TYPE, 
+    'NUMBER' => Db\Db::FLOAT_TYPE);
 
     /**
      * Creates a Pdo DSN for the adapter from $this->_config settings.
      *
      * @return string
      */
-    protected function _dsn()
+    protected function _dsn ()
     {
         // baseline of DSN parts
         $dsn = $this->_config;
-
+        
         if (isset($dsn['host'])) {
             $tns = 'dbname=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)' .
-                   '(HOST=' . $dsn['host'] . ')';
-
+             '(HOST=' . $dsn['host'] . ')';
+            
             if (isset($dsn['port'])) {
                 $tns .= '(PORT=' . $dsn['port'] . ')';
             } else {
                 $tns .= '(PORT=1521)';
             }
-
+            
             $tns .= '))(CONNECT_DATA=(SID=' . $dsn['dbname'] . ')))';
         } else {
             $tns = 'dbname=' . $dsn['dbname'];
         }
-
+        
         if (isset($dsn['charset'])) {
             $tns .= ';charset=' . $dsn['charset'];
         }
-
+        
         return $this->_pdoType . ':' . $tns;
     }
 
@@ -116,7 +114,7 @@ class Oci extends \Zend\Db\Adapter\AbstractPdoAdapter
      * @param string $value     Raw string
      * @return string           Quoted string
      */
-    protected function _quote($value)
+    protected function _quote ($value)
     {
         if (is_int($value) || is_float($value)) {
             return $value;
@@ -132,7 +130,7 @@ class Oci extends \Zend\Db\Adapter\AbstractPdoAdapter
      * @param string $alias An alias for the table.
      * @return string The quoted identifier and alias.
      */
-    public function quoteTableAs($ident, $alias = null, $auto = false)
+    public function quoteTableAs ($ident, $alias = null, $auto = false)
     {
         // Oracle doesn't allow the 'AS' keyword between the table identifier/expression and alias.
         return $this->_quoteIdentifierAs($ident, $alias, $auto, ' ');
@@ -143,7 +141,7 @@ class Oci extends \Zend\Db\Adapter\AbstractPdoAdapter
      *
      * @return array
      */
-    public function listTables()
+    public function listTables ()
     {
         $data = $this->fetchCol('SELECT table_name FROM all_tables');
         return $data;
@@ -179,7 +177,7 @@ class Oci extends \Zend\Db\Adapter\AbstractPdoAdapter
      * @param string $schemaName OPTIONAL
      * @return array
      */
-    public function describeTable($tableName, $schemaName = null)
+    public function describeTable ($tableName, $schemaName = null)
     {
         $version = $this->getServerVersion();
         if (($version === null) || version_compare($version, '9.0.0', '>=')) {
@@ -198,7 +196,7 @@ class Oci extends \Zend\Db\Adapter\AbstractPdoAdapter
             }
             $sql .= ' ORDER BY TC.COLUMN_ID';
         } else {
-            $subSql="SELECT AC.OWNER, AC.TABLE_NAME, ACC.COLUMN_NAME, AC.CONSTRAINT_TYPE, ACC.POSITION
+            $subSql = "SELECT AC.OWNER, AC.TABLE_NAME, ACC.COLUMN_NAME, AC.CONSTRAINT_TYPE, ACC.POSITION
                 from ALL_CONSTRAINTS AC, ALL_CONS_COLUMNS ACC
                   WHERE ACC.CONSTRAINT_NAME = AC.CONSTRAINT_NAME
                     AND ACC.TABLE_NAME = AC.TABLE_NAME
@@ -210,7 +208,7 @@ class Oci extends \Zend\Db\Adapter\AbstractPdoAdapter
                 $subSql .= ' AND UPPER(ACC.OWNER) = UPPER(:SCNAME)';
                 $bind[':SCNAME'] = $schemaName;
             }
-            $sql="SELECT TC.TABLE_NAME, TC.OWNER, TC.COLUMN_NAME, TC.DATA_TYPE,
+            $sql = "SELECT TC.TABLE_NAME, TC.OWNER, TC.COLUMN_NAME, TC.DATA_TYPE,
                     TC.DATA_DEFAULT, TC.NULLABLE, TC.COLUMN_ID, TC.DATA_LENGTH,
                     TC.DATA_SCALE, TC.DATA_PRECISION, CC.CONSTRAINT_TYPE, CC.POSITION
                 FROM ALL_TAB_COLUMNS TC, ($subSql) CC
@@ -221,30 +219,31 @@ class Oci extends \Zend\Db\Adapter\AbstractPdoAdapter
             }
             $sql .= ' ORDER BY TC.COLUMN_ID';
         }
-
+        
         $stmt = $this->query($sql, $bind);
-
+        
         /**
          * Use FETCH_NUM so we are not dependent on the CASE attribute of the Pdo connection
          */
         $result = $stmt->fetchAll(Db\Db::FETCH_NUM);
-
-        $table_name      = 0;
-        $owner           = 1;
-        $column_name     = 2;
-        $data_type       = 3;
-        $data_default    = 4;
-        $nullable        = 5;
-        $column_id       = 6;
-        $data_length     = 7;
-        $data_scale      = 8;
-        $data_precision  = 9;
+        
+        $table_name = 0;
+        $owner = 1;
+        $column_name = 2;
+        $data_type = 3;
+        $data_default = 4;
+        $nullable = 5;
+        $column_id = 6;
+        $data_length = 7;
+        $data_scale = 8;
+        $data_precision = 9;
         $constraint_type = 10;
-        $position        = 11;
-
+        $position = 11;
+        
         $desc = array();
         foreach ($result as $key => $row) {
-            list ($primary, $primaryPosition, $identity) = array(false, null, false);
+            list ($primary, $primaryPosition, $identity) = array(false, null, 
+            false);
             if ($row[$constraint_type] == 'P') {
                 $primary = true;
                 $primaryPosition = $row[$position];
@@ -254,21 +253,19 @@ class Oci extends \Zend\Db\Adapter\AbstractPdoAdapter
                 $identity = false;
             }
             $desc[$this->foldCase($row[$column_name])] = array(
-                'SCHEMA_NAME'      => $this->foldCase($row[$owner]),
-                'TABLE_NAME'       => $this->foldCase($row[$table_name]),
-                'COLUMN_NAME'      => $this->foldCase($row[$column_name]),
-                'COLUMN_POSITION'  => $row[$column_id],
-                'DATA_TYPE'        => $row[$data_type],
-                'DEFAULT'          => $row[$data_default],
-                'NULLABLE'         => (bool) ($row[$nullable] == 'Y'),
-                'LENGTH'           => $row[$data_length],
-                'SCALE'            => $row[$data_scale],
-                'PRECISION'        => $row[$data_precision],
-                'UNSIGNED'         => null, // @todo
-                'PRIMARY'          => $primary,
-                'PRIMARY_POSITION' => $primaryPosition,
-                'IDENTITY'         => $identity
-            );
+            'SCHEMA_NAME' => $this->foldCase($row[$owner]), 
+            'TABLE_NAME' => $this->foldCase($row[$table_name]), 
+            'COLUMN_NAME' => $this->foldCase($row[$column_name]), 
+            'COLUMN_POSITION' => $row[$column_id], 
+            'DATA_TYPE' => $row[$data_type], 
+            'DEFAULT' => $row[$data_default], 
+            'NULLABLE' => (bool) ($row[$nullable] == 'Y'), 
+            'LENGTH' => $row[$data_length], 
+            'SCALE' => $row[$data_scale], 
+            'PRECISION' => $row[$data_precision], 'UNSIGNED' => null,  // @todo
+            'PRIMARY' => $primary, 
+            'PRIMARY_POSITION' => $primaryPosition, 
+            'IDENTITY' => $identity);
         }
         return $desc;
     }
@@ -281,10 +278,12 @@ class Oci extends \Zend\Db\Adapter\AbstractPdoAdapter
      * @param string $sequenceName
      * @return integer
      */
-    public function lastSequenceId($sequenceName)
+    public function lastSequenceId ($sequenceName)
     {
         $this->_connect();
-        $value = $this->fetchOne('SELECT '.$this->quoteIdentifier($sequenceName, true).'.CURRVAL FROM dual');
+        $value = $this->fetchOne(
+        'SELECT ' . $this->quoteIdentifier($sequenceName, true) .
+         '.CURRVAL FROM dual');
         return $value;
     }
 
@@ -296,10 +295,12 @@ class Oci extends \Zend\Db\Adapter\AbstractPdoAdapter
      * @param string $sequenceName
      * @return integer
      */
-    public function nextSequenceId($sequenceName)
+    public function nextSequenceId ($sequenceName)
     {
         $this->_connect();
-        $value = $this->fetchOne('SELECT '.$this->quoteIdentifier($sequenceName, true).'.NEXTVAL FROM dual');
+        $value = $this->fetchOne(
+        'SELECT ' . $this->quoteIdentifier($sequenceName, true) .
+         '.NEXTVAL FROM dual');
         return $value;
     }
 
@@ -321,7 +322,7 @@ class Oci extends \Zend\Db\Adapter\AbstractPdoAdapter
      * @return string
      * @throws \Zend\Db\Adapter\Oracle\Exception
      */
-    public function lastInsertId($tableName = null, $primaryKey = null)
+    public function lastInsertId ($tableName = null, $primaryKey = null)
     {
         if ($tableName !== null) {
             $sequenceName = $tableName;
@@ -344,18 +345,20 @@ class Oci extends \Zend\Db\Adapter\AbstractPdoAdapter
      * @throws \Zend\Db\Adapter\Exception
      * @return string
      */
-    public function limit($sql, $count, $offset = 0)
+    public function limit ($sql, $count, $offset = 0)
     {
         $count = intval($count);
         if ($count <= 0) {
-            throw new Adapter\Exception("LIMIT argument count=$count is not valid");
+            throw new Adapter\Exception(
+            "LIMIT argument count=$count is not valid");
         }
-
+        
         $offset = intval($offset);
         if ($offset < 0) {
-            throw new Adapter\Exception("LIMIT argument offset=$offset is not valid");
+            throw new Adapter\Exception(
+            "LIMIT argument offset=$offset is not valid");
         }
-
+        
         /**
          * Oracle does not implement the LIMIT clause as some RDBMS do.
          * We have to simulate it with subqueries and ROWNUM.
@@ -366,10 +369,12 @@ class Oci extends \Zend\Db\Adapter\AbstractPdoAdapter
             FROM (
                 SELECT z1.*, ROWNUM AS \"zend_db_rownum\"
                 FROM (
-                    " . $sql . "
+                    " . $sql .
+         "
                 ) z1
             ) z2
-            WHERE z2.\"zend_db_rownum\" BETWEEN " . ($offset+1) . " AND " . ($offset+$count);
+            WHERE z2.\"zend_db_rownum\" BETWEEN " .
+         ($offset + 1) . " AND " . ($offset + $count);
         return $limit_sql;
     }
 

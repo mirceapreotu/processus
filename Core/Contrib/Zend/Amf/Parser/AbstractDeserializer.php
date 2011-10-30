@@ -39,6 +39,7 @@ namespace Zend\Amf\Parser;
  */
 abstract class AbstractDeserializer implements Deserializer
 {
+
     /**
      * The raw string that represents the AMF request.
      *
@@ -52,7 +53,7 @@ abstract class AbstractDeserializer implements Deserializer
      * @param  Zend\Amf\Parser\InputStream $stream
      * @return void
      */
-    public function __construct(InputStream $stream)
+    public function __construct (InputStream $stream)
     {
         $this->_stream = $stream;
     }

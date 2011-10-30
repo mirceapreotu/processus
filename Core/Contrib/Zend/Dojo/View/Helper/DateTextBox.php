@@ -32,14 +32,15 @@ namespace Zend\Dojo\View\Helper;
  * @subpackage View
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
-  */
+ */
 class DateTextBox extends Dijit
 {
+
     /**
      * Dijit being used
      * @var string
      */
-    protected $_dijit  = 'dijit.form.DateTextBox';
+    protected $_dijit = 'dijit.form.DateTextBox';
 
     /**
      * HTML element type
@@ -62,7 +63,8 @@ class DateTextBox extends Dijit
      * @param  array $attribs HTML attributes
      * @return string
      */
-    public function __invoke($id = null, $value = null, array $params = array(), array $attribs = array())
+    public function __invoke ($id = null, $value = null, array $params = array(), 
+    array $attribs = array())
     {
         return $this->_createFormElement($id, $value, $params, $attribs);
     }

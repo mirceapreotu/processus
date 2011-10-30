@@ -19,8 +19,8 @@
  */
 
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Reader\Extension\Syndication;
 use Zend\Feed\Reader;
 use Zend\Feed\Reader\Extension;
@@ -36,31 +36,31 @@ use Zend\Date;
  */
 class Feed extends \Zend\Feed\Reader\Extension\AbstractFeed
 {
+
     /**
      * Get update period
      * @return string
      */
-    public function getUpdatePeriod()
+    public function getUpdatePeriod ()
     {
         $name = 'updatePeriod';
         $period = $this->_getData($name);
-
+        
         if ($period === null) {
             $this->_data[$name] = 'daily';
             return 'daily'; //Default specified by spec
         }
-
-        switch ($period)
-        {
+        
+        switch ($period) {
             case 'hourly':
             case 'daily':
             case 'weekly':
             case 'yearly':
                 return $period;
             default:
-                throw new Reader\Exception("Feed specified invalid update period: '$period'."
-                    .  " Must be one of hourly, daily, weekly or yearly"
-                );
+                throw new Reader\Exception(
+                "Feed specified invalid update period: '$period'." .
+                 " Must be one of hourly, daily, weekly or yearly");
         }
     }
 
@@ -68,16 +68,16 @@ class Feed extends \Zend\Feed\Reader\Extension\AbstractFeed
      * Get update frequency
      * @return int
      */
-    public function getUpdateFrequency()
+    public function getUpdateFrequency ()
     {
         $name = 'updateFrequency';
         $freq = $this->_getData($name, 'number');
-
-        if (!$freq || $freq < 1) {
+        
+        if (! $freq || $freq < 1) {
             $this->_data[$name] = 1;
             return 1;
         }
-
+        
         return $freq;
     }
 
@@ -85,21 +85,20 @@ class Feed extends \Zend\Feed\Reader\Extension\AbstractFeed
      * Get update frequency as ticks
      * @return int
      */
-    public function getUpdateFrequencyAsTicks()
+    public function getUpdateFrequencyAsTicks ()
     {
         $name = 'updateFrequency';
         $freq = $this->_getData($name, 'number');
-
-        if (!$freq || $freq < 1) {
+        
+        if (! $freq || $freq < 1) {
             $this->_data[$name] = 1;
             $freq = 1;
         }
-
+        
         $period = $this->getUpdatePeriod();
         $ticks = 1;
-
-        switch ($period)
-        {
+        
+        switch ($period) {
             //intentional fall through
             case 'yearly':
                 $ticks *= 52; //TODO: fix generalisation, how?
@@ -113,7 +112,7 @@ class Feed extends \Zend\Feed\Reader\Extension\AbstractFeed
             default: //Never arrive here, exception thrown in getPeriod()
                 break;
         }
-
+        
         return $ticks / $freq;
     }
 
@@ -122,12 +121,12 @@ class Feed extends \Zend\Feed\Reader\Extension\AbstractFeed
      *
      * @return Date\Date|null
      */
-    public function getUpdateBase()
+    public function getUpdateBase ()
     {
         $updateBase = $this->_getData('updateBase');
         $date = null;
         if ($updateBase) {
-            $date = new Date\Date;
+            $date = new Date\Date();
             $date->set($updateBase, Date\Date::W3C);
         }
         return $date;
@@ -140,20 +139,21 @@ class Feed extends \Zend\Feed\Reader\Extension\AbstractFeed
      * @param string $type
      * @return mixed|null
      */
-    private function _getData($name, $type = 'string')
+    private function _getData ($name, $type = 'string')
     {
         if (array_key_exists($name, $this->_data)) {
             return $this->_data[$name];
         }
-
-        $data = $this->_xpath->evaluate($type . '(' . $this->getXpathPrefix() . '/syn10:' . $name . ')');
-
-        if (!$data) {
+        
+        $data = $this->_xpath->evaluate(
+        $type . '(' . $this->getXpathPrefix() . '/syn10:' . $name . ')');
+        
+        if (! $data) {
             $data = null;
         }
-
+        
         $this->_data[$name] = $data;
-
+        
         return $data;
     }
 
@@ -162,8 +162,9 @@ class Feed extends \Zend\Feed\Reader\Extension\AbstractFeed
      *
      * @return void
      */
-    protected function _registerNamespaces()
+    protected function _registerNamespaces ()
     {
-        $this->_xpath->registerNamespace('syn10', 'http://purl.org/rss/1.0/modules/syndication/');
+        $this->_xpath->registerNamespace('syn10', 
+        'http://purl.org/rss/1.0/modules/syndication/');
     }
 }

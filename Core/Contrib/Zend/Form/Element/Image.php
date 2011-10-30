@@ -36,6 +36,7 @@ namespace Zend\Form\Element;
  */
 class Image extends Xhtml
 {
+
     /**
      * What view helper to use when using view helper decorator
      * @var string
@@ -59,19 +60,19 @@ class Image extends Xhtml
      *
      * @return \Zend\Form\Element\Image
      */
-    public function loadDefaultDecorators()
+    public function loadDefaultDecorators ()
     {
         if ($this->loadDefaultDecoratorsIsDisabled()) {
             return $this;
         }
-
+        
         $decorators = $this->getDecorators();
         if (empty($decorators)) {
             $this->addDecorator('Tooltip')
-                 ->addDecorator('Image')
-                 ->addDecorator('Errors')
-                 ->addDecorator('HtmlTag', array('tag' => 'dd'))
-                 ->addDecorator('Label', array('tag' => 'dt'));
+                ->addDecorator('Image')
+                ->addDecorator('Errors')
+                ->addDecorator('HtmlTag', array('tag' => 'dd'))
+                ->addDecorator('Label', array('tag' => 'dt'));
         }
         return $this;
     }
@@ -82,7 +83,7 @@ class Image extends Xhtml
      * @param  string $path
      * @return \Zend\Form\Element\Image
      */
-    public function setImage($path)
+    public function setImage ($path)
     {
         $this->src = (string) $path;
         return $this;
@@ -93,7 +94,7 @@ class Image extends Xhtml
      *
      * @return string
      */
-    public function getImage()
+    public function getImage ()
     {
         return $this->src;
     }
@@ -104,7 +105,7 @@ class Image extends Xhtml
      * @param  mixed $value
      * @return \Zend\Form\Element\Image
      */
-    public function setImageValue($value)
+    public function setImageValue ($value)
     {
         $this->_imageValue = $value;
         return $this;
@@ -115,7 +116,7 @@ class Image extends Xhtml
      *
      * @return mixed
      */
-    public function getImageValue()
+    public function getImageValue ()
     {
         return $this->_imageValue;
     }
@@ -125,7 +126,7 @@ class Image extends Xhtml
      *
      * @return bool
      */
-    public function isChecked()
+    public function isChecked ()
     {
         $imageValue = $this->getImageValue();
         return ((null !== $imageValue) && ($this->getValue() == $imageValue));

@@ -36,6 +36,7 @@ namespace Zend\Dojo\Form\Element;
  */
 class SubmitButton extends Button
 {
+
     /**
      * Use SubmitButton dijit view helper
      * @var string

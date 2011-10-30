@@ -32,6 +32,7 @@ namespace Zend\Config;
  */
 class Config implements \Countable, \Iterator, \ArrayAccess
 {
+
     /**
      * Whether in-memory modifications to configuration data are allowed
      *
@@ -104,7 +105,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * @param  boolean $allowModifications
      * @return void
      */
-    public function __construct(array $array, $allowModifications = false)
+    public function __construct (array $array, $allowModifications = false)
     {
         $this->_allowModifications = (boolean) $allowModifications;
         $this->_loadedSection = null;
@@ -127,7 +128,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * @param mixed $default
      * @return mixed
      */
-    public function get($name, $default = null)
+    public function get ($name, $default = null)
     {
         $result = $default;
         if (array_key_exists($name, $this->_data)) {
@@ -142,7 +143,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * @param string $name
      * @return mixed
      */
-    public function __get($name)
+    public function __get ($name)
     {
         return $this->get($name);
     }
@@ -156,7 +157,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * @throws \Zend\Config\Exception
      * @return void
      */
-    public function __set($name, $value)
+    public function __set ($name, $value)
     {
         if ($this->_allowModifications) {
             if (is_array($value)) {
@@ -166,7 +167,8 @@ class Config implements \Countable, \Iterator, \ArrayAccess
             }
             $this->_count = count($this->_data);
         } else {
-            throw new Exception\InvalidArgumentException('Zend_Config is read only');
+            throw new Exception\InvalidArgumentException(
+            'Zend_Config is read only');
         }
     }
 
@@ -176,17 +178,17 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      *
      * @return void
      */
-    public function __clone()
+    public function __clone ()
     {
-      $array = array();
-      foreach ($this->_data as $key => $value) {
-          if ($value instanceof Config) {
-              $array[$key] = clone $value;
-          } else {
-              $array[$key] = $value;
-          }
-      }
-      $this->_data = $array;
+        $array = array();
+        foreach ($this->_data as $key => $value) {
+            if ($value instanceof Config) {
+                $array[$key] = clone $value;
+            } else {
+                $array[$key] = $value;
+            }
+        }
+        $this->_data = $array;
     }
 
     /**
@@ -194,7 +196,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      *
      * @return array
      */
-    public function toArray()
+    public function toArray ()
     {
         $array = array();
         $data = $this->_data;
@@ -214,7 +216,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * @param string $name
      * @return boolean
      */
-    public function __isset($name)
+    public function __isset ($name)
     {
         return isset($this->_data[$name]);
     }
@@ -226,16 +228,17 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * @throws \Zend\Config\Exception
      * @return void
      */
-    public function __unset($name)
+    public function __unset ($name)
     {
         if ($this->_allowModifications) {
             unset($this->_data[$name]);
             $this->_count = count($this->_data);
             $this->_skipNextIteration = true;
         } else {
-            throw new Exception\InvalidArgumentException('Zend_Config is read only');
+            throw new Exception\InvalidArgumentException(
+            'Zend_Config is read only');
         }
-
+    
     }
 
     /**
@@ -243,7 +246,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      *
      * @return int
      */
-    public function count()
+    public function count ()
     {
         return $this->_count;
     }
@@ -253,7 +256,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      *
      * @return mixed
      */
-    public function current()
+    public function current ()
     {
         $this->_skipNextIteration = false;
         return current($this->_data);
@@ -264,7 +267,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      *
      * @return mixed
      */
-    public function key()
+    public function key ()
     {
         return key($this->_data);
     }
@@ -273,21 +276,21 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * Defined by Iterator interface
      *
      */
-    public function next()
+    public function next ()
     {
         if ($this->_skipNextIteration) {
             $this->_skipNextIteration = false;
             return;
         }
         next($this->_data);
-        $this->_index++;
+        $this->_index ++;
     }
 
     /**
      * Defined by Iterator interface
      *
      */
-    public function rewind()
+    public function rewind ()
     {
         $this->_skipNextIteration = false;
         reset($this->_data);
@@ -299,7 +302,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      *
      * @return boolean
      */
-    public function valid()
+    public function valid ()
     {
         return $this->_index < $this->_count;
     }
@@ -311,11 +314,11 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * @param  mixed $offset
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists ($offset)
     {
         return $this->__isset($offset);
     }
-    
+
     /**
      * offsetGet(): defined by ArrayAccess interface.
      * 
@@ -323,11 +326,11 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * @param  mixed $offset
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet ($offset)
     {
         return $this->__get($offset);
     }
-    
+
     /**
      * offsetSet(): defined by ArrayAccess interface.
      * 
@@ -336,11 +339,11 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * @param  mixed $value
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet ($offset, $value)
     {
         $this->__set($offset, $value);
     }
-    
+
     /**
      * offsetUnset(): defined by ArrayAccess interface.
      * 
@@ -348,19 +351,19 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * @param  mixed $offset
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset ($offset)
     {
         $this->__unset($offset);
     }
-    
+
     /**
      * Returns the section name(s) loaded.
      *
      * @return mixed
      */
-    public function getSectionName()
+    public function getSectionName ()
     {
-        if(is_array($this->_loadedSection) && count($this->_loadedSection) == 1) {
+        if (is_array($this->_loadedSection) && count($this->_loadedSection) == 1) {
             $this->_loadedSection = $this->_loadedSection[0];
         }
         return $this->_loadedSection;
@@ -371,7 +374,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      *
      * @return boolean
      */
-    public function areAllSectionsLoaded()
+    public function areAllSectionsLoaded ()
     {
         return $this->_loadedSection === null;
     }
@@ -384,24 +387,26 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * @param \Zend\Config\Config $merge
      * @return \Zend\Config\Config
      */
-    public function merge(Config $merge)
+    public function merge (Config $merge)
     {
-        foreach($merge as $key => $item) {
-            if(array_key_exists($key, $this->_data)) {
-                if($item instanceof Config && $this->$key instanceof Config) {
-                    $this->$key = $this->$key->merge(new Config($item->toArray(), !$this->readOnly()));
+        foreach ($merge as $key => $item) {
+            if (array_key_exists($key, $this->_data)) {
+                if ($item instanceof Config && $this->$key instanceof Config) {
+                    $this->$key = $this->$key->merge(
+                    new Config($item->toArray(), ! $this->readOnly()));
                 } else {
                     $this->$key = $item;
                 }
             } else {
-                if($item instanceof Config) {
-                    $this->$key = new Config($item->toArray(), !$this->readOnly());
+                if ($item instanceof Config) {
+                    $this->$key = new Config($item->toArray(), 
+                    ! $this->readOnly());
                 } else {
                     $this->$key = $item;
                 }
             }
         }
-
+        
         return $this;
     }
 
@@ -411,7 +416,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * into one object which should then not be modified again.
      *
      */
-    public function setReadOnly()
+    public function setReadOnly ()
     {
         $this->_allowModifications = false;
         foreach ($this->_data as $key => $value) {
@@ -426,9 +431,9 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      *
      * @return boolean
      */
-    public function readOnly()
+    public function readOnly ()
     {
-        return !$this->_allowModifications;
+        return ! $this->_allowModifications;
     }
 
     /**
@@ -436,7 +441,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      *
      * @return array
      */
-    public function getExtends()
+    public function getExtends ()
     {
         return $this->_extends;
     }
@@ -448,13 +453,15 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * @param  string $extendedSection
      * @return void
      */
-    public function setExtend($extendingSection, $extendedSection = null)
+    public function setExtend ($extendingSection, $extendedSection = null)
     {
-        if ($extendedSection === null && isset($this->_extends[$extendingSection])) {
+        if ($extendedSection === null &&
+         isset($this->_extends[$extendingSection])) {
             unset($this->_extends[$extendingSection]);
-        } else if ($extendedSection !== null) {
-            $this->_extends[$extendingSection] = $extendedSection;
-        }
+        } else 
+            if ($extendedSection !== null) {
+                $this->_extends[$extendingSection] = $extendedSection;
+            }
     }
 
     /**
@@ -466,13 +473,14 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * @throws \Zend\Config\Exception
      * @return void
      */
-    protected function _assertValidExtend($extendingSection, $extendedSection)
+    protected function _assertValidExtend ($extendingSection, $extendedSection)
     {
         // detect circular section inheritance
         $extendedSectionCurrent = $extendedSection;
         while (array_key_exists($extendedSectionCurrent, $this->_extends)) {
             if ($this->_extends[$extendedSectionCurrent] == $extendingSection) {
-                throw new Exception\RuntimeException('Illegal circular inheritance detected');
+                throw new Exception\RuntimeException(
+                'Illegal circular inheritance detected');
             }
             $extendedSectionCurrent = $this->_extends[$extendedSectionCurrent];
         }
@@ -488,7 +496,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * @param  mixed $secondArray Second array to merge into first array
      * @return array
      */
-    protected function _arrayMergeRecursive($firstArray, $secondArray)
+    protected function _arrayMergeRecursive ($firstArray, $secondArray)
     {
         if (is_array($firstArray) && is_array($secondArray)) {
             return array_replace_recursive($firstArray, $secondArray);
@@ -501,7 +509,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      *
      * @return void
      */
-    protected function _setErrorHandler()
+    protected function _setErrorHandler ()
     {
         set_error_handler(array($this, '_handleError'));
     }
@@ -511,7 +519,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      *
      * @return array Handled error messages
      */
-    protected function _restoreErrorHandler()
+    protected function _restoreErrorHandler ()
     {
         restore_error_handler();
         $errorMessages = $this->_errorMessages;
@@ -528,7 +536,7 @@ class Config implements \Countable, \Iterator, \ArrayAccess
      * @param integer $errline
      * @return void
      */
-    protected function _handleError($errno, $errstr, $errfile, $errline)
+    protected function _handleError ($errno, $errstr, $errfile, $errline)
     {
         $this->_errorMessages[] = trim($errstr);
     }

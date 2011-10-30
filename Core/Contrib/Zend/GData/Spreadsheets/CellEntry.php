@@ -42,6 +42,7 @@ class CellEntry extends \Zend\GData\Entry
 {
 
     protected $_entryClassName = 'Zend\GData\Spreadsheets\CellEntry';
+
     protected $_cell;
 
     /**
@@ -49,13 +50,13 @@ class CellEntry extends \Zend\GData\Entry
      * @param string $uri (optional)
      * @param DOMElement $element (optional) The DOMElement on which to base this object.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(Spreadsheets::$namespaces);
         parent::__construct($element);
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_cell != null) {
@@ -64,18 +65,18 @@ class CellEntry extends \Zend\GData\Entry
         return $element;
     }
 
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('gs') . ':' . 'cell';
-            $cell = new Extension\Cell();
-            $cell->transferFromDOM($child);
-            $this->_cell = $cell;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('gs') . ':' . 'cell':
+                $cell = new Extension\Cell();
+                $cell->transferFromDOM($child);
+                $this->_cell = $cell;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
@@ -83,7 +84,7 @@ class CellEntry extends \Zend\GData\Entry
      * Gets the Cell element of this Cell Entry.
      * @return \Zend\GData\Spreadsheets\Extension\Cell
      */
-    public function getCell()
+    public function getCell ()
     {
         return $this->_cell;
     }
@@ -92,7 +93,7 @@ class CellEntry extends \Zend\GData\Entry
      * Sets the Cell element of this Cell Entry.
      * @param $cell \Zend\GData\Spreadsheets\Extension\Cell $cell
      */
-    public function setCell($cell)
+    public function setCell ($cell)
     {
         $this->_cell = $cell;
         return $this;

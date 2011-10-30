@@ -39,6 +39,7 @@ class MediaText extends \Zend\GData\Extension
 {
 
     protected $_rootElement = 'text';
+
     protected $_rootNamespace = 'media';
 
     /**
@@ -70,8 +71,8 @@ class MediaText extends \Zend\GData\Extension
      * @param $start string
      * @param $end string
      */
-    public function __construct($text = null, $type = null, $lang = null,
-            $start = null, $end = null)
+    public function __construct ($text = null, $type = null, $lang = null, $start = null, 
+    $end = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Media::$namespaces);
         parent::__construct();
@@ -92,7 +93,7 @@ class MediaText extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_type !== null) {
@@ -117,30 +118,30 @@ class MediaText extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'type':
-            $this->_type = $attribute->nodeValue;
-            break;
-        case 'lang':
-            $this->_lang = $attribute->nodeValue;
-            break;
-        case 'start':
-            $this->_start = $attribute->nodeValue;
-            break;
-        case 'end':
-            $this->_end = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'type':
+                $this->_type = $attribute->nodeValue;
+                break;
+            case 'lang':
+                $this->_lang = $attribute->nodeValue;
+                break;
+            case 'start':
+                $this->_start = $attribute->nodeValue;
+                break;
+            case 'end':
+                $this->_end = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
     /**
      * @return string
      */
-    public function getType()
+    public function getType ()
     {
         return $this->_type;
     }
@@ -149,7 +150,7 @@ class MediaText extends \Zend\GData\Extension
      * @param string $value
      * @return \Zend\GData\Media\Extension\MediaText Provides a fluent interface
      */
-    public function setType($value)
+    public function setType ($value)
     {
         $this->_type = $value;
         return $this;
@@ -158,7 +159,7 @@ class MediaText extends \Zend\GData\Extension
     /**
      * @return string
      */
-    public function getLang()
+    public function getLang ()
     {
         return $this->_lang;
     }
@@ -167,7 +168,7 @@ class MediaText extends \Zend\GData\Extension
      * @param string $value
      * @return \Zend\GData\Media\Extension\MediaText Provides a fluent interface
      */
-    public function setLang($value)
+    public function setLang ($value)
     {
         $this->_lang = $value;
         return $this;
@@ -176,7 +177,7 @@ class MediaText extends \Zend\GData\Extension
     /**
      * @return string
      */
-    public function getStart()
+    public function getStart ()
     {
         return $this->_start;
     }
@@ -185,7 +186,7 @@ class MediaText extends \Zend\GData\Extension
      * @param string $value
      * @return \Zend\GData\Media\Extension\MediaText Provides a fluent interface
      */
-    public function setStart($value)
+    public function setStart ($value)
     {
         $this->_start = $value;
         return $this;
@@ -194,7 +195,7 @@ class MediaText extends \Zend\GData\Extension
     /**
      * @return string
      */
-    public function getEnd()
+    public function getEnd ()
     {
         return $this->_end;
     }
@@ -203,7 +204,7 @@ class MediaText extends \Zend\GData\Extension
      * @param string $value
      * @return \Zend\GData\Media\Extension\MediaText Provides a fluent interface
      */
-    public function setEnd($value)
+    public function setEnd ($value)
     {
         $this->_end = $value;
         return $this;

@@ -17,20 +17,20 @@
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
- 
+
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Writer\Extension\Threading\Renderer;
 use Zend\Feed\Writer\Extension;
 
 /**
-* @uses \Zend\Feed\Writer\Extension\AbstractRenderer
-* @category Zend
-* @package Zend_Feed_Writer
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @uses \Zend\Feed\Writer\Extension\AbstractRenderer
+ * @category Zend
+ * @package Zend_Feed_Writer
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 class Entry extends Extension\AbstractRenderer
 {
 
@@ -42,13 +42,13 @@ class Entry extends Extension\AbstractRenderer
      * @var bool
      */
     protected $_called = false;
-    
+
     /**
      * Render entry
      * 
      * @return void
      */
-    public function render()
+    public function render ()
     {
         if (strtolower($this->getType()) == 'rss') {
             return; // Atom 1.0 only
@@ -60,18 +60,18 @@ class Entry extends Extension\AbstractRenderer
             $this->_appendNamespaces();
         }
     }
-    
+
     /**
      * Append entry namespaces
      * 
      * @return void
      */
-    protected function _appendNamespaces()
+    protected function _appendNamespaces ()
     {
-        $this->getRootElement()->setAttribute('xmlns:thr',
-            'http://purl.org/syndication/thread/1.0');  
+        $this->getRootElement()->setAttribute('xmlns:thr', 
+        'http://purl.org/syndication/thread/1.0');
     }
-    
+
     /**
      * Set comment link
      * 
@@ -79,10 +79,10 @@ class Entry extends Extension\AbstractRenderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setCommentLink(\DOMDocument $dom, \DOMElement $root)
+    protected function _setCommentLink (\DOMDocument $dom,\DOMElement $root)
     {
         $link = $this->getDataContainer()->getCommentLink();
-        if (!$link) {
+        if (! $link) {
             return;
         }
         $clink = $this->_dom->createElement('link');
@@ -96,7 +96,7 @@ class Entry extends Extension\AbstractRenderer
         $root->appendChild($clink);
         $this->_called = true;
     }
-    
+
     /**
      * Set comment feed links
      * 
@@ -104,16 +104,17 @@ class Entry extends Extension\AbstractRenderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setCommentFeedLinks(\DOMDocument $dom, \DOMElement $root)
+    protected function _setCommentFeedLinks (\DOMDocument $dom, 
+    DOMElement $root)
     {
         $links = $this->getDataContainer()->getCommentFeedLinks();
-        if (!$links || empty($links)) {
+        if (! $links || empty($links)) {
             return;
         }
         foreach ($links as $link) {
             $flink = $this->_dom->createElement('link');
             $flink->setAttribute('rel', 'replies');
-            $flink->setAttribute('type', 'application/'. $link['type'] .'+xml');
+            $flink->setAttribute('type', 'application/' . $link['type'] . '+xml');
             $flink->setAttribute('href', $link['uri']);
             $count = $this->getDataContainer()->getCommentCount();
             if ($count !== null) {
@@ -131,7 +132,7 @@ class Entry extends Extension\AbstractRenderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setCommentCount(\DOMDocument $dom, \DOMElement $root)
+    protected function _setCommentCount (\DOMDocument $dom,\DOMElement $root)
     {
         $count = $this->getDataContainer()->getCommentCount();
         if ($count === null) {

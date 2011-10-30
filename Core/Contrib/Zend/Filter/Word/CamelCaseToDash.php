@@ -32,12 +32,13 @@ namespace Zend\Filter\Word;
  */
 class CamelCaseToDash extends CamelCaseToSeparator
 {
+
     /**
      * Constructor
      *
      * @return void
      */
-    public function __construct()
+    public function __construct ()
     {
         parent::__construct('-');
     }

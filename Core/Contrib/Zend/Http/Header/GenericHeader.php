@@ -4,6 +4,7 @@ namespace Zend\Http\Header;
 
 class GenericHeader implements HeaderDescription
 {
+
     /**
      * @var string
      */
@@ -21,9 +22,9 @@ class GenericHeader implements HeaderDescription
      * @param string $headerLine
      * @return GenericHeader
      */
-    public static function fromString($headerLine)
+    public static function fromString ($headerLine)
     {
-        list($fieldName, $fieldValue) = explode(': ', $headerLine, 2);
+        list ($fieldName, $fieldValue) = explode(': ', $headerLine, 2);
         $header = new static($fieldName, $fieldValue);
         return $header;
     }
@@ -34,12 +35,12 @@ class GenericHeader implements HeaderDescription
      * @param null|string $fieldName
      * @param null|string $fieldValue
      */
-    public function __construct($fieldName = null, $fieldValue = null)
+    public function __construct ($fieldName = null, $fieldValue = null)
     {
         if ($fieldName) {
             $this->setFieldName($fieldName);
         }
-
+        
         if ($fieldValue) {
             $this->setFieldValue($fieldValue);
         }
@@ -51,20 +52,23 @@ class GenericHeader implements HeaderDescription
      * @param  string $fieldName
      * @return GenericHeader
      */
-    public function setFieldName($fieldName)
+    public function setFieldName ($fieldName)
     {
-        if (!is_string($fieldName) || empty($fieldName)) {
-            throw new Exception\InvalidArgumentException('Header name must be a string');
+        if (! is_string($fieldName) || empty($fieldName)) {
+            throw new Exception\InvalidArgumentException(
+            'Header name must be a string');
         }
-
+        
         // Pre-filter to normalize valid characters, change underscore to dash
-        $fieldName = str_replace(' ', '-', ucwords(str_replace(array('_', '-'), ' ', $fieldName)));
-
+        $fieldName = str_replace(' ', '-', 
+        ucwords(str_replace(array('_', '-'), ' ', $fieldName)));
+        
         // Validate what we have
-        if (!preg_match('/^[a-z][a-z0-9-]*$/i', $fieldName)) {
-            throw new Exception\InvalidArgumentException('Header name must start with a letter, and consist of only letters, numbers, and dashes');
+        if (! preg_match('/^[a-z][a-z0-9-]*$/i', $fieldName)) {
+            throw new Exception\InvalidArgumentException(
+            'Header name must start with a letter, and consist of only letters, numbers, and dashes');
         }
-
+        
         $this->fieldName = $fieldName;
         return $this;
     }
@@ -74,7 +78,7 @@ class GenericHeader implements HeaderDescription
      *
      * @return string
      */
-    public function getFieldName()
+    public function getFieldName ()
     {
         return $this->fieldName;
     }
@@ -85,14 +89,14 @@ class GenericHeader implements HeaderDescription
      * @param  string $fieldValue
      * @return GenericHeader
      */
-    public function setFieldValue($fieldValue)
+    public function setFieldValue ($fieldValue)
     {
         $fieldValue = (string) $fieldValue;
-
+        
         if (empty($fieldValue) || preg_match('/^\s+$/', $fieldValue)) {
             $fieldValue = '';
         }
-
+        
         $this->fieldValue = $fieldValue;
         return $this;
     }
@@ -102,7 +106,7 @@ class GenericHeader implements HeaderDescription
      * 
      * @return string
      */
-    public function getFieldValue()
+    public function getFieldValue ()
     {
         return $this->fieldValue;
     }
@@ -114,12 +118,12 @@ class GenericHeader implements HeaderDescription
      *
      * @return string
      */
-    public function toString()
+    public function toString ()
     {
-        $name  = $this->getFieldName();
+        $name = $this->getFieldName();
         $value = $this->getFieldValue();
-
-        return $name. ': ' . $value . "\r\n";
+        
+        return $name . ': ' . $value . "\r\n";
     }
 
 }

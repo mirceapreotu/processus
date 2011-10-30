@@ -23,8 +23,7 @@
  */
 namespace Zend\EventManager\Filter;
 
-use Zend\Stdlib\CallbackHandler,
-    Zend\Stdlib\SplPriorityQueue;
+use Zend\Stdlib\CallbackHandler, Zend\Stdlib\SplPriorityQueue;
 
 /**
  * Specialized priority queue implementation for use with an intercepting 
@@ -39,13 +38,14 @@ use Zend\Stdlib\CallbackHandler,
  */
 class FilterIterator extends SplPriorityQueue
 {
+
     /**
      * Does the queue contain a given value?
      * 
      * @param  mixed $datum 
      * @return bool
      */
-    public function contains($datum)
+    public function contains ($datum)
     {
         $chain = clone $this;
         foreach ($chain as $item) {
@@ -65,15 +65,15 @@ class FilterIterator extends SplPriorityQueue
      * @param  mixed $datum 
      * @return bool
      */
-    public function remove($datum)
+    public function remove ($datum)
     {
         $this->setExtractFlags(self::EXTR_BOTH);
-
+        
         // Iterate and remove any matches
         $removed = false;
-        $items   = array();
+        $items = array();
         $this->rewind();
-        while (!$this->isEmpty()) {
+        while (! $this->isEmpty()) {
             $item = $this->extract();
             if ($item['data'] === $datum) {
                 $removed = true;
@@ -81,12 +81,12 @@ class FilterIterator extends SplPriorityQueue
             }
             $items[] = $item;
         }
-
+        
         // Repopulate
         foreach ($items as $item) {
             $this->insert($item['data'], $item['priority']);
         }
-
+        
         $this->setExtractFlags(self::EXTR_DATA);
         return $removed;
     }
@@ -101,18 +101,19 @@ class FilterIterator extends SplPriorityQueue
      * @param  FilterIterator $chain 
      * @return void
      */
-    public function next($context = null, array $params = array(), $chain = null)
+    public function next ($context = null, array $params = array(), $chain = null)
     {
         if (empty($context) || $chain->isEmpty()) {
             return;
         }
-
+        
         $next = $this->extract();
-        if (!$next instanceof CallbackHandler) {
+        if (! $next instanceof CallbackHandler) {
             return;
         }
-
-        $return = call_user_func($next->getCallback(), $context, $params, $chain);
+        
+        $return = call_user_func($next->getCallback(), $context, $params, 
+        $chain);
         return $return;
     }
 }

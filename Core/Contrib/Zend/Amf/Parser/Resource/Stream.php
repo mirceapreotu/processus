@@ -34,13 +34,14 @@ namespace Zend\Amf\Parser\Resource;
  */
 class Stream
 {
+
     /**
      * Parse resource into string
      *
      * @param resource $resource Stream resource
      * @return array
      */
-    public function parse($resource) 
+    public function parse ($resource)
     {
         return stream_get_contents($resource);
     }

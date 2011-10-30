@@ -45,16 +45,21 @@ class ListQuery extends \Zend\GData\Query
     const SPREADSHEETS_LIST_FEED_URI = 'http://spreadsheets.google.com/feeds/list';
 
     protected $_defaultFeedUri = self::SPREADSHEETS_LIST_FEED_URI;
+
     protected $_visibility = 'private';
+
     protected $_projection = 'full';
+
     protected $_spreadsheetKey = null;
+
     protected $_worksheetId = 'default';
+
     protected $_rowId = null;
 
     /**
      * Constructs a new Zend_Gdata_Spreadsheets_ListQuery object.
      */
-    public function __construct()
+    public function __construct ()
     {
         parent::__construct();
     }
@@ -64,7 +69,7 @@ class ListQuery extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\Spreadsheets\CellQuery Provides a fluent interface
      */
-    public function setSpreadsheetKey($value)
+    public function setSpreadsheetKey ($value)
     {
         $this->_spreadsheetKey = $value;
         return $this;
@@ -74,7 +79,7 @@ class ListQuery extends \Zend\GData\Query
      * Gets the spreadsheet key for the query.
      * @return string spreadsheet key
      */
-    public function getSpreadsheetKey()
+    public function getSpreadsheetKey ()
     {
         return $this->_spreadsheetKey;
     }
@@ -84,7 +89,7 @@ class ListQuery extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\Spreadsheets\CellQuery Provides a fluent interface
      */
-    public function setWorksheetId($value)
+    public function setWorksheetId ($value)
     {
         $this->_worksheetId = $value;
         return $this;
@@ -94,7 +99,7 @@ class ListQuery extends \Zend\GData\Query
      * Gets the worksheet id for the query.
      * @return string worksheet id
      */
-    public function getWorksheetId()
+    public function getWorksheetId ()
     {
         return $this->_worksheetId;
     }
@@ -104,7 +109,7 @@ class ListQuery extends \Zend\GData\Query
      * @param string $value row id
      * @return \Zend\GData\Spreadsheets\CellQuery Provides a fluent interface
      */
-    public function setRowId($value)
+    public function setRowId ($value)
     {
         $this->_rowId = $value;
         return $this;
@@ -114,7 +119,7 @@ class ListQuery extends \Zend\GData\Query
      * Gets the row id for the query.
      * @return string row id
      */
-    public function getRowId()
+    public function getRowId ()
     {
         return $this->_rowId;
     }
@@ -124,7 +129,7 @@ class ListQuery extends \Zend\GData\Query
      * @param string $value Projection
      * @return \Zend\GData\Spreadsheets\ListQuery Provides a fluent interface
      */
-    public function setProjection($value)
+    public function setProjection ($value)
     {
         $this->_projection = $value;
         return $this;
@@ -135,7 +140,7 @@ class ListQuery extends \Zend\GData\Query
      * @param string $value visibility
      * @return \Zend\GData\Spreadsheets\ListQuery Provides a fluent interface
      */
-    public function setVisibility($value)
+    public function setVisibility ($value)
     {
         $this->_visibility = $value;
         return $this;
@@ -145,7 +150,7 @@ class ListQuery extends \Zend\GData\Query
      * Gets the projection for this query.
      * @return string projection
      */
-    public function getProjection()
+    public function getProjection ()
     {
         return $this->_projection;
     }
@@ -154,7 +159,7 @@ class ListQuery extends \Zend\GData\Query
      * Gets the visibility for this query.
      * @return string visibility
      */
-    public function getVisibility()
+    public function getVisibility ()
     {
         return $this->_visibility;
     }
@@ -164,7 +169,7 @@ class ListQuery extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\Spreadsheets\DocumentQuery Provides a fluent interface
      */
-    public function setSpreadsheetQuery($value)
+    public function setSpreadsheetQuery ($value)
     {
         if ($value != null) {
             $this->_params['sq'] = $value;
@@ -178,7 +183,7 @@ class ListQuery extends \Zend\GData\Query
      * Gets the spreadsheet key for this query.
      * @return string spreadsheet query
      */
-    public function getSpreadsheetQuery()
+    public function getSpreadsheetQuery ()
     {
         if (array_key_exists('sq', $this->_params)) {
             return $this->_params['sq'];
@@ -192,7 +197,7 @@ class ListQuery extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\Spreadsheets\DocumentQuery Provides a fluent interface
      */
-    public function setOrderBy($value)
+    public function setOrderBy ($value)
     {
         if ($value != null) {
             $this->_params['orderby'] = $value;
@@ -206,7 +211,7 @@ class ListQuery extends \Zend\GData\Query
      * Gets the orderby attribute for this query.
      * @return string orderby
      */
-    public function getOrderBy()
+    public function getOrderBy ()
     {
         if (array_key_exists('orderby', $this->_params)) {
             return $this->_params['orderby'];
@@ -220,7 +225,7 @@ class ListQuery extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\Spreadsheets\DocumentQuery Provides a fluent interface
      */
-    public function setReverse($value)
+    public function setReverse ($value)
     {
         if ($value != null) {
             $this->_params['reverse'] = $value;
@@ -234,10 +239,9 @@ class ListQuery extends \Zend\GData\Query
      * Gets the reverse attribute for this query.
      * @return string reverse
      */
-    public function getReverse()
+    public function getReverse ()
     {
-
-
+        
         if (array_key_exists('reverse', $this->_params)) {
             return $this->_params['reverse'];
         } else {
@@ -249,39 +253,43 @@ class ListQuery extends \Zend\GData\Query
      * Gets the full query URL for this query.
      * @return string url
      */
-    public function getQueryUrl()
+    public function getQueryUrl ()
     {
-
+        
         $uri = $this->_defaultFeedUri;
-
+        
         if ($this->_spreadsheetKey != null) {
-            $uri .= '/'.$this->_spreadsheetKey;
+            $uri .= '/' . $this->_spreadsheetKey;
         } else {
-            throw new App\Exception('A spreadsheet key must be provided for list queries.');
+            throw new App\Exception(
+            'A spreadsheet key must be provided for list queries.');
         }
-
+        
         if ($this->_worksheetId != null) {
-            $uri .= '/'.$this->_worksheetId;
+            $uri .= '/' . $this->_worksheetId;
         } else {
-            throw new App\Exception('A worksheet id must be provided for list queries.');
+            throw new App\Exception(
+            'A worksheet id must be provided for list queries.');
         }
-
+        
         if ($this->_visibility != null) {
-            $uri .= '/'.$this->_visibility;
+            $uri .= '/' . $this->_visibility;
         } else {
-            throw new App\Exception('A visibility must be provided for list queries.');
+            throw new App\Exception(
+            'A visibility must be provided for list queries.');
         }
-
+        
         if ($this->_projection != null) {
-            $uri .= '/'.$this->_projection;
+            $uri .= '/' . $this->_projection;
         } else {
-            throw new App\Exception('A projection must be provided for list queries.');
+            throw new App\Exception(
+            'A projection must be provided for list queries.');
         }
-
+        
         if ($this->_rowId != null) {
-            $uri .= '/'.$this->_rowId;
+            $uri .= '/' . $this->_rowId;
         }
-
+        
         $uri .= $this->getQueryString();
         return $uri;
     }
@@ -290,7 +298,7 @@ class ListQuery extends \Zend\GData\Query
      * Gets the attribute query string for this query.
      * @return string query string
      */
-    public function getQueryString()
+    public function getQueryString ()
     {
         return parent::getQueryString();
     }

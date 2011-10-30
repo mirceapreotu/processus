@@ -33,5 +33,6 @@ namespace Zend\InfoCard\Cipher\Symmetric;
  */
 interface AES256CBC
 {
-    public function decrypt($encryptedData, $decryptionKey, $iv_length = null);
+
+    public function decrypt ($encryptedData, $decryptionKey, $iv_length = null);
 }

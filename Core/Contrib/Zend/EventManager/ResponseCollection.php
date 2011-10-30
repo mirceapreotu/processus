@@ -33,8 +33,9 @@ use SplStack;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class ResponseCollection extends SplStack 
+class ResponseCollection extends SplStack
 {
+
     protected $stopped = false;
 
     /**
@@ -42,7 +43,7 @@ class ResponseCollection extends SplStack
      * 
      * @return bool
      */
-    public function stopped()
+    public function stopped ()
     {
         return $this->stopped;
     }
@@ -53,7 +54,7 @@ class ResponseCollection extends SplStack
      * @param  bool $flag 
      * @return ResponseCollection
      */
-    public function setStopped($flag)
+    public function setStopped ($flag)
     {
         $this->stopped = (bool) $flag;
         return $this;
@@ -64,7 +65,7 @@ class ResponseCollection extends SplStack
      *
      * @return mixed The first handler return value
      */
-    public function first()
+    public function first ()
     {
         return parent::bottom();
     }
@@ -77,7 +78,7 @@ class ResponseCollection extends SplStack
      *
      * @return mixed The last handler return value
      */
-    public function last()
+    public function last ()
     {
         if (count($this) === 0) {
             return null;
@@ -90,7 +91,7 @@ class ResponseCollection extends SplStack
      *
      * @param  mixed $value The value to look for among responses
      */
-    public function contains($value)
+    public function contains ($value)
     {
         foreach ($this as $response) {
             if ($response === $value) {

@@ -24,10 +24,7 @@
  */
 namespace Zend\Controller\Dispatcher;
 
-use Zend\Controller\Dispatcher,
-    Zend\Controller\Front as FrontController,
-    Zend\Controller\Response\AbstractResponse,
-    Zend\Loader\Broker;
+use Zend\Controller\Dispatcher, Zend\Controller\Front as FrontController, Zend\Controller\Response\AbstractResponse, Zend\Loader\Broker;
 
 /**
  * @uses       \Zend\Controller\Dispatcher\Exception
@@ -41,6 +38,7 @@ use Zend\Controller\Dispatcher,
  */
 abstract class AbstractDispatcher implements Dispatcher
 {
+
     /**
      * Helper broker instance
      * @var Broker
@@ -101,7 +99,7 @@ abstract class AbstractDispatcher implements Dispatcher
      *
      * @return void
      */
-    public function __construct(array $params = array())
+    public function __construct (array $params = array())
     {
         $this->setParams($params);
     }
@@ -115,7 +113,7 @@ abstract class AbstractDispatcher implements Dispatcher
      * @param string $unformatted
      * @return string
      */
-    public function formatControllerName($unformatted)
+    public function formatControllerName ($unformatted)
     {
         return ucfirst($this->_formatName($unformatted)) . 'Controller';
     }
@@ -129,10 +127,11 @@ abstract class AbstractDispatcher implements Dispatcher
      * @param string $unformatted
      * @return string
      */
-    public function formatActionName($unformatted)
+    public function formatActionName ($unformatted)
     {
         $formatted = $this->_formatName($unformatted, true);
-        return strtolower(substr($formatted, 0, 1)) . substr($formatted, 1) . 'Action';
+        return strtolower(substr($formatted, 0, 1)) . substr($formatted, 1) .
+         'Action';
     }
 
     /**
@@ -145,26 +144,27 @@ abstract class AbstractDispatcher implements Dispatcher
      * @return array
      * @throws \Zend\Controller\Dispatcher\Exception with invalid delimiters
      */
-    public function _verifyDelimiter($spec)
+    public function _verifyDelimiter ($spec)
     {
         if (is_string($spec)) {
             return (array) $spec;
         } elseif (is_array($spec)) {
             $allStrings = true;
             foreach ($spec as $delim) {
-                if (!is_string($delim)) {
+                if (! is_string($delim)) {
                     $allStrings = false;
                     break;
                 }
             }
-
-            if (!$allStrings) {
-                throw new Exception('Word delimiter array must contain only strings');
+            
+            if (! $allStrings) {
+                throw new Exception(
+                'Word delimiter array must contain only strings');
             }
-
+            
             return $spec;
         }
-
+        
         throw new Exception('Invalid word delimiter');
     }
 
@@ -174,7 +174,7 @@ abstract class AbstractDispatcher implements Dispatcher
      *
      * @return array
      */
-    public function getWordDelimiter()
+    public function getWordDelimiter ()
     {
         return $this->_wordDelimiter;
     }
@@ -188,11 +188,11 @@ abstract class AbstractDispatcher implements Dispatcher
      * @param string|array $spec
      * @return \Zend\Controller\Dispatcher\AbstractDispatcher
      */
-    public function setWordDelimiter($spec)
+    public function setWordDelimiter ($spec)
     {
         $spec = $this->_verifyDelimiter($spec);
         $this->_wordDelimiter = $spec;
-
+        
         return $this;
     }
 
@@ -202,7 +202,7 @@ abstract class AbstractDispatcher implements Dispatcher
      *
      * @return array
      */
-    public function getPathDelimiter()
+    public function getPathDelimiter ()
     {
         return $this->_pathDelimiter;
     }
@@ -216,13 +216,13 @@ abstract class AbstractDispatcher implements Dispatcher
      * @param string $spec
      * @return \Zend\Controller\Dispatcher\AbstractDispatcher
      */
-    public function setPathDelimiter($spec)
+    public function setPathDelimiter ($spec)
     {
-        if (!is_string($spec)) {
+        if (! is_string($spec)) {
             throw new Exception('Invalid path delimiter');
         }
         $this->_pathDelimiter = $spec;
-
+        
         return $this;
     }
 
@@ -239,21 +239,22 @@ abstract class AbstractDispatcher implements Dispatcher
      * @param boolean $isAction Defaults to false
      * @return string
      */
-    protected function _formatName($unformatted, $isAction = false)
+    protected function _formatName ($unformatted, $isAction = false)
     {
         // preserve directories
-        if (!$isAction) {
+        if (! $isAction) {
             $segments = explode($this->getPathDelimiter(), $unformatted);
         } else {
             $segments = (array) $unformatted;
         }
-
+        
         foreach ($segments as $key => $segment) {
-            $segment        = str_replace($this->getWordDelimiter(), ' ', strtolower($segment));
-            $segment        = preg_replace('/[^a-z0-9 ]/', '', $segment);
+            $segment = str_replace($this->getWordDelimiter(), ' ', 
+            strtolower($segment));
+            $segment = preg_replace('/[^a-z0-9 ]/', '', $segment);
             $segments[$key] = str_replace(' ', '', ucwords($segment));
         }
-
+        
         return implode('\\', $segments);
     }
 
@@ -262,12 +263,12 @@ abstract class AbstractDispatcher implements Dispatcher
      *
      * @return \Zend\Controller\Front
      */
-    public function getFrontController()
+    public function getFrontController ()
     {
         if (null === $this->_frontController) {
             $this->_frontController = FrontController::getInstance();
         }
-
+        
         return $this->_frontController;
     }
 
@@ -277,7 +278,7 @@ abstract class AbstractDispatcher implements Dispatcher
      * @param \Zend\Controller\Front $controller
      * @return \Zend\Controller\Dispatcher\AbstractDispatcher
      */
-    public function setFrontController(FrontController $controller)
+    public function setFrontController (FrontController $controller)
     {
         $this->_frontController = $controller;
         return $this;
@@ -290,7 +291,7 @@ abstract class AbstractDispatcher implements Dispatcher
      * @param mixed $value
      * @return \Zend\Controller\Dispatcher\AbstractDispatcher
      */
-    public function setParam($name, $value)
+    public function setParam ($name, $value)
     {
         $name = (string) $name;
         $this->_invokeParams[$name] = $value;
@@ -303,7 +304,7 @@ abstract class AbstractDispatcher implements Dispatcher
      * @param array $params
      * @return \Zend\Controller\Dispatcher\AbstractDispatcher
      */
-    public function setParams(array $params)
+    public function setParams (array $params)
     {
         $this->_invokeParams = array_merge($this->_invokeParams, $params);
         return $this;
@@ -315,12 +316,12 @@ abstract class AbstractDispatcher implements Dispatcher
      * @param string $name
      * @return mixed
      */
-    public function getParam($name)
+    public function getParam ($name)
     {
-        if(isset($this->_invokeParams[$name])) {
+        if (isset($this->_invokeParams[$name])) {
             return $this->_invokeParams[$name];
         }
-
+        
         return null;
     }
 
@@ -329,7 +330,7 @@ abstract class AbstractDispatcher implements Dispatcher
      *
      * @return array
      */
-    public function getParams()
+    public function getParams ()
     {
         return $this->_invokeParams;
     }
@@ -344,7 +345,7 @@ abstract class AbstractDispatcher implements Dispatcher
      * @param null|string|array single key or array of keys for params to clear
      * @return \Zend\Controller\Dispatcher\AbstractDispatcher
      */
-    public function clearParams($name = null)
+    public function clearParams ($name = null)
     {
         if (null === $name) {
             $this->_invokeParams = array();
@@ -357,7 +358,7 @@ abstract class AbstractDispatcher implements Dispatcher
                 }
             }
         }
-
+        
         return $this;
     }
 
@@ -367,7 +368,7 @@ abstract class AbstractDispatcher implements Dispatcher
      * @param \Zend\Controller\Response\AbstractResponse|null $response
      * @return \Zend\Controller\Dispatcher\AbstractDispatcher
      */
-    public function setResponse(AbstractResponse $response = null)
+    public function setResponse (AbstractResponse $response = null)
     {
         $this->_response = $response;
         return $this;
@@ -378,7 +379,7 @@ abstract class AbstractDispatcher implements Dispatcher
      *
      * @return \Zend\Controller\Response\AbstractResponse|null
      */
-    public function getResponse()
+    public function getResponse ()
     {
         return $this->_response;
     }
@@ -389,7 +390,7 @@ abstract class AbstractDispatcher implements Dispatcher
      * @param string $controller
      * @return \Zend\Controller\Dispatcher\AbstractDispatcher
      */
-    public function setDefaultControllerName($controller)
+    public function setDefaultControllerName ($controller)
     {
         $this->_defaultController = (string) $controller;
         return $this;
@@ -400,7 +401,7 @@ abstract class AbstractDispatcher implements Dispatcher
      *
      * @return string
      */
-    public function getDefaultControllerName()
+    public function getDefaultControllerName ()
     {
         return $this->_defaultController;
     }
@@ -411,7 +412,7 @@ abstract class AbstractDispatcher implements Dispatcher
      * @param string $action
      * @return \Zend\Controller\Dispatcher\AbstractDispatcher
      */
-    public function setDefaultAction($action)
+    public function setDefaultAction ($action)
     {
         $this->_defaultAction = (string) $action;
         return $this;
@@ -422,7 +423,7 @@ abstract class AbstractDispatcher implements Dispatcher
      *
      * @return string
      */
-    public function getDefaultAction()
+    public function getDefaultAction ()
     {
         return $this->_defaultAction;
     }
@@ -433,7 +434,7 @@ abstract class AbstractDispatcher implements Dispatcher
      * @param string $module
      * @return \Zend\Controller\Dispatcher\AbstractDispatcher
      */
-    public function setDefaultModule($module)
+    public function setDefaultModule ($module)
     {
         $this->_defaultModule = (string) $module;
         return $this;
@@ -444,7 +445,7 @@ abstract class AbstractDispatcher implements Dispatcher
      *
      * @return string
      */
-    public function getDefaultModule()
+    public function getDefaultModule ()
     {
         return $this->_defaultModule;
     }
@@ -455,7 +456,7 @@ abstract class AbstractDispatcher implements Dispatcher
      * @param  Broker $broker 
      * @return AbstractDispatcher
      */
-    public function setHelperBroker(Broker $broker = null)
+    public function setHelperBroker (Broker $broker = null)
     {
         $this->broker = $broker;
         return $this;

@@ -35,11 +35,12 @@ namespace Zend\Dojo\View\Helper;
  */
 class NumberTextBox extends Dijit
 {
+
     /**
      * Dijit being used
      * @var string
      */
-    protected $_dijit  = 'dijit.form.NumberTextBox';
+    protected $_dijit = 'dijit.form.NumberTextBox';
 
     /**
      * HTML element type
@@ -62,7 +63,8 @@ class NumberTextBox extends Dijit
      * @param  array $attribs HTML attributes
      * @return string
      */
-    public function __invoke($id = null, $value = null, array $params = array(), array $attribs = array())
+    public function __invoke ($id = null, $value = null, array $params = array(), 
+    array $attribs = array())
     {
         return $this->_createFormElement($id, $value, $params, $attribs);
     }

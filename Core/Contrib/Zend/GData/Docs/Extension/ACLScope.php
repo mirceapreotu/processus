@@ -39,6 +39,7 @@ class ACLScope extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'gAcl';
+
     protected $_rootElement = 'scope';
 
     /**
@@ -61,14 +62,13 @@ class ACLScope extends \Zend\GData\Extension
      * @param string $type The type of entity to share with
      * @param string $value the entity to share with (usually email address)
      */
-    public function __construct($type = null, $value = null)
+    public function __construct ($type = null, $value = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Docs::$namespaces);
         parent::__construct();
         $this->_type = $type;
         $this->_value = $value;
     }
-
 
     /**
      * Retrieves a DOMElement which corresponds to this element and all
@@ -80,7 +80,7 @@ class ACLScope extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 3, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 3, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_type !== null) {
@@ -100,17 +100,17 @@ class ACLScope extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'type':
-            $this->_type = $attribute->nodeValue;
-            break;
-        case 'value':
-            $this->_value = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'type':
+                $this->_type = $attribute->nodeValue;
+                break;
+            case 'value':
+                $this->_value = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -120,7 +120,7 @@ class ACLScope extends \Zend\GData\Extension
      * @see setType
      * @return string The requested attribute.
      */
-    public function getType()
+    public function getType ()
     {
         return $this->_type;
     }
@@ -130,7 +130,7 @@ class ACLScope extends \Zend\GData\Extension
      * @param string $value The desired value for this attribute.
      * @return \Zend\Gdata\Docs\Extension\ACLScope The element being modified.
      */
-    public function setType($value)
+    public function setType ($value)
     {
         $this->_type = $value;
         return $this;
@@ -142,7 +142,7 @@ class ACLScope extends \Zend\GData\Extension
      * @see setValue
      * @return string The requested attribute.
      */
-    public function getValue()
+    public function getValue ()
     {
         return $this->_value;
     }
@@ -153,7 +153,7 @@ class ACLScope extends \Zend\GData\Extension
      * @param string $value The desired value for this attribute.
      * @return \Zend\Gdata\Docs\Extension\ACLScope The element being modified.
      */
-    public function setValue($value)
+    public function setValue ($value)
     {
         $this->_value = $value;
         return $this;
@@ -165,10 +165,9 @@ class ACLScope extends \Zend\GData\Extension
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
-        return "Type Name: " . $this->getType() .
-               "\nValue: " . $this->getValue();
+        return "Type Name: " . $this->getType() . "\nValue: " . $this->getValue();
     }
 }
 ?>

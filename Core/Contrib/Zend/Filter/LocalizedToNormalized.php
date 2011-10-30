@@ -36,27 +36,25 @@ use Zend\Locale\Format;
  */
 class LocalizedToNormalized extends AbstractFilter
 {
+
     /**
      * Set options
      * @var array
      */
-    protected $_options = array(
-        'locale'      => null,
-        'date_format' => null,
-        'precision'   => null
-    );
+    protected $_options = array('locale' => null, 'date_format' => null, 
+    'precision' => null);
 
     /**
      * Class constructor
      *
      * @param string|\Zend\Locale\Locale $locale (Optional) Locale to set
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         if ($options instanceof \Zend\Config\Config) {
             $options = $options->toArray();
         }
-
+        
         if (null !== $options) {
             $this->setOptions($options);
         }
@@ -67,7 +65,7 @@ class LocalizedToNormalized extends AbstractFilter
      *
      * @return array
      */
-    public function getOptions()
+    public function getOptions ()
     {
         return $this->_options;
     }
@@ -78,7 +76,7 @@ class LocalizedToNormalized extends AbstractFilter
      * @param  array $options (Optional) Options to use
      * @return \Zend\Filter\LocalizedToNormalized
      */
-    public function setOptions(array $options = null)
+    public function setOptions (array $options = null)
     {
         $this->_options = $options + $this->_options;
         return $this;
@@ -92,18 +90,22 @@ class LocalizedToNormalized extends AbstractFilter
      * @param  string $value Value to normalized
      * @return string|array The normalized value
      */
-    public function filter($value)
+    public function filter ($value)
     {
         if (Format::isNumber($value, $this->_options)) {
             return Format::getNumber($value, $this->_options);
-        } else if (($this->_options['date_format'] === null) && (strpos($value, ':') !== false)) {
-            // Special case, no date format specified, detect time input
-            return Format::getTime($value, $this->_options);
-        } else if (Format::checkDateFormat($value, $this->_options)) {
-            // Detect date or time input
-            return Format::getDate($value, $this->_options);
-        }
-
+        } else 
+            if (($this->_options['date_format'] === null) &&
+             (strpos($value, ':') !== false)) {
+                // Special case, no date format specified, detect time input
+                return Format::getTime($value, $this->_options);
+            } else 
+                if (Format::checkDateFormat($value, $this->_options)) {
+                    // Detect date or time input
+                    return Format::getDate($value, 
+                    $this->_options);
+                }
+        
         return $value;
     }
 }

@@ -49,6 +49,7 @@ class MediaGroup extends \Zend\GData\Media\Extension\MediaGroup
 {
 
     protected $_rootElement = 'group';
+
     protected $_rootNamespace = 'media';
 
     /**
@@ -81,38 +82,38 @@ class MediaGroup extends \Zend\GData\Media\Extension\MediaGroup
      */
     protected $_uploaded = null;
 
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(\Zend\GData\YouTube::$namespaces);
         parent::__construct($element);
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_duration !== null) {
             $element->appendChild(
-                $this->_duration->getDOM($element->ownerDocument));
+            $this->_duration->getDOM($element->ownerDocument));
         }
         if ($this->_private !== null) {
             $element->appendChild(
-                $this->_private->getDOM($element->ownerDocument));
+            $this->_private->getDOM($element->ownerDocument));
         }
         if ($this->_videoid != null) {
             $element->appendChild(
-                $this->_videoid->getDOM($element->ownerDocument));
+            $this->_videoid->getDOM($element->ownerDocument));
         }
         if ($this->_uploaded != null) {
             $element->appendChild(
-                $this->_uploaded->getDOM($element->ownerDocument));
+            $this->_uploaded->getDOM($element->ownerDocument));
         }
         if ($this->_mediacredit != null) {
             $element->appendChild(
-                $this->_mediacredit->getDOM($element->ownerDocument));
+            $this->_mediacredit->getDOM($element->ownerDocument));
         }
         if ($this->_mediarating != null) {
             $element->appendChild(
-                $this->_mediarating->getDOM($element->ownerDocument));
+            $this->_mediarating->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -123,7 +124,7 @@ class MediaGroup extends \Zend\GData\Media\Extension\MediaGroup
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
@@ -154,17 +155,17 @@ class MediaGroup extends \Zend\GData\Media\Extension\MediaGroup
                 break;
             case $this->lookupNamespace('yt') . ':' . 'videoid':
                 $videoid = new VideoId();
-                $videoid ->transferFromDOM($child);
+                $videoid->transferFromDOM($child);
                 $this->_videoid = $videoid;
                 break;
             case $this->lookupNamespace('yt') . ':' . 'uploaded':
                 $uploaded = new Uploaded();
-                $uploaded ->transferFromDOM($child);
+                $uploaded->transferFromDOM($child);
                 $this->_uploaded = $uploaded;
                 break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
@@ -173,7 +174,7 @@ class MediaGroup extends \Zend\GData\Media\Extension\MediaGroup
      *
      * @return \Zend\GData\YouTube\Extension\Duration
      */
-    public function getDuration()
+    public function getDuration ()
     {
         return $this->_duration;
     }
@@ -183,9 +184,9 @@ class MediaGroup extends \Zend\GData\Media\Extension\MediaGroup
      *
      * @param \Zend\GData\YouTube\Extension\Duration $value The duration value
      * @return \Zend\GData\YouTube\Extension\MediaGroup Provides a fluent
-     *         interface
+     * interface
      */
-    public function setDuration($value)
+    public function setDuration ($value)
     {
         $this->_duration = $value;
         return $this;
@@ -196,7 +197,7 @@ class MediaGroup extends \Zend\GData\Media\Extension\MediaGroup
      *
      * @return \Zend\GData\YouTube\Extension\VideoId
      */
-    public function getVideoId()
+    public function getVideoId ()
     {
         return $this->_videoid;
     }
@@ -206,9 +207,9 @@ class MediaGroup extends \Zend\GData\Media\Extension\MediaGroup
      *
      * @param \Zend\GData\YouTube\Extension\VideoId $value The video id value
      * @return \Zend\GData\YouTube\Extension\MediaGroup Provides a fluent
-     *         interface
+     * interface
      */
-    public function setVideoId($value)
+    public function setVideoId ($value)
     {
         $this->_videoid = $value;
         return $this;
@@ -219,7 +220,7 @@ class MediaGroup extends \Zend\GData\Media\Extension\MediaGroup
      *
      * @return \Zend\GData\YouTube\Extension\Uploaded
      */
-    public function getUploaded()
+    public function getUploaded ()
     {
         return $this->_uploaded;
     }
@@ -229,9 +230,9 @@ class MediaGroup extends \Zend\GData\Media\Extension\MediaGroup
      *
      * @param \Zend\GData\YouTube\Extension\Uploaded $value The uploaded value
      * @return \Zend\GData\YouTube\Extension\MediaGroup Provides a fluent
-     *         interface
+     * interface
      */
-    public function setUploaded($value)
+    public function setUploaded ($value)
     {
         $this->_uploaded = $value;
         return $this;
@@ -242,7 +243,7 @@ class MediaGroup extends \Zend\GData\Media\Extension\MediaGroup
      *
      * @return \Zend\GData\YouTube\Extension\Private
      */
-    public function getPrivate()
+    public function getPrivate ()
     {
         return $this->_private;
     }
@@ -252,9 +253,9 @@ class MediaGroup extends \Zend\GData\Media\Extension\MediaGroup
      *
      * @param \Zend\GData\YouTube\Extension\Private $value The private value
      * @return \Zend\GData\YouTube\Extension\MediaGroup Provides a fluent
-     *         interface
+     * interface
      */
-    public function setPrivate($value)
+    public function setPrivate ($value)
     {
         $this->_private = $value;
         return $this;
@@ -265,7 +266,7 @@ class MediaGroup extends \Zend\GData\Media\Extension\MediaGroup
      *
      * @return \Zend\GData\YouTube\Extension\MediaRating
      */
-    public function getMediaRating()
+    public function getMediaRating ()
     {
         return $this->_mediarating;
     }
@@ -275,9 +276,9 @@ class MediaGroup extends \Zend\GData\Media\Extension\MediaGroup
      *
      * @param \Zend\GData\YouTube\Extension\MediaRating $value The rating element
      * @return \Zend\GData\YouTube\Extension\MediaGroup Provides a fluent
-     *         interface
+     * interface
      */
-    public function setMediaRating($value)
+    public function setMediaRating ($value)
     {
         $this->_mediarating = $value;
         return $this;
@@ -288,7 +289,7 @@ class MediaGroup extends \Zend\GData\Media\Extension\MediaGroup
      *
      * @return \Zend\GData\YouTube\Extension\MediaCredit
      */
-    public function getMediaCredit()
+    public function getMediaCredit ()
     {
         return $this->_mediacredit;
     }
@@ -298,9 +299,9 @@ class MediaGroup extends \Zend\GData\Media\Extension\MediaGroup
      *
      * @param \Zend\GData\YouTube\Extension\MediaCredit $value The credit element
      * @return \Zend\GData\YouTube\Extension\MediaGroup Provides a fluent
-     *         interface
+     * interface
      */
-    public function setMediaCredit($value)
+    public function setMediaCredit ($value)
     {
         $this->_mediacredit = $value;
         return $this;

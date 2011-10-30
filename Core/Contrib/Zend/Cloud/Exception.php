@@ -18,12 +18,10 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-
 /**
  * Zend_Exception
  */
 require_once 'Zend/Exception.php';
-
 
 /**
  * @category   Zend
@@ -33,6 +31,7 @@ require_once 'Zend/Exception.php';
  */
 class Zend_Cloud_Exception extends Zend_Exception
 {
+
     /**
      * Exception for the underlying adapter
      *
@@ -40,13 +39,14 @@ class Zend_Cloud_Exception extends Zend_Exception
      */
     protected $_clientException;
 
-    public function __construct($message, $code = 0, $clientException = null)
+    public function __construct ($message, $code = 0, $clientException = null)
     {
         $this->_clientException = $clientException;
         parent::__construct($message, $code, $clientException);
     }
 
-    public function getClientException() {
+    public function getClientException ()
+    {
         return $this->_getPrevious();
     }
 }

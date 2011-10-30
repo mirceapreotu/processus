@@ -24,8 +24,7 @@
  */
 namespace Zend\Controller\Action;
 
-use Zend\Controller\Action,
-    Zend\Loader\PluginSpecBroker;
+use Zend\Controller\Action, Zend\Loader\PluginSpecBroker;
 
 /**
  * @uses       \Zend\Controller\Action\Exception
@@ -40,6 +39,7 @@ use Zend\Controller\Action,
  */
 class HelperBroker extends PluginSpecBroker implements \IteratorAggregate
 {
+
     /**
      * @var string Default plugin loading strategy
      */
@@ -58,16 +58,16 @@ class HelperBroker extends PluginSpecBroker implements \IteratorAggregate
      * @var \Zend\Controller\Action\HelperBroker\PriorityStack
      */
     protected $stack = null;
-   
+
     /**
      * resetHelpers()
      *
      * @return void
      */
-    public function reset()
+    public function reset ()
     {
         $this->plugins = array();
-        $this->stack   = null;
+        $this->stack = null;
         return;
     }
 
@@ -76,12 +76,12 @@ class HelperBroker extends PluginSpecBroker implements \IteratorAggregate
      *
      * @return \Zend\Controller\Action\HelperPriorityStack
      */
-    public function getStack()
+    public function getStack ()
     {
-        if (!$this->stack instanceof HelperPriorityStack) {
+        if (! $this->stack instanceof HelperPriorityStack) {
             $this->stack = new HelperPriorityStack();
         }
-
+        
         return $this->stack;
     }
 
@@ -98,21 +98,21 @@ class HelperBroker extends PluginSpecBroker implements \IteratorAggregate
      * @param  mixed $plugin 
      * @return HelperBroker
      */
-    public function register($name, $plugin)
+    public function register ($name, $plugin)
     {
         parent::register($name, $plugin);
-
-        $stack   = $this->getStack();
+        
+        $stack = $this->getStack();
         $stack[] = $plugin;
-
+        
         if (method_exists($plugin, 'setBroker')) {
             $plugin->setBroker($this);
         }
-
+        
         if (null !== $controller = $this->getActionController()) {
             $plugin->setActionController($controller);
         }
-
+        
         return $this;
     }
 
@@ -123,10 +123,11 @@ class HelperBroker extends PluginSpecBroker implements \IteratorAggregate
      * @return true
      * @throws Exception
      */
-    protected function validatePlugin($plugin)
+    protected function validatePlugin ($plugin)
     {
-        if (!$plugin instanceof Helper\AbstractHelper) {
-            throw new Exception('Action helpers must implement Zend\Controller\Action\Helper\AbstractHelper');
+        if (! $plugin instanceof Helper\AbstractHelper) {
+            throw new Exception(
+            'Action helpers must implement Zend\Controller\Action\Helper\AbstractHelper');
         }
         return true;
     }
@@ -141,10 +142,10 @@ class HelperBroker extends PluginSpecBroker implements \IteratorAggregate
      * 
      * @return HelperPriorityStack
      */
-    public function getPlugins()
+    public function getPlugins ()
     {
         foreach ($this->specs as $name => $spec) {
-            if (!$this->isLoaded($name)) {
+            if (! $this->isLoaded($name)) {
                 $this->load($name);
             }
         }
@@ -156,7 +157,7 @@ class HelperBroker extends PluginSpecBroker implements \IteratorAggregate
      * 
      * @return Iterator
      */
-    public function getIterator()
+    public function getIterator ()
     {
         return $this->getStack()->getIterator();
     }
@@ -167,7 +168,7 @@ class HelperBroker extends PluginSpecBroker implements \IteratorAggregate
      * @param  Action $actionController 
      * @return HelperBroker
      */
-    public function setActionController(Action $actionController)
+    public function setActionController (Action $actionController)
     {
         $this->actionController = $actionController;
         foreach ($this->getStack() as $helper) {
@@ -182,7 +183,7 @@ class HelperBroker extends PluginSpecBroker implements \IteratorAggregate
      * 
      * @return null|Action
      */
-    public function getActionController()
+    public function getActionController ()
     {
         return $this->actionController;
     }
@@ -192,7 +193,7 @@ class HelperBroker extends PluginSpecBroker implements \IteratorAggregate
      *
      * @return void
      */
-    public function notifyPreDispatch()
+    public function notifyPreDispatch ()
     {
         foreach ($this as $helper) {
             $helper->preDispatch();
@@ -204,7 +205,7 @@ class HelperBroker extends PluginSpecBroker implements \IteratorAggregate
      *
      * @return void
      */
-    public function notifyPostDispatch()
+    public function notifyPostDispatch ()
     {
         foreach ($this as $helper) {
             $helper->postDispatch();

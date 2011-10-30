@@ -36,6 +36,7 @@ namespace Zend\Ldap\Filter;
  */
 class StringFilter extends AbstractFilter
 {
+
     /**
      * The filter.
      *
@@ -48,7 +49,7 @@ class StringFilter extends AbstractFilter
      *
      * @param string $filter
      */
-    public function __construct($filter)
+    public function __construct ($filter)
     {
         $this->_filter = $filter;
     }
@@ -58,7 +59,7 @@ class StringFilter extends AbstractFilter
      *
      * @return string
      */
-    public function toString()
+    public function toString ()
     {
         return '(' . $this->_filter . ')';
     }

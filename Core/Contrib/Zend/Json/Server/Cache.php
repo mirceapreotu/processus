@@ -36,6 +36,7 @@ namespace Zend\Json\Server;
  */
 class Cache extends \Zend\Server\Cache
 {
+
     /**
      * Cache a service map description (SMD) to a file
      *
@@ -45,18 +46,18 @@ class Cache extends \Zend\Server\Cache
      * @param  \Zend\Json\Server\Server $server
      * @return boolean
      */
-    public static function saveSmd($filename, Server $server)
+    public static function saveSmd ($filename, Server $server)
     {
-        if (!is_string($filename)
-            || (!file_exists($filename) && !is_writable(dirname($filename))))
-        {
+        if (! is_string($filename) ||
+         (! file_exists($filename) && ! is_writable(dirname($filename)))) {
             return false;
         }
-
-        if (0 === @file_put_contents($filename, $server->getServiceMap()->toJson())) {
+        
+        if (0 ===
+         @file_put_contents($filename, $server->getServiceMap()->toJson())) {
             return false;
         }
-
+        
         return true;
     }
 
@@ -69,20 +70,17 @@ class Cache extends \Zend\Server\Cache
      * @param  string $filename
      * @return string|false
      */
-    public static function getSmd($filename)
+    public static function getSmd ($filename)
     {
-        if (!is_string($filename)
-            || !file_exists($filename)
-            || !is_readable($filename))
-        {
+        if (! is_string($filename) || ! file_exists($filename) ||
+         ! is_readable($filename)) {
             return false;
         }
-
-
+        
         if (false === ($smd = @file_get_contents($filename))) {
             return false;
         }
-
+        
         return $smd;
     }
 
@@ -92,13 +90,13 @@ class Cache extends \Zend\Server\Cache
      * @param  string $filename
      * @return bool
      */
-    public static function deleteSmd($filename)
+    public static function deleteSmd ($filename)
     {
         if (is_string($filename) && file_exists($filename)) {
             unlink($filename);
             return true;
         }
-
+        
         return false;
     }
 }

@@ -39,12 +39,13 @@ class PrivateExtension extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'yt';
+
     protected $_rootElement = 'private';
 
     /**
      * Constructs a new Zend_Gdata_YouTube_Extension_Private object.
      */
-    public function __construct()
+    public function __construct ()
     {
         $this->registerAllNamespaces(\Zend\GData\YouTube::$namespaces);
         parent::__construct();
@@ -60,7 +61,7 @@ class PrivateExtension extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         return $element;
@@ -73,7 +74,7 @@ class PrivateExtension extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         parent::takeAttributeFromDOM($attribute);
     }

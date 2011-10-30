@@ -23,8 +23,7 @@
  */
 namespace Zend\Code\Reflection;
 
-use ReflectionFunction,
-    Zend\Code\Reflection;
+use ReflectionFunction, Zend\Code\Reflection;
 
 /**
  * @uses       ReflectionFunction
@@ -38,16 +37,18 @@ use ReflectionFunction,
  */
 class FunctionReflection extends ReflectionFunction implements Reflection
 {
+
     /**
      * Get function docblock
      *
      * @param  string $reflectionClass Name of reflection class to use
      * @return Zend_Reflection_Docblock
      */
-    public function getDocblock()
+    public function getDocblock ()
     {
         if ('' == ($comment = $this->getDocComment())) {
-            throw new Exception\InvalidArgumentException($this->getName() . ' does not have a docblock');
+            throw new Exception\InvalidArgumentException(
+            $this->getName() . ' does not have a docblock');
         }
         $instance = new DocBlockReflection($comment);
         return $instance;
@@ -59,14 +60,14 @@ class FunctionReflection extends ReflectionFunction implements Reflection
      * @param  bool $includeDocComment
      * @return int
      */
-    public function getStartLine($includeDocComment = false)
+    public function getStartLine ($includeDocComment = false)
     {
         if ($includeDocComment) {
             if ($this->getDocComment() != '') {
                 return $this->getDocblock()->getStartLine();
             }
         }
-
+        
         return parent::getStartLine();
     }
 
@@ -76,16 +77,12 @@ class FunctionReflection extends ReflectionFunction implements Reflection
      * @param  bool $includeDocblock
      * @return string
      */
-    public function getContents($includeDocblock = true)
+    public function getContents ($includeDocblock = true)
     {
-        return implode("\n",
-            array_splice(
-                file($this->getFileName()),
-                $this->getStartLine($includeDocblock),
-                ($this->getEndLine() - $this->getStartLine()),
-                true
-                )
-            );
+        return implode("\n", 
+        array_splice(file($this->getFileName()), 
+        $this->getStartLine($includeDocblock), 
+        ($this->getEndLine() - $this->getStartLine()), true));
     }
 
     /**
@@ -94,12 +91,13 @@ class FunctionReflection extends ReflectionFunction implements Reflection
      * @param  string $reflectionClass Name of reflection class to use
      * @return array Array of \Zend\Code\Reflection\ReflectionParameter
      */
-    public function getParameters()
+    public function getParameters ()
     {
-        $phpReflections  = parent::getParameters();
+        $phpReflections = parent::getParameters();
         $zendReflections = array();
         while ($phpReflections && ($phpReflection = array_shift($phpReflections))) {
-            $instance = new ParameterReflection($this->getName(), $phpReflection->getName());
+            $instance = new ParameterReflection($this->getName(), 
+            $phpReflection->getName());
             $zendReflections[] = $instance;
             unset($phpReflection);
         }
@@ -112,18 +110,20 @@ class FunctionReflection extends ReflectionFunction implements Reflection
      *
      * @return \Zend\Code\Reflection\Docblock\Tag\Return
      */
-    public function getReturn()
+    public function getReturn ()
     {
         $docblock = $this->getDocblock();
-        if (!$docblock->hasTag('return')) {
-            throw new Exception\InvalidArgumentException('Function does not specify an @return annotation tag; cannot determine return type');
+        if (! $docblock->hasTag('return')) {
+            throw new Exception\InvalidArgumentException(
+            'Function does not specify an @return annotation tag; cannot determine return type');
         }
-        $tag    = $docblock->getTag('return');
-        $return = ReflectionDocblockTag::factory('@return ' . $tag->getDescription());
+        $tag = $docblock->getTag('return');
+        $return = ReflectionDocblockTag::factory(
+        '@return ' . $tag->getDescription());
         return $return;
     }
 
-    public function toString()
+    public function toString ()
     {
         return $this->__toString();
     }
@@ -132,7 +132,7 @@ class FunctionReflection extends ReflectionFunction implements Reflection
      * Required due to bug in php
      * @return void
      */
-    public function __toString()
+    public function __toString ()
     {
         return parent::__toString();
     }

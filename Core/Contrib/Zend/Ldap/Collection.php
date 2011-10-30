@@ -35,6 +35,7 @@ namespace Zend\Ldap;
  */
 class Collection implements \Iterator, \Countable
 {
+
     /**
      * Iterator
      *
@@ -47,7 +48,7 @@ class Collection implements \Iterator, \Countable
      *
      * @var integer
      */
-    protected $_current = -1;
+    protected $_current = - 1;
 
     /**
      * Container for item caching to speed up multiple iterations
@@ -61,12 +62,12 @@ class Collection implements \Iterator, \Countable
      *
      * @param \Zend\Ldap\Collection\DefaultIterator $iterator
      */
-    public function __construct(Collection\DefaultIterator $iterator)
+    public function __construct (Collection\DefaultIterator $iterator)
     {
         $this->_iterator = $iterator;
     }
 
-    public function __destruct()
+    public function __destruct ()
     {
         $this->close();
     }
@@ -76,7 +77,7 @@ class Collection implements \Iterator, \Countable
      *
      * @return boolean
      */
-    public function close()
+    public function close ()
     {
         return $this->_iterator->close();
     }
@@ -86,7 +87,7 @@ class Collection implements \Iterator, \Countable
      *
      * @return array
      */
-    public function toArray()
+    public function toArray ()
     {
         $data = array();
         foreach ($this as $item) {
@@ -100,7 +101,7 @@ class Collection implements \Iterator, \Countable
      *
      * @return array
      */
-    public function getFirst()
+    public function getFirst ()
     {
         if ($this->count() > 0) {
             $this->rewind();
@@ -115,7 +116,7 @@ class Collection implements \Iterator, \Countable
      *
      * @return \Zend\Ldap\Collection\DefaultIterator
      */
-    public function getInnerIterator()
+    public function getInnerIterator ()
     {
         return $this->_iterator;
     }
@@ -126,7 +127,7 @@ class Collection implements \Iterator, \Countable
      *
      * @return int
      */
-    public function count()
+    public function count ()
     {
         return $this->_iterator->count();
     }
@@ -138,13 +139,13 @@ class Collection implements \Iterator, \Countable
      * @return array|null
      * @throws \Zend\Ldap\Exception
      */
-    public function current()
+    public function current ()
     {
         if ($this->count() > 0) {
             if ($this->_current < 0) {
                 $this->rewind();
             }
-            if (!array_key_exists($this->_current, $this->_cache)) {
+            if (! array_key_exists($this->_current, $this->_cache)) {
                 $current = $this->_iterator->current();
                 if ($current === null) {
                     return null;
@@ -163,7 +164,7 @@ class Collection implements \Iterator, \Countable
      * @param  array $data
      * @return array
      */
-    protected function _createEntry(array $data)
+    protected function _createEntry (array $data)
     {
         return $data;
     }
@@ -173,7 +174,7 @@ class Collection implements \Iterator, \Countable
      *
      * @return string|null
      */
-    public function dn()
+    public function dn ()
     {
         if ($this->count() > 0) {
             if ($this->_current < 0) {
@@ -191,7 +192,7 @@ class Collection implements \Iterator, \Countable
      *
      * @return int|null
      */
-    public function key()
+    public function key ()
     {
         if ($this->count() > 0) {
             if ($this->_current < 0) {
@@ -209,10 +210,10 @@ class Collection implements \Iterator, \Countable
      *
      * @throws \Zend\Ldap\Exception
      */
-    public function next()
+    public function next ()
     {
         $this->_iterator->next();
-        $this->_current++;
+        $this->_current ++;
     }
 
     /**
@@ -221,7 +222,7 @@ class Collection implements \Iterator, \Countable
      *
      * @throws \Zend\Ldap\Exception
      */
-    public function rewind()
+    public function rewind ()
     {
         $this->_iterator->rewind();
         $this->_current = 0;
@@ -234,7 +235,7 @@ class Collection implements \Iterator, \Countable
      *
      * @return boolean
      */
-    public function valid()
+    public function valid ()
     {
         if (isset($this->_cache[$this->_current])) {
             return true;

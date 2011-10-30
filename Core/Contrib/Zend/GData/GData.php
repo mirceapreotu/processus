@@ -64,13 +64,9 @@ class GData extends App
      *
      * @var array
      */
-    protected $_registeredPackages = array(
-        '\Zend\GData\Kind',
-        '\Zend\GData\Extension',
-        '\Zend\GData\GBase',
-        '\Zend\GData\App\Extension',
-        '\Zend\GData\App'
-        );
+    protected $_registeredPackages = array('\Zend\GData\Kind', 
+    '\Zend\GData\Extension', '\Zend\GData\GBase', '\Zend\GData\App\Extension', 
+    '\Zend\GData\App');
 
     /**
      * Namespaces used for Gdata data
@@ -78,11 +74,10 @@ class GData extends App
      * @var array
      */
     public static $namespaces = array(
-        array('gd', 'http://schemas.google.com/g/2005', 1, 0),
-        array('openSearch', 'http://a9.com/-/spec/opensearchrss/1.0/', 1, 0),
-        array('openSearch', 'http://a9.com/-/spec/opensearch/1.1/', 2, 0),
-        array('rss', 'http://blogs.law.harvard.edu/tech/rss', 1, 0)
-    );
+    array('gd', 'http://schemas.google.com/g/2005', 1, 0), 
+    array('openSearch', 'http://a9.com/-/spec/opensearchrss/1.0/', 1, 0), 
+    array('openSearch', 'http://a9.com/-/spec/opensearch/1.1/', 2, 0), 
+    array('rss', 'http://blogs.law.harvard.edu/tech/rss', 1, 0));
 
     /**
      * Client object used to communicate
@@ -103,9 +98,10 @@ class GData extends App
      *
      * @param \Zend\Http\Client $client
      * @param string $applicationId The identity of the app in the form of
-     *          Company-AppName-Version
+     * Company-AppName-Version
      */
-    public function __construct($client = null, $applicationId = 'MyCompany-MyApp-1.0')
+    public function __construct ($client = null, 
+    $applicationId = 'MyCompany-MyApp-1.0')
     {
         parent::__construct($client, $applicationId);
     }
@@ -118,19 +114,20 @@ class GData extends App
      * @param  string $className The class which is used as the return type
      * @throws \Zend\GData\App\Exception
      * @return string|\Zend\GData\App\Feed Returns string only if the object
-     *                                    mapping has been disabled explicitly
-     *                                    by passing false to the
-     *                                    useObjectMapping() function.
+     * mapping has been disabled explicitly
+     * by passing false to the
+     * useObjectMapping() function.
      */
-    public static function import($uri, $client = null,
-        $className='\Zend\GData\Feed')
+    public static function import ($uri, $client = null, 
+    $className = '\Zend\GData\Feed')
     {
         $app = new GData($client);
         $requestData = $app->decodeRequest('GET', $uri);
-        $response = $app->performHttpRequest($requestData['method'], $requestData['url']);
-
+        $response = $app->performHttpRequest($requestData['method'], 
+        $requestData['url']);
+        
         $feedContent = $response->getBody();
-
+        
         $feed = self::importString($feedContent, $className);
         if ($client != null) {
             $feed->setHttpClient($client);
@@ -145,11 +142,11 @@ class GData extends App
      * @param string $className The class type to use for returning the feed
      * @throws \Zend\GData\App\InvalidArgumentException
      * @return string|\Zend\GData\App\Feed Returns string only if the object
-     *                                    mapping has been disabled explicitly
-     *                                    by passing false to the
-     *                                    useObjectMapping() function.
+     * mapping has been disabled explicitly
+     * by passing false to the
+     * useObjectMapping() function.
      */
-    public function getFeed($location, $className = '\Zend\GData\Feed')
+    public function getFeed ($location, $className = '\Zend\GData\Feed')
     {
         if (is_string($location)) {
             $uri = $location;
@@ -157,8 +154,8 @@ class GData extends App
             $uri = $location->getQueryUrl();
         } else {
             throw new App\InvalidArgumentException(
-                    'You must specify the location as either a string URI ' .
-                    'or a child of Zend\GData\Query');
+            'You must specify the location as either a string URI ' .
+             'or a child of Zend\GData\Query');
         }
         return parent::getFeed($uri, $className);
     }
@@ -169,11 +166,11 @@ class GData extends App
      * @param mixed $location The location as string or \Zend\GData\Query
      * @throws \Zend\GData\App\InvalidArgumentException
      * @return string|\Zend\GData\App\Entry Returns string only if the object
-     *                                     mapping has been disabled explicitly
-     *                                     by passing false to the
-     *                                     useObjectMapping() function.
+     * mapping has been disabled explicitly
+     * by passing false to the
+     * useObjectMapping() function.
      */
-    public function getEntry($location, $className='\Zend\GData\Entry')
+    public function getEntry ($location, $className = '\Zend\GData\Entry')
     {
         if (is_string($location)) {
             $uri = $location;
@@ -181,8 +178,8 @@ class GData extends App
             $uri = $location->getQueryUrl();
         } else {
             throw new App\InvalidArgumentException(
-                    'You must specify the location as either a string URI ' .
-                    'or a child of Zend\GData\Query');
+            'You must specify the location as either a string URI ' .
+             'or a child of Zend\GData\Query');
         }
         return parent::getEntry($uri, $className);
     }
@@ -195,30 +192,35 @@ class GData extends App
      * to filter the HTTP requests and responses.
      *
      * @param string $method The HTTP method for the request -
-     *                       'GET', 'POST', 'PUT', 'DELETE'
+     * 'GET', 'POST', 'PUT', 'DELETE'
      * @param string $url The URL to which this request is being performed,
-     *                    or null if found in $data
+     * or null if found in $data
      * @param array $headers An associative array of HTTP headers
-     *                       for this request
+     * for this request
      * @param string $body The body of the HTTP request
      * @param string $contentType The value for the content type of the
-     *                            request body
+     * request body
      * @param int $remainingRedirects Number of redirects to follow
-     *                                if requests results in one
+     * if requests results in one
      * @return \Zend\Http\Response The response object
      */
-    public function performHttpRequest($method, $url, $headers = array(), $body = null, $contentType = null, $remainingRedirects = null)
+    public function performHttpRequest ($method, $url, $headers = array(), $body = null, 
+    $contentType = null, $remainingRedirects = null)
     {
         if ($this->_httpClient instanceof HttpClient) {
-            $filterResult = $this->_httpClient->filterHttpRequest($method, $url, $headers, $body, $contentType);
+            $filterResult = $this->_httpClient->filterHttpRequest($method, $url, 
+            $headers, $body, $contentType);
             $method = $filterResult['method'];
             $url = $filterResult['url'];
             $body = $filterResult['body'];
             $headers = $filterResult['headers'];
             $contentType = $filterResult['contentType'];
-            return $this->_httpClient->filterHttpResponse(parent::performHttpRequest($method, $url, $headers, $body, $contentType, $remainingRedirects));
+            return $this->_httpClient->filterHttpResponse(
+            parent::performHttpRequest($method, $url, $headers, $body, 
+            $contentType, $remainingRedirects));
         } else {
-            return parent::performHttpRequest($method, $url, $headers, $body, $contentType, $remainingRedirects);
+            return parent::performHttpRequest($method, $url, $headers, $body, 
+            $contentType, $remainingRedirects);
         }
     }
 
@@ -227,14 +229,13 @@ class GData extends App
      *
      * @return boolean True if service object is authenticated, false otherwise.
      */
-    public function isAuthenticated()
+    public function isAuthenticated ()
     {
         $client = parent::getHttpClient();
-        if ($client->getClientLoginToken() ||
-            $client->getAuthSubToken()) {
-                return true;
+        if ($client->getClientLoginToken() || $client->getAuthSubToken()) {
+            return true;
         }
-
+        
         return false;
     }
 

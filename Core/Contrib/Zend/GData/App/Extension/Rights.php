@@ -39,7 +39,7 @@ class Rights extends Text
 
     protected $_rootElement = 'rights';
 
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         parent::__construct();
         $this->_text = $text;

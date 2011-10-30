@@ -33,11 +33,12 @@ namespace Zend\Currency;
  */
 interface CurrencyService
 {
+
     /**
      * Returns the actual exchange rate
      *
      * @param string $from Short Name of the base currency
      * @param string $to   Short Name of the currency to exchange to
      */
-    public function getRate($from, $to);
+    public function getRate ($from, $to);
 }

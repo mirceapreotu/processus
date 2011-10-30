@@ -35,6 +35,7 @@ namespace Zend\Dojo\View\Helper;
  */
 class SubmitButton extends Button
 {
+
     /**
      * @var string Submit input
      */
@@ -49,16 +50,17 @@ class SubmitButton extends Button
      * @param  array $attribs HTML attributes
      * @return string
      */
-    public function __invoke($id = null, $value = null, array $params = array(), array $attribs = array())
+    public function __invoke ($id = null, $value = null, array $params = array(), 
+    array $attribs = array())
     {
-        if (!array_key_exists('label', $params)) {
+        if (! array_key_exists('label', $params)) {
             $params['label'] = $value;
         }
-        if (empty($params['label']) && !empty($params['content'])) {
+        if (empty($params['label']) && ! empty($params['content'])) {
             $params['label'] = $params['content'];
             $value = $params['content'];
         }
-        if (empty($params['label']) && !empty($attribs['content'])) {
+        if (empty($params['label']) && ! empty($attribs['content'])) {
             $params['label'] = $attribs['content'];
             $value = $attribs['content'];
             unset($attribs['content']);

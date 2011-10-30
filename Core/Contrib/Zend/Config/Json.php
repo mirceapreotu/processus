@@ -32,6 +32,7 @@ use Zend\Json\Json as JsonUtil;
  */
 class Json extends Config
 {
+
     /**
      * Name of object key indicating section current section extends
      */
@@ -72,12 +73,12 @@ class Json extends Config
      * @throws Exception\InvalidArgumentException When JSON text is not set or cannot be loaded
      * @throws Exception\RuntimeException When section $sectionName cannot be found in $json
      */
-    public function __construct($json, $section = null, $options = false)
+    public function __construct ($json, $section = null, $options = false)
     {
         if (empty($json)) {
             throw new Exception\InvalidArgumentException('Filename is not set');
         }
-
+        
         $allowModifications = false;
         if (is_bool($options)) {
             $allowModifications = $options;
@@ -101,7 +102,7 @@ class Json extends Config
                 }
             }
         }
-
+        
         if ($json[0] != '{') {
             // read json file
             $this->_setErrorHandler();
@@ -112,60 +113,66 @@ class Json extends Config
                 foreach ($errorMessages as $errMsg) {
                     $e = new Exception\RuntimeException($errMsg, 0, $e);
                 }
-                $e = new Exception\RuntimeException("Can't read file '{$json}'", 0, $e);
+                $e = new Exception\RuntimeException("Can't read file '{$json}'", 
+                0, $e);
                 throw $e;
             }
             $json = $content;
         }
-
+        
         // Replace constants
-        if (!$this->_ignoreConstants) {
+        if (! $this->_ignoreConstants) {
             $json = $this->_replaceConstants($json);
         }
-
+        
         // Parse/decode
         $config = JsonUtil::decode($json);
-
+        
         if (null === $config) {
             // decode failed
-            throw new Exception\RuntimeException("Error parsing JSON data");
+            throw new Exception\RuntimeException(
+            "Error parsing JSON data");
         }
-
+        
         // Flatten object structure into array
         $config = $this->flattenObjects($config);
-
+        
         if ($section === null) {
             $dataArray = array();
             foreach ($config as $sectionName => $sectionData) {
-                $dataArray[$sectionName] = $this->_processExtends($config, $sectionName);
+                $dataArray[$sectionName] = $this->_processExtends($config, 
+                $sectionName);
             }
-
+            
             parent::__construct($dataArray, $allowModifications);
         } elseif (is_array($section)) {
             $dataArray = array();
             foreach ($section as $sectionName) {
-                if (!isset($config[$sectionName])) {
-                    throw new Exception\RuntimeException(sprintf('Section "%s" cannot be found', $sectionName));
+                if (! isset($config[$sectionName])) {
+                    throw new Exception\RuntimeException(
+                    sprintf('Section "%s" cannot be found', $sectionName));
                 }
-
-                $dataArray = array_merge($this->_processExtends($config, $sectionName), $dataArray);
+                
+                $dataArray = array_merge(
+                $this->_processExtends($config, $sectionName), $dataArray);
             }
-
+            
             parent::__construct($dataArray, $allowModifications);
         } else {
-            if (!isset($config[$section])) {
-                throw new Exception\RuntimeException(sprintf('Section "%s" cannot be found', $section));
+            if (! isset($config[$section])) {
+                throw new Exception\RuntimeException(
+                sprintf('Section "%s" cannot be found', $section));
             }
-
+            
             $dataArray = $this->_processExtends($config, $section);
-            if (!is_array($dataArray)) {
+            if (! is_array($dataArray)) {
                 // Section in the JSON data contains just one top level string
                 $dataArray = array($section => $dataArray);
             }
-
+            
             parent::__construct($dataArray, $allowModifications);
         }
-
+        
         $this->_loadedSection = $section;
     }
 
@@ -179,28 +186,33 @@ class Json extends Config
      * @throws Exception\RuntimeException When $section cannot be found
      * @return array
      */
-    protected function _processExtends(array $data, $section, array $config = array())
+    protected function _processExtends (array $data, $section, 
+    array $config = array())
     {
-        if (!isset($data[$section])) {
-            throw new Exception\RuntimeException(sprintf('Section "%s" cannot be found', $section));
+        if (! isset($data[$section])) {
+            throw new Exception\RuntimeException(
+            sprintf('Section "%s" cannot be found', $section));
         }
-
-        $thisSection  = $data[$section];
-
+        
+        $thisSection = $data[$section];
+        
         if (is_array($thisSection) && isset($thisSection[self::EXTENDS_NAME])) {
             if (is_array($thisSection[self::EXTENDS_NAME])) {
-                throw new Exception\RuntimeException('Invalid extends clause: must be a string; array received');
+                throw new Exception\RuntimeException(
+                'Invalid extends clause: must be a string; array received');
             }
-            $this->_assertValidExtend($section, $thisSection[self::EXTENDS_NAME]);
-
-            if (!$this->_skipExtends) {
-                $config = $this->_processExtends($data, $thisSection[self::EXTENDS_NAME], $config);
+            $this->_assertValidExtend($section, 
+            $thisSection[self::EXTENDS_NAME]);
+            
+            if (! $this->_skipExtends) {
+                $config = $this->_processExtends($data, 
+                $thisSection[self::EXTENDS_NAME], $config);
             }
             unset($thisSection[self::EXTENDS_NAME]);
         }
-
+        
         $config = $this->_arrayMergeRecursive($config, $thisSection);
-
+        
         return $config;
     }
 
@@ -210,7 +222,7 @@ class Json extends Config
      * @param  string $value
      * @return string
      */
-    protected function _replaceConstants($value)
+    protected function _replaceConstants ($value)
     {
         foreach ($this->_getConstants() as $constant) {
             if (strstr($value, $constant)) {
@@ -225,7 +237,7 @@ class Json extends Config
      *
      * @return array
      */
-    protected function _getConstants()
+    protected function _getConstants ()
     {
         $constants = array_keys(get_defined_constants());
         rsort($constants, SORT_STRING);
@@ -238,7 +250,7 @@ class Json extends Config
      * @param  object|array $config
      * @return array
      */
-    protected function flattenObjects($config)
+    protected function flattenObjects ($config)
     {
         $flattened = array();
         foreach ($config as $key => $value) {

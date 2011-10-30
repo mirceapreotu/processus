@@ -75,9 +75,9 @@ class EmailListEntry extends \Zend\GData\Entry
      * Create a new instance.
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(GApps::$namespaces);
         parent::__construct($element);
@@ -90,13 +90,14 @@ class EmailListEntry extends \Zend\GData\Entry
      *
      * @param DOMDocument $doc The DOMDocument used to construct DOMElements
      * @return DOMElement The DOMElement representing this element and all
-     *          child properties.
+     * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_emailList !== null) {
-            $element->appendChild($this->_emailList->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_emailList->getDOM($element->ownerDocument));
         }
         foreach ($this->_feedLink as $feedLink) {
             $element->appendChild($feedLink->getDOM($element->ownerDocument));
@@ -110,17 +111,17 @@ class EmailListEntry extends \Zend\GData\Entry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
-
+        
         switch ($absoluteNodeName) {
-            case $this->lookupNamespace('apps') . ':' . 'emailList';
+            case $this->lookupNamespace('apps') . ':' . 'emailList':
                 $emailList = new Extension\EmailList();
                 $emailList->transferFromDOM($child);
                 $this->_emailList = $emailList;
                 break;
-            case $this->lookupNamespace('gd') . ':' . 'feedLink';
+            case $this->lookupNamespace('gd') . ':' . 'feedLink':
                 $feedLink = new \Zend\GData\Extension\FeedLink();
                 $feedLink->transferFromDOM($child);
                 $this->_feedLink[] = $feedLink;
@@ -136,9 +137,9 @@ class EmailListEntry extends \Zend\GData\Entry
      *
      * @see setEmailList
      * @return \Zend\GData\GApps\Extension\EmailList The requested object
-     *              or null if not set.
+     * or null if not set.
      */
-    public function getEmailList()
+    public function getEmailList ()
     {
         return $this->_emailList;
     }
@@ -151,10 +152,10 @@ class EmailListEntry extends \Zend\GData\Entry
      * protocol.
      *
      * @param \Zend\GData\GApps\Extension\EmailList $value The desired value
-     *              this element, or null to unset.
+     * this element, or null to unset.
      * @return Zend_Gdata_GApps_EventEntry Provides a fluent interface
      */
-    public function setEmailList($value)
+    public function setEmailList ($value)
     {
         $this->_emailList = $value;
         return $this;
@@ -165,15 +166,15 @@ class EmailListEntry extends \Zend\GData\Entry
      *
      * @see setFeedLink
      * @param string $rel (optional) The rel value of the link to be found.
-     *          If null, the array of links is returned.
+     * If null, the array of links is returned.
      * @return mixed If $rel is specified, a \Zend\GData\Extension\FeedLink
-     *          object corresponding to the requested rel value is returned
-     *          if found, or null if the requested value is not found. If
-     *          $rel is null or not specified, an array of all available
-     *          feed links for this entry is returned, or null if no feed
-     *          links are set.
+     * object corresponding to the requested rel value is returned
+     * if found, or null if the requested value is not found. If
+     * $rel is null or not specified, an array of all available
+     * feed links for this entry is returned, or null if no feed
+     * links are set.
      */
-    public function getFeedLink($rel = null)
+    public function getFeedLink ($rel = null)
     {
         if ($rel == null) {
             return $this->_feedLink;
@@ -195,11 +196,11 @@ class EmailListEntry extends \Zend\GData\Entry
      * protocol.
      *
      * @param array $value A collection of Zend_Gdata_GApps_Extension_FeedLink
-     *          instances representing all feed links for this entry, or
-     *          null to unset.
+     * instances representing all feed links for this entry, or
+     * null to unset.
      * @return Zend_Gdata_GApps_EventEntry Provides a fluent interface
      */
-    public function setFeedLink($value)
+    public function setFeedLink ($value)
     {
         $this->_feedLink = $value;
         return $this;

@@ -30,8 +30,7 @@ use Zend\File\Exception;
  * @package    Zend_File
  * @license    New BSD {@link http://framework.zend.com/license/new-bsd}
  */
-class InvalidArgumentException 
-    extends \InvalidArgumentException 
-    implements Exception
+class InvalidArgumentException extends \InvalidArgumentException implements 
+Exception
 {
 }

@@ -39,21 +39,23 @@ use Zend\InfoCard\XML\KeyInfo;
  */
 class XMLDSig extends AbstractKeyInfo implements KeyInfo
 {
+
     /**
      * Returns an instance of the EncryptedKey Data Block
      *
      * @throws \Zend\InfoCard\XML\Exception
      * @return \Zend\InfoCard\XML\EncryptedKey
      */
-    public function getEncryptedKey()
+    public function getEncryptedKey ()
     {
         $this->registerXPathNamespace('e', 'http://www.w3.org/2001/04/xmlenc#');
-        list($encryptedkey) = $this->xpath('//e:EncryptedKey');
-
-        if(!($encryptedkey instanceof \Zend\InfoCard\XML\AbstractElement)) {
-            throw new \Zend\InfoCard\XML\Exception\RuntimeException("Failed to retrieve encrypted key");
+        list ($encryptedkey) = $this->xpath('//e:EncryptedKey');
+        
+        if (! ($encryptedkey instanceof \Zend\InfoCard\XML\AbstractElement)) {
+            throw new \Zend\InfoCard\XML\Exception\RuntimeException(
+            "Failed to retrieve encrypted key");
         }
-
+        
         return \Zend\InfoCard\XML\EncryptedKey::getInstance($encryptedkey);
     }
 
@@ -62,7 +64,7 @@ class XMLDSig extends AbstractKeyInfo implements KeyInfo
      *
      * @return \Zend\InfoCard\XML\KeyInfo\Default
      */
-    public function getKeyInfo()
+    public function getKeyInfo ()
     {
         return $this->getEncryptedKey()->getKeyInfo();
     }

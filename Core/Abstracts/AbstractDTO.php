@@ -2,6 +2,7 @@
 
 namespace Core\Abstracts
 {
+
     /**
      * Created by JetBrains PhpStorm.
      * User: francis
@@ -11,24 +12,24 @@ namespace Core\Abstracts
      */
     abstract class AbstractDTO extends AbstractVO
     {
+
         /**
          * @return array
          */
-        public function export()
+        public function export ()
         {
             $exportData = array();
-            foreach ($this->getMapping() as $item => $key)
-            {
+            foreach ($this->getMapping() as $item => $key) {
                 $exportData[$key] = $this->getValueByKey($item);
             }
-
+            
             return $exportData;
         }
 
         /**
          * @abstract
          */
-        abstract protected function getMapping();
+        abstract protected function getMapping ();
     }
 }
 

@@ -39,14 +39,14 @@ use Zend\InfoCard\XML;
  */
 final class Factory
 {
+
     /**
      * Constructor (disabled)
      *
      * @return void
      */
-    private function __construct()
-    {
-    }
+    private function __construct ()
+    {}
 
     /**
      * Returns an instance of the class
@@ -55,24 +55,28 @@ final class Factory
      * @return \Zend\InfoCard\XML\EncryptedData\AbstractEncryptedData
      * @throws \Zend\InfoCard\XML\Exception
      */
-    static public function getInstance($xmlData)
+    static public function getInstance ($xmlData)
     {
-
-        if($xmlData instanceof XML\AbstractElement) {
+        
+        if ($xmlData instanceof XML\AbstractElement) {
             $strXmlData = $xmlData->asXML();
-        } else if (is_string($xmlData)) {
-            $strXmlData = $xmlData;
-        } else {
-            throw new XML\Exception\InvalidArgumentException("Invalid Data provided to create instance");
-        }
-
+        } else 
+            if (is_string($xmlData)) {
+                $strXmlData = $xmlData;
+            } else {
+                throw new XML\Exception\InvalidArgumentException(
+                "Invalid Data provided to create instance");
+            }
+        
         $sxe = simplexml_load_string($strXmlData);
-
-        switch($sxe['Type']) {
+        
+        switch ($sxe['Type']) {
             case 'http://www.w3.org/2001/04/xmlenc#Element':
-                return simplexml_load_string($strXmlData, 'Zend\InfoCard\XML\EncryptedData\XMLEnc');
+                return simplexml_load_string($strXmlData, 
+                'Zend\InfoCard\XML\EncryptedData\XMLEnc');
             default:
-                throw new XML\Exception\InvalidArgumentException("Unknown EncryptedData type found");
+                throw new XML\Exception\InvalidArgumentException(
+                "Unknown EncryptedData type found");
                 break;
         }
     }

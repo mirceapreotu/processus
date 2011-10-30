@@ -36,29 +36,28 @@ use Zend\Filter\Exception;
  */
 class Bz2 extends AbstractCompressionAlgorithm
 {
+
     /**
      * Compression Options
      * array(
-     *     'blocksize' => Blocksize to use from 0-9
-     *     'archive'   => Archive to use
+     * 'blocksize' => Blocksize to use from 0-9
+     * 'archive'   => Archive to use
      * )
      *
      * @var array
      */
-    protected $_options = array(
-        'blocksize' => 4,
-        'archive'   => null,
-    );
+    protected $_options = array('blocksize' => 4, 'archive' => null);
 
     /**
      * Class constructor
      *
      * @param array|\Zend\Config\Config $options (Optional) Options to set
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
-        if (!extension_loaded('bz2')) {
-            throw new Exception\ExtensionNotLoadedException('This filter needs the bz2 extension');
+        if (! extension_loaded('bz2')) {
+            throw new Exception\ExtensionNotLoadedException(
+            'This filter needs the bz2 extension');
         }
         parent::__construct($options);
     }
@@ -68,7 +67,7 @@ class Bz2 extends AbstractCompressionAlgorithm
      *
      * @return integer
      */
-    public function getBlocksize()
+    public function getBlocksize ()
     {
         return $this->_options['blocksize'];
     }
@@ -79,12 +78,13 @@ class Bz2 extends AbstractCompressionAlgorithm
      * @param integer $level
      * @return \Zend\Filter\Compress\Bz2
      */
-    public function setBlocksize($blocksize)
+    public function setBlocksize ($blocksize)
     {
         if (($blocksize < 0) || ($blocksize > 9)) {
-            throw new Exception\InvalidArgumentException('Blocksize must be between 0 and 9');
+            throw new Exception\InvalidArgumentException(
+            'Blocksize must be between 0 and 9');
         }
-
+        
         $this->_options['blocksize'] = (int) $blocksize;
         return $this;
     }
@@ -94,7 +94,7 @@ class Bz2 extends AbstractCompressionAlgorithm
      *
      * @return string
      */
-    public function getArchive()
+    public function getArchive ()
     {
         return $this->_options['archive'];
     }
@@ -105,7 +105,7 @@ class Bz2 extends AbstractCompressionAlgorithm
      * @param string $archive Archive to use
      * @return \Zend\Filter\Compress\Bz2
      */
-    public function setArchive($archive)
+    public function setArchive ($archive)
     {
         $this->_options['archive'] = (string) $archive;
         return $this;
@@ -117,26 +117,27 @@ class Bz2 extends AbstractCompressionAlgorithm
      * @param  string $content
      * @return string
      */
-    public function compress($content)
+    public function compress ($content)
     {
         $archive = $this->getArchive();
-        if (!empty($archive)) {
+        if (! empty($archive)) {
             $file = bzopen($archive, 'w');
-            if (!$file) {
-                throw new Exception\RuntimeException("Error opening the archive '" . $archive . "'");
+            if (! $file) {
+                throw new Exception\RuntimeException(
+                "Error opening the archive '" . $archive . "'");
             }
-
+            
             bzwrite($file, $content);
             bzclose($file);
             $compressed = true;
         } else {
             $compressed = bzcompress($content, $this->getBlocksize());
         }
-
+        
         if (is_int($compressed)) {
             throw new Exception\RuntimeException('Error during compression');
         }
-
+        
         return $compressed;
     }
 
@@ -146,29 +147,30 @@ class Bz2 extends AbstractCompressionAlgorithm
      * @param  string $content
      * @return string
      */
-    public function decompress($content)
+    public function decompress ($content)
     {
         $archive = $this->getArchive();
         if (file_exists($content)) {
             $archive = $content;
         }
-
+        
         if (file_exists($archive)) {
             $file = bzopen($archive, 'r');
-            if (!$file) {
-                throw new Exception\RuntimeException("Error opening the archive '" . $content . "'");
+            if (! $file) {
+                throw new Exception\RuntimeException(
+                "Error opening the archive '" . $content . "'");
             }
-
+            
             $compressed = bzread($file);
             bzclose($file);
         } else {
             $compressed = bzdecompress($content);
         }
-
+        
         if (is_int($compressed)) {
             throw new Exception\RuntimeException('Error during decompression');
         }
-
+        
         return $compressed;
     }
 
@@ -177,7 +179,7 @@ class Bz2 extends AbstractCompressionAlgorithm
      *
      * @return string
      */
-    public function toString()
+    public function toString ()
     {
         return 'Bz2';
     }

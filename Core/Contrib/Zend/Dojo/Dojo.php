@@ -23,8 +23,7 @@
  */
 namespace Zend\Dojo;
 
-use Zend\View\Renderer,
-    Zend\View\PhpRenderer;
+use Zend\View\Renderer, Zend\View\PhpRenderer;
 
 /**
  * Enable Dojo components
@@ -35,6 +34,7 @@ use Zend\View\Renderer,
  */
 class Dojo
 {
+
     /**
      * Base path to AOL CDN
      */
@@ -61,18 +61,22 @@ class Dojo
      * @param  \Zend\Form\Form $form
      * @return void
      */
-    public static function enableForm(\Zend\Form\Form $form)
+    public static function enableForm (\Zend\Form\Form $form)
     {
-        $form->addPrefixPath('Zend\Dojo\Form\Decorator', 'Zend/Dojo/Form/Decorator', 'decorator')
-             ->addPrefixPath('Zend\Dojo\Form\Element', 'Zend/Dojo/Form/Element', 'element')
-             ->addElementPrefixPath('Zend\Dojo\Form\Decorator', 'Zend/Dojo/Form/Decorator', 'decorator')
-             ->addDisplayGroupPrefixPath('Zend\Dojo\Form\Decorator', 'Zend/Dojo/Form/Decorator')
-             ->setDefaultDisplayGroupClass('Zend\Dojo\Form\DisplayGroup');
-
+        $form->addPrefixPath('Zend\Dojo\Form\Decorator', 
+        'Zend/Dojo/Form/Decorator', 'decorator')
+            ->addPrefixPath('Zend\Dojo\Form\Element', 'Zend/Dojo/Form/Element', 
+        'element')
+            ->addElementPrefixPath('Zend\Dojo\Form\Decorator', 
+        'Zend/Dojo/Form/Decorator', 'decorator')
+            ->addDisplayGroupPrefixPath('Zend\Dojo\Form\Decorator', 
+        'Zend/Dojo/Form/Decorator')
+            ->setDefaultDisplayGroupClass('Zend\Dojo\Form\DisplayGroup');
+        
         foreach ($form->getSubForms() as $subForm) {
             self::enableForm($subForm);
         }
-
+        
         if (null !== ($view = $form->getView())) {
             self::enableView($view);
         }
@@ -84,31 +88,31 @@ class Dojo
      * @param  \Zend\View\Renderer $view
      * @return void
      */
-    public static function enableView(Renderer $view)
+    public static function enableView (Renderer $view)
     {
-        if (!$view instanceof PhpRenderer) {
+        if (! $view instanceof PhpRenderer) {
             return;
         }
-
+        
         $view->getBroker()
-             ->getClassLoader()
-             ->registerPlugins(new View\HelperLoader());
+            ->getClassLoader()
+            ->registerPlugins(new View\HelperLoader());
     }
-    
+
     /**
      * Dojo-disable a dojo enabled view
      * 
      * @param  \Zend\View\Renderer $view
      * @return void
      */
-    public static function disableView(Renderer $view)
+    public static function disableView (Renderer $view)
     {
-        if (!$view instanceof PhpRenderer) {
+        if (! $view instanceof PhpRenderer) {
             return;
         }
         
-        $broker  = $view->getBroker();
-        $loader  = $broker->getClassLoader();
+        $broker = $view->getBroker();
+        $loader = $broker->getClassLoader();
         $plugins = $broker->getPlugins();
         foreach ($plugins as $plugin => $void) {
             $broker->unregister($plugin);

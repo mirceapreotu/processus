@@ -39,9 +39,10 @@ class Uploaded extends \Zend\GData\Extension
 {
 
     protected $_rootElement = 'uploaded';
+
     protected $_rootNamespace = 'yt';
 
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         $this->registerAllNamespaces(\Zend\GData\YouTube::$namespaces);
         parent::__construct();

@@ -23,10 +23,7 @@
  */
 namespace Zend\Controller;
 
-use Zend\Controller\Request\AbstractRequest,
-    Zend\Controller\Response\AbstractResponse,
-    Zend\Loader\Broker,
-    Zend\View;
+use Zend\Controller\Request\AbstractRequest, Zend\Controller\Response\AbstractResponse, Zend\Loader\Broker, Zend\View;
 
 /**
  * @uses       \Zend\Controller\Action\Exception
@@ -43,6 +40,7 @@ use Zend\Controller\Request\AbstractRequest,
  */
 abstract class Action implements ActionController
 {
+
     /**
      * Helper broker instance
      * @var Broker
@@ -124,11 +122,12 @@ abstract class Action implements ActionController
      * @param array $invokeArgs Any additional invocation arguments
      * @return void
      */
-    public function __construct(AbstractRequest $request, AbstractResponse $response, array $invokeArgs = array())
+    public function __construct (AbstractRequest $request, 
+    AbstractResponse $response, array $invokeArgs = array())
     {
         $this->setRequest($request)
-             ->setResponse($response)
-             ->_setInvokeArgs($invokeArgs);
+            ->setResponse($response)
+            ->_setInvokeArgs($invokeArgs);
     }
 
     /**
@@ -137,7 +136,7 @@ abstract class Action implements ActionController
      * @param  Broker $broker
      * @return Action
      */
-    public function setHelperBroker(Broker $broker)
+    public function setHelperBroker (Broker $broker)
     {
         $this->broker = $broker;
         if ($broker instanceof Action\HelperBroker) {
@@ -153,9 +152,8 @@ abstract class Action implements ActionController
      *
      * @return void
      */
-    public function init()
-    {
-    }
+    public function init ()
+    {}
 
     /**
      * Initialize View object
@@ -173,31 +171,35 @@ abstract class Action implements ActionController
      * @return \Zend\View\Renderer
      * @throws \Zend\Controller\Exception if base view directory does not exist
      */
-    public function initView()
+    public function initView ()
     {
         $broker = $this->broker();
-        if (!$this->getInvokeArg('noViewRenderer') && $broker && $broker->hasPlugin('viewRenderer')) {
+        if (! $this->getInvokeArg('noViewRenderer') && $broker &&
+         $broker->hasPlugin('viewRenderer')) {
             return $this->view;
         }
-
+        
         if (isset($this->view) && ($this->view instanceof View\Renderer)) {
             return $this->view;
         }
-
+        
         $request = $this->getRequest();
-        $module  = $request->getModuleName();
-        $dirs    = $this->getFrontController()->getControllerDirectory();
-        if (empty($module) || !isset($dirs[$module])) {
-            $module = $this->getFrontController()->getDispatcher()->getDefaultModule();
+        $module = $request->getModuleName();
+        $dirs = $this->getFrontController()->getControllerDirectory();
+        if (empty($module) || ! isset($dirs[$module])) {
+            $module = $this->getFrontController()
+                ->getDispatcher()
+                ->getDefaultModule();
         }
         $baseDir = dirname($dirs[$module]) . DIRECTORY_SEPARATOR . 'views';
-        if (!file_exists($baseDir) || !is_dir($baseDir)) {
-            throw new Exception('Missing base view directory ("' . $baseDir . '")');
+        if (! file_exists($baseDir) || ! is_dir($baseDir)) {
+            throw new Exception(
+            'Missing base view directory ("' . $baseDir . '")');
         }
-
+        
         $this->view = new View\PhpRenderer();
         $this->view->resolver()->addPath($baseDir . '/scripts');
-
+        
         return $this->view;
     }
 
@@ -218,20 +220,19 @@ abstract class Action implements ActionController
      * @param  bool $noController  Defaults to false; i.e. use controller name as subdir in which to search for view script
      * @return void
      */
-    public function render($action = null, $name = null, $noController = false)
+    public function render ($action = null, $name = null, $noController = false)
     {
         $broker = $this->broker();
-        if (!$this->getInvokeArg('noViewRenderer') && $broker && $broker->hasPlugin('viewRenderer')) {
-            return $broker->load('viewRenderer')->render($action, $name, $noController);
+        if (! $this->getInvokeArg('noViewRenderer') && $broker &&
+         $broker->hasPlugin('viewRenderer')) {
+            return $broker->load('viewRenderer')->render($action, $name, 
+            $noController);
         }
-
-        $view   = $this->initView();
+        
+        $view = $this->initView();
         $script = $this->getViewScript($action, $noController);
-
-        $this->getResponse()->appendBody(
-            $view->render($script),
-            $name
-        );
+        
+        $this->getResponse()->appendBody($view->render($script), $name);
     }
 
     /**
@@ -250,18 +251,16 @@ abstract class Action implements ActionController
      * @param  string $name
      * @return void
      */
-    public function renderScript($script, $name = null)
+    public function renderScript ($script, $name = null)
     {
         $broker = $this->broker();
-        if (!$this->getInvokeArg('noViewRenderer') && $broker && $broker->hasPlugin('viewRenderer')) {
+        if (! $this->getInvokeArg('noViewRenderer') && $broker &&
+         $broker->hasPlugin('viewRenderer')) {
             return $broker->load('viewRenderer')->renderScript($script, $name);
         }
-
+        
         $view = $this->initView();
-        $this->getResponse()->appendBody(
-            $view->render($script),
-            $name
-        );
+        $this->getResponse()->appendBody($view->render($script), $name);
     }
 
     /**
@@ -274,41 +273,43 @@ abstract class Action implements ActionController
      * @return string
      * @throws \Zend\Controller\Exception with bad $action
      */
-    public function getViewScript($action = null, $noController = null)
+    public function getViewScript ($action = null, $noController = null)
     {
         $broker = $this->broker();
-        if (!$this->getInvokeArg('noViewRenderer') && $broker && $broker->hasPlugin('viewRenderer')) {
+        if (! $this->getInvokeArg('noViewRenderer') && $broker &&
+         $broker->hasPlugin('viewRenderer')) {
             $viewRenderer = $broker->load('viewRenderer');
             if (null !== $noController) {
                 $viewRenderer->setNoController($noController);
             }
             return $viewRenderer->getViewScript($action);
         }
-
+        
         $request = $this->getRequest();
         if (null === $action) {
             $action = $request->getActionName();
-        } elseif (!is_string($action)) {
+        } elseif (! is_string($action)) {
             throw new Exception('Invalid action specifier for view render');
         }
-
+        
         if (null === $this->_delimiters) {
             $dispatcher = Front::getInstance()->getDispatcher();
             $wordDelimiters = $dispatcher->getWordDelimiter();
             $pathDelimiters = $dispatcher->getPathDelimiter();
-			$pathDelimiters = array($pathDelimiters, '_');
-            $this->_delimiters = array_unique(array_merge($wordDelimiters, (array) $pathDelimiters));
+            $pathDelimiters = array($pathDelimiters, '_');
+            $this->_delimiters = array_unique(
+            array_merge($wordDelimiters, (array) $pathDelimiters));
         }
-
+        
         $action = str_replace($this->_delimiters, '-', $action);
         $script = $action . '.' . $this->viewSuffix;
-
-        if (!$noController) {
+        
+        if (! $noController) {
             $controller = $request->getControllerName();
             $controller = str_replace($this->_delimiters, '-', $controller);
             $script = $controller . DIRECTORY_SEPARATOR . $script;
         }
-
+        
         return $script;
     }
 
@@ -317,7 +318,7 @@ abstract class Action implements ActionController
      *
      * @return \Zend\Controller\Request\AbstractRequest
      */
-    public function getRequest()
+    public function getRequest ()
     {
         return $this->_request;
     }
@@ -328,7 +329,7 @@ abstract class Action implements ActionController
      * @param \Zend\Controller\Request\AbstractRequest $request
      * @return \Zend\Controller\Action
      */
-    public function setRequest(AbstractRequest $request)
+    public function setRequest (AbstractRequest $request)
     {
         $this->_request = $request;
         return $this;
@@ -339,7 +340,7 @@ abstract class Action implements ActionController
      *
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function getResponse()
+    public function getResponse ()
     {
         return $this->_response;
     }
@@ -350,7 +351,7 @@ abstract class Action implements ActionController
      * @param \Zend\Controller\Response\AbstractResponse $response
      * @return \Zend\Controller\Action
      */
-    public function setResponse(AbstractResponse $response)
+    public function setResponse (AbstractResponse $response)
     {
         $this->_response = $response;
         return $this;
@@ -362,7 +363,7 @@ abstract class Action implements ActionController
      * @param array $args
      * @return \Zend\Controller\Action
      */
-    protected function _setInvokeArgs(array $args = array())
+    protected function _setInvokeArgs (array $args = array())
     {
         $this->_invokeArgs = $args;
         return $this;
@@ -373,7 +374,7 @@ abstract class Action implements ActionController
      *
      * @return array
      */
-    public function getInvokeArgs()
+    public function getInvokeArgs ()
     {
         return $this->_invokeArgs;
     }
@@ -384,12 +385,12 @@ abstract class Action implements ActionController
      * @param string $key
      * @return mixed
      */
-    public function getInvokeArg($key)
+    public function getInvokeArg ($key)
     {
         if (isset($this->_invokeArgs[$key])) {
             return $this->_invokeArgs[$key];
         }
-
+        
         return null;
     }
 
@@ -398,7 +399,7 @@ abstract class Action implements ActionController
      *
      * @return Broker|Action\Helper\AbstractHelper
      */
-    public function broker($name = null)
+    public function broker ($name = null)
     {
         if (null === $name) {
             return $this->broker;
@@ -412,7 +413,7 @@ abstract class Action implements ActionController
      * @param \Zend\Controller\Front $front
      * @return \Zend\Controller\Action
      */
-    public function setFrontController(Front $front)
+    public function setFrontController (Front $front)
     {
         $this->_frontController = $front;
         return $this;
@@ -423,19 +424,19 @@ abstract class Action implements ActionController
      *
      * @return \Zend\Controller\Front
      */
-    public function getFrontController()
+    public function getFrontController ()
     {
         // Used cache version if found
         if (null !== $this->_frontController) {
             return $this->_frontController;
         }
-
+        
         // Grab singleton instance, if class has been loaded
         if (class_exists('Zend\Controller\Front')) {
             $this->_frontController = Front::getInstance();
             return $this->_frontController;
         }
-
+        
         // Throw exception in all other cases
         throw new Exception('Front controller class has not been loaded');
     }
@@ -450,9 +451,8 @@ abstract class Action implements ActionController
      *
      * @return void
      */
-    public function preDispatch()
-    {
-    }
+    public function preDispatch ()
+    {}
 
     /**
      * Post-dispatch routines
@@ -467,9 +467,8 @@ abstract class Action implements ActionController
      *
      * @return void
      */
-    public function postDispatch()
-    {
-    }
+    public function postDispatch ()
+    {}
 
     /**
      * Proxy for undefined methods.  Default behavior is to throw an
@@ -482,14 +481,19 @@ abstract class Action implements ActionController
      * @return void
      * @throws \Zend\Controller\Action\Exception
      */
-    public function __call($methodName, $args)
+    public function __call ($methodName, $args)
     {
-        if ('Action' == substr($methodName, -6)) {
+        if ('Action' == substr($methodName, - 6)) {
             $action = substr($methodName, 0, strlen($methodName) - 6);
-            throw new Action\Exception(sprintf('Action "%s" does not exist and was not trapped in __call()', $action), 404);
+            throw new Action\Exception(
+            sprintf(
+            'Action "%s" does not exist and was not trapped in __call()', 
+            $action), 404);
         }
-
-        throw new Action\Exception(sprintf('Method "%s" does not exist and was not trapped in __call()', $methodName), 500);
+        
+        throw new Action\Exception(
+        sprintf('Method "%s" does not exist and was not trapped in __call()', 
+        $methodName), 500);
     }
 
     /**
@@ -498,24 +502,26 @@ abstract class Action implements ActionController
      * @param string $action Method name of action
      * @return void
      */
-    public function dispatch($action)
+    public function dispatch ($action)
     {
         // Notify helpers of action preDispatch state
         $broker = $this->broker();
         if ($broker instanceof Action\HelperBroker) {
             $broker->notifyPreDispatch();
         }
-
+        
         $this->preDispatch();
         if ($this->getRequest()->isDispatched()) {
             if (null === $this->_classMethods) {
                 $this->_classMethods = get_class_methods($this);
             }
-
+            
             // preDispatch() didn't change the action, so we can continue
-            if ($this->getInvokeArg('useCaseSensitiveActions') || in_array($action, $this->_classMethods)) {
+            if ($this->getInvokeArg('useCaseSensitiveActions') ||
+             in_array($action, $this->_classMethods)) {
                 if ($this->getInvokeArg('useCaseSensitiveActions')) {
-                    trigger_error('Using case sensitive actions without word separators is deprecated; please do not rely on this "feature"');
+                    trigger_error(
+                    'Using case sensitive actions without word separators is deprecated; please do not rely on this "feature"');
                 }
                 $this->$action();
             } else {
@@ -523,7 +529,7 @@ abstract class Action implements ActionController
             }
             $this->postDispatch();
         }
-
+        
         // whats actually important here is that this action controller is
         // shutting down, regardless of dispatching; notify the helpers of this
         // state
@@ -551,27 +557,28 @@ abstract class Action implements ActionController
      * object to use
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function run(AbstractRequest $request = null, \AbstractResponse $response = null)
+    public function run (AbstractRequest $request = null, 
+    AbstractResponse $response = null)
     {
         if (null !== $request) {
             $this->setRequest($request);
         } else {
             $request = $this->getRequest();
         }
-
+        
         if (null !== $response) {
             $this->setResponse($response);
         }
-
+        
         $action = $request->getActionName();
         if (empty($action)) {
             $action = 'index';
         }
         $action = $action . 'Action';
-
+        
         $request->setDispatched(true);
         $this->dispatch($action);
-
+        
         return $this->getResponse();
     }
 
@@ -586,13 +593,13 @@ abstract class Action implements ActionController
      * @param mixed $default
      * @return mixed
      */
-    protected function _getParam($paramName, $default = null)
+    protected function _getParam ($paramName, $default = null)
     {
         $value = $this->getRequest()->getParam($paramName);
         if ((null === $value) && (null !== $default)) {
             $value = $default;
         }
-
+        
         return $value;
     }
 
@@ -603,10 +610,10 @@ abstract class Action implements ActionController
      * @param mixed $value
      * @return \Zend\Controller\Action
      */
-    protected function _setParam($paramName, $value)
+    protected function _setParam ($paramName, $value)
     {
         $this->getRequest()->setParam($paramName, $value);
-
+        
         return $this;
     }
 
@@ -617,7 +624,7 @@ abstract class Action implements ActionController
      * @param string $paramName
      * @return boolean
      */
-    protected function _hasParam($paramName)
+    protected function _hasParam ($paramName)
     {
         return null !== $this->getRequest()->getParam($paramName);
     }
@@ -628,11 +635,10 @@ abstract class Action implements ActionController
      *
      * @return array
      */
-    protected function _getAllParams()
+    protected function _getAllParams ()
     {
         return $this->getRequest()->getParams();
     }
-
 
     /**
      * Forward to another controller/action.
@@ -660,25 +666,25 @@ abstract class Action implements ActionController
      * @param array $params
      * @return void
      */
-    final protected function _forward($action, $controller = null, $module = null, array $params = null)
+    final protected function _forward ($action, $controller = null, $module = null, 
+    array $params = null)
     {
         $request = $this->getRequest();
-
+        
         if (null !== $params) {
             $request->setParams($params);
         }
-
+        
         if (null !== $controller) {
             $request->setControllerName($controller);
-
+            
             // Module should only be reset if controller has been specified
             if (null !== $module) {
                 $request->setModuleName($module);
             }
         }
-
-        $request->setActionName($action)
-                ->setDispatched(false);
+        
+        $request->setActionName($action)->setDispatched(false);
     }
 
     /**
@@ -690,7 +696,7 @@ abstract class Action implements ActionController
      * @param array $options Options to be used when redirecting
      * @return void
      */
-    protected function _redirect($url, array $options = array())
+    protected function _redirect ($url, array $options = array())
     {
         $redirector = $this->broker('redirector');
         $redirector->gotoUrl($url, $options);

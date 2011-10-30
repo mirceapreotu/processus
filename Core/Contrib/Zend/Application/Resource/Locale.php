@@ -40,6 +40,7 @@ use Zend\Locale as SystemLocale;
  */
 class Locale extends AbstractResource
 {
+
     const DEFAULT_REGISTRY_KEY = 'Zend_Locale';
 
     /**
@@ -52,7 +53,7 @@ class Locale extends AbstractResource
      *
      * @return \Zend\Locale\Locale
      */
-    public function init()
+    public function init ()
     {
         return $this->getLocale();
     }
@@ -62,28 +63,27 @@ class Locale extends AbstractResource
      *
      * @return \Zend\Locale\Locale
      */
-    public function getLocale()
+    public function getLocale ()
     {
         if (null === $this->_locale) {
             $options = $this->getOptions();
-            if(!isset($options['default'])) {
+            if (! isset($options['default'])) {
                 $this->_locale = new SystemLocale\Locale();
-            } elseif(!isset($options['force']) ||
-                     (bool) $options['force'] == false)
-            {
+            } elseif (! isset($options['force']) ||
+             (bool) $options['force'] == false) {
                 // Don't force any locale, just go for auto detection
-                SystemLocale\Locale::setFallback($options['default']);
+                SystemLocale\Locale::setFallback(
+                $options['default']);
                 $this->_locale = new SystemLocale\Locale();
             } else {
                 $this->_locale = new SystemLocale\Locale($options['default']);
             }
-
-            $key = (isset($options['registry_key']) && !is_numeric($options['registry_key']))
-                ? $options['registry_key']
-                : self::DEFAULT_REGISTRY_KEY;
+            
+            $key = (isset($options['registry_key']) &&
+             ! is_numeric($options['registry_key'])) ? $options['registry_key'] : self::DEFAULT_REGISTRY_KEY;
             \Zend\Registry::set($key, $this->_locale);
         }
-
+        
         return $this->_locale;
     }
 }

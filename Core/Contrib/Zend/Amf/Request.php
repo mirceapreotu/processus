@@ -40,13 +40,14 @@ namespace Zend\Amf;
  */
 interface Request
 {
+
     /**
      * Prepare the AMF InputStream for parsing.
      *
      * @param  string $request
      * @return Zend\Amf\Request
      */
-    public function initialize($request);
+    public function initialize ($request);
 
     /**
      * Takes the raw AMF input stream and converts it into valid PHP objects
@@ -54,7 +55,7 @@ interface Request
      * @param  Zend\Amf\Parser\InputStream
      * @return Zend\Amf\Request
      */
-    public function readMessage(Parser\InputStream $stream);
+    public function readMessage (Parser\InputStream $stream);
 
     /**
      * Deserialize a message header from the input stream.
@@ -67,21 +68,21 @@ interface Request
      *
      * @return Zend\Amf\Value\MessageHeader
      */
-    public function readHeader();
+    public function readHeader ();
 
     /**
      * Deserialize a message body from the input stream
      *
      * @return Zend\Amf\Value\MessageBody
      */
-    public function readBody();
+    public function readBody ();
 
     /**
      * Return an array of the body objects that were found in the amf request.
      *
      * @return array {target, response, length, content}
      */
-    public function getAmfBodies();
+    public function getAmfBodies ();
 
     /**
      * Accessor to private array of message bodies.
@@ -89,21 +90,21 @@ interface Request
      * @param  Zend\Amf\Value\MessageBody $message
      * @return Zend\Amf\Request
      */
-    public function addAmfBody(Value\MessageBody $message);
+    public function addAmfBody (Value\MessageBody $message);
 
     /**
      * Return an array of headers that were found in the amf request.
      *
      * @return array {operation, mustUnderstand, length, param}
      */
-    public function getAmfHeaders();
+    public function getAmfHeaders ();
 
     /**
      * Return the either 0 or 3 for respect AMF version
      *
      * @return int
      */
-    public function getObjectEncoding();
+    public function getObjectEncoding ();
 
     /**
      * Set the object response encoding
@@ -111,5 +112,5 @@ interface Request
      * @param  mixed $int
      * @return Zend\Amf\Request
      */
-    public function setObjectEncoding($int);
+    public function setObjectEncoding ($int);
 }

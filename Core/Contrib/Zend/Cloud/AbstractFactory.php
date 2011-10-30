@@ -34,12 +34,13 @@ use Zend\Config;
  */
 class AbstractFactory
 {
+
     /**
      * Constructor
      *
      * @return void
      */
-    private function __construct()
+    private function __construct ()
     {
         // private ctor - should not be used
     }
@@ -51,16 +52,16 @@ class AbstractFactory
      * @param  array|Zend_Config $options
      * @return null|Zend_Cloud_DocumentService_Adapter|Zend_Cloud_QueueService_Adapter|Zend_Cloud_StorageService_Adapter
      */
-    protected static function _getAdapter($adapterOption, $options)
+    protected static function _getAdapter ($adapterOption, $options)
     {
         if ($options instanceof Config) {
             $options = $options->toArray();
         }
-
-        if (!isset($options[$adapterOption])) {
+        
+        if (! isset($options[$adapterOption])) {
             return null;
         }
-
+        
         $classname = $options[$adapterOption];
         unset($options[$adapterOption]);
         /*

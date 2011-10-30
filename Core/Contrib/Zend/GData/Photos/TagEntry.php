@@ -56,16 +56,16 @@ class TagEntry extends \Zend\GData\Entry
      * Create a new instance.
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(Photos::$namespaces);
         parent::__construct($element);
-
+        
         $category = new \Zend\GData\App\Extension\Category(
-            'http://schemas.google.com/photos/2007#tag',
-            'http://schemas.google.com/g/2005#kind');
+        'http://schemas.google.com/photos/2007#tag', 
+        'http://schemas.google.com/g/2005#kind');
         $this->setCategory(array($category));
     }
 
@@ -76,13 +76,14 @@ class TagEntry extends \Zend\GData\Entry
      *
      * @param DOMDocument $doc The DOMDocument used to construct DOMElements
      * @return DOMElement The DOMElement representing this element and all
-     *          child properties.
+     * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_gphotoWeight !== null) {
-            $element->appendChild($this->_gphotoWeight->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_gphotoWeight->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -93,12 +94,12 @@ class TagEntry extends \Zend\GData\Entry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
-
+        
         switch ($absoluteNodeName) {
-            case $this->lookupNamespace('gphoto') . ':' . 'weight';
+            case $this->lookupNamespace('gphoto') . ':' . 'weight':
                 $weight = new Extension\Weight();
                 $weight->transferFromDOM($child);
                 $this->_gphotoWeight = $weight;
@@ -115,7 +116,7 @@ class TagEntry extends \Zend\GData\Entry
      * @see setGphotoWeight
      * @return string The requested attribute.
      */
-    public function getGphotoWeight()
+    public function getGphotoWeight ()
     {
         return $this->_gphotoWeight;
     }
@@ -126,7 +127,7 @@ class TagEntry extends \Zend\GData\Entry
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\Photos\Extension\Weight The element being modified.
      */
-    public function setGphotoWeight($value)
+    public function setGphotoWeight ($value)
     {
         $this->_gphotoWeight = $value;
         return $this;

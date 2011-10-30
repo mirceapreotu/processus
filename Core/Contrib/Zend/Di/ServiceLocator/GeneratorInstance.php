@@ -4,19 +4,23 @@ namespace Zend\Di\ServiceLocator;
 
 class GeneratorInstance
 {
+
     protected $name;
+
     protected $constructor;
+
     protected $params;
+
     protected $methods = array();
 
-    public function __construct($name, $constructor, array $params)
+    public function __construct ($name, $constructor, array $params)
     {
-        $this->name        = $name;
+        $this->name = $name;
         $this->constructor = $constructor;
-        $this->params      = $params;
+        $this->params = $params;
     }
 
-    public function getName()
+    public function getName ()
     {
         return $this->name;
     }
@@ -30,29 +34,29 @@ class GeneratorInstance
      * @param  string $name 
      * @return GeneratorInstance
      */
-    public function setName($name)
+    public function setName ($name)
     {
         $this->name = $name;
         return $this;
     }
 
-    public function getConstructor()
+    public function getConstructor ()
     {
         return $this->constructor;
     }
 
-    public function getParams()
+    public function getParams ()
     {
         return $this->params;
     }
 
-    public function setMethods(array $methods)
+    public function setMethods (array $methods)
     {
         $this->methods = $methods;
         return $this;
     }
 
-    public function getMethods()
+    public function getMethods ()
     {
         return $this->methods;
     }

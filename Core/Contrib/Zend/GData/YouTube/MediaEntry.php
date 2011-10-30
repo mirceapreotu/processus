@@ -54,18 +54,18 @@ class MediaEntry extends \Zend\GData\Media\Entry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('media') . ':' . 'group':
-            $mediaGroup = new Extension\MediaGroup();
-            $mediaGroup->transferFromDOM($child);
-            $this->_mediaGroup = $mediaGroup;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('media') . ':' . 'group':
+                $mediaGroup = new Extension\MediaGroup();
+                $mediaGroup->transferFromDOM($child);
+                $this->_mediaGroup = $mediaGroup;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 

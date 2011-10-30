@@ -24,8 +24,7 @@
  */
 namespace Zend\Ldap\Node\Schema\AttributeType;
 
-use Zend\Ldap\Node\Schema\AttributeType,
-    Zend\Ldap\Node\Schema;
+use Zend\Ldap\Node\Schema\AttributeType, Zend\Ldap\Node\Schema;
 
 /**
  * Zend_Ldap_Node_Schema_AttributeType_ActiveDirectory provides access to the attribute type
@@ -41,12 +40,13 @@ use Zend\Ldap\Node\Schema\AttributeType,
  */
 class ActiveDirectory extends Schema\Item implements AttributeType
 {
+
     /**
      * Gets the attribute name
      *
      * @return string
      */
-    public function getName()
+    public function getName ()
     {
         return $this->ldapdisplayname[0];
     }
@@ -56,7 +56,7 @@ class ActiveDirectory extends Schema\Item implements AttributeType
      *
      * @return string
      */
-    public function getOid()
+    public function getOid ()
     {
 
     }
@@ -66,7 +66,7 @@ class ActiveDirectory extends Schema\Item implements AttributeType
      *
      * @return string
      */
-    public function getSyntax()
+    public function getSyntax ()
     {
 
     }
@@ -76,7 +76,7 @@ class ActiveDirectory extends Schema\Item implements AttributeType
      *
      * @return int|null
      */
-    public function getMaxLength()
+    public function getMaxLength ()
     {
 
     }
@@ -86,7 +86,7 @@ class ActiveDirectory extends Schema\Item implements AttributeType
      *
      * @return boolean
      */
-    public function isSingleValued()
+    public function isSingleValued ()
     {
 
     }
@@ -96,7 +96,7 @@ class ActiveDirectory extends Schema\Item implements AttributeType
      *
      * @return string
      */
-    public function getDescription()
+    public function getDescription ()
     {
 
     }

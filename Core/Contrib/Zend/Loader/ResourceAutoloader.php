@@ -31,6 +31,7 @@ namespace Zend\Loader;
  */
 class ResourceAutoloader implements SplAutoloader
 {
+
     /**
      * @var string Base path to resource classes
      */
@@ -68,20 +69,21 @@ class ResourceAutoloader implements SplAutoloader
      * @throws Exception\InvalidArgumentException
      * @return void
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         if (null === $options) {
-            throw new Exception\InvalidArgumentException('Options must be passed to resource loader constructor');
+            throw new Exception\InvalidArgumentException(
+            'Options must be passed to resource loader constructor');
         }
-
+        
         $this->setOptions($options);
-
+        
         $namespace = $this->getNamespace();
-        $prefix    = $this->getPrefix();
-        if (((null === $namespace) || (null === $this->getBasePath()))
-            && ((null === $prefix) || (null === $this->getBasePath()))
-        ) {
-            throw new Exception\InvalidArgumentException('Resource loader requires both a base path and either a namespace or prefix for initialization');
+        $prefix = $this->getPrefix();
+        if (((null === $namespace) || (null === $this->getBasePath())) &&
+         ((null === $prefix) || (null === $this->getBasePath()))) {
+            throw new Exception\InvalidArgumentException(
+            'Resource loader requires both a base path and either a namespace or prefix for initialization');
         }
     }
 
@@ -92,8 +94,8 @@ class ResourceAutoloader implements SplAutoloader
      * syntax. Example:
      * <code>
      * $loader = new ResourceAutoloader(array(
-     *     'namespace' => 'Stuff',
-     *     'basePath'  => '/path/to/some/stuff',
+     * 'namespace' => 'Stuff',
+     * 'basePath'  => '/path/to/some/stuff',
      * ))
      * $loader->addResourceType('Model', 'models', 'Model');
      *
@@ -106,21 +108,24 @@ class ResourceAutoloader implements SplAutoloader
      * @throws Exception\InvalidArgumentException if method not beginning with 'get' or not matching a valid resource type is called
      * @throws Exception\BadMethodCallException
      */
-    public function __call($method, $args)
+    public function __call ($method, $args)
     {
         if ('get' == substr($method, 0, 3)) {
-            $type  = strtolower(substr($method, 3));
-            if (!$this->hasResourceType($type)) {
-                throw new Exception\InvalidArgumentException("Invalid resource type $type; cannot load resource");
+            $type = strtolower(substr($method, 3));
+            if (! $this->hasResourceType($type)) {
+                throw new Exception\InvalidArgumentException(
+                "Invalid resource type $type; cannot load resource");
             }
             if (empty($args)) {
-                throw new Exception\InvalidArgumentException("Cannot load resources; no resource specified");
+                throw new Exception\InvalidArgumentException(
+                "Cannot load resources; no resource specified");
             }
             $resource = array_shift($args);
             return $this->load($resource, $type);
         }
-
-        throw new Exception\BadMethodCallException("Method '$method' is not supported");
+        
+        throw new Exception\BadMethodCallException(
+        "Method '$method' is not supported");
     }
 
     /**
@@ -129,7 +134,7 @@ class ResourceAutoloader implements SplAutoloader
      * @param string $class
      * @return False if not matched other wise the correct path
      */
-    public function getClassPath($class)
+    public function getClassPath ($class)
     {
         if (null !== $this->getNamespace()) {
             if (false !== ($path = $this->getNamespacedClassPath($class))) {
@@ -145,50 +150,50 @@ class ResourceAutoloader implements SplAutoloader
      * @param  string $class 
      * @return false|string
      */
-    public function getNamespacedClassPath($class)
+    public function getNamespacedClassPath ($class)
     {
-        $class             = ltrim($class, '\\');
-        $segments          = explode('\\', $class);
+        $class = ltrim($class, '\\');
+        $segments = explode('\\', $class);
         $namespaceTopLevel = $this->getNamespace();
-        $namespace         = '';
-
-
-        if (!empty($namespaceTopLevel)) {
+        $namespace = '';
+        
+        if (! empty($namespaceTopLevel)) {
             $namespace = array_shift($segments);
             if ($namespace != $namespaceTopLevel) {
                 // wrong namespace? we're done
                 return false;
             }
         }
-
+        
         if (count($segments) < 2) {
             // assumes all resources have a component and class name, minimum
             return false;
         }
-
-        $final     = array_pop($segments);
+        
+        $final = array_pop($segments);
         $component = $namespace;
         $lastMatch = false;
         do {
-            $segment    = array_shift($segments);
+            $segment = array_shift($segments);
             $component .= empty($component) ? $segment : '\\' . $segment;
             if (isset($this->_components[$component])) {
                 $lastMatch = $component;
             }
         } while (count($segments));
-
-        if (!$lastMatch) {
+        
+        if (! $lastMatch) {
             return false;
         }
-
+        
         $final = substr($class, strlen($lastMatch) + 1);
         $path = $this->_components[$lastMatch];
-        $classPath = $path . '/' . str_replace(array('\\', '_'), '/', $final) . '.php';
-
+        $classPath = $path . '/' . str_replace(array('\\', '_'), '/', $final) .
+         '.php';
+        
         if (\Zend\Loader::isReadable($classPath)) {
             return $classPath;
         }
-
+        
         return false;
     }
 
@@ -198,48 +203,48 @@ class ResourceAutoloader implements SplAutoloader
      * @param  string $class 
      * @return false|string
      */
-    public function getPrefixedClassPath($class)
+    public function getPrefixedClassPath ($class)
     {
-        $segments       = explode('_', $class);
+        $segments = explode('_', $class);
         $prefixTopLevel = $this->getPrefix();
-        $prefix         = '';
-
-        if (!empty($prefixTopLevel)) {
+        $prefix = '';
+        
+        if (! empty($prefixTopLevel)) {
             $prefix = array_shift($segments);
             if ($prefix != $prefixTopLevel) {
                 // wrong prefix? we're done
                 return false;
             }
         }
-
+        
         if (count($segments) < 2) {
             // assumes all resources have a component and class name, minimum
             return false;
         }
-
-        $final     = array_pop($segments);
+        
+        $final = array_pop($segments);
         $component = $prefix;
         $lastMatch = false;
         do {
-            $segment    = array_shift($segments);
+            $segment = array_shift($segments);
             $component .= empty($component) ? $segment : '_' . $segment;
             if (isset($this->_components[$component])) {
                 $lastMatch = $component;
             }
         } while (count($segments));
-
-        if (!$lastMatch) {
+        
+        if (! $lastMatch) {
             return false;
         }
-
+        
         $final = substr($class, strlen($lastMatch) + 1);
         $path = $this->_components[$lastMatch];
         $classPath = $path . '/' . str_replace('_', '/', $final) . '.php';
-
+        
         if (\Zend\Loader::isReadable($classPath)) {
             return $classPath;
         }
-
+        
         return false;
     }
 
@@ -249,7 +254,7 @@ class ResourceAutoloader implements SplAutoloader
      * @param  string $class
      * @return mixed False if not matched, otherwise result if include operation
      */
-    public function autoload($class)
+    public function autoload ($class)
     {
         $classPath = $this->getClassPath($class);
         if (false !== $classPath) {
@@ -263,7 +268,7 @@ class ResourceAutoloader implements SplAutoloader
      * 
      * @return void
      */
-    public function register()
+    public function register ()
     {
         spl_autoload_register(array($this, 'autoload'));
     }
@@ -275,12 +280,13 @@ class ResourceAutoloader implements SplAutoloader
      * @throws Exception\InvalidArgumentExceptions
      * @return \Zend\Loader\Autoloader\Resource
      */
-    public function setOptions($options)
+    public function setOptions ($options)
     {
-        if (!is_array($options) && !($options instanceof \Traversable)) {
-            throw new Exception\InvalidArgumentException('Options must be an array or Traversable');
+        if (! is_array($options) && ! ($options instanceof \Traversable)) {
+            throw new Exception\InvalidArgumentException(
+            'Options must be an array or Traversable');
         }
-
+        
         $methods = get_class_methods($this);
         foreach ($options as $key => $value) {
             $method = 'set' . ucfirst($key);
@@ -297,13 +303,13 @@ class ResourceAutoloader implements SplAutoloader
      * @param  string $namespace
      * @return ResourceAutoloader
      */
-    public function setNamespace($namespace)
+    public function setNamespace ($namespace)
     {
         if (null === $namespace) {
             $this->_namespace = null;
             return $this;
         }
-
+        
         $this->_namespace = rtrim((string) $namespace, '\\');
         $this->_namespace = rtrim($this->_namespace, '_');
         return $this;
@@ -314,7 +320,7 @@ class ResourceAutoloader implements SplAutoloader
      *
      * @return string
      */
-    public function getNamespace()
+    public function getNamespace ()
     {
         return $this->_namespace;
     }
@@ -325,13 +331,13 @@ class ResourceAutoloader implements SplAutoloader
      * @param  string $prefix
      * @return ResourceAutoloader
      */
-    public function setPrefix($prefix)
+    public function setPrefix ($prefix)
     {
         if (null === $prefix) {
             $this->_prefix = null;
             return $this;
         }
-
+        
         $this->_prefix = rtrim((string) $prefix, '_');
         $this->_prefix = rtrim($this->_prefix, '\\');
         return $this;
@@ -342,7 +348,7 @@ class ResourceAutoloader implements SplAutoloader
      *
      * @return string
      */
-    public function getPrefix()
+    public function getPrefix ()
     {
         return $this->_prefix;
     }
@@ -353,7 +359,7 @@ class ResourceAutoloader implements SplAutoloader
      * @param  string $path
      * @return Zend_Loader_Autoloader_Resource
      */
-    public function setBasePath($path)
+    public function setBasePath ($path)
     {
         $this->_basePath = (string) $path;
         return $this;
@@ -364,7 +370,7 @@ class ResourceAutoloader implements SplAutoloader
      *
      * @return string
      */
-    public function getBasePath()
+    public function getBasePath ()
     {
         return $this->_basePath;
     }
@@ -379,12 +385,13 @@ class ResourceAutoloader implements SplAutoloader
      * @throws Exception\InvalidPathException
      * @return Zend_Loader_Autoloader_Resource
      */
-    public function addResourceType($type, $path, $namespace = null)
+    public function addResourceType ($type, $path, $namespace = null)
     {
         $type = strtolower($type);
-        if (!isset($this->_resourceTypes[$type])) {
+        if (! isset($this->_resourceTypes[$type])) {
             if (null === $namespace) {
-                throw new Exception\MissingResourceNamespaceException('Initial definition of a resource type must include a namespace');
+                throw new Exception\MissingResourceNamespaceException(
+                'Initial definition of a resource type must include a namespace');
             }
             if (null !== $this->getNamespace()) {
                 $this->_addNamespaceResource($type, $namespace);
@@ -392,11 +399,13 @@ class ResourceAutoloader implements SplAutoloader
                 $this->_addPrefixResource($type, $namespace);
             }
         }
-        if (!is_string($path)) {
-            throw new Exception\InvalidPathException('Invalid path specification provided; must be string');
+        if (! is_string($path)) {
+            throw new Exception\InvalidPathException(
+            'Invalid path specification provided; must be string');
         }
-        $this->_resourceTypes[$type]['path'] = $this->getBasePath() . '/' . rtrim($path, '\/');
-
+        $this->_resourceTypes[$type]['path'] = $this->getBasePath() . '/' .
+         rtrim($path, '\/');
+        
         $component = $this->_resourceTypes[$type]['namespace'];
         $this->_components[$component] = $this->_resourceTypes[$type]['path'];
         return $this;
@@ -409,13 +418,13 @@ class ResourceAutoloader implements SplAutoloader
      * @param  string $namespace 
      * @return void
      */
-    protected function _addNamespaceResource($type, $namespace)
+    protected function _addNamespaceResource ($type, $namespace)
     {
         $namespaceTopLevel = $this->getNamespace();
         $namespace = ucfirst(trim($namespace, '\\'));
         $this->_resourceTypes[$type] = array(
-            'namespace' => empty($namespaceTopLevel) ? $namespace : $namespaceTopLevel . '\\' . $namespace,
-        );
+        'namespace' => empty($namespaceTopLevel) ? $namespace : $namespaceTopLevel .
+         '\\' . $namespace);
     }
 
     /**
@@ -425,13 +434,13 @@ class ResourceAutoloader implements SplAutoloader
      * @param  string $prefix 
      * @return void
      */
-    protected function _addPrefixResource($type, $prefix)
+    protected function _addPrefixResource ($type, $prefix)
     {
         $prefixTopLevel = $this->getPrefix();
         $prefix = ucfirst(trim($prefix, '_'));
         $this->_resourceTypes[$type] = array(
-            'namespace' => empty($prefixTopLevel) ? $prefix : $prefixTopLevel . '_' . $prefix,
-        );
+        'namespace' => empty($prefixTopLevel) ? $prefix : $prefixTopLevel . '_' .
+         $prefix);
     }
 
     /**
@@ -446,14 +455,14 @@ class ResourceAutoloader implements SplAutoloader
      * As an example:
      * <code>
      * $loader->addResourceTypes(array(
-     *     'model' => array(
-     *         'path'      => 'models',
-     *         'namespace' => 'Model',
-     *     ),
-     *     'form' => array(
-     *         'path'      => 'forms',
-     *         'namespace' => 'Form',
-     *     ),
+     * 'model' => array(
+     * 'path'      => 'models',
+     * 'namespace' => 'Model',
+     * ),
+     * 'form' => array(
+     * 'path'      => 'forms',
+     * 'namespace' => 'Form',
+     * ),
      * ));
      * </code>
      *
@@ -461,16 +470,18 @@ class ResourceAutoloader implements SplAutoloader
      * @throws Exception\InvalidArgumentException
      * @return \Zend\Loader\Autoloader\Resource
      */
-    public function addResourceTypes(array $types)
+    public function addResourceTypes (array $types)
     {
         foreach ($types as $type => $spec) {
-            if (!is_array($spec)) {
-                throw new Exception\InvalidArgumentException('addResourceTypes() expects an array of arrays');
+            if (! is_array($spec)) {
+                throw new Exception\InvalidArgumentException(
+                'addResourceTypes() expects an array of arrays');
             }
-            if (!isset($spec['path'])) {
-                throw new Exception\InvalidArgumentException('addResourceTypes() expects each array to include a paths element');
+            if (! isset($spec['path'])) {
+                throw new Exception\InvalidArgumentException(
+                'addResourceTypes() expects each array to include a paths element');
             }
-            $paths  = $spec['path'];
+            $paths = $spec['path'];
             $namespace = null;
             if (isset($spec['namespace'])) {
                 $namespace = $spec['namespace'];
@@ -487,7 +498,7 @@ class ResourceAutoloader implements SplAutoloader
      * @param  array $types
      * @return Zend_Loader_Autoloader_Resource
      */
-    public function setResourceTypes(array $types)
+    public function setResourceTypes (array $types)
     {
         $this->clearResourceTypes();
         return $this->addResourceTypes($types);
@@ -498,7 +509,7 @@ class ResourceAutoloader implements SplAutoloader
      *
      * @return array
      */
-    public function getResourceTypes()
+    public function getResourceTypes ()
     {
         return $this->_resourceTypes;
     }
@@ -509,7 +520,7 @@ class ResourceAutoloader implements SplAutoloader
      * @param  string $type
      * @return bool
      */
-    public function hasResourceType($type)
+    public function hasResourceType ($type)
     {
         return isset($this->_resourceTypes[$type]);
     }
@@ -520,7 +531,7 @@ class ResourceAutoloader implements SplAutoloader
      * @param  string $type
      * @return Zend_Loader_Autoloader_Resource
      */
-    public function removeResourceType($type)
+    public function removeResourceType ($type)
     {
         if ($this->hasResourceType($type)) {
             $namespace = $this->_resourceTypes[$type]['namespace'];
@@ -535,10 +546,10 @@ class ResourceAutoloader implements SplAutoloader
      *
      * @return Zend_Loader_Autoloader_Resource
      */
-    public function clearResourceTypes()
+    public function clearResourceTypes ()
     {
         $this->_resourceTypes = array();
-        $this->_components    = array();
+        $this->_components = array();
         return $this;
     }
 
@@ -548,7 +559,7 @@ class ResourceAutoloader implements SplAutoloader
      * @param  string $type
      * @return Zend_Loader_Autoloader_Resource
      */
-    public function setDefaultResourceType($type)
+    public function setDefaultResourceType ($type)
     {
         if ($this->hasResourceType($type)) {
             $this->_defaultResourceType = $type;
@@ -561,7 +572,7 @@ class ResourceAutoloader implements SplAutoloader
      *
      * @return string|null
      */
-    public function getDefaultResourceType()
+    public function getDefaultResourceType ()
     {
         return $this->_defaultResourceType;
     }
@@ -578,26 +589,28 @@ class ResourceAutoloader implements SplAutoloader
      * @return object
      * @throws Exception\InvalidArgumentException if resource type not specified or invalid
      */
-    public function load($resource, $type = null)
+    public function load ($resource, $type = null)
     {
         if (null === $type) {
             $type = $this->getDefaultResourceType();
             if (empty($type)) {
-                throw new Exception\InvalidArgumentException('No resource type specified');
+                throw new Exception\InvalidArgumentException(
+                'No resource type specified');
             }
         }
-        if (!$this->hasResourceType($type)) {
-            throw new Exception\InvalidArgumentException('Invalid resource type specified');
+        if (! $this->hasResourceType($type)) {
+            throw new Exception\InvalidArgumentException(
+            'Invalid resource type specified');
         }
         $namespace = $this->_resourceTypes[$type]['namespace'];
         if (null !== $this->getNamespace()) {
-            $class     = $namespace . '\\' . ucfirst($resource);
+            $class = $namespace . '\\' . ucfirst($resource);
         } elseif (null !== $this->getPrefix()) {
-            $class     = $namespace . '_' . ucfirst($resource);
+            $class = $namespace . '_' . ucfirst($resource);
         }
-
-        if (!isset($this->_resources[$class])) {
-            $this->_resources[$class] = new $class;
+        
+        if (! isset($this->_resources[$class])) {
+            $this->_resources[$class] = new $class();
         }
         return $this->_resources[$class];
     }

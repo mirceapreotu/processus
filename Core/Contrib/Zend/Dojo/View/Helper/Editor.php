@@ -35,6 +35,7 @@ namespace Zend\Dojo\View\Helper;
  */
 class Editor extends Dijit
 {
+
     /**
      * @param string Dijit type
      */
@@ -48,28 +49,20 @@ class Editor extends Dijit
     /**
      * @var array Maps non-core plugin to module basename
      */
-    protected $_pluginsModules = array(
-        'createLink' => 'LinkDialog',
-        'insertImage' => 'LinkDialog',
-        'fontName' => 'FontChoice',
-        'fontSize' => 'FontChoice',
-        'formatBlock' => 'FontChoice',
-        'foreColor' => 'TextColor',
-        'hiliteColor' => 'TextColor',
-        'enterKeyHandling' => 'EnterKeyHandling',
-        'fullScreen' => 'FullScreen',
-        'newPage' => 'NewPage',
-        'print' => 'Print',
-        'tabIndent' => 'TabIndent',
-        'toggleDir' => 'ToggleDir',
-        'viewSource' => 'ViewSource'
-    );
+    protected $_pluginsModules = array('createLink' => 'LinkDialog', 
+    'insertImage' => 'LinkDialog', 'fontName' => 'FontChoice', 
+    'fontSize' => 'FontChoice', 'formatBlock' => 'FontChoice', 
+    'foreColor' => 'TextColor', 'hiliteColor' => 'TextColor', 
+    'enterKeyHandling' => 'EnterKeyHandling', 'fullScreen' => 'FullScreen', 
+    'newPage' => 'NewPage', 'print' => 'Print', 'tabIndent' => 'TabIndent', 
+    'toggleDir' => 'ToggleDir', 'viewSource' => 'ViewSource');
 
     /**
      * JSON-encoded parameters
      * @var array
      */
-    protected $_jsonParams = array('captureEvents', 'events', 'plugins', 'extraPlugins');
+    protected $_jsonParams = array('captureEvents', 'events', 'plugins', 
+    'extraPlugins');
 
     /**
      * dijit.Editor
@@ -80,21 +73,21 @@ class Editor extends Dijit
      * @param  array $attribs
      * @return string
      */
-    public function __invoke($id = null, $value = null, $params = array(), $attribs = array())
+    public function __invoke ($id = null, $value = null, $params = array(), $attribs = array())
     {
         if (isset($params['plugins'])) {
             foreach ($this->_getRequiredModules($params['plugins']) as $module) {
                 $this->dojo->requireModule($module);
             }
         }
-
+        
         // Previous versions allowed specifying "degrade" to allow using a 
         // textarea instead of a div -- but this is insecure. Removing the 
         // parameter if set to prevent its injection in the dijit.
         if (isset($params['degrade'])) {
             unset($params['degrade']);
         }
-
+        
         $hiddenName = $id;
         if (array_key_exists('id', $attribs)) {
             $hiddenId = $attribs['id'];
@@ -102,34 +95,29 @@ class Editor extends Dijit
             $hiddenId = $hiddenName;
         }
         $hiddenId = $this->_normalizeId($hiddenId);
-
+        
         $textareaName = $this->_normalizeEditorName($hiddenName);
-        $textareaId   = $hiddenId . '-Editor';
-
-        $hiddenAttribs = array(
-            'id'    => $hiddenId,
-            'name'  => $hiddenName,
-            'value' => $value,
-            'type'  => 'hidden',
-        );
+        $textareaId = $hiddenId . '-Editor';
+        
+        $hiddenAttribs = array('id' => $hiddenId, 'name' => $hiddenName, 
+        'value' => $value, 'type' => 'hidden');
         $attribs['id'] = $textareaId;
-
+        
         $this->_createGetParentFormFunction();
         $this->_createEditorOnSubmit($hiddenId, $textareaId);
-
+        
         $attribs = $this->_prepareDijit($attribs, $params, 'textarea');
-
-        $html = '<div' . $this->_htmlAttribs($attribs) . '>'
-               . $value
-               . "</div>\n";
-
+        
+        $html = '<div' . $this->_htmlAttribs($attribs) . '>' . $value .
+         "</div>\n";
+        
         // Embed a textarea in a <noscript> tag to allow for graceful 
         // degradation
-        $html .= '<noscript>'
-               . $this->view->formTextarea($hiddenId, $value, $attribs)
-               . '</noscript>';
-
-        $html  .= '<input' . $this->_htmlAttribs($hiddenAttribs) . $this->getClosingBracket();
+        $html .= '<noscript>' .
+         $this->view->formTextarea($hiddenId, $value, $attribs) . '</noscript>';
+        
+        $html .= '<input' . $this->_htmlAttribs($hiddenAttribs) .
+         $this->getClosingBracket();
         
         return $html;
     }
@@ -140,7 +128,7 @@ class Editor extends Dijit
      * @param array $plugins plugins to include
      * @return array
      */
-    protected function _getRequiredModules(array $plugins)
+    protected function _getRequiredModules (array $plugins)
     {
         $modules = array();
         foreach ($plugins as $commandName) {
@@ -149,7 +137,7 @@ class Editor extends Dijit
                 $modules[] = 'dijit._editor.plugins.' . $pluginName;
             }
         }
-
+        
         return array_unique($modules);
     }
 
@@ -159,9 +147,9 @@ class Editor extends Dijit
      * @param  string $name
      * @return string
      */
-    protected function _normalizeEditorName($name)
+    protected function _normalizeEditorName ($name)
     {
-        if ('[]' == substr($name, -2)) {
+        if ('[]' == substr($name, - 2)) {
             $name = substr($name, 0, strlen($name) - 2);
             $name .= '[Editor][]';
         } else {
@@ -177,7 +165,7 @@ class Editor extends Dijit
      * @param  string $editorId
      * @return void
      */
-    protected function _createEditorOnSubmit($hiddenId, $editorId)
+    protected function _createEditorOnSubmit ($hiddenId, $editorId)
     {
         $this->dojo->onLoadCaptureStart();
         echo <<<EOJ

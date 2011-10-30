@@ -39,52 +39,50 @@ use Zend\Date;
  */
 class Subscription extends AbstractModel implements SubscriptionPersistence
 {
-    
+
     /**
      * Save subscription to RDMBS
      *
      * @param array $data
      * @return bool
      */
-    public function setSubscription(array $data)
+    public function setSubscription (array $data)
     {
-        if (!isset($data['id'])) {
+        if (! isset($data['id'])) {
             throw new PubSubHubbub\Exception(
-                'ID must be set before attempting a save'
-            );
+            'ID must be set before attempting a save');
         }
         $result = $this->_db->find($data['id']);
         if ($result && (0 < count($result))) {
             $data['created_time'] = $result->current()->created_time;
-            $now = new Date\Date;
-            if (array_key_exists('lease_seconds', $data) 
-                && $data['lease_seconds']
-            ) {
-                $data['expiration_time'] = $now->add($data['lease_seconds'], Date\Date::SECOND)
-                ->get('yyyy-MM-dd HH:mm:ss');
+            $now = new Date\Date();
+            if (array_key_exists('lease_seconds', $data) &&
+             $data['lease_seconds']) {
+                $data['expiration_time'] = $now->add($data['lease_seconds'], 
+                Date\Date::SECOND)->get('yyyy-MM-dd HH:mm:ss');
             }
-            $this->_db->update(
-                $data,
-                $this->_db->getAdapter()->quoteInto('id = ?', $data['id'])
-            );
+            $this->_db->update($data, 
+            $this->_db->getAdapter()
+                ->quoteInto('id = ?', $data['id']));
             return false;
         }
-
+        
         $this->_db->insert($data);
         return true;
     }
-    
+
     /**
      * Get subscription by ID/key
      * 
      * @param  string $key 
      * @return array
      */
-    public function getSubscription($key)
+    public function getSubscription ($key)
     {
-        if (empty($key) || !is_string($key)) {
-            throw new PubSubHubbub\Exception('Invalid parameter "key"'
-                .' of "' . $key . '" must be a non-empty string');
+        if (empty($key) || ! is_string($key)) {
+            throw new PubSubHubbub\Exception(
+            'Invalid parameter "key"' . ' of "' . $key .
+             '" must be a non-empty string');
         }
         $result = $this->_db->find($key);
         if (count($result)) {
@@ -99,11 +97,12 @@ class Subscription extends AbstractModel implements SubscriptionPersistence
      * @param  string $key 
      * @return bool
      */
-    public function hasSubscription($key)
+    public function hasSubscription ($key)
     {
-        if (empty($key) || !is_string($key)) {
-            throw new PubSubHubbub\Exception('Invalid parameter "key"'
-                .' of "' . $key . '" must be a non-empty string');
+        if (empty($key) || ! is_string($key)) {
+            throw new PubSubHubbub\Exception(
+            'Invalid parameter "key"' . ' of "' . $key .
+             '" must be a non-empty string');
         }
         $result = $this->_db->find($key);
         if (count($result)) {
@@ -118,13 +117,13 @@ class Subscription extends AbstractModel implements SubscriptionPersistence
      * @param string $key
      * @return bool
      */
-    public function deleteSubscription($key)
+    public function deleteSubscription ($key)
     {
         $result = $this->_db->find($key);
         if (count($result)) {
             $this->_db->delete(
-                $this->_db->getAdapter()->quoteInto('id = ?', $key)
-            );
+            $this->_db->getAdapter()
+                ->quoteInto('id = ?', $key));
             return true;
         }
         return false;

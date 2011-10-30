@@ -22,8 +22,7 @@
  * @namespace
  */
 namespace Zend\Code\Reflection\Docblock\Tag;
-use Zend\Code\Reflection,
-    Zend\Code\Reflection\Exception;
+use Zend\Code\Reflection, Zend\Code\Reflection\Exception;
 
 /**
  * @uses       \Zend\Code\Reflection\Exception
@@ -35,6 +34,7 @@ use Zend\Code\Reflection,
  */
 class ReturnTag extends Reflection\ReflectionDocblockTag
 {
+
     /**
      * @var string
      */
@@ -46,16 +46,19 @@ class ReturnTag extends Reflection\ReflectionDocblockTag
      * @param  string $tagDocblockLine
      * @return void
      */
-    public function __construct($tagDocblockLine)
+    public function __construct ($tagDocblockLine)
     {
-        if (!preg_match('#^@(\w+)\s+([\w|\\\]+)(?:\s+(.*))?#', $tagDocblockLine, $matches)) {
-            throw new Exception\InvalidArgumentException('Provided docblock line is does not contain a valid tag');
+        if (! preg_match('#^@(\w+)\s+([\w|\\\]+)(?:\s+(.*))?#', 
+        $tagDocblockLine, $matches)) {
+            throw new Exception\InvalidArgumentException(
+            'Provided docblock line is does not contain a valid tag');
         }
-
+        
         if ($matches[1] != 'return') {
-            throw new Exception\InvalidArgumentException('Provided docblock line is does not contain a valid @return tag');
+            throw new Exception\InvalidArgumentException(
+            'Provided docblock line is does not contain a valid @return tag');
         }
-
+        
         $this->_name = 'return';
         $this->_type = $matches[2];
         if (isset($matches[3])) {
@@ -68,7 +71,7 @@ class ReturnTag extends Reflection\ReflectionDocblockTag
      *
      * @return string
      */
-    public function getType()
+    public function getType ()
     {
         return $this->_type;
     }

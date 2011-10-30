@@ -23,9 +23,7 @@
  * @namespace
  */
 namespace Zend\Amf\Parser\Amf0;
-use Zend\Amf\Parser\AbstractDeserializer,
-    Zend\Amf,
-    Zend\Amf\Parser\Exception as ParserException;
+use Zend\Amf\Parser\AbstractDeserializer, Zend\Amf, Zend\Amf\Parser\Exception as ParserException;
 
 /**
  * Read an AMF0 input stream and convert it into PHP data types
@@ -45,6 +43,7 @@ use Zend\Amf\Parser\AbstractDeserializer,
  */
 class Deserializer extends AbstractDeserializer
 {
+
     /**
      * An array of objects used for recursively deserializing an object.
      * @var array
@@ -69,75 +68,76 @@ class Deserializer extends AbstractDeserializer
      * @return mixed whatever the data type is of the marker in php
      * @throws Zend\Amf\Exception for invalid type
      */
-    public function readTypeMarker($typeMarker = null)
+    public function readTypeMarker ($typeMarker = null)
     {
         if ($typeMarker === null) {
             $typeMarker = $this->_stream->readByte();
         }
-
-        switch($typeMarker) {
+        
+        switch ($typeMarker) {
             // number
             case Amf\Constants::AMF0_NUMBER:
                 return $this->_stream->readDouble();
-
+            
             // boolean
             case Amf\Constants::AMF0_BOOLEAN:
                 return (boolean) $this->_stream->readByte();
-
+            
             // string
             case Amf\Constants::AMF0_STRING:
                 return $this->_stream->readUTF();
-
+            
             // object
             case Amf\Constants::AMF0_OBJECT:
                 return $this->readObject();
-
+            
             // null
             case Amf\Constants::AMF0_NULL:
                 return null;
-
+            
             // undefined
             case Amf\Constants::AMF0_UNDEFINED:
                 return null;
-
+            
             // Circular references are returned here
             case Amf\Constants::AMF0_REFERENCE:
                 return $this->readReference();
-
+            
             // mixed array with numeric and string keys
             case Amf\Constants::AMF0_MIXEDARRAY:
                 return $this->readMixedArray();
-
+            
             // array
             case Amf\Constants::AMF0_ARRAY:
                 return $this->readArray();
-
+            
             // date
             case Amf\Constants::AMF0_DATE:
                 return $this->readDate();
-
+            
             // longString  strlen(string) > 2^16
             case Amf\Constants::AMF0_LONGSTRING:
                 return $this->_stream->readLongUTF();
-
+            
             //internal AS object,  not supported
             case Amf\Constants::AMF0_UNSUPPORTED:
                 return null;
-
+            
             // XML
             case Amf\Constants::AMF0_XML:
                 return $this->readXmlString();
-
+            
             // typed object ie Custom Class
             case Amf\Constants::AMF0_TYPEDOBJECT:
                 return $this->readTypedObject();
-
+            
             //AMF3-specific
             case Amf\Constants::AMF0_AMF3:
                 return $this->readAmf3TypeMarker();
-
+            
             default:
-                throw new ParserException\InvalidArgumentException('Unsupported marker type: ' . $typeMarker);
+                throw new ParserException\InvalidArgumentException(
+                'Unsupported marker type: ' . $typeMarker);
         }
     }
 
@@ -152,18 +152,19 @@ class Deserializer extends AbstractDeserializer
      * @param  array|null $object
      * @return object
      */
-    public function readObject($object = null)
+    public function readObject ($object = null)
     {
         if ($object === null) {
             $object = array();
         }
-
+        
         while (true) {
-            $key        = $this->_stream->readUTF();
+            $key = $this->_stream->readUTF();
             $typeMarker = $this->_stream->readByte();
-            if ($typeMarker != Amf\Constants::AMF0_OBJECTTERM ){
+            if ($typeMarker != Amf\Constants::AMF0_OBJECTTERM) {
                 //Recursivly call readTypeMarker to get the types of properties in the object
-                $object[$key] = $this->readTypeMarker($typeMarker);
+                $object[$key] = $this->readTypeMarker(
+                $typeMarker);
             } else {
                 //encountered AMF object terminator
                 break;
@@ -182,11 +183,12 @@ class Deserializer extends AbstractDeserializer
      * @return object
      * @throws Zend\Amf\Exception for invalid reference keys
      */
-    public function readReference()
+    public function readReference ()
     {
         $key = $this->_stream->readInt();
-        if (!array_key_exists($key, $this->_reference)) {
-            throw new ParserException\OutOfBoundsException('Invalid reference key: '. $key);
+        if (! array_key_exists($key, $this->_reference)) {
+            throw new ParserException\OutOfBoundsException(
+            'Invalid reference key: ' . $key);
         }
         return $this->_reference[$key];
     }
@@ -197,11 +199,11 @@ class Deserializer extends AbstractDeserializer
      * Called when marker type is 8
      *
      * @todo   As of Flash Player 9 there is not support for mixed typed arrays
-     *         so we handle this as an object. With the introduction of vectors
-     *         in Flash Player 10 this may need to be reconsidered.
+     * so we handle this as an object. With the introduction of vectors
+     * in Flash Player 10 this may need to be reconsidered.
      * @return array
      */
-    public function readMixedArray()
+    public function readMixedArray ()
     {
         $length = $this->_stream->readLong();
         return $this->readObject();
@@ -214,11 +216,11 @@ class Deserializer extends AbstractDeserializer
      *
      * @return array
      */
-    public function readArray()
+    public function readArray ()
     {
         $length = $this->_stream->readLong();
-        $array  = array();
-        while ($length--) {
+        $array = array();
+        while ($length --) {
             $array[] = $this->readTypeMarker();
         }
         return $array;
@@ -229,17 +231,17 @@ class Deserializer extends AbstractDeserializer
      *
      * @return Zend\Date\Date
      */
-    public function readDate()
+    public function readDate ()
     {
         // get the unix time stamp. Not sure why ActionScript does not use
         // milliseconds
         $timestamp = floor($this->_stream->readDouble() / 1000);
-
+        
         // The timezone offset is never returned to the server; it is always 0,
         // so read and ignore.
         $offset = $this->_stream->readInt();
-
-        $date   = new \Zend\Date\Date($timestamp);
+        
+        $date = new \Zend\Date\Date($timestamp);
         return $date;
     }
 
@@ -249,7 +251,7 @@ class Deserializer extends AbstractDeserializer
      *
      * @return SimpleXml Object
      */
-    public function readXmlString()
+    public function readXmlString ()
     {
         $string = $this->_stream->readLongUTF();
         return simplexml_load_string($string);
@@ -264,19 +266,19 @@ class Deserializer extends AbstractDeserializer
      * @return object|array
      * @throws Zend\Amf\Exception if unable to load type
      */
-    public function readTypedObject()
+    public function readTypedObject ()
     {
         // get the remote class name
-        $className    = $this->_stream->readUTF();
-        $loader       = Amf\Parser\TypeLoader::loadType($className);
+        $className = $this->_stream->readUTF();
+        $loader = Amf\Parser\TypeLoader::loadType($className);
         $returnObject = new $loader();
-        $properties   = get_object_vars($this->readObject());
+        $properties = get_object_vars($this->readObject());
         foreach ($properties as $key => $value) {
-            if($key) {
+            if ($key) {
                 $returnObject->$key = $value;
             }
         }
-        if($returnObject instanceof Amf\Value\Messaging\ArrayCollection) {
+        if ($returnObject instanceof Amf\Value\Messaging\ArrayCollection) {
             $returnObject = get_object_vars($returnObject);
         }
         return $returnObject;
@@ -288,7 +290,7 @@ class Deserializer extends AbstractDeserializer
      *
      * @return string
      */
-    public function readAmf3TypeMarker()
+    public function readAmf3TypeMarker ()
     {
         $deserializer = new Amf\Parser\Amf3\Deserializer($this->_stream);
         $this->_objectEncoding = Amf\Constants::AMF3_OBJECT_ENCODING;
@@ -301,7 +303,7 @@ class Deserializer extends AbstractDeserializer
      *
      * @return int
      */
-    public function getObjectEncoding()
+    public function getObjectEncoding ()
     {
         return $this->_objectEncoding;
     }

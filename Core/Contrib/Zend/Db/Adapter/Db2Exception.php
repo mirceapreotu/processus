@@ -35,11 +35,13 @@ namespace Zend\Db\Adapter;
  */
 class Db2Exception extends Exception
 {
-   protected $code = '00000';
-   protected $message = 'unknown exception';
 
-   function __construct($message = 'unknown exception', $code = '00000', \Exception $e = null) 
-   {
-       parent::__construct($message, $code, $e);
-   }
+    protected $code = '00000';
+
+    protected $message = 'unknown exception';
+
+    function __construct ($message = 'unknown exception', $code = '00000',\Exception $e = null)
+    {
+        parent::__construct($message, $code, $e);
+    }
 }

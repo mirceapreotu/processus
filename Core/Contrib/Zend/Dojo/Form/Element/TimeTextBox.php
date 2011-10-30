@@ -38,6 +38,7 @@ use Zend\Form\Element\Exception;
  */
 class TimeTextBox extends DateTextBox
 {
+
     /**
      * Use TimeTextBox dijit view helper
      * @var string
@@ -51,10 +52,13 @@ class TimeTextBox extends DateTextBox
      * @return true
      * @throws \Zend\Form\Element\Exception
      */
-    protected function _validateIso8601($format)
+    protected function _validateIso8601 ($format)
     {
-        if (!preg_match('/^T\d{2}:\d{2}:\d{2}$/', $format)) {
-            throw new Exception\InvalidArgumentException(sprintf('Invalid format "%s" provided; must match T:00:00:00 format', $format));
+        if (! preg_match('/^T\d{2}:\d{2}:\d{2}$/', $format)) {
+            throw new Exception\InvalidArgumentException(
+            sprintf(
+            'Invalid format "%s" provided; must match T:00:00:00 format', 
+            $format));
         }
         return true;
     }
@@ -65,7 +69,7 @@ class TimeTextBox extends DateTextBox
      * @param  string $pattern
      * @return \Zend\Dojo\Form\Element\NumberTextBox
      */
-    public function setTimePattern($pattern)
+    public function setTimePattern ($pattern)
     {
         $this->setConstraint('timePattern', (string) $pattern);
         return $this;
@@ -76,7 +80,7 @@ class TimeTextBox extends DateTextBox
      *
      * @return string|null
      */
-    public function getTimePattern()
+    public function getTimePattern ()
     {
         return $this->getConstraint('timePattern');
     }
@@ -87,7 +91,7 @@ class TimeTextBox extends DateTextBox
      * @param  string $format
      * @return \Zend\Dojo\Form\Element\NumberTextBox
      */
-    public function setClickableIncrement($format)
+    public function setClickableIncrement ($format)
     {
         $format = (string) $format;
         $this->_validateIso8601($format);
@@ -100,7 +104,7 @@ class TimeTextBox extends DateTextBox
      *
      * @return string|null
      */
-    public function getClickableIncrement()
+    public function getClickableIncrement ()
     {
         return $this->getConstraint('clickableIncrement');
     }
@@ -111,7 +115,7 @@ class TimeTextBox extends DateTextBox
      * @param  string $format
      * @return \Zend\Dojo\Form\Element\NumberTextBox
      */
-    public function setVisibleIncrement($format)
+    public function setVisibleIncrement ($format)
     {
         $format = (string) $format;
         $this->_validateIso8601($format);
@@ -124,7 +128,7 @@ class TimeTextBox extends DateTextBox
      *
      * @return string|null
      */
-    public function getVisibleIncrement()
+    public function getVisibleIncrement ()
     {
         return $this->getConstraint('visibleIncrement');
     }
@@ -135,7 +139,7 @@ class TimeTextBox extends DateTextBox
      * @param  string $format
      * @return \Zend\Dojo\Form\Element\NumberTextBox
      */
-    public function setVisibleRange($format)
+    public function setVisibleRange ($format)
     {
         $format = (string) $format;
         $this->_validateIso8601($format);
@@ -148,7 +152,7 @@ class TimeTextBox extends DateTextBox
      *
      * @return string|null
      */
-    public function getVisibleRange()
+    public function getVisibleRange ()
     {
         return $this->getConstraint('visibleRange');
     }

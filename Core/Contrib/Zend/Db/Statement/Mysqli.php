@@ -24,7 +24,7 @@
  */
 namespace Zend\Db\Statement;
 
-use \Zend\Db;
+use Zend\Db;
 
 /**
  * Extends for Mysqli
@@ -65,14 +65,15 @@ class Mysqli extends AbstractStatement
      * @return void
      * @throws \Zend\Db\Statement\MysqliException
      */
-    public function _prepare($sql)
+    public function _prepare ($sql)
     {
         $mysqli = $this->_adapter->getConnection();
-
+        
         $this->_stmt = $mysqli->prepare($sql);
-
+        
         if ($this->_stmt === false || $mysqli->errno) {
-            throw new MysqliException("Mysqli prepare error: " . $mysqli->error, $mysqli->errno);
+            throw new MysqliException("Mysqli prepare error: " . $mysqli->error, 
+            $mysqli->errno);
         }
     }
 
@@ -87,7 +88,8 @@ class Mysqli extends AbstractStatement
      * @return bool
      * @throws \Zend\Db\Statement\MysqliException
      */
-    protected function _bindParam($parameter, &$variable, $type = null, $length = null, $options = null)
+    protected function _bindParam ($parameter, &$variable, $type = null, 
+    $length = null, $options = null)
     {
         return true;
     }
@@ -97,7 +99,7 @@ class Mysqli extends AbstractStatement
      *
      * @return bool
      */
-    public function close()
+    public function close ()
     {
         if ($this->_stmt) {
             $r = $this->_stmt->close();
@@ -112,7 +114,7 @@ class Mysqli extends AbstractStatement
      *
      * @return bool
      */
-    public function closeCursor()
+    public function closeCursor ()
     {
         if ($stmt = $this->_stmt) {
             $mysqli = $this->_adapter->getConnection();
@@ -131,7 +133,7 @@ class Mysqli extends AbstractStatement
      *
      * @return int The number of columns.
      */
-    public function columnCount()
+    public function columnCount ()
     {
         if (isset($this->_meta) && $this->_meta) {
             return $this->_meta->field_count;
@@ -145,9 +147,9 @@ class Mysqli extends AbstractStatement
      *
      * @return string error code.
      */
-    public function errorCode()
+    public function errorCode ()
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
         return substr($this->_stmt->sqlstate, 0, 5);
@@ -159,16 +161,13 @@ class Mysqli extends AbstractStatement
      *
      * @return array
      */
-    public function errorInfo()
+    public function errorInfo ()
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
-        return array(
-            substr($this->_stmt->sqlstate, 0, 5),
-            $this->_stmt->errno,
-            $this->_stmt->error,
-        );
+        return array(substr($this->_stmt->sqlstate, 0, 5), $this->_stmt->errno, 
+        $this->_stmt->error);
     }
 
     /**
@@ -178,12 +177,12 @@ class Mysqli extends AbstractStatement
      * @return bool
      * @throws \Zend\Db\Statement\MysqliException
      */
-    public function _execute(array $params = null)
+    public function _execute (array $params = null)
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
-
+        
         // if no params were given as an argument to execute(),
         // then default to the _bindParam array
         if ($params === null) {
@@ -196,39 +195,40 @@ class Mysqli extends AbstractStatement
             foreach ($params as $k => &$value) {
                 $stmtParams[$k] = &$value;
             }
-            call_user_func_array(
-                array($this->_stmt, 'bind_param'),
-                $stmtParams
-                );
+            call_user_func_array(array($this->_stmt, 'bind_param'), $stmtParams);
         }
-
+        
         // execute the statement
         $retval = $this->_stmt->execute();
         if ($retval === false) {
-            throw new MysqliException("Mysqli statement execute error : " . $this->_stmt->error, $this->_stmt->errno);
+            throw new MysqliException(
+            "Mysqli statement execute error : " . $this->_stmt->error, 
+            $this->_stmt->errno);
         }
-
-
+        
         // retain metadata
         if ($this->_meta === null) {
             $this->_meta = $this->_stmt->result_metadata();
             if ($this->_stmt->errno) {
-                throw new MysqliException("Mysqli statement metadata error: " . $this->_stmt->error, $this->_stmt->errno);
+                throw new MysqliException(
+                "Mysqli statement metadata error: " . $this->_stmt->error, 
+                $this->_stmt->errno);
             }
         }
-
+        
         // statements that have no result set do not return metadata
         if ($this->_meta !== false) {
-
+            
             // get the column names that will result
             $this->_keys = array();
             foreach ($this->_meta->fetch_fields() as $col) {
                 $this->_keys[] = $this->_adapter->foldCase($col->name);
             }
-
+            
             // set up a binding space for result variables
-            $this->_values = array_fill(0, count($this->_keys), null);
-
+            $this->_values = array_fill(0, count($this->_keys), 
+            null);
+            
             // set up references to the result binding space.
             // just passing $this->_values in the call_user_func_array()
             // below won't work, you need references.
@@ -236,17 +236,14 @@ class Mysqli extends AbstractStatement
             foreach ($this->_values as $i => &$f) {
                 $refs[$i] = &$f;
             }
-
+            
             $this->_stmt->store_result();
             // bind to the result variables
-            call_user_func_array(
-                array($this->_stmt, 'bind_result'),
-                $this->_values
-            );
+            call_user_func_array(array($this->_stmt, 'bind_result'), 
+            $this->_values);
         }
         return $retval;
     }
-
 
     /**
      * Fetches a row from the result set.
@@ -257,9 +254,9 @@ class Mysqli extends AbstractStatement
      * @return mixed Array, object, or scalar depending on fetch mode.
      * @throws \Zend\Db\Statement\MysqliException
      */
-    public function fetch($style = null, $cursor = null, $offset = null)
+    public function fetch ($style = null, $cursor = null, $offset = null)
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
         // fetch the next result
@@ -270,21 +267,22 @@ class Mysqli extends AbstractStatement
                 $this->_stmt->reset();
                 return false;
             default:
-                // fallthrough
+        
+     // fallthrough
         }
-
+        
         // make sure we have a fetch mode
         if ($style === null) {
             $style = $this->_fetchMode;
         }
-
+        
         // dereference the result values, otherwise things like fetchAll()
         // return the same values for every entry (because of the reference).
         $values = array();
         foreach ($this->_values as $key => $val) {
             $values[] = $val;
         }
-
+        
         $row = false;
         switch ($style) {
             case Db\Db::FETCH_NUM:
@@ -306,7 +304,8 @@ class Mysqli extends AbstractStatement
                 return $this->_fetchBound($row);
                 break;
             default:
-                throw new MysqliException("Invalid fetch mode '$style' specified");
+                throw new MysqliException(
+                "Invalid fetch mode '$style' specified");
                 break;
         }
         return $row;
@@ -320,9 +319,9 @@ class Mysqli extends AbstractStatement
      * @return bool
      * @throws \Zend\Db\Statement\MysqliException
      */
-    public function nextRowset()
+    public function nextRowset ()
     {
-        throw new MysqliException(__FUNCTION__.'() is not implemented');
+        throw new MysqliException(__FUNCTION__ . '() is not implemented');
     }
 
     /**
@@ -332,9 +331,9 @@ class Mysqli extends AbstractStatement
      *
      * @return int     The number of rows affected.
      */
-    public function rowCount()
+    public function rowCount ()
     {
-        if (!$this->_adapter) {
+        if (! $this->_adapter) {
             return false;
         }
         $mysqli = $this->_adapter->getConnection();

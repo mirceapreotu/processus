@@ -33,6 +33,7 @@ namespace Zend\Crypt\Rsa;
  */
 class Key implements \Countable
 {
+
     /**
      * @var string
      */
@@ -57,7 +58,7 @@ class Key implements \Countable
      *
      * @return resource
      */
-    public function getOpensslKeyResource()
+    public function getOpensslKeyResource ()
     {
         return $this->_opensslKeyResource;
     }
@@ -66,30 +67,31 @@ class Key implements \Countable
      * @return string
      * @throws Zend\Crypt\Exception
      */
-    public function toString()
+    public function toString ()
     {
-        if (!empty($this->_pemString)) {
+        if (! empty($this->_pemString)) {
             return $this->_pemString;
-        } elseif (!empty($this->_certificateString)) {
+        } elseif (! empty($this->_certificateString)) {
             return $this->_certificateString;
         }
-        throw new \Zend\Crypt\Exception('No public key string representation is available');
+        throw new \Zend\Crypt\Exception(
+        'No public key string representation is available');
     }
 
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->toString();
     }
 
-    public function count()
+    public function count ()
     {
         return $this->_details['bits'];
     }
 
-    public function getType()
+    public function getType ()
     {
         return $this->_details['type'];
     }

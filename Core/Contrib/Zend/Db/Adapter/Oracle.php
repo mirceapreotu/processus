@@ -39,6 +39,7 @@ use Zend\Db;
  */
 class Oracle extends AbstractAdapter
 {
+
     /**
      * User-provided configuration.
      *
@@ -47,16 +48,12 @@ class Oracle extends AbstractAdapter
      * username => (string) Connect to the database as this username.
      * password => (string) Password associated with the username.
      * dbname   => Either the name of the local Oracle instance, or the
-     *             name of the entry in tnsnames.ora to which you want to connect.
+     * name of the entry in tnsnames.ora to which you want to connect.
      * persistent => (boolean) Set TRUE to use a persistent connection
      * @var array
      */
-    protected $_config = array(
-        'dbname'       => null,
-        'username'     => null,
-        'password'     => null,
-        'persistent'   => false
-    );
+    protected $_config = array('dbname' => null, 'username' => null, 
+    'password' => null, 'persistent' => false);
 
     /**
      * Keys are UPPERCASE SQL datatypes or the constants
@@ -69,14 +66,12 @@ class Oracle extends AbstractAdapter
      *
      * @var array Associative array of datatypes to values 0, 1, or 2.
      */
-    protected $_numericDataTypes = array(
-        Db\Db::INT_TYPE    => Db\Db::INT_TYPE,
-        Db\Db::BIGINT_TYPE => Db\Db::BIGINT_TYPE,
-        Db\Db::FLOAT_TYPE  => Db\Db::FLOAT_TYPE,
-        'BINARY_DOUBLE'      => Db\Db::FLOAT_TYPE,
-        'BINARY_FLOAT'       => Db\Db::FLOAT_TYPE,
-        'NUMBER'             => Db\Db::FLOAT_TYPE,
-    );
+    protected $_numericDataTypes = array(Db\Db::INT_TYPE => Db\Db::INT_TYPE, 
+    Db\Db::BIGINT_TYPE => Db\Db::BIGINT_TYPE, 
+    Db\Db::FLOAT_TYPE => Db\Db::FLOAT_TYPE, 
+    'BINARY_DOUBLE' => Db\Db::FLOAT_TYPE, 
+    'BINARY_FLOAT' => Db\Db::FLOAT_TYPE, 
+    'NUMBER' => Db\Db::FLOAT_TYPE);
 
     /**
      * @var integer
@@ -104,29 +99,28 @@ class Oracle extends AbstractAdapter
      * @return void
      * @throws \Zend\Db\Adapter\OracleException
      */
-    protected function _connect()
+    protected function _connect ()
     {
         if (is_resource($this->_connection)) {
             // connection already exists
             return;
         }
-
-        if (!extension_loaded('oci8')) {
-            throw new OracleException('The Oci8 extension is required for this adapter but the extension is not loaded');
+        
+        if (! extension_loaded('oci8')) {
+            throw new OracleException(
+            'The Oci8 extension is required for this adapter but the extension is not loaded');
         }
-
+        
         $this->_setExecuteMode(Oci_COMMIT_ON_SUCCESS);
-
+        
         $connectionFuncName = ($this->_config['persistent'] == true) ? 'oci_pconnect' : 'oci_connect';
-
-        $this->_connection = @$connectionFuncName(
-                $this->_config['username'],
-                $this->_config['password'],
-                $this->_config['dbname'],
-                $this->_config['charset']);
-
+        
+        $this->_connection = @$connectionFuncName($this->_config['username'], 
+        $this->_config['password'], $this->_config['dbname'], 
+        $this->_config['charset']);
+        
         // check the connection
-        if (!$this->_connection) {
+        if (! $this->_connection) {
             throw new OracleException(oci_error());
         }
     }
@@ -136,10 +130,10 @@ class Oracle extends AbstractAdapter
      *
      * @return boolean
      */
-    public function isConnected()
+    public function isConnected ()
     {
-        return ((bool) (is_resource($this->_connection)
-                     && get_resource_type($this->_connection) == 'oci8 connection'));
+        return ((bool) (is_resource($this->_connection) &&
+         get_resource_type($this->_connection) == 'oci8 connection'));
     }
 
     /**
@@ -147,7 +141,7 @@ class Oracle extends AbstractAdapter
      *
      * @return void
      */
-    public function closeConnection()
+    public function closeConnection ()
     {
         if ($this->isConnected()) {
             oci_close($this->_connection);
@@ -161,7 +155,7 @@ class Oracle extends AbstractAdapter
      * @param string $lob_as_string
      * @return \Zend\Db\Adapter\Oracle\Oracle
      */
-    public function setLobAsString($lobAsString)
+    public function setLobAsString ($lobAsString)
     {
         $this->_lobAsString = (bool) $lobAsString;
         return $this;
@@ -172,12 +166,12 @@ class Oracle extends AbstractAdapter
      *
      * @return boolean
      */
-    public function getLobAsString()
+    public function getLobAsString ()
     {
         if ($this->_lobAsString === null) {
             // if never set by user, we use driver option if it exists otherwise false
             if (isset($this->_config['driver_options']) &&
-                isset($this->_config['driver_options']['lob_as_string'])) {
+             isset($this->_config['driver_options']['lob_as_string'])) {
                 $this->_lobAsString = (bool) $this->_config['driver_options']['lob_as_string'];
             } else {
                 $this->_lobAsString = false;
@@ -192,11 +186,11 @@ class Oracle extends AbstractAdapter
      * @param string $sql The SQL statement with placeholders.
      * @return \Zend\Db\Statement\Oracle
      */
-    public function prepare($sql)
+    public function prepare ($sql)
     {
         $this->_connect();
         $stmtClass = $this->_defaultStmtClass;
-        if (!class_exists($stmtClass)) {
+        if (! class_exists($stmtClass)) {
             \Zend\Loader::loadClass($stmtClass);
         }
         $stmt = new $stmtClass($this, $sql);
@@ -213,7 +207,7 @@ class Oracle extends AbstractAdapter
      * @param string $value     Raw string
      * @return string           Quoted string
      */
-    protected function _quote($value)
+    protected function _quote ($value)
     {
         if (is_int($value) || is_float($value)) {
             return $value;
@@ -230,7 +224,7 @@ class Oracle extends AbstractAdapter
      * @param boolean $auto If true, heed the AUTO_QUOTE_IDENTIFIERS config option.
      * @return string The quoted identifier and alias.
      */
-    public function quoteTableAs($ident, $alias = null, $auto = false)
+    public function quoteTableAs ($ident, $alias = null, $auto = false)
     {
         // Oracle doesn't allow the 'AS' keyword between the table identifier/expression and alias.
         return $this->_quoteIdentifierAs($ident, $alias, $auto, ' ');
@@ -244,10 +238,11 @@ class Oracle extends AbstractAdapter
      * @param string $sequenceName
      * @return string
      */
-    public function lastSequenceId($sequenceName)
+    public function lastSequenceId ($sequenceName)
     {
         $this->_connect();
-        $sql = 'SELECT '.$this->quoteIdentifier($sequenceName, true).'.CURRVAL FROM dual';
+        $sql = 'SELECT ' . $this->quoteIdentifier($sequenceName, true) .
+         '.CURRVAL FROM dual';
         $value = $this->fetchOne($sql);
         return $value;
     }
@@ -260,10 +255,11 @@ class Oracle extends AbstractAdapter
      * @param string $sequenceName
      * @return string
      */
-    public function nextSequenceId($sequenceName)
+    public function nextSequenceId ($sequenceName)
     {
         $this->_connect();
-        $sql = 'SELECT '.$this->quoteIdentifier($sequenceName, true).'.NEXTVAL FROM dual';
+        $sql = 'SELECT ' . $this->quoteIdentifier($sequenceName, true) .
+         '.NEXTVAL FROM dual';
         $value = $this->fetchOne($sql);
         return $value;
     }
@@ -285,7 +281,7 @@ class Oracle extends AbstractAdapter
      * @param string $primaryKey  OPTIONAL Name of primary key column.
      * @return string
      */
-    public function lastInsertId($tableName = null, $primaryKey = null)
+    public function lastInsertId ($tableName = null, $primaryKey = null)
     {
         if ($tableName !== null) {
             $sequenceName = $tableName;
@@ -295,7 +291,7 @@ class Oracle extends AbstractAdapter
             $sequenceName .= '_seq';
             return $this->lastSequenceId($sequenceName);
         }
-
+        
         // No support for IDENTITY columns; return null
         return null;
     }
@@ -305,7 +301,7 @@ class Oracle extends AbstractAdapter
      *
      * @return array
      */
-    public function listTables()
+    public function listTables ()
     {
         $this->_connect();
         $data = $this->fetchCol('SELECT table_name FROM all_tables');
@@ -342,7 +338,7 @@ class Oracle extends AbstractAdapter
      * @param string $schemaName OPTIONAL
      * @return array
      */
-    public function describeTable($tableName, $schemaName = null)
+    public function describeTable ($tableName, $schemaName = null)
     {
         $version = $this->getServerVersion();
         if (($version === null) || version_compare($version, '9.0.0', '>=')) {
@@ -361,7 +357,7 @@ class Oracle extends AbstractAdapter
             }
             $sql .= ' ORDER BY TC.COLUMN_ID';
         } else {
-            $subSql="SELECT AC.OWNER, AC.TABLE_NAME, ACC.COLUMN_NAME, AC.CONSTRAINT_TYPE, ACC.POSITION
+            $subSql = "SELECT AC.OWNER, AC.TABLE_NAME, ACC.COLUMN_NAME, AC.CONSTRAINT_TYPE, ACC.POSITION
                 from ALL_CONSTRAINTS AC, ALL_CONS_COLUMNS ACC
                   WHERE ACC.CONSTRAINT_NAME = AC.CONSTRAINT_NAME
                     AND ACC.TABLE_NAME = AC.TABLE_NAME
@@ -373,7 +369,7 @@ class Oracle extends AbstractAdapter
                 $subSql .= ' AND UPPER(ACC.OWNER) = UPPER(:SCNAME)';
                 $bind[':SCNAME'] = $schemaName;
             }
-            $sql="SELECT TC.TABLE_NAME, TC.OWNER, TC.COLUMN_NAME, TC.DATA_TYPE,
+            $sql = "SELECT TC.TABLE_NAME, TC.OWNER, TC.COLUMN_NAME, TC.DATA_TYPE,
                     TC.DATA_DEFAULT, TC.NULLABLE, TC.COLUMN_ID, TC.DATA_LENGTH,
                     TC.DATA_SCALE, TC.DATA_PRECISION, CC.CONSTRAINT_TYPE, CC.POSITION
                 FROM ALL_TAB_COLUMNS TC, ($subSql) CC
@@ -384,30 +380,31 @@ class Oracle extends AbstractAdapter
             }
             $sql .= ' ORDER BY TC.COLUMN_ID';
         }
-
+        
         $stmt = $this->query($sql, $bind);
-
+        
         /**
          * Use FETCH_NUM so we are not dependent on the CASE attribute of the Pdo connection
          */
         $result = $stmt->fetchAll(Db\Db::FETCH_NUM);
-
-        $table_name      = 0;
-        $owner           = 1;
-        $column_name     = 2;
-        $data_type       = 3;
-        $data_default    = 4;
-        $nullable        = 5;
-        $column_id       = 6;
-        $data_length     = 7;
-        $data_scale      = 8;
-        $data_precision  = 9;
+        
+        $table_name = 0;
+        $owner = 1;
+        $column_name = 2;
+        $data_type = 3;
+        $data_default = 4;
+        $nullable = 5;
+        $column_id = 6;
+        $data_length = 7;
+        $data_scale = 8;
+        $data_precision = 9;
         $constraint_type = 10;
-        $position        = 11;
-
+        $position = 11;
+        
         $desc = array();
         foreach ($result as $key => $row) {
-            list ($primary, $primaryPosition, $identity) = array(false, null, false);
+            list ($primary, $primaryPosition, $identity) = array(false, null, 
+            false);
             if ($row[$constraint_type] == 'P') {
                 $primary = true;
                 $primaryPosition = $row[$position];
@@ -417,21 +414,19 @@ class Oracle extends AbstractAdapter
                 $identity = false;
             }
             $desc[$this->foldCase($row[$column_name])] = array(
-                'SCHEMA_NAME'      => $this->foldCase($row[$owner]),
-                'TABLE_NAME'       => $this->foldCase($row[$table_name]),
-                'COLUMN_NAME'      => $this->foldCase($row[$column_name]),
-                'COLUMN_POSITION'  => $row[$column_id],
-                'DATA_TYPE'        => $row[$data_type],
-                'DEFAULT'          => $row[$data_default],
-                'NULLABLE'         => (bool) ($row[$nullable] == 'Y'),
-                'LENGTH'           => $row[$data_length],
-                'SCALE'            => $row[$data_scale],
-                'PRECISION'        => $row[$data_precision],
-                'UNSIGNED'         => null, // @todo
-                'PRIMARY'          => $primary,
-                'PRIMARY_POSITION' => $primaryPosition,
-                'IDENTITY'         => $identity
-            );
+            'SCHEMA_NAME' => $this->foldCase($row[$owner]), 
+            'TABLE_NAME' => $this->foldCase($row[$table_name]), 
+            'COLUMN_NAME' => $this->foldCase($row[$column_name]), 
+            'COLUMN_POSITION' => $row[$column_id], 
+            'DATA_TYPE' => $row[$data_type], 
+            'DEFAULT' => $row[$data_default], 
+            'NULLABLE' => (bool) ($row[$nullable] == 'Y'), 
+            'LENGTH' => $row[$data_length], 
+            'SCALE' => $row[$data_scale], 
+            'PRECISION' => $row[$data_precision], 'UNSIGNED' => null,  // @todo
+            'PRIMARY' => $primary, 
+            'PRIMARY_POSITION' => $primaryPosition, 
+            'IDENTITY' => $identity);
         }
         return $desc;
     }
@@ -441,7 +436,7 @@ class Oracle extends AbstractAdapter
      *
      * @return void
      */
-    protected function _beginTransaction()
+    protected function _beginTransaction ()
     {
         $this->_setExecuteMode(Oci_DEFAULT);
     }
@@ -452,9 +447,9 @@ class Oracle extends AbstractAdapter
      * @return void
      * @throws \Zend\Db\Adapter\OracleException
      */
-    protected function _commit()
+    protected function _commit ()
     {
-        if (!oci_commit($this->_connection)) {
+        if (! oci_commit($this->_connection)) {
             throw new OracleException(oci_error($this->_connection));
         }
         $this->_setExecuteMode(Oci_COMMIT_ON_SUCCESS);
@@ -466,9 +461,9 @@ class Oracle extends AbstractAdapter
      * @return void
      * @throws \Zend\Db\Adapter\OracleException
      */
-    protected function _rollBack()
+    protected function _rollBack ()
     {
-        if (!oci_rollback($this->_connection)) {
+        if (! oci_rollback($this->_connection)) {
             throw new OracleException(oci_error($this->_connection));
         }
         $this->_setExecuteMode(Oci_COMMIT_ON_SUCCESS);
@@ -483,17 +478,18 @@ class Oracle extends AbstractAdapter
      * @return void
      * @throws \Zend\Db\Adapter\OracleException
      */
-    public function setFetchMode($mode)
+    public function setFetchMode ($mode)
     {
         switch ($mode) {
-            case Db\Db::FETCH_NUM:   // seq array
+            case Db\Db::FETCH_NUM: // seq array
             case Db\Db::FETCH_ASSOC: // assoc array
-            case Db\Db::FETCH_BOTH:  // seq+assoc array
-            case Db\Db::FETCH_OBJ:   // object
+            case Db\Db::FETCH_BOTH: // seq+assoc array
+            case Db\Db::FETCH_OBJ: // object
                 $this->_fetchMode = $mode;
                 break;
             case Db\Db::FETCH_BOUND: // bound to PHP variable
-                throw new OracleException('FETCH_BOUND is not supported yet');
+                throw new OracleException(
+                'FETCH_BOUND is not supported yet');
                 break;
             default:
                 throw new OracleException("Invalid fetch mode '$mode' specified");
@@ -510,18 +506,19 @@ class Oracle extends AbstractAdapter
      * @return string
      * @throws \Zend\Db\Adapter\OracleException
      */
-    public function limit($sql, $count, $offset = 0)
+    public function limit ($sql, $count, $offset = 0)
     {
         $count = intval($count);
         if ($count <= 0) {
             throw new OracleException("LIMIT argument count=$count is not valid");
         }
-
+        
         $offset = intval($offset);
         if ($offset < 0) {
-            throw new OracleException("LIMIT argument offset=$offset is not valid");
+            throw new OracleException(
+            "LIMIT argument offset=$offset is not valid");
         }
-
+        
         /**
          * Oracle does not implement the LIMIT clause as some RDBMS do.
          * We have to simulate it with subqueries and ROWNUM.
@@ -532,10 +529,12 @@ class Oracle extends AbstractAdapter
             FROM (
                 SELECT z1.*, ROWNUM AS \"zend_db_rownum\"
                 FROM (
-                    " . $sql . "
+                    " . $sql .
+         "
                 ) z1
             ) z2
-            WHERE z2.\"zend_db_rownum\" BETWEEN " . ($offset+1) . " AND " . ($offset+$count);
+            WHERE z2.\"zend_db_rownum\" BETWEEN " .
+         ($offset + 1) . " AND " . ($offset + $count);
         return $limit_sql;
     }
 
@@ -543,16 +542,17 @@ class Oracle extends AbstractAdapter
      * @param integer $mode
      * @throws \Zend\Db\Adapter\OracleException
      */
-    private function _setExecuteMode($mode)
+    private function _setExecuteMode ($mode)
     {
-        switch($mode) {
+        switch ($mode) {
             case Oci_COMMIT_ON_SUCCESS:
             case Oci_DEFAULT:
             case Oci_DESCRIBE_ONLY:
                 $this->_execute_mode = $mode;
                 break;
             default:
-                throw new OracleException("Invalid execution mode '$mode' specified");
+                throw new OracleException(
+                "Invalid execution mode '$mode' specified");
                 break;
         }
     }
@@ -560,7 +560,7 @@ class Oracle extends AbstractAdapter
     /**
      * @return int
      */
-    public function _getExecuteMode()
+    public function _getExecuteMode ()
     {
         return $this->_execute_mode;
     }
@@ -571,7 +571,7 @@ class Oracle extends AbstractAdapter
      * @param string $type 'positional' or 'named'
      * @return bool
      */
-    public function supportsParameters($type)
+    public function supportsParameters ($type)
     {
         switch ($type) {
             case 'named':
@@ -587,13 +587,14 @@ class Oracle extends AbstractAdapter
      *
      * @return string
      */
-    public function getServerVersion()
+    public function getServerVersion ()
     {
         $this->_connect();
         $version = oci_server_version($this->_connection);
         if ($version !== false) {
             $matches = null;
-            if (preg_match('/((?:[0-9]{1,2}\.){1,3}[0-9]{1,2})/', $version, $matches)) {
+            if (preg_match('/((?:[0-9]{1,2}\.){1,3}[0-9]{1,2})/', $version, 
+            $matches)) {
                 return $matches[1];
             } else {
                 return null;

@@ -48,7 +48,7 @@ class Feed extends \Zend\GData\Feed
      */
     protected $_entryClassName = 'Zend\GData\Geo\Entry';
 
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(Geo::$namespaces);
         parent::__construct($element);

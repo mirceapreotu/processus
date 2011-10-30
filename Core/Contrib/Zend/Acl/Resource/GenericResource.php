@@ -34,6 +34,7 @@ use Zend\Acl\Resource;
  */
 class GenericResource implements Resource
 {
+
     /**
      * Unique id of Resource
      *
@@ -47,7 +48,7 @@ class GenericResource implements Resource
      * @param  string $resourceId
      * @return void
      */
-    public function __construct($resourceId)
+    public function __construct ($resourceId)
     {
         $this->_resourceId = (string) $resourceId;
     }
@@ -57,7 +58,7 @@ class GenericResource implements Resource
      *
      * @return string
      */
-    public function getResourceId()
+    public function getResourceId ()
     {
         return $this->_resourceId;
     }
@@ -68,7 +69,7 @@ class GenericResource implements Resource
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getResourceId();
     }

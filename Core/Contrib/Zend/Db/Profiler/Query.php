@@ -70,7 +70,7 @@ class Query
     /**
      * @var array
      */
-
+    
     /**
      * Class constructor.  A query is about to be started, save the query text ($query) and its
      * type (one of the Zend_Db_Profiler::* constants).
@@ -79,7 +79,7 @@ class Query
      * @param  integer $queryType
      * @return void
      */
-    public function __construct($query, $queryType)
+    public function __construct ($query, $queryType)
     {
         $this->_query = $query;
         $this->_queryType = $queryType;
@@ -91,7 +91,7 @@ class Query
      * Clone handler for the query object.
      * @return void
      */
-    public function __clone()
+    public function __clone ()
     {
         $this->_boundParams = array();
         $this->_endedMicrotime = null;
@@ -106,7 +106,7 @@ class Query
      *
      * @return void
      */
-    public function start()
+    public function start ()
     {
         $this->_startedMicrotime = microtime(true);
     }
@@ -116,7 +116,7 @@ class Query
      *
      * @return void
      */
-    public function end()
+    public function end ()
     {
         $this->_endedMicrotime = microtime(true);
     }
@@ -126,7 +126,7 @@ class Query
      *
      * @return boolean
      */
-    public function hasEnded()
+    public function hasEnded ()
     {
         return $this->_endedMicrotime !== null;
     }
@@ -136,7 +136,7 @@ class Query
      *
      * @return string
      */
-    public function getQuery()
+    public function getQuery ()
     {
         return $this->_query;
     }
@@ -146,7 +146,7 @@ class Query
      *
      * @return integer
      */
-    public function getQueryType()
+    public function getQueryType ()
     {
         return $this->_queryType;
     }
@@ -156,7 +156,7 @@ class Query
      * @param mixed $variable
      * @return void
      */
-    public function bindParam($param, $variable)
+    public function bindParam ($param, $variable)
     {
         $this->_boundParams[$param] = $variable;
     }
@@ -165,7 +165,7 @@ class Query
      * @param array $param
      * @return void
      */
-    public function bindParams(array $params)
+    public function bindParams (array $params)
     {
         if (array_key_exists(0, $params)) {
             array_unshift($params, null);
@@ -179,7 +179,7 @@ class Query
     /**
      * @return array
      */
-    public function getQueryParams()
+    public function getQueryParams ()
     {
         return $this->_boundParams;
     }
@@ -190,12 +190,12 @@ class Query
      *
      * @return float|false
      */
-    public function getElapsedSecs()
+    public function getElapsedSecs ()
     {
         if (null === $this->_endedMicrotime) {
             return false;
         }
-
+        
         return $this->_endedMicrotime - $this->_startedMicrotime;
     }
 }

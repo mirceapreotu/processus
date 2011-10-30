@@ -30,6 +30,7 @@ namespace Zend\Cache;
  */
 interface Frontend
 {
+
     /**
      * Set a frontend option
      *
@@ -37,7 +38,7 @@ interface Frontend
      * @param  mixed $value
      * @return void
      */
-    public function setOption($name, $value);
+    public function setOption ($name, $value);
 
     /**
      * Retrieve an option value
@@ -45,7 +46,7 @@ interface Frontend
      * @param  string $name
      * @return mixed
      */
-    public function getOption($name);
+    public function getOption ($name);
 
     /**
      * Set cache lifetime
@@ -53,7 +54,7 @@ interface Frontend
      * @param  int $newLifetime
      * @return void
      */
-    public function setLifetime($newLifetime);
+    public function setLifetime ($newLifetime);
 
     /**
      * Set the cache backend
@@ -61,14 +62,14 @@ interface Frontend
      * @param  Backend $backendObject
      * @return void
      */
-    public function setBackend(Backend $backendObject);
+    public function setBackend (Backend $backendObject);
 
     /**
      * Retrieve the cache backend
      *
      * @return Backend
      */
-    public function getBackend();
+    public function getBackend ();
 
     /**
      * Load a cached item
@@ -78,7 +79,8 @@ interface Frontend
      * @param  bool $doNotUnserialize
      * @return mixed
      */
-    public function load($id, $doNotTestCacheValidity = false, $doNotUnserialize = false);
+    public function load ($id, $doNotTestCacheValidity = false, 
+    $doNotUnserialize = false);
 
     /**
      * Test if a cache exists for a given identifier
@@ -86,7 +88,7 @@ interface Frontend
      * @param  string $id
      * @return bool
      */
-    public function test($id);
+    public function test ($id);
 
     /**
      * Save some data in a cache
@@ -99,7 +101,8 @@ interface Frontend
      * @throws \Zend\Cache\Exception
      * @return boolean True if no problem
      */
-    public function save($data, $id = null, $tags = array(), $specificLifetime = false, $priority = 8);
+    public function save ($data, $id = null, $tags = array(), $specificLifetime = false, 
+    $priority = 8);
 
     /**
      * Remove a cached item
@@ -107,7 +110,7 @@ interface Frontend
      * @param  string $id
      * @return void
      */
-    public function remove($id);
+    public function remove ($id);
 
     /**
      * Clean the cache of multiple or all items
@@ -116,7 +119,7 @@ interface Frontend
      * @param  array $tags
      * @return void
      */
-    public function clean($mode = 'all', $tags = array());
+    public function clean ($mode = 'all', $tags = array());
 
     /**
      * Retrieve all cache identifiers matching ALL the given tags
@@ -124,7 +127,7 @@ interface Frontend
      * @param  array $tags
      * @return array
      */
-    public function getIdsMatchingTags($tags = array());
+    public function getIdsMatchingTags ($tags = array());
 
     /**
      * Get cache identifiers matching NONE of the given tags
@@ -132,7 +135,7 @@ interface Frontend
      * @param  array $tags
      * @return array
      */
-    public function getIdsNotMatchingTags($tags = array());
+    public function getIdsNotMatchingTags ($tags = array());
 
     /**
      * Get cache identifiers matching ANY of the given tags
@@ -140,28 +143,28 @@ interface Frontend
      * @param  array $tags
      * @return array
      */
-    public function getIdsMatchingAnyTags($tags = array());
+    public function getIdsMatchingAnyTags ($tags = array());
 
     /**
      * Get all cache identifiers
      *
      * @return array
      */
-    public function getIds();
+    public function getIds ();
 
     /**
      * Get all tags
      *
      * @return array
      */
-    public function getTags();
+    public function getTags ();
 
     /**
      * Retrieve the filling percentage of the backend storage
      *
      * @return int
      */
-    public function getFillingPercentage();
+    public function getFillingPercentage ();
 
     /**
      * Retrieve all metadata for a given cache identifier
@@ -169,7 +172,7 @@ interface Frontend
      * @param  string $id
      * @return array
      */
-    public function getMetadatas($id);
+    public function getMetadatas ($id);
 
     /**
      * Extend the lifetime of a given cache identifier
@@ -178,5 +181,5 @@ interface Frontend
      * @param  int $extraLifetime
      * @return bool
      */
-    public function touch($id, $extraLifetime);
+    public function touch ($id, $extraLifetime);
 }

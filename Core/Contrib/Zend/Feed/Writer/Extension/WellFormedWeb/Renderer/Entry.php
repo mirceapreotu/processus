@@ -17,20 +17,20 @@
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
- 
+
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Writer\Extension\WellFormedWeb\Renderer;
 use Zend\Feed\Writer\Extension;
 
 /**
-* @uses \Zend\Feed\Writer\Extension\RendererAbstract
-* @category Zend
-* @package Zend_Feed_Writer
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @uses \Zend\Feed\Writer\Extension\RendererAbstract
+ * @category Zend
+ * @package Zend_Feed_Writer
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 class Entry extends Extension\AbstractRenderer
 {
 
@@ -42,13 +42,13 @@ class Entry extends Extension\AbstractRenderer
      * @var bool
      */
     protected $_called = false;
-    
+
     /**
      * Render entry
      * 
      * @return void
      */
-    public function render()
+    public function render ()
     {
         if (strtolower($this->getType()) == 'atom') {
             return; // RSS 2.0 only
@@ -58,18 +58,18 @@ class Entry extends Extension\AbstractRenderer
             $this->_appendNamespaces();
         }
     }
-    
+
     /**
      * Append entry namespaces
      * 
      * @return void
      */
-    protected function _appendNamespaces()
+    protected function _appendNamespaces ()
     {
-        $this->getRootElement()->setAttribute('xmlns:wfw',
-            'http://wellformedweb.org/CommentAPI/');  
+        $this->getRootElement()->setAttribute('xmlns:wfw', 
+        'http://wellformedweb.org/CommentAPI/');
     }
-    
+
     /**
      * Set entry comment feed links
      * 
@@ -77,10 +77,11 @@ class Entry extends Extension\AbstractRenderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setCommentFeedLinks(\DOMDocument $dom, \DOMElement $root)
+    protected function _setCommentFeedLinks (\DOMDocument $dom, 
+    DOMElement $root)
     {
         $links = $this->getDataContainer()->getCommentFeedLinks();
-        if (!$links || empty($links)) {
+        if (! $links || empty($links)) {
             return;
         }
         foreach ($links as $link) {

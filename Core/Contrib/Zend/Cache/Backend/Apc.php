@@ -36,11 +36,13 @@ use Zend\Cache;
  */
 class Apc extends AbstractBackend implements ExtendedBackend
 {
+
     /**
      * Log message
      */
     const TAGS_UNSUPPORTED_BY_CLEAN_OF_APC_BACKEND = 'Zend\\Cache\\Backend\\Apc::clean() : tags are unsupported by the Apc backend';
-    const TAGS_UNSUPPORTED_BY_SAVE_OF_APC_BACKEND =  'Zend\\Cache\\Backend\\Apc::save() : tags are unsupported by the Apc backend';
+
+    const TAGS_UNSUPPORTED_BY_SAVE_OF_APC_BACKEND = 'Zend\\Cache\\Backend\\Apc::save() : tags are unsupported by the Apc backend';
 
     /**
      * Constructor
@@ -49,10 +51,11 @@ class Apc extends AbstractBackend implements ExtendedBackend
      * @throws \Zend\Cache\Exception
      * @return void
      */
-    public function __construct(array $options = array())
+    public function __construct (array $options = array())
     {
-        if (!extension_loaded('apc')) {
-            Cache\Cache::throwException('The apc extension must be loaded for using this backend !');
+        if (! extension_loaded('apc')) {
+            Cache\Cache::throwException(
+            'The apc extension must be loaded for using this backend !');
         }
         parent::__construct($options);
     }
@@ -66,7 +69,7 @@ class Apc extends AbstractBackend implements ExtendedBackend
      * @param  boolean $doNotTestCacheValidity if set to true, the cache validity won't be tested
      * @return string cached datas (or false)
      */
-    public function load($id, $doNotTestCacheValidity = false)
+    public function load ($id, $doNotTestCacheValidity = false)
     {
         $tmp = apc_fetch($id);
         if (is_array($tmp)) {
@@ -81,7 +84,7 @@ class Apc extends AbstractBackend implements ExtendedBackend
      * @param  string $id cache id
      * @return mixed false (a cache is not available) or "last modified" timestamp (int) of the available cache record
      */
-    public function test($id)
+    public function test ($id)
     {
         $tmp = apc_fetch($id);
         if (is_array($tmp)) {
@@ -102,7 +105,7 @@ class Apc extends AbstractBackend implements ExtendedBackend
      * @param int $specificLifetime if != false, set a specific lifetime for this cache record (null => infinite lifetime)
      * @return boolean true if no problem
      */
-    public function save($data, $id, $tags = array(), $specificLifetime = false)
+    public function save ($data, $id, $tags = array(), $specificLifetime = false)
     {
         $lifetime = $this->getLifetime($specificLifetime);
         $result = apc_store($id, array($data, time(), $lifetime), $lifetime);
@@ -118,7 +121,7 @@ class Apc extends AbstractBackend implements ExtendedBackend
      * @param  string $id cache id
      * @return boolean true if no problem
      */
-    public function remove($id)
+    public function remove ($id)
     {
         return apc_delete($id);
     }
@@ -138,14 +141,15 @@ class Apc extends AbstractBackend implements ExtendedBackend
      * @throws \Zend\Cache\Exception
      * @return boolean true if no problem
      */
-    public function clean($mode = Cache\CacheCache\Cache::CLEANING_MODE_ALL, $tags = array())
+    public function clean ($mode = Cache\CacheCache\Cache::CLEANING_MODE_ALL, $tags = array())
     {
         switch ($mode) {
             case Cache\Cache::CLEANING_MODE_ALL:
                 return apc_clear_cache('user');
                 break;
             case Cache\Cache::CLEANING_MODE_OLD:
-                $this->_log("Zend_Cache_Backend_Apc::clean() : CLEANING_MODE_OLD is unsupported by the Apc backend");
+                $this->_log(
+                "Zend_Cache_Backend_Apc::clean() : CLEANING_MODE_OLD is unsupported by the Apc backend");
                 break;
             case Cache\Cache::CLEANING_MODE_MATCHING_TAG:
             case Cache\Cache::CLEANING_MODE_NOT_MATCHING_TAG:
@@ -166,7 +170,7 @@ class Apc extends AbstractBackend implements ExtendedBackend
      * @deprecated
      * @return boolean
      */
-    public function isAutomaticCleaningAvailable()
+    public function isAutomaticCleaningAvailable ()
     {
         return false;
     }
@@ -177,11 +181,11 @@ class Apc extends AbstractBackend implements ExtendedBackend
      * @throws \Zend\Cache\Exception
      * @return int integer between 0 and 100
      */
-    public function getFillingPercentage()
+    public function getFillingPercentage ()
     {
         $mem = apc_sma_info(true);
-        $memSize    = $mem['num_seg'] * $mem['seg_size'];
-        $memAvailable= $mem['avail_mem'];
+        $memSize = $mem['num_seg'] * $mem['seg_size'];
+        $memAvailable = $mem['avail_mem'];
         $memUsed = $memSize - $memAvailable;
         if ($memSize == 0) {
             Cache\Cache::throwException('can\'t get apc memory size');
@@ -197,7 +201,7 @@ class Apc extends AbstractBackend implements ExtendedBackend
      *
      * @return array array of stored tags (string)
      */
-    public function getTags()
+    public function getTags ()
     {
         $this->_log(self::TAGS_UNSUPPORTED_BY_SAVE_OF_APC_BACKEND);
         return array();
@@ -211,7 +215,7 @@ class Apc extends AbstractBackend implements ExtendedBackend
      * @param array $tags array of tags
      * @return array array of matching cache ids (string)
      */
-    public function getIdsMatchingTags($tags = array())
+    public function getIdsMatchingTags ($tags = array())
     {
         $this->_log(self::TAGS_UNSUPPORTED_BY_SAVE_OF_APC_BACKEND);
         return array();
@@ -225,7 +229,7 @@ class Apc extends AbstractBackend implements ExtendedBackend
      * @param array $tags array of tags
      * @return array array of not matching cache ids (string)
      */
-    public function getIdsNotMatchingTags($tags = array())
+    public function getIdsNotMatchingTags ($tags = array())
     {
         $this->_log(self::TAGS_UNSUPPORTED_BY_SAVE_OF_APC_BACKEND);
         return array();
@@ -239,7 +243,7 @@ class Apc extends AbstractBackend implements ExtendedBackend
      * @param array $tags array of tags
      * @return array array of any matching cache ids (string)
      */
-    public function getIdsMatchingAnyTags($tags = array())
+    public function getIdsMatchingAnyTags ($tags = array())
     {
         $this->_log(self::TAGS_UNSUPPORTED_BY_SAVE_OF_APC_BACKEND);
         return array();
@@ -250,7 +254,7 @@ class Apc extends AbstractBackend implements ExtendedBackend
      *
      * @return array array of stored cache ids (string)
      */
-    public function getIds()
+    public function getIds ()
     {
         $res = array();
         $array = apc_cache_info('user', false);
@@ -272,23 +276,20 @@ class Apc extends AbstractBackend implements ExtendedBackend
      * @param string $id cache id
      * @return array array of metadatas (false if the cache id is not found)
      */
-    public function getMetadatas($id)
+    public function getMetadatas ($id)
     {
         $tmp = apc_fetch($id);
         if (is_array($tmp)) {
             $data = $tmp[0];
             $mtime = $tmp[1];
-            if (!isset($tmp[2])) {
+            if (! isset($tmp[2])) {
                 // because this record is only with 1.7 release
                 // if old cache records are still there...
                 return false;
             }
             $lifetime = $tmp[2];
-            return array(
-                'expire' => $mtime + $lifetime,
-                'tags' => array(),
-                'mtime' => $mtime
-            );
+            return array('expire' => $mtime + $lifetime, 'tags' => array(), 
+            'mtime' => $mtime);
         }
         return false;
     }
@@ -300,20 +301,20 @@ class Apc extends AbstractBackend implements ExtendedBackend
      * @param int $extraLifetime
      * @return boolean true if ok
      */
-    public function touch($id, $extraLifetime)
+    public function touch ($id, $extraLifetime)
     {
         $tmp = apc_fetch($id);
         if (is_array($tmp)) {
             $data = $tmp[0];
             $mtime = $tmp[1];
-            if (!isset($tmp[2])) {
+            if (! isset($tmp[2])) {
                 // because this record is only with 1.7 release
                 // if old cache records are still there...
                 return false;
             }
             $lifetime = $tmp[2];
             $newLifetime = $lifetime - (time() - $mtime) + $extraLifetime;
-            if ($newLifetime <=0) {
+            if ($newLifetime <= 0) {
                 return false;
             }
             apc_store($id, array($data, time(), $newLifetime), $newLifetime);
@@ -329,23 +330,18 @@ class Apc extends AbstractBackend implements ExtendedBackend
      * - automatic_cleaning (is automating cleaning necessary)
      * - tags (are tags supported)
      * - expired_read (is it possible to read expired cache records
-     *                 (for doNotTestCacheValidity option for example))
+     * (for doNotTestCacheValidity option for example))
      * - priority does the backend deal with priority when saving
      * - infinite_lifetime (is infinite lifetime can work with this backend)
      * - get_list (is it possible to get the list of cache ids and the complete list of tags)
      *
      * @return array associative of with capabilities
      */
-    public function getCapabilities()
+    public function getCapabilities ()
     {
-        return array(
-            'automatic_cleaning' => false,
-            'tags' => false,
-            'expired_read' => false,
-            'priority' => false,
-            'infinite_lifetime' => false,
-            'get_list' => true
-        );
+        return array('automatic_cleaning' => false, 'tags' => false, 
+        'expired_read' => false, 'priority' => false, 
+        'infinite_lifetime' => false, 'get_list' => true);
     }
 
 }

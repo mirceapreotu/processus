@@ -21,8 +21,7 @@
 
 namespace Zend\Config\Writer;
 
-use Zend\Config\Yaml as YamlConfig,
-    Zend\Config\Exception;
+use Zend\Config\Yaml as YamlConfig, Zend\Config\Exception;
 
 /**
  * @category   Zend
@@ -32,6 +31,7 @@ use Zend\Config\Yaml as YamlConfig,
  */
 class Yaml extends AbstractFileWriter
 {
+
     /**
      * What to call when we need to decode some YAML?
      *
@@ -44,7 +44,7 @@ class Yaml extends AbstractFileWriter
      *
      * @return callable
      */
-    public function getYamlEncoder()
+    public function getYamlEncoder ()
     {
         return $this->_yamlEncoder;
     }
@@ -55,12 +55,13 @@ class Yaml extends AbstractFileWriter
      * @param  callable $yamlEncoder the decoder to set
      * @return Zend_Config_Yaml
      */
-    public function setYamlEncoder($yamlEncoder)
+    public function setYamlEncoder ($yamlEncoder)
     {
-        if (!is_callable($yamlEncoder)) {
-            throw new Exception\InvalidArgumentException('Invalid parameter to setYamlEncoder - must be callable');
+        if (! is_callable($yamlEncoder)) {
+            throw new Exception\InvalidArgumentException(
+            'Invalid parameter to setYamlEncoder - must be callable');
         }
-
+        
         $this->_yamlEncoder = $yamlEncoder;
         return $this;
     }
@@ -71,31 +72,33 @@ class Yaml extends AbstractFileWriter
      * @since 1.10
      * @return string
      */
-    public function render()
+    public function render ()
     {
-        $data        = $this->_config->toArray();
+        $data = $this->_config->toArray();
         $sectionName = $this->_config->getSectionName();
-        $extends     = $this->_config->getExtends();
-
+        $extends = $this->_config->getExtends();
+        
         if (is_string($sectionName)) {
             $data = array($sectionName => $data);
         }
-
+        
         foreach ($extends as $section => $parentSection) {
             $data[$section][YamlConfig::EXTENDS_NAME] = $parentSection;
         }
-
+        
         // Ensure that each "extends" section actually exists
         foreach ($data as $section => $sectionData) {
-            if (is_array($sectionData) && isset($sectionData[YamlConfig::EXTENDS_NAME])) {
+            if (is_array($sectionData) &&
+             isset($sectionData[YamlConfig::EXTENDS_NAME])) {
                 $sectionExtends = $sectionData[YamlConfig::EXTENDS_NAME];
-                if (!isset($data[$sectionExtends])) {
+                if (! isset($data[$sectionExtends])) {
                     // Remove "extends" declaration if section does not exist
-                    unset($data[$section][YamlConfig::EXTENDS_NAME]);
+                    unset(
+                    $data[$section][YamlConfig::EXTENDS_NAME]);
                 }
             }
         }
-
+        
         return call_user_func($this->getYamlEncoder(), $data);
     }
 
@@ -107,7 +110,7 @@ class Yaml extends AbstractFileWriter
      * @param array $data YAML data
      * @return string
      */
-    public static function encode($data)
+    public static function encode ($data)
     {
         return self::_encodeYaml(0, $data);
     }
@@ -119,19 +122,20 @@ class Yaml extends AbstractFileWriter
      * @param array $data Data to encode
      * @return string
      */
-    protected static function _encodeYaml($indent, $data)
+    protected static function _encodeYaml ($indent, $data)
     {
         reset($data);
         $result = "";
         $numeric = is_numeric(key($data));
-
-        foreach($data as $key => $value) {
-            if(is_array($value)) {
-                $encoded = "\n".self::_encodeYaml($indent+1, $value);
+        
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $encoded = "\n" . self::_encodeYaml($indent + 1, $value);
             } else {
-                $encoded = (string)$value."\n";
+                $encoded = (string) $value . "\n";
             }
-            $result .= str_repeat("  ", $indent).($numeric?"- ":"$key: ").$encoded;
+            $result .= str_repeat("  ", $indent) . ($numeric ? "- " : "$key: ") .
+             $encoded;
         }
         return $result;
     }

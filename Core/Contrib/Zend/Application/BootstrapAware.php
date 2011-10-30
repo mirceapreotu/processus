@@ -35,18 +35,19 @@ namespace Zend\Application;
  */
 interface BootstrapAware
 {
+
     /**
      * Attach bootstrap instance
      * 
      * @param  Bootstrapper $bootstrap 
      * @return BootstrapAware
      */
-    public function setBootstrap(Bootstrapper $bootstrap);
+    public function setBootstrap (Bootstrapper $bootstrap);
 
     /**
      * Retrieve attached bootstrap instance
      * 
      * @return null|Bootstrapper
      */
-    public function getBootstrap();
+    public function getBootstrap ();
 }

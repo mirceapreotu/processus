@@ -35,12 +35,13 @@ namespace Zend\Barcode\Object;
  */
 class Error extends AbstractObject
 {
+
     /**
      * All texts are accepted
      * @param string $value
      * @return boolean
      */
-    public function validateText($value)
+    public function validateText ($value)
     {
         return true;
     }
@@ -49,7 +50,7 @@ class Error extends AbstractObject
      * Height is forced
      * @return integer
      */
-    public function getHeight($recalculate = false)
+    public function getHeight ($recalculate = false)
     {
         return 40;
     }
@@ -58,7 +59,7 @@ class Error extends AbstractObject
      * Width is forced
      * @return integer
      */
-    public function getWidth($recalculate = false)
+    public function getWidth ($recalculate = false)
     {
         return 400;
     }
@@ -68,11 +69,11 @@ class Error extends AbstractObject
      * and draw the error message
      * @return array
      */
-    public function draw()
+    public function draw ()
     {
         $this->_instructions = array();
-        $this->_addText('ERROR:', 10, array(5 , 18), $this->_font, 0, 'left');
-        $this->_addText($this->_text, 10, array(5 , 32), $this->_font, 0, 'left');
+        $this->_addText('ERROR:', 10, array(5, 18), $this->_font, 0, 'left');
+        $this->_addText($this->_text, 10, array(5, 32), $this->_font, 0, 'left');
         return $this->_instructions;
     }
 
@@ -80,23 +81,20 @@ class Error extends AbstractObject
      * For compatibility reason
      * @return void
      */
-    protected function _prepareBarcode()
-    {
-    }
+    protected function _prepareBarcode ()
+    {}
 
     /**
      * For compatibility reason
      * @return void
      */
-    protected function _checkParams()
-    {
-    }
+    protected function _checkParams ()
+    {}
 
     /**
      * For compatibility reason
      * @return void
      */
-    protected function _calculateBarcodeWidth()
-    {
-    }
+    protected function _calculateBarcodeWidth ()
+    {}
 }

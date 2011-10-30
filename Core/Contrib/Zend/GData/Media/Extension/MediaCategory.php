@@ -39,12 +39,14 @@ class MediaCategory extends \Zend\GData\Extension
 {
 
     protected $_rootElement = 'category';
+
     protected $_rootNamespace = 'media';
 
     /**
      * @var string
      */
     protected $_scheme = null;
+
     protected $_label = null;
 
     /**
@@ -54,7 +56,7 @@ class MediaCategory extends \Zend\GData\Extension
      * @param string $scheme    URI that identifies the categorization scheme
      * @param string $label     Human-readable label to be displayed in applications
      */
-    public function __construct($text = null, $scheme = null, $label = null)
+    public function __construct ($text = null, $scheme = null, $label = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Media::$namespaces);
         parent::__construct();
@@ -73,7 +75,7 @@ class MediaCategory extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_scheme !== null) {
@@ -92,17 +94,17 @@ class MediaCategory extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'scheme':
-            $this->_scheme = $attribute->nodeValue;
-            break;
-        case 'label':
-            $this->_label = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'scheme':
+                $this->_scheme = $attribute->nodeValue;
+                break;
+            case 'label':
+                $this->_label = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -112,7 +114,7 @@ class MediaCategory extends \Zend\GData\Extension
      *
      * @return string URI that identifies the categorization scheme
      */
-    public function getScheme()
+    public function getScheme ()
     {
         return $this->_scheme;
     }
@@ -121,7 +123,7 @@ class MediaCategory extends \Zend\GData\Extension
      * @param string $value     URI that identifies the categorization scheme
      * @return \Zend\GData\Media\Extension\MediaCategory Provides a fluent interface
      */
-    public function setScheme($value)
+    public function setScheme ($value)
     {
         $this->_scheme = $value;
         return $this;
@@ -130,7 +132,7 @@ class MediaCategory extends \Zend\GData\Extension
     /**
      * @return string Human-readable label to be displayed in applications
      */
-    public function getLabel()
+    public function getLabel ()
     {
         return $this->_label;
     }
@@ -139,7 +141,7 @@ class MediaCategory extends \Zend\GData\Extension
      * @param string $value     Human-readable label to be displayed in applications
      * @return \Zend\GData\Media\Extension\MediaCategory Provides a fluent interface
      */
-    public function setLabel($value)
+    public function setLabel ($value)
     {
         $this->_label = $value;
         return $this;

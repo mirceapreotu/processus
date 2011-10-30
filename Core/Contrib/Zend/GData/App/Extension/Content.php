@@ -38,15 +38,16 @@ class Content extends Text
 {
 
     protected $_rootElement = 'content';
+
     protected $_src = null;
 
-    public function __construct($text = null, $type = 'text', $src = null)
+    public function __construct ($text = null, $type = 'text', $src = null)
     {
         parent::__construct($text, $type);
         $this->_src = $src;
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_src !== null) {
@@ -55,21 +56,21 @@ class Content extends Text
         return $element;
     }
 
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'src':
-            $this->_src = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'src':
+                $this->_src = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
     /**
      * @return string
      */
-    public function getSrc()
+    public function getSrc ()
     {
         return $this->_src;
     }
@@ -78,7 +79,7 @@ class Content extends Text
      * @param string $value
      * @return \Zend\GData\App\Entry Provides a fluent interface
      */
-    public function setSrc($value)
+    public function setSrc ($value)
     {
         $this->_src = $value;
         return $this;

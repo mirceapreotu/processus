@@ -22,8 +22,7 @@
  * @namespace
  */
 namespace Zend\Filter;
-use Zend\Locale\Format,
-    Zend\Date\Date;
+use Zend\Locale\Format, Zend\Date\Date;
 
 /**
  * Localizes given normalized input
@@ -38,26 +37,24 @@ use Zend\Locale\Format,
  */
 class NormalizedToLocalized extends AbstractFilter
 {
+
     /**
      * Set options
      */
-    protected $_options = array(
-        'locale'      => null,
-        'date_format' => null,
-        'precision'   => null
-    );
+    protected $_options = array('locale' => null, 'date_format' => null, 
+    'precision' => null);
 
     /**
      * Class constructor
      *
      * @param string|\Zend\Locale\Locale $locale (Optional) Locale to set
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         if ($options instanceof \Zend\Config\Config) {
             $options = $options->toArray();
         }
-
+        
         if (null !== $options) {
             $this->setOptions($options);
         }
@@ -68,7 +65,7 @@ class NormalizedToLocalized extends AbstractFilter
      *
      * @return array
      */
-    public function getOptions()
+    public function getOptions ()
     {
         return $this->_options;
     }
@@ -79,7 +76,7 @@ class NormalizedToLocalized extends AbstractFilter
      * @param  array $options (Optional) Options to use
      * @return \Zend\Filter\LocalizedToNormalized
      */
-    public function setOptions(array $options = null)
+    public function setOptions (array $options = null)
     {
         $this->_options = $options + $this->_options;
         return $this;
@@ -93,17 +90,19 @@ class NormalizedToLocalized extends AbstractFilter
      * @param  string $value Value to normalized
      * @return string|array The normalized value
      */
-    public function filter($value)
+    public function filter ($value)
     {
         if (is_array($value)) {
             $date = new Date($value, $this->_options['locale']);
             return $date->toString($this->_options['date_format']);
-        } else if ($this->_options['precision'] === 0) {
-            return Format::toInteger($value, $this->_options);
-        } else if ($this->_options['precision'] === null) {
-            return Format::toFloat($value, $this->_options);
-        }
-
+        } else 
+            if ($this->_options['precision'] === 0) {
+                return Format::toInteger($value, $this->_options);
+            } else 
+                if ($this->_options['precision'] === null) {
+                    return Format::toFloat($value, $this->_options);
+                }
+        
         return Format::toNumber($value, $this->_options);
     }
 }

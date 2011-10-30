@@ -36,6 +36,7 @@ use Zend\Cache;
  */
 class BlackHole extends AbstractBackend implements ExtendedBackend
 {
+
     /**
      * Test if a cache is available for the given id and (if yes) return it (false else)
      *
@@ -43,7 +44,7 @@ class BlackHole extends AbstractBackend implements ExtendedBackend
      * @param  boolean $doNotTestCacheValidity if set to true, the cache validity won't be tested
      * @return string|false cached datas
      */
-    public function load($id, $doNotTestCacheValidity = false)
+    public function load ($id, $doNotTestCacheValidity = false)
     {
         return false;
     }
@@ -54,7 +55,7 @@ class BlackHole extends AbstractBackend implements ExtendedBackend
      * @param  string $id cache id
      * @return mixed false (a cache is not available) or "last modified" timestamp (int) of the available cache record
      */
-    public function test($id)
+    public function test ($id)
     {
         return false;
     }
@@ -71,7 +72,7 @@ class BlackHole extends AbstractBackend implements ExtendedBackend
      * @param  int    $specificLifetime If != false, set a specific lifetime for this cache record (null => infinite lifetime)
      * @return boolean true if no problem
      */
-    public function save($data, $id, $tags = array(), $specificLifetime = false)
+    public function save ($data, $id, $tags = array(), $specificLifetime = false)
     {
         return true;
     }
@@ -82,7 +83,7 @@ class BlackHole extends AbstractBackend implements ExtendedBackend
      * @param  string $id cache id
      * @return boolean true if no problem
      */
-    public function remove($id)
+    public function remove ($id)
     {
         return true;
     }
@@ -94,17 +95,17 @@ class BlackHole extends AbstractBackend implements ExtendedBackend
      * 'all' (default)  => remove all cache entries ($tags is not used)
      * 'old'            => remove too old cache entries ($tags is not used)
      * 'matchingTag'    => remove cache entries matching all given tags
-     *                     ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      * 'notMatchingTag' => remove cache entries not matching one of the given tags
-     *                     ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      * 'matchingAnyTag' => remove cache entries matching any given tags
-     *                     ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      *
      * @param  string $mode clean mode
      * @param  tags array $tags array of tags
      * @return boolean true if no problem
      */
-    public function clean($mode = Cache\CacheCache\Cache::CLEANING_MODE_ALL, $tags = array())
+    public function clean ($mode = Cache\CacheCache\Cache::CLEANING_MODE_ALL, $tags = array())
     {
         return true;
     }
@@ -114,7 +115,7 @@ class BlackHole extends AbstractBackend implements ExtendedBackend
      *
      * @return array array of stored cache ids (string)
      */
-    public function getIds()
+    public function getIds ()
     {
         return array();
     }
@@ -124,7 +125,7 @@ class BlackHole extends AbstractBackend implements ExtendedBackend
      *
      * @return array array of stored tags (string)
      */
-    public function getTags()
+    public function getTags ()
     {
         return array();
     }
@@ -137,7 +138,7 @@ class BlackHole extends AbstractBackend implements ExtendedBackend
      * @param array $tags array of tags
      * @return array array of matching cache ids (string)
      */
-    public function getIdsMatchingTags($tags = array())
+    public function getIdsMatchingTags ($tags = array())
     {
         return array();
     }
@@ -150,7 +151,7 @@ class BlackHole extends AbstractBackend implements ExtendedBackend
      * @param array $tags array of tags
      * @return array array of not matching cache ids (string)
      */
-    public function getIdsNotMatchingTags($tags = array())
+    public function getIdsNotMatchingTags ($tags = array())
     {
         return array();
     }
@@ -163,7 +164,7 @@ class BlackHole extends AbstractBackend implements ExtendedBackend
      * @param  array $tags array of tags
      * @return array array of any matching cache ids (string)
      */
-    public function getIdsMatchingAnyTags($tags = array())
+    public function getIdsMatchingAnyTags ($tags = array())
     {
         return array();
     }
@@ -174,7 +175,7 @@ class BlackHole extends AbstractBackend implements ExtendedBackend
      * @return int integer between 0 and 100
      * @throws \Zend\Cache\Exception
      */
-    public function getFillingPercentage()
+    public function getFillingPercentage ()
     {
         return 0;
     }
@@ -190,7 +191,7 @@ class BlackHole extends AbstractBackend implements ExtendedBackend
      * @param  string $id cache id
      * @return array array of metadatas (false if the cache id is not found)
      */
-    public function getMetadatas($id)
+    public function getMetadatas ($id)
     {
         return false;
     }
@@ -202,7 +203,7 @@ class BlackHole extends AbstractBackend implements ExtendedBackend
      * @param  int $extraLifetime
      * @return boolean true if ok
      */
-    public function touch($id, $extraLifetime)
+    public function touch ($id, $extraLifetime)
     {
         return false;
     }
@@ -214,23 +215,18 @@ class BlackHole extends AbstractBackend implements ExtendedBackend
      * - automatic_cleaning (is automating cleaning necessary)
      * - tags (are tags supported)
      * - expired_read (is it possible to read expired cache records
-     *                 (for doNotTestCacheValidity option for example))
+     * (for doNotTestCacheValidity option for example))
      * - priority does the backend deal with priority when saving
      * - infinite_lifetime (is infinite lifetime can work with this backend)
      * - get_list (is it possible to get the list of cache ids and the complete list of tags)
      *
      * @return array associative of with capabilities
      */
-    public function getCapabilities()
+    public function getCapabilities ()
     {
-        return array(
-            'automatic_cleaning' => true,
-            'tags'               => true,
-            'expired_read'       => true,
-            'priority'           => true,
-            'infinite_lifetime'  => true,
-            'get_list'           => true,
-        );
+        return array('automatic_cleaning' => true, 'tags' => true, 
+        'expired_read' => true, 'priority' => true, 'infinite_lifetime' => true, 
+        'get_list' => true);
     }
 
     /**
@@ -240,7 +236,6 @@ class BlackHole extends AbstractBackend implements ExtendedBackend
      *
      * @param string $id cache id
      */
-    public function ___expire($id)
-    {
-    }
+    public function ___expire ($id)
+    {}
 }

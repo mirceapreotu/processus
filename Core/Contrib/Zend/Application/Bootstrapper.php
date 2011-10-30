@@ -35,13 +35,14 @@ namespace Zend\Application;
  */
 interface Bootstrapper
 {
+
     /**
      * Constructor
      *
      * @param  \Zend\Application\Application $application
      * @return void
      */
-    public function __construct($application);
+    public function __construct ($application);
 
     /**
      * Set bootstrap options
@@ -49,21 +50,21 @@ interface Bootstrapper
      * @param  array $options
      * @return \Zend\Application\Bootstrapper
      */
-    public function setOptions(array $options);
+    public function setOptions (array $options);
 
     /**
      * Retrieve application object
      *
      * @return Zend_Application|\Zend\Application\Bootstrapper
      */
-    public function getApplication();
+    public function getApplication ();
 
     /**
      * Retrieve application environment
      *
      * @return string
      */
-    public function getEnvironment();
+    public function getEnvironment ();
 
     /**
      * Retrieve list of class resource initializers (_init* methods). Returns
@@ -71,7 +72,7 @@ interface Bootstrapper
      *
      * @return array
      */
-    public function getClassResources();
+    public function getClassResources ();
 
     /**
      * Retrieve list of class resource initializer names (resource names only,
@@ -79,7 +80,7 @@ interface Bootstrapper
      *
      * @return array
      */
-    public function getClassResourceNames();
+    public function getClassResourceNames ();
 
     /**
      * Bootstrap application or individual resource
@@ -87,12 +88,12 @@ interface Bootstrapper
      * @param  null|string $resource
      * @return mixed
      */
-    public function bootstrap($resource = null);
+    public function bootstrap ($resource = null);
 
     /**
      * Run the application
      *
      * @return void
      */
-    public function run();
+    public function run ();
 }

@@ -74,9 +74,9 @@ class NicknameEntry extends \Zend\GData\Entry
      * Create a new instance.
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(GApps::$namespaces);
         parent::__construct($element);
@@ -89,16 +89,18 @@ class NicknameEntry extends \Zend\GData\Entry
      *
      * @param DOMDocument $doc The DOMDocument used to construct DOMElements
      * @return DOMElement The DOMElement representing this element and all
-     *          child properties.
+     * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_login !== null) {
-            $element->appendChild($this->_login->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_login->getDOM($element->ownerDocument));
         }
         if ($this->_nickname !== null) {
-            $element->appendChild($this->_nickname->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_nickname->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -109,17 +111,17 @@ class NicknameEntry extends \Zend\GData\Entry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
-
+        
         switch ($absoluteNodeName) {
-            case $this->lookupNamespace('apps') . ':' . 'login';
+            case $this->lookupNamespace('apps') . ':' . 'login':
                 $login = new Extension\Login();
                 $login->transferFromDOM($child);
                 $this->_login = $login;
                 break;
-            case $this->lookupNamespace('apps') . ':' . 'nickname';
+            case $this->lookupNamespace('apps') . ':' . 'nickname':
                 $nickname = new Extension\Nickname();
                 $nickname->transferFromDOM($child);
                 $this->_nickname = $nickname;
@@ -136,7 +138,7 @@ class NicknameEntry extends \Zend\GData\Entry
      * @see setLogin
      * @return \Zend\GData\GApps\Extension\Login The requested object.
      */
-    public function getLogin()
+    public function getLogin ()
     {
         return $this->_login;
     }
@@ -146,10 +148,10 @@ class NicknameEntry extends \Zend\GData\Entry
      * is used to store the username address of the current user.
      *
      * @param \Zend\GData\GApps\Extension\Login $value The desired value for
-     *          this instance's login property.
+     * this instance's login property.
      * @return \Zend\GData\GApps\NicknameEntry Provides a fluent interface.
      */
-    public function setLogin($value)
+    public function setLogin ($value)
     {
         $this->_login = $value;
         return $this;
@@ -161,7 +163,7 @@ class NicknameEntry extends \Zend\GData\Entry
      * @see setNickname
      * @return \Zend\GData\GApps\Extension\Nickname The requested object.
      */
-    public function getNickname()
+    public function getNickname ()
     {
         return $this->_nickname;
     }
@@ -171,10 +173,10 @@ class NicknameEntry extends \Zend\GData\Entry
      * is used to store the the name of the current nickname.
      *
      * @param \Zend\GData\GApps\Extension\Nickname $value The desired value for
-     *          this instance's nickname property.
+     * this instance's nickname property.
      * @return \Zend\GData\GApps\NicknameEntry Provides a fluent interface.
      */
-    public function setNickname($value)
+    public function setNickname ($value)
     {
         $this->_nickname = $value;
         return $this;

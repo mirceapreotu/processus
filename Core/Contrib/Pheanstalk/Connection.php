@@ -9,135 +9,120 @@
  */
 class Pheanstalk_Connection
 {
-	const CRLF = "\r\n";
-	const CRLF_LENGTH = 2;
-	const DEFAULT_CONNECT_TIMEOUT = 2;
 
-	// responses which are global errors, mapped to their exception short-names
-	private $_errorResponses = array(
-		Pheanstalk_Response::RESPONSE_OUT_OF_MEMORY => 'OutOfMemory',
-		Pheanstalk_Response::RESPONSE_INTERNAL_ERROR => 'InternalError',
-		Pheanstalk_Response::RESPONSE_DRAINING => 'Draining',
-		Pheanstalk_Response::RESPONSE_BAD_FORMAT => 'BadFormat',
-		Pheanstalk_Response::RESPONSE_UNKNOWN_COMMAND => 'UnknownCommand',
-	);
+    const CRLF = "\r\n";
 
-	// responses which are followed by data
-	private $_dataResponses = array(
-		Pheanstalk_Response::RESPONSE_RESERVED,
-		Pheanstalk_Response::RESPONSE_FOUND,
-		Pheanstalk_Response::RESPONSE_OK,
-	);
+    const CRLF_LENGTH = 2;
 
-	private $_socket;
-	private $_hostname;
-	private $_port;
-	private $_connectTimeout;
+    const DEFAULT_CONNECT_TIMEOUT = 2;
 
-	/**
-	 * @param string $hostname
-	 * @param int $port
-	 * @param float $connectTimeout
-	 */
-	public function __construct($hostname, $port, $connectTimeout = null)
-	{
-		if (is_null($connectTimeout))
-			$connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
+    // responses which are global errors, mapped to their exception short-names
+    private $_errorResponses = array(
+    Pheanstalk_Response::RESPONSE_OUT_OF_MEMORY => 'OutOfMemory', 
+    Pheanstalk_Response::RESPONSE_INTERNAL_ERROR => 'InternalError', 
+    Pheanstalk_Response::RESPONSE_DRAINING => 'Draining', 
+    Pheanstalk_Response::RESPONSE_BAD_FORMAT => 'BadFormat', 
+    Pheanstalk_Response::RESPONSE_UNKNOWN_COMMAND => 'UnknownCommand');
 
-		$this->_hostname = $hostname;
-		$this->_port = $port;
-		$this->_connectTimeout = $connectTimeout;
-	}
+    // responses which are followed by data
+    private $_dataResponses = array(Pheanstalk_Response::RESPONSE_RESERVED, 
+    Pheanstalk_Response::RESPONSE_FOUND, Pheanstalk_Response::RESPONSE_OK);
 
-	/**
-	 * Sets a manually created socket, used for unit testing.
-	 * @param Pheanstalk_Socket $socket
-	 * @chainable
-	 */
-	public function setSocket(Pheanstalk_Socket $socket)
-	{
-		$this->_socket = $socket;
-		return $this;
-	}
+    private $_socket;
 
-	/**
-	 * @param object $command Pheanstalk_Command
-	 * @return object Pheanstalk_Response
-	 * @throws Pheanstalk_Exception_ClientException
-	 */
-	public function dispatchCommand($command)
-	{
-		$socket = $this->_getSocket();
+    private $_hostname;
 
-		$to_send = $command->getCommandLine().self::CRLF;
+    private $_port;
 
-		if ($command->hasData())
-		{
-			$to_send .= $command->getData().self::CRLF;
-		}
+    private $_connectTimeout;
 
-		$socket->write($to_send);
+    /**
+     * @param string $hostname
+     * @param int $port
+     * @param float $connectTimeout
+     */
+    public function __construct ($hostname, $port, $connectTimeout = null)
+    {
+        if (is_null($connectTimeout))
+            $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
+        
+        $this->_hostname = $hostname;
+        $this->_port = $port;
+        $this->_connectTimeout = $connectTimeout;
+    }
 
-		$responseLine = $socket->getLine();
-		$responseName = preg_replace('#^(\S+).*$#s', '$1', $responseLine);
+    /**
+     * Sets a manually created socket, used for unit testing.
+     * @param Pheanstalk_Socket $socket
+     * @chainable
+     */
+    public function setSocket (Pheanstalk_Socket $socket)
+    {
+        $this->_socket = $socket;
+        return $this;
+    }
 
-		if (isset($this->_errorResponses[$responseName]))
-		{
-			$exception = sprintf(
-				'Pheanstalk_Exception_Server%sException',
-				$this->_errorResponses[$responseName]
-			);
+    /**
+     * @param object $command Pheanstalk_Command
+     * @return object Pheanstalk_Response
+     * @throws Pheanstalk_Exception_ClientException
+     */
+    public function dispatchCommand ($command)
+    {
+        $socket = $this->_getSocket();
+        
+        $to_send = $command->getCommandLine() . self::CRLF;
+        
+        if ($command->hasData()) {
+            $to_send .= $command->getData() . self::CRLF;
+        }
+        
+        $socket->write($to_send);
+        
+        $responseLine = $socket->getLine();
+        $responseName = preg_replace('#^(\S+).*$#s', '$1', $responseLine);
+        
+        if (isset($this->_errorResponses[$responseName])) {
+            $exception = sprintf('Pheanstalk_Exception_Server%sException', 
+            $this->_errorResponses[$responseName]);
+            
+            throw new $exception(
+            sprintf("%s in response to '%s'", $responseName, $command));
+        }
+        
+        if (in_array($responseName, $this->_dataResponses)) {
+            $dataLength = preg_replace('#^.*\b(\d+)$#', '$1', $responseLine);
+            $data = $socket->read($dataLength);
+            
+            $crlf = $socket->read(self::CRLF_LENGTH);
+            if ($crlf !== self::CRLF) {
+                throw new Pheanstalk_Exception_ClientException(
+                sprintf('Expected %d bytes of CRLF after %d bytes of data', 
+                self::CRLF_LENGTH, $dataLength));
+            }
+        } else {
+            $data = null;
+        }
+        
+        return $command->getResponseParser()->parseResponse($responseLine, 
+        $data);
+    }
 
-			throw new $exception(sprintf(
-				"%s in response to '%s'",
-				$responseName,
-				$command
-			));
-		}
+    // ----------------------------------------
+    
 
-		if (in_array($responseName, $this->_dataResponses))
-		{
-			$dataLength = preg_replace('#^.*\b(\d+)$#', '$1', $responseLine);
-			$data = $socket->read($dataLength);
-
-			$crlf = $socket->read(self::CRLF_LENGTH);
-			if ($crlf !== self::CRLF)
-			{
-				throw new Pheanstalk_Exception_ClientException(sprintf(
-					'Expected %d bytes of CRLF after %d bytes of data',
-					self::CRLF_LENGTH,
-					$dataLength
-				));
-			}
-		}
-		else
-		{
-			$data = null;
-		}
-
-		return $command
-			->getResponseParser()
-			->parseResponse($responseLine, $data);
-	}
-
-	// ----------------------------------------
-
-	/**
-	 * Socket handle for the connection to beanstalkd
-	 * @return Pheanstalk_Socket
-	 * @throws Pheanstalk_Exception_ConnectionException
-	 */
-	private function _getSocket()
-	{
-		if (!isset($this->_socket))
-		{
-			$this->_socket = new Pheanstalk_Socket_NativeSocket(
-				$this->_hostname,
-				$this->_port,
-				$this->_connectTimeout
-			);
-		}
-
-		return $this->_socket;
-	}
+    /**
+     * Socket handle for the connection to beanstalkd
+     * @return Pheanstalk_Socket
+     * @throws Pheanstalk_Exception_ConnectionException
+     */
+    private function _getSocket ()
+    {
+        if (! isset($this->_socket)) {
+            $this->_socket = new Pheanstalk_Socket_NativeSocket($this->_hostname, 
+            $this->_port, $this->_connectTimeout);
+        }
+        
+        return $this->_socket;
+    }
 }

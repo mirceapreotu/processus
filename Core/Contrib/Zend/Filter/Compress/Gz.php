@@ -36,31 +36,30 @@ use Zend\Filter\Exception;
  */
 class Gz extends AbstractCompressionAlgorithm
 {
+
     /**
      * Compression Options
      * array(
-     *     'level'    => Compression level 0-9
-     *     'mode'     => Compression mode, can be 'compress', 'deflate'
-     *     'archive'  => Archive to use
+     * 'level'    => Compression level 0-9
+     * 'mode'     => Compression mode, can be 'compress', 'deflate'
+     * 'archive'  => Archive to use
      * )
      *
      * @var array
      */
-    protected $_options = array(
-        'level'   => 9,
-        'mode'    => 'compress',
-        'archive' => null,
-    );
+    protected $_options = array('level' => 9, 'mode' => 'compress', 
+    'archive' => null);
 
     /**
      * Class constructor
      *
      * @param array|\Zend\Config\Config|null $options (Optional) Options to set
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
-        if (!extension_loaded('zlib')) {
-            throw new Exception\ExtensionNotLoadedException('This filter needs the zlib extension');
+        if (! extension_loaded('zlib')) {
+            throw new Exception\ExtensionNotLoadedException(
+            'This filter needs the zlib extension');
         }
         parent::__construct($options);
     }
@@ -70,7 +69,7 @@ class Gz extends AbstractCompressionAlgorithm
      *
      * @return integer
      */
-    public function getLevel()
+    public function getLevel ()
     {
         return $this->_options['level'];
     }
@@ -81,12 +80,13 @@ class Gz extends AbstractCompressionAlgorithm
      * @param integer $level
      * @return \Zend\Filter\Compress\Gz
      */
-    public function setLevel($level)
+    public function setLevel ($level)
     {
         if (($level < 0) || ($level > 9)) {
-            throw new Exception\InvalidArgumentException('Level must be between 0 and 9');
+            throw new Exception\InvalidArgumentException(
+            'Level must be between 0 and 9');
         }
-
+        
         $this->_options['level'] = (int) $level;
         return $this;
     }
@@ -96,7 +96,7 @@ class Gz extends AbstractCompressionAlgorithm
      *
      * @return string
      */
-    public function getMode()
+    public function getMode ()
     {
         return $this->_options['mode'];
     }
@@ -106,12 +106,13 @@ class Gz extends AbstractCompressionAlgorithm
      *
      * @param string $mode Supported are 'compress', 'deflate' and 'file'
      */
-    public function setMode($mode)
+    public function setMode ($mode)
     {
         if (($mode != 'compress') && ($mode != 'deflate')) {
-            throw new Exception\InvalidArgumentException('Given compression mode not supported');
+            throw new Exception\InvalidArgumentException(
+            'Given compression mode not supported');
         }
-
+        
         $this->_options['mode'] = $mode;
         return $this;
     }
@@ -121,7 +122,7 @@ class Gz extends AbstractCompressionAlgorithm
      *
      * @return string
      */
-    public function getArchive()
+    public function getArchive ()
     {
         return $this->_options['archive'];
     }
@@ -132,7 +133,7 @@ class Gz extends AbstractCompressionAlgorithm
      * @param string $archive Archive to use
      * @return \Zend\Filter\Compress\Gz
      */
-    public function setArchive($archive)
+    public function setArchive ($archive)
     {
         $this->_options['archive'] = (string) $archive;
         return $this;
@@ -144,28 +145,30 @@ class Gz extends AbstractCompressionAlgorithm
      * @param  string $content
      * @return string
      */
-    public function compress($content)
+    public function compress ($content)
     {
         $archive = $this->getArchive();
-        if (!empty($archive)) {
+        if (! empty($archive)) {
             $file = gzopen($archive, 'w' . $this->getLevel());
-            if (!$file) {
-                throw new Exception\RuntimeException("Error opening the archive '" . $this->_options['archive'] . "'");
+            if (! $file) {
+                throw new Exception\RuntimeException(
+                "Error opening the archive '" . $this->_options['archive'] . "'");
             }
-
+            
             gzwrite($file, $content);
             gzclose($file);
             $compressed = true;
-        } else if ($this->_options['mode'] == 'deflate') {
-            $compressed = gzdeflate($content, $this->getLevel());
-        } else {
-            $compressed = gzcompress($content, $this->getLevel());
-        }
-
-        if (!$compressed) {
+        } else 
+            if ($this->_options['mode'] == 'deflate') {
+                $compressed = gzdeflate($content, $this->getLevel());
+            } else {
+                $compressed = gzcompress($content, $this->getLevel());
+            }
+        
+        if (! $compressed) {
             throw new Exception\RuntimeException('Error during compression');
         }
-
+        
         return $compressed;
     }
 
@@ -175,39 +178,41 @@ class Gz extends AbstractCompressionAlgorithm
      * @param  string $content
      * @return string
      */
-    public function decompress($content)
+    public function decompress ($content)
     {
         $archive = $this->getArchive();
-        $mode    = $this->getMode();
+        $mode = $this->getMode();
         if (file_exists($content)) {
             $archive = $content;
         }
-
+        
         if (file_exists($archive)) {
             $handler = fopen($archive, "rb");
-            if (!$handler) {
-                throw new Exception\RuntimeException("Error opening the archive '" . $archive . "'");
+            if (! $handler) {
+                throw new Exception\RuntimeException(
+                "Error opening the archive '" . $archive . "'");
             }
-
-            fseek($handler, -4, SEEK_END);
+            
+            fseek($handler, - 4, SEEK_END);
             $packet = fread($handler, 4);
-            $bytes  = unpack("V", $packet);
-            $size   = end($bytes);
+            $bytes = unpack("V", $packet);
+            $size = end($bytes);
             fclose($handler);
-
-            $file       = gzopen($archive, 'r');
+            
+            $file = gzopen($archive, 'r');
             $compressed = gzread($file, $size);
             gzclose($file);
-        } else if ($mode == 'deflate') {
-            $compressed = gzinflate($content);
-        } else {
-            $compressed = gzuncompress($content);
-        }
-
-        if (!$compressed) {
+        } else 
+            if ($mode == 'deflate') {
+                $compressed = gzinflate($content);
+            } else {
+                $compressed = gzuncompress($content);
+            }
+        
+        if (! $compressed) {
             throw new Exception\RuntimeException('Error during compression');
         }
-
+        
         return $compressed;
     }
 
@@ -216,7 +221,7 @@ class Gz extends AbstractCompressionAlgorithm
      *
      * @return string
      */
-    public function toString()
+    public function toString ()
     {
         return 'Gz';
     }

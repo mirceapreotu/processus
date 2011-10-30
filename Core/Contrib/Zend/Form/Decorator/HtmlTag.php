@@ -35,8 +35,8 @@ use Zend\Filter;
  * - tag: tag to use in decorator
  * - noAttribs: do not render attributes in the opening tag
  * - placement: 'append' or 'prepend'. If 'append', renders opening and
- *   closing tag after content; if prepend, renders opening and closing tag
- *   before content.
+ * closing tag after content; if prepend, renders opening and closing tag
+ * before content.
  * - openOnly: render opening tag only
  * - closeOnly: render closing tag only
  *
@@ -54,6 +54,7 @@ use Zend\Filter;
  */
 class HtmlTag extends AbstractDecorator
 {
+
     /**
      * Character encoding to use when escaping attributes
      * @var string
@@ -82,22 +83,21 @@ class HtmlTag extends AbstractDecorator
      *
      * @return string
      */
-    protected function _htmlAttribs(array $attribs)
+    protected function _htmlAttribs (array $attribs)
     {
         $xhtml = '';
-        $enc   = $this->_getEncoding();
+        $enc = $this->_getEncoding();
         foreach ((array) $attribs as $key => $val) {
             $key = htmlspecialchars($key, ENT_COMPAT, $enc);
             if (is_array($val)) {
-                if (array_key_exists('callback', $val)
-                    && is_callable($val['callback'])
-                ) {
+                if (array_key_exists('callback', $val) &&
+                 is_callable($val['callback'])) {
                     $val = call_user_func($val['callback'], $this);
                 } else {
                     $val = implode(' ', $val);
                 }
             }
-            $val    = htmlspecialchars($val, ENT_COMPAT, $enc);
+            $val = htmlspecialchars($val, ENT_COMPAT, $enc);
             $xhtml .= " $key=\"$val\"";
         }
         return $xhtml;
@@ -111,12 +111,12 @@ class HtmlTag extends AbstractDecorator
      * @param  string $tag
      * @return string
      */
-    public function normalizeTag($tag)
+    public function normalizeTag ($tag)
     {
-        if (!isset($this->_tagFilter)) {
+        if (! isset($this->_tagFilter)) {
             $this->_tagFilter = new Filter\FilterChain();
-            $this->_tagFilter->attach(new Filter\Alnum())
-                             ->attach(new Filter\StringToLower());
+            $this->_tagFilter->attach(new Filter\Alnum())->attach(
+            new Filter\StringToLower());
         }
         return $this->_tagFilter->filter($tag);
     }
@@ -127,7 +127,7 @@ class HtmlTag extends AbstractDecorator
      * @param  string $tag
      * @return \Zend\Form\Decorator\HtmlTag
      */
-    public function setTag($tag)
+    public function setTag ($tag)
     {
         $this->_tag = $this->normalizeTag($tag);
         return $this;
@@ -140,7 +140,7 @@ class HtmlTag extends AbstractDecorator
      *
      * @return string
      */
-    public function getTag()
+    public function getTag ()
     {
         if (null === $this->_tag) {
             if (null === ($tag = $this->getOption('tag'))) {
@@ -150,7 +150,7 @@ class HtmlTag extends AbstractDecorator
                 $this->removeOption('tag');
             }
         }
-
+        
         return $this->_tag;
     }
 
@@ -161,7 +161,7 @@ class HtmlTag extends AbstractDecorator
      * @param  array $attribs
      * @return string
      */
-    protected function _getOpenTag($tag, array $attribs = null)
+    protected function _getOpenTag ($tag, array $attribs = null)
     {
         $html = '<' . $tag;
         if (null !== $attribs) {
@@ -177,7 +177,7 @@ class HtmlTag extends AbstractDecorator
      * @param  string $tag
      * @return string
      */
-    protected function _getCloseTag($tag)
+    protected function _getCloseTag ($tag)
     {
         return '</' . $tag . '>';
     }
@@ -188,22 +188,22 @@ class HtmlTag extends AbstractDecorator
      * @param  string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
-        $tag       = $this->getTag();
+        $tag = $this->getTag();
         $placement = $this->getPlacement();
         $noAttribs = $this->getOption('noAttribs');
-        $openOnly  = $this->getOption('openOnly');
+        $openOnly = $this->getOption('openOnly');
         $closeOnly = $this->getOption('closeOnly');
         $this->removeOption('noAttribs');
         $this->removeOption('openOnly');
         $this->removeOption('closeOnly');
-
+        
         $attribs = null;
-        if (!$noAttribs) {
+        if (! $noAttribs) {
             $attribs = $this->getOptions();
         }
-
+        
         switch ($placement) {
             case self::APPEND:
                 if ($closeOnly) {
@@ -212,9 +212,8 @@ class HtmlTag extends AbstractDecorator
                 if ($openOnly) {
                     return $content . $this->_getOpenTag($tag, $attribs);
                 }
-                return $content
-                     . $this->_getOpenTag($tag, $attribs)
-                     . $this->_getCloseTag($tag);
+                return $content . $this->_getOpenTag($tag, $attribs) .
+                 $this->_getCloseTag($tag);
             case self::PREPEND:
                 if ($closeOnly) {
                     return $this->_getCloseTag($tag) . $content;
@@ -222,13 +221,12 @@ class HtmlTag extends AbstractDecorator
                 if ($openOnly) {
                     return $this->_getOpenTag($tag, $attribs) . $content;
                 }
-                return $this->_getOpenTag($tag, $attribs)
-                     . $this->_getCloseTag($tag)
-                     . $content;
+                return $this->_getOpenTag($tag, $attribs) .
+                 $this->_getCloseTag($tag) . $content;
             default:
-                return (($openOnly || !$closeOnly) ? $this->_getOpenTag($tag, $attribs) : '')
-                     . $content
-                     . (($closeOnly || !$openOnly) ? $this->_getCloseTag($tag) : '');
+                return (($openOnly || ! $closeOnly) ? $this->_getOpenTag($tag, 
+                $attribs) : '') . $content .
+                 (($closeOnly || ! $openOnly) ? $this->_getCloseTag($tag) : '');
         }
     }
 
@@ -237,17 +235,17 @@ class HtmlTag extends AbstractDecorator
      * 
      * @return string
      */
-    protected function _getEncoding()
+    protected function _getEncoding ()
     {
         if (null !== $this->_encoding) {
             return $this->_encoding;
         }
-
+        
         if (null === ($element = $this->getElement())) {
             $this->_encoding = 'UTF-8';
         } elseif (null === ($view = $element->getView())) {
             $this->_encoding = 'UTF-8';
-        } elseif (!method_exists($view, 'getEncoding')) {
+        } elseif (! method_exists($view, 'getEncoding')) {
             $this->_encoding = 'UTF-8';
         } else {
             $this->_encoding = $view->getEncoding();

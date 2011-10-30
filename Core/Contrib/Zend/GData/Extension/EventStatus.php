@@ -40,15 +40,16 @@ class EventStatus extends Extension
 {
 
     protected $_rootElement = 'eventStatus';
+
     protected $_value = null;
 
-    public function __construct($value = null)
+    public function __construct ($value = null)
     {
         parent::__construct();
         $this->_value = $value;
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_value !== null) {
@@ -57,14 +58,14 @@ class EventStatus extends Extension
         return $element;
     }
 
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'value':
-            $this->_value = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'value':
+                $this->_value = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -73,7 +74,7 @@ class EventStatus extends Extension
      *
      * @return string The requested attribute.
      */
-    public function getValue()
+    public function getValue ()
     {
         return $this->_value;
     }
@@ -84,7 +85,7 @@ class EventStatus extends Extension
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\Extension\Visibility The element being modified.
      */
-    public function setValue($value)
+    public function setValue ($value)
     {
         $this->_value = $value;
         return $this;
@@ -94,7 +95,7 @@ class EventStatus extends Extension
      * Magic toString method allows using this directly via echo
      * Works best in PHP >= 4.2.0
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getValue();
     }

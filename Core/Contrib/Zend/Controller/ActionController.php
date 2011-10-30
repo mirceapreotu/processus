@@ -24,8 +24,7 @@
  */
 namespace Zend\Controller;
 
-use Zend\Controller\Request\AbstractRequest,
-    Zend\Controller\Response\AbstractResponse;
+use Zend\Controller\Request\AbstractRequest, Zend\Controller\Response\AbstractResponse;
 
 /**
  * @category   Zend
@@ -36,6 +35,7 @@ use Zend\Controller\Request\AbstractRequest,
  */
 interface ActionController
 {
+
     /**
      * Class constructor
      *
@@ -62,9 +62,8 @@ interface ActionController
      * @param array $invokeArgs Any additional invocation arguments
      * @return void
      */
-    public function __construct(AbstractRequest $request,
-                                AbstractResponse $response,
-                                array $invokeArgs = array());
+    public function __construct (AbstractRequest $request, 
+    AbstractResponse $response, array $invokeArgs = array());
 
     /**
      * Dispatch the requested action
@@ -72,5 +71,5 @@ interface ActionController
      * @param string $action Method name of action
      * @return void
      */
-    public function dispatch($action);
+    public function dispatch ($action);
 }

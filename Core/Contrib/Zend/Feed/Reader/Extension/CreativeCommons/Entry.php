@@ -19,35 +19,36 @@
  */
 
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Reader\Extension\CreativeCommons;
 use Zend\Feed\Reader;
 use Zend\Feed\Reader\Extension;
 
 /**
-* @uses \Zend\Feed\Reader\Reader
-* @uses Reader\Reader_Entry_EntryAbstract
-* @category Zend
-* @package Reader\Reader
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @uses \Zend\Feed\Reader\Reader
+ * @uses Reader\Reader_Entry_EntryAbstract
+ * @category Zend
+ * @package Reader\Reader
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 class Entry extends Extension\AbstractEntry
 {
+
     /**
      * Get the entry license
      *
      * @return string|null
      */
-    public function getLicense($index = 0)
+    public function getLicense ($index = 0)
     {
         $licenses = $this->getLicenses();
-
+        
         if (isset($licenses[$index])) {
             return $licenses[$index];
         }
-
+        
         return null;
     }
 
@@ -56,31 +57,31 @@ class Entry extends Extension\AbstractEntry
      *
      * @return array
      */
-    public function getLicenses()
+    public function getLicenses ()
     {
         $name = 'licenses';
         if (array_key_exists($name, $this->_data)) {
             return $this->_data[$name];
         }
-
+        
         $licenses = array();
-        $list = $this->_xpath->evaluate($this->getXpathPrefix() . '//cc:license');
-
+        $list = $this->_xpath->evaluate(
+        $this->getXpathPrefix() . '//cc:license');
+        
         if ($list->length) {
             foreach ($list as $license) {
-                    $licenses[] = $license->nodeValue;
+                $licenses[] = $license->nodeValue;
             }
-
+            
             $licenses = array_unique($licenses);
         } else {
-            $cc = new Feed(
-                $this->_domDocument, $this->_data['type'], $this->_xpath
-            );
+            $cc = new Feed($this->_domDocument, $this->_data['type'], 
+            $this->_xpath);
             $licenses = $cc->getLicenses();
         }
-
+        
         $this->_data[$name] = $licenses;
-
+        
         return $this->_data[$name];
     }
 
@@ -88,8 +89,9 @@ class Entry extends Extension\AbstractEntry
      * Register Creative Commons namespaces
      *
      */
-    protected function _registerNamespaces()
+    protected function _registerNamespaces ()
     {
-        $this->_xpath->registerNamespace('cc', 'http://backend.userland.com/creativeCommonsRssModule');
+        $this->_xpath->registerNamespace('cc', 
+        'http://backend.userland.com/creativeCommonsRssModule');
     }
 }

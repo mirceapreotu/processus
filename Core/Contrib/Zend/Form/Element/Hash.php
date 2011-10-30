@@ -24,8 +24,7 @@
  */
 namespace Zend\Form\Element;
 
-use Zend\Session\Container as SessionContainer,
-    Zend\View\Renderer as View;
+use Zend\Session\Container as SessionContainer, Zend\View\Renderer as View;
 
 /**
  * CSRF form protection
@@ -40,6 +39,7 @@ use Zend\Session\Container as SessionContainer,
  */
 class Hash extends Xhtml
 {
+
     /**
      * Use formHidden view helper by default
      * @var string
@@ -80,13 +80,13 @@ class Hash extends Xhtml
      * @param  array|\Zend\Config\Config $options
      * @return void
      */
-    public function __construct($spec, $options = null)
+    public function __construct ($spec, $options = null)
     {
         parent::__construct($spec, $options);
-
+        
         $this->setAllowEmpty(false)
-             ->setRequired(true)
-             ->initCsrfValidator();
+            ->setRequired(true)
+            ->initCsrfValidator();
     }
 
     /**
@@ -95,7 +95,7 @@ class Hash extends Xhtml
      * @param  \Zend\Session\Container $session
      * @return \Zend\Form\Element\Hash
      */
-    public function setSession($session)
+    public function setSession ($session)
     {
         $this->_session = $session;
         return $this;
@@ -108,7 +108,7 @@ class Hash extends Xhtml
      *
      * @return \Zend\Session\Container
      */
-    public function getSession()
+    public function getSession ()
     {
         if (null === $this->_session) {
             $this->_session = new SessionContainer($this->getSessionName());
@@ -124,7 +124,7 @@ class Hash extends Xhtml
      *
      * @return \Zend\Form\Element\Hash
      */
-    public function initCsrfValidator()
+    public function initCsrfValidator ()
     {
         $session = $this->getSession();
         if (isset($session->hash)) {
@@ -132,7 +132,7 @@ class Hash extends Xhtml
         } else {
             $rightHash = null;
         }
-
+        
         $this->addValidator('Identical', true, array($rightHash));
         return $this;
     }
@@ -143,7 +143,7 @@ class Hash extends Xhtml
      * @param  string $salt
      * @return \Zend\Form\Element\Hash
      */
-    public function setSalt($salt)
+    public function setSalt ($salt)
     {
         $this->_salt = (string) $salt;
         return $this;
@@ -154,7 +154,7 @@ class Hash extends Xhtml
      *
      * @return string
      */
-    public function getSalt()
+    public function getSalt ()
     {
         return $this->_salt;
     }
@@ -166,7 +166,7 @@ class Hash extends Xhtml
      *
      * @return string
      */
-    public function getHash()
+    public function getHash ()
     {
         if (null === $this->_hash) {
             $this->_generateHash();
@@ -181,9 +181,10 @@ class Hash extends Xhtml
      *
      * @return string
      */
-    public function getSessionName()
+    public function getSessionName ()
     {
-        return str_replace('\\', '_', __CLASS__) . '_' . $this->getSalt() . '_' . $this->getName();
+        return str_replace('\\', '_', __CLASS__) . '_' . $this->getSalt() . '_' .
+         $this->getName();
     }
 
     /**
@@ -192,7 +193,7 @@ class Hash extends Xhtml
      * @param  int $ttl
      * @return \Zend\Form\Element\Hash
      */
-    public function setTimeout($ttl)
+    public function setTimeout ($ttl)
     {
         $this->_timeout = (int) $ttl;
         return $this;
@@ -203,7 +204,7 @@ class Hash extends Xhtml
      *
      * @return int
      */
-    public function getTimeout()
+    public function getTimeout ()
     {
         return $this->_timeout;
     }
@@ -213,7 +214,7 @@ class Hash extends Xhtml
      *
      * @return null
      */
-    public function getLabel()
+    public function getLabel ()
     {
         return null;
     }
@@ -223,7 +224,7 @@ class Hash extends Xhtml
      *
      * @return void
      */
-    public function initCsrfToken()
+    public function initCsrfToken ()
     {
         $session = $this->getSession();
         $session->setExpirationHops(1, null, true);
@@ -237,7 +238,7 @@ class Hash extends Xhtml
      * @param  \Zend\View\Renderer $view
      * @return string
      */
-    public function render(View $view = null)
+    public function render (View $view = null)
     {
         $this->initCsrfToken();
         return parent::render($view);
@@ -251,14 +252,11 @@ class Hash extends Xhtml
      *
      * @return void
      */
-    protected function _generateHash()
+    protected function _generateHash ()
     {
         $this->_hash = md5(
-            mt_rand(1,1000000)
-            .  $this->getSalt()
-            .  $this->getName()
-            .  mt_rand(1,1000000)
-        );
+        mt_rand(1, 1000000) . $this->getSalt() . $this->getName() .
+         mt_rand(1, 1000000));
         $this->setValue($this->_hash);
     }
 }

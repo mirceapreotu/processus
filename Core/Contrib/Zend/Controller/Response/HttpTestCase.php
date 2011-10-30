@@ -32,12 +32,13 @@ namespace Zend\Controller\Response;
  */
 class HttpTestCase extends Http
 {
+
     /**
      * "send" headers by returning array of all headers that would be sent
      *
      * @return array
      */
-    public function sendHeaders()
+    public function sendHeaders ()
     {
         $headers = array();
         foreach ($this->_headersRaw as $header) {
@@ -45,7 +46,7 @@ class HttpTestCase extends Http
         }
         foreach ($this->_headers as $header) {
             $name = $header['name'];
-            $key  = strtolower($name);
+            $key = strtolower($name);
             if (array_key_exists($name, $headers)) {
                 if ($header['replace']) {
                     $headers[$key] = $header['name'] . ': ' . $header['value'];
@@ -63,7 +64,7 @@ class HttpTestCase extends Http
      * @param  bool $throw
      * @return void
      */
-    public function canSendHeaders($throw = false)
+    public function canSendHeaders ($throw = false)
     {
         return true;
     }
@@ -73,7 +74,7 @@ class HttpTestCase extends Http
      *
      * @return string
      */
-    public function outputBody()
+    public function outputBody ()
     {
         $fullContent = '';
         foreach ($this->_body as $content) {
@@ -88,7 +89,7 @@ class HttpTestCase extends Http
      * @param  bool|string $spec
      * @return string|array|null
      */
-    public function getBody($spec = false)
+    public function getBody ($spec = false)
     {
         if (false === $spec) {
             return $this->outputBody();
@@ -97,7 +98,7 @@ class HttpTestCase extends Http
         } elseif (is_string($spec) && isset($this->_body[$spec])) {
             return $this->_body[$spec];
         }
-
+        
         return null;
     }
 
@@ -109,11 +110,11 @@ class HttpTestCase extends Http
      *
      * @return string
      */
-    public function sendResponse()
+    public function sendResponse ()
     {
         $headers = $this->sendHeaders();
         $content = implode("\n", $headers) . "\n\n";
-
+        
         if ($this->isException() && $this->renderExceptions()) {
             $exceptions = '';
             foreach ($this->getException() as $e) {
@@ -123,7 +124,7 @@ class HttpTestCase extends Http
         } else {
             $content .= $this->outputBody();
         }
-
+        
         return $content;
     }
 }

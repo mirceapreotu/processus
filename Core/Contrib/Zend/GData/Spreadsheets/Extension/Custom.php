@@ -38,8 +38,10 @@ namespace Zend\GData\Spreadsheets\Extension;
  */
 class Custom extends \Zend\GData\Extension
 {
+
     // custom elements have custom names.
     protected $_rootElement = null; // The name of the column
+
     protected $_rootNamespace = 'gsx';
 
     /**
@@ -47,7 +49,7 @@ class Custom extends \Zend\GData\Extension
      * @param string $column (optional) The column/tag name of the element.
      * @param string $value (optional) The text content of the element.
      */
-    public function __construct($column = null, $value = null)
+    public function __construct ($column = null, $value = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Spreadsheets::$namespaces);
         parent::__construct();
@@ -55,7 +57,7 @@ class Custom extends \Zend\GData\Extension
         $this->_rootElement = $column;
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         return $element;
@@ -68,7 +70,7 @@ class Custom extends \Zend\GData\Extension
      *
      * @param DOMNode $node The DOMNode that represents this object's data
      */
-    public function transferFromDOM($node)
+    public function transferFromDOM ($node)
     {
         parent::transferFromDOM($node);
         $this->_rootElement = $node->localName;
@@ -78,7 +80,7 @@ class Custom extends \Zend\GData\Extension
      * Sets the column/tag name of the element.
      * @param string $column The new column name.
      */
-    public function setColumnName($column)
+    public function setColumnName ($column)
     {
         $this->_rootElement = $column;
         return $this;
@@ -88,7 +90,7 @@ class Custom extends \Zend\GData\Extension
      * Gets the column name of the element
      * @return string The column name.
      */
-    public function getColumnName()
+    public function getColumnName ()
     {
         return $this->_rootElement;
     }

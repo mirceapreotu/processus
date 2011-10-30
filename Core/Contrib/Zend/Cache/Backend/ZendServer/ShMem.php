@@ -23,8 +23,7 @@
  * @namespace
  */
 namespace Zend\Cache\Backend\ZendServer;
-use Zend\Cache,
-    Zend\Cache\Backend;
+use Zend\Cache, Zend\Cache\Backend;
 
 /**
  * @uses       \Zend\Cache\Cache
@@ -37,16 +36,18 @@ use Zend\Cache,
  */
 class ShMem extends AbstractZendServer implements Backend
 {
+
     /**
      * Constructor
      *
      * @param  array $options associative array of options
      * @throws \Zend\Cache\Exception
      */
-    public function __construct(array $options = array())
+    public function __construct (array $options = array())
     {
-        if (!function_exists('zend_shm_cache_store')) {
-            Cache\Cache::throwException('Zend_Cache_ZendServer_ShMem backend has to be used within Zend Server environment.');
+        if (! function_exists('zend_shm_cache_store')) {
+            Cache\Cache::throwException(
+            'Zend_Cache_ZendServer_ShMem backend has to be used within Zend Server environment.');
         }
         parent::__construct($options);
     }
@@ -59,11 +60,10 @@ class ShMem extends AbstractZendServer implements Backend
      * @param int    $timeToLive  Time to live in seconds
      *
      */
-    protected function _store($data, $id, $timeToLive)
+    protected function _store ($data, $id, $timeToLive)
     {
-        if (zend_shm_cache_store($this->_options['namespace'] . '::' . $id,
-                                  $data,
-                                  $timeToLive) === false) {
+        if (zend_shm_cache_store($this->_options['namespace'] . '::' . $id, 
+        $data, $timeToLive) === false) {
             $this->_log('Store operation failed.');
             return false;
         }
@@ -75,7 +75,7 @@ class ShMem extends AbstractZendServer implements Backend
      *
      * @param string $id          Cache id
      */
-    protected function _fetch($id)
+    protected function _fetch ($id)
     {
         return zend_shm_cache_fetch($this->_options['namespace'] . '::' . $id);
     }
@@ -86,7 +86,7 @@ class ShMem extends AbstractZendServer implements Backend
      * @param string $id          Cache id
      * @return boolean true if no problem
      */
-    protected function _unset($id)
+    protected function _unset ($id)
     {
         return zend_shm_cache_delete($this->_options['namespace'] . '::' . $id);
     }
@@ -94,7 +94,7 @@ class ShMem extends AbstractZendServer implements Backend
     /**
      * Clear cache
      */
-    protected function _clear()
+    protected function _clear ()
     {
         zend_shm_cache_clear($this->_options['namespace']);
     }

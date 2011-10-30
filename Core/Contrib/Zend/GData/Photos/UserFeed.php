@@ -72,16 +72,16 @@ class UserFeed extends \Zend\GData\Feed
     protected $_gphotoNickname = null;
 
     protected $_entryClassName = 'Zend\GData\Photos\UserEntry';
+
     protected $_feedClassName = 'Zend\GData\Photos\UserFeed';
 
     protected $_entryKindClassMapping = array(
-        'http://schemas.google.com/photos/2007#album' => 'Zend\GData\Photos\AlbumEntry',
-        'http://schemas.google.com/photos/2007#photo' => 'Zend\GData\Photos\PhotoEntry',
-        'http://schemas.google.com/photos/2007#comment' => 'Zend\GData\Photos\CommentEntry',
-        'http://schemas.google.com/photos/2007#tag' => 'Zend\GData\Photos\TagEntry'
-    );
+    'http://schemas.google.com/photos/2007#album' => 'Zend\GData\Photos\AlbumEntry', 
+    'http://schemas.google.com/photos/2007#photo' => 'Zend\GData\Photos\PhotoEntry', 
+    'http://schemas.google.com/photos/2007#comment' => 'Zend\GData\Photos\CommentEntry', 
+    'http://schemas.google.com/photos/2007#tag' => 'Zend\GData\Photos\TagEntry');
 
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(Photos::$namespaces);
         parent::__construct($element);
@@ -93,21 +93,21 @@ class UserFeed extends \Zend\GData\Feed
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-            case $this->lookupNamespace('gphoto') . ':' . 'user';
+            case $this->lookupNamespace('gphoto') . ':' . 'user':
                 $user = new Extension\User();
                 $user->transferFromDOM($child);
                 $this->_gphotoUser = $user;
                 break;
-            case $this->lookupNamespace('gphoto') . ':' . 'nickname';
+            case $this->lookupNamespace('gphoto') . ':' . 'nickname':
                 $nickname = new Extension\Nickname();
                 $nickname->transferFromDOM($child);
                 $this->_gphotoNickname = $nickname;
                 break;
-            case $this->lookupNamespace('gphoto') . ':' . 'thumbnail';
+            case $this->lookupNamespace('gphoto') . ':' . 'thumbnail':
                 $thumbnail = new Extension\Thumbnail();
                 $thumbnail->transferFromDOM($child);
                 $this->_gphotoThumbnail = $thumbnail;
@@ -118,14 +118,15 @@ class UserFeed extends \Zend\GData\Feed
                 $categories = $tmpEntry->getCategory();
                 foreach ($categories as $category) {
                     if ($category->scheme == Photos::KIND_PATH &&
-                        $this->_entryKindClassMapping[$category->term] != "") {
-                            $entryClassName = $this->_entryKindClassMapping[$category->term];
-                            break;
+                     $this->_entryKindClassMapping[$category->term] != "") {
+                        $entryClassName = $this->_entryKindClassMapping[$category->term];
+                        break;
                     } else {
-                        throw new \Zend\GData\App\Exception('Entry is missing kind declaration.');
+                        throw new \Zend\GData\App\Exception(
+                        'Entry is missing kind declaration.');
                     }
                 }
-
+                
                 $newEntry = new $entryClassName($child);
                 $newEntry->setHttpClient($this->getHttpClient());
                 $this->_entry[] = $newEntry;
@@ -136,19 +137,22 @@ class UserFeed extends \Zend\GData\Feed
         }
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_gphotoUser != null) {
-            $element->appendChild($this->_gphotoUser->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_gphotoUser->getDOM($element->ownerDocument));
         }
         if ($this->_gphotoNickname != null) {
-            $element->appendChild($this->_gphotoNickname->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_gphotoNickname->getDOM($element->ownerDocument));
         }
         if ($this->_gphotoThumbnail != null) {
-            $element->appendChild($this->_gphotoThumbnail->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_gphotoThumbnail->getDOM($element->ownerDocument));
         }
-
+        
         return $element;
     }
 
@@ -158,7 +162,7 @@ class UserFeed extends \Zend\GData\Feed
      * @see setGphotoUser
      * @return string The requested attribute.
      */
-    public function getGphotoUser()
+    public function getGphotoUser ()
     {
         return $this->_gphotoUser;
     }
@@ -169,7 +173,7 @@ class UserFeed extends \Zend\GData\Feed
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\Photos\Extension\User The element being modified.
      */
-    public function setGphotoUser($value)
+    public function setGphotoUser ($value)
     {
         $this->_gphotoUser = $value;
         return $this;
@@ -181,7 +185,7 @@ class UserFeed extends \Zend\GData\Feed
      * @see setGphotoNickname
      * @return string The requested attribute.
      */
-    public function getGphotoNickname()
+    public function getGphotoNickname ()
     {
         return $this->_gphotoNickname;
     }
@@ -192,7 +196,7 @@ class UserFeed extends \Zend\GData\Feed
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\Photos\Extension\Nickname The element being modified.
      */
-    public function setGphotoNickname($value)
+    public function setGphotoNickname ($value)
     {
         $this->_gphotoNickname = $value;
         return $this;
@@ -204,7 +208,7 @@ class UserFeed extends \Zend\GData\Feed
      * @see setGphotoThumbnail
      * @return string The requested attribute.
      */
-    public function getGphotoThumbnail()
+    public function getGphotoThumbnail ()
     {
         return $this->_gphotoThumbnail;
     }
@@ -215,7 +219,7 @@ class UserFeed extends \Zend\GData\Feed
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\Photos\Extension\Thumbnail The element being modified.
      */
-    public function setGphotoThumbnail($value)
+    public function setGphotoThumbnail ($value)
     {
         $this->_gphotoThumbnail = $value;
         return $this;

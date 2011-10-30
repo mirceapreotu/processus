@@ -38,6 +38,7 @@ use Zend\Code\Reflection\MethodReflection;
  */
 class MethodGenerator extends AbstractMemberGenerator
 {
+
     /**
      * @var DocblockGenerator
      */
@@ -64,19 +65,20 @@ class MethodGenerator extends AbstractMemberGenerator
      * @param \Zend\Code\Reflection\MethodReflection $reflectionMethod
      * @return \MethodGenerator\Code\Generator\PhpMethod
      */
-    public static function fromReflection(MethodReflection $reflectionMethod)
+    public static function fromReflection (MethodReflection $reflectionMethod)
     {
         $method = new self();
-
+        
         $method->setSourceContent($reflectionMethod->getContents(false));
         $method->setSourceDirty(false);
-
+        
         if ($reflectionMethod->getDocComment() != '') {
-            $method->setDocblock(DocblockGenerator::fromReflection($reflectionMethod->getDocblock()));
+            $method->setDocblock(
+            DocblockGenerator::fromReflection($reflectionMethod->getDocblock()));
         }
-
+        
         $method->setFinal($reflectionMethod->isFinal());
-
+        
         if ($reflectionMethod->isPrivate()) {
             $method->setVisibility(self::VISIBILITY_PRIVATE);
         } elseif ($reflectionMethod->isProtected()) {
@@ -84,21 +86,23 @@ class MethodGenerator extends AbstractMemberGenerator
         } else {
             $method->setVisibility(self::VISIBILITY_PUBLIC);
         }
-
+        
         $method->setStatic($reflectionMethod->isStatic());
-
+        
         $method->setName($reflectionMethod->getName());
-
+        
         foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
-            $method->setParameter(ParameterGenerator::fromReflection($reflectionParameter));
+            $method->setParameter(
+            ParameterGenerator::fromReflection($reflectionParameter));
         }
-
+        
         $method->setBody($reflectionMethod->getBody());
-
+        
         return $method;
     }
 
-    public function __construct($name = null, array $parameters = array(), $flags = self::FLAG_PUBLIC, $body = null, $docblock = null)
+    public function __construct ($name = null, array $parameters = array(), 
+    $flags = self::FLAG_PUBLIC, $body = null, $docblock = null)
     {
         if ($name !== null) {
             $this->setName($name);
@@ -123,7 +127,7 @@ class MethodGenerator extends AbstractMemberGenerator
      * @param array $parameters
      * @return \MethodGenerator\Code\Generator\PhpMethod
      */
-    public function setParameters(array $parameters)
+    public function setParameters (array $parameters)
     {
         foreach ($parameters as $parameter) {
             $this->setParameter($parameter);
@@ -137,15 +141,16 @@ class MethodGenerator extends AbstractMemberGenerator
      * @param ParameterGenerator|string $parameter
      * @return \MethodGenerator\Code\Generator\PhpMethod
      */
-    public function setParameter($parameter)
+    public function setParameter ($parameter)
     {
         if (is_string($parameter)) {
             $parameter = new ParameterGenerator($parameter);
-        } elseif (!$parameter instanceof ParameterGenerator) {
-            throw new Exception\InvalidArgumentException('setParameter() expects either an array of method options or an instance of Zend_CodeGenerator_Php_Parameter');
+        } elseif (! $parameter instanceof ParameterGenerator) {
+            throw new Exception\InvalidArgumentException(
+            'setParameter() expects either an array of method options or an instance of Zend_CodeGenerator_Php_Parameter');
         }
         $parameterName = $parameter->getName();
-
+        
         $this->parameters[$parameterName] = $parameter;
         return $this;
     }
@@ -155,7 +160,7 @@ class MethodGenerator extends AbstractMemberGenerator
      *
      * @return array Array of \Zend\Code\Generator\Parameter\Parameter
      */
-    public function getParameters()
+    public function getParameters ()
     {
         return $this->parameters;
     }
@@ -166,7 +171,7 @@ class MethodGenerator extends AbstractMemberGenerator
      * @param string $body
      * @return \MethodGenerator\Code\Generator\PhpMethod
      */
-    public function setBody($body)
+    public function setBody ($body)
     {
         $this->body = $body;
         return $this;
@@ -177,7 +182,7 @@ class MethodGenerator extends AbstractMemberGenerator
      *
      * @return string
      */
-    public function getBody()
+    public function getBody ()
     {
         return $this->body;
     }
@@ -187,51 +192,51 @@ class MethodGenerator extends AbstractMemberGenerator
      *
      * @return string
      */
-    public function generate()
+    public function generate ()
     {
         $output = '';
-
+        
         $indent = $this->getIndentation();
-
+        
         if (($docblock = $this->getDocblock()) !== null) {
             $docblock->setIndentation($indent);
             $output .= $docblock->generate();
         }
-
+        
         $output .= $indent;
-
+        
         if ($this->isAbstract()) {
             $output .= 'abstract ';
         } else {
             $output .= (($this->isFinal()) ? 'final ' : '');
         }
-
-        $output .= $this->getVisibility()
-            . (($this->isStatic()) ? ' static' : '')
-            . ' function ' . $this->getName() . '(';
-
+        
+        $output .= $this->getVisibility() .
+         (($this->isStatic()) ? ' static' : '') . ' function ' . $this->getName() .
+         '(';
+        
         $parameters = $this->getParameters();
-        if (!empty($parameters)) {
+        if (! empty($parameters)) {
             foreach ($parameters as $parameter) {
                 $parameterOuput[] = $parameter->generate();
             }
-
+            
             $output .= implode(', ', $parameterOuput);
         }
-
+        
         $output .= ')' . self::LINE_FEED . $indent . '{' . self::LINE_FEED;
-
+        
         if ($this->body) {
-            $output .= preg_replace('#^(.+?)$#m', $indent . $indent . '$1', trim($this->body))
-                    .  self::LINE_FEED;
+            $output .= preg_replace('#^(.+?)$#m', $indent . $indent . '$1', 
+            trim($this->body)) . self::LINE_FEED;
         }
-
+        
         $output .= $indent . '}' . self::LINE_FEED;
-
+        
         return $output;
     }
 
-    public function __toString()
+    public function __toString ()
     {
         return $this->generate();
     }

@@ -36,6 +36,7 @@ namespace Zend\Form\Element;
  */
 class Radio extends Multi
 {
+
     /**
      * Use formRadio view helper by default
      * @var string
@@ -49,14 +50,14 @@ class Radio extends Multi
      *
      * @return \Zend\Form\Element\Radio
      */
-    public function loadDefaultDecorators()
+    public function loadDefaultDecorators ()
     {
         if ($this->loadDefaultDecoratorsIsDisabled()) {
             return $this;
         }
         parent::loadDefaultDecorators();
-        $this->addDecorator('Label', array('tag' => 'dt',
-                                           'disableFor' => true));
+        $this->addDecorator('Label', 
+        array('tag' => 'dt', 'disableFor' => true));
         return $this;
     }
 }

@@ -61,9 +61,9 @@ class ContactEntry extends UserProfileEntry
      * an individual contact for a user
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(YouTube::$namespaces);
         parent::__construct($element);
@@ -79,11 +79,12 @@ class ContactEntry extends UserProfileEntry
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_status != null) {
-            $element->appendChild($this->_status->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_status->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -94,18 +95,18 @@ class ContactEntry extends UserProfileEntry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('yt') . ':' . 'status':
-            $status = new Extension\Status();
-            $status->transferFromDOM($child);
-            $this->_status = $status;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('yt') . ':' . 'status':
+                $status = new Extension\Status();
+                $status->transferFromDOM($child);
+                $this->_status = $status;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
@@ -115,7 +116,7 @@ class ContactEntry extends UserProfileEntry
      * @param \Zend\GData\YouTube\Extension\Status $status The status
      * @return \Zend\GData\YouTube\ContactEntry Provides a fluent interface
      */
-    public function setStatus($status = null)
+    public function setStatus ($status = null)
     {
         $this->_status = $status;
         return $this;
@@ -126,7 +127,7 @@ class ContactEntry extends UserProfileEntry
      *
      * @return \Zend\GData\YouTube\Extension\Status  The status
      */
-    public function getStatus()
+    public function getStatus ()
     {
         return $this->_status;
     }

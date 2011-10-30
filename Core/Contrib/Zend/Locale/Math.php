@@ -37,20 +37,29 @@ namespace Zend\Locale;
  */
 class Math
 {
+
     // support unit testing without using bcmath functions
     public static $_bcmathDisabled = false;
 
-    public static $add   = '\\Zend\\Locale\\Math::Add';
-    public static $sub   = '\\Zend\\Locale\\Math::Sub';
-    public static $pow   = '\\Zend\\Locale\\Math::Pow';
-    public static $mul   = '\\Zend\\Locale\\Math::Mul';
-    public static $div   = '\\Zend\\Locale\\Math::Div';
-    public static $comp  = '\\Zend\\Locale\\Math::Comp';
-    public static $sqrt  = '\\Zend\\Locale\\Math::Sqrt';
-    public static $mod   = '\\Zend\\Locale\\Math::Mod';
+    public static $add = '\\Zend\\Locale\\Math::Add';
+
+    public static $sub = '\\Zend\\Locale\\Math::Sub';
+
+    public static $pow = '\\Zend\\Locale\\Math::Pow';
+
+    public static $mul = '\\Zend\\Locale\\Math::Mul';
+
+    public static $div = '\\Zend\\Locale\\Math::Div';
+
+    public static $comp = '\\Zend\\Locale\\Math::Comp';
+
+    public static $sqrt = '\\Zend\\Locale\\Math::Sqrt';
+
+    public static $mod = '\\Zend\\Locale\\Math::Mod';
+
     public static $scale = 'bcscale';
 
-    public static function isBcmathDisabled()
+    public static function isBcmathDisabled ()
     {
         return self::$_bcmathDisabled;
     }
@@ -58,14 +67,14 @@ class Math
     /**
      * Surprisingly, the results of this implementation of round()
      * prove better than the native PHP round(). For example, try:
-     *   round(639.795, 2);
-     *   round(267.835, 2);
-     *   round(0.302515, 5);
-     *   round(0.36665, 4);
+     * round(639.795, 2);
+     * round(267.835, 2);
+     * round(0.302515, 5);
+     * round(0.36665, 4);
      * then try:
-     *   Zend_Locale_Math::round('639.795', 2);
+     * Zend_Locale_Math::round('639.795', 2);
      */
-    public static function round($op1, $precision = 0)
+    public static function round ($op1, $precision = 0)
     {
         if (self::$_bcmathDisabled) {
             $op1 = round($op1, $precision);
@@ -73,12 +82,12 @@ class Math
                 return self::normalize(round($op1, $precision));
             }
         }
-
+        
         if (strpos($op1, 'E') !== false) {
             $op1 = self::floatalize($op1);
         }
-
-        $op1    = trim(self::normalize($op1));
+        
+        $op1 = trim(self::normalize($op1));
         $length = strlen($op1);
         if (($decPos = strpos($op1, '.')) === false) {
             $op1 .= '.0';
@@ -88,37 +97,38 @@ class Math
         if ($precision < 0 && abs($precision) > $decPos) {
             return '0';
         }
-
+        
         if ($precision >= ($length - ($decPos + 1))) {
             return $op1;
         }
-
+        
         if ($precision === 0) {
             $triggerPos = 1;
-            $roundPos   = -1;
+            $roundPos = - 1;
         } elseif ($precision > 0) {
             $triggerPos = $precision + 1;
-            $roundPos   = $precision;
+            $roundPos = $precision;
         } else {
             $triggerPos = $precision;
-            $roundPos   = $precision -1;
+            $roundPos = $precision - 1;
         }
-
+        
         $triggerDigit = $op1[$triggerPos + $decPos];
         if ($precision < 0) {
             // zero fill digits to the left of the decimal place
-            $op1 = substr($op1, 0, $decPos + $precision) . str_pad('', abs($precision), '0');
+            $op1 = substr($op1, 0, $decPos + $precision) .
+             str_pad('', abs($precision), '0');
         }
-
+        
         if ($triggerDigit >= '5') {
-            if ($roundPos + $decPos == -1) {
+            if ($roundPos + $decPos == - 1) {
                 return str_pad('1', $decPos + 1, '0');
             }
-
+            
             $roundUp = str_pad('', $length, '0');
             $roundUp[$decPos] = '.';
             $roundUp[$roundPos + $decPos] = '1';
-
+            
             if ($op1 > 0) {
                 if (self::$_bcmathDisabled) {
                     return PhpMath::Add($op1, $roundUp, $precision);
@@ -131,9 +141,9 @@ class Math
                 return self::Sub($op1, $roundUp, $precision);
             }
         } elseif ($precision >= 0) {
-            return substr($op1, 0, $decPos + ($precision ? $precision + 1: 0));
+            return substr($op1, 0, $decPos + ($precision ? $precision + 1 : 0));
         }
-
+        
         return (string) $op1;
     }
 
@@ -143,26 +153,26 @@ class Math
      *
      * @param string $value
      */
-    public static function floatalize($value)
+    public static function floatalize ($value)
     {
         $value = strtoupper($value);
         if (strpos($value, 'E') === false) {
             return $value;
         }
-
+        
         $number = substr($value, 0, strpos($value, 'E'));
         if (strpos($number, '.') !== false) {
-            $post   = strlen(substr($number, strpos($number, '.') + 1));
+            $post = strlen(substr($number, strpos($number, '.') + 1));
             $mantis = substr($value, strpos($value, 'E') + 1);
             if ($mantis < 0) {
                 $post += abs((int) $mantis);
             }
-
+            
             $value = number_format($value, $post, '.', '');
         } else {
             $value = number_format($value, 0, '.', '');
         }
-
+        
         return $value;
     }
 
@@ -173,17 +183,18 @@ class Math
      * @param   integer  $value  Value to normalize
      * @return  string           Normalized string without BCMath problems
      */
-    public static function normalize($value)
+    public static function normalize ($value)
     {
         $convert = localeconv();
-        $value = str_replace($convert['thousands_sep'], "",(string) $value);
+        $value = str_replace($convert['thousands_sep'], "", (string) $value);
         $value = str_replace($convert['positive_sign'], "", $value);
-        $value = str_replace($convert['decimal_point'], ".",$value);
-        if (!empty($convert['negative_sign']) and (strpos($value, $convert['negative_sign']))) {
+        $value = str_replace($convert['decimal_point'], ".", $value);
+        if (! empty($convert['negative_sign']) and
+         (strpos($value, $convert['negative_sign']))) {
             $value = str_replace($convert['negative_sign'], "", $value);
             $value = "-" . $value;
         }
-
+        
         return $value;
     }
 
@@ -194,11 +205,11 @@ class Math
      * @param   integer  $value  Value to normalize
      * @return  string           Normalized string without BCMath problems
      */
-    public static function localize($value)
+    public static function localize ($value)
     {
         $convert = localeconv();
         $value = str_replace(".", $convert['decimal_point'], (string) $value);
-        if (!empty($convert['negative_sign']) and (strpos($value, "-"))) {
+        if (! empty($convert['negative_sign']) and (strpos($value, "-"))) {
             $value = str_replace("-", $convert['negative_sign'], $value);
         }
         return $value;
@@ -212,21 +223,21 @@ class Math
      * @param integer $scale (Optional) Scale to use
      * @return string
      */
-    public static function exponent($value, $scale = null)
+    public static function exponent ($value, $scale = null)
     {
-        if (!extension_loaded('bcmath')) {
+        if (! extension_loaded('bcmath')) {
             return $value;
         }
-
+        
         $split = explode('e', $value);
         if (count($split) == 1) {
             $split = explode('E', $value);
         }
-
+        
         if (count($split) > 1) {
             $value = bcmul($split[0], bcpow(10, $split[1], $scale), $scale);
         }
-
+        
         return $value;
     }
 
@@ -238,11 +249,11 @@ class Math
      * @param  integer $scale
      * @return string
      */
-    public static function Add($op1, $op2, $scale = null)
+    public static function Add ($op1, $op2, $scale = null)
     {
         $op1 = self::exponent($op1, $scale);
         $op2 = self::exponent($op2, $scale);
-
+        
         return bcadd($op1, $op2, $scale);
     }
 
@@ -254,7 +265,7 @@ class Math
      * @param  integer $scale
      * @return string
      */
-    public static function Sub($op1, $op2, $scale = null)
+    public static function Sub ($op1, $op2, $scale = null)
     {
         $op1 = self::exponent($op1, $scale);
         $op2 = self::exponent($op2, $scale);
@@ -269,7 +280,7 @@ class Math
      * @param  integer $scale
      * @return string
      */
-    public static function Pow($op1, $op2, $scale = null)
+    public static function Pow ($op1, $op2, $scale = null)
     {
         $op1 = self::exponent($op1, $scale);
         $op2 = self::exponent($op2, $scale);
@@ -284,7 +295,7 @@ class Math
      * @param  integer $scale
      * @return string
      */
-    public static function Mul($op1, $op2, $scale = null)
+    public static function Mul ($op1, $op2, $scale = null)
     {
         $op1 = self::exponent($op1, $scale);
         $op2 = self::exponent($op2, $scale);
@@ -299,7 +310,7 @@ class Math
      * @param  integer $scale
      * @return string
      */
-    public static function Div($op1, $op2, $scale = null)
+    public static function Div ($op1, $op2, $scale = null)
     {
         $op1 = self::exponent($op1, $scale);
         $op2 = self::exponent($op2, $scale);
@@ -313,7 +324,7 @@ class Math
      * @param  integer $scale
      * @return string
      */
-    public static function Sqrt($op1, $scale = null)
+    public static function Sqrt ($op1, $scale = null)
     {
         $op1 = self::exponent($op1, $scale);
         return bcsqrt($op1, $scale);
@@ -326,7 +337,7 @@ class Math
      * @param  string  $op2
      * @return string
      */
-    public static function Mod($op1, $op2)
+    public static function Mod ($op1, $op2)
     {
         $op1 = self::exponent($op1);
         $op2 = self::exponent($op2);
@@ -341,7 +352,7 @@ class Math
      * @param  integer $scale
      * @return string
      */
-    public static function Comp($op1, $op2, $scale = null)
+    public static function Comp ($op1, $op2, $scale = null)
     {
         $op1 = self::exponent($op1, $scale);
         $op2 = self::exponent($op2, $scale);
@@ -349,8 +360,8 @@ class Math
     }
 }
 
-if (!extension_loaded('bcmath')
-    || (defined('TESTS_ZEND_LOCALE_BCMATH_ENABLED') && !TESTS_ZEND_LOCALE_BCMATH_ENABLED)
-) {
+if (! extension_loaded('bcmath') ||
+ (defined('TESTS_ZEND_LOCALE_BCMATH_ENABLED') &&
+ ! TESTS_ZEND_LOCALE_BCMATH_ENABLED)) {
     PhpMath::disable();
 }

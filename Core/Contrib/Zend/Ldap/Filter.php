@@ -39,12 +39,18 @@ namespace Zend\Ldap;
  */
 class Filter extends Filter\StringFilter
 {
-    const TYPE_EQUALS         = '=';
-    const TYPE_GREATER        = '>';
+
+    const TYPE_EQUALS = '=';
+
+    const TYPE_GREATER = '>';
+
     const TYPE_GREATEROREQUAL = '>=';
-    const TYPE_LESS           = '<';
-    const TYPE_LESSOREQUAL    = '<=';
-    const TYPE_APPROX         = '~=';
+
+    const TYPE_LESS = '<';
+
+    const TYPE_LESSOREQUAL = '<=';
+
+    const TYPE_APPROX = '~=';
 
     /**
      * Creates an 'equals' filter.
@@ -54,7 +60,7 @@ class Filter extends Filter\StringFilter
      * @param  string $value
      * @return \Zend\Ldap\Filter
      */
-    public static function equals($attr, $value)
+    public static function equals ($attr, $value)
     {
         return new self($attr, $value, self::TYPE_EQUALS, null, null);
     }
@@ -67,7 +73,7 @@ class Filter extends Filter\StringFilter
      * @param  string $value
      * @return \Zend\Ldap\Filter
      */
-    public static function begins($attr, $value)
+    public static function begins ($attr, $value)
     {
         return new self($attr, $value, self::TYPE_EQUALS, null, '*');
     }
@@ -80,7 +86,7 @@ class Filter extends Filter\StringFilter
      * @param  string $value
      * @return \Zend\Ldap\Filter
      */
-    public static function ends($attr, $value)
+    public static function ends ($attr, $value)
     {
         return new self($attr, $value, self::TYPE_EQUALS, '*', null);
     }
@@ -93,7 +99,7 @@ class Filter extends Filter\StringFilter
      * @param  string $value
      * @return \Zend\Ldap\Filter
      */
-    public static function contains($attr, $value)
+    public static function contains ($attr, $value)
     {
         return new self($attr, $value, self::TYPE_EQUALS, '*', '*');
     }
@@ -106,7 +112,7 @@ class Filter extends Filter\StringFilter
      * @param  string $value
      * @return \Zend\Ldap\Filter
      */
-    public static function greater($attr, $value)
+    public static function greater ($attr, $value)
     {
         return new self($attr, $value, self::TYPE_GREATER, null, null);
     }
@@ -119,7 +125,7 @@ class Filter extends Filter\StringFilter
      * @param  string $value
      * @return \Zend\Ldap\Filter
      */
-    public static function greaterOrEqual($attr, $value)
+    public static function greaterOrEqual ($attr, $value)
     {
         return new self($attr, $value, self::TYPE_GREATEROREQUAL, null, null);
     }
@@ -132,7 +138,7 @@ class Filter extends Filter\StringFilter
      * @param  string $value
      * @return \Zend\Ldap\Filter
      */
-    public static function less($attr, $value)
+    public static function less ($attr, $value)
     {
         return new self($attr, $value, self::TYPE_LESS, null, null);
     }
@@ -145,7 +151,7 @@ class Filter extends Filter\StringFilter
      * @param  string $value
      * @return \Zend\Ldap\Filter
      */
-    public static function lessOrEqual($attr, $value)
+    public static function lessOrEqual ($attr, $value)
     {
         return new self($attr, $value, self::TYPE_LESSOREQUAL, null, null);
     }
@@ -158,7 +164,7 @@ class Filter extends Filter\StringFilter
      * @param  string $value
      * @return \Zend\Ldap\Filter
      */
-    public static function approx($attr, $value)
+    public static function approx ($attr, $value)
     {
         return new self($attr, $value, self::TYPE_APPROX, null, null);
     }
@@ -170,7 +176,7 @@ class Filter extends Filter\StringFilter
      * @param  string $attr
      * @return \Zend\Ldap\Filter
      */
-    public static function any($attr)
+    public static function any ($attr)
     {
         return new self($attr, '', self::TYPE_EQUALS, '*', null);
     }
@@ -181,7 +187,7 @@ class Filter extends Filter\StringFilter
      * @param  string $filter
      * @return \Zend\Ldap\Filter\StringFilter
      */
-    public static function string($filter)
+    public static function string ($filter)
     {
         return new Filter\StringFilter($filter);
     }
@@ -193,7 +199,7 @@ class Filter extends Filter\StringFilter
      * @param string $value
      * @return \Zend\Ldap\Filter\MaskFilter
      */
-    public static function mask($mask, $value)
+    public static function mask ($mask, $value)
     {
         return new Filter\MaskFilter($mask, $value);
     }
@@ -204,7 +210,7 @@ class Filter extends Filter\StringFilter
      * @param  \Zend\Ldap\Filter\AbstractFilter $filter,...
      * @return \Zend\Ldap\Filter\AndFilter
      */
-    public static function andFilter($filter)
+    public static function andFilter ($filter)
     {
         return new Filter\AndFilter(func_get_args());
     }
@@ -215,7 +221,7 @@ class Filter extends Filter\StringFilter
      * @param  \Zend\Ldap\Filter\AbstractFilter $filter,...
      * @return \Zend\Ldap\Filter\OrFilter
      */
-    public static function orFilter($filter)
+    public static function orFilter ($filter)
     {
         return new Filter\OrFilter(func_get_args());
     }
@@ -230,12 +236,15 @@ class Filter extends Filter\StringFilter
      * @param  string $append
      * @return string
      */
-    private static function _createFilterString($attr, $value, $filtertype, $prepend = null, $append = null)
+    private static function _createFilterString ($attr, $value, $filtertype, 
+    $prepend = null, $append = null)
     {
         $str = $attr . $filtertype;
-        if ($prepend !== null) $str .= $prepend;
+        if ($prepend !== null)
+            $str .= $prepend;
         $str .= self::escapeValue($value);
-        if ($append !== null) $str .= $append;
+        if ($append !== null)
+            $str .= $append;
         return $str;
     }
 
@@ -248,9 +257,11 @@ class Filter extends Filter\StringFilter
      * @param string $prepend
      * @param string $append
      */
-    public function __construct($attr, $value, $filtertype, $prepend = null, $append = null)
+    public function __construct ($attr, $value, $filtertype, $prepend = null, 
+    $append = null)
     {
-        $filter = self::_createFilterString($attr, $value, $filtertype, $prepend, $append);
+        $filter = self::_createFilterString($attr, $value, $filtertype, 
+        $prepend, $append);
         parent::__construct($filter);
     }
 }

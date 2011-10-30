@@ -45,12 +45,14 @@ require_once 'Zend/Cloud/DocumentService/Query.php';
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-abstract class AbstractAdapter
-    implements Adapter
+abstract class AbstractAdapter implements Adapter
 {
-    const DOCUMENT_CLASS    = 'document_class';
+
+    const DOCUMENT_CLASS = 'document_class';
+
     const DOCUMENTSET_CLASS = 'documentset_class';
-    const QUERY_CLASS       = 'query_class';
+
+    const QUERY_CLASS = 'query_class';
 
     /**
      * Class to utilize for new document objects
@@ -77,7 +79,7 @@ abstract class AbstractAdapter
      * @param  string $class
      * @return Zend_Cloud_DocumentService_Adapter_AbstractAdapter
      */
-    public function setDocumentClass($class)
+    public function setDocumentClass ($class)
     {
         $this->_documentClass = (string) $class;
         return $this;
@@ -88,7 +90,7 @@ abstract class AbstractAdapter
      *
      * @return string
      */
-    public function getDocumentClass()
+    public function getDocumentClass ()
     {
         return $this->_documentClass;
     }
@@ -99,7 +101,7 @@ abstract class AbstractAdapter
      * @param  string $class
      * @return Zend_Cloud_DocumentService_Adapter_AbstractAdapter
      */
-    public function setDocumentSetClass($class)
+    public function setDocumentSetClass ($class)
     {
         $this->_documentSetClass = (string) $class;
         return $this;
@@ -110,7 +112,7 @@ abstract class AbstractAdapter
      *
      * @return string
      */
-    public function getDocumentSetClass()
+    public function getDocumentSetClass ()
     {
         return $this->_documentSetClass;
     }
@@ -121,7 +123,7 @@ abstract class AbstractAdapter
      * @param  string $class
      * @return Zend_Cloud_DocumentService_Adapter_AbstractAdapter
      */
-    public function setQueryClass($class)
+    public function setQueryClass ($class)
     {
         $this->_queryClass = (string) $class;
         return $this;
@@ -132,7 +134,7 @@ abstract class AbstractAdapter
      *
      * @return string
      */
-    public function getQueryClass()
+    public function getQueryClass ()
     {
         return $this->_queryClass;
     }

@@ -9,36 +9,37 @@ namespace Zend\Http\Header;
 class Vary implements HeaderDescription
 {
 
-    public static function fromString($headerLine)
+    public static function fromString ($headerLine)
     {
         $header = new static();
-
-        list($name, $value) = preg_split('#: #', $headerLine, 2);
-
+        
+        list ($name, $value) = preg_split('#: #', $headerLine, 2);
+        
         // check to ensure proper header type for this factory
         if (strtolower($name) !== 'vary') {
-            throw new Exception\InvalidArgumentException('Invalid header line for Vary string');
+            throw new Exception\InvalidArgumentException(
+            'Invalid header line for Vary string');
         }
-
+        
         // @todo implementation details
-        $header->value= $value;
+        $header->value = $value;
         
         return $header;
     }
 
-    public function getFieldName()
+    public function getFieldName ()
     {
         return 'Vary';
     }
 
-    public function getFieldValue()
+    public function getFieldValue ()
     {
         return $this->value;
     }
 
-    public function toString()
+    public function toString ()
     {
         return 'Vary: ' . $this->getFieldValue();
     }
-    
+
 }

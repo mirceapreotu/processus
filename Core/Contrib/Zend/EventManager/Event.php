@@ -38,6 +38,7 @@ use ArrayAccess;
  */
 class Event implements EventDescription
 {
+
     /**
      * @var string Event name
      */
@@ -68,16 +69,16 @@ class Event implements EventDescription
      * @param  array|ArrayAccess $params 
      * @return void
      */
-    public function __construct($name = null, $target = null, $params = null)
+    public function __construct ($name = null, $target = null, $params = null)
     {
         if (null !== $name) {
             $this->setName($name);
         }
-
+        
         if (null !== $target) {
             $this->setTarget($target);
         }
-
+        
         if (null !== $params) {
             $this->setParams($params);
         }
@@ -88,7 +89,7 @@ class Event implements EventDescription
      * 
      * @return string
      */
-    public function getName()
+    public function getName ()
     {
         return $this->name;
     }
@@ -100,7 +101,7 @@ class Event implements EventDescription
      * 
      * @return string|object
      */
-    public function getTarget()
+    public function getTarget ()
     {
         return $this->target;
     }
@@ -113,15 +114,15 @@ class Event implements EventDescription
      * @param  array|ArrayAccess|object $params 
      * @return Event
      */
-    public function setParams($params)
+    public function setParams ($params)
     {
-        if (!is_array($params) && !is_object($params)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Event parameters must be an array or object; received "%s"',
-                (is_object($params) ? get_class($params) : gettype($params))
-            ));
+        if (! is_array($params) && ! is_object($params)) {
+            throw new Exception\InvalidArgumentException(
+            sprintf(
+            'Event parameters must be an array or object; received "%s"', 
+            (is_object($params) ? get_class($params) : gettype($params))));
         }
-
+        
         $this->params = $params;
         return $this;
     }
@@ -131,7 +132,7 @@ class Event implements EventDescription
      * 
      * @return array|object|ArrayAccess
      */
-    public function getParams()
+    public function getParams ()
     {
         return $this->params;
     }
@@ -145,19 +146,20 @@ class Event implements EventDescription
      * @param  mixed $default 
      * @return mixed
      */
-    public function getParam($name, $default = null)
+    public function getParam ($name, $default = null)
     {
         // Check in params that are arrays or implement array access
-        if (is_array($this->params) || $this->params instanceof ArrayAccess) {
-            if (!isset($this->params[$name])) {
+        if (is_array($this->params) ||
+         $this->params instanceof ArrayAccess) {
+            if (! isset($this->params[$name])) {
                 return $default;
             }
-
+            
             return $this->params[$name];
         }
-
+        
         // Check in normal objects
-        if (!isset($this->params->{$name})) {
+        if (! isset($this->params->{$name})) {
             return $default;
         }
         return $this->params->{$name};
@@ -169,7 +171,7 @@ class Event implements EventDescription
      * @param  string $name 
      * @return Event
      */
-    public function setName($name)
+    public function setName ($name)
     {
         $this->name = (string) $name;
         return $this;
@@ -181,7 +183,7 @@ class Event implements EventDescription
      * @param  null|string|object $target 
      * @return Event
      */
-    public function setTarget($target)
+    public function setTarget ($target)
     {
         $this->target = $target;
         return $this;
@@ -194,7 +196,7 @@ class Event implements EventDescription
      * @param  mixed $value 
      * @return Event
      */
-    public function setParam($name, $value)
+    public function setParam ($name, $value)
     {
         if (is_array($this->params) || $this->params instanceof ArrayAccess) {
             // Arrays or objects implementing array access
@@ -212,7 +214,7 @@ class Event implements EventDescription
      * @param  bool $flag 
      * @return void
      */
-    public function stopPropagation($flag = true)
+    public function stopPropagation ($flag = true)
     {
         $this->stopPropagation = (bool) $flag;
     }
@@ -222,7 +224,7 @@ class Event implements EventDescription
      * 
      * @return bool
      */
-    public function propagationIsStopped()
+    public function propagationIsStopped ()
     {
         return $this->stopPropagation;
     }

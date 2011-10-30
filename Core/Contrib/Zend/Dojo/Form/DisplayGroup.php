@@ -24,8 +24,7 @@
  */
 namespace Zend\Dojo\Form;
 
-use Zend\Loader\PrefixPathMapper as PluginLoader,
-    Zend\View\Renderer as View;
+use Zend\Loader\PrefixPathMapper as PluginLoader, Zend\View\Renderer as View;
 
 /**
  * Dijit-enabled DisplayGroup
@@ -38,6 +37,7 @@ use Zend\Loader\PrefixPathMapper as PluginLoader,
  */
 class DisplayGroup extends \Zend\Form\DisplayGroup
 {
+
     /**
      * Constructor
      *
@@ -46,10 +46,11 @@ class DisplayGroup extends \Zend\Form\DisplayGroup
      * @param  array|\Zend\Config\Config|null $options
      * @return void
      */
-    public function __construct($name, PluginLoader $loader, $options = null)
+    public function __construct ($name, PluginLoader $loader, $options = null)
     {
         parent::__construct($name, $loader, $options);
-        $this->addPrefixPath('Zend\Dojo\Form\Decorator', 'Zend/Dojo/Form/Decorator');
+        $this->addPrefixPath('Zend\Dojo\Form\Decorator', 
+        'Zend/Dojo/Form/Decorator');
     }
 
     /**
@@ -60,12 +61,14 @@ class DisplayGroup extends \Zend\Form\DisplayGroup
      * @param  \Zend\View\Renderer $view
      * @return \Zend\Dojo\Form\Element\Dijit
      */
-    public function setView(View $view = null)
+    public function setView (View $view = null)
     {
         if (null !== $view) {
-            if(false === $view->getBroker()->isLoaded('dojo')) {
+            if (false === $view->getBroker()->isLoaded('dojo')) {
                 $loader = new \Zend\Dojo\View\HelperLoader();
-                $view->getBroker()->getClassLoader()->registerPlugins($loader);
+                $view->getBroker()
+                    ->getClassLoader()
+                    ->registerPlugins($loader);
             }
         }
         return parent::setView($view);

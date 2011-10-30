@@ -36,6 +36,7 @@ namespace Zend\Layout\Controller\Plugin;
  */
 class Layout extends \Zend\Controller\Plugin\AbstractPlugin
 {
+
     protected $_layoutActionHelper = null;
 
     /**
@@ -49,7 +50,7 @@ class Layout extends \Zend\Controller\Plugin\AbstractPlugin
      * @param  \Zend\Layout\Layout $layout
      * @return void
      */
-    public function __construct(\Zend\Layout\Layout $layout = null)
+    public function __construct (\Zend\Layout\Layout $layout = null)
     {
         if (null !== $layout) {
             $this->setLayout($layout);
@@ -61,7 +62,7 @@ class Layout extends \Zend\Controller\Plugin\AbstractPlugin
      *
      * @return \Zend\Layout\Layout
      */
-    public function getLayout()
+    public function getLayout ()
     {
         return $this->_layout;
     }
@@ -72,7 +73,7 @@ class Layout extends \Zend\Controller\Plugin\AbstractPlugin
      * @param  \Zend\Layout\Layout $layout
      * @return \Zend\Layout\Controller\Plugin\Layout
      */
-    public function setLayout(\Zend\Layout\Layout $layout)
+    public function setLayout (\Zend\Layout\Layout $layout)
     {
         $this->_layout = $layout;
         return $this;
@@ -84,7 +85,8 @@ class Layout extends \Zend\Controller\Plugin\AbstractPlugin
      * @param  \Zend\Layout\Controller\Action\Helper\Layout $layoutActionHelper
      * @return \Zend\Layout\Controller\Plugin\Layout
      */
-    public function setLayoutActionHelper(\Zend\Layout\Controller\Action\Helper\Layout $layoutActionHelper)
+    public function setLayoutActionHelper (
+    \Zend\Layout\Controller\Action\Helper\Layout $layoutActionHelper)
     {
         $this->_layoutActionHelper = $layoutActionHelper;
         return $this;
@@ -95,7 +97,7 @@ class Layout extends \Zend\Controller\Plugin\AbstractPlugin
      *
      * @return \Zend\Layout\Controller\Action\Helper\Layout
      */
-    public function getLayoutActionHelper()
+    public function getLayoutActionHelper ()
     {
         return $this->_layoutActionHelper;
     }
@@ -106,38 +108,38 @@ class Layout extends \Zend\Controller\Plugin\AbstractPlugin
      * @param  \Zend\Controller\Request\AbstractRequest $request
      * @return void
      */
-    public function postDispatch(\Zend\Controller\Request\AbstractRequest $request)
+    public function postDispatch (
+    \Zend\Controller\Request\AbstractRequest $request)
     {
         $layout = $this->getLayout();
         $helper = $this->getLayoutActionHelper();
-
+        
         // Return early if forward detected
-        if (!$request->isDispatched()
-            || $this->getResponse()->isRedirect()
-            || ($layout->getMvcSuccessfulActionOnly()
-                && (!empty($helper) && !$helper->isActionControllerSuccessful())))
-        {
+        if (! $request->isDispatched() ||
+         $this->getResponse()->isRedirect() ||
+         ($layout->getMvcSuccessfulActionOnly() &&
+         (! empty($helper) && ! $helper->isActionControllerSuccessful()))) {
             return;
         }
-
+        
         // Return early if layout has been disabled
-        if (!$layout->isEnabled()) {
+        if (! $layout->isEnabled()) {
             return;
         }
-
-        $response   = $this->getResponse();
-        $content    = $response->getBody(true);
+        
+        $response = $this->getResponse();
+        $content = $response->getBody(true);
         $contentKey = $layout->getContentKey();
-
+        
         if (isset($content['default'])) {
             $content[$contentKey] = $content['default'];
         }
         if ('default' != $contentKey) {
             unset($content['default']);
         }
-
+        
         $layout->assign($content);
-
+        
         $fullContent = null;
         $obStartLevel = ob_get_level();
         try {
@@ -152,6 +154,6 @@ class Layout extends \Zend\Controller\Plugin\AbstractPlugin
             $response->setBody(null);
             throw $e;
         }
-
+    
     }
 }

@@ -70,9 +70,9 @@ class ACLEntry extends \Zend\GData\Entry
      * Create a new instance.
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(GApps::$namespaces);
         parent::__construct($element);
@@ -85,16 +85,17 @@ class ACLEntry extends \Zend\GData\Entry
      *
      * @param DOMDocument $doc The DOMDocument used to construct DOMElements
      * @return DOMElement The DOMElement representing this element and all
-     *          child properties.
+     * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 3, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 3, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_role !== null) {
             $element->appendChild($this->_role->getDOM($element->ownerDocument));
         }
         if ($this->_scope !== null) {
-            $element->appendChild($this->_scope->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_scope->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -105,17 +106,17 @@ class ACLEntry extends \Zend\GData\Entry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
-
+        
         switch ($absoluteNodeName) {
-            case $this->lookupNamespace('gAcl') . ':' . 'role';
+            case $this->lookupNamespace('gAcl') . ':' . 'role':
                 $role = new Extension\ACLRole();
                 $role->transferFromDOM($child);
                 $this->_role = $role;
                 break;
-            case $this->lookupNamespace('gAcl') . ':' . 'scope';
+            case $this->lookupNamespace('gAcl') . ':' . 'scope':
                 $scope = new Extension\ACLScope();
                 $scope->transferFromDOM($child);
                 $this->_scope = $scope;
@@ -132,7 +133,7 @@ class ACLEntry extends \Zend\GData\Entry
      * @see setRole
      * @return \Zend\GData\GApps\Extension\Login The requested object.
      */
-    public function getRole()
+    public function getRole ()
     {
         return $this->_role;
     }
@@ -141,10 +142,10 @@ class ACLEntry extends \Zend\GData\Entry
      * Set the value of the role property for this object.
      *
      * @param \Zend\GData\Docs\Extension\ACLRole $value The desired value for
-     *          this instance's login property.
+     * this instance's login property.
      * @return \Zend\GData\Docs\ACLEntry Provides a fluent interface.
      */
-    public function setRole($value)
+    public function setRole ($value)
     {
         $this->_role = $value;
         return $this;
@@ -156,7 +157,7 @@ class ACLEntry extends \Zend\GData\Entry
      * @see setScope
      * @return \Zend\GData\Docs\Extension\ACLScope The requested object.
      */
-    public function getScope()
+    public function getScope ()
     {
         return $this->_scope;
     }
@@ -165,10 +166,10 @@ class ACLEntry extends \Zend\GData\Entry
      * Set the value of the scope property for this object.
      *
      * @param \Zend\GData\Docs\Extension\ACLScope $value The desired value for
-     *          this instance's name property.
+     * this instance's name property.
      * @return \Zend\GData\Docs\ACLEntry Provides a fluent interface.
      */
-    public function setScope($value)
+    public function setScope ($value)
     {
         $this->_scope = $value;
         return $this;

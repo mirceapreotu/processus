@@ -38,7 +38,7 @@ class PrivateKey extends Key
 
     protected $_publicKey = null;
 
-    public function __construct($pemString, $passPhrase = null)
+    public function __construct ($pemString, $passPhrase = null)
     {
         $this->_pemString = $pemString;
         $this->_parse($passPhrase);
@@ -48,17 +48,17 @@ class PrivateKey extends Key
      * @param string $passPhrase
      * @throws Zend\Crypt\Exception
      */
-    protected function _parse($passPhrase)
+    protected function _parse ($passPhrase)
     {
         $result = openssl_get_privatekey($this->_pemString, $passPhrase);
-        if (!$result) {
+        if (! $result) {
             throw new \Zend\Crypt\Exception('Unable to load private key');
         }
         $this->_opensslKeyResource = $result;
         $this->_details = openssl_pkey_get_details($this->_opensslKeyResource);
     }
 
-    public function getPublicKey()
+    public function getPublicKey ()
     {
         if ($this->_publicKey === null) {
             $this->_publicKey = new PublicKey($this->_details['key']);

@@ -32,6 +32,7 @@ namespace Zend\Authentication;
  */
 class AuthenticationService
 {
+
     /**
      * Persistent storage handler
      *
@@ -45,7 +46,7 @@ class AuthenticationService
      * @param  Storage $storage 
      * @return void
      */
-    public function __construct(Storage $storage = null)
+    public function __construct (Storage $storage = null)
     {
         if (null !== $storage) {
             $this->setStorage($storage);
@@ -59,12 +60,12 @@ class AuthenticationService
      *
      * @return Zend\Authentication\Storage
      */
-    public function getStorage()
+    public function getStorage ()
     {
         if (null === $this->_storage) {
             $this->setStorage(new Storage\Session());
         }
-
+        
         return $this->_storage;
     }
 
@@ -74,7 +75,7 @@ class AuthenticationService
      * @param  Zend\Authentication\Storage $storage
      * @return Zend\Authentication\AuthenticationService Provides a fluent interface
      */
-    public function setStorage(Storage $storage)
+    public function setStorage (Storage $storage)
     {
         $this->_storage = $storage;
         return $this;
@@ -86,10 +87,10 @@ class AuthenticationService
      * @param  Zend\Authentication\Adapter $adapter
      * @return Zend\Authentication\Result
      */
-    public function authenticate(Adapter $adapter)
+    public function authenticate (Adapter $adapter)
     {
         $result = $adapter->authenticate();
-
+        
         /**
          * ZF-7546 - prevent multiple succesive calls from storing inconsistent results
          * Ensure storage has clean state
@@ -97,11 +98,11 @@ class AuthenticationService
         if ($this->hasIdentity()) {
             $this->clearIdentity();
         }
-
+        
         if ($result->isValid()) {
             $this->getStorage()->write($result->getIdentity());
         }
-
+        
         return $result;
     }
 
@@ -110,9 +111,9 @@ class AuthenticationService
      *
      * @return boolean
      */
-    public function hasIdentity()
+    public function hasIdentity ()
     {
-        return !$this->getStorage()->isEmpty();
+        return ! $this->getStorage()->isEmpty();
     }
 
     /**
@@ -120,14 +121,14 @@ class AuthenticationService
      *
      * @return mixed|null
      */
-    public function getIdentity()
+    public function getIdentity ()
     {
         $storage = $this->getStorage();
-
+        
         if ($storage->isEmpty()) {
             return null;
         }
-
+        
         return $storage->read();
     }
 
@@ -136,7 +137,7 @@ class AuthenticationService
      *
      * @return void
      */
-    public function clearIdentity()
+    public function clearIdentity ()
     {
         $this->getStorage()->clear();
     }

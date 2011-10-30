@@ -36,6 +36,7 @@ use Zend\Config\Config;
  */
 interface Decorator
 {
+
     /**
      * Constructor
      *
@@ -44,7 +45,7 @@ interface Decorator
      * @param  array|\Zend\Config\Config $options
      * @return void
      */
-    public function __construct($options = null);
+    public function __construct ($options = null);
 
     /**
      * Set an element to decorate
@@ -55,14 +56,14 @@ interface Decorator
      * @param  mixed $element
      * @return \Zend\Form\Decorator
      */
-    public function setElement($element);
+    public function setElement ($element);
 
     /**
      * Retrieve current element
      *
      * @return mixed
      */
-    public function getElement();
+    public function getElement ();
 
     /**
      * Set decorator options from an array
@@ -70,7 +71,7 @@ interface Decorator
      * @param  array $options
      * @return \Zend\Form\Decorator
      */
-    public function setOptions(array $options);
+    public function setOptions (array $options);
 
     /**
      * Set decorator options from a config object
@@ -78,7 +79,7 @@ interface Decorator
      * @param  \Zend\Config\Config $config
      * @return \Zend\Form\Decorator
      */
-    public function setConfig(Config $config);
+    public function setConfig (Config $config);
 
     /**
      * Set a single option
@@ -87,7 +88,7 @@ interface Decorator
      * @param  mixed $value
      * @return \Zend\Form\Decorator
      */
-    public function setOption($key, $value);
+    public function setOption ($key, $value);
 
     /**
      * Retrieve a single option
@@ -95,14 +96,14 @@ interface Decorator
      * @param  string $key
      * @return mixed
      */
-    public function getOption($key);
+    public function getOption ($key);
 
     /**
      * Retrieve decorator options
      *
      * @return array
      */
-    public function getOptions();
+    public function getOptions ();
 
     /**
      * Delete a single option
@@ -110,14 +111,14 @@ interface Decorator
      * @param  string $key
      * @return bool
      */
-    public function removeOption($key);
+    public function removeOption ($key);
 
     /**
      * Clear all options
      *
      * @return \Zend\Form\Decorator
      */
-    public function clearOptions();
+    public function clearOptions ();
 
     /**
      * Render the element
@@ -125,5 +126,5 @@ interface Decorator
      * @param  string $content Content to decorate
      * @return string
      */
-    public function render($content);
+    public function render ($content);
 }

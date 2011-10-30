@@ -17,20 +17,20 @@
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
- 
+
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Writer\Extension\Atom\Renderer;
 use Zend\Feed\Writer\Extension;
 
 /**
-* @uses \Zend\Feed\Writer\Extension\AbstractRenderer
-* @category Zend
-* @package Zend_Feed_Writer
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @uses \Zend\Feed\Writer\Extension\AbstractRenderer
+ * @category Zend
+ * @package Zend_Feed_Writer
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 class Feed extends Extension\AbstractRenderer
 {
 
@@ -42,13 +42,13 @@ class Feed extends Extension\AbstractRenderer
      * @var bool
      */
     protected $_called = false;
-    
+
     /**
      * Render feed
      * 
      * @return void
      */
-    public function render()
+    public function render ()
     {
         /**
          * RSS 2.0 only. Used mainly to include Atom links and
@@ -63,16 +63,16 @@ class Feed extends Extension\AbstractRenderer
             $this->_appendNamespaces();
         }
     }
-    
+
     /**
      * Append namespaces to root element of feed
      * 
      * @return void
      */
-    protected function _appendNamespaces()
+    protected function _appendNamespaces ()
     {
-        $this->getRootElement()->setAttribute('xmlns:atom',
-            'http://www.w3.org/2005/Atom');  
+        $this->getRootElement()->setAttribute('xmlns:atom', 
+        'http://www.w3.org/2005/Atom');
     }
 
     /**
@@ -82,14 +82,14 @@ class Feed extends Extension\AbstractRenderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setFeedLinks(\DOMDocument $dom, \DOMElement $root)
+    protected function _setFeedLinks (\DOMDocument $dom,\DOMElement $root)
     {
         $flinks = $this->getDataContainer()->getFeedLinks();
-        if(!$flinks || empty($flinks)) {
+        if (! $flinks || empty($flinks)) {
             return;
         }
         foreach ($flinks as $type => $href) {
-            $mime  = 'application/' . strtolower($type) . '+xml';
+            $mime = 'application/' . strtolower($type) . '+xml';
             $flink = $dom->createElement('atom:link');
             $root->appendChild($flink);
             $flink->setAttribute('rel', 'self');
@@ -98,7 +98,7 @@ class Feed extends Extension\AbstractRenderer
         }
         $this->_called = true;
     }
-    
+
     /**
      * Set PuSH hubs
      * 
@@ -106,10 +106,10 @@ class Feed extends Extension\AbstractRenderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setHubs(\DOMDocument $dom, \DOMElement $root)
+    protected function _setHubs (\DOMDocument $dom,\DOMElement $root)
     {
         $hubs = $this->getDataContainer()->getHubs();
-        if (!$hubs || empty($hubs)) {
+        if (! $hubs || empty($hubs)) {
             return;
         }
         foreach ($hubs as $hubUrl) {

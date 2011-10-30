@@ -53,24 +53,16 @@ class Mysqli extends AbstractAdapter
      *
      * @var array Associative array of datatypes to values 0, 1, or 2.
      */
-    protected $_numericDataTypes = array(
-        Db\Db::INT_TYPE    => Db\Db::INT_TYPE,
-        Db\Db::BIGINT_TYPE => Db\Db::BIGINT_TYPE,
-        Db\Db::FLOAT_TYPE  => Db\Db::FLOAT_TYPE,
-        'INT'                => Db\Db::INT_TYPE,
-        'INTEGER'            => Db\Db::INT_TYPE,
-        'MEDIUMINT'          => Db\Db::INT_TYPE,
-        'SMALLINT'           => Db\Db::INT_TYPE,
-        'TINYINT'            => Db\Db::INT_TYPE,
-        'BIGINT'             => Db\Db::BIGINT_TYPE,
-        'SERIAL'             => Db\Db::BIGINT_TYPE,
-        'DEC'                => Db\Db::FLOAT_TYPE,
-        'DECIMAL'            => Db\Db::FLOAT_TYPE,
-        'DOUBLE'             => Db\Db::FLOAT_TYPE,
-        'DOUBLE PRECISION'   => Db\Db::FLOAT_TYPE,
-        'FIXED'              => Db\Db::FLOAT_TYPE,
-        'FLOAT'              => Db\Db::FLOAT_TYPE
-    );
+    protected $_numericDataTypes = array(Db\Db::INT_TYPE => Db\Db::INT_TYPE, 
+    Db\Db::BIGINT_TYPE => Db\Db::BIGINT_TYPE, 
+    Db\Db::FLOAT_TYPE => Db\Db::FLOAT_TYPE, 
+    'INT' => Db\Db::INT_TYPE, 'INTEGER' => Db\Db::INT_TYPE, 
+    'MEDIUMINT' => Db\Db::INT_TYPE, 'SMALLINT' => Db\Db::INT_TYPE, 
+    'TINYINT' => Db\Db::INT_TYPE, 'BIGINT' => Db\Db::BIGINT_TYPE, 
+    'SERIAL' => Db\Db::BIGINT_TYPE, 'DEC' => Db\Db::FLOAT_TYPE, 
+    'DECIMAL' => Db\Db::FLOAT_TYPE, 'DOUBLE' => Db\Db::FLOAT_TYPE, 
+    'DOUBLE PRECISION' => Db\Db::FLOAT_TYPE, 
+    'FIXED' => Db\Db::FLOAT_TYPE, 'FLOAT' => Db\Db::FLOAT_TYPE);
 
     /**
      * @var \Zend\Db\Statement\Mysqli
@@ -91,7 +83,7 @@ class Mysqli extends AbstractAdapter
      *
      * @return string           Quoted string
      */
-    protected function _quote($value)
+    protected function _quote ($value)
     {
         if (is_int($value) || is_float($value)) {
             return $value;
@@ -105,7 +97,7 @@ class Mysqli extends AbstractAdapter
      *
      * @return string
      */
-    public function getQuoteIdentifierSymbol()
+    public function getQuoteIdentifierSymbol ()
     {
         return "`";
     }
@@ -115,7 +107,7 @@ class Mysqli extends AbstractAdapter
      *
      * @return array
      */
-    public function listTables()
+    public function listTables ()
     {
         $result = array();
         // Use mysqli extension API, because SHOW doesn't work
@@ -160,19 +152,20 @@ class Mysqli extends AbstractAdapter
      * @param string $schemaName OPTIONAL
      * @return array
      */
-    public function describeTable($tableName, $schemaName = null)
+    public function describeTable ($tableName, $schemaName = null)
     {
         /**
          * @todo  use INFORMATION_SCHEMA someday when
          * Mysql's implementation isn't too slow.
          */
-
+        
         if ($schemaName) {
-            $sql = 'DESCRIBE ' . $this->quoteIdentifier("$schemaName.$tableName", true);
+            $sql = 'DESCRIBE ' .
+             $this->quoteIdentifier("$schemaName.$tableName", true);
         } else {
             $sql = 'DESCRIBE ' . $this->quoteIdentifier($tableName, true);
         }
-
+        
         /**
          * Use mysqli extension API, because DESCRIBE doesn't work
          * well as a prepared statement on Mysql 4.1.
@@ -185,18 +178,12 @@ class Mysqli extends AbstractAdapter
         } else {
             throw new MysqliException($this->getConnection()->error);
         }
-
+        
         $desc = array();
-
-        $row_defaults = array(
-            'Length'          => null,
-            'Scale'           => null,
-            'Precision'       => null,
-            'Unsigned'        => null,
-            'Primary'         => false,
-            'PrimaryPosition' => null,
-            'Identity'        => false
-        );
+        
+        $row_defaults = array('Length' => null, 'Scale' => null, 
+        'Precision' => null, 'Unsigned' => null, 'Primary' => false, 
+        'PrimaryPosition' => null, 'Identity' => false);
         $i = 1;
         $p = 1;
         foreach ($result as $key => $row) {
@@ -207,21 +194,28 @@ class Mysqli extends AbstractAdapter
             if (preg_match('/^((?:var)?char)\((\d+)\)/', $row['Type'], $matches)) {
                 $row['Type'] = $matches[1];
                 $row['Length'] = $matches[2];
-            } else if (preg_match('/^decimal\((\d+),(\d+)\)/', $row['Type'], $matches)) {
-                $row['Type'] = 'decimal';
-                $row['Precision'] = $matches[1];
-                $row['Scale'] = $matches[2];
-            } else if (preg_match('/^float\((\d+),(\d+)\)/', $row['Type'], $matches)) {
-                $row['Type'] = 'float';
-                $row['Precision'] = $matches[1];
-                $row['Scale'] = $matches[2];
-            } else if (preg_match('/^((?:big|medium|small|tiny)?int)\((\d+)\)/', $row['Type'], $matches)) {
-                $row['Type'] = $matches[1];
-                /**
-                 * The optional argument of a Mysql int type is not precision
-                 * or length; it is only a hint for display width.
-                 */
-            }
+            } else 
+                if (preg_match('/^decimal\((\d+),(\d+)\)/', $row['Type'], 
+                $matches)) {
+                    $row['Type'] = 'decimal';
+                    $row['Precision'] = $matches[1];
+                    $row['Scale'] = $matches[2];
+                } else 
+                    if (preg_match('/^float\((\d+),(\d+)\)/', $row['Type'], 
+                    $matches)) {
+                        $row['Type'] = 'float';
+                        $row['Precision'] = $matches[1];
+                        $row['Scale'] = $matches[2];
+                    } else 
+                        if (preg_match(
+                        '/^((?:big|medium|small|tiny)?int)\((\d+)\)/', 
+                        $row['Type'], $matches)) {
+                            $row['Type'] = $matches[1];
+                        /**
+                         * The optional argument of a Mysql int type is not precision
+                         * or length; it is only a hint for display width.
+                         */
+                        }
             if (strtoupper($row['Key']) == 'PRI') {
                 $row['Primary'] = true;
                 $row['PrimaryPosition'] = $p;
@@ -230,25 +224,22 @@ class Mysqli extends AbstractAdapter
                 } else {
                     $row['Identity'] = false;
                 }
-                ++$p;
+                ++ $p;
             }
             $desc[$this->foldCase($row['Field'])] = array(
-                'SCHEMA_NAME'      => null, // @todo
-                'TABLE_NAME'       => $this->foldCase($tableName),
-                'COLUMN_NAME'      => $this->foldCase($row['Field']),
-                'COLUMN_POSITION'  => $i,
-                'DATA_TYPE'        => $row['Type'],
-                'DEFAULT'          => $row['Default'],
-                'NULLABLE'         => (bool) ($row['Null'] == 'YES'),
-                'LENGTH'           => $row['Length'],
-                'SCALE'            => $row['Scale'],
-                'PRECISION'        => $row['Precision'],
-                'UNSIGNED'         => $row['Unsigned'],
-                'PRIMARY'          => $row['Primary'],
-                'PRIMARY_POSITION' => $row['PrimaryPosition'],
-                'IDENTITY'         => $row['Identity']
-            );
-            ++$i;
+            'SCHEMA_NAME' => null,  // @todo
+            'TABLE_NAME' => $this->foldCase($tableName), 
+            'COLUMN_NAME' => $this->foldCase($row['Field']), 
+            'COLUMN_POSITION' => $i, 'DATA_TYPE' => $row['Type'], 
+            'DEFAULT' => $row['Default'], 
+            'NULLABLE' => (bool) ($row['Null'] == 'YES'), 
+            'LENGTH' => $row['Length'], 'SCALE' => $row['Scale'], 
+            'PRECISION' => $row['Precision'], 
+            'UNSIGNED' => $row['Unsigned'], 
+            'PRIMARY' => $row['Primary'], 
+            'PRIMARY_POSITION' => $row['PrimaryPosition'], 
+            'IDENTITY' => $row['Identity']);
+            ++ $i;
         }
         return $desc;
     }
@@ -259,55 +250,52 @@ class Mysqli extends AbstractAdapter
      * @return void
      * @throws \Zend\Db\Adapter\MysqliException
      */
-    protected function _connect()
+    protected function _connect ()
     {
         if ($this->_connection) {
             return;
         }
-
-        if (!extension_loaded('mysqli')) {
-            throw new MysqliException('The Mysqli extension is required for this adapter but the extension is not loaded');
+        
+        if (! extension_loaded('mysqli')) {
+            throw new MysqliException(
+            'The Mysqli extension is required for this adapter but the extension is not loaded');
         }
-
+        
         if (isset($this->_config['port'])) {
             $port = (integer) $this->_config['port'];
         } else {
             $port = null;
         }
-
+        
         $this->_connection = mysqli_init();
-
-        if(!empty($this->_config['driver_options'])) {
-            foreach($this->_config['driver_options'] as $option=>$value) {
-                if(is_string($option)) {
+        
+        if (! empty($this->_config['driver_options'])) {
+            foreach ($this->_config['driver_options'] as $option => $value) {
+                if (is_string($option)) {
                     // Suppress warnings here
                     // Ignore it if it's not a valid constant
-                    $option = @constant(strtoupper($option));
-                    if($option === null)
+                    $option = @constant(
+                    strtoupper($option));
+                    if ($option === null)
                         continue;
                 }
                 mysqli_options($this->_connection, $option, $value);
             }
         }
-
+        
         // Suppress connection warnings here.
         // Throw an exception instead.
-        $_isConnected = @mysqli_real_connect(
-            $this->_connection,
-            $this->_config['host'],
-            $this->_config['username'],
-            $this->_config['password'],
-            $this->_config['dbname'],
-            $port
-        );
-
+        $_isConnected = @mysqli_real_connect($this->_connection, 
+        $this->_config['host'], $this->_config['username'], 
+        $this->_config['password'], $this->_config['dbname'], $port);
+        
         if ($_isConnected === false || mysqli_connect_errno()) {
-
+            
             $this->closeConnection();
             throw new MysqliException(mysqli_connect_error());
         }
-
-        if (!empty($this->_config['charset'])) {
+        
+        if (! empty($this->_config['charset'])) {
             mysqli_set_charset($this->_connection, $this->_config['charset']);
         }
     }
@@ -317,7 +305,7 @@ class Mysqli extends AbstractAdapter
      *
      * @return boolean
      */
-    public function isConnected()
+    public function isConnected ()
     {
         return ((bool) ($this->_connection instanceof \mysqli));
     }
@@ -327,7 +315,7 @@ class Mysqli extends AbstractAdapter
      *
      * @return void
      */
-    public function closeConnection()
+    public function closeConnection ()
     {
         if ($this->isConnected()) {
             $this->_connection->close();
@@ -341,18 +329,18 @@ class Mysqli extends AbstractAdapter
      * @param  string  $sql  SQL query
      * @return \Zend\Db\Statement\Mysqli
      */
-    public function prepare($sql)
+    public function prepare ($sql)
     {
         $this->_connect();
         if ($this->_stmt) {
             $this->_stmt->close();
         }
         $stmtClass = $this->_defaultStmtClass;
-        if (!class_exists($stmtClass)) {
+        if (! class_exists($stmtClass)) {
             \Zend\Loader::loadClass($stmtClass);
         }
         $stmt = new $stmtClass($this, $sql);
-        if ($stmt === \false) {
+        if ($stmt ===\false) {
             return false;
         }
         $stmt->setFetchMode($this->_fetchMode);
@@ -377,7 +365,7 @@ class Mysqli extends AbstractAdapter
      * @return string
      * @todo Return value should be int?
      */
-    public function lastInsertId($tableName = null, $primaryKey = null)
+    public function lastInsertId ($tableName = null, $primaryKey = null)
     {
         $mysqli = $this->_connection;
         return (string) $mysqli->insert_id;
@@ -388,7 +376,7 @@ class Mysqli extends AbstractAdapter
      *
      * @return void
      */
-    protected function _beginTransaction()
+    protected function _beginTransaction ()
     {
         $this->_connect();
         $this->_connection->autocommit(false);
@@ -399,7 +387,7 @@ class Mysqli extends AbstractAdapter
      *
      * @return void
      */
-    protected function _commit()
+    protected function _commit ()
     {
         $this->_connect();
         $this->_connection->commit();
@@ -411,7 +399,7 @@ class Mysqli extends AbstractAdapter
      *
      * @return void
      */
-    protected function _rollBack()
+    protected function _rollBack ()
     {
         $this->_connect();
         $this->_connection->rollback();
@@ -425,7 +413,7 @@ class Mysqli extends AbstractAdapter
      * @return void
      * @throws \Zend\Db\Adapter\MysqliException
      */
-    public function setFetchMode($mode)
+    public function setFetchMode ($mode)
     {
         switch ($mode) {
             case Db\Db::FETCH_LAZY:
@@ -437,7 +425,8 @@ class Mysqli extends AbstractAdapter
                 $this->_fetchMode = $mode;
                 break;
             case Db\Db::FETCH_BOUND: // bound to PHP variable
-                throw new MysqliException('FETCH_BOUND is not supported yet');
+                throw new MysqliException(
+                'FETCH_BOUND is not supported yet');
                 break;
             default:
                 throw new MysqliException("Invalid fetch mode '$mode' specified");
@@ -452,23 +441,24 @@ class Mysqli extends AbstractAdapter
      * @param int $offset OPTIONAL
      * @return string
      */
-    public function limit($sql, $count, $offset = 0)
+    public function limit ($sql, $count, $offset = 0)
     {
         $count = intval($count);
         if ($count <= 0) {
             throw new MysqliException("LIMIT argument count=$count is not valid");
         }
-
+        
         $offset = intval($offset);
         if ($offset < 0) {
-            throw new MysqliException("LIMIT argument offset=$offset is not valid");
+            throw new MysqliException(
+            "LIMIT argument offset=$offset is not valid");
         }
-
+        
         $sql .= " LIMIT $count";
         if ($offset > 0) {
             $sql .= " OFFSET $offset";
         }
-
+        
         return $sql;
     }
 
@@ -478,7 +468,7 @@ class Mysqli extends AbstractAdapter
      * @param string $type 'positional' or 'named'
      * @return bool
      */
-    public function supportsParameters($type)
+    public function supportsParameters ($type)
     {
         switch ($type) {
             case 'positional':
@@ -494,7 +484,7 @@ class Mysqli extends AbstractAdapter
      *
      *@return string
      */
-    public function getServerVersion()
+    public function getServerVersion ()
     {
         $this->_connect();
         $version = $this->_connection->server_version;

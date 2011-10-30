@@ -38,6 +38,7 @@ use Zend\Form\Element\Exception;
  */
 class CurrencyTextBox extends NumberTextBox
 {
+
     /**
      * Use CurrencyTextBox dijit view helper
      * @var string
@@ -50,7 +51,7 @@ class CurrencyTextBox extends NumberTextBox
      * @param  string $currency
      * @return \Zend\Dojo\Form\Element\CurrencyTextBox
      */
-    public function setCurrency($currency)
+    public function setCurrency ($currency)
     {
         $this->setDijitParam('currency', (string) $currency);
         return $this;
@@ -61,7 +62,7 @@ class CurrencyTextBox extends NumberTextBox
      *
      * @return string|null
      */
-    public function getCurrency()
+    public function getCurrency ()
     {
         return $this->getDijitParam('currency');
     }
@@ -74,17 +75,18 @@ class CurrencyTextBox extends NumberTextBox
      * @param  string $symbol
      * @return \Zend\Dojo\Form\Element\CurrencyTextBox
      */
-    public function setSymbol($symbol)
+    public function setSymbol ($symbol)
     {
         $symbol = strtoupper((string) $symbol);
         $length = strlen($symbol);
         if (3 > $length) {
-            throw new Exception\InvalidArgumentException('Invalid symbol provided; please provide ISO 4217 alphabetic currency code');
+            throw new Exception\InvalidArgumentException(
+            'Invalid symbol provided; please provide ISO 4217 alphabetic currency code');
         }
         if (3 < $length) {
             $symbol = substr($symbol, 0, 3);
         }
-
+        
         $this->setConstraint('symbol', $symbol);
         return $this;
     }
@@ -94,7 +96,7 @@ class CurrencyTextBox extends NumberTextBox
      *
      * @return string|null
      */
-    public function getSymbol()
+    public function getSymbol ()
     {
         return $this->getConstraint('symbol');
     }
@@ -105,7 +107,7 @@ class CurrencyTextBox extends NumberTextBox
      * @param  bool $flag
      * @return \Zend\Dojo\Form\Element\CurrencyTextBox
      */
-    public function setFractional($flag)
+    public function setFractional ($flag)
     {
         $this->setConstraint('fractional', (bool) $flag);
         return $this;
@@ -116,7 +118,7 @@ class CurrencyTextBox extends NumberTextBox
      *
      * @return bool
      */
-    public function getFractional()
+    public function getFractional ()
     {
         return ('true' == $this->getConstraint('fractional'));
     }

@@ -23,9 +23,7 @@
  */
 namespace Zend\Code\Reflection;
 
-use Zend\Code\Reflection,
-    Zend\Code\Scanner\DocBlockScanner,
-    Zend\Code\Annotation\AnnotationManager;
+use Zend\Code\Reflection, Zend\Code\Scanner\DocBlockScanner, Zend\Code\Annotation\AnnotationManager;
 
 /**
  * @uses       Reflector
@@ -37,6 +35,7 @@ use Zend\Code\Reflection,
  */
 class DocBlockReflection implements Reflection
 {
+
     /**
      * @var Reflector
      */
@@ -51,9 +50,11 @@ class DocBlockReflection implements Reflection
      * @var int
      */
     protected $startLine = null;
-    protected $endLine   = null;
-    /**#@-*/
 
+    protected $endLine = null;
+
+    /**#@-*/
+    
     /**
      * @var string
      */
@@ -94,7 +95,7 @@ class DocBlockReflection implements Reflection
      * @todo   What should this do?
      * @return void
      */
-    public static function export()
+    public static function export ()
     {
 
     }
@@ -106,29 +107,34 @@ class DocBlockReflection implements Reflection
      * @param AnnotationManager|null $annotationManager
      * @return \Zend\Code\Reflection\DocBlockReflection
      */
-    public function __construct($commentOrReflector, AnnotationManager $annotationManager = null)
+    public function __construct ($commentOrReflector, 
+    AnnotationManager $annotationManager = null)
     {
         if ($commentOrReflector instanceof \Reflector) {
             $this->reflector = $commentOrReflector;
-            if (!method_exists($commentOrReflector, 'getDocComment')) {
-                throw new Exception\InvalidArgumentException('Reflector must contain method "getDocComment"');
+            if (! method_exists($commentOrReflector, 'getDocComment')) {
+                throw new Exception\InvalidArgumentException(
+                'Reflector must contain method "getDocComment"');
             }
             $this->docComment = $commentOrReflector->getDocComment();
-
+            
             $lineCount = substr_count($this->docComment, "\n");
-
+            
             $this->startLine = $this->reflector->getStartLine() - $lineCount - 1;
-            $this->endLine   = $this->reflector->getStartLine() - 1;
+            $this->endLine = $this->reflector->getStartLine() - 1;
         } elseif (is_string($commentOrReflector)) {
             $this->docComment = $commentOrReflector;
         } else {
-            throw new Exception\InvalidArgumentException(get_class($this) . ' must have a (string) DocComment or a Reflector in the constructor');
+            throw new Exception\InvalidArgumentException(
+            get_class($this) .
+             ' must have a (string) DocComment or a Reflector in the constructor');
         }
-
+        
         if ($this->docComment == '') {
-            throw new Exception\InvalidArgumentException('DocComment cannot be empty');
+            throw new Exception\InvalidArgumentException(
+            'DocComment cannot be empty');
         }
-
+        
         $this->annotationManager = $annotationManager;
     }
 
@@ -136,7 +142,7 @@ class DocBlockReflection implements Reflection
      * @param AnnotationManager $annotationManager
      * @return DocBlockReflection
      */
-    public function setAnnotationManager(AnnotationManager $annotationManager)
+    public function setAnnotationManager (AnnotationManager $annotationManager)
     {
         $this->annotationManager = $annotationManager;
         return $this;
@@ -145,7 +151,7 @@ class DocBlockReflection implements Reflection
     /**
      * @return AnnotationManager
      */
-    public function getAnnotationManager()
+    public function getAnnotationManager ()
     {
         return $this->annotationManager;
     }
@@ -155,7 +161,7 @@ class DocBlockReflection implements Reflection
      *
      * @return string
      */
-    public function getContents()
+    public function getContents ()
     {
         $this->reflect();
         return $this->cleanDocComment;
@@ -166,7 +172,7 @@ class DocBlockReflection implements Reflection
      *
      * @return int
      */
-    public function getStartLine()
+    public function getStartLine ()
     {
         $this->reflect();
         return $this->startLine;
@@ -177,7 +183,7 @@ class DocBlockReflection implements Reflection
      *
      * @return int
      */
-    public function getEndLine()
+    public function getEndLine ()
     {
         $this->reflect();
         return $this->endLine;
@@ -188,7 +194,7 @@ class DocBlockReflection implements Reflection
      *
      * @return string
      */
-    public function getShortDescription()
+    public function getShortDescription ()
     {
         $this->reflect();
         return $this->shortDescription;
@@ -199,7 +205,7 @@ class DocBlockReflection implements Reflection
      *
      * @return string
      */
-    public function getLongDescription()
+    public function getLongDescription ()
     {
         $this->reflect();
         return $this->longDescription;
@@ -211,7 +217,7 @@ class DocBlockReflection implements Reflection
      * @param  string $name
      * @return bool
      */
-    public function hasTag($name)
+    public function hasTag ($name)
     {
         $this->reflect();
         foreach ($this->tags as $tag) {
@@ -228,7 +234,7 @@ class DocBlockReflection implements Reflection
      * @param  string $name
      * @return \Zend\Code\Reflection\ReflectionDocblockTag|false
      */
-    public function getTag($name)
+    public function getTag ($name)
     {
         $this->reflect();
         foreach ($this->tags as $tag) {
@@ -236,7 +242,7 @@ class DocBlockReflection implements Reflection
                 return $tag;
             }
         }
-
+        
         return false;
     }
 
@@ -246,13 +252,13 @@ class DocBlockReflection implements Reflection
      * @param string $filter
      * @return array Array of \Zend\Code\Reflection\ReflectionDocblockTag
      */
-    public function getTags($filter = null)
+    public function getTags ($filter = null)
     {
         $this->reflect();
-        if ($filter === null || !is_string($filter)) {
+        if ($filter === null || ! is_string($filter)) {
             return $this->tags;
         }
-
+        
         $returnTags = array();
         foreach ($this->tags as $tag) {
             if ($tag->getName() == $filter) {
@@ -262,7 +268,7 @@ class DocBlockReflection implements Reflection
         return $returnTags;
     }
 
-    public function hasAnnotation($name)
+    public function hasAnnotation ($name)
     {
         $this->reflect();
         foreach ($this->annotations as $annotation) {
@@ -273,7 +279,7 @@ class DocBlockReflection implements Reflection
         return false;
     }
 
-    public function getAnnotation($name)
+    public function getAnnotation ($name)
     {
         $this->reflect();
         return $this->annotations;
@@ -290,41 +296,43 @@ class DocBlockReflection implements Reflection
      *
      * @return void
      */
-    protected function reflect()
+    protected function reflect ()
     {
         if ($this->isReflected) {
             return;
         }
-
+        
         $docComment = $this->docComment; // localize variable
+        
 
         // First remove doc block line starters
-        $docComment = preg_replace('#[ \t]*(?:\/\*\*|\*\/|\*)?[ ]{0,1}(.*)?#', '$1', $docComment);
+        $docComment = preg_replace(
+        '#[ \t]*(?:\/\*\*|\*\/|\*)?[ ]{0,1}(.*)?#', '$1', $docComment);
         $docComment = ltrim($docComment, "\r\n"); // @todo should be changed to remove first and last empty line
         $this->cleanDocComment = $docComment;
-
+        
         $scanner = new DocBlockScanner($docComment, $this->annotationManager);
         $this->shortDescription = $scanner->getShortDescription();
-        $this->longDescription  = $scanner->getLongDescription();
-        $this->tags             = $scanner->getTags();
+        $this->longDescription = $scanner->getLongDescription();
+        $this->tags = $scanner->getTags();
         if ($this->annotationManager) {
             $this->annotations = $scanner->getAnnotations();
         }
         $this->isReflected = true;
     }
 
-    public function toString()
+    public function toString ()
     {
         $str = "Docblock [ /* Docblock */ ] {" . PHP_EOL . PHP_EOL;
         $str .= "  - Tags [" . count($this->tags) . "] {" . PHP_EOL;
-
-        foreach($this->tags AS $tag) {
+        
+        foreach ($this->tags as $tag) {
             $str .= "    " . $tag;
         }
-
+        
         $str .= "  }" . PHP_EOL;
         $str .= "}" . PHP_EOL;
-
+        
         return $str;
     }
 
@@ -335,7 +343,7 @@ class DocBlockReflection implements Reflection
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->toString();
     }

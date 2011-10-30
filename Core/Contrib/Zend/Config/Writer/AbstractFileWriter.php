@@ -37,6 +37,7 @@ use Zend\Config;
  */
 class AbstractFileWriter extends AbstractWriter
 {
+
     /**
      * Filename to write to
      *
@@ -57,10 +58,10 @@ class AbstractFileWriter extends AbstractWriter
      * @param  string $filename
      * @return \Zend\Config\Writer\AbstractFileWriter
      */
-    public function setFilename($filename)
+    public function setFilename ($filename)
     {
         $this->_filename = $filename;
-
+        
         return $this;
     }
 
@@ -70,10 +71,10 @@ class AbstractFileWriter extends AbstractWriter
      * @param  boolean     $exclusiveLock
      * @return \Zend\Config\Writer\AbstractFileWriter
      */
-    public function setExclusiveLock($exclusiveLock)
+    public function setExclusiveLock ($exclusiveLock)
     {
         $this->_exclusiveLock = $exclusiveLock;
-
+        
         return $this;
     }
 
@@ -85,40 +86,44 @@ class AbstractFileWriter extends AbstractWriter
      * @param bool $exclusiveLock
      * @return void
      */
-    public function write($filename = null, Config\Config $config = null, $exclusiveLock = null)
+    public function write ($filename = null, Config\Config $config = null, 
+    $exclusiveLock = null)
     {
         if ($filename !== null) {
             $this->setFilename($filename);
         }
-
+        
         if ($config !== null) {
             $this->setConfig($config);
         }
-
+        
         if ($exclusiveLock !== null) {
             $this->setExclusiveLock($exclusiveLock);
         }
-
+        
         if ($this->_filename === null) {
-            throw new Config\Exception\InvalidArgumentException('No filename was set');
+            throw new Config\Exception\InvalidArgumentException(
+            'No filename was set');
         }
-
+        
         if ($this->_config === null) {
-            throw new Config\Exception\InvalidArgumentException('No config was set');
+            throw new Config\Exception\InvalidArgumentException(
+            'No config was set');
         }
-
+        
         $configString = $this->render();
-
+        
         $flags = 0;
-
+        
         if ($this->_exclusiveLock) {
             $flags |= LOCK_EX;
         }
-
+        
         $result = @file_put_contents($this->_filename, $configString, $flags);
-
+        
         if ($result === false) {
-            throw new Config\Exception\RuntimeException('Could not write to file "' . $this->_filename . '"');
+            throw new Config\Exception\RuntimeException(
+            'Could not write to file "' . $this->_filename . '"');
         }
     }
 
@@ -129,7 +134,7 @@ class AbstractFileWriter extends AbstractWriter
      * @todo For 2.0 this should be redone into an abstract method.
      * @return string
      */
-    public function render()
+    public function render ()
     {
         return "";
     }

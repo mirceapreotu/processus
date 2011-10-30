@@ -2,12 +2,11 @@
 
 namespace Zend\Date\Exception;
 
-class InvalidArgumentException
-    extends \InvalidArgumentException
-    implements \Zend\Date\Exception
+class InvalidArgumentException extends \InvalidArgumentException implements 
+\Zend\Date\Exception
 {
-
-    /*
+    
+/*
 
     protected $operand = null;
 
@@ -23,5 +22,5 @@ class InvalidArgumentException
     }
 
      */
-    
+
 }

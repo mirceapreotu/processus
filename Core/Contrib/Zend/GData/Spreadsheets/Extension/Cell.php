@@ -38,7 +38,9 @@ namespace Zend\GData\Spreadsheets\Extension;
  */
 class Cell extends \Zend\GData\Extension
 {
+
     protected $_rootElement = 'cell';
+
     protected $_rootNamespace = 'gs';
 
     /**
@@ -78,7 +80,8 @@ class Cell extends \Zend\GData\Extension
      * @param string $inputValue (optional) Input value attribute of the element.
      * @param string $numericValue (optional) Numeric value attribute of the element.
      */
-    public function __construct($text = null, $row = null, $col = null, $inputValue = null, $numericValue = null)
+    public function __construct ($text = null, $row = null, $col = null, $inputValue = null, 
+    $numericValue = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Spreadsheets::$namespaces);
         parent::__construct();
@@ -89,33 +92,35 @@ class Cell extends \Zend\GData\Extension
         $this->_numericValue = $numericValue;
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         $element->setAttribute('row', $this->_row);
         $element->setAttribute('col', $this->_col);
-        if ($this->_inputValue) $element->setAttribute('inputValue', $this->_inputValue);
-        if ($this->_numericValue) $element->setAttribute('numericValue', $this->_numericValue);
+        if ($this->_inputValue)
+            $element->setAttribute('inputValue', $this->_inputValue);
+        if ($this->_numericValue)
+            $element->setAttribute('numericValue', $this->_numericValue);
         return $element;
     }
 
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'row':
-            $this->_row = $attribute->nodeValue;
-            break;
-        case 'col':
-            $this->_col = $attribute->nodeValue;
-            break;
-        case 'inputValue':
-            $this->_inputValue = $attribute->nodeValue;
-            break;
-        case 'numericValue':
-            $this->_numericValue = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'row':
+                $this->_row = $attribute->nodeValue;
+                break;
+            case 'col':
+                $this->_col = $attribute->nodeValue;
+                break;
+            case 'inputValue':
+                $this->_inputValue = $attribute->nodeValue;
+                break;
+            case 'numericValue':
+                $this->_numericValue = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -123,7 +128,7 @@ class Cell extends \Zend\GData\Extension
      * Gets the row attribute of the Cell element.
      * @return string Row of the Cell.
      */
-    public function getRow()
+    public function getRow ()
     {
         return $this->_row;
     }
@@ -132,7 +137,7 @@ class Cell extends \Zend\GData\Extension
      * Gets the column attribute of the Cell element.
      * @return string Column of the Cell.
      */
-    public function getColumn()
+    public function getColumn ()
     {
         return $this->_col;
     }
@@ -141,7 +146,7 @@ class Cell extends \Zend\GData\Extension
      * Gets the input value attribute of the Cell element.
      * @return string Input value of the Cell.
      */
-    public function getInputValue()
+    public function getInputValue ()
     {
         return $this->_inputValue;
     }
@@ -150,7 +155,7 @@ class Cell extends \Zend\GData\Extension
      * Gets the numeric value attribute of the Cell element.
      * @return string Numeric value of the Cell.
      */
-    public function getNumericValue()
+    public function getNumericValue ()
     {
         return $this->_numericValue;
     }
@@ -159,7 +164,7 @@ class Cell extends \Zend\GData\Extension
      * Sets the row attribute of the Cell element.
      * @param string $row New row of the Cell.
      */
-    public function setRow($row)
+    public function setRow ($row)
     {
         $this->_row = $row;
         return $this;
@@ -169,7 +174,7 @@ class Cell extends \Zend\GData\Extension
      * Sets the column attribute of the Cell element.
      * @param string $col New column of the Cell.
      */
-    public function setColumn($col)
+    public function setColumn ($col)
     {
         $this->_col = $col;
         return $this;
@@ -179,7 +184,7 @@ class Cell extends \Zend\GData\Extension
      * Sets the input value attribute of the Cell element.
      * @param string $inputValue New input value of the Cell.
      */
-    public function setInputValue($inputValue)
+    public function setInputValue ($inputValue)
     {
         $this->_inputValue = $inputValue;
         return $this;
@@ -189,7 +194,7 @@ class Cell extends \Zend\GData\Extension
      * Sets the numeric value attribute of the Cell element.
      * @param string $numericValue New numeric value of the Cell.
      */
-    public function setNumericValue($numericValue)
+    public function setNumericValue ($numericValue)
     {
         $this->_numericValue = $numericValue;
     }

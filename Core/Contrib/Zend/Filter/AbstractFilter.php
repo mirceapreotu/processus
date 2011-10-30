@@ -31,6 +31,7 @@ namespace Zend\Filter;
  */
 abstract class AbstractFilter implements Filter
 {
+
     /**
      * Invoke filter as a command
      *
@@ -40,7 +41,7 @@ abstract class AbstractFilter implements Filter
      * @throws Zend\Filter\RuntimeException If filtering $value is impossible
      * @return mixed
      */
-    public function __invoke($value)
+    public function __invoke ($value)
     {
         return $this->filter($value);
     }

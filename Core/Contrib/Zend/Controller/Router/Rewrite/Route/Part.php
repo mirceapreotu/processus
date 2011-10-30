@@ -38,6 +38,7 @@ use Zend\Controller\Request\Http as HttpRequest;
  */
 class Part implements Route
 {
+
     /**
      * Route to match
      * 
@@ -66,15 +67,16 @@ class Part implements Route
      * @param  array $options
      * @return void
      */
-    public function __construct(array $options)
+    public function __construct (array $options)
     {
-        if (!isset($options['route']) || !$options['route'] instanceof Route) {
+        if (! isset($options['route']) || ! $options['route'] instanceof Route) {
             throw new UnexpectedValueException('Options must contain a route');
         }
-
-        $this->_route        = $options['route'];
-        $this->_mayTerminate = (isset($options['may_terminate']) && $options['may_terminate']);
-        $this->_children     = new PriorityList();
+        
+        $this->_route = $options['route'];
+        $this->_mayTerminate = (isset($options['may_terminate']) &&
+         $options['may_terminate']);
+        $this->_children = new PriorityList();
     }
 
     /**
@@ -84,10 +86,10 @@ class Part implements Route
      * @param  Route $route
      * @return Part
      */
-    public function append($name, Route $route)
+    public function append ($name, Route $route)
     {
         $this->_children[$name] = $route;
-
+        
         return $this;
     }
 
@@ -99,25 +101,25 @@ class Part implements Route
      * @param  integer     $pathOffset
      * @return boolean
      */
-    public function match(HttpRequest $request, $pathOffset = null)
+    public function match (HttpRequest $request, $pathOffset = null)
     {
         $match = $this->_route->match($request, $pathOffset);
-
+        
         if ($match !== null) {
             foreach ($this->_children as $name => $route) {
                 $subMatch = $route->match($match, $pathOffset);
-
+                
                 if ($subMatch !== null) {
                     return $match->merge($subMatch);
                 }
             }
-
+            
             if ($this->_mayTerminate) {
                 // @todo: also check that the http request is at it's end
                 return $match;
             }
         }
-
+        
         return null;
     }
 
@@ -129,7 +131,7 @@ class Part implements Route
      * @param  array $options
      * @return string
      */
-    public function assemble(array $params = null, array $options = null)
+    public function assemble (array $params = null, array $options = null)
     {
         // @todo
     }

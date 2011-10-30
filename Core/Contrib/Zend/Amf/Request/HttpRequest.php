@@ -39,6 +39,7 @@ namespace Zend\Amf\Request;
  */
 class HttpRequest extends StreamRequest
 {
+
     /**
      * Raw AMF request
      * @var string
@@ -54,19 +55,19 @@ class HttpRequest extends StreamRequest
      *
      * @return void
      */
-    public function __construct()
+    public function __construct ()
     {
         // php://input allows you to read raw POST data. It is a less memory
         // intensive alternative to $HTTP_RAW_POST_DATA and does not need any
         // special php.ini directives
         $amfRequest = file_get_contents('php://input');
-
+        
         // Check to make sure that we have data on the input stream.
         if ($amfRequest != '') {
             $this->_rawRequest = $amfRequest;
             $this->initialize($amfRequest);
         } else {
-            echo '<p>Zend Amf Endpoint</p>' ;
+            echo '<p>Zend Amf Endpoint</p>';
         }
     }
 
@@ -75,7 +76,7 @@ class HttpRequest extends StreamRequest
      *
      * @return string
      */
-    public function getRawRequest()
+    public function getRawRequest ()
     {
         return $this->_rawRequest;
     }

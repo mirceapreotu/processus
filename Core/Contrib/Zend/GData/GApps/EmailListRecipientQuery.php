@@ -58,14 +58,14 @@ class EmailListRecipientQuery extends Query
      * Create a new instance.
      *
      * @param string $domain (optional) The Google Apps-hosted domain to use
-     *          when constructing query URIs.
+     * when constructing query URIs.
      * @param string $emailListName (optional) Value for the emailListName
-     *          property.
+     * property.
      * @param string $startRecipient (optional) Value for the
-     *          startRecipient property.
+     * startRecipient property.
      */
-    public function __construct($domain = null, $emailListName = null,
-            $startRecipient = null)
+    public function __construct ($domain = null, $emailListName = null, 
+    $startRecipient = null)
     {
         parent::__construct($domain);
         $this->setEmailListName($emailListName);
@@ -78,21 +78,21 @@ class EmailListRecipientQuery extends Query
      * null to disable filtering by list name.
      *
      * @param string $value The email list name to filter search results by,
-     *          or null to disable.
+     * or null to disable.
      */
-     public function setEmailListName($value)
-     {
-         $this->_emailListName = $value;
-     }
+    public function setEmailListName ($value)
+    {
+        $this->_emailListName = $value;
+    }
 
     /**
      * Get the email list name to query for. If no name is set, null will be
      * returned.
      *
      * @param string $value The email list name to filter search results by,
-     *          or null if disabled.
+     * or null if disabled.
      */
-    public function getEmailListName()
+    public function getEmailListName ()
     {
         return $this->_emailListName;
     }
@@ -102,9 +102,9 @@ class EmailListRecipientQuery extends Query
      * a list of email list recipients.
      *
      * @param string $value The first recipient to be returned, or null to
-     *              disable.
+     * disable.
      */
-    public function setStartRecipient($value)
+    public function setStartRecipient ($value)
     {
         if ($value !== null) {
             $this->_params['startRecipient'] = $value;
@@ -118,9 +118,9 @@ class EmailListRecipientQuery extends Query
      * a list of email list recipients.
      *
      * @return string The first recipient to be returned, or null if
-     *              disabled.
+     * disabled.
      */
-    public function getStartRecipient()
+    public function getStartRecipient ()
     {
         if (array_key_exists('startRecipient', $this->_params)) {
             return $this->_params['startRecipient'];
@@ -136,16 +136,16 @@ class EmailListRecipientQuery extends Query
      * @return string A URL generated based on the state of this query.
      * @throws \Zend\GData\App\InvalidArgumentException
      */
-    public function getQueryUrl()
+    public function getQueryUrl ()
     {
-
+        
         $uri = $this->getBaseUrl();
         $uri .= GApps::APPS_EMAIL_LIST_PATH;
         if ($this->_emailListName !== null) {
             $uri .= '/' . $this->_emailListName;
         } else {
             throw new \Zend\GData\App\InvalidArgumentException(
-                    'EmailListName must not be null');
+            'EmailListName must not be null');
         }
         $uri .= GApps::APPS_EMAIL_LIST_RECIPIENT_POSTFIX . '/';
         $uri .= $this->getQueryString();

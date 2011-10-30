@@ -33,6 +33,7 @@ use Zend\Uri;
  */
 class Publisher
 {
+
     /**
      * An array of URLs for all Hub Servers used by the Publisher, and to
      * which all topic update notifications will be sent.
@@ -73,7 +74,7 @@ class Publisher
      * @param  array|\Zend\Config\Config $options Options array or \Zend\Config\Config instance
      * @return void
      */
-    public function __construct($config = null)
+    public function __construct ($config = null)
     {
         if ($config !== null) {
             $this->setConfig($config);
@@ -86,13 +87,13 @@ class Publisher
      * @param  array|\Zend\Config\Config $options Options array or \Zend\Config\Config instance
      * @return \Zend\Feed\PubSubHubbub\Publisher
      */
-    public function setConfig($config)
+    public function setConfig ($config)
     {
         if ($config instanceof \Zend\Config\Config) {
             $config = $config->toArray();
-        } elseif (!is_array($config)) {
-            throw new Exception('Array or Zend_Config object'
-                . 'expected, got ' . gettype($config));
+        } elseif (! is_array($config)) {
+            throw new Exception(
+            'Array or Zend_Config object' . 'expected, got ' . gettype($config));
         }
         if (array_key_exists('hubUrls', $config)) {
             $this->addHubUrls($config['hubUrls']);
@@ -112,12 +113,13 @@ class Publisher
      * @param  string $url
      * @return \Zend\Feed\PubSubHubbub\Publisher
      */
-    public function addHubUrl($url)
+    public function addHubUrl ($url)
     {
-        if (empty($url) || !is_string($url) || !Uri\UriFactory::factory($url)->isValid()) {
-            throw new Exception('Invalid parameter "url"'
-                .' of "' . $url . '" must be a non-empty string and a valid'
-                .'URL');
+        if (empty($url) || ! is_string($url) ||
+         ! Uri\UriFactory::factory($url)->isValid()) {
+            throw new Exception(
+            'Invalid parameter "url"' . ' of "' . $url .
+             '" must be a non-empty string and a valid' . 'URL');
         }
         $this->_hubUrls[] = $url;
         return $this;
@@ -129,7 +131,7 @@ class Publisher
      * @param  array $urls
      * @return \Zend\Feed\PubSubHubbub\Publisher
      */
-    public function addHubUrls(array $urls)
+    public function addHubUrls (array $urls)
     {
         foreach ($urls as $url) {
             $this->addHubUrl($url);
@@ -143,9 +145,9 @@ class Publisher
      * @param  string $url
      * @return \Zend\Feed\PubSubHubbub\Publisher
      */
-    public function removeHubUrl($url)
+    public function removeHubUrl ($url)
     {
-        if (!in_array($url, $this->getHubUrls())) {
+        if (! in_array($url, $this->getHubUrls())) {
             return $this;
         }
         $key = array_search($url, $this->_hubUrls);
@@ -158,7 +160,7 @@ class Publisher
      *
      * @return array
      */
-    public function getHubUrls()
+    public function getHubUrls ()
     {
         $this->_hubUrls = array_unique($this->_hubUrls);
         return $this->_hubUrls;
@@ -170,12 +172,13 @@ class Publisher
      * @param  string $url
      * @return \Zend\Feed\PubSubHubbub\Publisher
      */
-    public function addUpdatedTopicUrl($url)
+    public function addUpdatedTopicUrl ($url)
     {
-        if (empty($url) || !is_string($url) || !Uri\UriFactory::factory($url)->isValid()) {
-            throw new Exception('Invalid parameter "url"'
-                .' of "' . $url . '" must be a non-empty string and a valid'
-                .'URL');
+        if (empty($url) || ! is_string($url) ||
+         ! Uri\UriFactory::factory($url)->isValid()) {
+            throw new Exception(
+            'Invalid parameter "url"' . ' of "' . $url .
+             '" must be a non-empty string and a valid' . 'URL');
         }
         $this->_updatedTopicUrls[] = $url;
         return $this;
@@ -187,7 +190,7 @@ class Publisher
      * @param  array $urls
      * @return \Zend\Feed\PubSubHubbub\Publisher
      */
-    public function addUpdatedTopicUrls(array $urls)
+    public function addUpdatedTopicUrls (array $urls)
     {
         foreach ($urls as $url) {
             $this->addUpdatedTopicUrl($url);
@@ -201,9 +204,9 @@ class Publisher
      * @param  string $url
      * @return \Zend\Feed\PubSubHubbub\Publisher
      */
-    public function removeUpdatedTopicUrl($url)
+    public function removeUpdatedTopicUrl ($url)
     {
-        if (!in_array($url, $this->getUpdatedTopicUrls())) {
+        if (! in_array($url, $this->getUpdatedTopicUrls())) {
             return $this;
         }
         $key = array_search($url, $this->_updatedTopicUrls);
@@ -216,7 +219,7 @@ class Publisher
      *
      * @return array
      */
-    public function getUpdatedTopicUrls()
+    public function getUpdatedTopicUrls ()
     {
         $this->_updatedTopicUrls = array_unique($this->_updatedTopicUrls);
         return $this->_updatedTopicUrls;
@@ -229,21 +232,23 @@ class Publisher
      * @return void
      * @throws \Zend\Feed\PubSubHubbub\Exception Thrown on failure
      */
-    public function notifyHub($url)
+    public function notifyHub ($url)
     {
-        if (empty($url) || !is_string($url) || !Uri\UriFactory::factory($url)->isValid()) {
-            throw new Exception('Invalid parameter "url"'
-                .' of "' . $url . '" must be a non-empty string and a valid'
-                .'URL');
+        if (empty($url) || ! is_string($url) ||
+         ! Uri\UriFactory::factory($url)->isValid()) {
+            throw new Exception(
+            'Invalid parameter "url"' . ' of "' . $url .
+             '" must be a non-empty string and a valid' . 'URL');
         }
         $client = $this->_getHttpClient();
         $client->setUri($url);
         $response = $client->request();
         if ($response->getStatus() !== 204) {
-            throw new Exception('Notification to Hub Server '
-                . 'at "' . $url . '" appears to have failed with a status code of "'
-                . $response->getStatus() . '" and message "'
-                . $response->getMessage() . '"');
+            throw new Exception(
+            'Notification to Hub Server ' . 'at "' . $url .
+             '" appears to have failed with a status code of "' .
+             $response->getStatus() . '" and message "' . $response->getMessage() .
+             '"');
         }
     }
 
@@ -258,23 +263,22 @@ class Publisher
      * @return void
      * @throws \Zend\Feed\PubSubHubbub\Exception Thrown if no hubs attached
      */
-    public function notifyAll()
+    public function notifyAll ()
     {
         $client = $this->_getHttpClient();
-        $hubs   = $this->getHubUrls();
+        $hubs = $this->getHubUrls();
         if (empty($hubs)) {
-            throw new Exception('No Hub Server URLs'
-                . ' have been set so no notifcations can be sent');
+            throw new Exception(
+            'No Hub Server URLs' .
+             ' have been set so no notifcations can be sent');
         }
         $this->_errors = array();
         foreach ($hubs as $url) {
             $client->setUri($url);
             $response = $client->request();
             if ($response->getStatus() !== 204) {
-                $this->_errors[] = array(
-                    'response' => $response,
-                    'hubUrl' => $url
-                );
+                $this->_errors[] = array('response' => $response, 
+                'hubUrl' => $url);
             }
         }
     }
@@ -286,23 +290,25 @@ class Publisher
      * @param  string|null $value
      * @return \Zend\Feed\PubSubHubbub\Publisher
      */
-    public function setParameter($name, $value = null)
+    public function setParameter ($name, $value = null)
     {
         if (is_array($name)) {
             $this->setParameters($name);
             return $this;
         }
-        if (empty($name) || !is_string($name)) {
-            throw new Exception('Invalid parameter "name"'
-                .' of "' . $name . '" must be a non-empty string');
+        if (empty($name) || ! is_string($name)) {
+            throw new Exception(
+            'Invalid parameter "name"' . ' of "' . $name .
+             '" must be a non-empty string');
         }
         if ($value === null) {
             $this->removeParameter($name);
             return $this;
         }
-        if (empty($value) || (!is_string($value) && $value !== null)) {
-            throw new Exception('Invalid parameter "value"'
-                .' of "' . $value . '" must be a non-empty string');
+        if (empty($value) || (! is_string($value) && $value !== null)) {
+            throw new Exception(
+            'Invalid parameter "value"' . ' of "' . $value .
+             '" must be a non-empty string');
         }
         $this->_parameters[$name] = $value;
         return $this;
@@ -314,7 +320,7 @@ class Publisher
      * @param  array $parameters
      * @return \Zend\Feed\PubSubHubbub\Publisher
      */
-    public function setParameters(array $parameters)
+    public function setParameters (array $parameters)
     {
         foreach ($parameters as $name => $value) {
             $this->setParameter($name, $value);
@@ -328,11 +334,12 @@ class Publisher
      * @param  string $name
      * @return \Zend\Feed\PubSubHubbub\Publisher
      */
-    public function removeParameter($name)
+    public function removeParameter ($name)
     {
-        if (empty($name) || !is_string($name)) {
-            throw new Exception('Invalid parameter "name"'
-                .' of "' . $name . '" must be a non-empty string');
+        if (empty($name) || ! is_string($name)) {
+            throw new Exception(
+            'Invalid parameter "name"' . ' of "' . $name .
+             '" must be a non-empty string');
         }
         if (array_key_exists($name, $this->_parameters)) {
             unset($this->_parameters[$name]);
@@ -345,7 +352,7 @@ class Publisher
      *
      * @return array
      */
-    public function getParameters()
+    public function getParameters ()
     {
         return $this->_parameters;
     }
@@ -356,7 +363,7 @@ class Publisher
      *
      * @return bool
      */
-    public function isSuccess()
+    public function isSuccess ()
     {
         if (count($this->_errors) > 0) {
             return false;
@@ -371,7 +378,7 @@ class Publisher
      *
      * @return array
      */
-    public function getErrors()
+    public function getErrors ()
     {
         return $this->_errors;
     }
@@ -381,19 +388,20 @@ class Publisher
      *
      * @return \Zend\Http\Client
      */
-    protected function _getHttpClient()
+    protected function _getHttpClient ()
     {
         $client = PubSubHubbub::getHttpClient();
         $client->setMethod(\Zend\Http\Client::POST);
-        $client->setConfig(array(
-            'useragent' => 'Zend_Feed_Pubsubhubbub_Publisher/' . \Zend\Version::VERSION,
-        ));
-        $params   = array();
+        $client->setConfig(
+        array(
+        'useragent' => 'Zend_Feed_Pubsubhubbub_Publisher/' .
+         \Zend\Version::VERSION));
+        $params = array();
         $params[] = 'hub.mode=publish';
-        $topics   = $this->getUpdatedTopicUrls();
+        $topics = $this->getUpdatedTopicUrls();
         if (empty($topics)) {
-            throw new Exception('No updated topic URLs'
-                . ' have been set');
+            throw new Exception(
+            'No updated topic URLs' . ' have been set');
         }
         foreach ($topics as $topicUrl) {
             $params[] = 'hub.url=' . urlencode($topicUrl);

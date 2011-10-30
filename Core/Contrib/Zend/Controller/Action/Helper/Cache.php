@@ -55,7 +55,7 @@ class Cache extends AbstractHelper
      * @var array
      */
     protected $_tags = array();
-    
+
     /**
      * Indexed map of Extensions by Controller and Action
      *
@@ -76,22 +76,22 @@ class Cache extends AbstractHelper
      * @param array $tags
      * @return void
      */
-    public function direct(array $actions, array $tags = array(), $extension = null)
+    public function direct (array $actions, array $tags = array(), $extension = null)
     {
         $controller = $this->getRequest()->getControllerName();
         $actions = array_unique($actions);
-        if (!isset($this->_caching[$controller])) {
+        if (! isset($this->_caching[$controller])) {
             $this->_caching[$controller] = array();
         }
-        if (!empty($tags)) {
+        if (! empty($tags)) {
             $tags = array_unique($tags);
-            if (!isset($this->_tags[$controller])) {
+            if (! isset($this->_tags[$controller])) {
                 $this->_tags[$controller] = array();
             }
         }
         foreach ($actions as $action) {
             $this->_caching[$controller][] = $action;
-            if (!empty($tags)) {
+            if (! empty($tags)) {
                 $this->_tags[$controller][$action] = array();
                 foreach ($tags as $tag) {
                     $this->_tags[$controller][$action][] = $tag;
@@ -99,7 +99,7 @@ class Cache extends AbstractHelper
             }
         }
         if ($extension) {
-            if (!isset($this->_extensions[$controller])) {
+            if (! isset($this->_extensions[$controller])) {
                 $this->_extensions[$controller] = array();
             }
             foreach ($actions as $action) {
@@ -118,18 +118,17 @@ class Cache extends AbstractHelper
      * @param bool $recursive
      * @return mixed
      */
-    public function removePage($relativeUrl, $recursive = false)
+    public function removePage ($relativeUrl, $recursive = false)
     {
         $cache = $this->getCache(\Zend\Cache\Manager::PAGECACHE);
         if ($recursive) {
             $backend = $cache->getBackend();
-            if (($backend instanceof \Zend\Cache\Backend)
-                && method_exists($backend, 'removeRecursively')
-            ) {
+            if (($backend instanceof \Zend\Cache\Backend) &&
+             method_exists($backend, 'removeRecursively')) {
                 return $backend->removeRecursively($relativeUrl);
             }
         }
-
+        
         return $cache->remove($relativeUrl);
     }
 
@@ -142,10 +141,10 @@ class Cache extends AbstractHelper
      * @param array $tags
      * @return mixed
      */
-    public function removePagesTagged(array $tags)
+    public function removePagesTagged (array $tags)
     {
-        return $this->getCache(\Zend\Cache\Manager::PAGECACHE)
-            ->clean(\Zend\Cache\Cache::CLEANING_MODE_MATCHING_ANY_TAG, $tags);
+        return $this->getCache(\Zend\Cache\Manager::PAGECACHE)->clean(
+        \Zend\Cache\Cache::CLEANING_MODE_MATCHING_ANY_TAG, $tags);
     }
 
     /**
@@ -153,34 +152,34 @@ class Cache extends AbstractHelper
      *
      * @return void
      */
-    public function preDispatch()
+    public function preDispatch ()
     {
         $controller = $this->getRequest()->getControllerName();
         $action = $this->getRequest()->getActionName();
         $stats = ob_get_status(true);
         foreach ($stats as $status) {
-            if ($status['name'] == 'Zend_Cache_Frontend_Page::_flush'
-            || $status['name'] == 'Zend_Cache_Frontend_Capture::_flush') {
+            if ($status['name'] == 'Zend_Cache_Frontend_Page::_flush' ||
+             $status['name'] == 'Zend_Cache_Frontend_Capture::_flush') {
                 $obStarted = true;
             }
         }
-        if (!isset($obStarted) && isset($this->_caching[$controller]) &&
-        in_array($action, $this->_caching[$controller])) {
+        if (! isset($obStarted) && isset($this->_caching[$controller]) &&
+         in_array($action, $this->_caching[$controller])) {
             $reqUri = $this->getRequest()->getRequestUri();
             $tags = array();
-            if (isset($this->_tags[$controller][$action])
-            && !empty($this->_tags[$controller][$action])) {
+            if (isset($this->_tags[$controller][$action]) &&
+             ! empty($this->_tags[$controller][$action])) {
                 $tags = array_unique($this->_tags[$controller][$action]);
             }
             $extension = null;
             if (isset($this->_extensions[$controller][$action])) {
                 $extension = $this->_extensions[$controller][$action];
             }
-            $this->getCache(\Zend\Cache\Manager::PAGECACHE)
-                ->start($this->_encodeCacheId($reqUri), $tags, $extension);
+            $this->getCache(\Zend\Cache\Manager::PAGECACHE)->start(
+            $this->_encodeCacheId($reqUri), $tags, $extension);
         }
     }
-    
+
     /**
      * Encode a Cache ID as hexadecimal. This is a workaround because Backend ID validation
      * is trapped in the Frontend classes. Will try to get this reversed for ZF 2.0
@@ -189,7 +188,7 @@ class Cache extends AbstractHelper
      * @return string
      * @param string $requestUri
      */
-    protected function _encodeCacheId($requestUri)
+    protected function _encodeCacheId ($requestUri)
     {
         return bin2hex($requestUri);
     }
@@ -200,7 +199,7 @@ class Cache extends AbstractHelper
      * @param \Zend\Cache\Manager $manager
      * @return void
      */
-    public function setManager(\Zend\Cache\Manager $manager)
+    public function setManager (\Zend\Cache\Manager $manager)
     {
         $this->_manager = $manager;
         return $this;
@@ -212,18 +211,17 @@ class Cache extends AbstractHelper
      *
      * @return \Zend\Cache\Manager
      */
-    public function getManager()
+    public function getManager ()
     {
         if ($this->_manager !== null) {
             return $this->_manager;
         }
         $front = \Zend\Controller\Front::getInstance();
-        if ($front->getParam('bootstrap')
-        && $front->getParam('bootstrap')->getResource('CacheManager')) {
-            return $front->getParam('bootstrap')
-                ->getResource('CacheManager');
+        if ($front->getParam('bootstrap') &&
+         $front->getParam('bootstrap')->getResource('CacheManager')) {
+            return $front->getParam('bootstrap')->getResource('CacheManager');
         }
-        $this->_manager = new \Zend\Cache\Manager;
+        $this->_manager = new \Zend\Cache\Manager();
         return $this->_manager;
     }
 
@@ -233,7 +231,7 @@ class Cache extends AbstractHelper
      *
      * @return array
      */
-    public function getCacheableActions()
+    public function getCacheableActions ()
     {
         return $this->_caching;
     }
@@ -243,7 +241,7 @@ class Cache extends AbstractHelper
      *
      * @return array
      */
-    public function getCacheableTags()
+    public function getCacheableTags ()
     {
         return $this->_tags;
     }
@@ -256,15 +254,14 @@ class Cache extends AbstractHelper
      * @param array $args
      * @return mixed
      */
-    public function __call($method, $args)
+    public function __call ($method, $args)
     {
         if (method_exists($this->getManager(), $method)) {
-            return call_user_func_array(
-                array($this->getManager(), $method), $args
-            );
+            return call_user_func_array(array($this->getManager(), $method), 
+            $args);
         }
-        throw new \Zend\Controller\Action\Exception('Method does not exist:'
-            . $method);
+        throw new \Zend\Controller\Action\Exception(
+        'Method does not exist:' . $method);
     }
 
 }

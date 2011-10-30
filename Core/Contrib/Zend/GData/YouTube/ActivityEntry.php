@@ -44,8 +44,8 @@ use Zend\GData\YouTube;
  */
 class ActivityEntry extends \Zend\GData\Entry
 {
-    const ACTIVITY_CATEGORY_SCHEME =
-        'http://gdata.youtube.com/schemas/2007/userevents.cat';
+
+    const ACTIVITY_CATEGORY_SCHEME = 'http://gdata.youtube.com/schemas/2007/userevents.cat';
 
     /**
      * The classname for individual user activity entry elements.
@@ -80,7 +80,7 @@ class ActivityEntry extends \Zend\GData\Entry
      * @param DOMElement $element (optional) The DOMElement on which to
      * base this object.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(YouTube::$namespaces);
         parent::__construct($element);
@@ -93,22 +93,22 @@ class ActivityEntry extends \Zend\GData\Entry
      *
      * @param DOMDocument $doc The DOMDocument used to construct DOMElements
      * @return DOMElement The DOMElement representing this element and all
-     *          child properties.
+     * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_videoId !== null) {
-          $element->appendChild($this->_videoId->getDOM(
-              $element->ownerDocument));
+            $element->appendChild(
+            $this->_videoId->getDOM($element->ownerDocument));
         }
         if ($this->_username !== null) {
-          $element->appendChild($this->_username->getDOM(
-              $element->ownerDocument));
+            $element->appendChild(
+            $this->_username->getDOM($element->ownerDocument));
         }
         if ($this->_rating !== null) {
-          $element->appendChild($this->_rating->getDOM(
-              $element->ownerDocument));
+            $element->appendChild(
+            $this->_rating->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -119,7 +119,7 @@ class ActivityEntry extends \Zend\GData\Entry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
@@ -149,7 +149,7 @@ class ActivityEntry extends \Zend\GData\Entry
      *
      * @return null|\Zend\GData\YouTube\Extension\VideoId
      */
-    public function getVideoId()
+    public function getVideoId ()
     {
         return $this->_videoId;
     }
@@ -159,7 +159,7 @@ class ActivityEntry extends \Zend\GData\Entry
      *
      * @return null|\Zend\GData\YouTube\Extension\Username
      */
-    public function getUsername()
+    public function getUsername ()
     {
         return $this->_username;
     }
@@ -169,7 +169,7 @@ class ActivityEntry extends \Zend\GData\Entry
      *
      * @return null|Zend_Gdata_YouTube_Extension_Rating
      */
-    public function getRating()
+    public function getRating ()
     {
         return $this->_rating;
     }
@@ -181,7 +181,7 @@ class ActivityEntry extends \Zend\GData\Entry
      *
      * @return integer|null The value of the rating that was created, if found.
      */
-    public function getRatingValue()
+    public function getRatingValue ()
     {
         $rating = $this->_rating;
         if ($rating) {
@@ -198,10 +198,10 @@ class ActivityEntry extends \Zend\GData\Entry
      *
      * @return string|null The activity category if found.
      */
-    public function getActivityType()
+    public function getActivityType ()
     {
         $categories = $this->getCategory();
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             if ($category->getScheme() == self::ACTIVITY_CATEGORY_SCHEME) {
                 return $category->getTerm();
             }
@@ -214,7 +214,7 @@ class ActivityEntry extends \Zend\GData\Entry
      *
      * @return string The author of the activity
      */
-    public function getAuthorName()
+    public function getAuthorName ()
     {
         $authors = $this->getAuthor();
         return $authors[0]->getName()->getText();

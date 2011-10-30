@@ -53,7 +53,7 @@ class LoggingHttpClientAdapterSocket extends \Zend\Http\Client\Adapter\Socket
      *
      * @param string $message The message to log
      */
-    protected function log($message)
+    protected function log ($message)
     {
         if ($this->log_handle == null) {
             $this->log_handle = fopen($this->config['logfile'], 'a');
@@ -69,7 +69,7 @@ class LoggingHttpClientAdapterSocket extends \Zend\Http\Client\Adapter\Socket
      * @param boolean $secure
      * @param int     $timeout
      */
-    public function connect($host, $port = 80, $secure = false)
+    public function connect ($host, $port = 80, $secure = false)
     {
         $this->log("Connecting to: ${host}:${port}");
         return parent::connect($host, $port, $secure);
@@ -85,7 +85,7 @@ class LoggingHttpClientAdapterSocket extends \Zend\Http\Client\Adapter\Socket
      * @param string        $body
      * @return string Request as string
      */
-    public function write($method, $uri, $http_ver = '1.1', $headers = array(), $body = '')
+    public function write ($method, $uri, $http_ver = '1.1', $headers = array(), $body = '')
     {
         $request = parent::write($method, $uri, $http_ver, $headers, $body);
         $this->log("\n\n" . $request);
@@ -97,7 +97,7 @@ class LoggingHttpClientAdapterSocket extends \Zend\Http\Client\Adapter\Socket
      *
      * @return string
      */
-    public function read()
+    public function read ()
     {
         $response = parent::read();
         $this->log("${response}\n\n");
@@ -108,7 +108,7 @@ class LoggingHttpClientAdapterSocket extends \Zend\Http\Client\Adapter\Socket
      * Close the connection to the server
      *
      */
-    public function close()
+    public function close ()
     {
         $this->log("Closing socket\n\n");
         parent::close();

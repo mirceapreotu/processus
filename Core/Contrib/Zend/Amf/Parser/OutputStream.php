@@ -38,12 +38,13 @@ namespace Zend\Amf\Parser;
  */
 class OutputStream extends \Zend\Amf\Util\BinaryStream
 {
+
     /**
      * Constructor
      *
      * @return void
      */
-    public function __construct()
+    public function __construct ()
     {
         parent::__construct('');
     }

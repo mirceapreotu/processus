@@ -11,39 +11,41 @@ use Zend\Uri\Uri;
 class Location implements HeaderDescription
 {
 
-    public static function fromString($headerLine)
+    public static function fromString ($headerLine)
     {
         $header = new static();
-
-        list($name, $value) = preg_split('#: #', $headerLine, 2);
-
+        
+        list ($name, $value) = preg_split('#: #', $headerLine, 2);
+        
         // check to ensure proper header type for this factory
         if (strtolower($name) !== 'location') {
-            throw new Exception\InvalidArgumentException('Invalid header line for Location string');
+            throw new Exception\InvalidArgumentException(
+            'Invalid header line for Location string');
         }
-
-        if (!Uri::validateHost($value)) {
-            throw new Exception\InvalidArgumentException('Invalid URI value for Location');
+        
+        if (! Uri::validateHost($value)) {
+            throw new Exception\InvalidArgumentException(
+            'Invalid URI value for Location');
         }
         // @todo implementation details
-        $header->value= $value;
-
+        $header->value = $value;
+        
         return $header;
     }
 
-    public function getFieldName()
+    public function getFieldName ()
     {
         return 'Location';
     }
 
-    public function getFieldValue()
+    public function getFieldValue ()
     {
         return $this->value;
     }
 
-    public function toString()
+    public function toString ()
     {
         return 'Location: ' . $this->getFieldValue();
     }
-    
+
 }

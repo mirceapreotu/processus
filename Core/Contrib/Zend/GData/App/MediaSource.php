@@ -35,12 +35,13 @@ namespace Zend\GData\App;
  */
 interface MediaSource
 {
+
     /**
      * Return a byte stream representation of this object.
      *
      * @return string
      */
-    public function encode();
+    public function encode ();
 
     /**
      * Set the content type for the file attached (example image/png)
@@ -48,14 +49,14 @@ interface MediaSource
      * @param string $value The content type
      * @return \Zend\GData\App\MediaFileSource Provides a fluent interface
      */
-    public function setContentType($value);
+    public function setContentType ($value);
 
     /**
      * The content type for the file attached (example image/png)
      *
      * @return string The content type
      */
-    public function getContentType();
+    public function getContentType ();
 
     /**
      * Sets the Slug header value.  Used by some services to determine the
@@ -64,7 +65,7 @@ interface MediaSource
      * @var string The slug value
      * @return \Zend\GData\App\MediaSource Provides a fluent interface
      */
-    public function setSlug($value);
+    public function setSlug ($value);
 
     /**
      * Returns the Slug header value.  Used by some services to determine the
@@ -72,5 +73,5 @@ interface MediaSource
      *
      * @return string The slug value
      */
-    public function getSlug();
+    public function getSlug ();
 }

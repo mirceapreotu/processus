@@ -33,11 +33,12 @@ namespace Zend\Authentication;
  */
 interface Adapter
 {
+
     /**
      * Performs an authentication attempt
      *
      * @return Zend\Authentication\Result
      * @throws Zend\Authentication\Adapter\Exception If authentication cannot be performed
      */
-    public function authenticate();
+    public function authenticate ();
 }

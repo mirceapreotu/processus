@@ -90,9 +90,9 @@ class UserEntry extends \Zend\GData\Entry
      * Create a new instance.
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(GApps::$namespaces);
         parent::__construct($element);
@@ -105,19 +105,21 @@ class UserEntry extends \Zend\GData\Entry
      *
      * @param DOMDocument $doc The DOMDocument used to construct DOMElements
      * @return DOMElement The DOMElement representing this element and all
-     *          child properties.
+     * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_login !== null) {
-            $element->appendChild($this->_login->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_login->getDOM($element->ownerDocument));
         }
         if ($this->_name !== null) {
             $element->appendChild($this->_name->getDOM($element->ownerDocument));
         }
         if ($this->_quota !== null) {
-            $element->appendChild($this->_quota->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_quota->getDOM($element->ownerDocument));
         }
         foreach ($this->_feedLink as $feedLink) {
             $element->appendChild($feedLink->getDOM($element->ownerDocument));
@@ -131,27 +133,27 @@ class UserEntry extends \Zend\GData\Entry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
-
+        
         switch ($absoluteNodeName) {
-            case $this->lookupNamespace('apps') . ':' . 'login';
+            case $this->lookupNamespace('apps') . ':' . 'login':
                 $login = new Extension\Login();
                 $login->transferFromDOM($child);
                 $this->_login = $login;
                 break;
-            case $this->lookupNamespace('apps') . ':' . 'name';
+            case $this->lookupNamespace('apps') . ':' . 'name':
                 $name = new Extension\Name();
                 $name->transferFromDOM($child);
                 $this->_name = $name;
                 break;
-            case $this->lookupNamespace('apps') . ':' . 'quota';
+            case $this->lookupNamespace('apps') . ':' . 'quota':
                 $quota = new Extension\Quota();
                 $quota->transferFromDOM($child);
                 $this->_quota = $quota;
                 break;
-            case $this->lookupNamespace('gd') . ':' . 'feedLink';
+            case $this->lookupNamespace('gd') . ':' . 'feedLink':
                 $feedLink = new \Zend\GData\Extension\FeedLink();
                 $feedLink->transferFromDOM($child);
                 $this->_feedLink[] = $feedLink;
@@ -168,7 +170,7 @@ class UserEntry extends \Zend\GData\Entry
      * @see setLogin
      * @return \Zend\GData\GApps\Extension\Login The requested object.
      */
-    public function getLogin()
+    public function getLogin ()
     {
         return $this->_login;
     }
@@ -178,10 +180,10 @@ class UserEntry extends \Zend\GData\Entry
      * is used to store the username address of the current user.
      *
      * @param \Zend\GData\GApps\Extension\Login $value The desired value for
-     *          this instance's login property.
+     * this instance's login property.
      * @return \Zend\GData\GApps\UserEntry Provides a fluent interface.
      */
-    public function setLogin($value)
+    public function setLogin ($value)
     {
         $this->_login = $value;
         return $this;
@@ -193,7 +195,7 @@ class UserEntry extends \Zend\GData\Entry
      * @see setName
      * @return \Zend\GData\GApps\Extension\Name The requested object.
      */
-    public function getName()
+    public function getName ()
     {
         return $this->_name;
     }
@@ -203,10 +205,10 @@ class UserEntry extends \Zend\GData\Entry
      * is used to store the full name of the current user.
      *
      * @param \Zend\GData\GApps\Extension\Name $value The desired value for
-     *          this instance's name property.
+     * this instance's name property.
      * @return \Zend\GData\GApps\UserEntry Provides a fluent interface.
      */
-    public function setName($value)
+    public function setName ($value)
     {
         $this->_name = $value;
         return $this;
@@ -218,7 +220,7 @@ class UserEntry extends \Zend\GData\Entry
      * @see setQuota
      * @return \Zend\GData\GApps\Extension\Quota The requested object.
      */
-    public function getQuota()
+    public function getQuota ()
     {
         return $this->_quota;
     }
@@ -229,10 +231,10 @@ class UserEntry extends \Zend\GData\Entry
      * user. Quotas may not be modifiable depending on the domain used.
      *
      * @param \Zend\GData\GApps\Extension\Quota $value The desired value for
-     *          this instance's quota property.
+     * this instance's quota property.
      * @return \Zend\GData\GApps\UserEntry Provides a fluent interface.
      */
-    public function setQuota($value)
+    public function setQuota ($value)
     {
         $this->_quota = $value;
         return $this;
@@ -243,14 +245,14 @@ class UserEntry extends \Zend\GData\Entry
      * specified, the feed link associated with that value is returned.
      *
      * @param string $rel The rel value of the link to be found. If null,
-     *          the array of links is returned instead.
+     * the array of links is returned instead.
      * @return mixed Either an array of \Zend\GData\Extension\FeedLink
-     *          objects if $rel is null, a single
-     *          Zend_Gdata_Extension_FeedLink object if $rel is specified
-     *          and a matching feed link is found, or null if $rel is
-     *          specified and no matching feed link is found.
+     * objects if $rel is null, a single
+     * Zend_Gdata_Extension_FeedLink object if $rel is specified
+     * and a matching feed link is found, or null if $rel is
+     * specified and no matching feed link is found.
      */
-    public function getFeedLink($rel = null)
+    public function getFeedLink ($rel = null)
     {
         if ($rel == null) {
             return $this->_feedLink;
@@ -269,10 +271,10 @@ class UserEntry extends \Zend\GData\Entry
      * is used to provide links to alternative feeds relevant to this entry.
      *
      * @param array $value A collection of
-     *          Zend_Gdata_GApps_Extension_FeedLink objects.
+     * Zend_Gdata_GApps_Extension_FeedLink objects.
      * @return Zend_Gdata_GApps_EventEntry Provides a fluent interface.
      */
-    public function setFeedLink($value)
+    public function setFeedLink ($value)
     {
         $this->_feedLink = $value;
         return $this;

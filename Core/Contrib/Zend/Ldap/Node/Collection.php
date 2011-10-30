@@ -39,13 +39,14 @@ use Zend\Ldap\Node;
  */
 class Collection extends \Zend\Ldap\Collection
 {
+
     /**
      * Creates the data structure for the given entry data
      *
      * @param  array $data
      * @return \Zend\Ldap\Node
      */
-    protected function _createEntry(array $data)
+    protected function _createEntry (array $data)
     {
         $node = Node::fromArray($data, true);
         $node->attachLDAP($this->_iterator->getLDAP());
@@ -58,7 +59,7 @@ class Collection extends \Zend\Ldap\Collection
      *
      * @return string
      */
-    public function key()
+    public function key ()
     {
         return $this->_iterator->key();
     }

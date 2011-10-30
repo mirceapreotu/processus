@@ -9,46 +9,46 @@ namespace Zend\Http\Header;
 class ProxyAuthenticate implements MultipleHeaderDescription
 {
 
-    public static function fromString($headerLine)
+    public static function fromString ($headerLine)
     {
         $header = new static();
-
-        list($name, $value) = preg_split('#: #', $headerLine, 2);
-
+        
+        list ($name, $value) = preg_split('#: #', $headerLine, 2);
+        
         // check to ensure proper header type for this factory
         if (strtolower($name) !== 'proxy-authenticate') {
-            throw new Exception\InvalidArgumentException('Invalid header line for Proxy-Authenticate string');
+            throw new Exception\InvalidArgumentException(
+            'Invalid header line for Proxy-Authenticate string');
         }
-
+        
         // @todo implementation details
-        $header->value= $value;
+        $header->value = $value;
         
         return $header;
     }
 
-    public function getFieldName()
+    public function getFieldName ()
     {
         return 'Proxy-Authenticate';
     }
 
-    public function getFieldValue()
+    public function getFieldValue ()
     {
         return $this->value;
     }
 
-    public function toString()
+    public function toString ()
     {
         return 'Proxy-Authenticate: ' . $this->getFieldValue();
     }
-    
-    public function toStringMultipleHeaders(array $headers)
+
+    public function toStringMultipleHeaders (array $headers)
     {
         $strings = array($this->toString());
         foreach ($headers as $header) {
-            if (!$header instanceof ProxyAuthenticate) {
+            if (! $header instanceof ProxyAuthenticate) {
                 throw new Exception\RuntimeException(
-                    'The ProxyAuthenticate multiple header implementation can only accept an array of ProxyAuthenticate headers'
-                );
+                'The ProxyAuthenticate multiple header implementation can only accept an array of ProxyAuthenticate headers');
             }
             $strings[] = $header->toString();
         }

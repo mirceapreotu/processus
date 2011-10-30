@@ -34,6 +34,7 @@ namespace Zend\Amf\Value;
  */
 class ByteArray
 {
+
     /**
      * @var string ByteString Data
      */
@@ -45,7 +46,7 @@ class ByteArray
      * @param  string $data
      * @return void
      */
-    public function __construct($data)
+    public function __construct ($data)
     {
         $this->_data = $data;
     }
@@ -55,7 +56,7 @@ class ByteArray
      *
      * @return string
      */
-    public function getData()
+    public function getData ()
     {
         return $this->_data;
     }

@@ -9,36 +9,37 @@ namespace Zend\Http\Header;
 class Expires implements HeaderDescription
 {
 
-    public static function fromString($headerLine)
+    public static function fromString ($headerLine)
     {
         $header = new static();
-
-        list($name, $value) = preg_split('#: #', $headerLine, 2);
-
+        
+        list ($name, $value) = preg_split('#: #', $headerLine, 2);
+        
         // check to ensure proper header type for this factory
         if (strtolower($name) !== 'expires') {
-            throw new Exception\InvalidArgumentException('Invalid header line for Expires string');
+            throw new Exception\InvalidArgumentException(
+            'Invalid header line for Expires string');
         }
-
+        
         // @todo implementation details
-        $header->value= $value;
+        $header->value = $value;
         
         return $header;
     }
 
-    public function getFieldName()
+    public function getFieldName ()
     {
         return 'Expires';
     }
 
-    public function getFieldValue()
+    public function getFieldValue ()
     {
         return $this->value;
     }
 
-    public function toString()
+    public function toString ()
     {
         return 'Expires: ' . $this->getFieldValue();
     }
-    
+
 }

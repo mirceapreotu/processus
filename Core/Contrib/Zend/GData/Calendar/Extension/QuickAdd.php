@@ -39,14 +39,16 @@ class QuickAdd extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'gCal';
+
     protected $_rootElement = 'quickadd';
+
     protected $_value = null;
 
     /**
      * Constructs a new Zend_Gdata_Calendar_Extension_QuickAdd object.
      * @param string $value (optional) The text content of the element.
      */
-    public function __construct($value = null)
+    public function __construct ($value = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Calendar::$namespaces);
         parent::__construct();
@@ -63,7 +65,7 @@ class QuickAdd extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_value !== null) {
@@ -79,22 +81,22 @@ class QuickAdd extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute needed to be handled
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'value':
-            if ($attribute->nodeValue == "true") {
-                $this->_value = true;
-            }
-            else if ($attribute->nodeValue == "false") {
-                $this->_value = false;
-            }
-            else {
-                throw new \Zend\GData\App\InvalidArgumentException("Expected 'true' or 'false' for gCal:selected#value.");
-            }
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'value':
+                if ($attribute->nodeValue == "true") {
+                    $this->_value = true;
+                } else 
+                    if ($attribute->nodeValue == "false") {
+                        $this->_value = false;
+                    } else {
+                        throw new \Zend\GData\App\InvalidArgumentException(
+                        "Expected 'true' or 'false' for gCal:selected#value.");
+                    }
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -103,7 +105,7 @@ class QuickAdd extends \Zend\GData\Extension
      *
      * @return string The value associated with this attribute.
      */
-    public function getValue()
+    public function getValue ()
     {
         return $this->_value;
     }
@@ -114,7 +116,7 @@ class QuickAdd extends \Zend\GData\Extension
      * @param string $value The desired value for this attribute.
      * @return \Zend\GData\Calendar\Extension\QuickAdd The element being modified.
      */
-    public function setValue($value)
+    public function setValue ($value)
     {
         $this->_value = $value;
         return $this;
@@ -124,7 +126,7 @@ class QuickAdd extends \Zend\GData\Extension
      * Magic toString method allows using this directly via echo
      * Works best in PHP >= 4.2.0
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getValue();
     }

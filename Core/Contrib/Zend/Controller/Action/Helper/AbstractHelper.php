@@ -35,6 +35,7 @@ use Zend\Loader\Broker;
  */
 abstract class AbstractHelper
 {
+
     /**
      * $_actionController
      *
@@ -59,7 +60,8 @@ abstract class AbstractHelper
      * @param  \Zend\Controller\Action $actionController
      * @return Zend_Controller_ActionHelper_Abstract Provides a fluent interface
      */
-    public function setActionController(\Zend\Controller\Action $actionController = null)
+    public function setActionController (
+    \Zend\Controller\Action $actionController = null)
     {
         $this->_actionController = $actionController;
         return $this;
@@ -70,7 +72,7 @@ abstract class AbstractHelper
      *
      * @return \Zend\Controller\Action
      */
-    public function getActionController()
+    public function getActionController ()
     {
         return $this->_actionController;
     }
@@ -81,7 +83,7 @@ abstract class AbstractHelper
      * @param  Broker $broker 
      * @return AbstractHelper
      */
-    public function setBroker(Broker $broker)
+    public function setBroker (Broker $broker)
     {
         $this->broker = $broker;
         return $this;
@@ -92,7 +94,7 @@ abstract class AbstractHelper
      * 
      * @return null|Broker
      */
-    public function getBroker()
+    public function getBroker ()
     {
         return $this->broker;
     }
@@ -102,7 +104,7 @@ abstract class AbstractHelper
      *
      * @return \Zend\Controller\Front
      */
-    public function getFrontController()
+    public function getFrontController ()
     {
         return \Zend\Controller\Front::getInstance();
     }
@@ -112,40 +114,37 @@ abstract class AbstractHelper
      *
      * @return void
      */
-    public function init()
-    {
-    }
+    public function init ()
+    {}
 
     /**
      * Hook into action controller preDispatch() workflow
      *
      * @return void
      */
-    public function preDispatch()
-    {
-    }
+    public function preDispatch ()
+    {}
 
     /**
      * Hook into action controller postDispatch() workflow
      *
      * @return void
      */
-    public function postDispatch()
-    {
-    }
+    public function postDispatch ()
+    {}
 
     /**
      * getRequest() -
      *
      * @return \Zend\Controller\Request\AbstractRequest $request
      */
-    public function getRequest()
+    public function getRequest ()
     {
         $controller = $this->getActionController();
         if (null === $controller) {
             $controller = $this->getFrontController();
         }
-
+        
         return $controller->getRequest();
     }
 
@@ -154,13 +153,13 @@ abstract class AbstractHelper
      *
      * @return \Zend\Controller\Response\AbstractResponse $response
      */
-    public function getResponse()
+    public function getResponse ()
     {
         $controller = $this->getActionController();
         if (null === $controller) {
             $controller = $this->getFrontController();
         }
-
+        
         return $controller->getResponse();
     }
 
@@ -169,12 +168,12 @@ abstract class AbstractHelper
      *
      * @return string
      */
-    public function getName()
+    public function getName ()
     {
         $className = get_class($this);
-
+        
         if (strpos($className, '\\') !== false) {
-            $name  = ltrim(strrchr($className, '\\'), '\\');
+            $name = ltrim(strrchr($className, '\\'), '\\');
             $words = preg_split('/(?<=\\w)(?=[A-Z])/', $name);
             return strtolower(implode('_', $words));
         } else {

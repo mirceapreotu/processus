@@ -99,7 +99,7 @@ class EventQuery extends \Zend\GData\Query
      *
      * @param string $url The URL to use as the base path for requests
      */
-    public function __construct($url = null)
+    public function __construct ($url = null)
     {
         parent::__construct($url);
     }
@@ -109,7 +109,7 @@ class EventQuery extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\Calendar\EventQuery Provides a fluent interface
      */
-    public function setComments($value)
+    public function setComments ($value)
     {
         $this->_comments = $value;
         return $this;
@@ -120,7 +120,7 @@ class EventQuery extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\Calendar\EventQuery Provides a fluent interface
      */
-    public function setEvent($value)
+    public function setEvent ($value)
     {
         $this->_event = $value;
         return $this;
@@ -131,7 +131,7 @@ class EventQuery extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\Calendar\EventQuery Provides a fluent interface
      */
-    public function setProjection($value)
+    public function setProjection ($value)
     {
         $this->_projection = $value;
         return $this;
@@ -142,7 +142,7 @@ class EventQuery extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\Calendar\EventQuery Provides a fluent interface
      */
-    public function setUser($value)
+    public function setUser ($value)
     {
         $this->_user = $value;
         return $this;
@@ -153,7 +153,7 @@ class EventQuery extends \Zend\GData\Query
      * @param bool $value
      * @return \Zend\GData\Calendar\EventQuery Provides a fluent interface
      */
-    public function setVisibility($value)
+    public function setVisibility ($value)
     {
         $this->_visibility = $value;
         return $this;
@@ -163,7 +163,7 @@ class EventQuery extends \Zend\GData\Query
      * @see $_comments;
      * @return string comments
      */
-    public function getComments()
+    public function getComments ()
     {
         return $this->_comments;
     }
@@ -172,7 +172,7 @@ class EventQuery extends \Zend\GData\Query
      * @see $_event;
      * @return string event
      */
-    public function getEvent()
+    public function getEvent ()
     {
         return $this->_event;
     }
@@ -181,7 +181,7 @@ class EventQuery extends \Zend\GData\Query
      * @see $_projection
      * @return string projection
      */
-    public function getProjection()
+    public function getProjection ()
     {
         return $this->_projection;
     }
@@ -190,7 +190,7 @@ class EventQuery extends \Zend\GData\Query
      * @see $_user
      * @return string user
      */
-    public function getUser()
+    public function getUser ()
     {
         return $this->_user;
     }
@@ -199,7 +199,7 @@ class EventQuery extends \Zend\GData\Query
      * @see $_visibility
      * @return string visibility
      */
-    public function getVisibility()
+    public function getVisibility ()
     {
         return $this->_visibility;
     }
@@ -208,7 +208,7 @@ class EventQuery extends \Zend\GData\Query
      * @param int $value
      * @return \Zend\GData\Calendar\EventQuery Provides a fluent interface
      */
-    public function setStartMax($value)
+    public function setStartMax ($value)
     {
         if ($value != null) {
             $this->_params['start-max'] = App\Util::formatTimestamp($value);
@@ -222,7 +222,7 @@ class EventQuery extends \Zend\GData\Query
      * @param int $value
      * @return \Zend\GData\Calendar\EventQuery Provides a fluent interface
      */
-    public function setStartMin($value)
+    public function setStartMin ($value)
     {
         if ($value != null) {
             $this->_params['start-min'] = App\Util::formatTimestamp($value);
@@ -236,7 +236,7 @@ class EventQuery extends \Zend\GData\Query
      * @param string $value
      * @return \Zend\GData\Calendar\EventQuery Provides a fluent interface
      */
-    public function setOrderBy($value)
+    public function setOrderBy ($value)
     {
         if ($value != null) {
             $this->_params['orderby'] = $value;
@@ -249,7 +249,7 @@ class EventQuery extends \Zend\GData\Query
     /**
      * @return int start-max
      */
-    public function getStartMax()
+    public function getStartMax ()
     {
         if (array_key_exists('start-max', $this->_params)) {
             return $this->_params['start-max'];
@@ -261,7 +261,7 @@ class EventQuery extends \Zend\GData\Query
     /**
      * @return int start-min
      */
-    public function getStartMin()
+    public function getStartMin ()
     {
         if (array_key_exists('start-min', $this->_params)) {
             return $this->_params['start-min'];
@@ -273,7 +273,7 @@ class EventQuery extends \Zend\GData\Query
     /**
      * @return string orderby
      */
-    public function getOrderBy()
+    public function getOrderBy ()
     {
         if (array_key_exists('orderby', $this->_params)) {
             return $this->_params['orderby'];
@@ -285,7 +285,7 @@ class EventQuery extends \Zend\GData\Query
     /**
      * @return string sortorder
      */
-    public function getSortOrder()
+    public function getSortOrder ()
     {
         if (array_key_exists('sortorder', $this->_params)) {
             return $this->_params['sortorder'];
@@ -297,7 +297,7 @@ class EventQuery extends \Zend\GData\Query
     /**
      * @return string sortorder
      */
-    public function setSortOrder($value)
+    public function setSortOrder ($value)
     {
         if ($value != null) {
             $this->_params['sortorder'] = $value;
@@ -310,7 +310,7 @@ class EventQuery extends \Zend\GData\Query
     /**
      * @return string recurrence-expansion-start
      */
-    public function getRecurrenceExpansionStart()
+    public function getRecurrenceExpansionStart ()
     {
         if (array_key_exists('recurrence-expansion-start', $this->_params)) {
             return $this->_params['recurrence-expansion-start'];
@@ -322,21 +322,21 @@ class EventQuery extends \Zend\GData\Query
     /**
      * @return string recurrence-expansion-start
      */
-    public function setRecurrenceExpansionStart($value)
+    public function setRecurrenceExpansionStart ($value)
     {
         if ($value != null) {
-            $this->_params['recurrence-expansion-start'] = App\Util::formatTimestamp($value);
+            $this->_params['recurrence-expansion-start'] = App\Util::formatTimestamp(
+            $value);
         } else {
             unset($this->_params['recurrence-expansion-start']);
         }
         return $this;
     }
 
-
     /**
      * @return string recurrence-expansion-end
      */
-    public function getRecurrenceExpansionEnd()
+    public function getRecurrenceExpansionEnd ()
     {
         if (array_key_exists('recurrence-expansion-end', $this->_params)) {
             return $this->_params['recurrence-expansion-end'];
@@ -348,10 +348,11 @@ class EventQuery extends \Zend\GData\Query
     /**
      * @return string recurrence-expansion-end
      */
-    public function setRecurrenceExpansionEnd($value)
+    public function setRecurrenceExpansionEnd ($value)
     {
         if ($value != null) {
-            $this->_params['recurrence-expansion-end'] = App\Util::formatTimestamp($value);
+            $this->_params['recurrence-expansion-end'] = App\Util::formatTimestamp(
+            $value);
         } else {
             unset($this->_params['recurrence-expansion-end']);
         }
@@ -362,7 +363,7 @@ class EventQuery extends \Zend\GData\Query
      * @param string $value Also accepts bools.
      * @return \Zend\GData\Calendar\EventQuery Provides a fluent interface
      */
-    public function getSingleEvents()
+    public function getSingleEvents ()
     {
         if (array_key_exists('singleevents', $this->_params)) {
             $value = $this->_params['singleevents'];
@@ -375,8 +376,8 @@ class EventQuery extends \Zend\GData\Query
                     break;
                 default:
                     throw new App\Exception(
-                            'Invalid query param value for futureevents: ' .
-                            $value . ' It must be a boolean.');
+                    'Invalid query param value for futureevents: ' . $value .
+                     ' It must be a boolean.');
             }
         } else {
             return null;
@@ -387,17 +388,17 @@ class EventQuery extends \Zend\GData\Query
      * @param string $value Also accepts bools. If using a string, must be either "true" or "false".
      * @return \Zend\GData\Calendar\EventQuery Provides a fluent interface
      */
-    public function setSingleEvents($value)
+    public function setSingleEvents ($value)
     {
         if ($value !== null) {
             if (is_bool($value)) {
-                $this->_params['singleevents'] = ($value?'true':'false');
+                $this->_params['singleevents'] = ($value ? 'true' : 'false');
             } elseif ($value == 'true' | $value == 'false') {
                 $this->_params['singleevents'] = $value;
             } else {
                 throw new App\Exception(
-                        'Invalid query param value for futureevents: ' .
-                        $value . ' It must be a boolean.');
+                'Invalid query param value for futureevents: ' . $value .
+                 ' It must be a boolean.');
             }
         } else {
             unset($this->_params['singleevents']);
@@ -408,7 +409,7 @@ class EventQuery extends \Zend\GData\Query
     /**
      * @return string futureevents
      */
-    public function getFutureEvents()
+    public function getFutureEvents ()
     {
         if (array_key_exists('futureevents', $this->_params)) {
             $value = $this->_params['futureevents'];
@@ -421,8 +422,8 @@ class EventQuery extends \Zend\GData\Query
                     break;
                 default:
                     throw new App\Exception(
-                            'Invalid query param value for futureevents: ' .
-                            $value . ' It must be a boolean.');
+                    'Invalid query param value for futureevents: ' . $value .
+                     ' It must be a boolean.');
             }
         } else {
             return null;
@@ -431,20 +432,20 @@ class EventQuery extends \Zend\GData\Query
 
     /**
      * @param string $value Also accepts bools. If using a string, must be either "true" or "false" or
-     *                      an exception will be thrown on retrieval.
+     * an exception will be thrown on retrieval.
      * @return \Zend\GData\Calendar\EventQuery Provides a fluent interface
      */
-    public function setFutureEvents($value)
+    public function setFutureEvents ($value)
     {
         if ($value !== null) {
             if (is_bool($value)) {
-                $this->_params['futureevents'] = ($value?'true':'false');
+                $this->_params['futureevents'] = ($value ? 'true' : 'false');
             } elseif ($value == 'true' | $value == 'false') {
                 $this->_params['futureevents'] = $value;
             } else {
                 throw new App\Exception(
-                        'Invalid query param value for futureevents: ' .
-                        $value . ' It must be a boolean.');
+                'Invalid query param value for futureevents: ' . $value .
+                 ' It must be a boolean.');
             }
         } else {
             unset($this->_params['futureevents']);
@@ -455,7 +456,7 @@ class EventQuery extends \Zend\GData\Query
     /**
      * @return string url
      */
-    public function getQueryUrl()
+    public function getQueryUrl ()
     {
         if (isset($this->_url)) {
             $uri = $this->_url;

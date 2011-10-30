@@ -40,6 +40,7 @@ use Zend\Layout\Layout;
  */
 abstract class AbstractAutoComplete extends AbstractHelper
 {
+
     /**
      * Suppress exit when sendJson() called
      *
@@ -53,7 +54,7 @@ abstract class AbstractAutoComplete extends AbstractHelper
      * @param  mixed $data
      * @return boolean
      */
-    abstract public function validateData($data);
+    abstract public function validateData ($data);
 
     /**
      * Prepare autocompletion data
@@ -62,21 +63,23 @@ abstract class AbstractAutoComplete extends AbstractHelper
      * @param  boolean $keepLayouts
      * @return mixed
      */
-    abstract public function prepareAutoCompletion($data, $keepLayouts = false);
+    abstract public function prepareAutoCompletion ($data, $keepLayouts = false);
 
     /**
      * Disable layouts and view renderer
      *
      * @return \Zend\Controller\Action\Helper\AutoComplete\AbstractAutoComplete Provides a fluent interface
      */
-    public function disableLayouts()
+    public function disableLayouts ()
     {
         if (null !== ($layout = Layout::getMvcInstance())) {
             $layout->disableLayout();
         }
-
-        $this->getBroker()->load('viewRenderer')->setNoRender(true);
-
+        
+        $this->getBroker()
+            ->load('viewRenderer')
+            ->setNoRender(true);
+        
         return $this;
     }
 
@@ -88,13 +91,16 @@ abstract class AbstractAutoComplete extends AbstractHelper
      * @throws \Zend\Controller\Action\Exception
      * @return string
      */
-    public function encodeJson($data, $keepLayouts = false)
+    public function encodeJson ($data, $keepLayouts = false)
     {
         if ($this->validateData($data)) {
-            return $this->getBroker()->load('json')->encodeJson($data, $keepLayouts);
+            return $this->getBroker()
+                ->load('json')
+                ->encodeJson($data, $keepLayouts);
         }
-
-        throw new \Zend\Controller\Action\Exception('Invalid data passed for autocompletion');
+        
+        throw new \Zend\Controller\Action\Exception(
+        'Invalid data passed for autocompletion');
     }
 
     /**
@@ -107,18 +113,18 @@ abstract class AbstractAutoComplete extends AbstractHelper
      * @param  bool  $keepLayouts
      * @return string|void
      */
-    public function sendAutoCompletion($data, $keepLayouts = false)
+    public function sendAutoCompletion ($data, $keepLayouts = false)
     {
         $data = $this->prepareAutoCompletion($data, $keepLayouts);
-
+        
         $response = $this->getResponse();
         $response->setBody($data);
-
-        if (!$this->suppressExit) {
+        
+        if (! $this->suppressExit) {
             $response->sendResponse();
-            exit;
+            exit();
         }
-
+        
         return $data;
     }
 
@@ -133,12 +139,12 @@ abstract class AbstractAutoComplete extends AbstractHelper
      * @param  bool  $keepLayouts
      * @return string|void
      */
-    public function direct($data, $sendNow = true, $keepLayouts = false)
+    public function direct ($data, $sendNow = true, $keepLayouts = false)
     {
         if ($sendNow) {
             return $this->sendAutoCompletion($data, $keepLayouts);
         }
-
+        
         return $this->prepareAutoCompletion($data, $keepLayouts);
     }
 }

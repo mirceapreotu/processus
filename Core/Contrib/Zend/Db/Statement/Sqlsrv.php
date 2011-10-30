@@ -61,16 +61,16 @@ class Sqlsrv extends AbstractStatement
      * @return void
      * @throws \Zend\Db\Statement\SqlsrvException
      */
-    protected function _prepare($sql)
+    protected function _prepare ($sql)
     {
         $connection = $this->_adapter->getConnection();
-
+        
         $this->_stmt = sqlsrv_prepare($connection, $sql);
-
-        if (!$this->_stmt) {
+        
+        if (! $this->_stmt) {
             throw new SqlsrvException(sqlsrv_errors());
         }
-
+        
         $this->_originalSQL = $sql;
     }
 
@@ -85,7 +85,8 @@ class Sqlsrv extends AbstractStatement
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    protected function _bindParam($parameter, &$variable, $type = null, $length = null, $options = null)
+    protected function _bindParam ($parameter, &$variable, $type = null, 
+    $length = null, $options = null)
     {
         //Sql server doesn't support bind by name
         return true;
@@ -96,12 +97,12 @@ class Sqlsrv extends AbstractStatement
      *
      * @return bool
      */
-    public function closeCursor()
+    public function closeCursor ()
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
-
+        
         sqlsrv_free_stmt($this->_stmt);
         $this->_stmt = false;
         return true;
@@ -113,15 +114,14 @@ class Sqlsrv extends AbstractStatement
      *
      * @return int The number of columns.
      */
-    public function columnCount()
+    public function columnCount ()
     {
         if ($this->_stmt && $this->_executed) {
             return sqlsrv_num_fields($this->_stmt);
         }
-
+        
         return 0;
     }
-
 
     /**
      * Retrieves the error code, if any, associated with the last operation on
@@ -129,20 +129,19 @@ class Sqlsrv extends AbstractStatement
      *
      * @return string error code.
      */
-    public function errorCode()
+    public function errorCode ()
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
-
+        
         $error = sqlsrv_errors();
-        if (!$error) {
+        if (! $error) {
             return false;
         }
-
+        
         return $error[0]['code'];
     }
-
 
     /**
      * Retrieves an array of error information, if any, associated with the
@@ -150,23 +149,19 @@ class Sqlsrv extends AbstractStatement
      *
      * @return array
      */
-    public function errorInfo()
+    public function errorInfo ()
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
-
+        
         $error = sqlsrv_errors();
-        if (!$error) {
+        if (! $error) {
             return false;
         }
-
-        return array(
-            $error[0]['code'],
-            $error[0]['message'],
-        );
+        
+        return array($error[0]['code'], $error[0]['message']);
     }
-
 
     /**
      * Executes a prepared statement.
@@ -175,40 +170,40 @@ class Sqlsrv extends AbstractStatement
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function _execute(array $params = null)
+    public function _execute (array $params = null)
     {
         $connection = $this->_adapter->getConnection();
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
-
+        
         if ($params !== null) {
-            if (!is_array($params)) {
+            if (! is_array($params)) {
                 $params = array($params);
             }
             $error = false;
-
+            
             // make all params passed by reference
             $params_ = array();
-            $temp    = array();
-            $i       = 1;
+            $temp = array();
+            $i = 1;
             foreach ($params as $param) {
-                $temp[$i]  = $param;
+                $temp[$i] = $param;
                 $params_[] = &$temp[$i];
-                $i++;
+                $i ++;
             }
             $params = $params_;
         }
-
+        
         $this->_stmt = sqlsrv_query($connection, $this->_originalSQL, $params);
-
-        if (!$this->_stmt) {
+        
+        if (! $this->_stmt) {
             throw new SqlsrvException(sqlsrv_errors());
         }
-
+        
         $this->_executed = true;
-
-        return (!$this->_stmt);
+        
+        return (! $this->_stmt);
     }
 
     /**
@@ -220,34 +215,34 @@ class Sqlsrv extends AbstractStatement
      * @return mixed Array, object, or scalar depending on fetch mode.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function fetch($style = null, $cursor = null, $offset = null)
+    public function fetch ($style = null, $cursor = null, $offset = null)
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
-
+        
         if (null === $style) {
             $style = $this->_fetchMode;
         }
-
+        
         $values = sqlsrv_fetch_array($this->_stmt, Sqlsrv_FETCH_ASSOC);
-
-        if (!$values && (null !== $error = sqlsrv_errors())) {
+        
+        if (! $values && (null !== $error = sqlsrv_errors())) {
             throw new SqlsrvException($error);
         }
-
+        
         if (null === $values) {
             return null;
         }
-
-        if (!$this->_keys) {
+        
+        if (! $this->_keys) {
             foreach ($values as $key => $value) {
                 $this->_keys[] = $this->_adapter->foldCase($key);
             }
         }
-
+        
         $values = array_values($values);
-
+        
         $row = false;
         switch ($style) {
             case Db\Db::FETCH_NUM:
@@ -258,21 +253,22 @@ class Sqlsrv extends AbstractStatement
                 break;
             case Db\Db::FETCH_BOTH:
                 $assoc = array_combine($this->_keys, $values);
-                $row   = array_merge($values, $assoc);
+                $row = array_merge($values, $assoc);
                 break;
             case Db\Db::FETCH_OBJ:
                 $row = (object) array_combine($this->_keys, $values);
                 break;
             case Db\Db::FETCH_BOUND:
                 $assoc = array_combine($this->_keys, $values);
-                $row   = array_merge($values, $assoc);
-                $row   = $this->_fetchBound($row);
+                $row = array_merge($values, $assoc);
+                $row = $this->_fetchBound($row);
                 break;
             default:
-                throw new SqlsrvException("Invalid fetch mode '$style' specified");
+                throw new SqlsrvException(
+                "Invalid fetch mode '$style' specified");
                 break;
         }
-
+        
         return $row;
     }
 
@@ -283,26 +279,26 @@ class Sqlsrv extends AbstractStatement
      * @return string
      * @throws \Zend\Db\Statement\Exception
      */
-    public function fetchColumn($col = 0)
+    public function fetchColumn ($col = 0)
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
-
-        if (!sqlsrv_fetch($this->_stmt)) {
+        
+        if (! sqlsrv_fetch($this->_stmt)) {
             if (null !== $error = sqlsrv_errors()) {
                 throw new SqlsrvException($error);
             }
-
+            
             // If no error, there is simply no record
             return false;
         }
-
+        
         $data = sqlsrv_get_field($this->_stmt, $col); //0-based
         if ($data === false) {
             throw new SqlsrvException(sqlsrv_errors());
         }
-
+        
         return $data;
     }
 
@@ -314,24 +310,24 @@ class Sqlsrv extends AbstractStatement
      * @return mixed One object instance of the specified class.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function fetchObject($class = 'stdClass', array $config = array())
+    public function fetchObject ($class = 'stdClass', array $config = array())
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
-
+        
         $obj = sqlsrv_fetch_object($this->_stmt);
-
+        
         if ($error = sqlsrv_errors()) {
             throw new SqlsrvException($error);
         }
-
+        
         /* @todo XXX handle parameters */
-
+        
         if (null === $obj) {
             return false;
         }
-
+        
         return $obj;
     }
 
@@ -342,18 +338,18 @@ class Sqlsrv extends AbstractStatement
      * @return mixed
      * @throws \Zend\Db\Statement\SqlsrvException
      */
-    public function getColumnMeta($column)
+    public function getColumnMeta ($column)
     {
         $fields = sqlsrv_field_metadata($this->_stmt);
-
-        if (!$fields) {
+        
+        if (! $fields) {
             throw new SqlsrvException('Column metadata can not be fetched');
         }
-
-        if (!isset($fields[$column])) {
+        
+        if (! isset($fields[$column])) {
             throw new SqlsrvException('Column index does not exist in statement');
         }
-
+        
         return $fields[$column];
     }
 
@@ -365,16 +361,16 @@ class Sqlsrv extends AbstractStatement
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function nextRowset()
+    public function nextRowset ()
     {
         if (sqlsrv_next_result($this->_stmt) === false) {
             throw new SqlsrvException(sqlsrv_errors());
         }
-		
-		// reset column keys
-		$this->_keys = null;
-
-		return true;
+        
+        // reset column keys
+        $this->_keys = null;
+        
+        return true;
     }
 
     /**
@@ -385,27 +381,27 @@ class Sqlsrv extends AbstractStatement
      * @return int     The number of rows affected.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function rowCount()
+    public function rowCount ()
     {
-        if (!$this->_stmt) {
+        if (! $this->_stmt) {
             return false;
         }
-
-        if (!$this->_executed) {
+        
+        if (! $this->_executed) {
             return 0;
         }
-
+        
         $num_rows = sqlsrv_rows_affected($this->_stmt);
-
+        
         // Strict check is necessary; 0 is a valid return value
         if ($num_rows === false) {
             throw new SqlsrvException(sqlsrv_errors());
         }
-
+        
         return $num_rows;
     }
-	
-	/**
+
+    /**
      * Returns an array containing all of the result set rows.
      *
      * @param int $style OPTIONAL Fetch mode.
@@ -416,12 +412,12 @@ class Sqlsrv extends AbstractStatement
      * is used, the final result removes the extra column
      * 'zend_db_rownum'
      */
-    public function fetchAll($style = null, $col = null)
+    public function fetchAll ($style = null, $col = null)
     {
         $data = parent::fetchAll($style, $col);
         $results = array();
         $remove = $this->_adapter->foldCase('ZEND_DB_ROWNUM');
-
+        
         foreach ($data as $row) {
             if (is_array($row) && array_key_exists($remove, $row)) {
                 unset($row[$remove]);

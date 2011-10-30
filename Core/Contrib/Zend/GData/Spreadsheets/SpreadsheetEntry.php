@@ -46,7 +46,7 @@ class SpreadsheetEntry extends \Zend\GData\Entry
      * Constructs a new Zend_Gdata_Spreadsheets_SpreadsheetEntry object.
      * @param DOMElement $element (optional) The DOMElement on which to base this object.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(Spreadsheets::$namespaces);
         parent::__construct($element);
@@ -57,7 +57,7 @@ class SpreadsheetEntry extends \Zend\GData\Entry
      *
      * @return \Zend\GData\Spreadsheets\WorksheetFeed The worksheets
      */
-    public function getWorksheets()
+    public function getWorksheets ()
     {
         $service = new Spreadsheets($this->getHttpClient());
         return $service->getWorksheetFeed($this);

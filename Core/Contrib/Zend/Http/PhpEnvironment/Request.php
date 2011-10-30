@@ -2,12 +2,12 @@
 
 namespace Zend\Http\PhpEnvironment;
 
-use Zend\Http\Request as HttpRequest,
-    Zend\Stdlib\Parameters;
+use Zend\Http\Request as HttpRequest, Zend\Stdlib\Parameters;
 
 class Request extends HttpRequest
 {
-    public function __construct()
+
+    public function __construct ()
     {
         $this->setEnv(new Parameters($_ENV));
         $this->setPost(new Parameters($_POST));

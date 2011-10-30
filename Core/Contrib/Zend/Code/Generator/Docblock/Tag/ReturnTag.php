@@ -45,14 +45,16 @@ class ReturnTag extends \Zend\Code\Generator\Docblock\Tag
      * @param \Zend\Code\Reflection\ReflectionDocblockTag $reflectionTagReturn
      * @return \Zend\Code\Generator\Docblock\Tag\ReturnTag
      */
-    public static function fromReflection(\Zend\Code\Reflection\ReflectionDocblockTag $reflectionTagReturn)
+    public static function fromReflection (
+    \Zend\Code\Reflection\ReflectionDocblockTag $reflectionTagReturn)
     {
         $returnTag = new self();
-
+        
         $returnTag->setName('return');
         $returnTag->setDatatype($reflectionTagReturn->getType()); // @todo rename
-        $returnTag->setDescription($reflectionTagReturn->getDescription());
-
+        $returnTag->setDescription(
+        $reflectionTagReturn->getDescription());
+        
         return $returnTag;
     }
 
@@ -62,7 +64,7 @@ class ReturnTag extends \Zend\Code\Generator\Docblock\Tag
      * @param string $datatype
      * @return \Zend\Code\Generator\Docblock\Tag\ReturnTag
      */
-    public function setDatatype($datatype)
+    public function setDatatype ($datatype)
     {
         $this->_datatype = $datatype;
         return $this;
@@ -73,18 +75,17 @@ class ReturnTag extends \Zend\Code\Generator\Docblock\Tag
      *
      * @return string
      */
-    public function getDatatype()
+    public function getDatatype ()
     {
         return $this->_datatype;
     }
-
 
     /**
      * generate()
      *
      * @return string
      */
-    public function generate()
+    public function generate ()
     {
         $output = '@return ' . $this->_datatype . ' ' . $this->description;
         return $output;

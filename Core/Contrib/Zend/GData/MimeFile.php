@@ -47,9 +47,9 @@ class MimeFile
      * Create a new MimeFile object.
      *
      * @param string $fileHandle An open file handle to the file being
-     *               read.
+     * read.
      */
-    public function __construct($fileHandle)
+    public function __construct ($fileHandle)
     {
         $this->_fileHandle = $fileHandle;
     }
@@ -59,11 +59,11 @@ class MimeFile
      *
      * @param integer $bytesRequested The size of the chunk that is to be read.
      * @return string A corresponding piece of the message. This could be
-     *                binary or regular text.
+     * binary or regular text.
      */
-    public function read($bytesRequested)
+    public function read ($bytesRequested)
     {
-      return fread($this->_fileHandle, $bytesRequested);
+        return fread($this->_fileHandle, $bytesRequested);
     }
 
 }

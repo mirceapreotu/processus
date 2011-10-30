@@ -56,7 +56,7 @@ class SpreadsheetFeed extends \Zend\GData\Feed
      * Constructs a new Zend_Gdata_Spreadsheets_SpreadsheetFeed object.
      * @param DOMElement $element (optional) The DOMElement on which to base this object.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(Spreadsheets::$namespaces);
         parent::__construct($element);

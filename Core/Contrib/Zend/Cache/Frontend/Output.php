@@ -43,7 +43,7 @@ class Output extends Core
      * @param  array $options Associative array of options
      * @return void
      */
-    public function __construct(array $options = array())
+    public function __construct (array $options = array())
     {
         parent::__construct($options);
         $this->_idStack = array();
@@ -57,12 +57,12 @@ class Output extends Core
      * @param  boolean $echoData               If set to true, datas are sent to the browser if the cache is hit (simpy returned else)
      * @return mixed True if the cache is hit (false else) with $echoData=true (default) ; string else (datas)
      */
-    public function start($id, $doNotTestCacheValidity = false, $echoData = true)
+    public function start ($id, $doNotTestCacheValidity = false, $echoData = true)
     {
         $data = $this->load($id, $doNotTestCacheValidity);
         if ($data !== false) {
-            if ( $echoData ) {
-                echo($data);
+            if ($echoData) {
+                echo ($data);
                 return true;
             } else {
                 return $data;
@@ -84,13 +84,14 @@ class Output extends Core
      * @param  int     $priority         integer between 0 (very low priority) and 10 (maximum priority) used by some particular backends
      * @return void
      */
-    public function end($tags = array(), $specificLifetime = false, $forcedDatas = null, $echoData = true, $priority = 8)
+    public function end ($tags = array(), $specificLifetime = false, $forcedDatas = null, 
+    $echoData = true, $priority = 8)
     {
         if ($forcedDatas === null) {
             $data = ob_get_contents();
             ob_end_clean();
         } else {
-            $data =& $forcedDatas;
+            $data = & $forcedDatas;
         }
         $id = array_pop($this->_idStack);
         if ($id === null) {
@@ -98,7 +99,7 @@ class Output extends Core
         }
         $this->save($data, $id, $tags, $specificLifetime, $priority);
         if ($echoData) {
-            echo($data);
+            echo ($data);
         }
     }
 

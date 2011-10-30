@@ -33,6 +33,7 @@ namespace Zend\Filter;
  */
 class PregReplace extends AbstractFilter
 {
+
     /**
      * Pattern to match
      * @var mixed
@@ -50,19 +51,19 @@ class PregReplace extends AbstractFilter
      *
      * @var bool
      */
-    static protected $_unicodeSupportEnabled = null;
+    protected static $_unicodeSupportEnabled = null;
 
     /**
      * Is Unicode Support Enabled Utility function
      *
      * @return bool
      */
-    static public function isUnicodeSupportEnabled()
+    static public function isUnicodeSupportEnabled ()
     {
         if (self::$_unicodeSupportEnabled === null) {
             self::_determineUnicodeSupport();
         }
-
+        
         return self::$_unicodeSupportEnabled;
     }
 
@@ -71,7 +72,7 @@ class PregReplace extends AbstractFilter
      *
      * @return bool
      */
-    static protected function _determineUnicodeSupport()
+    static protected function _determineUnicodeSupport ()
     {
         self::$_unicodeSupportEnabled = (@preg_match('/\pL/u', 'a')) ? true : false;
     }
@@ -79,34 +80,35 @@ class PregReplace extends AbstractFilter
     /**
      * Constructor
      * Supported options are
-     *     'match'   => matching pattern
-     *     'replace' => replace with this
+     * 'match'   => matching pattern
+     * 'replace' => replace with this
      *
      * @param  string|array $options
      * @return void
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         if ($options instanceof \Zend\Config\Config) {
             $options = $options->toArray();
-        } else if (!is_array($options)) {
-            $options = func_get_args();
-            $temp    = array();
-            if (!empty($options)) {
-                $temp['match'] = array_shift($options);
+        } else 
+            if (! is_array($options)) {
+                $options = func_get_args();
+                $temp = array();
+                if (! empty($options)) {
+                    $temp['match'] = array_shift($options);
+                }
+                
+                if (! empty($options)) {
+                    $temp['replace'] = array_shift($options);
+                }
+                
+                $options = $temp;
             }
-
-            if (!empty($options)) {
-                $temp['replace'] = array_shift($options);
-            }
-
-            $options = $temp;
-        }
-
+        
         if (array_key_exists('match', $options)) {
             $this->setMatchPattern($options['match']);
         }
-
+        
         if (array_key_exists('replace', $options)) {
             $this->setReplacement($options['replace']);
         }
@@ -118,7 +120,7 @@ class PregReplace extends AbstractFilter
      * @param mixed $match - same as the first argument of preg_replace
      * @return \Zend\Filter\PregReplace
      */
-    public function setMatchPattern($match)
+    public function setMatchPattern ($match)
     {
         $this->_matchPattern = $match;
         return $this;
@@ -129,7 +131,7 @@ class PregReplace extends AbstractFilter
      *
      * @return string
      */
-    public function getMatchPattern()
+    public function getMatchPattern ()
     {
         return $this->_matchPattern;
     }
@@ -140,7 +142,7 @@ class PregReplace extends AbstractFilter
      * @param mixed $replacement - same as the second argument of preg_replace
      * @return \Zend\Filter\PregReplace
      */
-    public function setReplacement($replacement)
+    public function setReplacement ($replacement)
     {
         $this->_replacement = $replacement;
         return $this;
@@ -151,7 +153,7 @@ class PregReplace extends AbstractFilter
      *
      * @return string
      */
-    public function getReplacement()
+    public function getReplacement ()
     {
         return $this->_replacement;
     }
@@ -162,12 +164,13 @@ class PregReplace extends AbstractFilter
      * @param  string $value
      * @return string
      */
-    public function filter($value)
+    public function filter ($value)
     {
         if ($this->_matchPattern == null) {
-            throw new Exception\RuntimeException(get_class($this) . ' does not have a valid MatchPattern set.');
+            throw new Exception\RuntimeException(
+            get_class($this) . ' does not have a valid MatchPattern set.');
         }
-
+        
         return preg_replace($this->_matchPattern, $this->_replacement, $value);
     }
 }

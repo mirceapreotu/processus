@@ -39,8 +39,11 @@ class Review extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'gbs';
+
     protected $_rootElement = 'review';
+
     protected $_lang = null;
+
     protected $_type = null;
 
     /**
@@ -49,10 +52,10 @@ class Review extends \Zend\GData\Extension
      *
      * @param string|null $lang Review language.
      * @param string|null $type Type of text construct (typically text, html,
-     *        or xhtml).
+     * or xhtml).
      * @param string|null $value Text content of the review.
      */
-    public function __construct($lang = null, $type = null, $value = null)
+    public function __construct ($lang = null, $type = null, $value = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Books::$namespaces);
         parent::__construct();
@@ -71,7 +74,7 @@ class Review extends \Zend\GData\Extension
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc);
         if ($this->_lang !== null) {
@@ -89,17 +92,17 @@ class Review extends \Zend\GData\Extension
      *
      * @param DOMNode $attribute The DOMNode attribute to be handled.
      */
-    protected function takeAttributeFromDOM($attribute)
+    protected function takeAttributeFromDOM ($attribute)
     {
         switch ($attribute->localName) {
-        case 'lang':
-            $this->_lang = $attribute->nodeValue;
-            break;
-        case 'type':
-            $this->_type = $attribute->nodeValue;
-            break;
-        default:
-            parent::takeAttributeFromDOM($attribute);
+            case 'lang':
+                $this->_lang = $attribute->nodeValue;
+                break;
+            case 'type':
+                $this->_type = $attribute->nodeValue;
+                break;
+            default:
+                parent::takeAttributeFromDOM($attribute);
         }
     }
 
@@ -108,7 +111,7 @@ class Review extends \Zend\GData\Extension
      *
      * @return string The lang
      */
-    public function getLang()
+    public function getLang ()
     {
         return $this->_lang;
     }
@@ -118,7 +121,7 @@ class Review extends \Zend\GData\Extension
      *
      * @return string The type
      */
-    public function getType()
+    public function getType ()
     {
         return $this->_type;
     }
@@ -129,7 +132,7 @@ class Review extends \Zend\GData\Extension
      * @param string $lang language of link title
      * @return \Zend\GData\Books\Extension\Review Provides a fluent interface
      */
-    public function setLang($lang)
+    public function setLang ($lang)
     {
         $this->_lang = $lang;
         return $this;
@@ -141,12 +144,11 @@ class Review extends \Zend\GData\Extension
      * @param string $type type of text construct (typically 'text', 'html' or 'xhtml')
      * @return \Zend\GData\Books\Extension\Review Provides a fluent interface
      */
-    public function setType($type)
+    public function setType ($type)
     {
         $this->_type = $type;
         return $this;
     }
-
 
 }
 

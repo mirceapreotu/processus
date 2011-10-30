@@ -19,19 +19,19 @@
  */
 
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Writer;
 use Zend\Feed\Writer\Exception;
 use Zend\Uri;
 use Zend\Date;
 
 /**
-* @category Zend
-* @package Zend_Feed_Writer
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @category Zend
+ * @package Zend_Feed_Writer
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 class Entry
 {
 
@@ -63,7 +63,7 @@ class Entry
      *
      * @return void
      */
-    public function __construct()
+    public function __construct ()
     {
         Writer::registerCoreExtensions();
         $this->_loadExtensions();
@@ -75,26 +75,28 @@ class Entry
      * @param  int $index
      * @return string|null
      */
-    public function addAuthor($name, $email = null, $uri = null)
+    public function addAuthor ($name, $email = null, $uri = null)
     {
         $author = array();
         if (is_array($name)) {
-            if (!array_key_exists('name', $name)
-                || empty($name['name'])
-                || !is_string($name['name'])
-            ) {
-                throw new Exception('Invalid parameter: author array must include a "name" key with a non-empty string value');
+            if (! array_key_exists('name', $name) || empty($name['name']) ||
+             ! is_string($name['name'])) {
+                throw new Exception(
+                'Invalid parameter: author array must include a "name" key with a non-empty string value');
             }
             $author['name'] = $name['name'];
             if (isset($name['email'])) {
-                if (empty($name['email']) || !is_string($name['email'])) {
-                    throw new Exception('Invalid parameter: "email" array value must be a non-empty string');
+                if (empty($name['email']) || ! is_string($name['email'])) {
+                    throw new Exception(
+                    'Invalid parameter: "email" array value must be a non-empty string');
                 }
                 $author['email'] = $name['email'];
             }
             if (isset($name['uri'])) {
-                if (empty($name['uri']) || !is_string($name['uri']) || !Uri\UriFactory::factory($name['uri'])->isValid()) {
-                    throw new Exception('Invalid parameter: "uri" array value must be a non-empty string and valid URI/IRI');
+                if (empty($name['uri']) || ! is_string($name['uri']) ||
+                 ! Uri\UriFactory::factory($name['uri'])->isValid()) {
+                    throw new Exception(
+                    'Invalid parameter: "uri" array value must be a non-empty string and valid URI/IRI');
                 }
                 $author['uri'] = $name['uri'];
             }
@@ -103,19 +105,23 @@ class Entry
          * Array notation (above) is preferred and will be the sole supported input from ZF 2.0
          */
         } else {
-            if (empty($name['name']) || !is_string($name['name'])) {
-                throw new Exception('Invalid parameter: "name" must be a non-empty string value');
+            if (empty($name['name']) || ! is_string($name['name'])) {
+                throw new Exception(
+                'Invalid parameter: "name" must be a non-empty string value');
             }
             $author['name'] = $name;
             if (isset($email)) {
-                if (empty($email) || !is_string($email)) {
-                    throw new Exception('Invalid parameter: "email" value must be a non-empty string');
+                if (empty($email) || ! is_string($email)) {
+                    throw new Exception(
+                    'Invalid parameter: "email" value must be a non-empty string');
                 }
                 $author['email'] = $email;
             }
             if (isset($uri)) {
-                if (empty($uri) || !is_string($uri) || !Uri\UriFactory::factory($uri)->isValid()) {
-                    throw new Exception('Invalid parameter: "uri" array value must be a non-empty string and valid URI/IRI');
+                if (empty($uri) || ! is_string($uri) ||
+                 ! Uri\UriFactory::factory($uri)->isValid()) {
+                    throw new Exception(
+                    'Invalid parameter: "uri" array value must be a non-empty string and valid URI/IRI');
                 }
                 $author['uri'] = $uri;
             }
@@ -128,9 +134,9 @@ class Entry
      *
      * @return array
      */
-    public function addAuthors(array $authors)
+    public function addAuthors (array $authors)
     {
-        foreach($authors as $author) {
+        foreach ($authors as $author) {
             $this->addAuthor($author);
         }
     }
@@ -140,10 +146,11 @@ class Entry
      *
      * @return string|null
      */
-    public function setEncoding($encoding)
+    public function setEncoding ($encoding)
     {
-        if (empty($encoding) || !is_string($encoding)) {
-            throw new Exception('Invalid parameter: parameter must be a non-empty string');
+        if (empty($encoding) || ! is_string($encoding)) {
+            throw new Exception(
+            'Invalid parameter: parameter must be a non-empty string');
         }
         $this->_data['encoding'] = $encoding;
     }
@@ -153,9 +160,9 @@ class Entry
      *
      * @return string|null
      */
-    public function getEncoding()
+    public function getEncoding ()
     {
-        if (!array_key_exists('encoding', $this->_data)) {
+        if (! array_key_exists('encoding', $this->_data)) {
             return 'UTF-8';
         }
         return $this->_data['encoding'];
@@ -166,10 +173,11 @@ class Entry
      *
      * @return string|null
      */
-    public function setCopyright($copyright)
+    public function setCopyright ($copyright)
     {
-        if (empty($copyright) || !is_string($copyright)) {
-            throw new Exception('Invalid parameter: parameter must be a non-empty string');
+        if (empty($copyright) || ! is_string($copyright)) {
+            throw new Exception(
+            'Invalid parameter: parameter must be a non-empty string');
         }
         $this->_data['copyright'] = $copyright;
     }
@@ -179,10 +187,11 @@ class Entry
      *
      * @return string|null
      */
-    public function setContent($content)
+    public function setContent ($content)
     {
-        if (empty($content) || !is_string($content)) {
-            throw new Exception('Invalid parameter: parameter must be a non-empty string');
+        if (empty($content) || ! is_string($content)) {
+            throw new Exception(
+            'Invalid parameter: parameter must be a non-empty string');
         }
         $this->_data['content'] = $content;
     }
@@ -192,17 +201,18 @@ class Entry
      *
      * @return string|null
      */
-    public function setDateCreated($date = null)
+    public function setDateCreated ($date = null)
     {
         $zdate = null;
         if ($date === null) {
-            $zdate = new Date\Date;
+            $zdate = new Date\Date();
         } elseif (ctype_digit($date) && strlen($date) == 10) {
             $zdate = new Date\Date($date, Date\Date::TIMESTAMP);
         } elseif ($date instanceof Date\Date) {
             $zdate = $date;
         } else {
-            throw new Exception('Invalid Zend\Date\Date object or UNIX Timestamp passed as parameter');
+            throw new Exception(
+            'Invalid Zend\Date\Date object or UNIX Timestamp passed as parameter');
         }
         $this->_data['dateCreated'] = $zdate;
     }
@@ -212,17 +222,18 @@ class Entry
      *
      * @return string|null
      */
-    public function setDateModified($date = null)
+    public function setDateModified ($date = null)
     {
         $zdate = null;
         if ($date === null) {
-            $zdate = new Date\Date;
+            $zdate = new Date\Date();
         } elseif (ctype_digit($date) && strlen($date) == 10) {
             $zdate = new Date\Date($date, Date\Date::TIMESTAMP);
         } elseif ($date instanceof Date\Date) {
             $zdate = $date;
         } else {
-            throw new Exception('Invalid Date\Date object or UNIX Timestamp passed as parameter');
+            throw new Exception(
+            'Invalid Date\Date object or UNIX Timestamp passed as parameter');
         }
         $this->_data['dateModified'] = $zdate;
     }
@@ -232,10 +243,11 @@ class Entry
      *
      * @return string|null
      */
-    public function setDescription($description)
+    public function setDescription ($description)
     {
-        if (empty($description) || !is_string($description)) {
-            throw new Exception('Invalid parameter: parameter must be a non-empty string');
+        if (empty($description) || ! is_string($description)) {
+            throw new Exception(
+            'Invalid parameter: parameter must be a non-empty string');
         }
         $this->_data['description'] = $description;
     }
@@ -245,10 +257,11 @@ class Entry
      *
      * @return string|null
      */
-    public function setId($id)
+    public function setId ($id)
     {
-        if (empty($id) || !is_string($id)) {
-            throw new Exception('Invalid parameter: parameter must be a non-empty string');
+        if (empty($id) || ! is_string($id)) {
+            throw new Exception(
+            'Invalid parameter: parameter must be a non-empty string');
         }
         $this->_data['id'] = $id;
     }
@@ -258,10 +271,12 @@ class Entry
      *
      * @return string|null
      */
-    public function setLink($link)
+    public function setLink ($link)
     {
-        if (empty($link) || !is_string($link) || !Uri\UriFactory::factory($link)->isValid()) {
-            throw new Exception('Invalid parameter: parameter must be a non-empty string and valid URI/IRI');
+        if (empty($link) || ! is_string($link) ||
+         ! Uri\UriFactory::factory($link)->isValid()) {
+            throw new Exception(
+            'Invalid parameter: parameter must be a non-empty string and valid URI/IRI');
         }
         $this->_data['link'] = $link;
     }
@@ -271,10 +286,11 @@ class Entry
      *
      * @return string|null
      */
-    public function setCommentCount($count)
+    public function setCommentCount ($count)
     {
-        if (empty($count) || !is_numeric($count) || (int) $count < 0) {
-            throw new Exception('Invalid parameter: "count" must be a non-empty integer number');
+        if (empty($count) || ! is_numeric($count) || (int) $count < 0) {
+            throw new Exception(
+            'Invalid parameter: "count" must be a non-empty integer number');
         }
         $this->_data['commentCount'] = (int) $count;
     }
@@ -284,10 +300,12 @@ class Entry
      *
      * @return string|null
      */
-    public function setCommentLink($link)
+    public function setCommentLink ($link)
     {
-        if (empty($link) || !is_string($link) || !Uri\UriFactory::factory($link)->isValid()) {
-            throw new Exception('Invalid parameter: "link" must be a non-empty string and valid URI/IRI');
+        if (empty($link) || ! is_string($link) ||
+         ! Uri\UriFactory::factory($link)->isValid()) {
+            throw new Exception(
+            'Invalid parameter: "link" must be a non-empty string and valid URI/IRI');
         }
         $this->_data['commentLink'] = $link;
     }
@@ -297,16 +315,20 @@ class Entry
      *
      * @return string|null
      */
-    public function setCommentFeedLink(array $link)
+    public function setCommentFeedLink (array $link)
     {
-        if (!isset($link['uri']) || !is_string($link['uri']) || !Uri\UriFactory::factory($link['uri'])->isValid()) {
-            throw new Exception('Invalid parameter: "link" must be a non-empty string and valid URI/IRI');
+        if (! isset($link['uri']) || ! is_string($link['uri']) ||
+         ! Uri\UriFactory::factory($link['uri'])->isValid()) {
+            throw new Exception(
+            'Invalid parameter: "link" must be a non-empty string and valid URI/IRI');
         }
-        if (!isset($link['type']) || !in_array($link['type'], array('atom', 'rss', 'rdf'))) {
-            throw new Exception('Invalid parameter: "type" must be one'
-            . ' of "atom", "rss" or "rdf"');
+        if (! isset($link['type']) ||
+         ! in_array($link['type'], array('atom', 'rss', 'rdf'))) {
+            throw new Exception(
+            'Invalid parameter: "type" must be one' .
+             ' of "atom", "rss" or "rdf"');
         }
-        if (!isset($this->_data['commentFeedLinks'])) {
+        if (! isset($this->_data['commentFeedLinks'])) {
             $this->_data['commentFeedLinks'] = array();
         }
         $this->_data['commentFeedLinks'][] = $link;
@@ -319,7 +341,7 @@ class Entry
      *
      * @return string|null
      */
-    public function setCommentFeedLinks(array $links)
+    public function setCommentFeedLinks (array $links)
     {
         foreach ($links as $link) {
             $this->setCommentFeedLink($link);
@@ -331,10 +353,11 @@ class Entry
      *
      * @return string|null
      */
-    public function setTitle($title)
+    public function setTitle ($title)
     {
-        if (empty($title) || !is_string($title)) {
-            throw new Exception('Invalid parameter: parameter must be a non-empty string');
+        if (empty($title) || ! is_string($title)) {
+            throw new Exception(
+            'Invalid parameter: parameter must be a non-empty string');
         }
         $this->_data['title'] = $title;
     }
@@ -344,9 +367,9 @@ class Entry
      *
      * @return array
      */
-    public function getAuthors()
+    public function getAuthors ()
     {
-        if (!array_key_exists('authors', $this->_data)) {
+        if (! array_key_exists('authors', $this->_data)) {
             return null;
         }
         return $this->_data['authors'];
@@ -357,9 +380,9 @@ class Entry
      *
      * @return string
      */
-    public function getContent()
+    public function getContent ()
     {
-        if (!array_key_exists('content', $this->_data)) {
+        if (! array_key_exists('content', $this->_data)) {
             return null;
         }
         return $this->_data['content'];
@@ -370,9 +393,9 @@ class Entry
      *
      * @return string
      */
-    public function getCopyright()
+    public function getCopyright ()
     {
-        if (!array_key_exists('copyright', $this->_data)) {
+        if (! array_key_exists('copyright', $this->_data)) {
             return null;
         }
         return $this->_data['copyright'];
@@ -383,9 +406,9 @@ class Entry
      *
      * @return string
      */
-    public function getDateCreated()
+    public function getDateCreated ()
     {
-        if (!array_key_exists('dateCreated', $this->_data)) {
+        if (! array_key_exists('dateCreated', $this->_data)) {
             return null;
         }
         return $this->_data['dateCreated'];
@@ -396,9 +419,9 @@ class Entry
      *
      * @return string
      */
-    public function getDateModified()
+    public function getDateModified ()
     {
-        if (!array_key_exists('dateModified', $this->_data)) {
+        if (! array_key_exists('dateModified', $this->_data)) {
             return null;
         }
         return $this->_data['dateModified'];
@@ -409,9 +432,9 @@ class Entry
      *
      * @return string
      */
-    public function getDescription()
+    public function getDescription ()
     {
-        if (!array_key_exists('description', $this->_data)) {
+        if (! array_key_exists('description', $this->_data)) {
             return null;
         }
         return $this->_data['description'];
@@ -422,9 +445,9 @@ class Entry
      *
      * @return string
      */
-    public function getId()
+    public function getId ()
     {
-        if (!array_key_exists('id', $this->_data)) {
+        if (! array_key_exists('id', $this->_data)) {
             return null;
         }
         return $this->_data['id'];
@@ -435,23 +458,22 @@ class Entry
      *
      * @return string|null
      */
-    public function getLink()
+    public function getLink ()
     {
-        if (!array_key_exists('link', $this->_data)) {
+        if (! array_key_exists('link', $this->_data)) {
             return null;
         }
         return $this->_data['link'];
     }
-
 
     /**
      * Get all links
      *
      * @return array
      */
-    public function getLinks()
+    public function getLinks ()
     {
-        if (!array_key_exists('links', $this->_data)) {
+        if (! array_key_exists('links', $this->_data)) {
             return null;
         }
         return $this->_data['links'];
@@ -462,9 +484,9 @@ class Entry
      *
      * @return string
      */
-    public function getTitle()
+    public function getTitle ()
     {
-        if (!array_key_exists('title', $this->_data)) {
+        if (! array_key_exists('title', $this->_data)) {
             return null;
         }
         return $this->_data['title'];
@@ -475,9 +497,9 @@ class Entry
      *
      * @return integer
      */
-    public function getCommentCount()
+    public function getCommentCount ()
     {
-        if (!array_key_exists('commentCount', $this->_data)) {
+        if (! array_key_exists('commentCount', $this->_data)) {
             return null;
         }
         return $this->_data['commentCount'];
@@ -488,9 +510,9 @@ class Entry
      *
      * @return string
      */
-    public function getCommentLink()
+    public function getCommentLink ()
     {
-        if (!array_key_exists('commentLink', $this->_data)) {
+        if (! array_key_exists('commentLink', $this->_data)) {
             return null;
         }
         return $this->_data['commentLink'];
@@ -502,9 +524,9 @@ class Entry
      *
      * @return string
      */
-    public function getCommentFeedLinks()
+    public function getCommentFeedLinks ()
     {
-        if (!array_key_exists('commentFeedLinks', $this->_data)) {
+        if (! array_key_exists('commentFeedLinks', $this->_data)) {
             return null;
         }
         return $this->_data['commentFeedLinks'];
@@ -515,23 +537,23 @@ class Entry
      *
      * @param string $category
      */
-    public function addCategory(array $category)
+    public function addCategory (array $category)
     {
-        if (!isset($category['term'])) {
-            throw new Exception('Each category must be an array and '
-            . 'contain at least a "term" element containing the machine '
-            . ' readable category name');
+        if (! isset($category['term'])) {
+            throw new Exception(
+            'Each category must be an array and ' .
+             'contain at least a "term" element containing the machine ' .
+             ' readable category name');
         }
         if (isset($category['scheme'])) {
-            if (empty($category['scheme'])
-                || !is_string($category['scheme'])
-                || !Uri\UriFactory::factory($category['scheme'])->isValid()
-            ) {
-                throw new Exception('The Atom scheme or RSS domain of'
-                . ' a category must be a valid URI');
+            if (empty($category['scheme']) || ! is_string($category['scheme']) ||
+             ! Uri\UriFactory::factory($category['scheme'])->isValid()) {
+                throw new Exception(
+                'The Atom scheme or RSS domain of' .
+                 ' a category must be a valid URI');
             }
         }
-        if (!isset($this->_data['categories'])) {
+        if (! isset($this->_data['categories'])) {
             $this->_data['categories'] = array();
         }
         $this->_data['categories'][] = $category;
@@ -542,7 +564,7 @@ class Entry
      *
      * @param array $categories
      */
-    public function addCategories(array $categories)
+    public function addCategories (array $categories)
     {
         foreach ($categories as $category) {
             $this->addCategory($category);
@@ -554,9 +576,9 @@ class Entry
      *
      * @return string|null
      */
-    public function getCategories()
+    public function getCategories ()
     {
-        if (!array_key_exists('categories', $this->_data)) {
+        if (! array_key_exists('categories', $this->_data)) {
             return null;
         }
         return $this->_data['categories'];
@@ -570,12 +592,12 @@ class Entry
      *
      * @param array $enclosure
      */
-    public function setEnclosure(array $enclosure)
+    public function setEnclosure (array $enclosure)
     {
-        if (!isset($enclosure['uri'])) {
+        if (! isset($enclosure['uri'])) {
             throw new Exception('Enclosure "uri" is not set');
         }
-        if (!Uri\UriFactory::factory($enclosure['uri'])->isValid()) {
+        if (! Uri\UriFactory::factory($enclosure['uri'])->isValid()) {
             throw new Exception('Enclosure "uri" is not a valid URI/IRI');
         }
         $this->_data['enclosure'] = $enclosure;
@@ -586,9 +608,9 @@ class Entry
      *
      * @return array
      */
-    public function getEnclosure()
+    public function getEnclosure ()
     {
-        if (!array_key_exists('enclosure', $this->_data)) {
+        if (! array_key_exists('enclosure', $this->_data)) {
             return null;
         }
         return $this->_data['enclosure'];
@@ -599,7 +621,7 @@ class Entry
      *
      * @param string $name
      */
-    public function remove($name)
+    public function remove ($name)
     {
         if (isset($this->_data[$name])) {
             unset($this->_data[$name]);
@@ -611,7 +633,7 @@ class Entry
      *
      * @return array
      */
-    public function getExtensions()
+    public function getExtensions ()
     {
         return $this->_extensions;
     }
@@ -622,7 +644,7 @@ class Entry
      * @param string $name
      * @return object
      */
-    public function getExtension($name)
+    public function getExtension ($name)
     {
         if (array_key_exists($name . '\\Entry', $this->_extensions)) {
             return $this->_extensions[$name . '\\Entry'];
@@ -637,7 +659,7 @@ class Entry
      *
      * @param string $type
      */
-    public function setType($type)
+    public function setType ($type)
     {
         $this->_type = $type;
     }
@@ -647,7 +669,7 @@ class Entry
      *
      * @return string Value will be "rss" or "atom"
      */
-    public function getType()
+    public function getType ()
     {
         return $this->_type;
     }
@@ -660,16 +682,16 @@ class Entry
      * @return mixed
      * @throws Exception if no extensions implements the method
      */
-    public function __call($method, $args)
+    public function __call ($method, $args)
     {
         foreach ($this->_extensions as $extension) {
             try {
                 return call_user_func_array(array($extension, $method), $args);
-            } catch (InvalidMethodException $e) {
-            }
+            } catch (InvalidMethodException $e) {}
         }
-        throw new Exception('Method: ' . $method
-            . ' does not exist and could not be located on a registered Extension');
+        throw new Exception(
+        'Method: ' . $method .
+         ' does not exist and could not be located on a registered Extension');
     }
 
     /**
@@ -679,9 +701,9 @@ class Entry
      *
      * @return Zend_Feed_Writer_Source
      */
-    public function createSource()
+    public function createSource ()
     {
-        $source = new Source;
+        $source = new Source();
         if ($this->getEncoding()) {
             $source->setEncoding($this->getEncoding());
         }
@@ -695,7 +717,7 @@ class Entry
      *
      * @param Zend_Feed_Writer_Source $source
      */
-    public function setSource(Source $source)
+    public function setSource (Source $source)
     {
         $this->_data['source'] = $source;
     }
@@ -703,7 +725,7 @@ class Entry
     /**
      * @return Zend_Feed_Writer_Source
      */
-    public function getSource()
+    public function getSource ()
     {
         if (isset($this->_data['source'])) {
             return $this->_data['source'];
@@ -716,7 +738,7 @@ class Entry
      *
      * @return void
      */
-    protected function _loadExtensions()
+    protected function _loadExtensions ()
     {
         $all = Writer::getExtensions();
         $exts = $all['entry'];

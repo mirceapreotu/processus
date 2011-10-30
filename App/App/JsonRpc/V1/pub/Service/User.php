@@ -11,7 +11,8 @@ namespace App\JsonRpc\V1\Pub\Service
      */
     class User
     {
-        public function listing($params)
+
+        public function listing ($params)
         {
             $model = new UserModel();
             return $model->listing();

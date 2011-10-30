@@ -46,7 +46,6 @@ class Broker extends AbstractPlugin
      */
     protected $_plugins = array();
 
-
     /**
      * Register a plugin.
      *
@@ -54,27 +53,28 @@ class Broker extends AbstractPlugin
      * @param  int $stackIndex
      * @return \Zend\Controller\Plugin\Broker
      */
-    public function registerPlugin(AbstractPlugin $plugin, $stackIndex = null)
+    public function registerPlugin (AbstractPlugin $plugin, $stackIndex = null)
     {
         if (false !== array_search($plugin, $this->_plugins, true)) {
             throw new Controller\Exception('Plugin already registered');
         }
-
+        
         $stackIndex = (int) $stackIndex;
-
+        
         if ($stackIndex) {
             if (isset($this->_plugins[$stackIndex])) {
-                throw new Controller\Exception('Plugin with stackIndex "' . $stackIndex . '" already registered');
+                throw new Controller\Exception(
+                'Plugin with stackIndex "' . $stackIndex . '" already registered');
             }
             $this->_plugins[$stackIndex] = $plugin;
         } else {
             $stackIndex = count($this->_plugins);
             while (isset($this->_plugins[$stackIndex])) {
-                ++$stackIndex;
+                ++ $stackIndex;
             }
             $this->_plugins[$stackIndex] = $plugin;
         }
-
+        
         $request = $this->getRequest();
         if ($request) {
             $this->_plugins[$stackIndex]->setRequest($request);
@@ -83,9 +83,9 @@ class Broker extends AbstractPlugin
         if ($response) {
             $this->_plugins[$stackIndex]->setResponse($response);
         }
-
+        
         ksort($this->_plugins);
-
+        
         return $this;
     }
 
@@ -95,7 +95,7 @@ class Broker extends AbstractPlugin
      * @param string|\Zend\Controller\Plugin\AbstractPlugin $plugin Plugin object or class name
      * @return \Zend\Controller\Plugin\Broker
      */
-    public function unregisterPlugin($plugin)
+    public function unregisterPlugin ($plugin)
     {
         if ($plugin instanceof AbstractPlugin) {
             // Given a plugin object, find it in the array
@@ -122,7 +122,7 @@ class Broker extends AbstractPlugin
      * @param  string $class
      * @return bool
      */
-    public function hasPlugin($class)
+    public function hasPlugin ($class)
     {
         $class = ltrim($class, '\\');
         foreach ($this->_plugins as $plugin) {
@@ -131,7 +131,7 @@ class Broker extends AbstractPlugin
                 return true;
             }
         }
-
+        
         return false;
     }
 
@@ -141,7 +141,7 @@ class Broker extends AbstractPlugin
      * @param  string $class Class name of plugin(s) desired
      * @return false|\Zend\Controller\Plugin\AbstractPlugin|array Returns false if none found, plugin if only one found, and array of plugins if multiple plugins of same class found
      */
-    public function getPlugin($class)
+    public function getPlugin ($class)
     {
         $found = array();
         foreach ($this->_plugins as $plugin) {
@@ -150,7 +150,7 @@ class Broker extends AbstractPlugin
                 $found[] = $plugin;
             }
         }
-
+        
         switch (count($found)) {
             case 0:
                 return false;
@@ -166,7 +166,7 @@ class Broker extends AbstractPlugin
      *
      * @return array
      */
-    public function getPlugins()
+    public function getPlugins ()
     {
         return $this->_plugins;
     }
@@ -177,14 +177,14 @@ class Broker extends AbstractPlugin
      * @param \Zend\Controller\Request\AbstractRequest $request
      * @return \Zend\Controller\Plugin\Broker
      */
-    public function setRequest(Request\AbstractRequest $request)
+    public function setRequest (Request\AbstractRequest $request)
     {
         $this->_request = $request;
-
+        
         foreach ($this->_plugins as $plugin) {
             $plugin->setRequest($request);
         }
-
+        
         return $this;
     }
 
@@ -193,7 +193,7 @@ class Broker extends AbstractPlugin
      *
      * @return \Zend\Controller\Request\AbstractRequest $request
      */
-    public function getRequest()
+    public function getRequest ()
     {
         return $this->_request;
     }
@@ -204,15 +204,14 @@ class Broker extends AbstractPlugin
      * @param \Zend\Controller\Response\AbstractResponse $response
      * @return \Zend\Controller\Plugin\Broker
      */
-    public function setResponse(Controller\Response\AbstractResponse $response)
+    public function setResponse (Controller\Response\AbstractResponse $response)
     {
         $this->_response = $response;
-
+        
         foreach ($this->_plugins as $plugin) {
             $plugin->setResponse($response);
         }
-
-
+        
         return $this;
     }
 
@@ -221,11 +220,10 @@ class Broker extends AbstractPlugin
      *
      * @return \Zend\Controller\Response\AbstractResponse $response
      */
-    public function getResponse()
+    public function getResponse ()
     {
         return $this->_response;
     }
-
 
     /**
      * Called before Zend_Controller_Front begins evaluating the
@@ -234,7 +232,7 @@ class Broker extends AbstractPlugin
      * @param \Zend\Controller\Request\AbstractRequest $request
      * @return void
      */
-    public function routeStartup(Request\AbstractRequest $request)
+    public function routeStartup (Request\AbstractRequest $request)
     {
         $broker = $this->getHelperBroker();
         foreach ($this->_plugins as $plugin) {
@@ -251,7 +249,6 @@ class Broker extends AbstractPlugin
         }
     }
 
-
     /**
      * Called before Zend_Controller_Front exits its iterations over
      * the route set.
@@ -259,7 +256,7 @@ class Broker extends AbstractPlugin
      * @param  \Zend\Controller\Request\AbstractRequest $request
      * @return void
      */
-    public function routeShutdown(Request\AbstractRequest $request)
+    public function routeShutdown (Request\AbstractRequest $request)
     {
         $broker = $this->getHelperBroker();
         foreach ($this->_plugins as $plugin) {
@@ -276,7 +273,6 @@ class Broker extends AbstractPlugin
         }
     }
 
-
     /**
      * Called before Zend_Controller_Front enters its dispatch loop.
      *
@@ -288,7 +284,7 @@ class Broker extends AbstractPlugin
      * @param  \Zend\Controller\Request\AbstractRequest $request
      * @return void
      */
-    public function dispatchLoopStartup(Request\AbstractRequest $request)
+    public function dispatchLoopStartup (Request\AbstractRequest $request)
     {
         $broker = $this->getHelperBroker();
         foreach ($this->_plugins as $plugin) {
@@ -305,14 +301,13 @@ class Broker extends AbstractPlugin
         }
     }
 
-
     /**
      * Called before an action is dispatched by Zend_Controller_Dispatcher.
      *
      * @param  \Zend\Controller\Request\AbstractRequest $request
      * @return void
      */
-    public function preDispatch(Request\AbstractRequest $request)
+    public function preDispatch (Request\AbstractRequest $request)
     {
         $broker = $this->getHelperBroker();
         foreach ($this->_plugins as $plugin) {
@@ -329,14 +324,13 @@ class Broker extends AbstractPlugin
         }
     }
 
-
     /**
      * Called after an action is dispatched by Zend_Controller_Dispatcher.
      *
      * @param  \Zend\Controller\Request\AbstractRequest $request
      * @return void
      */
-    public function postDispatch(Request\AbstractRequest $request)
+    public function postDispatch (Request\AbstractRequest $request)
     {
         $broker = $this->getHelperBroker();
         foreach ($this->_plugins as $plugin) {
@@ -353,18 +347,17 @@ class Broker extends AbstractPlugin
         }
     }
 
-
     /**
      * Called before Zend_Controller_Front exits its dispatch loop.
      *
      * @param  \Zend\Controller\Request\AbstractRequest $request
      * @return void
      */
-    public function dispatchLoopShutdown()
+    public function dispatchLoopShutdown ()
     {
         $broker = $this->getHelperBroker();
-       foreach ($this->_plugins as $plugin) {
-           try {
+        foreach ($this->_plugins as $plugin) {
+            try {
                 $plugin->setHelperBroker($broker);
                 $plugin->dispatchLoopShutdown();
             } catch (\Exception $e) {
@@ -374,6 +367,6 @@ class Broker extends AbstractPlugin
                     $this->getResponse()->setException($e);
                 }
             }
-       }
+        }
     }
 }

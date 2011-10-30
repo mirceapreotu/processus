@@ -32,11 +32,14 @@ namespace Zend\Controller\Action;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countable
+class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, 
+\Countable
 {
 
     protected $_helpersByPriority = array();
-    protected $_helpersByNameRef  = array();
+
+    protected $_helpersByNameRef = array();
+
     protected $_nextDefaultPriority = 1;
 
     /**
@@ -45,12 +48,12 @@ class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countabl
      * @param string $helperName    The helper name
      * @return \Zend\Controller\Action\Helper\AbstractHelper
      */
-    public function __get($helperName)
+    public function __get ($helperName)
     {
-        if (!array_key_exists($helperName, $this->_helpersByNameRef)) {
+        if (! array_key_exists($helperName, $this->_helpersByNameRef)) {
             return false;
         }
-
+        
         return $this->_helpersByNameRef[$helperName];
     }
 
@@ -60,7 +63,7 @@ class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countabl
      * @param string $helperName    The helper name
      * @return \Zend\Controller\Action\Helper\AbstractHelper
      */
-    public function __isset($helperName)
+    public function __isset ($helperName)
     {
         return array_key_exists($helperName, $this->_helpersByNameRef);
     }
@@ -71,7 +74,7 @@ class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countabl
      * @param string $helperName    The helper name
      * @return \Zend\Controller\Action\Helper\AbstractHelper
      */
-    public function __unset($helperName)
+    public function __unset ($helperName)
     {
         return $this->offsetUnset($helperName);
     }
@@ -82,7 +85,7 @@ class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countabl
      * @param \Zend\Controller\Action\Helper\AbstractHelper $helper
      * @return \Zend\Controller\Action\HelperBroker\PriorityStack
      */
-    public function push(Helper\AbstractHelper $helper)
+    public function push (Helper\AbstractHelper $helper)
     {
         $this->offsetSet($this->getNextFreeHigherPriority(), $helper);
         return $this;
@@ -93,7 +96,7 @@ class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countabl
      *
      * @return array
      */
-    public function getIterator()
+    public function getIterator ()
     {
         return new \ArrayObject($this->_helpersByPriority);
     }
@@ -104,12 +107,14 @@ class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countabl
      * @param int|string $priorityOrHelperName
      * @return \Zend\Controller\Action\HelperBroker\PriorityStack
      */
-    public function offsetExists($priorityOrHelperName)
+    public function offsetExists ($priorityOrHelperName)
     {
         if (is_string($priorityOrHelperName)) {
-            return array_key_exists($priorityOrHelperName, $this->_helpersByNameRef);
+            return array_key_exists($priorityOrHelperName, 
+            $this->_helpersByNameRef);
         } else {
-            return array_key_exists($priorityOrHelperName, $this->_helpersByPriority);
+            return array_key_exists($priorityOrHelperName, 
+            $this->_helpersByPriority);
         }
     }
 
@@ -119,12 +124,14 @@ class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countabl
      * @param int|string $priorityOrHelperName
      * @return \Zend\Controller\Action\HelperBroker\PriorityStack
      */
-    public function offsetGet($priorityOrHelperName)
+    public function offsetGet ($priorityOrHelperName)
     {
-        if (!$this->offsetExists($priorityOrHelperName)) {
-            throw new Action\Exception('A helper with priority ' . $priorityOrHelperName . ' does not exist.');
+        if (! $this->offsetExists($priorityOrHelperName)) {
+            throw new Action\Exception(
+            'A helper with priority ' . $priorityOrHelperName .
+             ' does not exist.');
         }
-
+        
         if (is_string($priorityOrHelperName)) {
             return $this->_helpersByNameRef[$priorityOrHelperName];
         } else {
@@ -139,31 +146,34 @@ class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countabl
      * @param \Zend\Controller\Action\Helper\AbstractHelper $helper
      * @return \Zend\Controller\Action\HelperBroker\PriorityStack
      */
-    public function offsetSet($priority, $helper)
+    public function offsetSet ($priority, $helper)
     {
         $priority = (int) $priority;
-
-        if (!$helper instanceof Helper\AbstractHelper) {
-            throw new Exception('$helper must extend Zend\Controller\Action\Helper\AbstractHelper');
+        
+        if (! $helper instanceof Helper\AbstractHelper) {
+            throw new Exception(
+            '$helper must extend Zend\Controller\Action\Helper\AbstractHelper');
         }
-
+        
         if (array_key_exists($helper->getName(), $this->_helpersByNameRef)) {
             // remove any object with the same name
             $this->offsetUnset($helper->getName());
         }
-
+        
         if (array_key_exists($priority, $this->_helpersByPriority)) {
-            $priority = $this->getNextFreeHigherPriority($priority);  // ensures LIFO
+            $priority = $this->getNextFreeHigherPriority($priority); // ensures LIFO
         }
-
+        
         $this->_helpersByPriority[$priority] = $helper;
         $this->_helpersByNameRef[$helper->getName()] = $helper;
-
-        if ($priority == ($nextFreeDefault = $this->getNextFreeHigherPriority($this->_nextDefaultPriority))) {
+        
+        if ($priority ==
+         ($nextFreeDefault = $this->getNextFreeHigherPriority(
+        $this->_nextDefaultPriority))) {
             $this->_nextDefaultPriority = $nextFreeDefault;
         }
-
-        krsort($this->_helpersByPriority);  // always make sure priority and LIFO are both enforced
+        
+        krsort($this->_helpersByPriority); // always make sure priority and LIFO are both enforced
         return $this;
     }
 
@@ -173,12 +183,14 @@ class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countabl
      * @param int|string $priorityOrHelperName Priority integer or the helper name
      * @return \Zend\Controller\Action\HelperBroker\PriorityStack
      */
-    public function offsetUnset($priorityOrHelperName)
+    public function offsetUnset ($priorityOrHelperName)
     {
-        if (!$this->offsetExists($priorityOrHelperName)) {
-            throw new Exception('A helper with priority or name ' . $priorityOrHelperName . ' does not exist.');
+        if (! $this->offsetExists($priorityOrHelperName)) {
+            throw new Exception(
+            'A helper with priority or name ' . $priorityOrHelperName .
+             ' does not exist.');
         }
-
+        
         if (is_string($priorityOrHelperName)) {
             $helperName = $priorityOrHelperName;
             $helper = $this->_helpersByNameRef[$helperName];
@@ -187,7 +199,7 @@ class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countabl
             $priority = $priorityOrHelperName;
             $helperName = $this->_helpersByPriority[$priorityOrHelperName]->getName();
         }
-
+        
         unset($this->_helpersByNameRef[$helperName]);
         unset($this->_helpersByPriority[$priority]);
         return $this;
@@ -198,7 +210,7 @@ class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countabl
      *
      * @return int
      */
-    public function count()
+    public function count ()
     {
         return count($this->_helpersByPriority);
     }
@@ -210,18 +222,18 @@ class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countabl
      * @param int $indexPriority OPTIONAL
      * @return int
      */
-    public function getNextFreeHigherPriority($indexPriority = null)
+    public function getNextFreeHigherPriority ($indexPriority = null)
     {
         if ($indexPriority == null) {
             $indexPriority = $this->_nextDefaultPriority;
         }
-
+        
         $priorities = array_keys($this->_helpersByPriority);
-
+        
         while (in_array($indexPriority, $priorities)) {
-            $indexPriority++;
+            $indexPriority ++;
         }
-
+        
         return $indexPriority;
     }
 
@@ -232,18 +244,18 @@ class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countabl
      * @param int $indexPriority
      * @return int
      */
-    public function getNextFreeLowerPriority($indexPriority = null)
+    public function getNextFreeLowerPriority ($indexPriority = null)
     {
         if ($indexPriority == null) {
             $indexPriority = $this->_nextDefaultPriority;
         }
-
+        
         $priorities = array_keys($this->_helpersByPriority);
-
+        
         while (in_array($indexPriority, $priorities)) {
-            $indexPriority--;
+            $indexPriority --;
         }
-
+        
         return $indexPriority;
     }
 
@@ -252,7 +264,7 @@ class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countabl
      *
      * @return int
      */
-    public function getHighestPriority()
+    public function getHighestPriority ()
     {
         return max(array_keys($this->_helpersByPriority));
     }
@@ -262,7 +274,7 @@ class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countabl
      *
      * @return int
      */
-    public function getLowestPriority()
+    public function getLowestPriority ()
     {
         return min(array_keys($this->_helpersByPriority));
     }
@@ -272,7 +284,7 @@ class HelperPriorityStack implements \IteratorAggregate, \ArrayAccess, \Countabl
      *
      * @return array
      */
-    public function getHelpersByName()
+    public function getHelpersByName ()
     {
         return $this->_helpersByNameRef;
     }

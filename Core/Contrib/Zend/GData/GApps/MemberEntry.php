@@ -19,7 +19,7 @@
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id:$
- */   
+ */
 
 /**
  * @namespace
@@ -63,9 +63,9 @@ class MemberEntry extends \Zend\Gdata\Entry
      * Create a new instance.
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(\Zend\Gdata\Gapps::$namespaces);
         parent::__construct($element);
@@ -78,12 +78,12 @@ class MemberEntry extends \Zend\Gdata\Entry
      *
      * @param DOMDocument $doc The DOMDocument used to construct DOMElements
      * @return DOMElement The DOMElement representing this element and all
-     *          child properties.
+     * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
-
+        
         foreach ($this->_property as $p) {
             $element->appendChild($p->getDOM($element->ownerDocument));
         }
@@ -96,13 +96,13 @@ class MemberEntry extends \Zend\Gdata\Entry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
-
+        
         switch ($absoluteNodeName) {
-
-            case $this->lookupNamespace('apps') . ':' . 'property';
+            
+            case $this->lookupNamespace('apps') . ':' . 'property':
                 $property = new \Zend\Gdata\Gapps\Extension\Property();
                 $property->transferFromDOM($child);
                 $this->_property[] = $property;
@@ -117,14 +117,14 @@ class MemberEntry extends \Zend\Gdata\Entry
      * Returns all property tags for this entry
      *
      * @param string $rel The rel value of the property to be found. If null,
-     *          the array of properties is returned instead.
+     * the array of properties is returned instead.
      * @return mixed Either an array of \Zend\Gdata\Gapps\Extension\Property
-     *          objects if $rel is null, a single
-     *          \Zend\Gdata\Gapps\Extension\Property object if $rel is specified
-     *          and a matching feed link is found, or null if $rel is
-     *          specified and no matching property is found.
+     * objects if $rel is null, a single
+     * \Zend\Gdata\Gapps\Extension\Property object if $rel is specified
+     * and a matching feed link is found, or null if $rel is
+     * specified and no matching property is found.
      */
-    public function getProperty($rel = null)
+    public function getProperty ($rel = null)
     {
         if ($rel == null) {
             return $this->_property;
@@ -142,10 +142,10 @@ class MemberEntry extends \Zend\Gdata\Entry
      * Set the value of the  property property for this object.
      *
      * @param array $value A collection of
-     *          \Zend\Gdata\Gapps\Extension\Property objects.
+     * \Zend\Gdata\Gapps\Extension\Property objects.
      * @return \Zend\Gdata\Gapps\MemberEntry Provides a fluent interface.
      */
-    public function setProperty($value)
+    public function setProperty ($value)
     {
         $this->_property = $value;
         return $this;

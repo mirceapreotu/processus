@@ -37,6 +37,7 @@ namespace Zend\Controller\Action\Helper;
  */
 class AjaxContext extends ContextSwitch
 {
+
     /**
      * Controller property to utilize for context switching
      * @var string
@@ -50,7 +51,7 @@ class AjaxContext extends ContextSwitch
      *
      * @return void
      */
-    public function __construct()
+    public function __construct ()
     {
         parent::__construct();
         $this->addContext('html', array('suffix' => 'ajax'));
@@ -64,14 +65,14 @@ class AjaxContext extends ContextSwitch
      * @param  string $format
      * @return void
      */
-    public function initContext($format = null)
+    public function initContext ($format = null)
     {
         $this->_currentContext = null;
-
-        if (!$this->getRequest()->isXmlHTTPRequest()) {
+        
+        if (! $this->getRequest()->isXmlHTTPRequest()) {
             return;
         }
-
+        
         return parent::initContext($format);
     }
 }

@@ -36,6 +36,7 @@ namespace Zend\Controller\Response;
  */
 abstract class AbstractResponse
 {
+
     /**
      * Body content
      * @var array
@@ -96,7 +97,7 @@ abstract class AbstractResponse
      * @param  string $name
      * @return string
      */
-    protected function _normalizeHeader($name)
+    protected function _normalizeHeader ($name)
     {
         $filtered = str_replace(array('-', '_'), ' ', (string) $name);
         $filtered = ucwords(strtolower($filtered));
@@ -115,12 +116,12 @@ abstract class AbstractResponse
      * @param boolean $replace
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function setHeader($name, $value, $replace = false)
+    public function setHeader ($name, $value, $replace = false)
     {
         $this->canSendHeaders(true);
-        $name  = $this->_normalizeHeader($name);
+        $name = $this->_normalizeHeader($name);
         $value = (string) $value;
-
+        
         if ($replace) {
             foreach ($this->_headers as $key => $header) {
                 if ($name == $header['name']) {
@@ -128,13 +129,10 @@ abstract class AbstractResponse
                 }
             }
         }
-
-        $this->_headers[] = array(
-            'name'    => $name,
-            'value'   => $value,
-            'replace' => $replace
-        );
-
+        
+        $this->_headers[] = array('name' => $name, 'value' => $value, 
+        'replace' => $replace);
+        
         return $this;
     }
 
@@ -148,12 +146,11 @@ abstract class AbstractResponse
      * @param int $code
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function setRedirect($url, $code = 302)
+    public function setRedirect ($url, $code = 302)
     {
         $this->canSendHeaders(true);
-        $this->setHeader('Location', $url, true)
-             ->setHTTPResponseCode($code);
-
+        $this->setHeader('Location', $url, true)->setHTTPResponseCode($code);
+        
         return $this;
     }
 
@@ -162,7 +159,7 @@ abstract class AbstractResponse
      *
      * @return boolean
      */
-    public function isRedirect()
+    public function isRedirect ()
     {
         return $this->_isRedirect;
     }
@@ -172,7 +169,7 @@ abstract class AbstractResponse
      *
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders ()
     {
         return $this->_headers;
     }
@@ -182,10 +179,10 @@ abstract class AbstractResponse
      *
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function clearHeaders()
+    public function clearHeaders ()
     {
         $this->_headers = array();
-
+        
         return $this;
     }
 
@@ -195,18 +192,18 @@ abstract class AbstractResponse
      * @param  string $name
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function clearHeader($name)
+    public function clearHeader ($name)
     {
         if (! count($this->_headers)) {
             return $this;
         }
-
+        
         foreach ($this->_headers as $index => $header) {
             if ($name == $header['name']) {
                 unset($this->_headers[$index]);
             }
         }
-
+        
         return $this;
     }
 
@@ -218,7 +215,7 @@ abstract class AbstractResponse
      * @param string $value
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function setRawHeader($value)
+    public function setRawHeader ($value)
     {
         $this->canSendHeaders(true);
         if ('Location' == substr($value, 0, 8)) {
@@ -233,7 +230,7 @@ abstract class AbstractResponse
      *
      * @return array
      */
-    public function getRawHeaders()
+    public function getRawHeaders ()
     {
         return $this->_headersRaw;
     }
@@ -243,7 +240,7 @@ abstract class AbstractResponse
      *
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function clearRawHeaders()
+    public function clearRawHeaders ()
     {
         $this->_headersRaw = array();
         return $this;
@@ -255,15 +252,15 @@ abstract class AbstractResponse
      * @param  string $headerRaw
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function clearRawHeader($headerRaw)
+    public function clearRawHeader ($headerRaw)
     {
         if (! count($this->_headersRaw)) {
             return $this;
         }
-
+        
         $key = array_search($headerRaw, $this->_headersRaw);
         unset($this->_headersRaw[$key]);
-
+        
         return $this;
     }
 
@@ -272,10 +269,9 @@ abstract class AbstractResponse
      *
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function clearAllHeaders()
+    public function clearAllHeaders ()
     {
-        return $this->clearHeaders()
-                    ->clearRawHeaders();
+        return $this->clearHeaders()->clearRawHeaders();
     }
 
     /**
@@ -284,18 +280,18 @@ abstract class AbstractResponse
      * @param int $code
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function setHTTPResponseCode($code)
+    public function setHTTPResponseCode ($code)
     {
-        if (!is_int($code) || (100 > $code) || (599 < $code)) {
+        if (! is_int($code) || (100 > $code) || (599 < $code)) {
             throw new Exception('Invalid HTTP response code');
         }
-
+        
         if ((300 <= $code) && (307 >= $code)) {
             $this->_isRedirect = true;
         } else {
             $this->_isRedirect = false;
         }
-
+        
         $this->_httpResponseCode = $code;
         return $this;
     }
@@ -305,7 +301,7 @@ abstract class AbstractResponse
      *
      * @return int
      */
-    public function getHTTPResponseCode()
+    public function getHTTPResponseCode ()
     {
         return $this->_httpResponseCode;
     }
@@ -317,14 +313,16 @@ abstract class AbstractResponse
      * @return boolean
      * @throws \Zend\Controller\Response\Exception
      */
-    public function canSendHeaders($throw = false)
+    public function canSendHeaders ($throw = false)
     {
         $ok = headers_sent($file, $line);
         if ($ok && $throw && $this->headersSentThrowsException) {
-            throw new Exception('Cannot send headers; headers already sent in ' . $file . ', line ' . $line);
+            throw new Exception(
+            'Cannot send headers; headers already sent in ' . $file . ', line ' .
+             $line);
         }
-
-        return !$ok;
+        
+        return ! $ok;
     }
 
     /**
@@ -335,41 +333,44 @@ abstract class AbstractResponse
      *
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function sendHeaders()
+    public function sendHeaders ()
     {
         // Only check if we can send headers if we have headers to send
-        if (count($this->_headersRaw) || count($this->_headers) || (200 != $this->_httpResponseCode)) {
+        if (count($this->_headersRaw) || count($this->_headers) ||
+         (200 != $this->_httpResponseCode)) {
             $this->canSendHeaders(true);
         } elseif (200 == $this->_httpResponseCode) {
             // Haven't changed the response code, and we have no headers
             return $this;
         }
-
+        
         $httpCodeSent = false;
-
+        
         foreach ($this->_headersRaw as $header) {
-            if (!$httpCodeSent && $this->_httpResponseCode) {
+            if (! $httpCodeSent && $this->_httpResponseCode) {
                 header($header, true, $this->_httpResponseCode);
                 $httpCodeSent = true;
             } else {
                 header($header);
             }
         }
-
+        
         foreach ($this->_headers as $header) {
-            if (!$httpCodeSent && $this->_httpResponseCode) {
-                header($header['name'] . ': ' . $header['value'], $header['replace'], $this->_httpResponseCode);
+            if (! $httpCodeSent && $this->_httpResponseCode) {
+                header($header['name'] . ': ' . $header['value'], 
+                $header['replace'], $this->_httpResponseCode);
                 $httpCodeSent = true;
             } else {
-                header($header['name'] . ': ' . $header['value'], $header['replace']);
+                header($header['name'] . ': ' . $header['value'], 
+                $header['replace']);
             }
         }
-
-        if (!$httpCodeSent) {
+        
+        if (! $httpCodeSent) {
             header('HTTP/1.1 ' . $this->_httpResponseCode);
             $httpCodeSent = true;
         }
-
+        
         return $this;
     }
 
@@ -386,14 +387,14 @@ abstract class AbstractResponse
      * @param null|string $name
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function setBody($content, $name = null)
+    public function setBody ($content, $name = null)
     {
-        if ((null === $name) || !is_string($name)) {
+        if ((null === $name) || ! is_string($name)) {
             $this->_body = array('default' => (string) $content);
         } else {
             $this->_body[$name] = (string) $content;
         }
-
+        
         return $this;
     }
 
@@ -404,9 +405,9 @@ abstract class AbstractResponse
      * @param null|string $name
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function appendBody($content, $name = null)
+    public function appendBody ($content, $name = null)
     {
-        if ((null === $name) || !is_string($name)) {
+        if ((null === $name) || ! is_string($name)) {
             if (isset($this->_body['default'])) {
                 $this->_body['default'] .= (string) $content;
             } else {
@@ -417,7 +418,7 @@ abstract class AbstractResponse
         } else {
             return $this->append($name, $content);
         }
-
+        
         return $this;
     }
 
@@ -431,7 +432,7 @@ abstract class AbstractResponse
      * @param  string $name Named segment to clear
      * @return boolean
      */
-    public function clearBody($name = null)
+    public function clearBody ($name = null)
     {
         if (null !== $name) {
             $name = (string) $name;
@@ -439,10 +440,10 @@ abstract class AbstractResponse
                 unset($this->_body[$name]);
                 return true;
             }
-
+            
             return false;
         }
-
+        
         $this->_body = array();
         return true;
     }
@@ -458,7 +459,7 @@ abstract class AbstractResponse
      * @param boolean $spec
      * @return string|array|null
      */
-    public function getBody($spec = false)
+    public function getBody ($spec = false)
     {
         if (false === $spec) {
             ob_start();
@@ -469,7 +470,7 @@ abstract class AbstractResponse
         } elseif (is_string($spec) && isset($this->_body[$spec])) {
             return $this->_body[$spec];
         }
-
+        
         return null;
     }
 
@@ -483,12 +484,13 @@ abstract class AbstractResponse
      * @param string $content
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function append($name, $content)
+    public function append ($name, $content)
     {
-        if (!is_string($name)) {
-            throw new Exception('Invalid body segment key ("' . gettype($name) . '")');
+        if (! is_string($name)) {
+            throw new Exception(
+            'Invalid body segment key ("' . gettype($name) . '")');
         }
-
+        
         if (isset($this->_body[$name])) {
             unset($this->_body[$name]);
         }
@@ -506,19 +508,20 @@ abstract class AbstractResponse
      * @param string $content
      * @return void
      */
-    public function prepend($name, $content)
+    public function prepend ($name, $content)
     {
-        if (!is_string($name)) {
-            throw new Exception('Invalid body segment key ("' . gettype($name) . '")');
+        if (! is_string($name)) {
+            throw new Exception(
+            'Invalid body segment key ("' . gettype($name) . '")');
         }
-
+        
         if (isset($this->_body[$name])) {
             unset($this->_body[$name]);
         }
-
+        
         $new = array($name => (string) $content);
         $this->_body = $new + $this->_body;
-
+        
         return $this;
     }
 
@@ -532,32 +535,34 @@ abstract class AbstractResponse
      * after the parent. Defaults to false (after)
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function insert($name, $content, $parent = null, $before = false)
+    public function insert ($name, $content, $parent = null, $before = false)
     {
-        if (!is_string($name)) {
-            throw new Exception('Invalid body segment key ("' . gettype($name) . '")');
+        if (! is_string($name)) {
+            throw new Exception(
+            'Invalid body segment key ("' . gettype($name) . '")');
         }
-
-        if ((null !== $parent) && !is_string($parent)) {
-            throw new Exception('Invalid body segment parent key ("' . gettype($parent) . '")');
+        
+        if ((null !== $parent) && ! is_string($parent)) {
+            throw new Exception(
+            'Invalid body segment parent key ("' . gettype($parent) . '")');
         }
-
+        
         if (isset($this->_body[$name])) {
             unset($this->_body[$name]);
         }
-
-        if ((null === $parent) || !isset($this->_body[$parent])) {
+        
+        if ((null === $parent) || ! isset($this->_body[$parent])) {
             return $this->append($name, $content);
         }
-
-        $ins  = array($name => (string) $content);
+        
+        $ins = array($name => (string) $content);
         $keys = array_keys($this->_body);
-        $loc  = array_search($parent, $keys);
-        if (!$before) {
+        $loc = array_search($parent, $keys);
+        if (! $before) {
             // Increment location if not inserting before
-            ++$loc;
+            ++ $loc;
         }
-
+        
         if (0 === $loc) {
             // If location of key is 0, we're prepending
             $this->_body = $ins + $this->_body;
@@ -566,11 +571,11 @@ abstract class AbstractResponse
             $this->_body = $this->_body + $ins;
         } else {
             // Otherwise, insert at location specified
-            $pre  = array_slice($this->_body, 0, $loc);
+            $pre = array_slice($this->_body, 0, $loc);
             $post = array_slice($this->_body, $loc);
             $this->_body = $pre + $ins + $post;
         }
-
+        
         return $this;
     }
 
@@ -579,7 +584,7 @@ abstract class AbstractResponse
      *
      * @return void
      */
-    public function outputBody()
+    public function outputBody ()
     {
         $body = implode('', $this->_body);
         echo $body;
@@ -591,7 +596,7 @@ abstract class AbstractResponse
      * @param Exception $e
      * @return \Zend\Controller\Response\AbstractResponse
      */
-    public function setException(\Exception $e)
+    public function setException (\Exception $e)
     {
         $this->_exceptions[] = $e;
         return $this;
@@ -602,7 +607,7 @@ abstract class AbstractResponse
      *
      * @return array
      */
-    public function getException()
+    public function getException ()
     {
         return $this->_exceptions;
     }
@@ -612,9 +617,9 @@ abstract class AbstractResponse
      *
      * @return boolean
      */
-    public function isException()
+    public function isException ()
     {
-        return !empty($this->_exceptions);
+        return ! empty($this->_exceptions);
     }
 
     /**
@@ -623,14 +628,14 @@ abstract class AbstractResponse
      * @param  string $type
      * @return boolean
      */
-    public function hasExceptionOfType($type)
+    public function hasExceptionOfType ($type)
     {
         foreach ($this->_exceptions as $e) {
             if ($e instanceof $type) {
                 return true;
             }
         }
-
+        
         return false;
     }
 
@@ -640,14 +645,14 @@ abstract class AbstractResponse
      * @param  string $message
      * @return boolean
      */
-    public function hasExceptionOfMessage($message)
+    public function hasExceptionOfMessage ($message)
     {
         foreach ($this->_exceptions as $e) {
             if ($message == $e->getMessage()) {
                 return true;
             }
         }
-
+        
         return false;
     }
 
@@ -657,7 +662,7 @@ abstract class AbstractResponse
      * @param  int $code
      * @return boolean
      */
-    public function hasExceptionOfCode($code)
+    public function hasExceptionOfCode ($code)
     {
         $code = (int) $code;
         foreach ($this->_exceptions as $e) {
@@ -665,7 +670,7 @@ abstract class AbstractResponse
                 return true;
             }
         }
-
+        
         return false;
     }
 
@@ -675,7 +680,7 @@ abstract class AbstractResponse
      * @param  string $type
      * @return false|array
      */
-    public function getExceptionByType($type)
+    public function getExceptionByType ($type)
     {
         $exceptions = array();
         foreach ($this->_exceptions as $e) {
@@ -683,11 +688,11 @@ abstract class AbstractResponse
                 $exceptions[] = $e;
             }
         }
-
+        
         if (empty($exceptions)) {
             $exceptions = false;
         }
-
+        
         return $exceptions;
     }
 
@@ -697,7 +702,7 @@ abstract class AbstractResponse
      * @param  string $message
      * @return false|array
      */
-    public function getExceptionByMessage($message)
+    public function getExceptionByMessage ($message)
     {
         $exceptions = array();
         foreach ($this->_exceptions as $e) {
@@ -705,11 +710,11 @@ abstract class AbstractResponse
                 $exceptions[] = $e;
             }
         }
-
+        
         if (empty($exceptions)) {
             $exceptions = false;
         }
-
+        
         return $exceptions;
     }
 
@@ -719,20 +724,20 @@ abstract class AbstractResponse
      * @param mixed $code
      * @return void
      */
-    public function getExceptionByCode($code)
+    public function getExceptionByCode ($code)
     {
-        $code       = (int) $code;
+        $code = (int) $code;
         $exceptions = array();
         foreach ($this->_exceptions as $e) {
             if ($code == $e->getCode()) {
                 $exceptions[] = $e;
             }
         }
-
+        
         if (empty($exceptions)) {
             $exceptions = false;
         }
-
+        
         return $exceptions;
     }
 
@@ -745,12 +750,12 @@ abstract class AbstractResponse
      * @param boolean $flag Optional
      * @return boolean
      */
-    public function renderExceptions($flag = null)
+    public function renderExceptions ($flag = null)
     {
         if (null !== $flag) {
             $this->_renderExceptions = $flag ? true : false;
         }
-
+        
         return $this->_renderExceptions;
     }
 
@@ -760,10 +765,10 @@ abstract class AbstractResponse
      *
      * @return void
      */
-    public function sendResponse()
+    public function sendResponse ()
     {
         $this->sendHeaders();
-
+        
         if ($this->isException() && $this->renderExceptions()) {
             $exceptions = '';
             foreach ($this->getException() as $e) {
@@ -772,7 +777,7 @@ abstract class AbstractResponse
             echo $exceptions;
             return;
         }
-
+        
         $this->outputBody();
     }
 
@@ -784,7 +789,7 @@ abstract class AbstractResponse
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         ob_start();
         $this->sendResponse();

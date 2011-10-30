@@ -22,10 +22,12 @@ namespace Zend\Code;
 
 class NameInformation
 {
+
     protected $namespace = null;
+
     protected $uses = array();
 
-    public function __construct($namespace = null, array $uses = array())
+    public function __construct ($namespace = null, array $uses = array())
     {
         if ($namespace) {
             $this->setNamespace($namespace);
@@ -35,30 +37,30 @@ class NameInformation
         }
     }
 
-    public function setNamespace($namespace)
+    public function setNamespace ($namespace)
     {
         $this->namespace = $namespace;
         return $this;
     }
 
-    public function getNamespace()
+    public function getNamespace ()
     {
         return $this->namespace;
     }
 
-    public function hasNamespace()
+    public function hasNamespace ()
     {
         return ($this->namespace != null);
     }
 
-    public function setUses(array $uses)
+    public function setUses (array $uses)
     {
         $this->uses = array();
         $this->addUses($uses);
         return $this;
     }
 
-    public function addUses(array $uses)
+    public function addUses (array $uses)
     {
         foreach ($uses as $use => $as) {
             if (is_int($use)) {
@@ -66,42 +68,44 @@ class NameInformation
             } elseif (is_string($use)) {
                 $this->addUse($use, $as);
             }
-
+        
         }
         return $this;
     }
 
-    public function addUse($use, $as = null)
+    public function addUse ($use, $as = null)
     {
         $use = trim($use, '\\');
         if ($as === null) {
             $as = trim($use, '\\');
             $nsSeparatorPosition = strrpos($as, '\\');
-            if ($nsSeparatorPosition !== false && $nsSeparatorPosition !== 0 && $nsSeparatorPosition != strlen($as)) {
+            if ($nsSeparatorPosition !== false && $nsSeparatorPosition !== 0 &&
+             $nsSeparatorPosition != strlen($as)) {
                 $as = substr($as, $nsSeparatorPosition + 1);
             }
         }
         $this->uses[$use] = $as;
     }
 
-    public function getUses()
+    public function getUses ()
     {
         return $this->uses;
     }
 
-    public function resolveName($name)
+    public function resolveName ($name)
     {
-        if ($this->namespace && !$this->uses && strlen($name) > 0 && $name{0} != '\\') {
+        if ($this->namespace && ! $this->uses && strlen($name) > 0 &&
+         $name{0} != '\\') {
             return $this->namespace . '\\' . $name;
         }
-
-        if (!$this->uses || strlen($name) <= 0 || $name{0} == '\\') {
+        
+        if (! $this->uses || strlen($name) <= 0 || $name{0} == '\\') {
             return ltrim($name, '\\');
         }
-
+        
         if ($this->namespace || $this->uses) {
             $firstPart = $name;
-            if (($firstPartEnd = strpos($firstPart, '\\')) !== false)  {
+            if (($firstPartEnd = strpos($firstPart, '\\')) !== false) {
                 $firstPart = substr($firstPart, 0, $firstPartEnd);
             } else {
                 $firstPartEnd = strlen($firstPart);

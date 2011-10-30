@@ -40,6 +40,7 @@ class QuotaCurrent extends \Zend\GData\Extension
 {
 
     protected $_rootNamespace = 'gphoto';
+
     protected $_rootElement = 'quotaCurrent';
 
     /**
@@ -47,7 +48,7 @@ class QuotaCurrent extends \Zend\GData\Extension
      *
      * @param string $text (optional) The value being represented.
      */
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Photos::$namespaces);
         parent::__construct();

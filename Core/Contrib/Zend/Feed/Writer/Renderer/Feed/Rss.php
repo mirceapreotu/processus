@@ -19,25 +19,21 @@
  */
 
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Writer\Renderer\Feed;
 
-use DOMDocument,
-    DOMElement,
-    Zend\Date,
-    Zend\Feed\Writer,
-    Zend\Feed\Writer\Renderer,
-    Zend\Uri;
+use DOMDocument, DOMElement, Zend\Date, Zend\Feed\Writer, Zend\Feed\Writer\Renderer, Zend\Uri;
 
 /**
-* @category Zend
-* @package Zend_Feed_Writer
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @category Zend
+ * @package Zend_Feed_Writer
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
 {
+
     /**
      * Constructor
      * 
@@ -54,9 +50,9 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * 
      * @return Zend_Feed_Writer_Renderer_Feed_Rss
      */
-    public function render()
+    public function render ()
     {
-        if (!$this->_container->getEncoding()) {
+        if (! $this->_container->getEncoding()) {
             $this->_container->setEncoding('UTF-8');
         }
         $this->_dom = new DOMDocument('1.0', $this->_container->getEncoding());
@@ -92,7 +88,8 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
         
         foreach ($this->_container as $entry) {
             if ($this->getDataContainer()->getEncoding()) {
-                $entry->setEncoding($this->getDataContainer()->getEncoding());
+                $entry->setEncoding($this->getDataContainer()
+                    ->getEncoding());
             }
             if ($entry instanceof Writer\Entry) {
                 $renderer = new Renderer\Entry\Rss($entry);
@@ -119,10 +116,10 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param DOMElement $root 
      * @return void
      */
-    protected function _setLanguage(DOMDocument $dom, DOMElement $root)
+    protected function _setLanguage (DOMDocument $dom, DOMElement $root)
     {
         $lang = $this->getDataContainer()->getLanguage();
-        if (!$lang) {
+        if (! $lang) {
             return;
         }
         $language = $dom->createElement('language');
@@ -137,23 +134,24 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setTitle(DOMDocument $dom, DOMElement $root)
+    protected function _setTitle (DOMDocument $dom, DOMElement $root)
     {
-        if(!$this->getDataContainer()->getTitle()) {
-            $message = 'RSS 2.0 feed elements MUST contain exactly one'
-            . ' title element but a title has not been set';
+        if (! $this->getDataContainer()->getTitle()) {
+            $message = 'RSS 2.0 feed elements MUST contain exactly one' .
+             ' title element but a title has not been set';
             $exception = new Writer\Exception($message);
-            if (!$this->_ignoreExceptions) {
+            if (! $this->_ignoreExceptions) {
                 throw $exception;
             } else {
                 $this->_exceptions[] = $exception;
                 return;
             }
         }
-
+        
         $title = $dom->createElement('title');
         $root->appendChild($title);
-        $text = $dom->createTextNode($this->getDataContainer()->getTitle());
+        $text = $dom->createTextNode($this->getDataContainer()
+            ->getTitle());
         $title->appendChild($text);
     }
 
@@ -164,13 +162,13 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setDescription(DOMDocument $dom, DOMElement $root)
+    protected function _setDescription (DOMDocument $dom, DOMElement $root)
     {
-        if(!$this->getDataContainer()->getDescription()) {
-            $message = 'RSS 2.0 feed elements MUST contain exactly one'
-            . ' description element but one has not been set';
+        if (! $this->getDataContainer()->getDescription()) {
+            $message = 'RSS 2.0 feed elements MUST contain exactly one' .
+             ' description element but one has not been set';
             $exception = new Writer\Exception($message);
-            if (!$this->_ignoreExceptions) {
+            if (! $this->_ignoreExceptions) {
                 throw $exception;
             } else {
                 $this->_exceptions[] = $exception;
@@ -179,7 +177,9 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
         }
         $subtitle = $dom->createElement('description');
         $root->appendChild($subtitle);
-        $text = $dom->createTextNode($this->getDataContainer()->getDescription());
+        $text = $dom->createTextNode(
+        $this->getDataContainer()
+            ->getDescription());
         $subtitle->appendChild($text);
     }
 
@@ -190,17 +190,18 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setDateModified(DOMDocument $dom, DOMElement $root)
+    protected function _setDateModified (DOMDocument $dom, DOMElement $root)
     {
-        if(!$this->getDataContainer()->getDateModified()) {
+        if (! $this->getDataContainer()->getDateModified()) {
             return;
         }
-
+        
         $updated = $dom->createElement('pubDate');
         $root->appendChild($updated);
         $text = $dom->createTextNode(
-            $this->getDataContainer()->getDateModified()->get(Date\Date::RSS)
-        );
+        $this->getDataContainer()
+            ->getDateModified()
+            ->get(Date\Date::RSS));
         $updated->appendChild($text);
     }
 
@@ -211,13 +212,13 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setGenerator(DOMDocument $dom, DOMElement $root)
+    protected function _setGenerator (DOMDocument $dom, DOMElement $root)
     {
-        if(!$this->getDataContainer()->getGenerator()) {
-            $this->getDataContainer()->setGenerator('Zend_Feed_Writer',
-                \Zend\Version::VERSION, 'http://framework.zend.com');
+        if (! $this->getDataContainer()->getGenerator()) {
+            $this->getDataContainer()->setGenerator('Zend_Feed_Writer', 
+            \Zend\Version::VERSION, 'http://framework.zend.com');
         }
-
+        
         $gdata = $this->getDataContainer()->getGenerator();
         $generator = $dom->createElement('generator');
         $root->appendChild($generator);
@@ -239,14 +240,14 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setLink(DOMDocument $dom, DOMElement $root)
+    protected function _setLink (DOMDocument $dom, DOMElement $root)
     {
         $value = $this->getDataContainer()->getLink();
-        if(!$value) {
-            $message = 'RSS 2.0 feed elements MUST contain exactly one'
-            . ' link element but one has not been set';
+        if (! $value) {
+            $message = 'RSS 2.0 feed elements MUST contain exactly one' .
+             ' link element but one has not been set';
             $exception = new Writer\Exception($message);
-            if (!$this->_ignoreExceptions) {
+            if (! $this->_ignoreExceptions) {
                 throw $exception;
             } else {
                 $this->_exceptions[] = $exception;
@@ -257,11 +258,11 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
         $root->appendChild($link);
         $text = $dom->createTextNode($value);
         $link->appendChild($text);
-        if (!Uri\UriFactory::factory($value)->isValid()) {
+        if (! Uri\UriFactory::factory($value)->isValid()) {
             $link->setAttribute('isPermaLink', 'false');
         }
     }
-    
+
     /**
      * Set feed authors
      * 
@@ -269,10 +270,10 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setAuthors(DOMDocument $dom, DOMElement $root)
+    protected function _setAuthors (DOMDocument $dom, DOMElement $root)
     {
         $authors = $this->getDataContainer()->getAuthors();
-        if (!$authors || empty($authors)) {
+        if (! $authors || empty($authors)) {
             return;
         }
         foreach ($authors as $data) {
@@ -286,7 +287,7 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
             $root->appendChild($author);
         }
     }
-    
+
     /**
      * Set feed copyright
      * 
@@ -294,10 +295,10 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setCopyright(DOMDocument $dom, DOMElement $root)
+    protected function _setCopyright (DOMDocument $dom, DOMElement $root)
     {
         $copyright = $this->getDataContainer()->getCopyright();
-        if (!$copyright) {
+        if (! $copyright) {
             return;
         }
         $copy = $dom->createElement('copyright');
@@ -313,65 +314,64 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setImage(DOMDocument $dom, DOMElement $root)
+    protected function _setImage (DOMDocument $dom, DOMElement $root)
     {
         $image = $this->getDataContainer()->getImage();
-        if (!$image) {
+        if (! $image) {
             return;
         }
-
-        if (!isset($image['title']) || empty($image['title'])
-            || !is_string($image['title'])
-        ) {
+        
+        if (! isset($image['title']) || empty($image['title']) ||
+         ! is_string($image['title'])) {
             $message = 'RSS 2.0 feed images must include a title';
             $exception = new Writer\Exception($message);
-            if (!$this->_ignoreExceptions) {
+            if (! $this->_ignoreExceptions) {
                 throw $exception;
             } else {
                 $this->_exceptions[] = $exception;
                 return;
             }
         }
-
-        if (empty($image['link']) || !is_string($image['link'])
-            || !Uri\UriFactory::factory($image['link'])->isValid()
-        ) {
-            $message = 'Invalid parameter: parameter \'link\''
-            . ' must be a non-empty string and valid URI/IRI';
+        
+        if (empty($image['link']) || ! is_string($image['link']) ||
+         ! Uri\UriFactory::factory($image['link'])->isValid()) {
+            $message = 'Invalid parameter: parameter \'link\'' .
+             ' must be a non-empty string and valid URI/IRI';
             $exception = new Writer\Exception($message);
-            if (!$this->_ignoreExceptions) {
+            if (! $this->_ignoreExceptions) {
                 throw $exception;
             } else {
                 $this->_exceptions[] = $exception;
                 return;
             }
         }
-
-        $img   = $dom->createElement('image');
+        
+        $img = $dom->createElement('image');
         $root->appendChild($img);
-
-        $url   = $dom->createElement('url');
-        $text  = $dom->createTextNode($image['uri']);
+        
+        $url = $dom->createElement('url');
+        $text = $dom->createTextNode($image['uri']);
         $url->appendChild($text);
-
+        
         $title = $dom->createElement('title');
-        $text  = $dom->createTextNode($image['title']);
+        $text = $dom->createTextNode($image['title']);
         $title->appendChild($text);
-
-        $link  = $dom->createElement('link');
-        $text  = $dom->createTextNode($image['link']);
+        
+        $link = $dom->createElement('link');
+        $text = $dom->createTextNode($image['link']);
         $link->appendChild($text);
-
+        
         $img->appendChild($url);
         $img->appendChild($title);
         $img->appendChild($link);
-
+        
         if (isset($image['height'])) {
-            if (!ctype_digit((string) $image['height']) || $image['height'] > 400) {
-                $message = 'Invalid parameter: parameter \'height\''
-                         . ' must be an integer not exceeding 400';
+            if (! ctype_digit((string) $image['height']) ||
+             $image['height'] > 400) {
+                $message = 'Invalid parameter: parameter \'height\'' .
+                 ' must be an integer not exceeding 400';
                 $exception = new Writer\Exception($message);
-                if (!$this->_ignoreExceptions) {
+                if (! $this->_ignoreExceptions) {
                     throw $exception;
                 } else {
                     $this->_exceptions[] = $exception;
@@ -379,16 +379,16 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
                 }
             }
             $height = $dom->createElement('height');
-            $text   = $dom->createTextNode($image['height']);
+            $text = $dom->createTextNode($image['height']);
             $height->appendChild($text);
             $img->appendChild($height);
         }
         if (isset($image['width'])) {
-            if (!ctype_digit((string) $image['width']) || $image['width'] > 144) {
-                $message = 'Invalid parameter: parameter \'width\''
-                         . ' must be an integer not exceeding 144';
+            if (! ctype_digit((string) $image['width']) || $image['width'] > 144) {
+                $message = 'Invalid parameter: parameter \'width\'' .
+                 ' must be an integer not exceeding 144';
                 $exception = new Writer\Exception($message);
-                if (!$this->_ignoreExceptions) {
+                if (! $this->_ignoreExceptions) {
                     throw $exception;
                 } else {
                     $this->_exceptions[] = $exception;
@@ -396,16 +396,17 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
                 }
             }
             $width = $dom->createElement('width');
-            $text  = $dom->createTextNode($image['width']);
+            $text = $dom->createTextNode($image['width']);
             $width->appendChild($text);
             $img->appendChild($width);
         }
         if (isset($image['description'])) {
-            if (empty($image['description']) || !is_string($image['description'])) {
-                $message = 'Invalid parameter: parameter \'description\''
-                         . ' must be a non-empty string';
+            if (empty($image['description']) || ! is_string(
+            $image['description'])) {
+                $message = 'Invalid parameter: parameter \'description\'' .
+                 ' must be a non-empty string';
                 $exception = new Writer\Exception($message);
-                if (!$this->_ignoreExceptions) {
+                if (! $this->_ignoreExceptions) {
                     throw $exception;
                 } else {
                     $this->_exceptions[] = $exception;
@@ -418,7 +419,7 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
             $img->appendChild($desc);
         }
     }
-    
+
     /**
      * Set date feed was created
      * 
@@ -426,15 +427,15 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setDateCreated(DOMDocument $dom, DOMElement $root)
+    protected function _setDateCreated (DOMDocument $dom, DOMElement $root)
     {
-        if(!$this->getDataContainer()->getDateCreated()) {
+        if (! $this->getDataContainer()->getDateCreated()) {
             return;
         }
-        if(!$this->getDataContainer()->getDateModified()) {
+        if (! $this->getDataContainer()->getDateModified()) {
             $this->getDataContainer()->setDateModified(
-                $this->getDataContainer()->getDateCreated()
-            );
+            $this->getDataContainer()
+                ->getDateCreated());
         }
     }
 
@@ -445,20 +446,21 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setLastBuildDate(DOMDocument $dom, DOMElement $root)
+    protected function _setLastBuildDate (DOMDocument $dom, DOMElement $root)
     {
-        if(!$this->getDataContainer()->getLastBuildDate()) {
+        if (! $this->getDataContainer()->getLastBuildDate()) {
             return;
         }
-
+        
         $lastBuildDate = $dom->createElement('lastBuildDate');
         $root->appendChild($lastBuildDate);
         $text = $dom->createTextNode(
-            $this->getDataContainer()->getLastBuildDate()->get(Date\Date::RSS)
-        );
+        $this->getDataContainer()
+            ->getLastBuildDate()
+            ->get(Date\Date::RSS));
         $lastBuildDate->appendChild($text);
     }
-    
+
     /**
      * Set base URL to feed links
      * 
@@ -466,15 +468,15 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setBaseUrl(DOMDocument $dom, DOMElement $root)
+    protected function _setBaseUrl (DOMDocument $dom, DOMElement $root)
     {
         $baseUrl = $this->getDataContainer()->getBaseUrl();
-        if (!$baseUrl) {
+        if (! $baseUrl) {
             return;
         }
         $root->setAttribute('xml:base', $baseUrl);
     }
-    
+
     /**
      * Set feed categories
      * 
@@ -482,10 +484,10 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  DOMElement $root 
      * @return void
      */
-    protected function _setCategories(DOMDocument $dom, DOMElement $root)
+    protected function _setCategories (DOMDocument $dom, DOMElement $root)
     {
         $categories = $this->getDataContainer()->getCategories();
-        if (!$categories) {
+        if (! $categories) {
             return;
         }
         foreach ($categories as $cat) {

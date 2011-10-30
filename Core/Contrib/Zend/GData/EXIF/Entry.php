@@ -40,6 +40,7 @@ use Zend\GData\EXIF;
  */
 class Entry extends \Zend\GData\Entry
 {
+
     /**
      * The classname for individual feed elements.
      *
@@ -58,9 +59,9 @@ class Entry extends \Zend\GData\Entry
      * Create a new instance.
      *
      * @param DOMElement $element (optional) DOMElement from which this
-     *          object should be constructed.
+     * object should be constructed.
      */
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(EXIF::$namespaces);
         parent::__construct($element);
@@ -76,7 +77,7 @@ class Entry extends \Zend\GData\Entry
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_tags != null) {
@@ -91,18 +92,18 @@ class Entry extends \Zend\GData\Entry
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('exif') . ':' . 'tags':
-            $tags = new Extension\Tags();
-            $tags->transferFromDOM($child);
-            $this->_tags = $tags;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('exif') . ':' . 'tags':
+                $tags = new Extension\Tags();
+                $tags->transferFromDOM($child);
+                $this->_tags = $tags;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
@@ -111,9 +112,9 @@ class Entry extends \Zend\GData\Entry
      *
      * @see setTags
      * @return \Zend\GData\EXIF\Extension\Tags The requested object
-     *              or null if not set.
+     * or null if not set.
      */
-    public function getTags()
+    public function getTags ()
     {
         return $this->_tags;
     }
@@ -126,10 +127,10 @@ class Entry extends \Zend\GData\Entry
      * protocol.
      *
      * @param \Zend\GData\EXIF\Extension\Tags $value The desired value
-     *              this element, or null to unset.
+     * this element, or null to unset.
      * @return \Zend\GData\EXIF\Entry Provides a fluent interface
      */
-    public function setTags($value)
+    public function setTags ($value)
     {
         $this->_tags = $value;
         return $this;

@@ -22,10 +22,7 @@
  * @namespace
  */
 namespace Zend\Amf\Request;
-use Zend\Amf\Request as AMFRequest,
-    Zend\Amf\Parser,
-    Zend\Amf\Value,
-    Zend\Amf;
+use Zend\Amf\Request as AMFRequest, Zend\Amf\Parser, Zend\Amf\Value, Zend\Amf;
 
 /**
  * Handle the incoming AMF request by deserializing the data to php object
@@ -44,11 +41,13 @@ use Zend\Amf\Request as AMFRequest,
  */
 class StreamRequest implements AMFRequest
 {
+
     /**
      * @var int AMF client type (AMF0, AMF3)
      */
     protected $_clientType = 0; // default AMF0
 
+    
     /**
      * @var array Message bodies
      */
@@ -86,10 +85,11 @@ class StreamRequest implements AMFRequest
      * @param  string $request
      * @return \Zend\Amf\Request\StreamRequest
      */
-    public function initialize($request)
+    public function initialize ($request)
     {
-        $this->_inputStream  = new Parser\InputStream($request);
-        $this->_deserializer = new Amf\Parser\Amf0\Deserializer($this->_inputStream);
+        $this->_inputStream = new Parser\InputStream($request);
+        $this->_deserializer = new Amf\Parser\Amf0\Deserializer(
+        $this->_inputStream);
         $this->readMessage($this->_inputStream);
         return $this;
     }
@@ -100,31 +100,31 @@ class StreamRequest implements AMFRequest
      * @param  \Zend\Amf\Parser\InputStream
      * @return \Zend\Amf\Request\StreamRequest
      */
-    public function readMessage(Parser\InputStream $stream)
+    public function readMessage (Parser\InputStream $stream)
     {
         $clientVersion = $stream->readUnsignedShort();
-        if (($clientVersion != Amf\Constants::AMF0_OBJECT_ENCODING)
-            && ($clientVersion != Amf\Constants::AMF3_OBJECT_ENCODING)
-            && ($clientVersion != Amf\Constants::FMS_OBJECT_ENCODING)
-        ) {
-            throw new Amf\Exception\RuntimeException('Unknown Player Version ' . $clientVersion);
+        if (($clientVersion != Amf\Constants::AMF0_OBJECT_ENCODING) &&
+         ($clientVersion != Amf\Constants::AMF3_OBJECT_ENCODING) &&
+         ($clientVersion != Amf\Constants::FMS_OBJECT_ENCODING)) {
+            throw new Amf\Exception\RuntimeException(
+            'Unknown Player Version ' . $clientVersion);
         }
-
-        $this->_bodies  = array();
+        
+        $this->_bodies = array();
         $this->_headers = array();
-        $headerCount    = $stream->readInt();
-
+        $headerCount = $stream->readInt();
+        
         // Iterate through the AMF envelope header
-        while ($headerCount--) {
+        while ($headerCount --) {
             $this->_headers[] = $this->readHeader();
         }
-
+        
         // Iterate through the AMF envelope body
         $bodyCount = $stream->readInt();
-        while ($bodyCount--) {
+        while ($bodyCount --) {
             $this->_bodies[] = $this->readBody();
         }
-
+        
         return $this;
     }
 
@@ -139,18 +139,20 @@ class StreamRequest implements AMFRequest
      *
      * @return \Zend\Amf\Value\MessageHeader
      */
-    public function readHeader()
+    public function readHeader ()
     {
-        $name     = $this->_inputStream->readUTF();
-        $mustRead = (bool)$this->_inputStream->readByte();
-        $length   = $this->_inputStream->readLong();
-
+        $name = $this->_inputStream->readUTF();
+        $mustRead = (bool) $this->_inputStream->readByte();
+        $length = $this->_inputStream->readLong();
+        
         try {
             $data = $this->_deserializer->readTypeMarker();
         } catch (\Exception $e) {
-            throw new Amf\Exception\RuntimeException('Unable to parse ' . $name . ' header data: ' . $e->getMessage() . ' '. $e->getLine(), 0, $e);
+            throw new Amf\Exception\RuntimeException(
+            'Unable to parse ' . $name . ' header data: ' . $e->getMessage() .
+             ' ' . $e->getLine(), 0, $e);
         }
-
+        
         $header = new Value\MessageHeader($name, $mustRead, $data, $length);
         return $header;
     }
@@ -160,33 +162,37 @@ class StreamRequest implements AMFRequest
      *
      * @return \Zend\Amf\Value\MessageBody
      */
-    public function readBody()
+    public function readBody ()
     {
-        $targetURI   = $this->_inputStream->readUTF();
+        $targetURI = $this->_inputStream->readUTF();
         $responseURI = $this->_inputStream->readUTF();
-        $length      = $this->_inputStream->readLong();
-
+        $length = $this->_inputStream->readLong();
+        
         try {
             $data = $this->_deserializer->readTypeMarker();
         } catch (\Exception $e) {
-            throw new Amf\Exception\RuntimeException('Unable to parse ' . $targetURI . ' body data ' . $e->getMessage(), 0, $e);
+            throw new Amf\Exception\RuntimeException(
+            'Unable to parse ' . $targetURI . ' body data ' . $e->getMessage(), 
+            0, $e);
         }
-
+        
         // Check for AMF3 objectEncoding
-        if ($this->_deserializer->getObjectEncoding() == Amf\Constants::AMF3_OBJECT_ENCODING) {
+        if ($this->_deserializer->getObjectEncoding() ==
+         Amf\Constants::AMF3_OBJECT_ENCODING) {
             /*
              * When and AMF3 message is sent to the server it is nested inside
              * an AMF0 array called Content. The following code gets the object
              * out of the content array and sets it as the message data.
              */
-            if(is_array($data) && $data[0] instanceof Value\Messaging\AbstractMessage){
+            if (is_array($data) &&
+             $data[0] instanceof Value\Messaging\AbstractMessage) {
                 $data = $data[0];
             }
-
+            
             // set the encoding so we return our message in AMF3
             $this->_objectEncoding = Amf\Constants::AMF3_OBJECT_ENCODING;
         }
-
+        
         $body = new Value\MessageBody($targetURI, $responseURI, $data);
         return $body;
     }
@@ -196,7 +202,7 @@ class StreamRequest implements AMFRequest
      *
      * @return array {target, response, length, content}
      */
-    public function getAmfBodies()
+    public function getAmfBodies ()
     {
         return $this->_bodies;
     }
@@ -207,7 +213,7 @@ class StreamRequest implements AMFRequest
      * @param  \Zend\Amf\Value\MessageBody $message
      * @return \Zend\Amf\Request\StreamRequest
      */
-    public function addAmfBody(Value\MessageBody $message)
+    public function addAmfBody (Value\MessageBody $message)
     {
         $this->_bodies[] = $message;
         return $this;
@@ -218,7 +224,7 @@ class StreamRequest implements AMFRequest
      *
      * @return array {operation, mustUnderstand, length, param}
      */
-    public function getAmfHeaders()
+    public function getAmfHeaders ()
     {
         return $this->_headers;
     }
@@ -228,7 +234,7 @@ class StreamRequest implements AMFRequest
      *
      * @return int
      */
-    public function getObjectEncoding()
+    public function getObjectEncoding ()
     {
         return $this->_objectEncoding;
     }
@@ -239,7 +245,7 @@ class StreamRequest implements AMFRequest
      * @param  mixed $int
      * @return \Zend\Amf\Request\StreamRequest
      */
-    public function setObjectEncoding($int)
+    public function setObjectEncoding ($int)
     {
         $this->_objectEncoding = $int;
         return $this;

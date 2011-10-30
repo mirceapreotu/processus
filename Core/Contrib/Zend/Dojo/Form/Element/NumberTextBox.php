@@ -38,6 +38,7 @@ use Zend\Form\Element\Exception;
  */
 class NumberTextBox extends ValidationTextBox
 {
+
     /**
      * Use NumberTextBox dijit view helper
      * @var string
@@ -48,12 +49,8 @@ class NumberTextBox extends ValidationTextBox
      * Allowed numeric type formats
      * @var array
      */
-    protected $_allowedTypes = array(
-        'decimal',
-        'scientific',
-        'percent',
-        'currency',
-    );
+    protected $_allowedTypes = array('decimal', 'scientific', 'percent', 
+    'currency');
 
     /**
      * Set locale
@@ -61,7 +58,7 @@ class NumberTextBox extends ValidationTextBox
      * @param  string $locale
      * @return \Zend\Dojo\Form\Element\NumberTextBox
      */
-    public function setLocale($locale)
+    public function setLocale ($locale)
     {
         $this->setConstraint('locale', (string) $locale);
         return $this;
@@ -72,7 +69,7 @@ class NumberTextBox extends ValidationTextBox
      *
      * @return string|null
      */
-    public function getLocale()
+    public function getLocale ()
     {
         return $this->getConstraint('locale');
     }
@@ -83,7 +80,7 @@ class NumberTextBox extends ValidationTextBox
      * @param  string $pattern
      * @return \Zend\Dojo\Form\Element\NumberTextBox
      */
-    public function setPattern($pattern)
+    public function setPattern ($pattern)
     {
         $this->setConstraint('pattern', (string) $pattern);
         return $this;
@@ -94,7 +91,7 @@ class NumberTextBox extends ValidationTextBox
      *
      * @return string|null
      */
-    public function getPattern()
+    public function getPattern ()
     {
         return $this->getConstraint('pattern');
     }
@@ -106,13 +103,14 @@ class NumberTextBox extends ValidationTextBox
      * @param  string $type
      * @return \Zend\Dojo\Form\Element\NumberTextBox
      */
-    public function setType($type)
+    public function setType ($type)
     {
         $type = strtolower($type);
-        if (!in_array($type, $this->_allowedTypes)) {
-            throw new Exception\InvalidArgumentException(sprintf('Invalid numeric type "%s" specified', $type));
+        if (! in_array($type, $this->_allowedTypes)) {
+            throw new Exception\InvalidArgumentException(
+            sprintf('Invalid numeric type "%s" specified', $type));
         }
-
+        
         $this->setConstraint('type', $type);
         return $this;
     }
@@ -122,7 +120,7 @@ class NumberTextBox extends ValidationTextBox
      *
      * @return string|null
      */
-    public function getType()
+    public function getType ()
     {
         return $this->getConstraint('type');
     }
@@ -133,7 +131,7 @@ class NumberTextBox extends ValidationTextBox
      * @param  int $places
      * @return \Zend\Dojo\Form\Element\NumberTextBox
      */
-    public function setPlaces($places)
+    public function setPlaces ($places)
     {
         $this->setConstraint('places', (int) $places);
         return $this;
@@ -144,7 +142,7 @@ class NumberTextBox extends ValidationTextBox
      *
      * @return int|null
      */
-    public function getPlaces()
+    public function getPlaces ()
     {
         return $this->getConstraint('places');
     }
@@ -155,7 +153,7 @@ class NumberTextBox extends ValidationTextBox
      * @param  bool $strict
      * @return \Zend\Dojo\Form\Element\NumberTextBox
      */
-    public function setStrict($flag)
+    public function setStrict ($flag)
     {
         $this->setConstraint('strict', (bool) $flag);
         return $this;
@@ -166,9 +164,9 @@ class NumberTextBox extends ValidationTextBox
      *
      * @return bool
      */
-    public function getStrict()
+    public function getStrict ()
     {
-        if (!$this->hasConstraint('strict')) {
+        if (! $this->hasConstraint('strict')) {
             return false;
         }
         return ('true' == $this->getConstraint('strict'));

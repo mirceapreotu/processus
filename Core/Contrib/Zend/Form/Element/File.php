@@ -23,13 +23,7 @@
  */
 namespace Zend\Form\Element;
 
-use Zend\Form\Element\Exception,
-    Zend\Form\Form,
-    Zend\Form\Decorator\FileDecorator,
-    Zend\Loader\PrefixPathLoader,
-    Zend\Loader\PrefixPathMapper,
-    Zend\View\Renderer as View,
-    Zend\File\Transfer\Adapter\AbstractAdapter as AbstractFileAdapter;
+use Zend\Form\Element\Exception, Zend\Form\Form, Zend\Form\Decorator\FileDecorator, Zend\Loader\PrefixPathLoader, Zend\Loader\PrefixPathMapper, Zend\View\Renderer as View, Zend\File\Transfer\Adapter\AbstractAdapter as AbstractFileAdapter;
 
 /**
  * Zend_Form_Element
@@ -42,6 +36,7 @@ use Zend\Form\Element\Exception,
  */
 class File extends Xhtml
 {
+
     /**
      * Plugin loader type
      */
@@ -75,26 +70,27 @@ class File extends Xhtml
     /**
      * @var integer Maximum file size for MAX_FILE_SIZE attribut of form
      */
-    protected static $_maxFileSize = -1;
+    protected static $_maxFileSize = - 1;
 
     /**
      * Load default decorators
      *
      * @return \Zend\Form\Element\File
      */
-    public function loadDefaultDecorators()
+    public function loadDefaultDecorators ()
     {
         if ($this->loadDefaultDecoratorsIsDisabled()) {
             return $this;
         }
-
+        
         $decorators = $this->getDecorators();
         if (empty($decorators)) {
             $this->addDecorator('File')
-                 ->addDecorator('Errors')
-                 ->addDecorator('Description', array('tag' => 'p', 'class' => 'description'))
-                 ->addDecorator('HtmlTag', array('tag' => 'dd'))
-                 ->addDecorator('Label', array('tag' => 'dt'));
+                ->addDecorator('Errors')
+                ->addDecorator('Description', 
+            array('tag' => 'p', 'class' => 'description'))
+                ->addDecorator('HtmlTag', array('tag' => 'dd'))
+                ->addDecorator('Label', array('tag' => 'dt'));
         }
         return $this;
     }
@@ -106,14 +102,14 @@ class File extends Xhtml
      * @param  string $type
      * @return \Zend\Form\Element\File
      */
-    public function setPluginLoader(PrefixPathMapper $loader, $type)
+    public function setPluginLoader (PrefixPathMapper $loader, $type)
     {
         $type = strtoupper($type);
-
+        
         if ($type != self::TRANSFER_ADAPTER) {
             return parent::setPluginLoader($loader, $type);
         }
-
+        
         $this->_loaders[$type] = $loader;
         return $this;
     }
@@ -124,21 +120,20 @@ class File extends Xhtml
      * @param  string $type
      * @return \Zend\Loader\PrefixPathMapper
      */
-    public function getPluginLoader($type)
+    public function getPluginLoader ($type)
     {
         $type = strtoupper($type);
-
+        
         if ($type != self::TRANSFER_ADAPTER) {
             return parent::getPluginLoader($type);
         }
-
-        if (!array_key_exists($type, $this->_loaders)) {
-            $loader = new PrefixPathLoader(array(
-                'Zend\File\Transfer\Adapter' => 'Zend/File/Transfer/Adapter/',
-            ));
+        
+        if (! array_key_exists($type, $this->_loaders)) {
+            $loader = new PrefixPathLoader(
+            array('Zend\File\Transfer\Adapter' => 'Zend/File/Transfer/Adapter/'));
             $this->setPluginLoader($loader, self::TRANSFER_ADAPTER);
         }
-
+        
         return $this->_loaders[$type];
     }
 
@@ -150,21 +145,22 @@ class File extends Xhtml
      * @param  string $type
      * @return \Zend\Form\Element\File
      */
-    public function addPrefixPath($prefix, $path, $type = null)
+    public function addPrefixPath ($prefix, $path, $type = null)
     {
         $type = strtoupper($type);
-        if (!empty($type) && ($type != self::TRANSFER_ADAPTER)) {
+        if (! empty($type) && ($type != self::TRANSFER_ADAPTER)) {
             return parent::addPrefixPath($prefix, $path, $type);
         }
-
+        
         if (empty($type)) {
             $pluginPrefix = rtrim($prefix, '\\') . '\Transfer\Adapter';
-            $pluginPath   = rtrim($path, DIRECTORY_SEPARATOR) . '/Transfer/Adapter/';
-            $loader       = $this->getPluginLoader(self::TRANSFER_ADAPTER);
+            $pluginPath = rtrim($path, DIRECTORY_SEPARATOR) .
+             '/Transfer/Adapter/';
+            $loader = $this->getPluginLoader(self::TRANSFER_ADAPTER);
             $loader->addPrefixPath($pluginPrefix, $pluginPath);
             return parent::addPrefixPath($prefix, $path, null);
         }
-
+        
         $loader = $this->getPluginLoader($type);
         $loader->addPrefixPath($prefix, $path);
         return $this;
@@ -176,23 +172,24 @@ class File extends Xhtml
      * @param  string|\Zend\File\Transfer\Adapter\AbstractAdapter $adapter
      * @return \Zend\Form\Element\File
      */
-    public function setTransferAdapter($adapter)
+    public function setTransferAdapter ($adapter)
     {
         if ($adapter instanceof AbstractFileAdapter) {
             $this->_adapter = $adapter;
         } elseif (is_string($adapter)) {
             $loader = $this->getPluginLoader(self::TRANSFER_ADAPTER);
-            $class  = $loader->load($adapter);
-            $this->_adapter = new $class;
+            $class = $loader->load($adapter);
+            $this->_adapter = new $class();
         } else {
-            throw new Exception\InvalidArgumentException('Invalid adapter specified');
+            throw new Exception\InvalidArgumentException(
+            'Invalid adapter specified');
         }
-
+        
         foreach (array('filter', 'validator') as $type) {
             $loader = $this->getPluginLoader($type);
             $this->_adapter->setPluginLoader($loader, $type);
         }
-
+        
         return $this;
     }
 
@@ -203,7 +200,7 @@ class File extends Xhtml
      *
      * @return \Zend\File\Transfer\Adapter\AbstractAdapter
      */
-    public function getTransferAdapter()
+    public function getTransferAdapter ()
     {
         if (null === $this->_adapter) {
             $this->setTransferAdapter('Http');
@@ -219,12 +216,14 @@ class File extends Xhtml
      * @param  mixed $options
      * @return \Zend\Form\Element\File
      */
-    public function addValidator($validator, $breakChainOnFailure = false, $options = array())
+    public function addValidator ($validator, $breakChainOnFailure = false, 
+    $options = array())
     {
         $adapter = $this->getTransferAdapter();
-        $adapter->addValidator($validator, $breakChainOnFailure, $options, $this->getName());
+        $adapter->addValidator($validator, $breakChainOnFailure, $options, 
+        $this->getName());
         $this->_validated = false;
-
+        
         return $this;
     }
 
@@ -234,12 +233,12 @@ class File extends Xhtml
      * @param  array $validators
      * @return \Zend\Form\Element\File
      */
-    public function addValidators(array $validators)
+    public function addValidators (array $validators)
     {
         $adapter = $this->getTransferAdapter();
         $adapter->addValidators($validators, $this->getName());
         $this->_validated = false;
-
+        
         return $this;
     }
 
@@ -249,12 +248,12 @@ class File extends Xhtml
      * @param  array $validators
      * @return \Zend\Form\Element\File
      */
-    public function setValidators(array $validators)
+    public function setValidators (array $validators)
     {
         $adapter = $this->getTransferAdapter();
         $adapter->setValidators($validators, $this->getName());
         $this->_validated = false;
-
+        
         return $this;
     }
 
@@ -264,9 +263,9 @@ class File extends Xhtml
      * @param  string $name
      * @return \Zend\Validator\Validator|null
      */
-    public function getValidator($name)
+    public function getValidator ($name)
     {
-        $adapter    = $this->getTransferAdapter();
+        $adapter = $this->getTransferAdapter();
         return $adapter->getValidator($name);
     }
 
@@ -275,14 +274,14 @@ class File extends Xhtml
      *
      * @return array
      */
-    public function getValidators()
+    public function getValidators ()
     {
         $adapter = $this->getTransferAdapter();
         $validators = $adapter->getValidators($this->getName());
         if ($validators === null) {
             $validators = array();
         }
-
+        
         return $validators;
     }
 
@@ -292,12 +291,12 @@ class File extends Xhtml
      * @param  string $name
      * @return \Zend\Form\Element\File
      */
-    public function removeValidator($name)
+    public function removeValidator ($name)
     {
         $adapter = $this->getTransferAdapter();
         $adapter->removeValidator($name);
         $this->_validated = false;
-
+        
         return $this;
     }
 
@@ -306,12 +305,12 @@ class File extends Xhtml
      *
      * @return \Zend\Form\Element\File
      */
-    public function clearValidators()
+    public function clearValidators ()
     {
         $adapter = $this->getTransferAdapter();
         $adapter->clearValidators();
         $this->_validated = false;
-
+        
         return $this;
     }
 
@@ -322,11 +321,11 @@ class File extends Xhtml
      * @param  string|array $options Options to set for the filter
      * @return \Zend\Form\Element\File
      */
-    public function addFilter($filter, $options = null)
+    public function addFilter ($filter, $options = null)
     {
         $adapter = $this->getTransferAdapter();
         $adapter->addFilter($filter, $options, $this->getName());
-
+        
         return $this;
     }
 
@@ -336,11 +335,11 @@ class File extends Xhtml
      * @param  array $filters
      * @return \Zend\Form\Element\File
      */
-    public function addFilters(array $filters)
+    public function addFilters (array $filters)
     {
         $adapter = $this->getTransferAdapter();
         $adapter->addFilters($filters, $this->getName());
-
+        
         return $this;
     }
 
@@ -350,11 +349,11 @@ class File extends Xhtml
      * @param  string|array $filter Filter to set
      * @return \Zend\Form\Element\File
      */
-    public function setFilters(array $filters)
+    public function setFilters (array $filters)
     {
         $adapter = $this->getTransferAdapter();
         $adapter->setFilters($filters, $this->getName());
-
+        
         return $this;
     }
 
@@ -364,7 +363,7 @@ class File extends Xhtml
      * @param  string $name
      * @return \Zend\Filter\Filter|null
      */
-    public function getFilter($name)
+    public function getFilter ($name)
     {
         $adapter = $this->getTransferAdapter();
         return $adapter->getFilter($name);
@@ -375,11 +374,11 @@ class File extends Xhtml
      *
      * @return array List of set filters
      */
-    public function getFilters()
+    public function getFilters ()
     {
         $adapter = $this->getTransferAdapter();
         $filters = $adapter->getFilters($this->getName());
-
+        
         if ($filters === null) {
             $filters = array();
         }
@@ -392,11 +391,11 @@ class File extends Xhtml
      * @param  string $name
      * @return \Zend\Form\Element\File
      */
-    public function removeFilter($name)
+    public function removeFilter ($name)
     {
         $adapter = $this->getTransferAdapter();
         $adapter->removeFilter($name);
-
+        
         return $this;
     }
 
@@ -405,11 +404,11 @@ class File extends Xhtml
      *
      * @return \Zend\Form\Element\File
      */
-    public function clearFilters()
+    public function clearFilters ()
     {
         $adapter = $this->getTransferAdapter();
         $adapter->clearFilters();
-
+        
         return $this;
     }
 
@@ -420,32 +419,36 @@ class File extends Xhtml
      * @param  mixed  $context
      * @return bool
      */
-    public function isValid($value, $context = null)
+    public function isValid ($value, $context = null)
     {
         if (($this->_validated) || ($this->isValueDisabled())) {
             return true;
         }
-
-        $adapter    = $this->getTransferAdapter();
+        
+        $adapter = $this->getTransferAdapter();
         $translator = $this->getTranslator();
         if ($translator !== null) {
             $adapter->setTranslator($translator);
         }
-
-        if (!$this->isRequired()) {
-            $adapter->setOptions(array('ignoreNoFile' => true), $this->getName());
+        
+        if (! $this->isRequired()) {
+            $adapter->setOptions(array('ignoreNoFile' => true), 
+            $this->getName());
         } else {
-            $adapter->setOptions(array('ignoreNoFile' => false), $this->getName());
-            if ($this->autoInsertNotEmptyValidator() && !$this->getValidator('NotEmpty')) {
-                $this->addValidator = array('validator' => 'NotEmpty', 'breakChainOnFailure' => true);
+            $adapter->setOptions(array('ignoreNoFile' => false), 
+            $this->getName());
+            if ($this->autoInsertNotEmptyValidator() &&
+             ! $this->getValidator('NotEmpty')) {
+                $this->addValidator = array('validator' => 'NotEmpty', 
+                'breakChainOnFailure' => true);
             }
         }
-
-        if($adapter->isValid($this->getName())) {
+        
+        if ($adapter->isValid($this->getName())) {
             $this->_validated = true;
             return true;
         }
-
+        
         $this->_validated = false;
         return false;
     }
@@ -455,25 +458,25 @@ class File extends Xhtml
      *
      * @return boolean
      */
-    public function receive()
+    public function receive ()
     {
-        if (!$this->_validated) {
+        if (! $this->_validated) {
             $disabled = $this->isValueDisabled();
             $this->setValueDisabled(false);
             
-            if (!$this->isValid($this->getName())) {
+            if (! $this->isValid($this->getName())) {
                 $this->setValueDisabled($disabled);
                 return false;
             }
             
             $this->setValueDisabled($disabled);
         }
-
+        
         $adapter = $this->getTransferAdapter();
         if ($adapter->receive($this->getName())) {
             return true;
         }
-
+        
         return false;
     }
 
@@ -482,7 +485,7 @@ class File extends Xhtml
      *
      * @return array
      */
-    public function getErrors()
+    public function getErrors ()
     {
         return parent::getErrors() + $this->getTransferAdapter()->getErrors();
     }
@@ -492,7 +495,7 @@ class File extends Xhtml
      *
      * @return bool
      */
-    public function hasErrors()
+    public function hasErrors ()
     {
         return (parent::hasErrors() || $this->getTransferAdapter()->hasErrors());
     }
@@ -502,7 +505,7 @@ class File extends Xhtml
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages ()
     {
         return parent::getMessages() + $this->getTransferAdapter()->getMessages();
     }
@@ -513,7 +516,7 @@ class File extends Xhtml
      * @param  string $path
      * @return \Zend\Form\Element\File
      */
-    public function setDestination($path)
+    public function setDestination ($path)
     {
         $this->getTransferAdapter()->setDestination($path, $this->getName());
         return $this;
@@ -524,7 +527,7 @@ class File extends Xhtml
      *
      * @return string
      */
-    public function getDestination()
+    public function getDestination ()
     {
         return $this->getTransferAdapter()->getDestination($this->getName());
     }
@@ -536,12 +539,12 @@ class File extends Xhtml
      * @param  boolean $path  (Optional) Return also the path, defaults to true
      * @return string
      */
-    public function getFileName($value = null, $path = true)
+    public function getFileName ($value = null, $path = true)
     {
         if (empty($value)) {
             $value = $this->getName();
         }
-
+        
         return $this->getTransferAdapter()->getFileName($value, $path);
     }
 
@@ -551,12 +554,12 @@ class File extends Xhtml
      * @param  string $value (Optional) Element or file to return
      * @return array
      */
-    public function getFileInfo($value = null)
+    public function getFileInfo ($value = null)
     {
         if (empty($value)) {
             $value = $this->getName();
         }
-
+        
         return $this->getTransferAdapter()->getFileInfo($value);
     }
 
@@ -566,7 +569,7 @@ class File extends Xhtml
      * @param integer $count Number of file elements
      * @return \Zend\Form\Element\File Provides fluent interface
      */
-    public function setMultiFile($count)
+    public function setMultiFile ($count)
     {
         if ((integer) $count < 2) {
             $this->setIsArray(false);
@@ -575,7 +578,7 @@ class File extends Xhtml
             $this->setIsArray(true);
             $this->_counter = (integer) $count;
         }
-
+        
         return $this;
     }
 
@@ -584,7 +587,7 @@ class File extends Xhtml
      *
      * @return integer
      */
-    public function getMultiFile()
+    public function getMultiFile ()
     {
         return $this->_counter;
     }
@@ -594,23 +597,24 @@ class File extends Xhtml
      *
      * @return integer
      */
-    public function getMaxFileSize()
+    public function getMaxFileSize ()
     {
         if (self::$_maxFileSize < 0) {
             $ini = $this->_convertIniToInteger(trim(ini_get('post_max_size')));
-            $max = $this->_convertIniToInteger(trim(ini_get('upload_max_filesize')));
+            $max = $this->_convertIniToInteger(
+            trim(ini_get('upload_max_filesize')));
             $min = max($ini, $max);
             if ($ini > 0) {
                 $min = min($min, $ini);
             }
-
+            
             if ($max > 0) {
                 $min = min($min, $max);
             }
-
+            
             self::$_maxFileSize = $min;
         }
-
+        
         return self::$_maxFileSize;
     }
 
@@ -620,21 +624,25 @@ class File extends Xhtml
      * @param  integer $size
      * @return integer
      */
-    public function setMaxFileSize($size)
+    public function setMaxFileSize ($size)
     {
         $ini = $this->_convertIniToInteger(trim(ini_get('post_max_size')));
         $max = $this->_convertIniToInteger(trim(ini_get('upload_max_filesize')));
-
-        if (($max > -1) && ($size > $max)) {
-            trigger_error("Your 'upload_max_filesize' config setting limits the maximum filesize to '$max'. You tried to set '$size'.", E_USER_NOTICE);
+        
+        if (($max > - 1) && ($size > $max)) {
+            trigger_error(
+            "Your 'upload_max_filesize' config setting limits the maximum filesize to '$max'. You tried to set '$size'.", 
+            E_USER_NOTICE);
             $size = $max;
         }
-
-        if (($ini > -1) && ($size > $ini)) {
-            trigger_error("Your 'post_max_size' config setting limits the maximum filesize to '$ini'. You tried to set '$size'.", E_USER_NOTICE);
+        
+        if (($ini > - 1) && ($size > $ini)) {
+            trigger_error(
+            "Your 'post_max_size' config setting limits the maximum filesize to '$ini'. You tried to set '$size'.", 
+            E_USER_NOTICE);
             $size = $ini;
         }
-
+        
         self::$_maxFileSize = $size;
         return $this;
     }
@@ -645,30 +653,30 @@ class File extends Xhtml
      * @param  string $setting
      * @return integer
      */
-    private function _convertIniToInteger($setting)
+    private function _convertIniToInteger ($setting)
     {
-        if (!is_numeric($setting)) {
-            $type = strtoupper(substr($setting, -1));
-            $setting = (integer) substr($setting, 0, -1);
-
+        if (! is_numeric($setting)) {
+            $type = strtoupper(substr($setting, - 1));
+            $setting = (integer) substr($setting, 0, - 1);
+            
             switch ($type) {
-                case 'K' :
+                case 'K':
                     $setting *= 1024;
                     break;
-
-                case 'M' :
+                
+                case 'M':
                     $setting *= 1024 * 1024;
                     break;
-
-                case 'G' :
+                
+                case 'G':
                     $setting *= 1024 * 1024 * 1024;
                     break;
-
-                default :
+                
+                default:
                     break;
             }
         }
-
+        
         return (integer) $setting;
     }
 
@@ -679,7 +687,7 @@ class File extends Xhtml
      * @param boolean $flag Sets if the file is handled as the elements value
      * @return \Zend\Form\Element\File
      */
-    public function setValueDisabled($flag)
+    public function setValueDisabled ($flag)
     {
         $this->_valueDisabled = (bool) $flag;
         return $this;
@@ -690,7 +698,7 @@ class File extends Xhtml
      *
      * @return boolean Receive the file on calling getValues()?
      */
-    public function isValueDisabled()
+    public function isValueDisabled ()
     {
         return $this->_valueDisabled;
     }
@@ -701,25 +709,25 @@ class File extends Xhtml
      *
      * @return null|string
      */
-    public function getValue()
+    public function getValue ()
     {
         if ($this->_value !== null) {
             return $this->_value;
         }
-
+        
         $content = $this->getTransferAdapter()->getFileName($this->getName());
         if (empty($content)) {
             return null;
         }
-
-        if (!$this->isValid(null)) {
+        
+        if (! $this->isValid(null)) {
             return null;
         }
-
-        if (!$this->_valueDisabled && !$this->receive()) {
+        
+        if (! $this->_valueDisabled && ! $this->receive()) {
             return null;
         }
-
+        
         return $this->getFileName(null, false);
     }
 
@@ -729,7 +737,7 @@ class File extends Xhtml
      * @param  mixed $value
      * @return \Zend\Form\Element\File
      */
-    public function setValue($value)
+    public function setValue ($value)
     {
         return $this;
     }
@@ -740,12 +748,12 @@ class File extends Xhtml
      * @param  \Zend\Translator\Translator|null $translator
      * @return \Zend\Form\Element\File
      */
-    public function setTranslator($translator = null)
+    public function setTranslator ($translator = null)
     {
         $adapter = $this->getTransferAdapter();
         $adapter->setTranslator($translator);
         parent::setTranslator($translator);
-
+        
         return $this;
     }
 
@@ -754,17 +762,17 @@ class File extends Xhtml
      *
      * @return \Zend\Translator\Adapter\Adapter|null
      */
-    public function getTranslator()
+    public function getTranslator ()
     {
         if ($this->translatorIsDisabled()) {
             return null;
         }
-
+        
         $translator = $this->getTransferAdapter()->getTranslator();
         if (null === $translator) {
             return Form::getDefaultTranslator();
         }
-
+        
         return $translator;
     }
 
@@ -774,12 +782,12 @@ class File extends Xhtml
      * @param  bool $flag
      * @return \Zend\Form\Element\File
      */
-    public function setDisableTranslator($flag)
+    public function setDisableTranslator ($flag)
     {
         $adapter = $this->getTransferAdapter();
         $adapter->setDisableTranslator($flag);
         $this->_translatorDisabled = (bool) $flag;
-
+        
         return $this;
     }
 
@@ -788,7 +796,7 @@ class File extends Xhtml
      *
      * @return bool
      */
-    public function translatorIsDisabled()
+    public function translatorIsDisabled ()
     {
         $adapter = $this->getTransferAdapter();
         return $adapter->translatorIsDisabled();
@@ -799,7 +807,7 @@ class File extends Xhtml
      *
      * @return bool
      */
-    public function isReceived()
+    public function isReceived ()
     {
         $adapter = $this->getTransferAdapter();
         return $adapter->isReceived($this->getName());
@@ -810,7 +818,7 @@ class File extends Xhtml
      *
      * @return bool
      */
-    public function isUploaded()
+    public function isUploaded ()
     {
         $adapter = $this->getTransferAdapter();
         return $adapter->isUploaded($this->getName());
@@ -821,7 +829,7 @@ class File extends Xhtml
      *
      * @return bool
      */
-    public function isFiltered()
+    public function isFiltered ()
     {
         $adapter = $this->getTransferAdapter();
         return $adapter->isFiltered($this->getName());
@@ -833,7 +841,7 @@ class File extends Xhtml
      * @param string $hash (Optional) Hash algorithm to use
      * @return string|array Hashstring
      */
-    public function getHash($hash = 'crc32')
+    public function getHash ($hash = 'crc32')
     {
         $adapter = $this->getTransferAdapter();
         return $adapter->getHash($hash, $this->getName());
@@ -845,7 +853,7 @@ class File extends Xhtml
      * @param  array $options
      * @return \Zend\Form\Element\File
      */
-    public function setOptions(array $options)
+    public function setOptions (array $options)
     {
         parent::setOptions($options);
         $adapter = $this->getTransferAdapter();
@@ -858,7 +866,7 @@ class File extends Xhtml
      *
      * @return string|array Filesize
      */
-    public function getFileSize()
+    public function getFileSize ()
     {
         $adapter = $this->getTransferAdapter();
         return $adapter->getFileSize($this->getName());
@@ -869,7 +877,7 @@ class File extends Xhtml
      *
      * @return string|array Mimetype
      */
-    public function getMimeType()
+    public function getMimeType ()
     {
         $adapter = $this->getTransferAdapter();
         return $adapter->getMimeType($this->getName());
@@ -882,7 +890,7 @@ class File extends Xhtml
      * @param  \Zend\View\Renderer $view
      * @return string
      */
-    public function render(View $view = null)
+    public function render (View $view = null)
     {
         $marker = false;
         foreach ($this->getDecorators() as $decorator) {
@@ -890,11 +898,12 @@ class File extends Xhtml
                 $marker = true;
             }
         }
-
-        if (!$marker) {
-            throw new Exception\RunTimeException('No file decorator found... unable to render file element');
+        
+        if (! $marker) {
+            throw new Exception\RunTimeException(
+            'No file decorator found... unable to render file element');
         }
-
+        
         return parent::render($view);
     }
 
@@ -903,30 +912,31 @@ class File extends Xhtml
      *
      * @return array
      */
-    protected function _getErrorMessages()
+    protected function _getErrorMessages ()
     {
         $translator = $this->getTranslator();
-        $messages   = $this->getErrorMessages();
-        $value      = $this->getFileName();
+        $messages = $this->getErrorMessages();
+        $value = $this->getFileName();
         foreach ($messages as $key => $message) {
             if (null !== $translator) {
                 $message = $translator->translate($message);
             }
-
+            
             if ($this->isArray() || is_array($value)) {
                 $aggregateMessages = array();
                 foreach ($value as $val) {
-                    $aggregateMessages[] = str_replace('%value%', $val, $message);
+                    $aggregateMessages[] = str_replace('%value%', $val, 
+                    $message);
                 }
-
-                if (!empty($aggregateMessages)) {
+                
+                if (! empty($aggregateMessages)) {
                     $messages[$key] = $aggregateMessages;
                 }
             } else {
                 $messages[$key] = str_replace('%value%', $value, $message);
             }
         }
-
+        
         return $messages;
     }
 }

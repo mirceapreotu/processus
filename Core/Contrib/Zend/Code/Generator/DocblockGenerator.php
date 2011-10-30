@@ -37,6 +37,7 @@ use Zend\Code\Reflection\DocBlockReflection;
  */
 class DocblockGenerator extends AbstractGenerator
 {
+
     /**
      * @var string
      */
@@ -63,24 +64,27 @@ class DocblockGenerator extends AbstractGenerator
      * @param ReflectionDocblock $reflectionDocblock
      * @return DocblockGenerator
      */
-    public static function fromReflection(DocBlockReflection $reflectionDocblock)
+    public static function fromReflection (
+    DocBlockReflection $reflectionDocblock)
     {
         $docblock = new self();
-
+        
         $docblock->setSourceContent($reflectionDocblock->getContents());
         $docblock->setSourceDirty(false);
-
-        $docblock->setShortDescription($reflectionDocblock->getShortDescription());
+        
+        $docblock->setShortDescription(
+        $reflectionDocblock->getShortDescription());
         $docblock->setLongDescription($reflectionDocblock->getLongDescription());
-
+        
         foreach ($reflectionDocblock->getTags() as $tag) {
             $docblock->setTag(Docblock\Tag::fromReflection($tag));
         }
-
+        
         return $docblock;
     }
 
-    public function __construct($shortDescription = null, $longDescription = null, array $tags = array())
+    public function __construct ($shortDescription = null, $longDescription = null, 
+    array $tags = array())
     {
         if ($shortDescription !== null) {
             $this->setShortDescription($shortDescription);
@@ -91,7 +95,7 @@ class DocblockGenerator extends AbstractGenerator
         if ($this->tags !== array()) {
             $this->setTag($tags);
         }
-
+    
     }
 
     /**
@@ -100,7 +104,7 @@ class DocblockGenerator extends AbstractGenerator
      * @param string $shortDescription
      * @return DocblockGenerator
      */
-    public function setShortDescription($shortDescription)
+    public function setShortDescription ($shortDescription)
     {
         $this->shortDescription = $shortDescription;
         return $this;
@@ -111,7 +115,7 @@ class DocblockGenerator extends AbstractGenerator
      *
      * @return string
      */
-    public function getShortDescription()
+    public function getShortDescription ()
     {
         return $this->shortDescription;
     }
@@ -122,7 +126,7 @@ class DocblockGenerator extends AbstractGenerator
      * @param string $longDescription
      * @return \Zend\Code\GeneratorDocblock
      */
-    public function setLongDescription($longDescription)
+    public function setLongDescription ($longDescription)
     {
         $this->longDescription = $longDescription;
         return $this;
@@ -133,7 +137,7 @@ class DocblockGenerator extends AbstractGenerator
      *
      * @return string
      */
-    public function getLongDescription()
+    public function getLongDescription ()
     {
         return $this->longDescription;
     }
@@ -144,12 +148,12 @@ class DocblockGenerator extends AbstractGenerator
      * @param array $tags
      * @return \Zend\Code\GeneratorDocblock
      */
-    public function setTags(array $tags)
+    public function setTags (array $tags)
     {
         foreach ($tags as $tag) {
             $this->setTag($tag);
         }
-
+        
         return $this;
     }
 
@@ -159,17 +163,16 @@ class DocblockGenerator extends AbstractGenerator
      * @param array|\Zend\Code\Generator\Docblock\Tag $tag
      * @return \Zend\Code\GeneratorDocblock
      */
-    public function setTag($tag)
+    public function setTag ($tag)
     {
         if (is_array($tag)) {
             $tag = new Docblock\Tag($tag);
-        } elseif (!$tag instanceof Docblock\Tag) {
+        } elseif (! $tag instanceof Docblock\Tag) {
             throw new Exception\InvalidArgumentException(
-                'setTag() expects either an array of method options or an '
-                . 'instance of Zend\\Code\\Generator\\Docblock\\Tag'
-                );
+            'setTag() expects either an array of method options or an ' .
+             'instance of Zend\\Code\\Generator\\Docblock\\Tag');
         }
-
+        
         $this->tags[] = $tag;
         return $this;
     }
@@ -179,7 +182,7 @@ class DocblockGenerator extends AbstractGenerator
      *
      * @return Docblock\Tag[]
      */
-    public function getTags()
+    public function getTags ()
     {
         return $this->tags;
     }
@@ -189,24 +192,24 @@ class DocblockGenerator extends AbstractGenerator
      *
      * @return string
      */
-    public function generate()
+    public function generate ()
     {
-        if (!$this->isSourceDirty()) {
+        if (! $this->isSourceDirty()) {
             return $this->docCommentize($this->getSourceContent());
         }
-
-        $output  = '';
+        
+        $output = '';
         if (null !== ($sd = $this->getShortDescription())) {
             $output .= $sd . self::LINE_FEED . self::LINE_FEED;
         }
         if (null !== ($ld = $this->getLongDescription())) {
             $output .= $ld . self::LINE_FEED . self::LINE_FEED;
         }
-
+        
         foreach ($this->getTags() as $tag) {
             $output .= $tag->generate() . self::LINE_FEED;
         }
-
+        
         return $this->docCommentize(trim($output));
     }
 
@@ -216,7 +219,7 @@ class DocblockGenerator extends AbstractGenerator
      * @param string $content
      * @return string
      */
-    protected function docCommentize($content)
+    protected function docCommentize ($content)
     {
         $indent = $this->getIndentation();
         $output = $indent . '/**' . self::LINE_FEED;

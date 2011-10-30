@@ -32,14 +32,15 @@ namespace Zend\Dojo\View\Helper;
  * @subpackage View
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
-  */
+ */
 class StackContainer extends DijitContainer
 {
+
     /**
      * Dijit being used
      * @var string
      */
-    protected $_dijit  = 'dijit.layout.StackContainer';
+    protected $_dijit = 'dijit.layout.StackContainer';
 
     /**
      * Dojo module to use
@@ -56,12 +57,13 @@ class StackContainer extends DijitContainer
      * @param  array $attribs HTML attributes
      * @return string
      */
-    public function __invoke($id = null, $content = '', array $params = array(), array $attribs = array())
+    public function __invoke ($id = null, $content = '', array $params = array(), 
+    array $attribs = array())
     {
         if (0 === func_num_args()) {
             return $this;
         }
-
+        
         return $this->_createLayoutContainer($id, $content, $params, $attribs);
     }
 }

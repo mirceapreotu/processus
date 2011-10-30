@@ -34,6 +34,7 @@ use Zend\Loader\Broker;
  */
 interface Dispatcher
 {
+
     /**
      * Formats a string into a controller name.  This is used to take a raw
      * controller name, such as one that would be packaged inside a request
@@ -43,7 +44,7 @@ interface Dispatcher
      * @param string $unformatted
      * @return string
      */
-    public function formatControllerName($unformatted);
+    public function formatControllerName ($unformatted);
 
     /**
      * Formats a string into a module name.  This is used to take a raw
@@ -54,7 +55,7 @@ interface Dispatcher
      * @param string $unformatted
      * @return string
      */
-    public function formatModuleName($unformatted);
+    public function formatModuleName ($unformatted);
 
     /**
      * Formats a string into an action name.  This is used to take a raw
@@ -65,7 +66,7 @@ interface Dispatcher
      * @param string $unformatted
      * @return string
      */
-    public function formatActionName($unformatted);
+    public function formatActionName ($unformatted);
 
     /**
      * Returns TRUE if an action can be dispatched, or FALSE otherwise.
@@ -73,7 +74,7 @@ interface Dispatcher
      * @param  \Zend\Controller\Request\AbstractRequest $request
      * @return boolean
      */
-    public function isDispatchable(Request\AbstractRequest $request);
+    public function isDispatchable (Request\AbstractRequest $request);
 
     /**
      * Add or modify a parameter with which to instantiate an Action Controller
@@ -82,7 +83,7 @@ interface Dispatcher
      * @param mixed $value
      * @return \Zend\Controller\Dispatcher
      */
-    public function setParam($name, $value);
+    public function setParam ($name, $value);
 
     /**
      * Set an array of a parameters to pass to the Action Controller constructor
@@ -90,7 +91,7 @@ interface Dispatcher
      * @param array $params
      * @return \Zend\Controller\Dispatcher
      */
-    public function setParams(array $params);
+    public function setParams (array $params);
 
     /**
      * Retrieve a single parameter from the controller parameter stack
@@ -98,14 +99,14 @@ interface Dispatcher
      * @param string $name
      * @return mixed
      */
-    public function getParam($name);
+    public function getParam ($name);
 
     /**
      * Retrieve the parameters to pass to the Action Controller constructor
      *
      * @return array
      */
-    public function getParams();
+    public function getParams ();
 
     /**
      * Clear the controller parameter stack
@@ -117,7 +118,7 @@ interface Dispatcher
      * @param null|string|array single key or array of keys for params to clear
      * @return \Zend\Controller\Dispatcher
      */
-    public function clearParams($name = null);
+    public function clearParams ($name = null);
 
     /**
      * Set the response object to use, if any
@@ -125,14 +126,14 @@ interface Dispatcher
      * @param \Zend\Controller\Response\AbstractResponse|null $response
      * @return void
      */
-    public function setResponse(Response\AbstractResponse $response = null);
+    public function setResponse (Response\AbstractResponse $response = null);
 
     /**
      * Retrieve the response object, if any
      *
      * @return \Zend\Controller\Response\AbstractResponse|null
      */
-    public function getResponse();
+    public function getResponse ();
 
     /**
      * Add a controller directory to the controller directory stack
@@ -141,7 +142,7 @@ interface Dispatcher
      * @param string $args
      * @return \Zend\Controller\Dispatcher
      */
-    public function addControllerDirectory($path, $args = null);
+    public function addControllerDirectory ($path, $args = null);
 
     /**
      * Set the directory where controller files are stored
@@ -152,14 +153,14 @@ interface Dispatcher
      * @param string|array $dir
      * @return \Zend\Controller\Dispatcher
      */
-    public function setControllerDirectory($path);
+    public function setControllerDirectory ($path);
 
     /**
      * Return the currently set directory(ies) for controller file lookup
      *
      * @return array
      */
-    public function getControllerDirectory();
+    public function getControllerDirectory ();
 
     /**
      * Dispatches a request object to a controller/action.  If the action
@@ -169,7 +170,8 @@ interface Dispatcher
      * @param  \Zend\Controller\Response\AbstractResponse $response
      * @return void
      */
-    public function dispatch(Request\AbstractRequest $request, Response\AbstractResponse $response);
+    public function dispatch (Request\AbstractRequest $request, 
+    Response\AbstractResponse $response);
 
     /**
      * Whether or not a given module is valid
@@ -177,28 +179,28 @@ interface Dispatcher
      * @param string $module
      * @return boolean
      */
-    public function isValidModule($module);
+    public function isValidModule ($module);
 
     /**
      * Retrieve the default module name
      *
      * @return string
      */
-    public function getDefaultModule();
+    public function getDefaultModule ();
 
     /**
      * Retrieve the default controller name
      *
      * @return string
      */
-    public function getDefaultControllerName();
+    public function getDefaultControllerName ();
 
     /**
      * Retrieve the default action
      *
      * @return string
      */
-    public function getDefaultAction();
+    public function getDefaultAction ();
 
     /**
      * Set helper broker
@@ -206,5 +208,5 @@ interface Dispatcher
      * @param  Broker $broker 
      * @return Dispatches
      */
-    public function setHelperBroker(Broker $broker = null);
+    public function setHelperBroker (Broker $broker = null);
 }

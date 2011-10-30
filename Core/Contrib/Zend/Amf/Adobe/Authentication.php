@@ -59,11 +59,11 @@ class Authentication extends \Zend\Amf\AbstractAuthentication
      *
      * @param string $rolefile File containing XML with users and roles
      */
-    public function __construct($rolefile)
+    public function __construct ($rolefile)
     {
         $this->_acl = new \Zend\Acl\Acl();
         $xml = simplexml_load_file($rolefile);
-/*
+        /*
 Roles file format:
  <roles>
    <role id=”admin”>
@@ -74,13 +74,13 @@ Roles file format:
     </role>
 </roles>
 */
-        foreach($xml->role as $role) {
-            $this->_acl->addRole(new \Zend\Acl\Role\GenericRole((string)$role["id"]));
-            foreach($role->user as $user) {
-                $this->_users[(string)$user['name']] = array(
-                    'password' => (string)$user['password'],
-                    'role'     => (string)$role['id']
-                );
+        foreach ($xml->role as $role) {
+            $this->_acl->addRole(
+            new \Zend\Acl\Role\GenericRole((string) $role["id"]));
+            foreach ($role->user as $user) {
+                $this->_users[(string) $user['name']] = array(
+                'password' => (string) $user['password'], 
+                'role' => (string) $role['id']);
             }
         }
     }
@@ -90,7 +90,7 @@ Roles file format:
      *
      * @return \Zend\Acl\Acl
      */
-    public function getAcl()
+    public function getAcl ()
     {
         return $this->_acl;
     }
@@ -102,32 +102,27 @@ Roles file format:
      * @return Zend\Authentication\Result
      * @throws Zend\Authentication\Adapter\Exception
      */
-    public function authenticate()
+    public function authenticate ()
     {
-        if (empty($this->_username) 
-            || empty($this->_password)
-        ) {
-            throw new Authentication\Adapter\Exception\InvalidArgumentException('Username/password should be set');
+        if (empty($this->_username) || empty($this->_password)) {
+            throw new Authentication\Adapter\Exception\InvalidArgumentException(
+            'Username/password should be set');
         }
-
-        if (!isset($this->_users[$this->_username])) {
+        
+        if (! isset($this->_users[$this->_username])) {
             return new Authentication\Result(
-                Authentication\Result::FAILURE_IDENTITY_NOT_FOUND,
-                null,
-                array('Username not found')
-            );
+            Authentication\Result::FAILURE_IDENTITY_NOT_FOUND, null, 
+            array('Username not found'));
         }
-
+        
         $user = $this->_users[$this->_username];
-        if($user["password"] != $this->_password) {
+        if ($user["password"] != $this->_password) {
             return new Authentication\Result(
-                Authentication\Result::FAILURE_CREDENTIAL_INVALID,
-                null,
-                array('Authentication failed')
-            );
+            Authentication\Result::FAILURE_CREDENTIAL_INVALID, null, 
+            array('Authentication failed'));
         }
-
-        $id       = new \stdClass();
+        
+        $id = new \stdClass();
         $id->role = $user["role"];
         $id->name = $this->_username;
         return new Authentication\Result(Authentication\Result::SUCCESS, $id);

@@ -41,6 +41,7 @@ class HttpException extends Exception
 {
 
     protected $_httpClientException = null;
+
     protected $_response = null;
 
     /**
@@ -50,7 +51,7 @@ class HttpException extends Exception
      * @param \Zend\Http\Client\Exception Optionally pass in a \Zend\Http\Client\Exception
      * @param \Zend\Http\Response Optionally pass in a \Zend\Http\Response
      */
-    public function __construct($message = null, $e = null, $response = null)
+    public function __construct ($message = null, $e = null, $response = null)
     {
         $this->_httpClientException = $e;
         $this->_response = $response;
@@ -62,7 +63,7 @@ class HttpException extends Exception
      *
      * @return \Zend\Http\Client\Exception
      */
-    public function getHttpClientException()
+    public function getHttpClientException ()
     {
         return $this->_httpClientException;
     }
@@ -72,7 +73,7 @@ class HttpException extends Exception
      *
      * @param \Zend\Http\Client\Exception $value
      */
-    public function setHttpClientException($value)
+    public function setHttpClientException ($value)
     {
         $this->_httpClientException = $value;
         return $this;
@@ -83,7 +84,7 @@ class HttpException extends Exception
      *
      * @param \Zend\Http\Response $response
      */
-    public function setResponse($response)
+    public function setResponse ($response)
     {
         $this->_response = $response;
         return $this;
@@ -94,7 +95,7 @@ class HttpException extends Exception
      *
      * @return \Zend\Http\Response
      */
-    public function getResponse()
+    public function getResponse ()
     {
         return $this->_response;
     }
@@ -104,7 +105,7 @@ class HttpException extends Exception
      *
      * @return string
      */
-    public function getRawResponseBody()
+    public function getRawResponseBody ()
     {
         if ($this->getResponse()) {
             $response = $this->getResponse();

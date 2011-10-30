@@ -63,7 +63,7 @@ abstract class AbstractGenerator implements Generator
      * @param bool $isSourceDirty
      * @return \Zend\Code\Generator\AbstractPhp
      */
-    public function setSourceDirty($isSourceDirty = true)
+    public function setSourceDirty ($isSourceDirty = true)
     {
         $this->isSourceDirty = ($isSourceDirty) ? true : false;
         return $this;
@@ -74,7 +74,7 @@ abstract class AbstractGenerator implements Generator
      *
      * @return bool
      */
-    public function isSourceDirty()
+    public function isSourceDirty ()
     {
         return $this->isSourceDirty;
     }
@@ -85,7 +85,7 @@ abstract class AbstractGenerator implements Generator
      * @param string|int $indentation
      * @return \Zend\Code\Generator\AbstractPhp
      */
-    public function setIndentation($indentation)
+    public function setIndentation ($indentation)
     {
         $this->indentation = $indentation;
         return $this;
@@ -96,7 +96,7 @@ abstract class AbstractGenerator implements Generator
      *
      * @return string|int
      */
-    public function getIndentation()
+    public function getIndentation ()
     {
         return $this->indentation;
     }
@@ -106,7 +106,7 @@ abstract class AbstractGenerator implements Generator
      *
      * @param string $sourceContent
      */
-    public function setSourceContent($sourceContent)
+    public function setSourceContent ($sourceContent)
     {
         $this->sourceContent = $sourceContent;
         return;
@@ -117,12 +117,12 @@ abstract class AbstractGenerator implements Generator
      *
      * @return string
      */
-    public function getSourceContent()
+    public function getSourceContent ()
     {
         return $this->sourceContent;
     }
 
-//    /**
+    //    /**
 //     * __construct()
 //     *
 //     * @param array $options
@@ -171,5 +171,6 @@ abstract class AbstractGenerator implements Generator
 //        }
 //        return $this;
 //    }
+
 
 }

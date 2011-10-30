@@ -32,6 +32,7 @@ namespace Zend\Filter;
  */
 class Int extends AbstractFilter
 {
+
     /**
      * Defined by Zend_Filter_Interface
      *
@@ -40,7 +41,7 @@ class Int extends AbstractFilter
      * @param  string $value
      * @return integer
      */
-    public function filter($value)
+    public function filter ($value)
     {
         return (int) ((string) $value);
     }

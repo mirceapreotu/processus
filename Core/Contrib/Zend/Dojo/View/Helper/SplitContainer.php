@@ -35,11 +35,12 @@ namespace Zend\Dojo\View\Helper;
  */
 class SplitContainer extends DijitContainer
 {
+
     /**
      * Dijit being used
      * @var string
      */
-    protected $_dijit  = 'dijit.layout.SplitContainer';
+    protected $_dijit = 'dijit.layout.SplitContainer';
 
     /**
      * Dojo module to use
@@ -56,12 +57,13 @@ class SplitContainer extends DijitContainer
      * @param  array $attribs HTML attributes
      * @return string
      */
-    public function __invoke($id = null, $content = '', array $params = array(), array $attribs = array())
+    public function __invoke ($id = null, $content = '', array $params = array(), 
+    array $attribs = array())
     {
         if (0 === func_num_args()) {
             return $this;
         }
-
+        
         return $this->_createLayoutContainer($id, $content, $params, $attribs);
     }
 }

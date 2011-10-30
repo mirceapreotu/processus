@@ -52,18 +52,16 @@ class BaseAttribute extends \Zend\GData\App\Extension\Element
      * @param string $text (optional) The text value of the Base attribute
      * @param string $text (optional) The type of the Base attribute
      */
-    public function __construct($name = null, $text = null, $type = null)
+    public function __construct ($name = null, $text = null, $type = null)
     {
         $this->registerAllNamespaces(\Zend\GData\GBase::$namespaces);
         if ($type !== null) {
-          $attr = array('name' => 'type', 'value' => $type);
-          $typeAttr = array('type' => $attr);
-          $this->setExtensionAttributes($typeAttr);
+            $attr = array('name' => 'type', 'value' => $type);
+            $typeAttr = array('type' => $attr);
+            $this->setExtensionAttributes($typeAttr);
         }
-        parent::__construct($name,
-                            $this->_rootNamespace,
-                            $this->lookupNamespace($this->_rootNamespace),
-                            $text);
+        parent::__construct($name, $this->_rootNamespace, 
+        $this->lookupNamespace($this->_rootNamespace), $text);
     }
 
     /**
@@ -71,8 +69,9 @@ class BaseAttribute extends \Zend\GData\App\Extension\Element
      *
      * @return attribute name The requested object.
      */
-    public function getName() {
-      return $this->_rootElement;
+    public function getName ()
+    {
+        return $this->_rootElement;
     }
 
     /**
@@ -80,37 +79,40 @@ class BaseAttribute extends \Zend\GData\App\Extension\Element
      *
      * @return attribute type The requested object.
      */
-    public function getType() {
-      $typeAttr = $this->getExtensionAttributes();
-      return $typeAttr['type']['value'];
+    public function getType ()
+    {
+        $typeAttr = $this->getExtensionAttributes();
+        return $typeAttr['type']['value'];
     }
 
     /**
      * Set the 'name' of the Base attribute object:
-     *     &lt;g:[$name] type='[$type]'&gt;[$value]&lt;/g:[$name]&gt;
+     * &lt;g:[$name] type='[$type]'&gt;[$value]&lt;/g:[$name]&gt;
      *
      * @param \Zend\GData\App\Extension\Element $attribute The attribute object
      * @param string $name The name of the Base attribute
      * @return Zend_Gdata_Extension_ItemEntry Provides a fluent interface
      */
-    public function setName($name) {
-      $this->_rootElement = $name;
-      return $this;
+    public function setName ($name)
+    {
+        $this->_rootElement = $name;
+        return $this;
     }
 
     /**
      * Set the 'type' of the Base attribute object:
-     *     &lt;g:[$name] type='[$type]'&gt;[$value]&lt;/g:[$name]&gt;
+     * &lt;g:[$name] type='[$type]'&gt;[$value]&lt;/g:[$name]&gt;
      *
      * @param \Zend\GData\App\Extension\Element $attribute The attribute object
      * @param string $type The type of the Base attribute
      * @return Zend_Gdata_Extension_ItemEntry Provides a fluent interface
      */
-    public function setType($type) {
-      $attr = array('name' => 'type', 'value' => $type);
-      $typeAttr = array('type' => $attr);
-      $this->setExtensionAttributes($typeAttr);
-      return $this;
+    public function setType ($type)
+    {
+        $attr = array('name' => 'type', 'value' => $type);
+        $typeAttr = array('type' => $attr);
+        $this->setExtensionAttributes($typeAttr);
+        return $this;
     }
 
 }

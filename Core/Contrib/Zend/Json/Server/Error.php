@@ -32,31 +32,32 @@ namespace Zend\Json\Server;
  */
 class Error
 {
-    const ERROR_PARSE           = -32768;
-    const ERROR_INVALID_REQUEST = -32600;
-    const ERROR_INVALID_METHOD  = -32601;
-    const ERROR_INVALID_PARAMS  = -32602;
-    const ERROR_INTERNAL        = -32603;
-    const ERROR_OTHER           = -32000;
+
+    const ERROR_PARSE = - 32768;
+
+    const ERROR_INVALID_REQUEST = - 32600;
+
+    const ERROR_INVALID_METHOD = - 32601;
+
+    const ERROR_INVALID_PARAMS = - 32602;
+
+    const ERROR_INTERNAL = - 32603;
+
+    const ERROR_OTHER = - 32000;
 
     /**
      * Allowed error codes
      * @var array
      */
-    protected $_allowedCodes = array(
-        self::ERROR_PARSE,
-        self::ERROR_INVALID_REQUEST,
-        self::ERROR_INVALID_METHOD,
-        self::ERROR_INVALID_PARAMS,
-        self::ERROR_INTERNAL,
-        self::ERROR_OTHER,
-    );
+    protected $_allowedCodes = array(self::ERROR_PARSE, 
+    self::ERROR_INVALID_REQUEST, self::ERROR_INVALID_METHOD, 
+    self::ERROR_INVALID_PARAMS, self::ERROR_INTERNAL, self::ERROR_OTHER);
 
     /**
      * Current code
      * @var int
      */
-    protected $_code = -32000;
+    protected $_code = - 32000;
 
     /**
      * Error data
@@ -78,11 +79,11 @@ class Error
      * @param  mixed $data
      * @return void
      */
-    public function __construct($message = null, $code = -32000, $data = null)
+    public function __construct ($message = null, $code = -32000, $data = null)
     {
         $this->setMessage($message)
-             ->setCode($code)
-             ->setData($data);
+            ->setCode($code)
+            ->setData($data);
     }
 
     /**
@@ -91,19 +92,19 @@ class Error
      * @param  int $code
      * @return \Zend\Json\Server\Error
      */
-    public function setCode($code)
+    public function setCode ($code)
     {
-        if (!is_scalar($code)) {
+        if (! is_scalar($code)) {
             return $this;
         }
-
+        
         $code = (int) $code;
         if (in_array($code, $this->_allowedCodes)) {
             $this->_code = $code;
-        } elseif (in_array($code, range(-32099, -32000))) {
+        } elseif (in_array($code, range(- 32099, - 32000))) {
             $this->_code = $code;
         }
-
+        
         return $this;
     }
 
@@ -112,7 +113,7 @@ class Error
      *
      * @return int|null
      */
-    public function getCode()
+    public function getCode ()
     {
         return $this->_code;
     }
@@ -123,12 +124,12 @@ class Error
      * @param  string $message
      * @return \Zend\Json\Server\Error
      */
-    public function setMessage($message)
+    public function setMessage ($message)
     {
-        if (!is_scalar($message)) {
+        if (! is_scalar($message)) {
             return $this;
         }
-
+        
         $this->_message = (string) $message;
         return $this;
     }
@@ -138,7 +139,7 @@ class Error
      *
      * @return string
      */
-    public function getMessage()
+    public function getMessage ()
     {
         return $this->_message;
     }
@@ -149,7 +150,7 @@ class Error
      * @param  mixed $data
      * @return \Zend\Json\Server\Error
      */
-    public function setData($data)
+    public function setData ($data)
     {
         $this->_data = $data;
         return $this;
@@ -160,7 +161,7 @@ class Error
      *
      * @return mixed
      */
-    public function getData()
+    public function getData ()
     {
         return $this->_data;
     }
@@ -170,13 +171,10 @@ class Error
      *
      * @return array
      */
-    public function toArray()
+    public function toArray ()
     {
-        return array(
-            'code'    => $this->getCode(),
-            'message' => $this->getMessage(),
-            'data'    => $this->getData(),
-        );
+        return array('code' => $this->getCode(), 
+        'message' => $this->getMessage(), 'data' => $this->getData());
     }
 
     /**
@@ -184,7 +182,7 @@ class Error
      *
      * @return string
      */
-    public function toJson()
+    public function toJson ()
     {
         return \Zend\Json\Json::encode($this->toArray());
     }
@@ -194,7 +192,7 @@ class Error
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->toJson();
     }

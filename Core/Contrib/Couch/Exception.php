@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP-on-Couch
  *
@@ -19,37 +20,38 @@
  */
 class Couch_Exception extends Exception
 {
-	// couchDB response once parsed
-	protected $couch_response = array();
 
-	/**
-	 *class constructor
-	 *
-	 * @param string $raw_response HTTP response from the CouchDB server
-	 */
-	function __construct($raw_response)
-	{
-		$this->couch_response = Couch_Db::parseRawResponse($raw_response);
-		if (is_object($this->couch_response['body']) and isset($this->couch_response['body']->reason)) {
-			$message = $this->couch_response['status_message'] . ' - ' . $this->couch_response['body']->reason;
-		}
-		else
-		{
-			$message = $this->couch_response['status_message'];
-		}
-		parent::__construct($message, $this->couch_response['status_code']);
-	}
+    // couchDB response once parsed
+    protected $couch_response = array();
 
-	/**
-	 * returns CouchDB server response body (if any)
-	 *
-	 * if the response's "Content-Type" is set to "application/json", the
-	 * body is json_decode()d
-	 *
-	 * @return string|object|null CouchDB server response
-	 */
-	function getBody()
-	{
-		return $this->couch_response['body'];
-	}
+    /**
+     *class constructor
+     *
+     * @param string $raw_response HTTP response from the CouchDB server
+     */
+    function __construct ($raw_response)
+    {
+        $this->couch_response = Couch_Db::parseRawResponse($raw_response);
+        if (is_object($this->couch_response['body']) and
+         isset($this->couch_response['body']->reason)) {
+            $message = $this->couch_response['status_message'] . ' - ' .
+             $this->couch_response['body']->reason;
+        } else {
+            $message = $this->couch_response['status_message'];
+        }
+        parent::__construct($message, $this->couch_response['status_code']);
+    }
+
+    /**
+     * returns CouchDB server response body (if any)
+     *
+     * if the response's "Content-Type" is set to "application/json", the
+     * body is json_decode()d
+     *
+     * @return string|object|null CouchDB server response
+     */
+    function getBody ()
+    {
+        return $this->couch_response['body'];
+    }
 }

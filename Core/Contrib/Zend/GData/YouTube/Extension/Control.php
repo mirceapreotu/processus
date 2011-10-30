@@ -47,7 +47,7 @@ class Control extends \Zend\GData\App\Extension\Control
      * @param \Zend\GData\App\Extension\Draft $draft
      * @param \Zend\GData\YouTube\Extension\State $state
      */
-    public function __construct($draft = null, $state = null)
+    public function __construct ($draft = null, $state = null)
     {
         $this->registerAllNamespaces(\Zend\GData\YouTube::$namespaces);
         parent::__construct($draft);
@@ -64,11 +64,12 @@ class Control extends \Zend\GData\App\Extension\Control
      * @return DOMElement The DOMElement representing this element and all
      * child properties.
      */
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_state != null) {
-            $element->appendChild($this->_state->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_state->getDOM($element->ownerDocument));
         }
         return $element;
     }
@@ -79,18 +80,18 @@ class Control extends \Zend\GData\App\Extension\Control
      *
      * @param DOMNode $child The DOMNode to process
      */
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('yt') . ':' . 'state':
-            $state = new State();
-            $state->transferFromDOM($child);
-            $this->_state = $state;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('yt') . ':' . 'state':
+                $state = new State();
+                $state->transferFromDOM($child);
+                $this->_state = $state;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
@@ -99,7 +100,7 @@ class Control extends \Zend\GData\App\Extension\Control
      *
      * @return \Zend\GData\YouTube\Extension\State The state element.
      */
-    public function getState()
+    public function getState ()
     {
         return $this->_state;
     }
@@ -110,20 +111,20 @@ class Control extends \Zend\GData\App\Extension\Control
      * @param \Zend\GData\YouTube\Extension\State $value The desired value for this attribute.
      * @return Zend_YouTube_Extension_Control The element being modified.
      */
-    public function setState($value)
+    public function setState ($value)
     {
         $this->_state = $value;
         return $this;
     }
 
     /**
-    * Get the value of this element's state attribute.
-    *
-    * @return string The state's text value
-    */
-    public function getStateValue()
+     * Get the value of this element's state attribute.
+     *
+     * @return string The state's text value
+     */
+    public function getStateValue ()
     {
-      return $this->getState()->getText();
+        return $this->getState()->getText();
     }
 
 }

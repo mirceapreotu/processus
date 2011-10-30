@@ -17,23 +17,23 @@
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
- 
+
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Writer\Renderer\Feed;
 use Zend\Feed\Writer\Renderer;
 use Zend\Feed\Writer;
 
 /**
-* @uses DOMDocument
-* @uses \Zend\Feed\Writer\Renderer\Feed\Atom\AtomAbstract
-* @uses \Zend\Feed\Writer\Renderer\RendererInterface
-* @category Zend
-* @package Zend_Feed_Writer
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @uses DOMDocument
+ * @uses \Zend\Feed\Writer\Renderer\Feed\Atom\AtomAbstract
+ * @uses \Zend\Feed\Writer\Renderer\RendererInterface
+ * @category Zend
+ * @package Zend_Feed_Writer
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 class AtomSource extends AtomAbstract implements Renderer\Renderer
 {
 
@@ -47,15 +47,15 @@ class AtomSource extends AtomAbstract implements Renderer\Renderer
     {
         parent::__construct($container);
     }
-    
+
     /**
      * Render Atom Feed Metadata (Source element)
      * 
      * @return \Zend\Feed\Writer\Renderer\Feed\Atom
      */
-    public function render()
+    public function render ()
     {
-        if (!$this->_container->getEncoding()) {
+        if (! $this->_container->getEncoding()) {
             $this->_container->setEncoding('UTF-8');
         }
         $this->_dom = new \DOMDocument('1.0', $this->_container->getEncoding());
@@ -85,7 +85,7 @@ class AtomSource extends AtomAbstract implements Renderer\Renderer
         }
         return $this;
     }
-    
+
     /**
      * Set feed generator string
      * 
@@ -93,12 +93,12 @@ class AtomSource extends AtomAbstract implements Renderer\Renderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setGenerator(\DOMDocument $dom, \DOMElement $root)
+    protected function _setGenerator (\DOMDocument $dom,\DOMElement $root)
     {
-        if(!$this->getDataContainer()->getGenerator()) {
+        if (! $this->getDataContainer()->getGenerator()) {
             return;
         }
-
+        
         $gdata = $this->getDataContainer()->getGenerator();
         $generator = $dom->createElement('generator');
         $root->appendChild($generator);

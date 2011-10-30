@@ -36,32 +36,25 @@ abstract class Cache
      *
      * @var array
      */
-    public static $standardFrontends = array('Core', 'Output', 'Class', 'File', 'Function', 'Page');
+    public static $standardFrontends = array('Core', 'Output', 'Class', 'File', 
+    'Function', 'Page');
 
     /**
      * Standard backends
      *
      * @var array
      */
-    public static $standardBackends = array(
-        'Apc', 
-        'BlackHole',
-        'File', 
-        'Memcached', 
-        'Sqlite', 
-        'TwoLevels',
-        'Xcache', 
-        'ZendPlatform', 
-        'ZendServer\Disk',
-        'ZendServer\ShMem',
-    );
+    public static $standardBackends = array('Apc', 'BlackHole', 'File', 
+    'Memcached', 'Sqlite', 'TwoLevels', 'Xcache', 'ZendPlatform', 
+    'ZendServer\Disk', 'ZendServer\ShMem');
 
     /**
      * Standard backends which implement the ExtendedInterface
      *
      * @var array
      */
-    public static $standardExtendedBackends = array('File', 'Apc', 'TwoLevels', 'Memcached', 'Sqlite');
+    public static $standardExtendedBackends = array('File', 'Apc', 'TwoLevels', 
+    'Memcached', 'Sqlite');
 
     /**
      * Only for backward compatibility (may be removed in next major release)
@@ -69,7 +62,8 @@ abstract class Cache
      * @var array
      * @deprecated
      */
-    public static $availableFrontends = array('Core', 'Output', 'Class', 'File', 'Function', 'Page');
+    public static $availableFrontends = array('Core', 'Output', 'Class', 'File', 
+    'Function', 'Page');
 
     /**
      * Only for backward compatibility (may be removed in next major release)
@@ -77,7 +71,8 @@ abstract class Cache
      * @var array
      * @deprecated
      */
-    public static $availableBackends = array('File', 'Sqlite', 'Memcached', 'Apc', 'ZendPlatform', 'Xcache', 'TwoLevels');
+    public static $availableBackends = array('File', 'Sqlite', 'Memcached', 
+    'Apc', 'ZendPlatform', 'Xcache', 'TwoLevels');
 
     /**
      * Filter to split camelCased words into individual words
@@ -87,10 +82,14 @@ abstract class Cache
     /**
      * Consts for clean() method
      */
-    const CLEANING_MODE_ALL              = 'all';
-    const CLEANING_MODE_OLD              = 'old';
-    const CLEANING_MODE_MATCHING_TAG     = 'matchingTag';
+    const CLEANING_MODE_ALL = 'all';
+
+    const CLEANING_MODE_OLD = 'old';
+
+    const CLEANING_MODE_MATCHING_TAG = 'matchingTag';
+
     const CLEANING_MODE_NOT_MATCHING_TAG = 'notMatchingTag';
+
     const CLEANING_MODE_MATCHING_ANY_TAG = 'matchingAnyTag';
 
     /**
@@ -105,21 +104,29 @@ abstract class Cache
      * @throws \Zend\Cache\Exception
      * @return Zend\Cache\Frontend
      */
-    public static function factory($frontend, $backend, $frontendOptions = array(), $backendOptions = array(), $customFrontendNaming = false, $customBackendNaming = false)
+    public static function factory ($frontend, $backend, 
+    $frontendOptions = array(), $backendOptions = array(), $customFrontendNaming = false, 
+    $customBackendNaming = false)
     {
         if (is_string($backend)) {
-            $backendObject = self::_makeBackend($backend, $backendOptions, $customBackendNaming);
+            $backendObject = self::_makeBackend($backend, $backendOptions, 
+            $customBackendNaming);
         } else {
-            if (!is_object($backend) || !in_array('Zend\\Cache\\Backend', class_implements($backend))) {
-                self::throwException('backend must be a backend name (string) or an object which implements Zend\\Cache\\Backend');
+            if (! is_object($backend) ||
+             ! in_array('Zend\\Cache\\Backend', class_implements($backend))) {
+                self::throwException(
+                'backend must be a backend name (string) or an object which implements Zend\\Cache\\Backend');
             }
             $backendObject = $backend;
         }
         if (is_string($frontend)) {
-            $frontendObject = self::_makeFrontend($frontend, $frontendOptions, $customFrontendNaming);
+            $frontendObject = self::_makeFrontend($frontend, $frontendOptions, 
+            $customFrontendNaming);
         } else {
-            if (!is_object($frontend) || !in_array('Zend\\Cache\\Frontend', class_implements($frontend))) {
-                self::throwException('frontend must be a frontend name (string) or an object');
+            if (! is_object($frontend) ||
+             ! in_array('Zend\\Cache\\Frontend', class_implements($frontend))) {
+                self::throwException(
+                'frontend must be a frontend name (string) or an object');
             }
             $frontendObject = $frontend;
         }
@@ -135,20 +142,21 @@ abstract class Cache
      * @param boolean $customBackendNaming
      * @return \Zend\Cache\Backend
      */
-    public static function _makeBackend($backend, $backendOptions, $customBackendNaming = false)
+    public static function _makeBackend ($backend, $backendOptions, 
+    $customBackendNaming = false)
     {
-        if (!$customBackendNaming) {
-            $backend  = self::_normalizeName($backend);
+        if (! $customBackendNaming) {
+            $backend = self::_normalizeName($backend);
         }
         if (in_array($backend, self::$standardBackends)) {
             // we use a standard backend
             $backendClass = 'Zend\Cache\Backend\\' . $backend;
         } else {
             // we use a custom backend
-            if (!preg_match('~^[\w\\\\]+$~D', $backend)) {
+            if (! preg_match('~^[\w\\\\]+$~D', $backend)) {
                 self::throwException("Invalid backend name [$backend]");
             }
-            if (!$customBackendNaming) {
+            if (! $customBackendNaming) {
                 // we use this boolean to avoid an API break
                 $backendClass = 'Zend\Cache\Backend\\' . $backend;
             } else {
@@ -156,7 +164,7 @@ abstract class Cache
             }
         }
         $backend = new $backendClass($backendOptions);
-        if (!$backend instanceof Backend) {
+        if (! $backend instanceof Backend) {
             self::throwException('Backend must implement Zend\\Cache\\Backend');
         }
         return $backend;
@@ -170,30 +178,34 @@ abstract class Cache
      * @param boolean $customFrontendNaming
      * @return Zend_Cache_Core|Zend_Cache_Frontend
      */
-    public static function _makeFrontend($frontend, $frontendOptions = array(), $customFrontendNaming = false)
+    public static function _makeFrontend ($frontend, $frontendOptions = array(), 
+    $customFrontendNaming = false)
     {
-        if (!$customFrontendNaming) {
+        if (! $customFrontendNaming) {
             $frontend = self::_normalizeName($frontend);
         }
         if (in_array($frontend, self::$standardFrontends)) {
             // we use a standard frontend
             // For perfs reasons, with frontend == 'Core', we can interact with the Core itself
-            $frontendClass = 'Zend\Cache\Frontend\\' . $frontend;
+            $frontendClass = 'Zend\Cache\Frontend\\' .
+             $frontend;
         } else {
             // we use a custom frontend
-            if (!preg_match('~^[\w\\\\]+$~D', $frontend)) {
+            if (! preg_match('~^[\w\\\\]+$~D', $frontend)) {
                 self::throwException("Invalid frontend name [$frontend]");
             }
-            if (!$customFrontendNaming) {
+            if (! $customFrontendNaming) {
                 // we use this boolean to avoid an API break
-                $frontendClass = 'Zend\Cache\Frontend\\' . $frontend;
+                $frontendClass = 'Zend\Cache\Frontend\\' .
+                 $frontend;
             } else {
                 $frontendClass = $frontend;
             }
         }
         $frontend = new $frontendClass($frontendOptions);
-        if (!$frontend instanceof Frontend) {
-            self::throwException('Frontend must be implement Zend\\Cache\\Frontend');
+        if (! $frontend instanceof Frontend) {
+            self::throwException(
+            'Frontend must be implement Zend\\Cache\\Frontend');
         }
         return $frontend;
     }
@@ -205,12 +217,12 @@ abstract class Cache
      * @param  string $msg  Message for the exception
      * @throws \Zend\Cache\Exception
      */
-    public static function throwException($msg, \Exception $e = null)
+    public static function throwException ($msg,\Exception $e = null)
     {
         throw new Exception($msg, 0, $e);
     }
 
-    protected static function _getCamelCaseFilter()
+    protected static function _getCamelCaseFilter ()
     {
         if (null === self::$_camelCaseFilter) {
             self::$_camelCaseFilter = new \Zend\Filter\Word\CamelCaseToSeparator();
@@ -224,7 +236,7 @@ abstract class Cache
      * @param  string $name  Name to normalize
      * @return string
      */
-    protected static function _normalizeName($name)
+    protected static function _normalizeName ($name)
     {
         $filter = self::_getCamelCaseFilter();
         $name = $filter($name);
@@ -234,7 +246,7 @@ abstract class Cache
         if (stripos($name, 'ZendServer') === 0) {
             $name = 'ZendServer\\' . substr($name, strlen('ZendServer'));
         }
-
+        
         return $name;
     }
 
@@ -248,9 +260,9 @@ abstract class Cache
      * @param string   $filename
      * @return boolean
      */
-    private static function _isReadable($filename)
+    private static function _isReadable ($filename)
     {
-        if (!$fh = @fopen($filename, 'r', true)) {
+        if (! $fh = @fopen($filename, 'r', true)) {
             return false;
         }
         @fclose($fh);

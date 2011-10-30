@@ -77,32 +77,34 @@ class MediaMimeStream
      * Create a new MimeMediaStream object.
      *
      * @param string $xmlString The string corresponding to the XML section
-     *               of the message, typically an atom entry or feed.
+     * of the message, typically an atom entry or feed.
      * @param string $filePath The path to the file that constitutes the binary
-     *               part of the message.
+     * part of the message.
      * @param string $fileContentType The valid internet media type of the file.
      * @throws \Zend\GData\App\IOException If the file cannot be read or does
-     *         not exist. Also if mbstring.func_overload has been set > 1.
+     * not exist. Also if mbstring.func_overload has been set > 1.
      */
-    public function __construct($xmlString = null, $filePath = null,
-        $fileContentType = null)
+    public function __construct ($xmlString = null, $filePath = null, 
+    $fileContentType = null)
     {
-        if (!file_exists($filePath) || !is_readable($filePath)) {
-            throw new App\IOException('File to be uploaded at ' .
-                $filePath . ' does not exist or is not readable.');
+        if (! file_exists($filePath) || ! is_readable($filePath)) {
+            throw new App\IOException(
+            'File to be uploaded at ' . $filePath .
+             ' does not exist or is not readable.');
         }
-
+        
         $this->_fileHandle = fopen($filePath, 'rb', TRUE);
-        $this->_boundaryString = '=_' . md5(microtime(1) . rand(1,20));
+        $this->_boundaryString = '=_' . md5(microtime(1) . rand(1, 20));
         $entry = $this->wrapEntry($xmlString, $fileContentType);
-        $closingBoundary = new MimeBodyString("\r\n--{$this->_boundaryString}--\r\n");
+        $closingBoundary = new MimeBodyString(
+        "\r\n--{$this->_boundaryString}--\r\n");
         $file = new MimeFile($this->_fileHandle);
         $this->_parts = array($entry, $file, $closingBoundary);
-
+        
         $fileSize = filesize($filePath);
-        $this->_totalSize = $entry->getSize() + $fileSize
-          + $closingBoundary->getSize();
-
+        $this->_totalSize = $entry->getSize() + $fileSize +
+         $closingBoundary->getSize();
+    
     }
 
     /**
@@ -110,7 +112,7 @@ class MediaMimeStream
      *
      * @return void
      */
-    private function wrapEntry($entry, $fileMimeType)
+    private function wrapEntry ($entry, $fileMimeType)
     {
         $wrappedEntry = "--{$this->_boundaryString}\r\n";
         $wrappedEntry .= "Content-Type: application/atom+xml\r\n\r\n";
@@ -124,28 +126,28 @@ class MediaMimeStream
      * Read a specific chunk of the the MIME multipart message.
      *
      * @param integer $bufferSize The size of the chunk that is to be read,
-     *                            must be lower than MAX_BUFFER_SIZE.
+     * must be lower than MAX_BUFFER_SIZE.
      * @return string A corresponding piece of the message. This could be
-     *                binary or regular text.
+     * binary or regular text.
      */
-    public function read($bytesRequested)
+    public function read ($bytesRequested)
     {
-        if($this->_currentPart >= count($this->_parts)) {
-          return FALSE;
+        if ($this->_currentPart >= count($this->_parts)) {
+            return FALSE;
         }
-
+        
         $activePart = $this->_parts[$this->_currentPart];
         $buffer = $activePart->read($bytesRequested);
-
-        while(strlen($buffer) < $bytesRequested) {
-          $this->_currentPart += 1;
-          $nextBuffer = $this->read($bytesRequested - strlen($buffer));
-          if($nextBuffer === FALSE) {
-            break;
-          }
-          $buffer .= $nextBuffer;
+        
+        while (strlen($buffer) < $bytesRequested) {
+            $this->_currentPart += 1;
+            $nextBuffer = $this->read($bytesRequested - strlen($buffer));
+            if ($nextBuffer === FALSE) {
+                break;
+            }
+            $buffer .= $nextBuffer;
         }
-
+        
         return $buffer;
     }
 
@@ -154,7 +156,7 @@ class MediaMimeStream
      *
      * @return integer Total size of the message to be sent.
      */
-    public function getTotalSize()
+    public function getTotalSize ()
     {
         return $this->_totalSize;
     }
@@ -164,7 +166,7 @@ class MediaMimeStream
      *
      * @return void
      */
-    public function closeFileHandle()
+    public function closeFileHandle ()
     {
         if ($this->_fileHandle !== null) {
             fclose($this->_fileHandle);
@@ -176,10 +178,10 @@ class MediaMimeStream
      *
      * @return string A valid HTTP Content-Type header.
      */
-    public function getContentType()
+    public function getContentType ()
     {
-        return 'multipart/related;boundary="' .
-            $this->_boundaryString . '"' . "\r\n";
+        return 'multipart/related;boundary="' . $this->_boundaryString . '"' .
+         "\r\n";
     }
 
 }

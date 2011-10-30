@@ -23,8 +23,7 @@
  */
 namespace Zend\Code\Reflection;
 
-use ReflectionParameter,
-    Zend\Code\Reflection;
+use ReflectionParameter, Zend\Code\Reflection;
 
 /**
  * @uses       ReflectionParameter
@@ -36,6 +35,7 @@ use ReflectionParameter,
  */
 class ParameterReflection extends ReflectionParameter implements Reflection
 {
+
     /**
      * @var bool
      */
@@ -47,9 +47,9 @@ class ParameterReflection extends ReflectionParameter implements Reflection
      * @param  string $reflectionClass Reflection class to use
      * @return \Zend\Code\Reflection\ReflectionClass
      */
-    public function getDeclaringClass()
+    public function getDeclaringClass ()
     {
-        $phpReflection  = parent::getDeclaringClass();
+        $phpReflection = parent::getDeclaringClass();
         $zendReflection = new ClassReflection($phpReflection->getName());
         unset($phpReflection);
         return $zendReflection;
@@ -61,9 +61,9 @@ class ParameterReflection extends ReflectionParameter implements Reflection
      * @param  string $reflectionClass Reflection class to use
      * @return \Zend\Code\Reflection\ReflectionClass
      */
-    public function getClass()
+    public function getClass ()
     {
-        $phpReflection  = parent::getClass();
+        $phpReflection = parent::getClass();
         if ($phpReflection == null) {
             return null;
         }
@@ -78,11 +78,12 @@ class ParameterReflection extends ReflectionParameter implements Reflection
      * @param  string $reflectionClass Reflection class to use
      * @return Zend_Reflection_Function|\MethodReflection\Code\Reflection\ReflectionMethod
      */
-    public function getDeclaringFunction($reflectionClass = null)
+    public function getDeclaringFunction ($reflectionClass = null)
     {
         $phpReflection = parent::getDeclaringFunction();
         if ($phpReflection instanceof \ReflectionMethod) {
-            $zendReflection = new MethodReflection($this->getDeclaringClass()->getName(), $phpReflection->getName());
+            $zendReflection = new MethodReflection(
+            $this->getDeclaringClass()->getName(), $phpReflection->getName());
         } else {
             $zendReflection = new FunctionReflection($phpReflection->getName());
         }
@@ -95,26 +96,26 @@ class ParameterReflection extends ReflectionParameter implements Reflection
      *
      * @return string
      */
-    public function getType()
+    public function getType ()
     {
         if ($docblock = $this->getDeclaringFunction()->getDocblock()) {
             $params = $docblock->getTags('param');
-
+            
             if (isset($params[$this->getPosition()])) {
                 return $params[$this->getPosition()]->getType();
             }
-
+        
         }
-
+        
         return null;
     }
 
-    public function toString()
+    public function toString ()
     {
         return parent::__toString();
     }
 
-    public function __toString()
+    public function __toString ()
     {
         return parent::__toString();
     }

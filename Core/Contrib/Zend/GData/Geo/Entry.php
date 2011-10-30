@@ -45,46 +45,46 @@ class Entry extends \Zend\GData\Entry
 
     protected $_where = null;
 
-    public function __construct($element = null)
+    public function __construct ($element = null)
     {
         $this->registerAllNamespaces(Geo::$namespaces);
         parent::__construct($element);
     }
 
-    public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null)
+    public function getDOM ($doc = null, $majorVersion = 1, $minorVersion = null)
     {
         $element = parent::getDOM($doc, $majorVersion, $minorVersion);
         if ($this->_where != null) {
-            $element->appendChild($this->_where->getDOM($element->ownerDocument));
+            $element->appendChild(
+            $this->_where->getDOM($element->ownerDocument));
         }
         return $element;
     }
 
-    protected function takeChildFromDOM($child)
+    protected function takeChildFromDOM ($child)
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName) {
-        case $this->lookupNamespace('georss') . ':' . 'where':
-            $where = new Extension\GeoRssWhere();
-            $where->transferFromDOM($child);
-            $this->_where = $where;
-            break;
-        default:
-            parent::takeChildFromDOM($child);
-            break;
+            case $this->lookupNamespace('georss') . ':' . 'where':
+                $where = new Extension\GeoRssWhere();
+                $where->transferFromDOM($child);
+                $this->_where = $where;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
+                break;
         }
     }
 
-    public function getWhere()
+    public function getWhere ()
     {
         return $this->_where;
     }
 
-    public function setWhere($value)
+    public function setWhere ($value)
     {
         $this->_where = $value;
         return $this;
     }
-
 
 }

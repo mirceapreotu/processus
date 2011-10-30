@@ -35,20 +35,21 @@ namespace Zend\Controller\Request;
 class Simple extends AbstractRequest
 {
 
-    public function __construct($action = null, $controller = null, $module = null, array $params = array())
+    public function __construct ($action = null, $controller = null, $module = null, 
+    array $params = array())
     {
         if ($action) {
             $this->setActionName($action);
         }
-
+        
         if ($controller) {
             $this->setControllerName($controller);
         }
-
+        
         if ($module) {
             $this->setModuleName($module);
         }
-
+        
         if ($params) {
             $this->setParams($params);
         }

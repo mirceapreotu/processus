@@ -35,8 +35,7 @@ namespace Zend\GData\Books\Extension;
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class PreviewLink extends
-    BooksLink
+class PreviewLink extends BooksLink
 {
 
     /**
@@ -50,8 +49,8 @@ class PreviewLink extends
      * @param string|null $title Human-readable resource title
      * @param string|null $length Resource length in octets
      */
-    public function __construct($href = null, $rel = null, $type = null,
-            $hrefLang = null, $title = null, $length = null)
+    public function __construct ($href = null, $rel = null, $type = null, $hrefLang = null, 
+    $title = null, $length = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Books::$namespaces);
         parent::__construct($href, $rel, $type, $hrefLang, $title, $length);

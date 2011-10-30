@@ -19,74 +19,75 @@
  */
 
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Reader;
 
 /**
-* @category Zend
-* @package Zend_Feed_Reader
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @category Zend
+ * @package Zend_Feed_Reader
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 interface Entry
 {
+
     /**
      * Get the specified author
      *
      * @param  int $index
      * @return string|null
      */
-    public function getAuthor($index = 0);
+    public function getAuthor ($index = 0);
 
     /**
      * Get an array with feed authors
      *
      * @return array
      */
-    public function getAuthors();
+    public function getAuthors ();
 
     /**
      * Get the entry content
      *
      * @return string
      */
-    public function getContent();
+    public function getContent ();
 
     /**
      * Get the entry creation date
      *
      * @return string
      */
-    public function getDateCreated();
+    public function getDateCreated ();
 
     /**
      * Get the entry modification date
      *
      * @return string
      */
-    public function getDateModified();
+    public function getDateModified ();
 
     /**
      * Get the entry description
      *
      * @return string
      */
-    public function getDescription();
+    public function getDescription ();
 
     /**
      * Get the entry enclosure
      *
      * @return stdClass
      */
-    public function getEnclosure();
+    public function getEnclosure ();
 
     /**
      * Get the entry ID
      *
      * @return string
      */
-    public function getId();
+    public function getId ();
 
     /**
      * Get a specific link
@@ -94,54 +95,54 @@ interface Entry
      * @param  int $index
      * @return string
      */
-    public function getLink($index = 0);
+    public function getLink ($index = 0);
 
     /**
      * Get all links
      *
      * @return array
      */
-    public function getLinks();
+    public function getLinks ();
 
     /**
      * Get a permalink to the entry
      *
      * @return string
      */
-    public function getPermalink();
+    public function getPermalink ();
 
     /**
      * Get the entry title
      *
      * @return string
      */
-    public function getTitle();
+    public function getTitle ();
 
     /**
      * Get the number of comments/replies for current entry
      *
      * @return integer
      */
-    public function getCommentCount();
+    public function getCommentCount ();
 
     /**
      * Returns a URI pointing to the HTML page where comments can be made on this entry
      *
      * @return string
      */
-    public function getCommentLink();
+    public function getCommentLink ();
 
     /**
      * Returns a URI pointing to a feed of all comments for this entry
      *
      * @return string
      */
-    public function getCommentFeedLink();
-    
+    public function getCommentFeedLink ();
+
     /**
      * Get all categories
      *
      * @return Zend_Feed_Reader_Collection_Category
      */
-    public function getCategories();
+    public function getCategories ();
 }

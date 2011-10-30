@@ -23,8 +23,7 @@
  * @namespace
  */
 namespace Zend\Cache\Backend;
-use Zend\Cache,
-    Zend\Cache\Backend;
+use Zend\Cache, Zend\Cache\Backend;
 
 /**
  * @uses       \Zend\Cache\Cache
@@ -37,24 +36,19 @@ use Zend\Cache,
  */
 class StaticBackend extends AbstractBackend implements Backend
 {
+
     const INNER_CACHE_NAME = 'zend_cache_backend_static_tagcache';
 
     /**
      * StaticBackend backend options
      * @var array
      */
-    protected $_options = array(
-        'public_dir'            => null,
-        'sub_dir'               => 'html',
-        'file_extension'        => '.html',
-        'index_filename'        => 'index',
-        'file_locking'          => true,
-        'cache_file_umask'      => 0600,
-        'cache_directory_umask' => 0700,
-        'debug_header'          => false,
-        'tag_cache'             => null,
-        'disable_caching'       => false
-    );
+    protected $_options = array('public_dir' => null, 
+    'sub_dir' => 'html', 'file_extension' => '.html', 
+    'index_filename' => 'index', 'file_locking' => true, 
+    'cache_file_umask' => 0600, 'cache_directory_umask' => 0700, 
+    'debug_header' => false, 'tag_cache' => null, 
+    'disable_caching' => false);
 
     /**
      * Cache for handling tags
@@ -77,7 +71,7 @@ class StaticBackend extends AbstractBackend implements Backend
      * @param  mixed $value
      * @return \Zend\Cache\Backend\StaticBackend
      */
-    public function setOption($name, $value)
+    public function setOption ($name, $value)
     {
         if ($name == 'tag_cache') {
             $this->setInnerCache($value);
@@ -94,14 +88,15 @@ class StaticBackend extends AbstractBackend implements Backend
      * @param  string $name
      * @return mixed
      */
-    public function getOption($name = array())
+    public function getOption ($name = array())
     {
         if ($name == 'tag_cache') {
             return $this->getInnerCache();
-        } else if ($name == 'lifetime') {
-            return parent::getLifetime();
-        }
-
+        } else 
+            if ($name == 'lifetime') {
+                return parent::getLifetime();
+            }
+        
         return parent::getOption($name);
     }
 
@@ -114,31 +109,34 @@ class StaticBackend extends AbstractBackend implements Backend
      * @param  boolean $doNotTestCacheValidity If set to true, the cache validity won't be tested
      * @return string|false cached datas
      */
-    public function load($id, $doNotTestCacheValidity = false)
+    public function load ($id, $doNotTestCacheValidity = false)
     {
         if (empty($id)) {
             $id = $this->_detectId();
         } else {
             $id = $this->_decodeId($id);
         }
-        if (!$this->_verifyPath($id)) {
-            Cache\Cache::throwException('Invalid cache id: does not match expected public_dir path');
+        if (! $this->_verifyPath($id)) {
+            Cache\Cache::throwException(
+            'Invalid cache id: does not match expected public_dir path');
         }
         if ($doNotTestCacheValidity) {
-            $this->_log("Zend_Cache_Backend_Static::load() : \$doNotTestCacheValidity=true is unsupported by the StaticBackend backend");
+            $this->_log(
+            "Zend_Cache_Backend_Static::load() : \$doNotTestCacheValidity=true is unsupported by the StaticBackend backend");
         }
-
+        
         $fileName = basename($id);
         if (empty($fileName)) {
             $fileName = $this->_options['index_filename'];
         }
         $pathName = $this->_options['public_dir'] . dirname($id);
-        $file     = rtrim($pathName, '/') . '/' . $fileName . $this->_options['file_extension'];
+        $file = rtrim($pathName, '/') . '/' . $fileName .
+         $this->_options['file_extension'];
         if (file_exists($file)) {
             $content = file_get_contents($file);
             return $content;
         }
-
+        
         return false;
     }
 
@@ -148,31 +146,33 @@ class StaticBackend extends AbstractBackend implements Backend
      * @param  string $id cache id
      * @return bool
      */
-    public function test($id)
+    public function test ($id)
     {
         $id = $this->_decodeId($id);
-        if (!$this->_verifyPath($id)) {
-            Cache\Cache::throwException('Invalid cache id: does not match expected public_dir path');
+        if (! $this->_verifyPath($id)) {
+            Cache\Cache::throwException(
+            'Invalid cache id: does not match expected public_dir path');
         }
-
+        
         $fileName = basename($id);
         if (empty($fileName)) {
             $fileName = $this->_options['index_filename'];
         }
-        if ($this->_tagged === null && $tagged = $this->getInnerCache()->load(self::INNER_CACHE_NAME)) {
+        if ($this->_tagged === null &&
+         $tagged = $this->getInnerCache()->load(self::INNER_CACHE_NAME)) {
             $this->_tagged = $tagged;
-        } elseif (!$this->_tagged) {
+        } elseif (! $this->_tagged) {
             return false;
         }
         $pathName = $this->_options['public_dir'] . dirname($id);
-
+        
         // Switch extension if needed
         if (isset($this->_tagged[$id])) {
             $extension = $this->_tagged[$id]['extension'];
         } else {
             $extension = $this->_options['file_extension'];
         }
-        $file     = $pathName . '/' . $fileName . $extension;
+        $file = $pathName . '/' . $fileName . $extension;
         if (file_exists($file)) {
             return true;
         }
@@ -191,7 +191,7 @@ class StaticBackend extends AbstractBackend implements Backend
      * @param  int   $specificLifetime If != false, set a specific lifetime for this cache record (null => infinite lifetime)
      * @return boolean true if no problem
      */
-    public function save($data, $id, $tags = array(), $specificLifetime = false)
+    public function save ($data, $id, $tags = array(), $specificLifetime = false)
     {
         if ($this->_options['disable_caching']) {
             return true;
@@ -202,28 +202,29 @@ class StaticBackend extends AbstractBackend implements Backend
             $extension = '.' . ltrim($data[1], '.');
             $data = $data[0];
         }
-
+        
         clearstatcache();
         if ($id === null || strlen($id) == 0) {
             $id = $this->_detectId();
         } else {
             $id = $this->_decodeId($id);
         }
-
+        
         $fileName = basename($id);
         if (empty($fileName)) {
             $fileName = $this->_options['index_filename'];
         }
-
+        
         $pathName = realpath($this->_options['public_dir']) . dirname($id);
         $this->_createDirectoriesFor($pathName);
-
+        
         if ($id === null || strlen($id) == 0) {
             $dataUnserialized = unserialize($data);
             $data = $dataUnserialized['data'];
         }
         $ext = $this->_options['file_extension'];
-        if ($extension) $ext = $extension;
+        if ($extension)
+            $ext = $extension;
         $file = rtrim($pathName, '/') . '/' . $fileName . $ext;
         if ($this->_options['file_locking']) {
             $result = file_put_contents($file, $data, LOCK_EX);
@@ -231,19 +232,21 @@ class StaticBackend extends AbstractBackend implements Backend
             $result = file_put_contents($file, $data);
         }
         @chmod($file, $this->_octdec($this->_options['cache_file_umask']));
-
-        if ($this->_tagged === null && $tagged = $this->getInnerCache()->load(self::INNER_CACHE_NAME)) {
+        
+        if ($this->_tagged === null &&
+         $tagged = $this->getInnerCache()->load(self::INNER_CACHE_NAME)) {
             $this->_tagged = $tagged;
         } elseif ($this->_tagged === null) {
             $this->_tagged = array();
         }
-        if (!isset($this->_tagged[$id])) {
+        if (! isset($this->_tagged[$id])) {
             $this->_tagged[$id] = array();
         }
-        if (!isset($this->_tagged[$id]['tags'])) {
+        if (! isset($this->_tagged[$id]['tags'])) {
             $this->_tagged[$id]['tags'] = array();
         }
-        $this->_tagged[$id]['tags'] = array_unique(array_merge($this->_tagged[$id]['tags'], $tags));
+        $this->_tagged[$id]['tags'] = array_unique(
+        array_merge($this->_tagged[$id]['tags'], $tags));
         $this->_tagged[$id]['extension'] = $ext;
         $this->getInnerCache()->save($this->_tagged, self::INNER_CACHE_NAME);
         return (bool) $result;
@@ -252,15 +255,16 @@ class StaticBackend extends AbstractBackend implements Backend
     /**
      * Recursively create the directories needed to write the static file
      */
-    protected function _createDirectoriesFor($path)
+    protected function _createDirectoriesFor ($path)
     {
-        if ( !is_dir($path)
-          && !@mkdir($path, $this->_options['cache_directory_umask'], true)) {
+        if (! is_dir($path) &&
+         ! @mkdir($path, $this->_options['cache_directory_umask'], true)) {
             $lastErr = error_get_last();
-            Zend_Cache::throwException("Can't create directory: {$lastErr['message']}");
+            Zend_Cache::throwException(
+            "Can't create directory: {$lastErr['message']}");
         }
-
-        /*
+        
+    /*
         $parts = explode('/', $path);
         $directory = '';
         foreach ($parts as $part) {
@@ -281,7 +285,7 @@ class StaticBackend extends AbstractBackend implements Backend
      * This format is the only valid one possible for the class, so it's simple
      * to just run a regular expression for the starting serialized format.
      */
-    protected function _isSerialized($data)
+    protected function _isSerialized ($data)
     {
         return preg_match("/a:2:\{i:0;s:\d+:\"/", $data);
     }
@@ -292,15 +296,17 @@ class StaticBackend extends AbstractBackend implements Backend
      * @param  string $id Cache id
      * @return boolean True if no problem
      */
-    public function remove($id)
+    public function remove ($id)
     {
-        if (!$this->_verifyPath($id)) {
-            Cache\Cache::throwException('Invalid cache id: does not match expected public_dir path');
+        if (! $this->_verifyPath($id)) {
+            Cache\Cache::throwException(
+            'Invalid cache id: does not match expected public_dir path');
         }
         $fileName = basename($id);
-        if ($this->_tagged === null && $tagged = $this->getInnerCache()->load(self::INNER_CACHE_NAME)) {
+        if ($this->_tagged === null &&
+         $tagged = $this->getInnerCache()->load(self::INNER_CACHE_NAME)) {
             $this->_tagged = $tagged;
-        } elseif (!$this->_tagged) {
+        } elseif (! $this->_tagged) {
             return false;
         }
         if (isset($this->_tagged[$id])) {
@@ -312,8 +318,8 @@ class StaticBackend extends AbstractBackend implements Backend
             $fileName = $this->_options['index_filename'];
         }
         $pathName = $this->_options['public_dir'] . dirname($id);
-        $file     = realpath($pathName) . '/' . $fileName . $extension;
-        if (!file_exists($file)) {
+        $file = realpath($pathName) . '/' . $fileName . $extension;
+        if (! file_exists($file)) {
             return false;
         }
         return unlink($file);
@@ -327,20 +333,21 @@ class StaticBackend extends AbstractBackend implements Backend
      * @param  string $id Cache id
      * @return boolean True if no problem
      */
-    public function removeRecursively($id)
+    public function removeRecursively ($id)
     {
-        if (!$this->_verifyPath($id)) {
-            Cache\Cache::throwException('Invalid cache id: does not match expected public_dir path');
+        if (! $this->_verifyPath($id)) {
+            Cache\Cache::throwException(
+            'Invalid cache id: does not match expected public_dir path');
         }
         $fileName = basename($id);
         if (empty($fileName)) {
             $fileName = $this->_options['index_filename'];
         }
-        $pathName  = $this->_options['public_dir'] . dirname($id);
-        $file      = $pathName . '/' . $fileName . $this->_options['file_extension'];
+        $pathName = $this->_options['public_dir'] . dirname($id);
+        $file = $pathName . '/' . $fileName . $this->_options['file_extension'];
         $directory = $pathName . '/' . $fileName;
         if (file_exists($directory)) {
-            if (!is_writable($directory)) {
+            if (! is_writable($directory)) {
                 return false;
             }
             foreach (new \DirectoryIterator($directory) as $file) {
@@ -353,7 +360,7 @@ class StaticBackend extends AbstractBackend implements Backend
             rmdir(dirname($path));
         }
         if (file_exists($file)) {
-            if (!is_writable($file)) {
+            if (! is_writable($file)) {
                 return false;
             }
             return unlink($file);
@@ -368,45 +375,50 @@ class StaticBackend extends AbstractBackend implements Backend
      * Zend_Cache::CLEANING_MODE_ALL (default)    => remove all cache entries ($tags is not used)
      * Zend_Cache::CLEANING_MODE_OLD              => remove too old cache entries ($tags is not used)
      * Zend_Cache::CLEANING_MODE_MATCHING_TAG     => remove cache entries matching all given tags
-     *                                               ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      * Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG => remove cache entries not {matching one of the given tags}
-     *                                               ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      * Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG => remove cache entries matching any given tags
-     *                                               ($tags can be an array of strings or a single string)
+     * ($tags can be an array of strings or a single string)
      *
      * @param  string $mode Clean mode
      * @param  array  $tags Array of tags
      * @return boolean true if no problem
      */
-    public function clean($mode = Cache\Cache::CLEANING_MODE_ALL, $tags = array())
+    public function clean ($mode = Cache\Cache::CLEANING_MODE_ALL, $tags = array())
     {
         $result = false;
         switch ($mode) {
             case Cache\Cache::CLEANING_MODE_MATCHING_TAG:
             case Cache\Cache::CLEANING_MODE_MATCHING_ANY_TAG:
                 if (empty($tags)) {
-                    throw new \InvalidArgumentException('Cannot use tag matching modes as no tags were defined');
+                    throw new \InvalidArgumentException(
+                    'Cannot use tag matching modes as no tags were defined');
                 }
-                if ($this->_tagged === null && $tagged = $this->getInnerCache()->load(self::INNER_CACHE_NAME)) {
+                if ($this->_tagged === null &&
+                 $tagged = $this->getInnerCache()->load(self::INNER_CACHE_NAME)) {
                     $this->_tagged = $tagged;
-                } elseif (!$this->_tagged) {
+                } elseif (! $this->_tagged) {
                     return true;
                 }
                 foreach ($tags as $tag) {
                     $urls = array_keys($this->_tagged);
                     foreach ($urls as $url) {
-                        if (isset($this->_tagged[$url]['tags']) && in_array($tag, $this->_tagged[$url]['tags'])) {
+                        if (isset($this->_tagged[$url]['tags']) &&
+                         in_array($tag, $this->_tagged[$url]['tags'])) {
                             $this->remove($url);
                             unset($this->_tagged[$url]);
                         }
                     }
                 }
-                $this->getInnerCache()->save($this->_tagged, self::INNER_CACHE_NAME);
+                $this->getInnerCache()->save($this->_tagged, 
+                self::INNER_CACHE_NAME);
                 $result = true;
                 break;
             case Cache\Cache::CLEANING_MODE_ALL:
                 if ($this->_tagged === null) {
-                    $tagged = $this->getInnerCache()->load(self::INNER_CACHE_NAME);
+                    $tagged = $this->getInnerCache()->load(
+                    self::INNER_CACHE_NAME);
                     $this->_tagged = $tagged;
                 }
                 if ($this->_tagged === null || empty($this->_tagged)) {
@@ -417,18 +429,22 @@ class StaticBackend extends AbstractBackend implements Backend
                     $this->remove($url);
                     unset($this->_tagged[$url]);
                 }
-                $this->getInnerCache()->save($this->_tagged, self::INNER_CACHE_NAME);
+                $this->getInnerCache()->save($this->_tagged, 
+                self::INNER_CACHE_NAME);
                 $result = true;
                 break;
             case Cache\Cache::CLEANING_MODE_OLD:
-                $this->_log("Zend_Cache_Backend_Static : Selected Cleaning Mode Currently Unsupported By This Backend");
+                $this->_log(
+                "Zend_Cache_Backend_Static : Selected Cleaning Mode Currently Unsupported By This Backend");
                 break;
             case Cache\Cache::CLEANING_MODE_NOT_MATCHING_TAG:
                 if (empty($tags)) {
-                    throw new \InvalidArgumentException('Cannot use tag matching modes as no tags were defined');
+                    throw new \InvalidArgumentException(
+                    'Cannot use tag matching modes as no tags were defined');
                 }
                 if ($this->_tagged === null) {
-                    $tagged = $this->getInnerCache()->load(self::INNER_CACHE_NAME);
+                    $tagged = $this->getInnerCache()->load(
+                    self::INNER_CACHE_NAME);
                     $this->_tagged = $tagged;
                 }
                 if ($this->_tagged === null || empty($this->_tagged)) {
@@ -436,13 +452,15 @@ class StaticBackend extends AbstractBackend implements Backend
                 }
                 $urls = array_keys($this->_tagged);
                 foreach ($urls as $url) {
-                    $difference = array_diff($tags, $this->_tagged[$url]['tags']);
+                    $difference = array_diff($tags, 
+                    $this->_tagged[$url]['tags']);
                     if (count($tags) == count($difference)) {
                         $this->remove($url);
                         unset($this->_tagged[$url]);
                     }
                 }
-                $this->getInnerCache()->save($this->_tagged, self::INNER_CACHE_NAME);
+                $this->getInnerCache()->save($this->_tagged, 
+                self::INNER_CACHE_NAME);
                 $result = true;
                 break;
             default:
@@ -461,7 +479,7 @@ class StaticBackend extends AbstractBackend implements Backend
      * @param  \Zend\Cache\Frontend
      * @return void
      */
-    public function setInnerCache(Cache\Frontend $cache)
+    public function setInnerCache (Cache\Frontend $cache)
     {
         $this->_tagCache = $cache;
         $this->_options['tag_cache'] = $cache;
@@ -472,10 +490,11 @@ class StaticBackend extends AbstractBackend implements Backend
      *
      * @return \Zend\Cache\Frontend
      */
-    public function getInnerCache()
+    public function getInnerCache ()
     {
         if ($this->_tagCache === null) {
-            Cache\Cache::throwException('An Inner Cache has not been set; use setInnerCache()');
+            Cache\Cache::throwException(
+            'An Inner Cache has not been set; use setInnerCache()');
         }
         return $this->_tagCache;
     }
@@ -486,7 +505,7 @@ class StaticBackend extends AbstractBackend implements Backend
      * @param  string $path
      * @return bool
      */
-    protected function _verifyPath($path)
+    protected function _verifyPath ($path)
     {
         $path = realpath($path);
         $base = realpath($this->_options['public_dir']);
@@ -498,7 +517,7 @@ class StaticBackend extends AbstractBackend implements Backend
      *
      * @return string
      */
-    protected function _detectId()
+    protected function _detectId ()
     {
         return $_SERVER['REQUEST_URI'];
     }
@@ -513,24 +532,23 @@ class StaticBackend extends AbstractBackend implements Backend
      * @return void
      * @deprecated Not usable until perhaps ZF 2.0
      */
-    protected static function _validateIdOrTag($string)
+    protected static function _validateIdOrTag ($string)
     {
-        if (!is_string($string)) {
+        if (! is_string($string)) {
             Cache\Cache::throwException('Invalid id or tag : must be a string');
         }
-
+        
         // Internal only checked in Frontend - not here!
         if (substr($string, 0, 9) == 'internal-') {
             return;
         }
-
+        
         // Validation assumes no query string, fragments or scheme included - only the path
-        if (!preg_match(
-                '/^(?:\/(?:(?:%[[:xdigit:]]{2}|[A-Za-z0-9-_.!~*\'()\[\]:@&=+$,;])*)?)+$/',
-                $string
-            )
-        ) {
-            Cache\Cache::throwException("Invalid id or tag '$string' : must be a valid URL path");
+        if (! preg_match(
+        '/^(?:\/(?:(?:%[[:xdigit:]]{2}|[A-Za-z0-9-_.!~*\'()\[\]:@&=+$,;])*)?)+$/', 
+        $string)) {
+            Cache\Cache::throwException(
+            "Invalid id or tag '$string' : must be a valid URL path");
         }
     }
 
@@ -541,7 +559,7 @@ class StaticBackend extends AbstractBackend implements Backend
      * @param $val The potential octal in need of conversion
      * @return int
      */
-    protected function _octdec($val)
+    protected function _octdec ($val)
     {
         if (decoct(octdec($val)) == $val && is_string($val)) {
             return octdec($val);
@@ -552,7 +570,7 @@ class StaticBackend extends AbstractBackend implements Backend
     /**
      * Decode a request URI from the provided ID
      */
-    protected function _decodeId($id)
+    protected function _decodeId ($id)
     {
         return pack('H*', $id);
     }

@@ -23,7 +23,7 @@
 /** @namespace */
 namespace Zend\Cloud\Infrastructure\Adapter\Exception;
 
-use \Zend\Cloud\Infrastructure\Adapter\Exception;
+use Zend\Cloud\Infrastructure\Adapter\Exception;
 
 /**
  * @category   Zend

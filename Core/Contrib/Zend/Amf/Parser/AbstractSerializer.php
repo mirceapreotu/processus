@@ -34,6 +34,7 @@ namespace Zend\Amf\Parser;
  */
 abstract class AbstractSerializer implements Serializer
 {
+
     /**
      * Reference to the current output stream being constructed
      *
@@ -47,7 +48,7 @@ abstract class AbstractSerializer implements Serializer
      * @param  Zend\Amf\Parser\OutputStream $stream
      * @return void
      */
-    public function __construct(OutputStream $stream)
+    public function __construct (OutputStream $stream)
     {
         $this->_stream = $stream;
     }

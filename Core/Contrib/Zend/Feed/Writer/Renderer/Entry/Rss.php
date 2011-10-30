@@ -19,23 +19,21 @@
  */
 
 /**
-* @namespace
-*/
+ * @namespace
+ */
 namespace Zend\Feed\Writer\Renderer\Entry;
 
-use Zend\Date,
-    Zend\Feed\Writer,
-    Zend\Feed\Writer\Renderer,
-    Zend\Uri;
+use Zend\Date, Zend\Feed\Writer, Zend\Feed\Writer\Renderer, Zend\Uri;
 
 /**
-* @category Zend
-* @package Zend_Feed_Writer
-* @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
-* @license http://framework.zend.com/license/new-bsd New BSD License
-*/
+ * @category Zend
+ * @package Zend_Feed_Writer
+ * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license http://framework.zend.com/license/new-bsd New BSD License
+ */
 class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
 {
+
     /**
      * Constructor
      * 
@@ -46,13 +44,13 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
     {
         parent::__construct($container);
     }
-    
+
     /**
      * Render RSS entry
      * 
      * @return Zend_Feed_Writer_Renderer_Entry_Rss
      */
-    public function render()
+    public function render ()
     {
         $this->_dom = new \DOMDocument('1.0', $this->_container->getEncoding());
         $this->_dom->formatOutput = true;
@@ -76,10 +74,10 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
             $ext->setDOMDocument($this->getDOMDocument(), $entry);
             $ext->render();
         }
-
+        
         return $this;
     }
-    
+
     /**
      * Set entry title
      * 
@@ -87,15 +85,15 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setTitle(\DOMDocument $dom, \DOMElement $root)
+    protected function _setTitle (\DOMDocument $dom,\DOMElement $root)
     {
-        if(!$this->getDataContainer()->getDescription()
-        && !$this->getDataContainer()->getTitle()) {
-            $message = 'RSS 2.0 entry elements SHOULD contain exactly one'
-            . ' title element but a title has not been set. In addition, there'
-            . ' is no description as required in the absence of a title.';
+        if (! $this->getDataContainer()->getDescription() &&
+         ! $this->getDataContainer()->getTitle()) {
+            $message = 'RSS 2.0 entry elements SHOULD contain exactly one' .
+             ' title element but a title has not been set. In addition, there' .
+             ' is no description as required in the absence of a title.';
             $exception = new Writer\Exception($message);
-            if (!$this->_ignoreExceptions) {
+            if (! $this->_ignoreExceptions) {
                 throw $exception;
             } else {
                 $this->_exceptions[] = $exception;
@@ -104,10 +102,11 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
         }
         $title = $dom->createElement('title');
         $root->appendChild($title);
-        $text = $dom->createTextNode($this->getDataContainer()->getTitle());
+        $text = $dom->createTextNode($this->getDataContainer()
+            ->getTitle());
         $title->appendChild($text);
     }
-    
+
     /**
      * Set entry description
      * 
@@ -115,31 +114,33 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setDescription(\DOMDocument $dom, \DOMElement $root)
+    protected function _setDescription (\DOMDocument $dom,\DOMElement $root)
     {
-        if(!$this->getDataContainer()->getDescription()
-        && !$this->getDataContainer()->getTitle()) {
-            $message = 'RSS 2.0 entry elements SHOULD contain exactly one'
-            . ' description element but a description has not been set. In'
-            . ' addition, there is no title element as required in the absence'
-            . ' of a description.';
+        if (! $this->getDataContainer()->getDescription() &&
+         ! $this->getDataContainer()->getTitle()) {
+            $message = 'RSS 2.0 entry elements SHOULD contain exactly one' .
+             ' description element but a description has not been set. In' .
+             ' addition, there is no title element as required in the absence' .
+             ' of a description.';
             $exception = new Writer\Exception($message);
-            if (!$this->_ignoreExceptions) {
+            if (! $this->_ignoreExceptions) {
                 throw $exception;
             } else {
                 $this->_exceptions[] = $exception;
                 return;
             }
         }
-        if (!$this->getDataContainer()->getDescription()) {
+        if (! $this->getDataContainer()->getDescription()) {
             return;
         }
         $subtitle = $dom->createElement('description');
         $root->appendChild($subtitle);
-        $text = $dom->createCDATASection($this->getDataContainer()->getDescription());
+        $text = $dom->createCDATASection(
+        $this->getDataContainer()
+            ->getDescription());
         $subtitle->appendChild($text);
     }
-    
+
     /**
      * Set date entry was last modified
      * 
@@ -147,20 +148,21 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setDateModified(\DOMDocument $dom, \DOMElement $root)
+    protected function _setDateModified (\DOMDocument $dom,\DOMElement $root)
     {
-        if(!$this->getDataContainer()->getDateModified()) {
+        if (! $this->getDataContainer()->getDateModified()) {
             return;
         }
-
+        
         $updated = $dom->createElement('pubDate');
         $root->appendChild($updated);
         $text = $dom->createTextNode(
-            $this->getDataContainer()->getDateModified()->get(Date\Date::RSS)
-        );
+        $this->getDataContainer()
+            ->getDateModified()
+            ->get(Date\Date::RSS));
         $updated->appendChild($text);
     }
-    
+
     /**
      * Set date entry was created
      * 
@@ -168,18 +170,18 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setDateCreated(\DOMDocument $dom, \DOMElement $root)
+    protected function _setDateCreated (\DOMDocument $dom,\DOMElement $root)
     {
-        if (!$this->getDataContainer()->getDateCreated()) {
+        if (! $this->getDataContainer()->getDateCreated()) {
             return;
         }
-        if (!$this->getDataContainer()->getDateModified()) {
+        if (! $this->getDataContainer()->getDateModified()) {
             $this->getDataContainer()->setDateModified(
-                $this->getDataContainer()->getDateCreated()
-            );
+            $this->getDataContainer()
+                ->getDateCreated());
         }
     }
-    
+
     /**
      * Set entry authors
      * 
@@ -187,10 +189,10 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setAuthors(\DOMDocument $dom, \DOMElement $root)
+    protected function _setAuthors (\DOMDocument $dom,\DOMElement $root)
     {
         $authors = $this->_container->getAuthors();
-        if ((!$authors || empty($authors))) {
+        if ((! $authors || empty($authors))) {
             return;
         }
         foreach ($authors as $data) {
@@ -204,7 +206,7 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
             $root->appendChild($author);
         }
     }
-    
+
     /**
      * Set entry enclosure
      * 
@@ -212,24 +214,24 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setEnclosure(\DOMDocument $dom, \DOMElement $root)
+    protected function _setEnclosure (\DOMDocument $dom,\DOMElement $root)
     {
         $data = $this->_container->getEnclosure();
-        if ((!$data || empty($data))) {
+        if ((! $data || empty($data))) {
             return;
         }
-        if (!isset($data['type'])) {
+        if (! isset($data['type'])) {
             $exception = new Writer\Exception('Enclosure "type" is not set');
-            if (!$this->_ignoreExceptions) {
+            if (! $this->_ignoreExceptions) {
                 throw $exception;
             } else {
                 $this->_exceptions[] = $exception;
                 return;
             }
         }
-        if (!isset($data['length'])) {
+        if (! isset($data['length'])) {
             $exception = new Writer\Exception('Enclosure "length" is not set');
-            if (!$this->_ignoreExceptions) {
+            if (! $this->_ignoreExceptions) {
                 throw $exception;
             } else {
                 $this->_exceptions[] = $exception;
@@ -237,9 +239,10 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
             }
         }
         if (isset($data['length']) && (int) $data['length'] <= 0) {
-            $exception = new Writer\Exception('Enclosure "length" must be an integer'
-            . ' indicating the content\'s length in bytes');
-            if (!$this->_ignoreExceptions) {
+            $exception = new Writer\Exception(
+            'Enclosure "length" must be an integer' .
+             ' indicating the content\'s length in bytes');
+            if (! $this->_ignoreExceptions) {
                 throw $exception;
             } else {
                 $this->_exceptions[] = $exception;
@@ -252,7 +255,7 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
         $enclosure->setAttribute('url', $data['uri']);
         $root->appendChild($enclosure);
     }
-    
+
     /**
      * Set link to entry
      * 
@@ -260,17 +263,18 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setLink(\DOMDocument $dom, \DOMElement $root)
+    protected function _setLink (\DOMDocument $dom,\DOMElement $root)
     {
-        if(!$this->getDataContainer()->getLink()) {
+        if (! $this->getDataContainer()->getLink()) {
             return;
         }
         $link = $dom->createElement('link');
         $root->appendChild($link);
-        $text = $dom->createTextNode($this->getDataContainer()->getLink());
+        $text = $dom->createTextNode($this->getDataContainer()
+            ->getLink());
         $link->appendChild($text);
     }
-    
+
     /**
      * Set entry identifier
      * 
@@ -278,26 +282,28 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setId(\DOMDocument $dom, \DOMElement $root)
+    protected function _setId (\DOMDocument $dom,\DOMElement $root)
     {
-        if(!$this->getDataContainer()->getId()
-        && !$this->getDataContainer()->getLink()) {
+        if (! $this->getDataContainer()->getId() &&
+         ! $this->getDataContainer()->getLink()) {
             return;
         }
-
+        
         $id = $dom->createElement('guid');
         $root->appendChild($id);
-        if (!$this->getDataContainer()->getId()) {
+        if (! $this->getDataContainer()->getId()) {
             $this->getDataContainer()->setId(
-                $this->getDataContainer()->getLink());
+            $this->getDataContainer()
+                ->getLink());
         }
-        $text = $dom->createTextNode($this->getDataContainer()->getId());
+        $text = $dom->createTextNode($this->getDataContainer()
+            ->getId());
         $id->appendChild($text);
-        if (!Uri\UriFactory::factory($this->getDataContainer()->getId())->isValid()) {
+        if (! Uri\UriFactory::factory($this->getDataContainer()->getId())->isValid()) {
             $id->setAttribute('isPermaLink', 'false');
         }
     }
-    
+
     /**
      * Set link to entry comments
      * 
@@ -305,10 +311,10 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param  \DOMElement $root 
      * @return void
      */
-    protected function _setCommentLink(\DOMDocument $dom, \DOMElement $root)
+    protected function _setCommentLink (\DOMDocument $dom,\DOMElement $root)
     {
         $link = $this->getDataContainer()->getCommentLink();
-        if (!$link) {
+        if (! $link) {
             return;
         }
         $clink = $this->_dom->createElement('comments');
@@ -316,7 +322,7 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
         $clink->appendChild($text);
         $root->appendChild($clink);
     }
-    
+
     /**
      * Set entry categories
      * 
@@ -324,10 +330,10 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\Renderer
      * @param \DOMElement $root 
      * @return void
      */
-    protected function _setCategories(\DOMDocument $dom, \DOMElement $root)
+    protected function _setCategories (\DOMDocument $dom,\DOMElement $root)
     {
         $categories = $this->getDataContainer()->getCategories();
-        if (!$categories) {
+        if (! $categories) {
             return;
         }
         foreach ($categories as $cat) {

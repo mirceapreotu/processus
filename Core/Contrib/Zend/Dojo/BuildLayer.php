@@ -23,9 +23,7 @@
  */
 namespace Zend\Dojo;
 
-use Zend\Config\Config,
-    Zend\Json\Json,
-    Zend\View\Renderer;
+use Zend\Config\Config, Zend\Json\Json, Zend\View\Renderer;
 
 /**
  * Dojo module layer and custom build profile generation support
@@ -37,6 +35,7 @@ use Zend\Config\Config,
  */
 class BuildLayer
 {
+
     /**
      * Flag: whether or not to consume JS aggregated in the dojo() view
      * helper when generate the module layer contents
@@ -75,14 +74,9 @@ class BuildLayer
      * Build profile options
      * @var array
      */
-    protected $_profileOptions = array(
-        'action'        => 'release',
-        'optimize'      => 'shrinksafe',
-        'layerOptimize' => 'shrinksafe',
-        'copyTests'     => false,
-        'loader'        => 'default',
-        'cssOptimize'   => 'comments',
-    );
+    protected $_profileOptions = array('action' => 'release', 
+    'optimize' => 'shrinksafe', 'layerOptimize' => 'shrinksafe', 
+    'copyTests' => false, 'loader' => 'default', 'cssOptimize' => 'comments');
 
     /**
      * Associative array of module/path pairs for the build profile
@@ -103,13 +97,14 @@ class BuildLayer
      * @return void
      * @throws \Zend\Dojo\Exception for invalid option argument
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
         if (null !== $options) {
             if ($options instanceof Config) {
                 $options = $options->toArray();
-            } elseif (!is_array($options)) {
-                throw new Exception\InvalidArgumentException('Invalid options provided to constructor');
+            } elseif (! is_array($options)) {
+                throw new Exception\InvalidArgumentException(
+                'Invalid options provided to constructor');
             }
             $this->setOptions($options);
         }
@@ -123,7 +118,7 @@ class BuildLayer
      * @param  array $options
      * @return \Zend\Dojo\BuildLayer
      */
-    public function setOptions(array $options)
+    public function setOptions (array $options)
     {
         $methods = get_class_methods($this);
         foreach ($options as $key => $value) {
@@ -141,7 +136,7 @@ class BuildLayer
      * @param  \Zend\View\Renderer $view
      * @return \Zend\Dojo\BuildLayer
      */
-    public function setView(Renderer $view)
+    public function setView (Renderer $view)
     {
         $this->_view = $view;
         return $this;
@@ -152,7 +147,7 @@ class BuildLayer
      *
      * @return \Zend\View\Renderer|null
      */
-    public function getView()
+    public function getView ()
     {
         return $this->_view;
     }
@@ -163,7 +158,7 @@ class BuildLayer
      * @param  \Zend\Dojo\View\Helper\Dojo\Container $helper
      * @return \Zend\Dojo\BuildLayer
      */
-    public function setDojoHelper(View\Helper\Dojo\Container $helper)
+    public function setDojoHelper (View\Helper\Dojo\Container $helper)
     {
         $this->_dojo = $helper;
         return $this;
@@ -177,11 +172,12 @@ class BuildLayer
      * @return \Zend\Dojo\View\Helper\Dojo\Container
      * @throws \Zend\Dojo\Exception if not registered and no view object found
      */
-    public function getDojoHelper()
+    public function getDojoHelper ()
     {
         if (null === $this->_dojo) {
             if (null === ($view = $this->getView())) {
-                throw new Exception\RuntimeException('View object not registered; cannot retrieve dojo helper');
+                throw new Exception\RuntimeException(
+                'View object not registered; cannot retrieve dojo helper');
             }
             $dojo = $view->plugin('dojo');
             $this->setDojoHelper($dojo());
@@ -195,10 +191,11 @@ class BuildLayer
      * @param  string $name
      * @return \Zend\Dojo\BuildLayer
      */
-    public function setLayerName($name)
+    public function setLayerName ($name)
     {
-        if (!preg_match('/^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$/i', $name)) {
-            throw new Exception\InvalidArgumentException('Invalid layer name provided; must be of form[a-z][a-z0-9_](\.[a-z][a-z0-9_])+');
+        if (! preg_match('/^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$/i', $name)) {
+            throw new Exception\InvalidArgumentException(
+            'Invalid layer name provided; must be of form[a-z][a-z0-9_](\.[a-z][a-z0-9_])+');
         }
         $this->_layerName = $name;
         return $this;
@@ -209,7 +206,7 @@ class BuildLayer
      *
      * @return string|null
      */
-    public function getLayerName()
+    public function getLayerName ()
     {
         return $this->_layerName;
     }
@@ -222,7 +219,7 @@ class BuildLayer
      * @param  string $path
      * @return \Zend\Dojo\BuildLayer
      */
-    public function setLayerScriptPath($path)
+    public function setLayerScriptPath ($path)
     {
         $this->_layerScriptPath = (string) $path;
         return $this;
@@ -233,7 +230,7 @@ class BuildLayer
      *
      * @return string|null
      */
-    public function getLayerScriptPath()
+    public function getLayerScriptPath ()
     {
         return $this->_layerScriptPath;
     }
@@ -245,7 +242,7 @@ class BuildLayer
      * @param  bool $flag
      * @return \Zend\Dojo\BuildLayer
      */
-    public function setConsumeJavascript($flag)
+    public function setConsumeJavascript ($flag)
     {
         $this->_consumeJavascript = (bool) $flag;
         return $this;
@@ -257,7 +254,7 @@ class BuildLayer
      *
      * @return bool
      */
-    public function consumeJavascript()
+    public function consumeJavascript ()
     {
         return $this->_consumeJavascript;
     }
@@ -269,7 +266,7 @@ class BuildLayer
      * @param  bool $flag
      * @return \Zend\Dojo\BuildLayer
      */
-    public function setConsumeOnLoad($flag)
+    public function setConsumeOnLoad ($flag)
     {
         $this->_consumeOnLoad = (bool) $flag;
         return $this;
@@ -280,7 +277,7 @@ class BuildLayer
      *
      * @return bool
      */
-    public function consumeOnLoad()
+    public function consumeOnLoad ()
     {
         return $this->_consumeOnLoad;
     }
@@ -291,7 +288,7 @@ class BuildLayer
      * @param  array $options
      * @return \Zend\Dojo\BuildLayer
      */
-    public function setProfileOptions(array $options)
+    public function setProfileOptions (array $options)
     {
         $this->_profileOptions += $options;
         return $this;
@@ -303,7 +300,7 @@ class BuildLayer
      * @param  array $options
      * @return \Zend\Dojo\BuildLayer
      */
-    public function addProfileOptions(array $options)
+    public function addProfileOptions (array $options)
     {
         $this->_profileOptions = $this->_profileOptions + $options;
         return $this;
@@ -316,7 +313,7 @@ class BuildLayer
      * @param  value $value
      * @return \Zend\Dojo\BuildLayer
      */
-    public function addProfileOption($key, $value)
+    public function addProfileOption ($key, $value)
     {
         $this->_profileOptions[(string) $key] = $value;
         return $this;
@@ -328,7 +325,7 @@ class BuildLayer
      * @param  string $key
      * @return bool
      */
-    public function hasProfileOption($key)
+    public function hasProfileOption ($key)
     {
         return array_key_exists((string) $key, $this->_profileOptions);
     }
@@ -341,7 +338,7 @@ class BuildLayer
      * @param  string $key
      * @return mixed
      */
-    public function getProfileOption($key)
+    public function getProfileOption ($key)
     {
         if ($this->hasProfileOption($key)) {
             return $this->_profileOptions[(string) $key];
@@ -354,7 +351,7 @@ class BuildLayer
      *
      * @return array
      */
-    public function getProfileOptions()
+    public function getProfileOptions ()
     {
         return $this->_profileOptions;
     }
@@ -365,7 +362,7 @@ class BuildLayer
      * @param  string $name
      * @return \Zend\Dojo\BuildLayer
      */
-    public function removeProfileOption($name)
+    public function removeProfileOption ($name)
     {
         if ($this->hasProfileOption($name)) {
             unset($this->_profileOptions[(string) $name]);
@@ -378,7 +375,7 @@ class BuildLayer
      *
      * @return \Zend\Dojo\BuildLayer
      */
-    public function clearProfileOptions()
+    public function clearProfileOptions ()
     {
         $this->_profileOptions = array();
         return $this;
@@ -393,7 +390,7 @@ class BuildLayer
      * @param  null|string $path
      * @return \Zend\Dojo\BuildLayer
      */
-    public function addProfilePrefix($prefix, $path = null)
+    public function addProfilePrefix ($prefix, $path = null)
     {
         if (null === $path) {
             $path = '../' . $prefix;
@@ -408,7 +405,7 @@ class BuildLayer
      * @param  array $prefixes
      * @return \Zend\Dojo\BuildLayer
      */
-    public function setProfilePrefixes(array $prefixes)
+    public function setProfilePrefixes (array $prefixes)
     {
         foreach ($prefixes as $prefix => $path) {
             $this->addProfilePrefix($prefix, $path);
@@ -421,23 +418,23 @@ class BuildLayer
      *
      * @return array
      */
-    public function getProfilePrefixes()
+    public function getProfilePrefixes ()
     {
         $layerName = $this->getLayerName();
         if (null !== $layerName) {
-            $prefix    = $this->_getPrefix($layerName);
-            if (!array_key_exists($prefix, $this->_profilePrefixes)) {
+            $prefix = $this->_getPrefix($layerName);
+            if (! array_key_exists($prefix, $this->_profilePrefixes)) {
                 $this->addProfilePrefix($prefix);
             }
         }
         $view = $this->getView();
-        if (!empty($view)) {
+        if (! empty($view)) {
             $helper = $this->getDojoHelper();
             if ($helper) {
                 $modules = $helper->getModules();
                 foreach ($modules as $module) {
                     $prefix = $this->_getPrefix($module);
-                    if (!array_key_exists($prefix, $this->_profilePrefixes)) {
+                    if (! array_key_exists($prefix, $this->_profilePrefixes)) {
                         $this->addProfilePrefix($prefix);
                     }
                 }
@@ -451,24 +448,25 @@ class BuildLayer
      *
      * @return string
      */
-    public function generateLayerScript()
+    public function generateLayerScript ()
     {
-        $helper        = $this->getDojoHelper();
-        $layerName     = $this->getLayerName();
-        $modulePaths   = $helper->getModulePaths();
-        $modules       = $helper->getModules();
+        $helper = $this->getDojoHelper();
+        $layerName = $this->getLayerName();
+        $modulePaths = $helper->getModulePaths();
+        $modules = $helper->getModules();
         $onLoadActions = $helper->getOnLoadActions();
-        $javascript    = $helper->getJavascript();
-
+        $javascript = $helper->getJavascript();
+        
         $content = 'dojo.provide("' . $layerName . '");' . "\n\n(function(){\n";
-
+        
         foreach ($modulePaths as $module => $path) {
-            $content .= sprintf("dojo.registerModulePath(\"%s\", \"%s\");\n", $module, $path);
+            $content .= sprintf("dojo.registerModulePath(\"%s\", \"%s\");\n", 
+            $module, $path);
         }
         foreach ($modules as $module) {
             $content .= sprintf("dojo.require(\"%s\");\n", $module);
         }
-
+        
         if ($this->consumeOnLoad()) {
             foreach ($helper->getOnLoadActions() as $callback) {
                 $content .= sprintf("dojo.addOnLoad(%s);\n", $callback);
@@ -476,13 +474,13 @@ class BuildLayer
         }
         if ($this->consumeJavascript()) {
             $javascript = implode("\n", $helper->getJavascript());
-            if (!empty($javascript)) {
+            if (! empty($javascript)) {
                 $content .= "\n" . $javascript . "\n";
             }
         }
-
+        
         $content .= "})();";
-
+        
         return $content;
     }
 
@@ -491,26 +489,26 @@ class BuildLayer
      *
      * @return string
      */
-    public function generateBuildProfile()
+    public function generateBuildProfile ()
     {
-        $profileOptions  = $this->getProfileOptions();
-        $layerName       = $this->getLayerName();
+        $profileOptions = $this->getProfileOptions();
+        $layerName = $this->getLayerName();
         $layerScriptPath = $this->getLayerScriptPath();
         $profilePrefixes = $this->getProfilePrefixes();
-
-        if (!array_key_exists('releaseName', $profileOptions)) {
-            $profileOptions['releaseName'] = substr($layerName, 0, strpos($layerName, '.'));
+        
+        if (! array_key_exists('releaseName', $profileOptions)) {
+            $profileOptions['releaseName'] = substr($layerName, 0, 
+            strpos($layerName, '.'));
         }
-
+        
         $profile = $profileOptions;
-        $profile['layers'] = array(array(
-            'name'              => $layerScriptPath,
-            'layerDependencies' => array(),
-            'dependencies'      => array($layerName),
-        ));
+        $profile['layers'] = array(
+        array('name' => $layerScriptPath, 'layerDependencies' => array(), 
+        'dependencies' => array($layerName)));
         $profile['prefixes'] = array_values($profilePrefixes);
-
-        return 'dependencies = ' . $this->_filterJsonProfileToJavascript($profile) . ';';
+        
+        return 'dependencies = ' .
+         $this->_filterJsonProfileToJavascript($profile) . ';';
     }
 
     /**
@@ -519,9 +517,9 @@ class BuildLayer
      * @param  string $module
      * @return void
      */
-    protected function _getPrefix($module)
+    protected function _getPrefix ($module)
     {
-        $segments  = explode('.', $module, 2);
+        $segments = explode('.', $module, 2);
         return $segments[0];
     }
 
@@ -531,7 +529,7 @@ class BuildLayer
      * @param  string $profile
      * @return string
      */
-    protected function _filterJsonProfileToJavascript($profile)
+    protected function _filterJsonProfileToJavascript ($profile)
     {
         $profile = Json::encode($profile);
         $profile = preg_replace('/"([^"]*)":/', '$1:', $profile);

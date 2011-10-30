@@ -38,6 +38,7 @@ namespace Zend\Form\Decorator;
  */
 class Tooltip extends AbstractDecorator
 {
+
     /**
      * Translates the title attribute if it is available, if the translator is available
      * and if the translator is not disable on the element being rendered.
@@ -45,14 +46,14 @@ class Tooltip extends AbstractDecorator
      * @param string $content
      * @return string
      */
-    public function render($content)
+    public function render ($content)
     {
         if (null !== ($title = $this->getElement()->getAttrib('title'))) {
             if (null !== ($translator = $this->getElement()->getTranslator())) {
                 $title = $translator->translate($title);
             }
         }
-
+        
         $this->getElement()->setAttrib('title', $title);
         return $content;
     }

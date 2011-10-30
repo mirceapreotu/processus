@@ -37,6 +37,7 @@ use Zend\Session;
  */
 class Redirector extends AbstractHelper
 {
+
     /**
      * HTTP status code for redirects
      * @var int
@@ -79,7 +80,7 @@ class Redirector extends AbstractHelper
      *
      * @return int
      */
-    public function getCode()
+    public function getCode ()
     {
         return $this->_code;
     }
@@ -91,13 +92,14 @@ class Redirector extends AbstractHelper
      * @throws \Zend\Controller\Action\Exception on invalid HTTP status code
      * @return true
      */
-    protected function _checkCode($code)
+    protected function _checkCode ($code)
     {
-        $code = (int)$code;
+        $code = (int) $code;
         if ((300 > $code) || (307 < $code) || (304 == $code) || (306 == $code)) {
-            throw new Action\Exception('Invalid redirect HTTP status code (' . $code  . ')');
+            throw new Action\Exception(
+            'Invalid redirect HTTP status code (' . $code . ')');
         }
-
+        
         return true;
     }
 
@@ -107,7 +109,7 @@ class Redirector extends AbstractHelper
      * @param  int $code
      * @return \Zend\Controller\Action\Helper\Redirector Provides a fluent interface
      */
-    public function setCode($code)
+    public function setCode ($code)
     {
         $this->_checkCode($code);
         $this->_code = $code;
@@ -119,7 +121,7 @@ class Redirector extends AbstractHelper
      *
      * @return boolean
      */
-    public function getExit()
+    public function getExit ()
     {
         return $this->_exit;
     }
@@ -130,7 +132,7 @@ class Redirector extends AbstractHelper
      * @param  boolean $flag
      * @return \Zend\Controller\Action\Helper\Redirector Provides a fluent interface
      */
-    public function setExit($flag)
+    public function setExit ($flag)
     {
         $this->_exit = ($flag) ? true : false;
         return $this;
@@ -142,7 +144,7 @@ class Redirector extends AbstractHelper
      *
      * @return boolean
      */
-    public function getPrependBase()
+    public function getPrependBase ()
     {
         return $this->_prependBase;
     }
@@ -153,7 +155,7 @@ class Redirector extends AbstractHelper
      * @param  boolean $flag
      * @return \Zend\Controller\Action\Helper\Redirector Provides a fluent interface
      */
-    public function setPrependBase($flag)
+    public function setPrependBase ($flag)
     {
         $this->_prependBase = ($flag) ? true : false;
         return $this;
@@ -165,7 +167,7 @@ class Redirector extends AbstractHelper
      *
      * @return boolean
      */
-    public function getCloseSessionOnExit()
+    public function getCloseSessionOnExit ()
     {
         return $this->_closeSessionOnExit;
     }
@@ -176,7 +178,7 @@ class Redirector extends AbstractHelper
      * @param  boolean $flag
      * @return \Zend\Controller\Action\Helper\Redirector Provides a fluent interface
      */
-    public function setCloseSessionOnExit($flag)
+    public function setCloseSessionOnExit ($flag)
     {
         $this->_closeSessionOnExit = ($flag) ? true : false;
         return $this;
@@ -187,7 +189,7 @@ class Redirector extends AbstractHelper
      *
      * @return boolean
      */
-    public function getUseAbsoluteUri()
+    public function getUseAbsoluteUri ()
     {
         return $this->_useAbsoluteUri;
     }
@@ -198,7 +200,7 @@ class Redirector extends AbstractHelper
      * @param  boolean $flag
      * @return \Zend\Controller\Action\Helper\Redirector Provides a fluent interface
      */
-    public function setUseAbsoluteUri($flag = true)
+    public function setUseAbsoluteUri ($flag = true)
     {
         $this->_useAbsoluteUri = ($flag) ? true : false;
         return $this;
@@ -209,14 +211,16 @@ class Redirector extends AbstractHelper
      *
      * @return void
      */
-    protected function _redirect($url)
+    protected function _redirect ($url)
     {
-        if ($this->getUseAbsoluteUri() && !preg_match('#^(https?|ftp)://#', $url)) {
-            $host  = (isset($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:'');
-            $proto = (isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=="off") ? 'https' : 'http';
-            $port  = (isset($_SERVER['SERVER_PORT'])?$_SERVER['SERVER_PORT']:80);
-            $uri   = $proto . '://' . $host;
-            if ((('http' == $proto) && (80 != $port)) || (('https' == $proto) && (443 != $port))) {
+        if ($this->getUseAbsoluteUri() && ! preg_match('#^(https?|ftp)://#', 
+        $url)) {
+            $host = (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
+            $proto = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== "off") ? 'https' : 'http';
+            $port = (isset($_SERVER['SERVER_PORT']) ? $_SERVER['SERVER_PORT'] : 80);
+            $uri = $proto . '://' . $host;
+            if ((('http' == $proto) && (80 != $port)) ||
+             (('https' == $proto) && (443 != $port))) {
                 $uri .= ':' . $port;
             }
             $url = $uri . '/' . ltrim($url, '/');
@@ -230,7 +234,7 @@ class Redirector extends AbstractHelper
      *
      * @return string
      */
-    public function getRedirectUrl()
+    public function getRedirectUrl ()
     {
         return $this->_redirectUrl;
     }
@@ -241,20 +245,20 @@ class Redirector extends AbstractHelper
      * @param  string $url
      * @return string
      */
-    protected function _prependBase($url)
+    protected function _prependBase ($url)
     {
         if ($this->getPrependBase()) {
             $request = $this->getRequest();
             if ($request instanceof \Zend\Controller\Request\Http) {
                 $base = rtrim($request->getBaseUrl(), '/');
-                if (!empty($base) && ('/' != $base)) {
+                if (! empty($base) && ('/' != $base)) {
                     $url = $base . '/' . ltrim($url, '/');
                 } else {
                     $url = '/' . ltrim($url, '/');
                 }
             }
         }
-
+        
         return $url;
     }
 
@@ -267,39 +271,40 @@ class Redirector extends AbstractHelper
      * @param  array  $params
      * @return void
      */
-    public function setGotoSimple($action, $controller = null, $module = null, array $params = array())
+    public function setGotoSimple ($action, $controller = null, $module = null, 
+    array $params = array())
     {
         $dispatcher = $this->getFrontController()->getDispatcher();
-        $request    = $this->getRequest();
-        $curModule  = $request->getModuleName();
+        $request = $this->getRequest();
+        $curModule = $request->getModuleName();
         $useDefaultController = false;
-
+        
         if (null === $controller && null !== $module) {
             $useDefaultController = true;
         }
-
+        
         if (null === $module) {
             $module = $curModule;
         }
-
+        
         if ($module == $dispatcher->getDefaultModule()) {
             $module = '';
         }
-
-        if (null === $controller && !$useDefaultController) {
+        
+        if (null === $controller && ! $useDefaultController) {
             $controller = $request->getControllerName();
             if (empty($controller)) {
                 $controller = $dispatcher->getDefaultControllerName();
             }
         }
-
-        $params['module']     = $module;
+        
+        $params['module'] = $module;
         $params['controller'] = $controller;
-        $params['action']     = $action;
-
+        $params['action'] = $action;
+        
         $router = $this->getFrontController()->getRouter();
-        $url    = $router->assemble($params, 'application', true);
-
+        $url = $router->assemble($params, 'application', true);
+        
         $this->_redirect($url);
     }
 
@@ -312,11 +317,12 @@ class Redirector extends AbstractHelper
      * @param  boolean $encode
      * @return void
      */
-    public function setGotoRoute(array $urlOptions = array(), $name = null, $reset = false, $encode = true)
+    public function setGotoRoute (array $urlOptions = array(), $name = null, $reset = false, 
+    $encode = true)
     {
         $router = $this->getFrontController()->getRouter();
-        $url    = $router->assemble($urlOptions, $name, $reset, $encode);
-
+        $url = $router->assemble($urlOptions, $name, $reset, $encode);
+        
         $this->_redirect($url);
     }
 
@@ -344,11 +350,11 @@ class Redirector extends AbstractHelper
      * @param  array  $options
      * @return void
      */
-    public function setGotoUrl($url, array $options = array())
+    public function setGotoUrl ($url, array $options = array())
     {
         // prevent header injections
         $url = str_replace(array("\n", "\r"), '', $url);
-
+        
         if (null !== $options) {
             if (isset($options['exit'])) {
                 $this->setExit(($options['exit']) ? true : false);
@@ -360,12 +366,12 @@ class Redirector extends AbstractHelper
                 $this->setCode($options['code']);
             }
         }
-
+        
         // If relative URL, decide if we should prepend base URL
-        if (!preg_match('|^[a-z]+://|', $url)) {
+        if (! preg_match('|^[a-z]+://|', $url)) {
             $url = $this->_prependBase($url);
         }
-
+        
         $this->_redirect($url);
     }
 
@@ -378,10 +384,11 @@ class Redirector extends AbstractHelper
      * @param  array  $params
      * @return void
      */
-    public function gotoSimple($action, $controller = null, $module = null, array $params = array())
+    public function gotoSimple ($action, $controller = null, $module = null, 
+    array $params = array())
     {
         $this->setGotoSimple($action, $controller, $module, $params);
-
+        
         if ($this->getExit()) {
             $this->redirectAndExit();
         }
@@ -396,7 +403,8 @@ class Redirector extends AbstractHelper
      * @param  array $params
      * @return void
      */
-    public function gotoSimpleAndExit($action, $controller = null, $module = null, array $params = array())
+    public function gotoSimpleAndExit ($action, $controller = null, $module = null, 
+    array $params = array())
     {
         $this->setGotoSimple($action, $controller, $module, $params);
         $this->redirectAndExit();
@@ -414,10 +422,11 @@ class Redirector extends AbstractHelper
      * @param  boolean $encode
      * @return void
      */
-    public function gotoRoute(array $urlOptions = array(), $name = null, $reset = false, $encode = true)
+    public function gotoRoute (array $urlOptions = array(), $name = null, $reset = false, 
+    $encode = true)
     {
         $this->setGotoRoute($urlOptions, $name, $reset, $encode);
-
+        
         if ($this->getExit()) {
             $this->redirectAndExit();
         }
@@ -434,7 +443,8 @@ class Redirector extends AbstractHelper
      * @param  boolean $reset
      * @return void
      */
-    public function gotoRouteAndExit(array $urlOptions = array(), $name = null, $reset = false)
+    public function gotoRouteAndExit (array $urlOptions = array(), $name = null, 
+    $reset = false)
     {
         $this->setGotoRoute($urlOptions, $name, $reset);
         $this->redirectAndExit();
@@ -447,10 +457,10 @@ class Redirector extends AbstractHelper
      * @param  array  $options
      * @return void
      */
-    public function gotoUrl($url, array $options = array())
+    public function gotoUrl ($url, array $options = array())
     {
         $this->setGotoUrl($url, $options);
-
+        
         if ($this->getExit()) {
             $this->redirectAndExit();
         }
@@ -463,7 +473,7 @@ class Redirector extends AbstractHelper
      * @param  array  $options
      * @return void
      */
-    public function gotoUrlAndExit($url, array $options = array())
+    public function gotoUrlAndExit ($url, array $options = array())
     {
         $this->gotoUrl($url, $options);
         $this->redirectAndExit();
@@ -474,7 +484,7 @@ class Redirector extends AbstractHelper
      *
      * @return void
      */
-    public function redirectAndExit()
+    public function redirectAndExit ()
     {
         $this->getResponse()->sendHeaders();
         exit();
@@ -490,7 +500,8 @@ class Redirector extends AbstractHelper
      * @param  array  $params
      * @return void
      */
-    public function direct($action, $controller = null, $module = null, array $params = array())
+    public function direct ($action, $controller = null, $module = null, 
+    array $params = array())
     {
         $this->gotoSimple($action, $controller, $module, $params);
     }
@@ -505,7 +516,7 @@ class Redirector extends AbstractHelper
      * @return mixed
      * @throws \Zend\Controller\Action\Exception for invalid methods
      */
-    public function __call($method, $args)
+    public function __call ($method, $args)
     {
         $method = strtolower($method);
         if ('goto' == $method) {
@@ -515,9 +526,11 @@ class Redirector extends AbstractHelper
             return call_user_func_array(array($this, 'setGotoSimple'), $args);
         }
         if ('gotoandexit' == $method) {
-            return call_user_func_array(array($this, 'gotoSimpleAndExit'), $args);
+            return call_user_func_array(array($this, 'gotoSimpleAndExit'), 
+            $args);
         }
-
-        throw new Action\Exception(sprintf('Invalid method "%s" called on redirector', $method));
+        
+        throw new Action\Exception(
+        sprintf('Invalid method "%s" called on redirector', $method));
     }
 }

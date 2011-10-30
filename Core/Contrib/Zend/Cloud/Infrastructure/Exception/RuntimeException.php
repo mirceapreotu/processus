@@ -24,7 +24,7 @@
  */
 namespace Zend\Cloud\Infrastructure\Exception;
 
-use \Zend\Cloud\Infrastructure\Exception;
+use Zend\Cloud\Infrastructure\Exception;
 
 /**
  * @package    Zend\Cloud

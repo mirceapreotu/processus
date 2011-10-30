@@ -35,9 +35,10 @@ use Zend\Dojo\View\Exception;
  * @subpackage View
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
-  */
+ */
 class CustomDijit extends DijitContainer
 {
+
     /**
      * Default dojoType; set the value when extending
      * @var string
@@ -56,30 +57,31 @@ class CustomDijit extends DijitContainer
      * @param  array $attribs
      * @return string|\Zend\Dojo\View\Helper\CustomDijit
      */
-    public function __invoke($id = null, $value = null, array $params = array(), array $attribs = array())
+    public function __invoke ($id = null, $value = null, array $params = array(), 
+    array $attribs = array())
     {
         if (null === $id) {
             return $this;
         }
-
-        if (!array_key_exists('dojoType', $params)
-            && (null === $this->_defaultDojoType)
-        ) {
-            throw new Exception\InvalidArgumentException('No dojoType specified; cannot create dijit');
+        
+        if (! array_key_exists('dojoType', $params) &&
+         (null === $this->_defaultDojoType)) {
+            throw new Exception\InvalidArgumentException(
+            'No dojoType specified; cannot create dijit');
         } elseif (array_key_exists('dojoType', $params)) {
-            $this->_dijit  = $params['dojoType'];
+            $this->_dijit = $params['dojoType'];
             $this->_module = $params['dojoType'];
             unset($params['dojoType']);
         } else {
-            $this->_dijit  = $this->_defaultDojoType;
+            $this->_dijit = $this->_defaultDojoType;
             $this->_module = $this->_defaultDojoType;
         }
-
+        
         if (array_key_exists('rootNode', $params)) {
             $this->setRootNode($params['rootNode']);
             unset($params['rootNode']);
         }
-
+        
         return $this->_createLayoutContainer($id, $value, $params, $attribs);
     }
 
@@ -94,21 +96,22 @@ class CustomDijit extends DijitContainer
      * @param  array $attribs
      * @return void
      */
-    public function captureStart($id, array $params = array(), array $attribs = array())
+    public function captureStart ($id, array $params = array(), 
+    array $attribs = array())
     {
-        if (!array_key_exists('dojoType', $params)
-            && (null === $this->_defaultDojoType)
-        ) {
-            throw new Exception\InvalidArgumentException('No dojoType specified; cannot create dijit');
+        if (! array_key_exists('dojoType', $params) &&
+         (null === $this->_defaultDojoType)) {
+            throw new Exception\InvalidArgumentException(
+            'No dojoType specified; cannot create dijit');
         } elseif (array_key_exists('dojoType', $params)) {
-            $this->_dijit  = $params['dojoType'];
+            $this->_dijit = $params['dojoType'];
             $this->_module = $params['dojoType'];
             unset($params['dojoType']);
         } else {
-            $this->_dijit  = $this->_defaultDojoType;
+            $this->_dijit = $this->_defaultDojoType;
             $this->_module = $this->_defaultDojoType;
         }
-
+        
         return parent::captureStart($id, $params, $attribs);
     }
 }

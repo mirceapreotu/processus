@@ -40,12 +40,13 @@ use Zend\Ldap\Node\RootDse;
  */
 class ActiveDirectory extends RootDse
 {
+
     /**
      * Gets the configurationNamingContext.
      *
      * @return string|null
      */
-    public function getConfigurationNamingContext()
+    public function getConfigurationNamingContext ()
     {
         return $this->getAttribute('configurationNamingContext', 0);
     }
@@ -55,7 +56,7 @@ class ActiveDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getCurrentTime()
+    public function getCurrentTime ()
     {
         return $this->getAttribute('currentTime', 0);
     }
@@ -65,7 +66,7 @@ class ActiveDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getDefaultNamingContext()
+    public function getDefaultNamingContext ()
     {
         return $this->getAttribute('defaultNamingContext', 0);
     }
@@ -75,7 +76,7 @@ class ActiveDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getDnsHostName()
+    public function getDnsHostName ()
     {
         return $this->getAttribute('dnsHostName', 0);
     }
@@ -85,7 +86,7 @@ class ActiveDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getDomainControllerFunctionality()
+    public function getDomainControllerFunctionality ()
     {
         return $this->getAttribute('domainControllerFunctionality', 0);
     }
@@ -95,7 +96,7 @@ class ActiveDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getDomainFunctionality()
+    public function getDomainFunctionality ()
     {
         return $this->getAttribute('domainFunctionality', 0);
     }
@@ -105,7 +106,7 @@ class ActiveDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getDsServiceName()
+    public function getDsServiceName ()
     {
         return $this->getAttribute('dsServiceName', 0);
     }
@@ -115,7 +116,7 @@ class ActiveDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getForestFunctionality()
+    public function getForestFunctionality ()
     {
         return $this->getAttribute('forestFunctionality', 0);
     }
@@ -125,7 +126,7 @@ class ActiveDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getHighestCommittedUSN()
+    public function getHighestCommittedUSN ()
     {
         return $this->getAttribute('highestCommittedUSN', 0);
     }
@@ -135,7 +136,7 @@ class ActiveDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getIsGlobalCatalogReady()
+    public function getIsGlobalCatalogReady ()
     {
         return $this->getAttribute('isGlobalCatalogReady', 0);
     }
@@ -145,7 +146,7 @@ class ActiveDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getIsSynchronized()
+    public function getIsSynchronized ()
     {
         return $this->getAttribute('isSynchronized', 0);
     }
@@ -155,7 +156,7 @@ class ActiveDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getLDAPServiceName()
+    public function getLDAPServiceName ()
     {
         return $this->getAttribute('ldapServiceName', 0);
     }
@@ -165,7 +166,7 @@ class ActiveDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getRootDomainNamingContext()
+    public function getRootDomainNamingContext ()
     {
         return $this->getAttribute('rootDomainNamingContext', 0);
     }
@@ -175,7 +176,7 @@ class ActiveDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getSchemaNamingContext()
+    public function getSchemaNamingContext ()
     {
         return $this->getAttribute('schemaNamingContext', 0);
     }
@@ -185,7 +186,7 @@ class ActiveDirectory extends RootDse
      *
      * @return string|null
      */
-    public function getServerName()
+    public function getServerName ()
     {
         return $this->getAttribute('serverName', 0);
     }
@@ -196,7 +197,7 @@ class ActiveDirectory extends RootDse
      * @param string|string|array $oids capability(s) to check
      * @return boolean
      */
-    public function supportsCapability($oids)
+    public function supportsCapability ($oids)
     {
         return $this->attributeHasValue('supportedCapabilities', $oids);
     }
@@ -207,7 +208,7 @@ class ActiveDirectory extends RootDse
      * @param string|array $oids control oid(s) to check
      * @return boolean
      */
-    public function supportsControl($oids)
+    public function supportsControl ($oids)
     {
         return $this->attributeHasValue('supportedControl', $oids);
     }
@@ -218,7 +219,7 @@ class ActiveDirectory extends RootDse
      * @param string|array $policies policy(s) to check
      * @return boolean
      */
-    public function supportsPolicy($policies)
+    public function supportsPolicy ($policies)
     {
         return $this->attributeHasValue('supportedLDAPPolicies', $policies);
     }
@@ -228,7 +229,7 @@ class ActiveDirectory extends RootDse
      *
      * @return int
      */
-    public function getServerType()
+    public function getServerType ()
     {
         return self::SERVER_TYPE_ACTIVEDIRECTORY;
     }
@@ -238,7 +239,7 @@ class ActiveDirectory extends RootDse
      *
      * @return \Zend\Ldap\Dn
      */
-    public function getSchemaDn()
+    public function getSchemaDn ()
     {
         $schemaDn = $this->getSchemaNamingContext();
         return \Zend\Ldap\Dn::fromString($schemaDn);

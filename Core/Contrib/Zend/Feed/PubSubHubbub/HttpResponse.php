@@ -33,6 +33,7 @@ namespace Zend\Feed\PubSubHubbub;
  */
 class HttpResponse
 {
+
     /**
      * The body of any response to the current callback request
      *
@@ -59,7 +60,7 @@ class HttpResponse
      *
      * @return void
      */
-    public function sendResponse()
+    public function sendResponse ()
     {
         $this->sendHeaders();
         echo $this->getBody();
@@ -73,7 +74,7 @@ class HttpResponse
      *
      * @return void
      */
-    public function sendHeaders()
+    public function sendHeaders ()
     {
         if (count($this->_headers) || (200 != $this->_httpResponseCode)) {
             $this->canSendHeaders(true);
@@ -82,14 +83,16 @@ class HttpResponse
         }
         $httpCodeSent = false;
         foreach ($this->_headers as $header) {
-            if (!$httpCodeSent && $this->_httpResponseCode) {
-                header($header['name'] . ': ' . $header['value'], $header['replace'], $this->_httpResponseCode);
+            if (! $httpCodeSent && $this->_httpResponseCode) {
+                header($header['name'] . ': ' . $header['value'], 
+                $header['replace'], $this->_httpResponseCode);
                 $httpCodeSent = true;
             } else {
-                header($header['name'] . ': ' . $header['value'], $header['replace']);
+                header($header['name'] . ': ' . $header['value'], 
+                $header['replace']);
             }
         }
-        if (!$httpCodeSent) {
+        if (! $httpCodeSent) {
             header('HTTP/1.1 ' . $this->_httpResponseCode);
             $httpCodeSent = true;
         }
@@ -106,9 +109,9 @@ class HttpResponse
      * @param  boolean $replace
      * @return \Zend\Feed\PubSubHubbub\HttpResponse
      */
-    public function setHeader($name, $value, $replace = false)
+    public function setHeader ($name, $value, $replace = false)
     {
-        $name  = $this->_normalizeHeader($name);
+        $name = $this->_normalizeHeader($name);
         $value = (string) $value;
         if ($replace) {
             foreach ($this->_headers as $key => $header) {
@@ -117,12 +120,9 @@ class HttpResponse
                 }
             }
         }
-        $this->_headers[] = array(
-            'name'    => $name,
-            'value'   => $value,
-            'replace' => $replace,
-        );
-
+        $this->_headers[] = array('name' => $name, 'value' => $value, 
+        'replace' => $replace);
+        
         return $this;
     }
 
@@ -132,7 +132,7 @@ class HttpResponse
      * @param  string $name
      * @return string|null
      */
-    public function getHeader($name)
+    public function getHeader ($name)
     {
         $name = $this->_normalizeHeader($name);
         foreach ($this->_headers as $header) {
@@ -147,7 +147,7 @@ class HttpResponse
      *
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders ()
     {
         return $this->_headers;
     }
@@ -159,13 +159,15 @@ class HttpResponse
      * @return boolean
      * @throws \Zend\Feed\PubSubHubbub\Exception
      */
-    public function canSendHeaders($throw = false)
+    public function canSendHeaders ($throw = false)
     {
         $ok = headers_sent($file, $line);
         if ($ok && $throw) {
-            throw new Exception('Cannot send headers; headers already sent in ' . $file . ', line ' . $line);
+            throw new Exception(
+            'Cannot send headers; headers already sent in ' . $file . ', line ' .
+             $line);
         }
-        return !$ok;
+        return ! $ok;
     }
 
     /**
@@ -174,11 +176,11 @@ class HttpResponse
      * @param  int $code
      * @return \Zend\Feed\PubSubHubbub\HttpResponse
      */
-    public function setHttpResponseCode($code)
+    public function setHttpResponseCode ($code)
     {
-        if (!is_int($code) || (100 > $code) || (599 < $code)) {
-            throw new Exception('Invalid HTTP response'
-            . ' code:' . $code);
+        if (! is_int($code) || (100 > $code) || (599 < $code)) {
+            throw new Exception(
+            'Invalid HTTP response' . ' code:' . $code);
         }
         $this->_httpResponseCode = $code;
         return $this;
@@ -189,7 +191,7 @@ class HttpResponse
      *
      * @return int
      */
-    public function getHttpResponseCode()
+    public function getHttpResponseCode ()
     {
         return $this->_httpResponseCode;
     }
@@ -200,7 +202,7 @@ class HttpResponse
      * @param  string $content
      * @return \Zend\Feed\PubSubHubbub\HttpResponse
      */
-    public function setBody($content)
+    public function setBody ($content)
     {
         $this->_body = (string) $content;
         $this->setHeader('content-length', strlen($content));
@@ -212,7 +214,7 @@ class HttpResponse
      *
      * @return string
      */
-    public function getBody()
+    public function getBody ()
     {
         return $this->_body;
     }
@@ -223,7 +225,7 @@ class HttpResponse
      * @param  string $name
      * @return string
      */
-    protected function _normalizeHeader($name)
+    protected function _normalizeHeader ($name)
     {
         $filtered = str_replace(array('-', '_'), ' ', (string) $name);
         $filtered = ucwords(strtolower($filtered));

@@ -33,6 +33,7 @@ namespace Zend\Feed\PubSubHubbub;
  */
 interface Callback
 {
+
     /**
      * Handle any callback from a Hub Server responding to a subscription or
      * unsubscription request. This should be the Hub Server confirming the
@@ -41,7 +42,7 @@ interface Callback
      * @param array $httpData GET/POST data if available and not in $_GET/POST
      * @param bool $sendResponseNow Whether to send response now or when asked
      */
-    public function handle(array $httpData = null, $sendResponseNow = false);
+    public function handle (array $httpData = null, $sendResponseNow = false);
 
     /**
      * Send the response, including all headers.
@@ -51,7 +52,7 @@ interface Callback
      *
      * @return void
      */
-    public function sendResponse();
+    public function sendResponse ();
 
     /**
      * An instance of a class handling Http Responses. This is implemented in
@@ -60,7 +61,7 @@ interface Callback
      *
      * @param Zend\Feed\PubSubHubbub\HttpResponse|\Zend\Controller\Response\Http $httpResponse
      */
-    public function setHttpResponse($httpResponse);
+    public function setHttpResponse ($httpResponse);
 
     /**
      * An instance of a class handling Http Responses. This is implemented in
@@ -69,5 +70,5 @@ interface Callback
      *
      * @return Zend\Feed\PubSubHubbub\HttpResponse|\Zend\Controller\Response\Http
      */
-    public function getHttpResponse();
+    public function getHttpResponse ();
 }

@@ -24,8 +24,7 @@
  */
 namespace Zend\InfoCard\XML\Security\Transform;
 
-use Zend\InfoCard\XML\Security\Transform,
-    Zend\InfoCard\XML\Security;
+use Zend\InfoCard\XML\Security\Transform, Zend\InfoCard\XML\Security;
 
 /**
  * A class to create a transform rule set based on XML URIs and then apply those rules
@@ -41,6 +40,7 @@ use Zend\InfoCard\XML\Security\Transform,
  */
 class TransformChain
 {
+
     /**
      * A list of transforms to apply
      *
@@ -55,15 +55,16 @@ class TransformChain
      * @param string $uri The transform URI
      * @return string The transform implementation class name
      */
-    protected function _findClassbyURI($uri)
+    protected function _findClassbyURI ($uri)
     {
-        switch($uri) {
+        switch ($uri) {
             case 'http://www.w3.org/2000/09/xmldsig#enveloped-signature':
                 return 'Zend\InfoCard\XML\Security\Transform\EnvelopedSignature';
             case 'http://www.w3.org/2001/10/xml-exc-c14n#':
                 return 'Zend\InfoCard\XML\Security\Transform\XMLExcC14N';
             default:
-                throw new Security\Exception\InvalidArgumentException("Unknown or Unsupported Transformation Requested");
+                throw new Security\Exception\InvalidArgumentException(
+                "Unknown or Unsupported Transformation Requested");
         }
     }
 
@@ -73,12 +74,11 @@ class TransformChain
      * @param string $uri The Transform URI
      * @return \Zend\InfoCard\XML\Security\Transform
      */
-    public function addTransform($uri)
+    public function addTransform ($uri)
     {
         $class = $this->_findClassbyURI($uri);
-
-        $this->_transformList[] = array('uri' => $uri,
-                                        'class' => $class);
+        
+        $this->_transformList[] = array('uri' => $uri, 'class' => $class);
         return $this;
     }
 
@@ -87,7 +87,7 @@ class TransformChain
      *
      * @return array The list of transforms
      */
-    public function getTransformList()
+    public function getTransformList ()
     {
         return $this->_transformList;
     }
@@ -98,25 +98,27 @@ class TransformChain
      * @param string $strXmlDocument The input XML
      * @return string The XML after the transformations have been applied
      */
-    public function applyTransforms($strXmlDocument)
+    public function applyTransforms ($strXmlDocument)
     {
-        foreach($this->_transformList as $transform) {
-            if (!class_exists($transform['class'])) {
+        foreach ($this->_transformList as $transform) {
+            if (! class_exists($transform['class'])) {
                 \Zend\Loader::loadClass($transform['class']);
             }
-
-            $transformer = new $transform['class'];
-
+            
+            $transformer = new $transform['class']();
+            
             // We can't really test this check because it would require logic changes in the component itself
             // @codeCoverageIgnoreStart
-            if(!($transformer instanceof Transform)) {
-                throw new Security\Exception\RuntimeExcpetion("Transforms must implement the Transform Interface");
+            if (! ($transformer instanceof Transform)) {
+                throw new Security\Exception\RuntimeExcpetion(
+                "Transforms must implement the Transform Interface");
             }
             // @codeCoverageIgnoreEnd
+            
 
             $strXmlDocument = $transformer->transform($strXmlDocument);
         }
-
+        
         return $strXmlDocument;
     }
 }

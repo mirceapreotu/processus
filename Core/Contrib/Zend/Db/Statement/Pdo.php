@@ -53,7 +53,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return void
      * @throws \Zend\Db\Statement\Exception
      */
-    protected function _prepare($sql)
+    protected function _prepare ($sql)
     {
         try {
             $this->_stmt = $this->_adapter->getConnection()->prepare($sql);
@@ -66,13 +66,13 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * Bind a column of the statement result set to a PHP variable.
      *
      * @param string $column Name the column in the result set, either by
-     *                       position or by name.
+     * position or by name.
      * @param mixed  $param  Reference to the PHP variable containing the value.
      * @param mixed  $type   OPTIONAL
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function bindColumn($column, &$param, $type = null)
+    public function bindColumn ($column, &$param, $type = null)
     {
         try {
             if ($type === null) {
@@ -96,7 +96,8 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    protected function _bindParam($parameter, &$variable, $type = null, $length = null, $options = null)
+    protected function _bindParam ($parameter, &$variable, $type = null, 
+    $length = null, $options = null)
     {
         try {
             if ($type === null) {
@@ -110,7 +111,8 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
                     $type = \PDO::PARAM_STR;
                 }
             }
-            return $this->_stmt->bindParam($parameter, $variable, $type, $length, $options);
+            return $this->_stmt->bindParam($parameter, $variable, $type, 
+            $length, $options);
         } catch (\PDOException $e) {
             throw new Exception($e->getMessage(), (int) $e->getCode(), $e);
         }
@@ -125,14 +127,14 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function bindValue($parameter, $value, $type = null)
+    public function bindValue ($parameter, $value, $type = null)
     {
         if (is_string($parameter) && $parameter[0] != ':') {
             $parameter = ":$parameter";
         }
-
+        
         $this->_bindParam[$parameter] = $value;
-
+        
         try {
             if ($type === null) {
                 return $this->_stmt->bindValue($parameter, $value);
@@ -150,7 +152,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function closeCursor()
+    public function closeCursor ()
     {
         try {
             return $this->_stmt->closeCursor();
@@ -166,7 +168,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return int The number of columns.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function columnCount()
+    public function columnCount ()
     {
         try {
             return $this->_stmt->columnCount();
@@ -182,7 +184,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return string error code.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function errorCode()
+    public function errorCode ()
     {
         try {
             return $this->_stmt->errorCode();
@@ -198,7 +200,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return array
      * @throws \Zend\Db\Statement\Exception
      */
-    public function errorInfo()
+    public function errorInfo ()
     {
         try {
             return $this->_stmt->errorInfo();
@@ -214,7 +216,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function _execute(array $params = null)
+    public function _execute (array $params = null)
     {
         try {
             if ($params !== null) {
@@ -236,7 +238,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return mixed Array, object, or scalar depending on fetch mode.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function fetch($style = null, $cursor = null, $offset = null)
+    public function fetch ($style = null, $cursor = null, $offset = null)
     {
         if ($style === null) {
             $style = $this->_fetchMode;
@@ -253,7 +255,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      *
      * @return IteratorIterator
      */
-    public function getIterator()
+    public function getIterator ()
     {
         return new \IteratorIterator($this->_stmt);
     }
@@ -266,7 +268,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return array Collection of rows, each in a format by the fetch mode.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function fetchAll($style = null, $col = null)
+    public function fetchAll ($style = null, $col = null)
     {
         if ($style === null) {
             $style = $this->_fetchMode;
@@ -292,7 +294,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return string
      * @throws \Zend\Db\Statement\Exception
      */
-    public function fetchColumn($col = 0)
+    public function fetchColumn ($col = 0)
     {
         try {
             return $this->_stmt->fetchColumn($col);
@@ -309,7 +311,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return mixed One object instance of the specified class.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function fetchObject($class = 'stdClass', array $config = array())
+    public function fetchObject ($class = 'stdClass', array $config = array())
     {
         try {
             return $this->_stmt->fetchObject($class, $config);
@@ -325,7 +327,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return mixed      Attribute value.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function getAttribute($key)
+    public function getAttribute ($key)
     {
         try {
             return $this->_stmt->getAttribute($key);
@@ -341,7 +343,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return mixed
      * @throws \Zend\Db\Statement\Exception
      */
-    public function getColumnMeta($column)
+    public function getColumnMeta ($column)
     {
         try {
             return $this->_stmt->getColumnMeta($column);
@@ -358,7 +360,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function nextRowset()
+    public function nextRowset ()
     {
         try {
             return $this->_stmt->nextRowset();
@@ -375,7 +377,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return int     The number of rows affected.
      * @throws \Zend\Db\Statement\Exception
      */
-    public function rowCount()
+    public function rowCount ()
     {
         try {
             return $this->_stmt->rowCount();
@@ -392,7 +394,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function setAttribute($key, $val)
+    public function setAttribute ($key, $val)
     {
         try {
             return $this->_stmt->setAttribute($key, $val);
@@ -408,7 +410,7 @@ class Pdo extends AbstractStatement implements \IteratorAggregate
      * @return bool
      * @throws \Zend\Db\Statement\Exception
      */
-    public function setFetchMode($mode)
+    public function setFetchMode ($mode)
     {
         $this->_fetchMode = $mode;
         try {

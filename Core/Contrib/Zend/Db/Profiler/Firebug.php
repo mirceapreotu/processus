@@ -40,6 +40,7 @@ use Zend\Db\Profiler;
  */
 class Firebug extends Profiler
 {
+
     /**
      * The original label for this profiler.
      * @var string
@@ -70,10 +71,10 @@ class Firebug extends Profiler
      * @param string $label OPTIONAL Label for the profiling info.
      * @return void
      */
-    public function __construct($label = null)
+    public function __construct ($label = null)
     {
         $this->_label = $label;
-        if(!$this->_label) {
+        if (! $this->_label) {
             $this->_label = 'Zend_Db_Profiler_Firebug';
         }
     }
@@ -85,30 +86,32 @@ class Firebug extends Profiler
      * @param  boolean $enable
      * @return \Zend\Db\Profiler Provides a fluent interface
      */
-    public function setEnabled($enable)
+    public function setEnabled ($enable)
     {
         parent::setEnabled($enable);
-
+        
         if ($this->getEnabled()) {
-
-            if (!$this->_message) {
-                $this->_message = new \Zend\Wildfire\Plugin\FirePhp\TableMessage($this->_label);
+            
+            if (! $this->_message) {
+                $this->_message = new \Zend\Wildfire\Plugin\FirePhp\TableMessage(
+                $this->_label);
                 $this->_message->setBuffered(true);
-                $this->_message->setHeader(array('Time','Event','Parameters'));
+                $this->_message->setHeader(array('Time', 'Event', 'Parameters'));
                 $this->_message->setDestroy(true);
                 $this->_message->setOption('includeLineNumbers', false);
-                \Zend\Wildfire\Plugin\FirePhp\FirePhp::getInstance()->send($this->_message);
+                \Zend\Wildfire\Plugin\FirePhp\FirePhp::getInstance()->send(
+                $this->_message);
             }
-
+        
         } else {
-
+            
             if ($this->_message) {
                 $this->_message->setDestroy(true);
                 $this->_message = null;
             }
-
+        
         }
-
+        
         return $this;
     }
 
@@ -119,24 +122,24 @@ class Firebug extends Profiler
      * @throws \Zend\Db\Profiler\Exception
      * @return void
      */
-    public function queryEnd($queryId)
+    public function queryEnd ($queryId)
     {
         $state = parent::queryEnd($queryId);
-
-        if (!$this->getEnabled() || $state == self::IGNORED) {
+        
+        if (! $this->getEnabled() || $state == self::IGNORED) {
             return;
         }
-
+        
         $this->_message->setDestroy(false);
-
+        
         $profile = $this->getQueryProfile($queryId);
-
+        
         $this->_totalElapsedTime += $profile->getElapsedSecs();
-
-        $this->_message->addRow(array((string)round($profile->getElapsedSecs(),5),
-                                      $profile->getQuery(),
-                                      ($params=$profile->getQueryParams())?$params:null));
-
+        
+        $this->_message->addRow(
+        array((string) round($profile->getElapsedSecs(), 5), 
+        $profile->getQuery(), ($params = $profile->getQueryParams()) ? $params : null));
+        
         $this->updateMessageLabel();
     }
 
@@ -145,17 +148,15 @@ class Firebug extends Profiler
      *
      * @return void
      */
-    protected function updateMessageLabel()
+    protected function updateMessageLabel ()
     {
-        if (!$this->_message) {
+        if (! $this->_message) {
             return;
         }
-        $this->_message->setLabel(str_replace(array('%label%',
-                                                    '%totalCount%',
-                                                    '%totalDuration%'),
-                                              array($this->_label,
-                                                    $this->getTotalNumQueries(),
-                                                    (string)round($this->_totalElapsedTime,5)),
-                                              $this->_label_template));
+        $this->_message->setLabel(
+        str_replace(
+        array('%label%', '%totalCount%', '%totalDuration%'), 
+        array($this->_label, $this->getTotalNumQueries(), 
+        (string) round($this->_totalElapsedTime, 5)), $this->_label_template));
     }
 }

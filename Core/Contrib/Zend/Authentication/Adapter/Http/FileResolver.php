@@ -37,6 +37,7 @@ namespace Zend\Authentication\Adapter\Http;
  */
 class FileResolver implements Resolver
 {
+
     /**
      * Path to credentials file
      *
@@ -50,9 +51,9 @@ class FileResolver implements Resolver
      * @param  string $path Complete filename where the credentials are stored
      * @return void
      */
-    public function __construct($path = '')
+    public function __construct ($path = '')
     {
-        if (!empty($path)) {
+        if (! empty($path)) {
             $this->setFile($path);
         }
     }
@@ -64,13 +65,13 @@ class FileResolver implements Resolver
      * @return Zend\Authentication\Adapter\Http\FileResolver Provides a fluent interface
      * @throws Zend\Authentication\Adapter\Http\Exception
      */
-    public function setFile($path)
+    public function setFile ($path)
     {
-        if (empty($path) || !is_readable($path)) {
+        if (empty($path) || ! is_readable($path)) {
             throw new InvalidArgumentException('Path not readable: ' . $path);
         }
         $this->_file = $path;
-
+        
         return $this;
     }
 
@@ -79,7 +80,7 @@ class FileResolver implements Resolver
      *
      * @return string
      */
-    public function getFile()
+    public function getFile ()
     {
         return $this->_file;
     }
@@ -93,7 +94,7 @@ class FileResolver implements Resolver
      * returned string is the plain-text password for Basic authentication.
      *
      * The expected format of the file is:
-     *   username:realm:sharedSecret
+     * username:realm:sharedSecret
      *
      * That is, each line consists of the user's username, the applicable
      * authentication realm, and the password or hash, each delimited by
@@ -102,30 +103,35 @@ class FileResolver implements Resolver
      * @param  string $username Username
      * @param  string $realm    Authentication Realm
      * @return string|false User's shared secret, if the user is found in the
-     *         realm, false otherwise.
+     * realm, false otherwise.
      * @throws Zend\Authentication\Adapter\Http\Exception
      */
-    public function resolve($username, $realm)
+    public function resolve ($username, $realm)
     {
         if (empty($username)) {
             throw new InvalidArgumentException('Username is required');
-        } else if (!ctype_print($username) || strpos($username, ':') !== false) {
-            throw new InvalidArgumentException('Username must consist only of printable characters, '
-                                                              . 'excluding the colon');
-        }
+        } else 
+            if (! ctype_print($username) || strpos($username, ':') !== false) {
+                throw new InvalidArgumentException(
+                'Username must consist only of printable characters, ' .
+                 'excluding the colon');
+            }
         if (empty($realm)) {
             throw new InvalidArgumentException('Realm is required');
-        } else if (!ctype_print($realm) || strpos($realm, ':') !== false) {
-            throw new InvalidArgumentException('Realm must consist only of printable characters, '
-                                                              . 'excluding the colon.');
-        }
-
+        } else 
+            if (! ctype_print($realm) || strpos($realm, ':') !== false) {
+                throw new InvalidArgumentException(
+                'Realm must consist only of printable characters, ' .
+                 'excluding the colon.');
+            }
+        
         // Open file, read through looking for matching credentials
         $fp = @fopen($this->_file, 'r');
-        if (!$fp) {
-            throw new RuntimeException('Unable to open password file: ' . $this->_file);
+        if (! $fp) {
+            throw new RuntimeException(
+            'Unable to open password file: ' . $this->_file);
         }
-
+        
         // No real validation is done on the contents of the password file. The
         // assumption is that we trust the administrators to keep it secure.
         while (($line = fgetcsv($fp, 512, ':')) !== false) {
@@ -135,7 +141,7 @@ class FileResolver implements Resolver
                 return $password;
             }
         }
-
+        
         fclose($fp);
         return false;
     }

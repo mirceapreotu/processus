@@ -40,13 +40,14 @@ class ColCount extends \Zend\GData\Extension
 {
 
     protected $_rootElement = 'colCount';
+
     protected $_rootNamespace = 'gs';
 
     /**
      * Constructs a new Zend_Gdata_Spreadsheets_Extension_ColCount element.
      * @param string $text (optional) Text contents of the element.
      */
-    public function __construct($text = null)
+    public function __construct ($text = null)
     {
         $this->registerAllNamespaces(\Zend\GData\Spreadsheets::$namespaces);
         parent::__construct();

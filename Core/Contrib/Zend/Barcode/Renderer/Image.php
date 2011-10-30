@@ -23,11 +23,7 @@
  * @namespace
  */
 namespace Zend\Barcode\Renderer;
-use Zend\Barcode,
-    Zend\Barcode\Exception\RendererCreationException,
-    Zend\Barcode\Renderer\Exception\RuntimeException,
-    Zend\Barcode\Renderer\Exception\OutOfRangeException,
-    Zend\Barcode\Renderer\Exception\InvalidArgumentException;
+use Zend\Barcode, Zend\Barcode\Exception\RendererCreationException, Zend\Barcode\Renderer\Exception\RuntimeException, Zend\Barcode\Renderer\Exception\OutOfRangeException, Zend\Barcode\Renderer\Exception\InvalidArgumentException;
 
 /**
  * Class for rendering the barcode as image
@@ -41,13 +37,12 @@ use Zend\Barcode,
  */
 class Image extends AbstractRenderer
 {
+
     /**
      * List of authorized output format
      * @var array
      */
-    protected $_allowedImageType = array('png',
-                                         'jpeg',
-                                         'gif'  );
+    protected $_allowedImageType = array('png', 'jpeg', 'gif');
 
     /**
      * Image format
@@ -90,12 +85,13 @@ class Image extends AbstractRenderer
      * @param array|\Zend\Config\Config $options
      * @return void
      */
-    public function __construct($options = null)
+    public function __construct ($options = null)
     {
-        if (!function_exists('gd_info')) {
-            throw new RendererCreationException('\Zend\Barcode\Renderer\Image requires the GD extension');
+        if (! function_exists('gd_info')) {
+            throw new RendererCreationException(
+            '\Zend\Barcode\Renderer\Image requires the GD extension');
         }
-
+        
         parent::__construct($options);
     }
 
@@ -105,12 +101,11 @@ class Image extends AbstractRenderer
      * @return \Zend\Barcode\Renderer
      * @throw \Zend\Barcode\Renderer\Exception
      */
-    public function setHeight($value)
+    public function setHeight ($value)
     {
-        if (!is_numeric($value) || intval($value) < 0) {
+        if (! is_numeric($value) || intval($value) < 0) {
             throw new OutOfRangeException(
-                'Image height must be greater than or equals 0'
-            );
+            'Image height must be greater than or equals 0');
         }
         $this->_userHeight = intval($value);
         return $this;
@@ -121,7 +116,7 @@ class Image extends AbstractRenderer
      *
      * @return int
      */
-    public function getHeight()
+    public function getHeight ()
     {
         return $this->_userHeight;
     }
@@ -132,12 +127,11 @@ class Image extends AbstractRenderer
      * @param mixed $value
      * @return void
      */
-    public function setWidth($value)
+    public function setWidth ($value)
     {
-        if (!is_numeric($value) || intval($value) < 0) {
+        if (! is_numeric($value) || intval($value) < 0) {
             throw new OutOfRangeException(
-                'Image width must be greater than or equals 0'
-            );
+            'Image width must be greater than or equals 0');
         }
         $this->_userWidth = intval($value);
         return $this;
@@ -148,7 +142,7 @@ class Image extends AbstractRenderer
      *
      * @return int
      */
-    public function getWidth()
+    public function getWidth ()
     {
         return $this->_userWidth;
     }
@@ -160,12 +154,11 @@ class Image extends AbstractRenderer
      * @return \Zend\Barcode\Renderer
      * @throw \Zend\Barcode\Renderer\Exception
      */
-    public function setResource($image)
+    public function setResource ($image)
     {
         if (gettype($image) != 'resource' || get_resource_type($image) != 'gd') {
             throw new InvalidArgumentException(
-                'Invalid image resource provided to setResource()'
-            );
+            'Invalid image resource provided to setResource()');
         }
         $this->_resource = $image;
         return $this;
@@ -178,19 +171,17 @@ class Image extends AbstractRenderer
      * @return \Zend\Barcode\Renderer
      * @throw \Zend\Barcode\Renderer\Exception
      */
-    public function setImageType($value)
+    public function setImageType ($value)
     {
         if ($value == 'jpg') {
             $value = 'jpeg';
         }
-
-        if (!in_array($value, $this->_allowedImageType)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid type "%s" provided to setImageType()',
-                $value
-            ));
+        
+        if (! in_array($value, $this->_allowedImageType)) {
+            throw new InvalidArgumentException(
+            sprintf('Invalid type "%s" provided to setImageType()', $value));
         }
-
+        
         $this->_imageType = $value;
         return $this;
     }
@@ -200,7 +191,7 @@ class Image extends AbstractRenderer
      *
      * @return string
      */
-    public function getImageType()
+    public function getImageType ()
     {
         return $this->_imageType;
     }
@@ -210,26 +201,20 @@ class Image extends AbstractRenderer
      *
      * @return void
      */
-    protected function _initRenderer()
+    protected function _initRenderer ()
     {
-        $barcodeWidth  = $this->_barcode->getWidth(true);
+        $barcodeWidth = $this->_barcode->getWidth(true);
         $barcodeHeight = $this->_barcode->getHeight(true);
-
+        
         if ($this->_resource !== null) {
-            $foreColor       = $this->_barcode->getForeColor();
+            $foreColor = $this->_barcode->getForeColor();
             $backgroundColor = $this->_barcode->getBackgroundColor();
-            $this->_imageBackgroundColor = imagecolorallocate(
-                $this->_resource,
-                ($backgroundColor & 0xFF0000) >> 16,
-                ($backgroundColor & 0x00FF00) >> 8,
-                $backgroundColor & 0x0000FF
-            );
-            $this->_imageForeColor = imagecolorallocate(
-                $this->_resource,
-                ($foreColor & 0xFF0000) >> 16,
-                ($foreColor & 0x00FF00) >> 8,
-                $foreColor & 0x0000FF
-            );
+            $this->_imageBackgroundColor = imagecolorallocate($this->_resource, 
+            ($backgroundColor & 0xFF0000) >> 16, 
+            ($backgroundColor & 0x00FF00) >> 8, $backgroundColor & 0x0000FF);
+            $this->_imageForeColor = imagecolorallocate($this->_resource, 
+            ($foreColor & 0xFF0000) >> 16, ($foreColor & 0x00FF00) >> 8, 
+            $foreColor & 0x0000FF);
         } else {
             $width = $barcodeWidth;
             $height = $barcodeHeight;
@@ -239,33 +224,26 @@ class Image extends AbstractRenderer
             if ($this->_userHeight && $this->_barcode->getType() != 'error') {
                 $height = $this->_userHeight;
             }
-
-            $foreColor       = $this->_barcode->getForeColor();
+            
+            $foreColor = $this->_barcode->getForeColor();
             $backgroundColor = $this->_barcode->getBackgroundColor();
             $this->_resource = imagecreatetruecolor($width, $height);
-
-            $this->_imageBackgroundColor = imagecolorallocate(
-                $this->_resource,
-                ($backgroundColor & 0xFF0000) >> 16,
-                ($backgroundColor & 0x00FF00) >> 8,
-                $backgroundColor & 0x0000FF
-            );
-            $this->_imageForeColor = imagecolorallocate(
-                $this->_resource,
-                ($foreColor & 0xFF0000) >> 16,
-                ($foreColor & 0x00FF00) >> 8,
-                $foreColor & 0x0000FF
-            );
+            
+            $this->_imageBackgroundColor = imagecolorallocate($this->_resource, 
+            ($backgroundColor & 0xFF0000) >> 16, 
+            ($backgroundColor & 0x00FF00) >> 8, $backgroundColor & 0x0000FF);
+            $this->_imageForeColor = imagecolorallocate($this->_resource, 
+            ($foreColor & 0xFF0000) >> 16, ($foreColor & 0x00FF00) >> 8, 
+            $foreColor & 0x0000FF);
             $white = imagecolorallocate($this->_resource, 255, 255, 255);
-            imagefilledrectangle($this->_resource, 0, 0, $width - 1, $height - 1, $white);
+            imagefilledrectangle($this->_resource, 0, 0, $width - 1, 
+            $height - 1, $white);
         }
-        $this->_adjustPosition(imagesy($this->_resource), imagesx($this->_resource));
-        imagefilledrectangle($this->_resource,
-                             $this->_leftOffset,
-                             $this->_topOffset,
-                             $this->_leftOffset + $barcodeWidth - 1,
-                             $this->_topOffset + $barcodeHeight - 1,
-                             $this->_imageBackgroundColor);
+        $this->_adjustPosition(imagesy($this->_resource), 
+        imagesx($this->_resource));
+        imagefilledrectangle($this->_resource, $this->_leftOffset, 
+        $this->_topOffset, $this->_leftOffset + $barcodeWidth - 1, 
+        $this->_topOffset + $barcodeHeight - 1, $this->_imageBackgroundColor);
     }
 
     /**
@@ -273,7 +251,7 @@ class Image extends AbstractRenderer
      *
      * @return void
      */
-    protected function _checkParams()
+    protected function _checkParams ()
     {
         $this->_checkDimensions();
     }
@@ -283,41 +261,37 @@ class Image extends AbstractRenderer
      *
      * @return void
      */
-    protected function _checkDimensions()
+    protected function _checkDimensions ()
     {
         if ($this->_resource !== null) {
             if (imagesy($this->_resource) < $this->_barcode->getHeight(true)) {
                 throw new RuntimeException(
-                    'Barcode is define outside the image (height)'
-                );
+                'Barcode is define outside the image (height)');
             }
         } else {
             if ($this->_userHeight) {
                 $height = $this->_barcode->getHeight(true);
                 if ($this->_userHeight < $height) {
-                    throw new RuntimeException(sprintf(
-                        "Barcode is define outside the image (calculated: '%d', provided: '%d')",
-                        $height,
-                        $this->_userHeight
-                    ));
+                    throw new RuntimeException(
+                    sprintf(
+                    "Barcode is define outside the image (calculated: '%d', provided: '%d')", 
+                    $height, $this->_userHeight));
                 }
             }
         }
         if ($this->_resource !== null) {
             if (imagesx($this->_resource) < $this->_barcode->getWidth(true)) {
                 throw new RuntimeException(
-                    'Barcode is define outside the image (width)'
-                );
+                'Barcode is define outside the image (width)');
             }
         } else {
             if ($this->_userWidth) {
                 $width = $this->_barcode->getWidth(true);
                 if ($this->_userWidth < $width) {
-                    throw new RuntimeException(sprintf(
-                        "Barcode is define outside the image (calculated: '%d', provided: '%d')",
-                        $width,
-                        $this->_userWidth
-                    ));
+                    throw new RuntimeException(
+                    sprintf(
+                    "Barcode is define outside the image (calculated: '%d', provided: '%d')", 
+                    $width, $this->_userWidth));
                 }
             }
         }
@@ -328,7 +302,7 @@ class Image extends AbstractRenderer
      *
      * @return mixed
      */
-    public function render()
+    public function render ()
     {
         $this->draw();
         header("Content-Type: image/" . $this->_imageType);
@@ -344,22 +318,17 @@ class Image extends AbstractRenderer
      * @param integer $color
      * @param boolean $filled
      */
-    protected function _drawPolygon($points, $color, $filled = true)
+    protected function _drawPolygon ($points, $color, $filled = true)
     {
-        $newPoints = array($points[0][0] + $this->_leftOffset,
-                           $points[0][1] + $this->_topOffset,
-                           $points[1][0] + $this->_leftOffset,
-                           $points[1][1] + $this->_topOffset,
-                           $points[2][0] + $this->_leftOffset,
-                           $points[2][1] + $this->_topOffset,
-                           $points[3][0] + $this->_leftOffset,
-                           $points[3][1] + $this->_topOffset,   );
-
-        $allocatedColor = imagecolorallocate($this->_resource,
-                                             ($color & 0xFF0000) >> 16,
-                                             ($color & 0x00FF00) >> 8,
-                                              $color & 0x0000FF         );
-
+        $newPoints = array($points[0][0] + $this->_leftOffset, 
+        $points[0][1] + $this->_topOffset, $points[1][0] + $this->_leftOffset, 
+        $points[1][1] + $this->_topOffset, $points[2][0] + $this->_leftOffset, 
+        $points[2][1] + $this->_topOffset, $points[3][0] + $this->_leftOffset, 
+        $points[3][1] + $this->_topOffset);
+        
+        $allocatedColor = imagecolorallocate($this->_resource, 
+        ($color & 0xFF0000) >> 16, ($color & 0x00FF00) >> 8, $color & 0x0000FF);
+        
         if ($filled) {
             imagefilledpolygon($this->_resource, $newPoints, 4, $allocatedColor);
         } else {
@@ -378,19 +347,18 @@ class Image extends AbstractRenderer
      * @param string $alignment
      * @param float $orientation
      */
-    protected function _drawText($text, $size, $position, $font, $color, $alignment = 'center', $orientation = 0)
+    protected function _drawText ($text, $size, $position, $font, $color, 
+    $alignment = 'center', $orientation = 0)
     {
-        $allocatedColor = imagecolorallocate($this->_resource,
-                                             ($color & 0xFF0000) >> 16,
-                                             ($color & 0x00FF00) >> 8,
-                                              $color & 0x0000FF         );
-
+        $allocatedColor = imagecolorallocate($this->_resource, 
+        ($color & 0xFF0000) >> 16, ($color & 0x00FF00) >> 8, $color & 0x0000FF);
+        
         if ($font == null) {
             $font = 3;
         }
         $position[0] += $this->_leftOffset;
         $position[1] += $this->_topOffset;
-
+        
         if (is_numeric($font)) {
             if ($orientation) {
                 /**
@@ -401,8 +369,7 @@ class Image extends AbstractRenderer
                  * the text
                  */
                 throw new RuntimeException(
-                    'No orientation possible with GD internal font'
-                );
+                'No orientation possible with GD internal font');
             }
             $fontWidth = imagefontwidth($font);
             $positionY = $position[1] - imagefontheight($font) + 1;
@@ -411,20 +378,22 @@ class Image extends AbstractRenderer
                     $positionX = $position[0];
                     break;
                 case 'center':
-                    $positionX = $position[0] - ceil(($fontWidth * strlen($text)) / 2);
+                    $positionX = $position[0] -
+                     ceil(($fontWidth * strlen($text)) / 2);
                     break;
                 case 'right':
                     $positionX = $position[0] - ($fontWidth * strlen($text));
                     break;
             }
-            imagestring($this->_resource, $font, $positionX, $positionY, $text, $color);
+            imagestring($this->_resource, $font, $positionX, $positionY, $text, 
+            $color);
         } else {
-
-            if (!function_exists('imagettfbbox')) {
+            
+            if (! function_exists('imagettfbbox')) {
                 throw new RuntimeException(
-                    'A font was provided, but this instance of PHP does not have TTF (FreeType) support');
+                'A font was provided, but this instance of PHP does not have TTF (FreeType) support');
             }
-
+            
             $box = imagettfbbox($size, 0, $font, $text);
             switch ($alignment) {
                 case 'left':
@@ -437,14 +406,10 @@ class Image extends AbstractRenderer
                     $width = ($box[2] - $box[0]);
                     break;
             }
-            imagettftext($this->_resource,
-                         $size,
-                         $orientation,
-                         $position[0] - ($width * cos(pi() * $orientation / 180)),
-                         $position[1] + ($width * sin(pi() * $orientation / 180)),
-                         $allocatedColor,
-                         $font,
-                         $text);
+            imagettftext($this->_resource, $size, $orientation, 
+            $position[0] - ($width * cos(pi() * $orientation / 180)), 
+            $position[1] + ($width * sin(pi() * $orientation / 180)), 
+            $allocatedColor, $font, $text);
         }
     }
 }

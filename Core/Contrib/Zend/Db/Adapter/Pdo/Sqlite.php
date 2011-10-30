@@ -23,9 +23,7 @@
  * @namespace
  */
 namespace Zend\Db\Adapter\Pdo;
-use Zend\Db,
-    Zend\Db\Adapter,
-    Zend\Db\Adapter\AbstractPdoAdapter;
+use Zend\Db, Zend\Db\Adapter, Zend\Db\Adapter\AbstractPdoAdapter;
 
 /**
  * Class for connecting to Sqlite2 and Sqlite3 databases and performing common operations.
@@ -47,7 +45,7 @@ class Sqlite extends \Zend\Db\Adapter\AbstractPdoAdapter
      *
      * @var string
      */
-     protected $_pdoType = 'sqlite';
+    protected $_pdoType = 'sqlite';
 
     /**
      * Keys are UPPERCASE SQL datatypes or the constants
@@ -60,13 +58,10 @@ class Sqlite extends \Zend\Db\Adapter\AbstractPdoAdapter
      *
      * @var array Associative array of datatypes to values 0, 1, or 2.
      */
-    protected $_numericDataTypes = array(
-        Db\Db::INT_TYPE    => Db\Db::INT_TYPE,
-        Db\Db::BIGINT_TYPE => Db\Db::BIGINT_TYPE,
-        Db\Db::FLOAT_TYPE  => Db\Db::FLOAT_TYPE,
-        'INTEGER'            => Db\Db::BIGINT_TYPE,
-        'REAL'               => Db\Db::FLOAT_TYPE
-    );
+    protected $_numericDataTypes = array(Db\Db::INT_TYPE => Db\Db::INT_TYPE, 
+    Db\Db::BIGINT_TYPE => Db\Db::BIGINT_TYPE, 
+    Db\Db::FLOAT_TYPE => Db\Db::FLOAT_TYPE, 
+    'INTEGER' => Db\Db::BIGINT_TYPE, 'REAL' => Db\Db::FLOAT_TYPE);
 
     /**
      * Constructor.
@@ -77,23 +72,23 @@ class Sqlite extends \Zend\Db\Adapter\AbstractPdoAdapter
      * Also, an extra config key "sqlite2" specifies compatibility mode.
      *
      * dbname    => (string) The name of the database to user (required,
-     *                       use :memory: for memory-based database)
+     * use :memory: for memory-based database)
      *
      * sqlite2   => (boolean) Pdo_SQLITE defaults to Sqlite 3.  For compatibility
-     *                        with an older Sqlite 2 database, set this to TRUE.
+     * with an older Sqlite 2 database, set this to TRUE.
      *
      * @param array $config An array of configuration keys.
      */
-    public function __construct(array $config = array())
+    public function __construct (array $config = array())
     {
         if (isset($config['sqlite2']) && $config['sqlite2']) {
             $this->_pdoType = 'sqlite2';
         }
-
+        
         // Sqlite uses no username/password.  Stub to satisfy parent::_connect()
         $this->_config['username'] = null;
         $this->_config['password'] = null;
-
+        
         return parent::__construct($config);
     }
 
@@ -104,20 +99,21 @@ class Sqlite extends \Zend\Db\Adapter\AbstractPdoAdapter
      * @param array $config
      * @throws \Zend\Db\Adapter\Exception
      */
-    protected function _checkRequiredOptions(array $config)
+    protected function _checkRequiredOptions (array $config)
     {
         // we need at least a dbname
         if (! array_key_exists('dbname', $config)) {
-            throw new Adapter\Exception("Configuration array must have a key for 'dbname' that names the database instance");
+            throw new Adapter\Exception(
+            "Configuration array must have a key for 'dbname' that names the database instance");
         }
     }
 
     /**
      * DSN builder
      */
-    protected function _dsn()
+    protected function _dsn ()
     {
-        return $this->_pdoType .':'. $this->_config['dbname'];
+        return $this->_pdoType . ':' . $this->_config['dbname'];
     }
 
     /**
@@ -126,7 +122,7 @@ class Sqlite extends \Zend\Db\Adapter\AbstractPdoAdapter
      *
      * @throws \Zend\Db\Adapter\Exception
      */
-    protected function _connect()
+    protected function _connect ()
     {
         /**
          * if we already have a Pdo object, no need to re-connect.
@@ -134,15 +130,15 @@ class Sqlite extends \Zend\Db\Adapter\AbstractPdoAdapter
         if ($this->_connection) {
             return;
         }
-
+        
         parent::_connect();
-
+        
         $retval = $this->_connection->exec('PRAGMA full_column_names=0');
         if ($retval === false) {
             $error = $this->_connection->errorInfo();
             throw new Adapter\Exception($error[2]);
         }
-
+        
         $retval = $this->_connection->exec('PRAGMA short_column_names=1');
         if ($retval === false) {
             $error = $this->_connection->errorInfo();
@@ -155,12 +151,12 @@ class Sqlite extends \Zend\Db\Adapter\AbstractPdoAdapter
      *
      * @return array
      */
-    public function listTables()
+    public function listTables ()
     {
-        $sql = "SELECT name FROM sqlite_master WHERE type='table' "
-             . "UNION ALL SELECT name FROM sqlite_temp_master "
-             . "WHERE type='table' ORDER BY name";
-
+        $sql = "SELECT name FROM sqlite_master WHERE type='table' " .
+         "UNION ALL SELECT name FROM sqlite_temp_master " .
+         "WHERE type='table' ORDER BY name";
+        
         return $this->fetchCol($sql);
     }
 
@@ -192,44 +188,46 @@ class Sqlite extends \Zend\Db\Adapter\AbstractPdoAdapter
      * @param string $schemaName OPTIONAL
      * @return array
      */
-    public function describeTable($tableName, $schemaName = null)
+    public function describeTable ($tableName, $schemaName = null)
     {
         $sql = 'PRAGMA ';
-
+        
         if ($schemaName) {
             $sql .= $this->quoteIdentifier($schemaName) . '.';
         }
-
-        $sql .= 'table_info('.$this->quoteIdentifier($tableName).')';
-
+        
+        $sql .= 'table_info(' . $this->quoteIdentifier($tableName) . ')';
+        
         $stmt = $this->query($sql);
-
+        
         /**
          * Use FETCH_NUM so we are not dependent on the CASE attribute of the Pdo connection
          */
         $result = $stmt->fetchAll(Db\Db::FETCH_NUM);
-
-        $cid        = 0;
-        $name       = 1;
-        $type       = 2;
-        $notnull    = 3;
+        
+        $cid = 0;
+        $name = 1;
+        $type = 2;
+        $notnull = 3;
         $dflt_value = 4;
-        $pk         = 5;
-
+        $pk = 5;
+        
         $desc = array();
-
+        
         $p = 1;
         foreach ($result as $key => $row) {
-            list($length, $scale, $precision, $primary, $primaryPosition, $identity) =
-                array(null, null, null, false, null, false);
+            list ($length, $scale, $precision, $primary, $primaryPosition, $identity) = array(
+            null, null, null, false, null, false);
             if (preg_match('/^((?:var)?char)\((\d+)\)/i', $row[$type], $matches)) {
                 $row[$type] = $matches[1];
                 $length = $matches[2];
-            } else if (preg_match('/^decimal\((\d+),(\d+)\)/i', $row[$type], $matches)) {
-                $row[$type] = 'DECIMAL';
-                $precision = $matches[1];
-                $scale = $matches[2];
-            }
+            } else 
+                if (preg_match('/^decimal\((\d+),(\d+)\)/i', $row[$type], 
+                $matches)) {
+                    $row[$type] = 'DECIMAL';
+                    $precision = $matches[1];
+                    $scale = $matches[2];
+                }
             if ((bool) $row[$pk]) {
                 $primary = true;
                 $primaryPosition = $p;
@@ -237,24 +235,20 @@ class Sqlite extends \Zend\Db\Adapter\AbstractPdoAdapter
                  * Sqlite INTEGER primary key is always auto-increment.
                  */
                 $identity = (bool) ($row[$type] == 'INTEGER');
-                ++$p;
+                ++ $p;
             }
             $desc[$this->foldCase($row[$name])] = array(
-                'SCHEMA_NAME'      => $this->foldCase($schemaName),
-                'TABLE_NAME'       => $this->foldCase($tableName),
-                'COLUMN_NAME'      => $this->foldCase($row[$name]),
-                'COLUMN_POSITION'  => $row[$cid]+1,
-                'DATA_TYPE'        => $row[$type],
-                'DEFAULT'          => $row[$dflt_value],
-                'NULLABLE'         => ! (bool) $row[$notnull],
-                'LENGTH'           => $length,
-                'SCALE'            => $scale,
-                'PRECISION'        => $precision,
-                'UNSIGNED'         => null, // Sqlite3 does not support unsigned data
-                'PRIMARY'          => $primary,
-                'PRIMARY_POSITION' => $primaryPosition,
-                'IDENTITY'         => $identity
-            );
+            'SCHEMA_NAME' => $this->foldCase($schemaName), 
+            'TABLE_NAME' => $this->foldCase($tableName), 
+            'COLUMN_NAME' => $this->foldCase($row[$name]), 
+            'COLUMN_POSITION' => $row[$cid] + 1, 
+            'DATA_TYPE' => $row[$type], 'DEFAULT' => $row[$dflt_value], 
+            'NULLABLE' => ! (bool) $row[$notnull], 'LENGTH' => $length, 
+            'SCALE' => $scale, 'PRECISION' => $precision, 
+            'UNSIGNED' => null, // Sqlite3 does not support unsigned data
+'PRIMARY' => $primary, 
+            'PRIMARY_POSITION' => $primaryPosition, 
+            'IDENTITY' => $identity);
         }
         return $desc;
     }
@@ -267,23 +261,25 @@ class Sqlite extends \Zend\Db\Adapter\AbstractPdoAdapter
      * @param integer $offset OPTIONAL
      * @return string
      */
-    public function limit($sql, $count, $offset = 0)
+    public function limit ($sql, $count, $offset = 0)
     {
         $count = intval($count);
         if ($count <= 0) {
-            throw new Adapter\Exception("LIMIT argument count=$count is not valid");
+            throw new Adapter\Exception(
+            "LIMIT argument count=$count is not valid");
         }
-
+        
         $offset = intval($offset);
         if ($offset < 0) {
-            throw new Adapter\Exception("LIMIT argument offset=$offset is not valid");
+            throw new Adapter\Exception(
+            "LIMIT argument offset=$offset is not valid");
         }
-
+        
         $sql .= " LIMIT $count";
         if ($offset > 0) {
             $sql .= " OFFSET $offset";
         }
-
+        
         return $sql;
     }
 

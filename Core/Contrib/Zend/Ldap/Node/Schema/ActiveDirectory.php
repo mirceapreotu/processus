@@ -24,8 +24,7 @@
  */
 namespace Zend\Ldap\Node\Schema;
 
-use Zend\Ldap\Node\Schema,
-    Zend\Ldap;
+use Zend\Ldap\Node\Schema, Zend\Ldap;
 
 /**
  * Zend_Ldap_Node_Schema_ActiveDirectory provides a simple data-container for the Schema node of
@@ -43,12 +42,14 @@ use Zend\Ldap\Node\Schema,
  */
 class ActiveDirectory extends Schema
 {
+
     /**
      * The attribute Types
      *
      * @var array
      */
     protected $_attributeTypes = array();
+
     /**
      * The object classes
      *
@@ -63,16 +64,16 @@ class ActiveDirectory extends Schema
      * @param  \Zend\Ldap\Ldap    $ldap
      * @return \Zend\Ldap\Node\Schema Provides a fluid interface
      */
-    protected function _parseSchema(Ldap\Dn $dn, Ldap\Ldap $ldap)
+    protected function _parseSchema (Ldap\Dn $dn, Ldap\Ldap $ldap)
     {
         parent::_parseSchema($dn, $ldap);
-        foreach ($ldap->search('(objectClass=classSchema)', $dn,
-                Ldap\Ldap::SEARCH_SCOPE_ONE) as $node) {
+        foreach ($ldap->search('(objectClass=classSchema)', $dn, 
+        Ldap\Ldap::SEARCH_SCOPE_ONE) as $node) {
             $val = new ObjectClass\ActiveDirectory($node);
             $this->_objectClasses[$val->getName()] = $val;
         }
-        foreach ($ldap->search('(objectClass=attributeSchema)', $dn,
-                Ldap\Ldap::SEARCH_SCOPE_ONE) as $node) {
+        foreach ($ldap->search('(objectClass=attributeSchema)', $dn, 
+        Ldap\Ldap::SEARCH_SCOPE_ONE) as $node) {
             $val = new AttributeType\ActiveDirectory($node);
             $this->_attributeTypes[$val->getName()] = $val;
         }
@@ -84,7 +85,7 @@ class ActiveDirectory extends Schema
      *
      * @return array
      */
-    public function getAttributeTypes()
+    public function getAttributeTypes ()
     {
         return $this->_attributeTypes;
     }
@@ -94,7 +95,7 @@ class ActiveDirectory extends Schema
      *
      * @return array
      */
-    public function getObjectClasses()
+    public function getObjectClasses ()
     {
         return $this->_objectClasses;
     }

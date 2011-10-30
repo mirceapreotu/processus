@@ -35,6 +35,7 @@ namespace Zend\Dojo\Form\Element;
  */
 class RadioButton extends DijitMulti
 {
+
     /**
      * Use RadioButton dijit view helper
      * @var string
