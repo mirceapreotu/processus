@@ -1,10 +1,10 @@
 <?php
 
-    namespace App\Controller;
-
+namespace App\Controller
+{
     use Core\Abstracts\AbstractView;
     use App\Model\FooModel;
-
+	
     /**
      *
      */
@@ -16,8 +16,18 @@
       public function index()
       {
         $model = new FooModel();
-        echo $this->renderView('foobar', array('results' => $model->foo()));
+
+        echo '<pre>';
+
+        foreach($model->foo() as $obj)
+        {
+            print_r($obj);
+            echo '<hr>';
+        }
+
+        echo '</pre>';
       }
     }
+}
 
 ?>

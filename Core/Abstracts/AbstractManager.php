@@ -1,7 +1,7 @@
 <?php
 
-    namespace Core\Abstracts;
-
+namespace Core\Abstracts
+{
     use Core\Lib\Db\MySQL;
     use Core\Lib\Db\CouchDb;
     use Core\Lib\Db\Memcached;
@@ -65,5 +65,6 @@
             return self::$_memcachedInstance;
         }
     }
+}
 
 ?>

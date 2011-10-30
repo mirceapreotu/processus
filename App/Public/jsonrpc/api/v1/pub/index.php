@@ -1,7 +1,7 @@
 <?php
 
     use Core\Bootstrap;
-    use App\Controller\FooController;
+    use App\JsonRpc\V1\Pub\Gateway;
 
 
     // #########################################################
@@ -19,7 +19,7 @@
     // #########################################################
 
 
-    $fooController = new FooController();
-	$fooController->index();
+    $gateway = new Gateway();
+    $gateway->run();
 
 ?>
