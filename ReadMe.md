@@ -7,6 +7,7 @@ This is a tiny oriented PHP Framework on top from Zend.
 ## Convention
 
 Folder: http://framework.zend.com/wiki/display/ZFDEV/Choosing+Your+Application's+Directory+Layout
+
 Coding Style: http://framework.zend.com/manual/en/coding-standard.html
 
 Pls. use the complete Zend Style Convention!
