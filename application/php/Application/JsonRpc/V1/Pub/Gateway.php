@@ -16,7 +16,10 @@
                 'namespace' => __NAMESPACE__,
                 'validDomains' => array(
                     'Pub'
-                )
+                ),
+                'authModule' => array(
+                    "Application\\JsonRpc\\V1\\Pub\\Auth"
+                ),
             );
 
         }
