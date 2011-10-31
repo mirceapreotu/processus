@@ -40,6 +40,12 @@
             public static function init($mode = 'DEFAULT')
             {
                 try {
+
+                    define('PATH_ROOT', realpath(dirname(__FILE__) . '/../../../'));
+                    define('PATH_CORE', PATH_ROOT .'/library/Processus/core');
+                    define('PATH_APP', PATH_ROOT. '/application/php');
+                    define('PATH_PUBLIC', PATH_ROOT. '/htdocs');
+
                     // display erros for the following part
                     ini_set('display_errors', TRUE);
 
