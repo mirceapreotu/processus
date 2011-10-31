@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf8">
+<title>JSON RPC Client</title>
+</head>
+<body>
+
+	<h1>RPC Client</h1>
+	<div>Requesting Server...</div>
+
+	<script type="text/javascript"
+		src="http://code.jquery.com/jquery-1.7rc1.min.js"></script>
+	<script type="text/javascript">
+        $(function(){
+            console.log('Init');
+
+            $.ajax({
+                url: "jsonrpc/api/v1/pub/",
+                type: "POST",
+                contentType: "application/json",
+                dataType: 'json',
+                data: '{"id":"112","method":"Pub.User.listing","params":[{"name":"Tino"}], "extended": {"accessKey":19393}}',
+                success: function(resp, status) {
+                    console.log(JSON.stringify(resp));
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
