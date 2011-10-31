@@ -11,6 +11,7 @@
     {
         interface InterfaceAuthModule
         {
-
+            public function setAuthData();
+            public function isAuthorized();
         }
     }
