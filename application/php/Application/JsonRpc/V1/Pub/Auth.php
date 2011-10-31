@@ -13,6 +13,14 @@
 
         class Auth implements InterfaceAuthModule
         {
+            public function setAuthData($authData)
+            {
 
+            }
+            
+            public function isAuthorized()
+            {
+
+            }
         }
     }
