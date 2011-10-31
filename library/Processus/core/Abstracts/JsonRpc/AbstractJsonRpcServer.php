@@ -85,7 +85,7 @@
             }
 
             /**
-             * @return \Core\Abstracts\JsonRpc\AbstractJsonRpcRequest
+             * @return \Processus\Abstracts\JsonRpc\AbstractJsonRpcRequest
              */
             public function getRequest()
             {
