@@ -108,9 +108,6 @@
              */
             public static function _autoLoad($className)
             {
-
-                var_dump($className);
-
                 $rootPath = NULL;
 
                 $pathParts = explode('\\', $className);
