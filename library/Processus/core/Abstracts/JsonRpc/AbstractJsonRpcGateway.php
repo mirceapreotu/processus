@@ -30,6 +30,8 @@
              */
             protected $_config;
 
+            protected $_authModule;
+
             /**
              * @return bool
              */
@@ -194,6 +196,19 @@
                 }
 
                 return false;
+            }
+
+            // #########################################################
+
+            /**
+             * @return \Processus\Interfaces\InterfaceAuthModule
+             */
+            public function getAuthModule()
+            {
+                $authClass = $this->getConfigValue('authModule');
+                /** @var $_authModule \Processus\Interfaces\InterfaceAuthModule */
+                $this->_authModule = new $authClass();
+                return $this->_authModule;
             }
 
             // #########################################################
