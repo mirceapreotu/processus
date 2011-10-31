@@ -11,17 +11,43 @@ return array(//prefix must be alphanum and underscore
 'gaintSConfig' => array(
     'membase_config' => array(
         'membase_salt' => "monitoring_tool",
-        'membase_expireTime' => array("flash" => 5, "low" => 10, "medium" => 30),
-'membase_databucket' => array(
-'user' => array("host" => "127.0.0.1", "port" => ""), 
-'friends' => array("host" => "127.0.0.1", "port" => ""), 
-'default' => array("host" => "127.0.0.1", "port" => "11211"), 
-'tmp' => array("host" => "127.0.0.1", "port" => "")), 
-'servers' => array(
-"local" => array("id" => "default", "host" => "127.0.0.1", "port" => "11211"))), 
-
-'couchDB' => array(
-"logging" => array("host" => "localhost", "dbName" => "logging"))), 
+        'membase_expireTime' => array(
+            "flash" => 5,
+            "low" => 10,
+            "medium" => 30
+        ),
+        'membase_databucket' => array(
+            'user' => array(
+                "host" => "127.0.0.1",
+                "port" => ""
+            ),
+            'friends' => array(
+                "host" => "127.0.0.1",
+                "port" => ""
+            ),
+            'default' => array(
+                "host" => "127.0.0.1",
+                "port" => "11211"
+            ),
+            'tmp' => array(
+                "host" => "127.0.0.1",
+                "port" => "")
+        ),
+        'servers' => array(
+            "local" => array(
+                "id" => "default",
+                "host" => "127.0.0.1",
+                "port" => "11211"
+            )
+        )
+    ),
+    'couchDB' => array(
+        "logging" => array(
+            "host" => "localhost",
+            "dbName" => "logging"
+        )
+    )
+),
 
 // #########################################################
 
