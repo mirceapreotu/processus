@@ -1,32 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang = "en">
 <head>
-<meta charset="utf8">
-<title>JSON RPC Client</title>
+    <meta charset = "utf8">
+    <title>JSON RPC Client</title>
 </head>
 <body>
 
-	<h1>RPC Client</h1>
-	<div>Requesting Server...</div>
+<h1>RPC Client</h1>
 
-	<script type="text/javascript"
-		src="http://code.jquery.com/jquery-1.7rc1.min.js"></script>
-	<script type="text/javascript">
-        $(function(){
-            console.log('Init');
+<div>Requesting Server...</div>
 
-            $.ajax({
-                url: "jsonrpc/api/v1/pub/",
-                type: "POST",
-                contentType: "application/json",
-                dataType: 'json',
-                data: '{"id":"112","method":"Pub.User.listing","params":[{"name":"Tino", "lastname":"Ehrich"}], "extended": {"accessKey":19393}}',
-                success: function(resp, status) {
-                    console.log(JSON.stringify(resp));
-                }
-            });
+<script type = "text/javascript"
+        src = "http://code.jquery.com/jquery-1.7rc1.min.js"></script>
+<script type = "text/javascript">
+    $(function() {
+        console.log('Init');
+
+        $.ajax({
+            url:"jsonrpc/api/v1/pub/",
+            type:"POST",
+            contentType:"application/json",
+            dataType:'json',
+            data:'{"id":"112","method":"Pub.User.listing","params":[{"name":"Tino", "lastname":"Ehrich"}], "extended": {"accessKey":19393}}',
+            success:function(resp, status) {
+                console.log(JSON.stringify(resp));
+            }
         });
-    </script>
+
+        $.ajax({
+            url:"jsonrpc/api/v1/app/",
+            type:"POST",
+            contentType:"application/json",
+            dataType:'json',
+            data:'{"id":"112","method":"Admin.User.addUser","params":[{"name":"Tino", "lastname":"Ehrich"}], "extended": {"id":310269, "fb":1087101225}}',
+            success:function(resp, status) {
+                console.log(JSON.stringify(resp));
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
