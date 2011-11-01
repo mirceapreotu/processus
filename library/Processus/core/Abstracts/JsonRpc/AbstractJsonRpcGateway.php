@@ -4,6 +4,7 @@
     {
         use Processus\Abstracts\JsonRpc\AbstractJsonRpcRequest;
         use Processus\Abstracts\JsonRpc\AbstractJsonRpcServer;
+        use Processus\Interfaces\InterfaceAuthModule;
 
         /**
          *
@@ -85,6 +86,15 @@
              */
             public function isValidRequest()
             {
+                $authModule = $this->getAuthModule();
+                if($authModule instanceof InterfaceAuthModule)
+                {
+                    if($authModule->isAuthorized() === FALSE)
+                    {
+                        throw new \Exception("Authorisation Required");
+                    }
+                }
+
                 if ($this->isEnabled() && $this->hasNamespace() && $this->isValidDomain()) {
                     return TRUE;
                 }
@@ -140,6 +150,7 @@
              */
             protected function _run()
             {
+                /** @var $server AbstractJsonRpcServer */
                 $server = $this->getServer();
                 $server->run();
             }
@@ -205,10 +216,17 @@
              */
             public function getAuthModule()
             {
-                $authClass = $this->getConfigValue('authModule');
-                /** @var $_authModule \Processus\Interfaces\InterfaceAuthModule */
-                $this->_authModule = new $authClass();
-                return $this->_authModule;
+                $authClass = $this->getConfigValue('namespace') . "\\" . "Auth";
+
+                if(class_exists($authClass))
+                {
+                    /** @var $_authModule \Processus\Interfaces\InterfaceAuthModule */
+                    $this->_authModule = new $authClass();
+                    $this->_authModule->setAuthData($this->getRequest());
+                    return $this->_authModule;
+                }
+
+                return FALSE;
             }
 
             // #########################################################
