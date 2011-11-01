@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\JsonRpc\V1\Pub\Service
+namespace Application\JsonRpc\V1\Admin\Service
 {
     use Application\Model\UserModel;
 
