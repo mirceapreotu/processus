@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\JsonRpc\V1\Pub
+namespace Application\JsonRpc\V1\Admin
 {
     use Processus\Abstracts\JsonRpc\AbstractJsonRpcServer;
 
@@ -9,9 +9,6 @@ namespace Application\JsonRpc\V1\Pub
      */
     class Server extends AbstractJsonRpcServer
     {
-
-        protected $_config = array(
-        'validMethods' => array('listing'));
     }
 }
 
