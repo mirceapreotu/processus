@@ -1,6 +1,7 @@
 <?php
 namespace Processus\Abstracts\Manager
 {
+    use Processus\Interfaces\InterfaceComConfig;
     
     use Processus\Interfaces\InterfaceDatabase;
 
