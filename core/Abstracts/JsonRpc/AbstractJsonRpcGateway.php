@@ -30,7 +30,10 @@
              * @var array
              */
             protected $_config;
-
+            
+            /**
+             * @var InterfaceAuthModule
+             */
             protected $_authModule;
 
             /**
