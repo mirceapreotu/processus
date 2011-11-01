@@ -1,6 +1,6 @@
 <?php
 
-    namespace Application\JsonRpc\V1\Pub
+    namespace Application\JsonRpc\V1\Admin
     {
         use Processus\Abstracts\JsonRpc\AbstractJsonRpcGateway;
 
@@ -15,7 +15,7 @@
                 'enabled' => TRUE,
                 'namespace' => __NAMESPACE__,
                 'validDomains' => array(
-                    'Pub'
+                    'Admin'
                 ),
             );
 
