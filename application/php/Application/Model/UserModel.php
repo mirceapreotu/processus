@@ -13,13 +13,11 @@ namespace Application\Model
      */
     class UserModel extends AbstractManager
     {
-
         /**
          * @return mixed
          */
         public function listing ()
-        {
-            
+        {            
             $com = new ComConfig();
             $com->setConnector(MySQL::getInstance())
                 ->setExpiredTime(100)
