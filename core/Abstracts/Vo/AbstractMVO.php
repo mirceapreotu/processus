@@ -4,7 +4,6 @@ namespace Processus\Abstracts\Vo
 {
 
     /**
-     * Created by JetBrains PhpStorm.
      * User: francis
      * Date: 7/29/11
      * Time: 12:39 PM
@@ -33,7 +32,7 @@ namespace Processus\Abstracts\Vo
         /**
          * @return string
          */
-        protected function getSaltValue ()
+        protected function getSaltValue()
         {
             return $this->_saltValue;
         }
@@ -41,7 +40,7 @@ namespace Processus\Abstracts\Vo
         /**
          * @return string
          */
-        protected function getHashAlgo ()
+        protected function getHashAlgo()
         {
             return $this->_hashAlgo;
         }
@@ -49,7 +48,7 @@ namespace Processus\Abstracts\Vo
         /**
          * @return string
          */
-        protected function getMemId ()
+        protected function getMemId()
         {
             return $this->_memId;
         }
@@ -58,7 +57,7 @@ namespace Processus\Abstracts\Vo
          * @param $mId
          * @return void
          */
-        public function setMemId ($mId)
+        public function setMemId($mId)
         {
             $this->_memId = $mId;
         }
@@ -66,19 +65,18 @@ namespace Processus\Abstracts\Vo
         /**
          * @return bool
          */
-        public function saveInMem ()
+        public function saveInMem()
         {
             if (! $this->getMemId()) {
                 return false;
             }
-            return $this->getMemcachedClient()->set($this->getMemId(), 
-            $this->getData(), 0);
+            return $this->getMemcachedClient()->set($this->getMemId(), $this->getData(), 0);
         }
 
         /**
          * @return bool
          */
-        public function deleteFromMem ()
+        public function deleteFromMem()
         {
             $this->getMemcachedClient()->delete($this->getMemId());
             return true;
@@ -87,10 +85,9 @@ namespace Processus\Abstracts\Vo
         /**
          * @return object
          */
-        public function getFromMem ()
+        public function getFromMem()
         {
-            $this->_data = $this->_memDataProvider = $this->getMemcachedClient()->get(
-            $this->getMemId());
+            $this->_data = $this->_memDataProvider = $this->getMemcachedClient()->get($this->getMemId());
             return $this->_memDataProvider;
         }
 
@@ -98,15 +95,15 @@ namespace Processus\Abstracts\Vo
          * @throws Exception
          * @return Memcached
          */
-        public function getMemcachedClient ()
+        public function getMemcachedClient()
         {
             if (! $this->_memcachedClient) {
                 try {
                     $memId = 'default';
                     $this->_memcachedClient = new Memcached($memId);
-                    $this->_memcachedClient->addServer($this->getMembaseHost(), 
-                    $this->getDataBucketPort());
-                } catch (Exception $error) {
+                    $this->_memcachedClient->addServer($this->getMembaseHost(), $this->getDataBucketPort());
+                }
+                catch (Exception $error) {
                     $couchDoc = new stdClass();
                     $couchDoc->type = 'fatal';
                     $couchDoc->created = time();
@@ -124,7 +121,7 @@ namespace Processus\Abstracts\Vo
         /**
          * @return string
          */
-        protected function getMembaseHost ()
+        protected function getMembaseHost()
         {
             return "127.0.0.1";
         }
@@ -132,7 +129,7 @@ namespace Processus\Abstracts\Vo
         /**
          * @return string
          */
-        protected function getDataBucketPort ()
+        protected function getDataBucketPort()
         {
             return "11280";
         }
