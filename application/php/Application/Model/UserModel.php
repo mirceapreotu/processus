@@ -2,7 +2,11 @@
 
 namespace Application\Model
 {
-    use Processus\Abstracts\AbstractManager;
+    use Processus\Lib\Db\MySQL;
+
+	use Processus\Abstracts\Manager\ComConfig;
+
+	use Processus\Abstracts\Manager\AbstractManager;
 
     /**
      *
@@ -15,9 +19,14 @@ namespace Application\Model
          */
         public function listing ()
         {
-            $mysql = $this->getMysqlInstance();
-            return $mysql->fetchAll(
-            'SELECT id, facebook_id FROM users LIMIT 10');
+            
+            $com = new ComConfig();
+            $com->setConnector(MySQL::getInstance())
+                ->setExpiredTime(100)
+                ->setFromCache(TRUE)
+                ->setSqlStmt('SELECT id, facebook_id FROM users LIMIT 10');
+
+            return $this->fetchAll($com);
         }
     }
 }
