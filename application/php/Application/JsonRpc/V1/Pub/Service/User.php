@@ -12,10 +12,26 @@ namespace Application\JsonRpc\V1\Pub\Service
     class User
     {
 
+        /**
+         * @param $params
+         * @return mixed
+         */
         public function listing ($params)
         {
             $model = new UserModel();
             return $model->listing();
+        }
+
+        /**
+         * @param $userData
+         * @return bool
+         */
+        public function addUser($userData)
+        {
+            $userFirstName = $userData['name'];
+            $userLastName = $userData['lastname'];
+
+            return true;
         }
     }
 }
