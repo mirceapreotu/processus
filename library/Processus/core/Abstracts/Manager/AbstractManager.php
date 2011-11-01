@@ -55,11 +55,7 @@
              * @return
              */
             public function getMemcachedInstance()
-            {
-                ServerFactory::memcachedFactory();
-                ServerFactory::mysqlFactory();
-                ServerFactory::couchdbFactory();
-                
+            {                
                 if (self::$_memcachedInstance instanceof Memcached !== TRUE) {
                     self::$_memcachedInstance = Memcached::getInstance();
                 }
