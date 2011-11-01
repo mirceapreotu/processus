@@ -13,14 +13,14 @@ namespace Processus\Abstracts\Vo
     abstract class AbstractVO
     {
 
-        /** @var object */
+        /** @var array */
         protected $_data = array();
 
         /**
-         * @param $data
-         * @return App_GaintS_Core_AbstractVO
+         * @param array|mixed $data
+         * @return \Processus\Abstracts\Vo\AbstractVO
          */
-        public function setData ($data)
+        public function setData($data)
         {
             /** @var $_data object */
             $this->_data = (array) $data;
@@ -28,21 +28,21 @@ namespace Processus\Abstracts\Vo
         }
 
         /**
-         * @param $key string
-         * @param $value mixed
-         * @return App_GaintS_Core_AbstractVO
+         * @param string $key
+         * @param mixed $value
+         * @return \Processus\Abstracts\Vo\AbstractVO
          */
-        public function setValueByKey ($key, $value)
+        public function setValueByKey(string $key, mixed $value)
         {
             $this->_data->$key = $value;
             return $this;
         }
 
         /**
-         * @param $key
-         * @return mixed | object
+         * @param string $key
+         * @return multitype:
          */
-        public function getValueByKey ($key)
+        public function getValueByKey(string $key)
         {
             return $this->_data[$key];
         }
@@ -50,10 +50,10 @@ namespace Processus\Abstracts\Vo
         /**
          * @return object
          */
-        public function getData ()
+        public function getData()
         {
             if (is_null($this->_data)) {
-                throw new Exception("data is null");
+                throw new \Exception("data is null");
             }
             return $this->_data;
         }
