@@ -97,7 +97,7 @@
 
                     return true;
 
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     var_dump($e);
                     die("" . __METHOD__ . " FAILED.");
                 }
