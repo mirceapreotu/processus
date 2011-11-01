@@ -5,9 +5,6 @@
 
         use Zend\Json\Server\Server;
 
-        /**
-         *
-         */
         abstract class AbstractJsonRpcServer extends Server
         {
 
@@ -27,17 +24,15 @@
                 return FALSE;
             }
 
+
             // #########################################################
 
             /**
              * @return bool
              */
-            public function isValidMethod()
+            public function isValidClass()
             {
-                if (!empty($this->_config['validMethods']) &&
-                        in_array($this->_request->getMethod(),
-                            $this->_config['validMethods'])
-                ) {
+                if ($this->validateConfigKey('validClasses') && in_array($this->getRequest()->getClass(), $this->getConfigValue('validClasses'))) {
                     return TRUE;
                 }
 
@@ -51,7 +46,7 @@
              */
             public function isValidRequest()
             {
-                if ($this->hasNamespace() && $this->isValidMethod()) {
+                if ($this->hasNamespace() && $this->isValidClass()) {
                     return TRUE;
                 }
 
@@ -80,10 +75,11 @@
             {
                 // set class
                 $this->setClass($this->getRequest()->getSpecifiedServiceClassName());
-
                 // Handle the request:
                 $this->handle();
             }
+
+            // #########################################################
 
             /**
              * @return \Processus\Abstracts\JsonRpc\AbstractJsonRpcRequest
@@ -91,6 +87,46 @@
             public function getRequest()
             {
                 return parent::getRequest();
+            }
+
+            /**
+             * @return mixed
+             */
+            public function getConfig()
+            {
+                return $this->_config;
+            }
+
+            // #########################################################
+
+            /**
+             * @param $key
+             * @return mixed | bool
+             */
+            private function getConfigValue($key)
+            {
+                if (array_key_exists($key, $this->getConfig())) {
+
+                    return $this->_config[$key];
+
+                }
+
+                return false;
+            }
+
+            // #########################################################
+
+            /**
+             * @param null $key
+             * @return bool
+             */
+            private function validateConfigKey($key = NULL)
+            {
+                if (array_key_exists($key, $this->getConfig())) {
+                    return TRUE;
+                }
+
+                return FALSE;
             }
         }
     }
