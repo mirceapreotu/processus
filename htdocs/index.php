@@ -1,22 +1,16 @@
 <?php
 
-use Bootstrap;
-use App\Controller\FooController;
+    use Processus\Bootstrap;
+    use Application\JsonRpc\V1\Pub\Gateway;
 
-// #########################################################
+    // #########################################################
 
-define('PATH_ROOT', '..');
-define('PATH_CORE', PATH_ROOT . '/library/Processus/core');
-define('PATH_APP', PATH_ROOT . '/application/php');
-define('PATH_PUBLIC', PATH_ROOT . '/htdocs');
+    require_once ('../library/Processus/core/Bootstrap.php');
+    Bootstrap::init();
 
-require_once (PATH_CORE . '/Bootstrap.php');
-Bootstrap::init();
+    // #########################################################
 
-// #########################################################
-
-
-$fooController = new FooController();
-$fooController->index();
+    $fooController = new FooController();
+    $fooController->index();
 
 ?>

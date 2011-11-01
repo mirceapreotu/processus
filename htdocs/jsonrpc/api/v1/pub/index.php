@@ -12,4 +12,5 @@
 
     $gateway = new Gateway();
     $gateway->run();
+
 ?>
