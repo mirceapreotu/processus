@@ -1,7 +1,7 @@
 <?php
 
     use Processus\Bootstrap;
-    use Application\JsonRpc\V1\Pub\Gateway;
+    use Application\JsonRpc\V1\Admin\Gateway;
 
     // #########################################################
 
