@@ -10,21 +10,31 @@ namespace Processus\Abstracts\Vo
      * Time: 12:39 PM
      * To change this template use File | Settings | File Templates.
      */
+    use Processus\Lib\Db\Memcached;
+    
     use Processus\Lib\Server\ServerFactory;
 
     abstract class AbstractMVO extends AbstractVO
     {
 
-        /** @var string */
+        /**
+         * @var string
+         */
         protected $_memId;
 
-        /** @var string */
+        /** 
+         * @var string 
+         */
         protected $_saltValue;
 
-        /** @var string */
+        /** 
+         * @var string 
+         */
         protected $_hashAlgo;
 
-        /** @var  */
+        /** 
+         * @var Memcached 
+         */
         protected $_memcachedClient;
 
         /**
@@ -57,10 +67,9 @@ namespace Processus\Abstracts\Vo
         }
 
         /**
-         * @param $mId
-         * @return void
+         * @param string $mId
          */
-        public function setMemId($mId)
+        public function setMemId(string $mId)
         {
             $this->_memId = $mId;
         }
