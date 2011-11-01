@@ -2,6 +2,10 @@
 
 namespace Application\JsonRpc\V1\Admin\Service
 {
+    use Processus\Lib\Db\CouchDb;
+    
+    use Processus\Lib\Db\MySQL;
+    
     use Application\Model\UserModel;
 
     /**
@@ -26,11 +30,11 @@ namespace Application\JsonRpc\V1\Admin\Service
          * @param $userData
          * @return bool
          */
-        public function addUser($userData)
+        public function addUser ($userData, $foo, $foobar, $deineMutter, $mama, $fucker)
         {
             $userFirstName = $userData['name'];
             $userLastName = $userData['lastname'];
-
+            
             return true;
         }
     }
