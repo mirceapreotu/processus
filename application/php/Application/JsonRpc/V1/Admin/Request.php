@@ -8,7 +8,7 @@
      */
 
 
-    namespace Application\JsonRpc\V1\Pub
+    namespace Application\JsonRpc\V1\Admin
     {
 
         use Processus\Abstracts\JsonRpc\AbstractJsonRpcRequest;
