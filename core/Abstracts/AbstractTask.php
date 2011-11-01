@@ -9,7 +9,9 @@ namespace Processus\Abstracts
      * Time: 1:32 AM
      * To change this template use File | Settings | File Templates.
      */
-    class AbstractTask extends AbstractManager
+    use Processus\Abstracts\Manager\AbstractManager;
+
+	class AbstractTask extends AbstractManager
     {
     }
 }
