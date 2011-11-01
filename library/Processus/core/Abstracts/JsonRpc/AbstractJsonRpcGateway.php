@@ -220,7 +220,7 @@
 
                 if(class_exists($authClass))
                 {
-                    /** @var $_authModule \Processus\Interfaces\InterfaceAuthModule */
+                    /** @var $_authModule InterfaceAuthModule */
                     $this->_authModule = new $authClass();
                     $this->_authModule->setAuthData($this->getRequest());
                     return $this->_authModule;
