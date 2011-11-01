@@ -11,6 +11,7 @@
         use Processus\Interfaces\InterfaceAuthModule;
         use Processus\Abstracts\JsonRpc\AbstractJsonRpcRequest;
         use Processus\Lib\Auth\LowAuth;
+        use Processus\Lib\Db\MySQL;
 
         class Auth extends LowAuth
         {
@@ -18,7 +19,7 @@
             private $_isAuthorized = FALSE;
 
             /**
-             * @var AbstractJsonRpcRequest
+             * @var mixed|array
              */
             private $_authData;
 
@@ -38,7 +39,7 @@
 
                 $sqlStmt = "SELECT * FROM users WHERE id=" . $this->_authData['id'];
                 /** @var $mysql \Processus\Lib\Db\MySQL */
-                $mysql = \Processus\Lib\Db\MySQL::getInstance();
+                $mysql = MySQL::getInstance();
                 $user = $mysql->fetchOne($sqlStmt);
 
                 if((boolean)$user->deauthorized === TRUE)
