@@ -80,6 +80,7 @@
             {
                 // set class
                 $this->setClass($this->getRequest()->getSpecifiedServiceClassName());
+
                 // Handle the request:
                 $this->handle();
             }
