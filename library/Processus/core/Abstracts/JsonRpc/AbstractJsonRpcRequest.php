@@ -33,6 +33,11 @@
              */
             protected $_specifiedNamespace;
 
+            /**
+             * @var mixed | array
+             */
+            protected $_extended;
+
             // #########################################################
 
             public function __construct()
@@ -54,12 +59,21 @@
             // #########################################################
 
             /**
-             * @return array
+             * @return array|mixed
              */
             public function getExtended()
             {
-                $rawJSON = $this->getRawJson();
-                return $rawJSON['extended'];
+                return $this->_extended;
+            }
+
+            // #########################################################
+
+            /**
+             * @param array $extended
+             */
+            public function setExtended(array $extended)
+            {
+                $this->_extended = $extended;
             }
 
             // #########################################################
