@@ -14,7 +14,7 @@ namespace Processus\Lib\Db
     {
 
         /**
-         * @var
+         * @var \Processus\Lib\Db\MySQL
          */
         private static $_instance;
 
@@ -27,12 +27,12 @@ namespace Processus\Lib\Db
 
         /**
          * @static
-         * @return Core_Lib_Db_MySQL
+         * @return MySQL
          */
         public static function getInstance()
         {
             if (self::$_instance instanceof self !== TRUE) {
-                self::$_instance = new self();
+                self::$_instance = new MySQL();
                 self::$_instance->init();
             }
             
@@ -55,7 +55,7 @@ namespace Processus\Lib\Db
         /**
          * @param null $sql
          * @param array $args
-         * @return Zend_Db_Statement_Pdo
+         * @return \Zend\Db\Statement\Pdo
          */
         private function _prepare($sql = NULL, $args = array())
         {
@@ -82,7 +82,7 @@ namespace Processus\Lib\Db
         /**
          * @param null $sql
          * @param array $args
-         * @return Zend_Db_Statement_Pdo
+         * @return \Zend\Db\Statement\Pdo
          */
         public function fetch($sql = NULL, $args = array())
         {
@@ -119,7 +119,7 @@ namespace Processus\Lib\Db
         /**
          * @param null $tableName
          * @param array $values
-         * @return
+         * @return mixed
          */
         public function insert($tableName = NULL, $values = array())
         {
@@ -160,7 +160,7 @@ namespace Processus\Lib\Db
          * @param null $tableName
          * @param array $values
          * @param array $conditions
-         * @return
+         * @return mixed
          */
         public function update($tableName = NULL, $values = array(), $conditions = array())
         {
