@@ -18,6 +18,16 @@ namespace Processus\Lib\Server
     {
 
         /**
+         * @var array
+         */
+        private static $_couchbasePool;
+        
+        /**
+         * @var array
+         */
+        private static $_mysqlPool; 
+        
+        /**
          * @param array $memcachedConfig
          * @return \Processus\Lib\Db\Memcached
          */
@@ -35,16 +45,6 @@ namespace Processus\Lib\Server
         {
             $mysql = new MySQL();
             return $mysql;
-        }
-
-        /**
-         * @param array $couchDbConfig
-         * @return \Processus\Lib\Db\CouchDb
-         */
-        public static function couchDbFactory(array $couchDbConfig)
-        {
-            $couchdb = new CouchDb();
-            return $couchdb;
         }
     }
 }
