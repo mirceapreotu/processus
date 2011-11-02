@@ -40,7 +40,7 @@ namespace Processus\Abstracts\Vo
 
         /**
          * @param string $key
-         * @return multitype:
+         * @return mixed | array
          */
         public function getValueByKey(string $key)
         {
