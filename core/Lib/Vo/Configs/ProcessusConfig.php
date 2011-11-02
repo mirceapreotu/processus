@@ -29,14 +29,6 @@ namespace Processus\Lib\Vo\Configs
         private $_mysqlConfig;
 
         /**
-         * @return \Processus\Abstracts\Vo\mixed
-         */
-        public function getBeanstalkdConfig()
-        {
-            return $this->getValueByKey("beanstalkd");
-        }
-
-        /**
          * @return \Processus\Lib\Vo\Configs\CouchbaseConfig
          */
         public function getCouchbaseConfig()
@@ -52,10 +44,11 @@ namespace Processus\Lib\Vo\Configs
         /**
          * @return \Processus\Lib\Vo\Configs\BeanstalkdConfig
          */
-        public function getBeanstalkDConfig()
+        public function getBeanstalkdConfig()
         {
             if (! $this->_beanstalkdConfig) {
                 $this->_beanstalkdConfig = new BeanstalkdConfig();
+                $this->_beanstalkdConfig->setData($this->getValueByKey("beanstalkd"));
             }
             
             return $this->_beanstalkdConfig;
@@ -68,6 +61,7 @@ namespace Processus\Lib\Vo\Configs
         {
             if (! $this->_mysqlConfig) {
                 $this->_mysqlConfig = new MysqlConfig();
+                $this->_mysqlConfig->setData($this->getValueByKey("mysql"));
             }
             
             return $this->_mysqlConfig;
