@@ -12,6 +12,7 @@ namespace Processus\Lib\Db
      */
     class MySQL implements InterfaceDatabase
     {
+
         /**
          * @var
          */
@@ -21,7 +22,6 @@ namespace Processus\Lib\Db
          * @var
          */
         public $dbh;
-
 
         // #########################################################
 
@@ -35,14 +35,12 @@ namespace Processus\Lib\Db
                 self::$_instance = new self();
                 self::$_instance->init();
             }
-
+            
             return self::$_instance;
         }
 
-
         // #########################################################
-
-
+        
         /**
          * @return void
          */
@@ -52,9 +50,7 @@ namespace Processus\Lib\Db
             $this->dbh = Db::factory($registry->getConfig('database')->adapter, $registry->getConfig('database')->params->toArray());
         }
 
-
-        // #########################################################
-
+        // #########################################################        
 
         /**
          * @param null $sql
@@ -69,10 +65,8 @@ namespace Processus\Lib\Db
             return $stmt;
         }
 
-
         // #########################################################
-
-
+        
         /**
          * @param null $sql
          * @param array $args
@@ -83,10 +77,8 @@ namespace Processus\Lib\Db
             return $this->_prepare($sql, $args)->fetchColumn();
         }
 
-
         // #########################################################
-
-
+        
         /**
          * @param null $sql
          * @param array $args
@@ -97,10 +89,8 @@ namespace Processus\Lib\Db
             return $this->_prepare($sql, $args);
         }
 
-
         // #########################################################
-
-
+        
         /**
          * @param null $sql
          * @param array $args
@@ -111,10 +101,8 @@ namespace Processus\Lib\Db
             return $this->_prepare($sql, $args)->fetchObject();
         }
 
-
         // #########################################################
-
-
+        
         /**
          * @param null $sql
          * @param array $args
@@ -125,9 +113,8 @@ namespace Processus\Lib\Db
             return $this->_prepare($sql, $args)->fetchAll();
         }
 
-
         // #########################################################
-
+        
 
         /**
          * @param null $tableName
@@ -136,40 +123,38 @@ namespace Processus\Lib\Db
          */
         public function insert($tableName = NULL, $values = array())
         {
-            if (!is_null($tableName) && !empty($values)) {
+            if (! is_null($tableName) && ! empty($values)) {
                 // add an ID if not existing
-                if (!array_key_exists('id', $values)) {
+                if (! array_key_exists('id', $values)) {
                     $values['id'] = NULL;
                 }
-
+                
                 // prepare placeholders and values
                 $_set = array();
                 $_placeholder = array();
                 $_values = array();
-
-                foreach ($values as $key => $val)
-                {
+                
+                foreach ($values as $key => $val) {
                     $_set[] = $key;
-
+                    
                     $placeholder_key = ':' . $key;
                     $_placeholder[] = $placeholder_key;
-
+                    
                     $_values[$placeholder_key] = $val;
                 }
-
+                
                 // build sql
                 $sql = 'INSERT INTO ' . $tableName . ' (' . join(',', $_set) . ') VALUES (' . join(',', $_placeholder) . ')';
-
+                
                 // insert
                 $this->_prepare($sql, $_values);
             }
-
+            
             return;
         }
 
-
         // #########################################################
-
+        
 
         /**
          * @param null $tableName
@@ -179,35 +164,33 @@ namespace Processus\Lib\Db
          */
         public function update($tableName = NULL, $values = array(), $conditions = array())
         {
-            if (!is_null($tableName) && !empty($values) && array_key_exists('id', $conditions)) {
+            if (! is_null($tableName) && ! empty($values) && array_key_exists('id', $conditions)) {
                 // prepare placeholders and values
                 $_set = array();
                 $_values = array();
-
-                foreach ($values as $key => $val)
-                {
+                
+                foreach ($values as $key => $val) {
                     $placeholder_key = ':' . $key;
                     $_set[] = $key . '=' . $placeholder_key;
                     $_values[$placeholder_key] = $val;
                 }
-
+                
                 // prepare conditions
                 $_cond = array();
-
-                foreach ($conditions as $key => $val)
-                {
+                
+                foreach ($conditions as $key => $val) {
                     $placeholder_key = ':_' . $key;
                     $_cond[] = $key . '=' . $placeholder_key;
                     $_values[$placeholder_key] = $val;
                 }
-
+                
                 // build sql
                 $sql = 'UPDATE ' . $tableName . ' SET ' . join(',', $_set) . ' WHERE ' . join(' AND ', $_cond);
-
+                
                 // update
                 $this->_prepare($sql, $_values);
             }
-
+            
             return;
         }
     }

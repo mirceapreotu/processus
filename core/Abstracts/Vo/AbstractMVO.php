@@ -4,7 +4,6 @@ namespace Processus\Abstracts\Vo
 {
     
     /**
-     * Created by JetBrains PhpStorm.
      * User: francis
      * Date: 7/29/11
      * Time: 12:39 PM
