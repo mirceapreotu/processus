@@ -15,7 +15,7 @@ namespace Processus
         protected static $_instance;
 
     	/**
-    	 * @var holds Zend_Config
+    	 * @var Config
     	 */
     	private $config;
 
