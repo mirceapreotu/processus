@@ -124,11 +124,7 @@ namespace Processus\Lib\Db
         public function insert($tableName = NULL, $values = array())
         {
             if (! is_null($tableName) && ! empty($values)) {
-                // add an ID if not existing
-                if (! array_key_exists('id', $values)) {
-                    $values['id'] = NULL;
-                }
-                
+
                 // prepare placeholders and values
                 $_set = array();
                 $_placeholder = array();
@@ -145,7 +141,7 @@ namespace Processus\Lib\Db
                 
                 // build sql
                 $sql = 'INSERT INTO ' . $tableName . ' (' . join(',', $_set) . ') VALUES (' . join(',', $_placeholder) . ')';
-                
+
                 // insert
                 $this->_prepare($sql, $_values);
             }

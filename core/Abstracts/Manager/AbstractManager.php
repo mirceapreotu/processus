@@ -92,7 +92,8 @@ namespace Processus\Abstracts\Manager
         
 
         /**
-         * @param array $com
+         * @param $com
+         * @return mixed
          */
         protected function _fetchFromMysql($com)
         {
@@ -103,7 +104,8 @@ namespace Processus\Abstracts\Manager
         
 
         /**
-         * @param array $com
+         * @param $com
+         * @return mixed
          */
         protected function _fetchOneFromMysql($com)
         {
@@ -114,7 +116,8 @@ namespace Processus\Abstracts\Manager
         
 
         /**
-         * @param array $com
+         * @param $com
+         * @return mixed
          */
         protected function _fetchAllFromMysql($com)
         {

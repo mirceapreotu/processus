@@ -175,7 +175,7 @@ namespace Processus\Abstracts\Manager
         
 
         /**
-         * @return int $_expiredTime
+         * @return int
          */
         public function getExpiredTime()
         {
@@ -197,7 +197,8 @@ namespace Processus\Abstracts\Manager
         
 
         /**
-         * @param boolean $_fromCache
+         * @param $_fromCache
+         * @return ComConfig
          */
         public function setFromCache($_fromCache)
         {
@@ -210,6 +211,7 @@ namespace Processus\Abstracts\Manager
 
         /**
          * @param string $_sqlStmt
+         * @return ComConfig
          */
         public function setSqlStmt(string $_sqlStmt)
         {
@@ -222,6 +224,7 @@ namespace Processus\Abstracts\Manager
 
         /**
          * @param array $_sqlParams
+         * @return ComConfig
          */
         public function setSqlParams(array $_sqlParams)
         {
@@ -233,7 +236,8 @@ namespace Processus\Abstracts\Manager
         
 
         /**
-         * @param number $_expiredTime
+         * @param $_expiredTime
+         * @return ComConfig
          */
         public function setExpiredTime($_expiredTime)
         {
@@ -245,7 +249,8 @@ namespace Processus\Abstracts\Manager
         
 
         /**
-         * @param InterfaceDatabase $_connector
+         * @param \Processus\Interfaces\InterfaceDatabase $_connector
+         * @return ComConfig
          */
         public function setConnector(InterfaceDatabase $_connector)
         {
