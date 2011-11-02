@@ -32,9 +32,14 @@ namespace Processus\Lib\Facebook
         private $_facebookSdkConf;
 
         /**
-         * @var unknown_type
+         * @var mixed | array
          */
         private $_userFacebookData;
+
+        /**
+         * @var mixed | array
+         */
+        private $_facebookFriends;
 
         /**
          * @return \Processus\Lib\Facebook\Facebook
@@ -71,7 +76,7 @@ namespace Processus\Lib\Facebook
             
             return $this->_userFacebookData;
         }
-        
+
         /**
          * @return string
          */
@@ -79,13 +84,28 @@ namespace Processus\Lib\Facebook
         {
             return $this->getFacebookSdk()->getAccessToken();
         }
-        
+
         /**
          * @return string
          */
         public function getUserId()
         {
             return $this->getFacebookSdk()->getUser();
+        }
+
+        /**
+         * @return \Processus\Lib\Facebook\mixed
+         */
+        public function getUserFriends()
+        {
+            if (! $this->_facebookFriends) {
+                
+                $rawData = $this->getFacebookSdk()->api("/me/friends");
+                $this->_facebookFriends = $rawData['data'];
+                
+            }
+            
+            return $this->_facebookFriends;
         }
 
         /**
