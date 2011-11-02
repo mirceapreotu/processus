@@ -17,7 +17,7 @@ namespace Processus\Lib\Facebook
     {
 
         /**
-         * @var Facebook
+         * @var FacebookClient
          */
         private static $_instance;
 
@@ -42,7 +42,7 @@ namespace Processus\Lib\Facebook
         private $_facebookFriends;
 
         /**
-         * @return \Processus\Lib\Facebook\Facebook
+         * @return \Processus\Lib\Facebook\FacebookClient
          */
         public static function getInstance()
         {
@@ -99,10 +99,8 @@ namespace Processus\Lib\Facebook
         public function getUserFriends()
         {
             if (! $this->_facebookFriends) {
-                
                 $rawData = $this->getFacebookSdk()->api("/me/friends");
                 $this->_facebookFriends = $rawData['data'];
-                
             }
             
             return $this->_facebookFriends;
