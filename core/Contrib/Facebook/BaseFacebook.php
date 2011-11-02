@@ -387,8 +387,7 @@ namespace Processus\Contrib\Facebook
             }
             
             return $this->getUrl('www', 'dialog/oauth', 
-            array_merge(
-            array('client_id' => $this->getAppId(), 'redirect_uri' => $currentUrl, // possibly overwritten
+            array_merge(array('client_id' => $this->getAppId(), 'redirect_uri' => $currentUrl, // possibly overwritten
 'state' => $this->state), $params));
         }
 
@@ -698,8 +697,7 @@ namespace Processus\Contrib\Facebook
             }
             
             if ($result === false) {
-                $e = new FacebookApiException(
-                array('error_code' => curl_errno($ch), 'error' => array('message' => curl_error($ch), 'type' => 'CurlException')));
+                $e = new FacebookApiException(array('error_code' => curl_errno($ch), 'error' => array('message' => curl_error($ch), 'type' => 'CurlException')));
                 curl_close($ch);
                 throw $e;
             }
