@@ -37,7 +37,7 @@ namespace Processus\Lib\Vo\Configs
          * @return array
          * @param string $databucketKey
          */
-        private function getCouchbasePortsByDatabucketKey(string $databucketKey)
+        public function getCouchbasePortByDatabucketKey(string $databucketKey)
         {
              return $this->_data['couchbasePorts'][$databucketKey];   
         }
