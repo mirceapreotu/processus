@@ -10,7 +10,7 @@ namespace Processus\Lib\Profiler
 
     class ProfilerStack
     {
-        public function __construct()
+        public static function getProfilerStackData()
         {
             
         }
