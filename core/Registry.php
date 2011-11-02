@@ -75,7 +75,7 @@ namespace Processus
         
 
         /**
-         * @return \Processus\Lib\Vo\Config\ProcessusConfig
+         * @return \Processus\Lib\Vo\Configs\ProcessusConfig
          */
         public function getProcessusConfig()
         {
