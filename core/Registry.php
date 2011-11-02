@@ -1,10 +1,10 @@
 <?php
 
 namespace Processus
-{
-    use Processus\Lib\Vo\ProcessusConfig;
-    
-    use Zend\Config\Config;
+{    
+    use Processus\Lib\Vo\Configs\ProcessusConfig;
+
+	use Zend\Config\Config;
 
     /**
      *
@@ -75,7 +75,7 @@ namespace Processus
         
 
         /**
-         * @return \Processus\Lib\Vo\ProcessusConfig
+         * @return \Processus\Lib\Vo\Config\ProcessusConfig
          */
         public function getProcessusConfig()
         {
