@@ -94,7 +94,7 @@ namespace Processus\Abstracts\Manager
         /**
          * @param array $com
          */
-        private function _fetchFromMysql($com)
+        protected function _fetchFromMysql($com)
         {
             return $com->getConnector()->fetch($com->getSqlStmt(), $com->getSqlParams());
         }
@@ -105,7 +105,7 @@ namespace Processus\Abstracts\Manager
         /**
          * @param array $com
          */
-        private function _fetchOneFromMysql($com)
+        protected function _fetchOneFromMysql($com)
         {
             return $com->getConnector()->fetchOne($com->getSqlStmt(), $com->getSqlParams());
         }
@@ -116,7 +116,7 @@ namespace Processus\Abstracts\Manager
         /**
          * @param array $com
          */
-        private function _fetchAllFromMysql($com)
+        protected function _fetchAllFromMysql($com)
         {
             return $com->getConnector()->fetchAll($com->getSqlStmt(), $com->getSqlParams());
         }
