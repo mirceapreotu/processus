@@ -8,13 +8,11 @@
 namespace Application\Model\Mvo
 {
     
-    use Processus\Abstracts\Vo\AbstractMVO;
+    use Processus\Lib\Mvo\UserMvo;
 
-    class FacebookUserMvo extends AbstractMVO
-    {
-        //TODO - Insert your code here
-    
-
+    class FacebookUserMvo extends UserMvo
+    {   
+        
     }
 
 }
