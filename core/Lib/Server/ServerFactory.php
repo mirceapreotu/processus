@@ -13,7 +13,6 @@ namespace Processus\Lib\Server
 
     class ServerFactory
     {
-
         /**
          * @var array
          */
