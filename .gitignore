@@ -1,2 +1,5 @@
 *.DS_Store*
 var/
+.idea
+*.DS_Store*
+.DS_Store
