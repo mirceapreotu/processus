@@ -10,7 +10,7 @@
         {
 
             /**
-             * @var App_Application
+             * @var Application
              */
             private static $_instance;
 
@@ -18,13 +18,12 @@
 
 
             /**
-             * @static
-             * @return App_Application
+             * @return \Processus\Application
              */
             public static function getInstance()
             {
                 if (self::$_instance instanceof self !== TRUE) {
-                    self::$_instance = new self();
+                    self::$_instance = new Application();
                     self::$_instance->init();
                 }
 
