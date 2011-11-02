@@ -12,8 +12,7 @@ namespace Processus\Lib\Mvo
 
     class UserMvo extends AbstractMVO
     {
-        //TODO - Insert your code here
-    
+
         /**
          * @return \Processus\Abstracts\Vo\multitype:
          */
