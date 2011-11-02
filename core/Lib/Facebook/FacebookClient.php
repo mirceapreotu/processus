@@ -31,6 +31,9 @@ namespace Processus\Lib\Facebook
          */
         private $_facebookSdkConf;
 
+        /**
+         * @var unknown_type
+         */
         private $_userFacebookData;
 
         /**
@@ -82,7 +85,7 @@ namespace Processus\Lib\Facebook
          */
         public function getUserId()
         {
-            return $this->_facebookSdk->getUser();
+            return $this->getFacebookSdk()->getUser();
         }
 
         /**
