@@ -9,7 +9,11 @@ namespace Processus\Abstracts\Vo
      * Time: 12:39 PM
      * To change this template use File | Settings | File Templates.
      */
-    use Processus\Lib\Db\Memcached;
+    use Processus\Registry;
+
+	use Processus\Application;
+
+	use Processus\Lib\Db\Memcached;
     
     use Processus\Lib\Server\ServerFactory;
 
