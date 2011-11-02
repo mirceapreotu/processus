@@ -12,8 +12,22 @@ namespace Processus\Lib\Vo\Configs
 
     class ProcessusConfig extends AbstractVO
     {
-        //TODO - Insert your code here
-        
+
+        /**
+         * @var CouchbaseConfig
+         */
+        private $_couchbaseConfig;
+
+        /**
+         * @var BeanstalkdConfig
+         */
+        private $_beanstalkdConfig;
+
+        /**
+         * @var MysqlConfig
+         */
+        private $_mysqlConfig;
+
         /**
          * @return \Processus\Abstracts\Vo\mixed
          */
@@ -21,12 +35,44 @@ namespace Processus\Lib\Vo\Configs
         {
             return $this->getValueByKey("beanstalkd");
         }
-        
+
+        /**
+         * @return \Processus\Lib\Vo\Configs\CouchbaseConfig
+         */
         public function getCouchbaseConfig()
         {
-            return $this->getValueByKey("couchbaseConfig");
+            if (! $this->_couchbaseConfig) {
+                $this->_couchbaseConfig = new CouchbaseConfig();
+                $this->_couchbaseConfig->setData($this->getValueByKey("couchbaseConfig"));
+            }
+            
+            return $this->_couchbaseConfig;
         }
 
+        /**
+         * @return \Processus\Lib\Vo\Configs\BeanstalkdConfig
+         */
+        public function getBeanstalkDConfig()
+        {
+            if (! $this->_beanstalkdConfig) {
+                $this->_beanstalkdConfig = new BeanstalkdConfig();
+            }
+            
+            return $this->_beanstalkdConfig;
+        }
+
+        /**
+         * @return \Processus\Lib\Vo\Configs\MysqlConfig
+         */
+        public function getMysqlConfig()
+        {
+            if (! $this->_mysqlConfig) {
+                $this->_mysqlConfig = new MysqlConfig();
+            }
+            
+            return $this->_mysqlConfig;
+        }
+    
     }
 }
 ?>
