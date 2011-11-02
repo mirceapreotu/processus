@@ -426,7 +426,7 @@ namespace Processus\Contrib\Facebook
         /**
          * Make an API call.
          *
-         * @return mixed The decoded response
+         * @return mixed | array
          */
         public function api(/* polymorphic */) {
             $args = func_get_args();
