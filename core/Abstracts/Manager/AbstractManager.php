@@ -9,7 +9,7 @@ namespace Processus\Abstracts\Manager
         /**
          * @param InterfaceComConfig $com
          */
-        public function fetch(InterfaceComConfig $com)
+        protected function fetch(InterfaceComConfig $com)
         {
             $results = NULL;
             
@@ -30,7 +30,7 @@ namespace Processus\Abstracts\Manager
         /**
          * @param InterfaceComConfig $com
          */
-        public function fetchOne(InterfaceComConfig $com)
+        protected function fetchOne(InterfaceComConfig $com)
         {
             $results = NULL;
             
@@ -51,7 +51,7 @@ namespace Processus\Abstracts\Manager
         /**
          * @param InterfaceComConfig $com
          */
-        public function fetchAll(InterfaceComConfig $com)
+        protected function fetchAll(InterfaceComConfig $com)
         {
             $results = NULL;
             
@@ -72,7 +72,7 @@ namespace Processus\Abstracts\Manager
         /**
          * @param InterfaceComConfig $com
          */
-        public function insert(InterfaceComConfig $com)
+        protected function insert(InterfaceComConfig $com)
         {
             $com->getConnector()->insert($com->getSqlTableName(), $com->getSqlParams());
         }
@@ -83,7 +83,7 @@ namespace Processus\Abstracts\Manager
         /**
          * @param InterfaceComConfig $com
          */
-        public function update(InterfaceComConfig $com)
+        protected function update(InterfaceComConfig $com)
         {
             $com->getConnector()->update($com->getSqlTableName(), $com->getSqlConditions());
         }
