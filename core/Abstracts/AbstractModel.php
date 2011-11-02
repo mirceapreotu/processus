@@ -10,14 +10,16 @@ namespace Processus\Abstracts
      * Time: 12:02 PM
      * To change this template use File | Settings | File Templates.
      */
-    abstract class AbstractModel extends AbstractManager
+    use Processus\Abstracts\Manager\AbstractManager;
+
+	abstract class AbstractModel extends AbstractManager
     {
 
         protected $_data = array();
 
         /**
-         * @param $item
-         * @return App_GaintS_Core_AbstractModel
+         * @param unknown_type $item
+         * @return \Processus\Abstracts\AbstractModel
          */
         public function addItem ($item)
         {
@@ -26,8 +28,8 @@ namespace Processus\Abstracts
         }
 
         /**
-         * @param $id
-         * @return App_GaintS_Core_AbstractModel
+         * @param unknown_type $id
+         * @return \Processus\Abstracts\AbstractModel
          */
         public function removeItemById ($id)
         {

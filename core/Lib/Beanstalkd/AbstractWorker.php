@@ -6,14 +6,18 @@
  * Time: 4:28 AM
  * To change this template use File | Settings | File Templates.
  */
- 
-abstract class App_GaintS_Lib_Beanstalkd_AbstractWorker
+
+namespace Processus\Lib\Beanstalkd
 {
 
-    public function __construct()
+    abstract class AbstractWorker
     {
-        $this->startWorker();
-    }
 
-    abstract public function startWorker();
+        public function __construct()
+        {
+            $this->startWorker();
+        }
+
+        abstract public function startWorker();
+    }
 }

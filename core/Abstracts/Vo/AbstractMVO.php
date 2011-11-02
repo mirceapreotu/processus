@@ -2,26 +2,38 @@
 
 namespace Processus\Abstracts\Vo
 {
-
+    
     /**
      * User: francis
      * Date: 7/29/11
      * Time: 12:39 PM
      * To change this template use File | Settings | File Templates.
      */
+    use Processus\Lib\Db\Memcached;
+    
+    use Processus\Lib\Server\ServerFactory;
+
     abstract class AbstractMVO extends AbstractVO
     {
 
-        /** @var string */
+        /**
+         * @var string
+         */
         protected $_memId;
 
-        /** @var string */
+        /** 
+         * @var string 
+         */
         protected $_saltValue;
 
-        /** @var string */
+        /** 
+         * @var string 
+         */
         protected $_hashAlgo;
 
-        /** @var  */
+        /** 
+         * @var Memcached 
+         */
         protected $_memcachedClient;
 
         /**
@@ -54,10 +66,9 @@ namespace Processus\Abstracts\Vo
         }
 
         /**
-         * @param $mId
-         * @return void
+         * @param string $mId
          */
-        public function setMemId($mId)
+        public function setMemId(string $mId)
         {
             $this->_memId = $mId;
         }
@@ -93,26 +104,24 @@ namespace Processus\Abstracts\Vo
 
         /**
          * @throws Exception
-         * @return Memcached
+         * @return \Processus\Lib\Db\Memcached
          */
         public function getMemcachedClient()
         {
             if (! $this->_memcachedClient) {
                 try {
-                    $memId = 'default';
-                    $this->_memcachedClient = new Memcached($memId);
-                    $this->_memcachedClient->addServer($this->getMembaseHost(), $this->getDataBucketPort());
+                    
+                    $memcachedConfig = array();
+                    $memcachedConfig['port'] = $this->getDataBucketPort();
+                    $memcachedConfig['host'] = $this->getMembaseHost();
+                    
+                    $this->_memcachedClient = ServerFactory::memcachedFactory($memcachedConfig);
+                
                 }
-                catch (Exception $error) {
-                    $couchDoc = new stdClass();
-                    $couchDoc->type = 'fatal';
-                    $couchDoc->created = time();
-                    $couchDoc->error = $error;
-                    $this->getCouchDBLogger()
-                        ->setLogType("[FATAL]" . __CLASS__ . __METHOD__)
-                        ->setData($couchDoc)
-                        ->writeLog();
+                catch (\Exception $error) {
+                    
                     throw $error;
+                
                 }
             }
             return $this->_memcachedClient;

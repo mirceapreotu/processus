@@ -1,32 +1,50 @@
 <?php
 
-/** 
+/**
+ * 
  * @author francis
- * 
- * 
+ *
  */
 namespace Processus\Lib\Server
 {
+    
+    use Processus\Lib\Db\CouchDb;
+    
+    use Processus\Lib\Db\MySQL;
+    
+    use Processus\Lib\Db\Memcached;
 
     class ServerFactory
     {
 
-        //TODO - Insert your code here
-        
-
-        public static function memcachedFactory ($memcachedConfig)
+        /**
+         * @param array $memcachedConfig
+         * @return \Processus\Lib\Db\Memcached
+         */
+        public static function memcachedFactory(array $memcachedConfig)
         {
-
+            $memcached = new Memcached();
+            return $memcached;
         }
 
-        public static function mysqlFactory ($mysqlConfig)
+        /**
+         * @param array $mysqlConfig
+         * @return \Processus\Lib\Db\MySQL
+         */
+        public static function mysqlFactory(array $mysqlConfig)
         {
-
+            $mysql = new MySQL();
+            return $mysql;
         }
 
-        public static function couchDbFactory ($couchDbFactory)
+        /**
+         * @param array $couchDbConfig
+         * @return \Processus\Lib\Db\CouchDb
+         */
+        public static function couchDbFactory(array $couchDbConfig)
         {
-
+            $couchdb = new CouchDb();
+            return $couchdb;
         }
     }
 }

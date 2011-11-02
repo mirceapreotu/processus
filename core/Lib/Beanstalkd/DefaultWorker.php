@@ -6,11 +6,18 @@
  * Time: 4:28 AM
  * To change this template use File | Settings | File Templates.
  */
- 
-class App_GaintS_Lib_Beanstalkd_DefaultWorker extends App_GaintS_Lib_Beanstalkd_AbstractWorker
+
+namespace Processus\Lib\Beanstalkd
 {
-    public function startWorker()
+    
+    use Processus\Lib\Beanstalkd\AbstractWorker;
+
+    class DefaultWorker extends AbstractWorker
     {
 
+        public function startWorker()
+        {
+        
+        }
     }
 }
