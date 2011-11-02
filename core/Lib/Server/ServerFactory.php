@@ -7,9 +7,6 @@
  */
 namespace Processus\Lib\Server
 {
-    
-    use Processus\Lib\Db\CouchDb;
-    
     use Processus\Lib\Db\MySQL;
     
     use Processus\Lib\Db\Memcached;
@@ -20,28 +17,38 @@ namespace Processus\Lib\Server
         /**
          * @var array
          */
-        private static $_couchbasePool;
-        
+        private static $_couchbasePool = array();
+
         /**
          * @var array
          */
-        private static $_mysqlPool; 
-        
+        private static $_mysqlPool;
+
         /**
-         * @param array $memcachedConfig
+         * @param string $host
+         * @param string $port
+         * @param string $id
          * @return \Processus\Lib\Db\Memcached
          */
-        public static function memcachedFactory(array $memcachedConfig)
+        public static function memcachedFactory(string $host, string $port, $id = "default")
         {
-            $memcached = new Memcached();
-            return $memcached;
+            $poolKey = md5($host . $port . $id);
+            
+            if (array_key_exists($poolKey, self::$_couchbasePool) === FALSE) {
+                
+                $memcached = new Memcached($host, $port, $id);
+                self::$_couchbasePool[$poolKey] = $memcached;
+            
+            }
+
+            return self::$_couchbasePool[$poolKey];
         }
 
         /**
          * @param array $mysqlConfig
          * @return \Processus\Lib\Db\MySQL
          */
-        public static function mysqlFactory(array $mysqlConfig)
+        public static function mysqlFactory(string $host, string $port)
         {
             $mysql = new MySQL();
             return $mysql;
