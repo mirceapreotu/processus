@@ -3,8 +3,8 @@
 namespace Processus
 {
     use Processus\Lib\Bo\UserBo;
-
-	use Processus\Lib\Profiler\Profiler;
+    
+    use Processus\Lib\Profiler\Profiler;
 
     class Application
     {
@@ -13,18 +13,19 @@ namespace Processus
          * @var Application
          */
         private static $_instance;
-        
+
         /**
          * @var Profiler
          */
         private $_profiler;
-        
+
         /**
          * @var UserBo
          */
         private $_userBo;
 
         // #########################################################
+        
 
         /**
          * @return \Processus\Application
@@ -41,13 +42,21 @@ namespace Processus
 
         // #########################################################
         
+
+        /**
+         * @return \Processus\Lib\Bo\UserBo
+         */
         public function getUserBo()
         {
-        
+            if (! $this->_userBo) {
+                $this->_userBo = new UserBo();
+            }
+            return $this->_userBo;
         }
 
         // #########################################################
         
+
         /**
          * @return \Processus\Lib\Profiler\Profiler
          */
