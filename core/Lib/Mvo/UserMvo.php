@@ -14,7 +14,13 @@ namespace Processus\Lib\Mvo
     {
         //TODO - Insert your code here
     
-
+        /**
+         * @return \Processus\Abstracts\Vo\multitype:
+         */
+        public function getFirstname()
+        {
+            return $this->getValueByKey("firstname");
+        }
     }
 }
 ?>
