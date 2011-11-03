@@ -28,7 +28,7 @@ namespace Processus\Lib\Server
          * @param string $host
          * @param string $port
          * @param string $id
-         * @return mixed
+         * @return Memcached
          */
         public static function memcachedFactory(string $host, string $port, $id = "default")
         {
