@@ -2,7 +2,7 @@
 
 namespace Processus\Abstracts\Vo
 {
-
+    
     /**
      * Created by JetBrains PhpStorm.
      * User: francis
@@ -10,20 +10,26 @@ namespace Processus\Abstracts\Vo
      * Time: 11:38 AM
      * To change this template use File | Settings | File Templates.
      */
-    abstract class AbstractVO
+    use Zend\Pdf\BinaryParser\DataSource\String;
+
+	use Processus\Abstracts\AbstractClass;
+
+    abstract class AbstractVO extends AbstractClass
     {
 
-        /** @var array */
-        protected $_data = array();
+        /**
+         * @var String
+         */
+        protected $_data;
 
         /**
-         * @param array|mixed $data
+         * @param array $data
          * @return \Processus\Abstracts\Vo\AbstractVO
          */
         public function setData($data)
         {
-            /** @var $_data object */
-            $this->_data = (array) $data;
+            /** @var object $_data */
+            $this->_data = array_to_object($data);
             return $this;
         }
 
@@ -44,7 +50,7 @@ namespace Processus\Abstracts\Vo
          */
         public function getValueByKey(string $key)
         {
-            return $this->_data[$key];
+            return $this->_data->$key;
         }
 
         /**

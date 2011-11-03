@@ -15,12 +15,6 @@ namespace Processus\Manager
     class UserManager extends AbstractManager
     {
 
-        public function getUserFriends()
-        {
-            $bo = Application::getInstance()->getUserBo();
-        
-        }
-
         /**
          * @param array $friendsList
          */

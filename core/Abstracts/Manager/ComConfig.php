@@ -21,7 +21,7 @@ namespace Processus\Abstracts\Manager
 
         private $_fromCache = TRUE;
 
-        private $_sqlStmt;
+        private $_sqlStmt = "";
 
         private $_sqlParams = array();
 
@@ -31,7 +31,7 @@ namespace Processus\Abstracts\Manager
 
         private $_connector;
 
-        private $_sqlTableName;
+        private $_sqlTableName = "";
 
         // #########################################################
         

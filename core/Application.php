@@ -2,9 +2,13 @@
 
 namespace Processus
 {
+    use Processus\Lib\Db\Memcached;
+    
+    use Processus\Lib\Server\ServerFactory;
+    
     use Processus\Lib\Facebook\FacebookClient;
-
-	use Processus\Lib\Bo\UserBo;
+    
+    use Processus\Lib\Bo\UserBo;
     
     use Processus\Lib\Profiler\Profiler;
 
@@ -20,12 +24,12 @@ namespace Processus
          * @var Profiler
          */
         private $_profiler;
-        
+
         /**
          * @var Registry
          */
         private $_registry;
-        
+
         /**
          * @var FacebookClient
          */
@@ -35,6 +39,33 @@ namespace Processus
          * @var UserBo
          */
         private $_userBo;
+
+        /**
+         * @var Memcached
+         */
+        private $_memcached;
+
+        // #########################################################
+        
+
+        /**
+         * @return \Processus\Lib\Db\Memcached
+         */
+        public function getDefaultCache()
+        {
+            if (! $this->_memcached) {
+                
+                $config = $this->getRegistry()
+                    ->getProcessusConfig()
+                    ->getCouchbaseConfig()
+                    ->getCouchbasePortByDatabucketKey("default");
+                
+                $this->_memcached = ServerFactory::memcachedFactory($config['host'], $config['port']);
+            }
+            
+            return $this->_memcached;
+        
+        }
 
         // #########################################################
         
@@ -46,14 +77,14 @@ namespace Processus
         {
             if (self::$_instance instanceof self !== TRUE) {
                 self::$_instance = new Application();
-                self::$_instance->init();
             }
             
             return self::$_instance;
         }
-        
+
         // #########################################################
         
+
         /**
          * @return \Processus\Registry
          */
@@ -65,8 +96,7 @@ namespace Processus
             }
             return $this->_registry;
         }
-        
-        
+
         // #########################################################
         
 
@@ -94,7 +124,6 @@ namespace Processus
             }
             return $this->_userBo;
         }
-
 
         // #########################################################
         

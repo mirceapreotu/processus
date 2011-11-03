@@ -8,13 +8,15 @@
 namespace Processus\Lib\Bo
 {
     
+    use Processus\Abstracts\AbstractClass;
+    
     use Processus\Manager\UserManager;
     
     use Processus\Lib\Mvo\FacebookUserMvo;
     
     use Processus\Lib\Mvo\UserMvo;
 
-    class UserBo
+    class UserBo extends AbstractClass
     {
 
         /**
@@ -34,6 +36,10 @@ namespace Processus\Lib\Bo
         {
             if (! $this->_userMvo) {
                 $this->_userMvo = new FacebookUserMvo();
+                $this->_userMvo->setMemId($this->getApplication()
+                    ->getFacebookClient()
+                    ->getUserId());
+                $this->_userMvo->getFromMem();
             }
             
             return $this->_userMvo;
@@ -50,15 +56,44 @@ namespace Processus\Lib\Bo
             
             return $this->_userManager;
         }
-        
-        /**
-         * @return array | mixed
-         */
-        public function getUserFriends()
-        {
-            return $this->getUserManager()->getUserFriends();
-        }
 
+        /**
+         * @return Ambigous <\Processus\Manager\mixed, NULL>
+         */
+        public function getAppFriends()
+        {
+            $userManager = $this->getApplication()
+                ->getUserBo()
+                ->getUserManager();
+            $fbClient = $this->getApplication()->getFacebookClient();
+            $friendsIdList = $fbClient->getFriendsIdList();
+            $filterFriends = $userManager->filterAppFriends(join(",", $friendsIdList));
+            
+            $mvoFriendsList = array();
+            foreach ($filterFriends as $item) {
+                
+                $mvo = new FacebookUserMvo();
+                
+                $mvo->setMemId($item->id);
+                $data = $mvo->getFromMem();
+                
+                if (! $data) {
+                    
+                    $data = $this->getApplication()
+                        ->getFacebookClient()
+                        ->getUserDataById($item->id);
+                    $mvo->setData($data);
+                    $mvo->saveInMem();
+                    
+                }
+                
+                $mvoFriendsList[] = $mvo->getFullName();
+            
+            }
+            
+            return $mvoFriendsList;
+        }
+    
     }
 }
 ?>

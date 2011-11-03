@@ -7,9 +7,6 @@
  */
 namespace Processus\Lib\Mvo
 {
-    
-    use Processus\Registry;
-    
     use Processus\Lib\Mvo\UserMvo;
 
     class FacebookUserMvo extends UserMvo
@@ -20,24 +17,22 @@ namespace Processus\Lib\Mvo
          */
         protected function getDataBucketPort()
         {
-            return Registry::getInstance()->getProcessusConfig()
+            $config = $this->getApplication()
+                ->getRegistry()
+                ->getProcessusConfig()
                 ->getCouchbaseConfig()
                 ->getCouchbasePortByDatabucketKey("fbusers");
+            
+            return $config['port'];
         }
 
         /**
-         * @return boolean
+         * @see Processus\Abstracts\Vo.AbstractMVO::setMemId()
          */
-        public function checkForUpdate()
+        public function setMemId($mId)
         {
-            $memCachedClient = $this->getMemcachedClient();
-            $check = $memCachedClient->fetch($this->getMemId());
-            
-            if ($check) {
-            
-            }
-            
-            return TRUE;
+            $this->_memId = "FacebookUserMvo_2" . $mId;
+            return $this;
         }
     
     }

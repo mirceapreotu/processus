@@ -2,7 +2,9 @@
 
 namespace Processus\Lib\Db
 {
-    use Processus\Registry;
+    use Processus\Application;
+
+	use Processus\Registry;
     use Processus\Interfaces\InterfaceDatabase;
     use Zend\Db\Db;
     use Zend\Db\Statement\Pdo;
@@ -46,7 +48,7 @@ namespace Processus\Lib\Db
          */
         public function init()
         {
-            $registry = Registry::getInstance();
+            $registry = Application::getInstance()->getRegistry();
             $this->dbh = Db::factory($registry->getConfig('database')->adapter, $registry->getConfig('database')->params->toArray());
         }
 

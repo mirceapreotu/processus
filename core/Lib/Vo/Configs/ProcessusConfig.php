@@ -37,7 +37,6 @@ namespace Processus\Lib\Vo\Configs
                 $this->_couchbaseConfig = new CouchbaseConfig();
                 $this->_couchbaseConfig->setData($this->getValueByKey("couchbaseConfig"));
             }
-            
             return $this->_couchbaseConfig;
         }
 

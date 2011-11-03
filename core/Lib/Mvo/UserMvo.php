@@ -18,7 +18,15 @@ namespace Processus\Lib\Mvo
          */
         public function getFirstname()
         {
-            return $this->getValueByKey("firstname");
+            return $this->getValueByKey("first_name");
+        }
+        
+        /**
+         * @return string
+         */
+        public function getFullName()
+        {
+            return $this->getValueByKey("name");
         }
     }
 }

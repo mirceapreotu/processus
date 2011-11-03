@@ -1,10 +1,10 @@
 <?php
 
 namespace Processus
-{    
+{
     use Processus\Lib\Vo\Configs\ProcessusConfig;
-
-	use Zend\Config\Config;
+    
+    use Zend\Config\Config;
 
     /**
      *
@@ -22,7 +22,6 @@ namespace Processus
          */
         private $_processusConfig;
 
-
         // #########################################################
         
 
@@ -38,8 +37,8 @@ namespace Processus
         
 
         /**
-         * @param null $key
-         * @return array | mixed
+         * @param string $key
+         * @return Config
          */
         public function getConfig($key = NULL)
         {
@@ -54,7 +53,7 @@ namespace Processus
         
 
         /**
-         * @return \Processus\Lib\Vo\Configs\ProcessusConfig
+         * @return ProcessusConfig
          */
         public function getProcessusConfig()
         {
@@ -62,6 +61,7 @@ namespace Processus
                 $this->_processusConfig = new ProcessusConfig();
                 $this->_processusConfig->setData($this->getConfig("processus"));
             }
+            
             return $this->_processusConfig;
         }
     }

@@ -29,6 +29,7 @@ namespace Processus\Abstracts\Manager
 
         // #########################################################
         
+
         /**
          * @return \Processus\Lib\Db\Memcached
          */
@@ -76,21 +77,10 @@ namespace Processus\Abstracts\Manager
             
             if (empty($results)) {
                 $results = $this->_fetchFromMysql($com);
-                $this->cacheResult($results, $com);
+                $this->cacheResult($com, $results);
             }
             
             return $results;
-        }
-
-        // #########################################################
-        
-        /**
-         * @param InterfaceComConfig $com
-         * @param mixed|array $results
-         */
-        protected function cacheResult(InterfaceComConfig $com, $results)
-        {
-            $this->getMemcached()->insert($com->getMemId(), $results, $com->getExpiredTime());
         }
 
         // #########################################################
@@ -104,11 +94,12 @@ namespace Processus\Abstracts\Manager
             $results = NULL;
             
             if ($com->getFromCache() === TRUE) {
-                // $results = theCache($com);
+                $results = $this->getDataFromCache($com);
             }
             
             if (empty($results)) {
                 $results = $this->_fetchOneFromMysql($com);
+                $this->cacheResult($com, $results);
             }
             
             return $results;
@@ -125,11 +116,12 @@ namespace Processus\Abstracts\Manager
             $results = NULL;
             
             if ($com->getFromCache() === TRUE) {
-                // $results = theCache($com);
+                $results = $this->getDataFromCache($com);
             }
             
             if (empty($results)) {
                 $results = $this->_fetchAllFromMysql($com);
+                $this->cacheResult($com, $results);
             }
             
             return $results;
@@ -191,6 +183,18 @@ namespace Processus\Abstracts\Manager
         protected function _fetchAllFromMysql($com)
         {
             return $com->getConnector()->fetchAll($com->getSqlStmt(), $com->getSqlParams());
+        }
+
+        // #########################################################
+        
+
+        /**
+         * @param InterfaceComConfig $com
+         * @param mixed|array $results
+         */
+        protected function cacheResult(InterfaceComConfig $com, $results)
+        {
+            $this->getMemcached()->insert($com->getMemId(), $results, $com->getExpiredTime());
         }
     
     }

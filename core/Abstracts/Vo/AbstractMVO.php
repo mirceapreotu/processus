@@ -71,10 +71,12 @@ namespace Processus\Abstracts\Vo
 
         /**
          * @param string $mId
+         * @return \Processus\Abstracts\Vo\AbstractMVO
          */
         public function setMemId(string $mId)
         {
             $this->_memId = $mId;
+            return $this;
         }
 
         /**
@@ -85,7 +87,7 @@ namespace Processus\Abstracts\Vo
             if (! $this->getMemId()) {
                 return false;
             }
-            return $this->getMemcachedClient()->set($this->getMemId(), $this->getData(), 0);
+            return $this->getMemcachedClient()->insert($this->getMemId(), $this->getData(), 0);
         }
 
         /**
@@ -102,8 +104,8 @@ namespace Processus\Abstracts\Vo
          */
         public function getFromMem()
         {
-            $this->_data = $this->_memDataProvider = $this->getMemcachedClient()->get($this->getMemId());
-            return $this->_memDataProvider;
+            $this->_data = $this->getMemcachedClient()->fetch($this->getMemId());
+            return $this->_data;
         }
 
         /**
@@ -115,11 +117,7 @@ namespace Processus\Abstracts\Vo
             if (! $this->_memcachedClient) {
                 try {
                     
-                    $memcachedConfig = array();
-                    $memcachedConfig['port'] = $this->getDataBucketPort();
-                    $memcachedConfig['host'] = $this->getMembaseHost();
-                    
-                    $this->_memcachedClient = ServerFactory::memcachedFactory($memcachedConfig);
+                    $this->_memcachedClient = ServerFactory::memcachedFactory($this->getMembaseHost(), $this->getDataBucketPort());
                 
                 }
                 catch (\Exception $error) {

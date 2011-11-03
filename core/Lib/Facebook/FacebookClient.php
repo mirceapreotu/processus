@@ -9,11 +9,13 @@
 namespace Processus\Lib\Facebook
 {
     
+    use Processus\Abstracts\AbstractClass;
+    
     use Processus\Registry;
     
     use Processus\Contrib\Facebook\Facebook;
 
-    class FacebookClient
+    class FacebookClient extends AbstractClass
     {
 
         /**
@@ -43,7 +45,9 @@ namespace Processus\Lib\Facebook
         {
             if (! $this->_facebookSdkConf) {
                 /**  */
-                $this->_facebookSdkConf = Registry::getInstance()->getConfig("Facebook");
+                $this->_facebookSdkConf = $this->getApplication()
+                    ->getRegistry()
+                    ->getConfig("Facebook");
             }
             return $this->_facebookSdkConf;
         }
@@ -81,14 +85,22 @@ namespace Processus\Lib\Facebook
          */
         public function getUserFriends()
         {
-            if (! $this->_facebookFriends) {
+            $defaultCache = $this->getApplication()->getDefaultCache();
+            $fbNum = $this->getUserId();
+            $memKey = "getFriendsList_67" . $fbNum;
+            
+            $facebookFriends = $defaultCache->fetch($memKey);
+            
+            if (! $facebookFriends) {
                 $rawData = $this->getFacebookSdk()->api("/me/friends");
-                $this->_facebookFriends = $rawData['data'];
+                $facebookFriends = $rawData['data'];
+                
+                $defaultCache->insert($memKey, $facebookFriends, 60 * 60 * 3);
             }
             
-            return $this->_facebookFriends;
+            return $facebookFriends;
         }
-
+            
         /**
          * @return \Processus\Contrib\Facebook\Facebook
          */
@@ -102,11 +114,10 @@ namespace Processus\Lib\Facebook
         }
 
         /**
-         * @return array
+         * @return multitype:unknown
          */
         public function getFriendsIdList()
         {
-            $fbNum = $this->getUserId();
             $friendsList = $this->getUserFriends();
             
             $idList = array();
@@ -117,7 +128,16 @@ namespace Processus\Lib\Facebook
             
             return $idList;
         }
-    
+        
+        /**
+         * @param string $facebookUserId
+         * @return Ambigous <\Processus\Contrib\Facebook\mixed, mixed>
+         */
+        public function getUserDataById(string $facebookUserId)
+        {
+            $userData  = $this->getFacebookSdk()->api("/" . $facebookUserId);
+            return $userData;
+        }
     }
 }
 ?>
