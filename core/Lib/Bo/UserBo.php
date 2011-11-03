@@ -87,11 +87,19 @@ namespace Processus\Lib\Bo
                 
                 }
                 
-                $mvoFriendsList[] = $mvo->getFullName();
+                $mvoFriendsList[] = $mvo->getDefaultDto()->export();
             
             }
             
             return $mvoFriendsList;
+        }
+        
+        /**
+         * @return string
+         */
+        public function getFacebookUserId()
+        {
+            return $this->getApplication()->getFacebookClient()->getUserId();
         }
 
         /**
@@ -101,7 +109,7 @@ namespace Processus\Lib\Bo
         {
             
             $fbClient = $this->getApplication()->getFacebookClient();
-            $fbUserId = $fbClient->getUserId();
+            $fbUserId = $this->getFacebookUserId();
             
             $userData = $this->getFacebookUserMvo()->getData();
             
