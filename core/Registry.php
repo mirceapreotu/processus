@@ -13,11 +13,6 @@ namespace Processus
     {
 
         /**
-         * @var Registry instance
-         */
-        protected static $_instance;
-
-        /**
          * @var Config
          */
         private $config;
@@ -27,22 +22,6 @@ namespace Processus
          */
         private $_processusConfig;
 
-        // #########################################################
-        
-
-        /**
-         * @static
-         * @return Registry
-         */
-        public static function getInstance()
-        {
-            if (self::$_instance instanceof self !== TRUE) {
-                self::$_instance = new self();
-                self::$_instance->init();
-            }
-            
-            return self::$_instance;
-        }
 
         // #########################################################
         
