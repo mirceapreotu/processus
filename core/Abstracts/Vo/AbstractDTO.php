@@ -16,7 +16,7 @@ namespace Processus\Abstracts\Vo
         /**
          * @return array
          */
-        public function export ()
+        public function export()
         {
             $exportData = array();
             foreach ($this->getMapping() as $item => $key) {
@@ -29,7 +29,7 @@ namespace Processus\Abstracts\Vo
         /**
          * @abstract
          */
-        abstract protected function getMapping ();
+        abstract protected function getMapping();
     }
 }
 
