@@ -51,9 +51,9 @@ namespace Processus\Lib\Db
          * @param string $key
          * @param mixed $value
          */
-        public function insert($key = "foobar", $value = array())
+        public function insert($key = "foobar", $value = array(), $expiredTime = 1)
         {
-            $this->_memcachedClient->set($key, $value);
+            $this->_memcachedClient->set($key, $value, $expiredTime);
         }
 
         /**
