@@ -22,27 +22,10 @@ namespace Processus\Lib\Bo
          */
         private $_userMvo;
 
-        /** 
-         * @var UserBo
-         */
-        private static $_instance;
-
         /**
          * @var UserManager
          */
         private $_userManager;
-
-        /**
-         * @return UserBo
-         */
-        public static function getIntance()
-        {
-            if (! self::$_instance) {
-                self::$_instance = new UserBo();
-            }
-            
-            return self::$_instance;
-        }
 
         /**
          * @return \Processus\Lib\Mvo\FacebookUserMvo

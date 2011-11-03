@@ -17,11 +17,6 @@ namespace Processus\Lib\Facebook
     {
 
         /**
-         * @var FacebookClient
-         */
-        private static $_instance;
-
-        /**
          * @var Facebook
          */
         private $_facebookSdk;
@@ -40,18 +35,6 @@ namespace Processus\Lib\Facebook
          * @var mixed | array
          */
         private $_facebookFriends;
-
-        /**
-         * @return \Processus\Lib\Facebook\FacebookClient
-         */
-        public static function getInstance()
-        {
-            if (! self::$_instance) {
-                self::$_instance = new FacebookClient();
-            }
-            
-            return self::$_instance;
-        }
 
         /**
          * @return Ambigous <\Processus\multitype:, multitype:>
@@ -116,6 +99,23 @@ namespace Processus\Lib\Facebook
             }
             
             return $this->_facebookSdk;
+        }
+
+        /**
+         * @return array
+         */
+        public function getFriendsIdList()
+        {
+            $fbNum = $this->getUserId();
+            $friendsList = $this->getUserFriends();
+            
+            $idList = array();
+            
+            foreach ($friendsList as $item) {
+                $idList[] = $item['id'];
+            }
+            
+            return $idList;
         }
     
     }
