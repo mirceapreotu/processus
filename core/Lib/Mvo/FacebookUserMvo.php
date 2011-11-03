@@ -31,7 +31,7 @@ namespace Processus\Lib\Mvo
          */
         public function setMemId($mId)
         {
-            $this->_memId = "FacebookUserMvo_2" . $mId;
+            $this->_memId = "FacebookUserMvo_" . $mId;
             return $this;
         }
     
