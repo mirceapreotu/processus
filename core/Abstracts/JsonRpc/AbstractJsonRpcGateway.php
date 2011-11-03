@@ -2,7 +2,9 @@
 
 namespace Processus\Abstracts\JsonRpc
 {
-    use Processus\Abstracts\JsonRpc\AbstractJsonRpcRequest;
+    use Processus\Abstracts\AbstractClass;
+
+	use Processus\Abstracts\JsonRpc\AbstractJsonRpcRequest;
     use Processus\Abstracts\JsonRpc\AbstractJsonRpcServer;
     use Processus\Interfaces\InterfaceAuthModule;
 
@@ -11,7 +13,7 @@ namespace Processus\Abstracts\JsonRpc
      * @example {"id":"112","method":"Pub.User.listing","params":[{"name":"Tino"}], "extended":[{}]}
      *
      */
-    abstract class AbstractJsonRpcGateway
+    abstract class AbstractJsonRpcGateway extends AbstractClass
     {
 
         // #########################################################
