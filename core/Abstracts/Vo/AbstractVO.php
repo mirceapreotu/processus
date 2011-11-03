@@ -58,9 +58,6 @@ namespace Processus\Abstracts\Vo
          */
         public function getData()
         {
-            if (is_null($this->_data)) {
-                throw new \Exception("data is null");
-            }
             return $this->_data;
         }
     
