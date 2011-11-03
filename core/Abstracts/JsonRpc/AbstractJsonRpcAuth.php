@@ -10,7 +10,7 @@ namespace Processus\Abstracts\JsonRpc
 
     use Processus\Abstracts\AbstractClass;
 
-	abstract class AbstractAuth extends AbstractClass
+	abstract class AbstractJsonRpcAuth extends AbstractClass
     {
     }
 }
