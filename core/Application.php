@@ -2,7 +2,9 @@
 
 namespace Processus
 {
-    use Processus\Lib\Bo\UserBo;
+    use Processus\Lib\Facebook\FacebookClient;
+
+	use Processus\Lib\Bo\UserBo;
     
     use Processus\Lib\Profiler\Profiler;
 
@@ -18,6 +20,16 @@ namespace Processus
          * @var Profiler
          */
         private $_profiler;
+        
+        /**
+         * @var Registry
+         */
+        private $_registry;
+        
+        /**
+         * @var FacebookClient
+         */
+        private $_facebookClient;
 
         /**
          * @var UserBo
@@ -39,6 +51,35 @@ namespace Processus
             
             return self::$_instance;
         }
+        
+        // #########################################################
+        
+        /**
+         * @return \Processus\Registry
+         */
+        public function getRegistry()
+        {
+            if (! $this->_registry) {
+                $this->_registry = new Registry();
+                $this->_registry->init();
+            }
+            return $this->_registry;
+        }
+        
+        
+        // #########################################################
+        
+
+        /**
+         * @return \Processus\Lib\Facebook\FacebookClient
+         */
+        public function getFacebookClient()
+        {
+            if (! $this->_facebookClient) {
+                $this->_facebookClient = new FacebookClient();
+            }
+            return $this->_facebookClient;
+        }
 
         // #########################################################
         
@@ -53,6 +94,7 @@ namespace Processus
             }
             return $this->_userBo;
         }
+
 
         // #########################################################
         
