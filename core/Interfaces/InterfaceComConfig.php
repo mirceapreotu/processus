@@ -16,6 +16,8 @@ namespace Processus\Interfaces
         public function getSqlParams();
 
         public function getExpiredTime();
+        
+        public function getMemId();
 
         public function getConnector();
 
