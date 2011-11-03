@@ -18,7 +18,7 @@ namespace Processus\Abstracts\Vo
     {
 
         /**
-         * @var String
+         * @var object
          */
         protected $_data;
 
