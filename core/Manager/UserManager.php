@@ -38,7 +38,7 @@ namespace Processus\Manager
             
             $sqlStmt = "SELECT fbu.id FROM fbusers AS fbu WHERE fbu.id IN (" . $friendsList . ")";
             
-            $com->setConnector(\Processus\Lib\Db\MySQL::getInstance())->setSqlStmt($sqlStmt);
+            $com->setConnector(\Processus\Lib\Db\MySQL::getInstance())->setSqlStmt($sqlStmt)->setMemId(__METHOD__ . "_" . $this->getApplication()->getUserBo()->getFacebookUserId());
             
             return $this->fetchAll($com);
         }

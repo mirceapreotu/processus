@@ -37,7 +37,15 @@ namespace Processus\Lib\Facebook
          * @var mixed | array
          */
         private $_facebookFriends;
-
+        
+        /**
+         * @return string
+         */
+        public function getLoginUrl()
+        {
+           return $this->getFacebookSdk()->getLoginUrl();
+        }
+        
         /**
          * @return Ambigous <\Processus\multitype:, multitype:>
          */

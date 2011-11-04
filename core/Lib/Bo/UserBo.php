@@ -84,14 +84,44 @@ namespace Processus\Lib\Bo
                         ->getUserDataById($item->id);
                     $mvo->setData($data);
                     $mvo->saveInMem();
-                    
+                
                 }
                 
-                $mvoFriendsList[] = $mvo->getFullName();
+                $mvoFriendsList[] = $mvo->getDefaultDto()->export();
             
             }
             
             return $mvoFriendsList;
+        }
+        
+        /**
+         * @return string
+         */
+        public function getFacebookUserId()
+        {
+            return $this->getApplication()->getFacebookClient()->getUserId();
+        }
+
+        /**
+         * @return boolean
+         */
+        public function isAuthorized()
+        {
+            
+            $fbClient = $this->getApplication()->getFacebookClient();
+            $fbUserId = $this->getFacebookUserId();
+            
+            $userData = $this->getFacebookUserMvo()->getData();
+            
+            if (! $userData) {
+                
+                $fbData = $fbClient->getUserDataById($fbUserId);
+                $this->getFacebookUserMvo()->setData($fbData);
+                $this->getFacebookUserMvo()->saveInMem();
+            
+            }
+            
+            return TRUE;
         }
     
     }
