@@ -49,7 +49,8 @@ namespace Processus\Lib\Db
         public function init()
         {
             $registry = Application::getInstance()->getRegistry();
-            $this->dbh = Db::factory($registry->getConfig('database')->adapter, $registry->getConfig('database')->params->toArray());
+            $masters = $registry->getProcessusConfig()->getMysqlConfig()->getValueByKey('masters');
+            $this->dbh = Db::factory($masters[0]->adapter, $masters[0]->params->toArray());
         }
 
         // #########################################################        
