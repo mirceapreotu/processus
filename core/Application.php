@@ -133,11 +133,11 @@ namespace Processus
          */
         public function getProfiler()
         {
-            if (! $this->$_profiler) {
-                $this->$_profiler = new Profiler();
+            if (! $this->_profiler) {
+                $this->_profiler = new Profiler();
             }
             
-            return $this->$_profiler;
+            return $this->_profiler;
         }
     }
 }
