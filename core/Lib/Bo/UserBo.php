@@ -32,13 +32,14 @@ namespace Processus\Lib\Bo
         /**
          * @return \Processus\Lib\Mvo\FacebookUserMvo
          */
-        public function getFacebookUserMvo()
+        public function getFacebookUserMvo ()
         {
             if (! $this->_userMvo) {
                 $this->_userMvo = new FacebookUserMvo();
                 $this->_userMvo->setMemId($this->getApplication()
                     ->getFacebookClient()
                     ->getUserId());
+                
                 $this->_userMvo->getFromMem();
             }
             
@@ -48,7 +49,7 @@ namespace Processus\Lib\Bo
         /**
          * @return UserManager
          */
-        public function getUserManager()
+        public function getUserManager ()
         {
             if (! $this->_userManager) {
                 $this->_userManager = new UserManager();
@@ -60,20 +61,19 @@ namespace Processus\Lib\Bo
         /**
          * @return Ambigous <\Processus\Manager\mixed, NULL>
          */
-        public function getAppFriends()
+        public function getAppFriends ()
         {
-            $userManager = $this->getApplication()
-                ->getUserBo()
-                ->getUserManager();
             $fbClient = $this->getApplication()->getFacebookClient();
             $friendsIdList = $fbClient->getFriendsIdList();
+            
+            $userManager = $this->getUserManager();
             $filterFriends = $userManager->filterAppFriends(join(",", $friendsIdList));
             
             $mvoFriendsList = array();
+
             foreach ($filterFriends as $item) {
                 
                 $mvo = new FacebookUserMvo();
-                
                 $mvo->setMemId($item->id);
                 $data = $mvo->getFromMem();
                 
@@ -82,32 +82,33 @@ namespace Processus\Lib\Bo
                     $data = $this->getApplication()
                         ->getFacebookClient()
                         ->getUserDataById($item->id);
+
                     $mvo->setData($data);
                     $mvo->saveInMem();
                 
                 }
                 
                 $mvoFriendsList[] = $mvo->getDefaultDto()->export();
-            
             }
             
             return $mvoFriendsList;
         }
-        
+
         /**
          * @return string
          */
-        public function getFacebookUserId()
+        public function getFacebookUserId ()
         {
-            return $this->getApplication()->getFacebookClient()->getUserId();
+            return $this->getApplication()
+                ->getFacebookClient()
+                ->getUserId();
         }
 
         /**
          * @return boolean
          */
-        public function isAuthorized()
+        public function isAuthorized ()
         {
-            
             $fbClient = $this->getApplication()->getFacebookClient();
             $fbUserId = $this->getFacebookUserId();
             
@@ -123,7 +124,6 @@ namespace Processus\Lib\Bo
             
             return TRUE;
         }
-    
     }
 }
 ?>
