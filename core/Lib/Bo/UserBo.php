@@ -70,7 +70,7 @@ namespace Processus\Lib\Bo
             $filterFriends = $userManager->filterAppFriends(join(",", $friendsIdList));
             
             $mvoFriendsList = array();
-
+            
             foreach ($filterFriends as $item) {
                 
                 $mvo = new FacebookUserMvo();
@@ -82,7 +82,7 @@ namespace Processus\Lib\Bo
                     $data = $this->getApplication()
                         ->getFacebookClient()
                         ->getUserDataById($item->id);
-
+                    
                     $mvo->setData($data);
                     $mvo->saveInMem();
                 
@@ -112,17 +112,22 @@ namespace Processus\Lib\Bo
             $fbClient = $this->getApplication()->getFacebookClient();
             $fbUserId = $this->getFacebookUserId();
             
-            $userData = $this->getFacebookUserMvo()->getData();
-            
-            if (! $userData) {
+            if ($fbUserId) {
+                $userData = $this->getFacebookUserMvo()->getData();
                 
-                $fbData = $fbClient->getUserDataById($fbUserId);
-                $this->getFacebookUserMvo()->setData($fbData);
-                $this->getFacebookUserMvo()->saveInMem();
+                if (! $userData) {
+                    
+                    $fbData = $fbClient->getUserDataById($fbUserId);
+                    $this->getFacebookUserMvo()->setData($fbData);
+                    $this->getFacebookUserMvo()->saveInMem();
+                    
+                }
             
+                return TRUE;
             }
-            
-            return TRUE;
+            else {
+                return FALSE;
+            }            
         }
     }
 }
