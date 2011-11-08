@@ -47,20 +47,23 @@ namespace Processus\Lib\Server
 
         /**
          * @static
-         * @param string $host
-         * @param string $port
-         * @return \Processus\Lib\Db\MySQL
+         * @param string $adapter
+         * @param array $params
+         * @return MySQL
          */
-        public static function mysqlFactory(string $host, string $port)
+        public static function mysqlFactory(string $adapter, array $params)
         {
-            $poolKey = md5($host . $port);
+            $poolKey = md5($adapter . join('', $params));
             
             if (array_key_exists($poolKey, self::$_mysqlPool) === FALSE) {
-                $mySql = new MySQL($host, $port);
-                self::$_mysqlPool[$poolKey] = $mySql;
+                $mysql = new MySQL();
+                $mysql->init($adapter, $params);
+                self::$_mysqlPool[$poolKey] = $mysql;
             }
+
+            var_dump(array($mysql, $adapter, $params, $poolKey));
             
-            return $mySql;
+            return $mysql;
         }
     }
 }
