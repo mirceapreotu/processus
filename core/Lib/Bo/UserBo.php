@@ -63,14 +63,17 @@ namespace Processus\Lib\Bo
          */
         public function getAppFriends ()
         {
+            // get friends from facebook
             $fbClient = $this->getApplication()->getFacebookClient();
             $friendsIdList = $fbClient->getFriendsIdList();
             
+            // match appUsers with friendsList from facebook
             $userManager = $this->getUserManager();
             $filterFriends = $userManager->filterAppFriends($friendsIdList);
             
             $mvoFriendsList = array();
             
+            // get friends from membase || or add them
             foreach ($filterFriends as $item) {
                 
                 $mvo = new FacebookUserMvo();
@@ -78,14 +81,12 @@ namespace Processus\Lib\Bo
                 $data = $mvo->getFromMem();
                 
                 if (! $data) {
-                    
                     $data = $this->getApplication()
                         ->getFacebookClient()
                         ->getUserDataById($item->id);
                     
                     $mvo->setData($data);
                     $mvo->saveInMem();
-                
                 }
                 
                 $mvoFriendsList[] = $mvo;
@@ -120,14 +121,14 @@ namespace Processus\Lib\Bo
                     $fbData = $fbClient->getUserDataById($fbUserId);
                     $this->getFacebookUserMvo()->setData($fbData);
                     $this->getFacebookUserMvo()->saveInMem();
-                    
+                
                 }
-            
+                
                 return TRUE;
             }
             else {
                 return FALSE;
-            }            
+            }
         }
     }
 }
