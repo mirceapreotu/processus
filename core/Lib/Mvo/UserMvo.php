@@ -14,11 +14,19 @@ namespace Processus\Lib\Mvo
     {
 
         /**
-         * @return \Processus\Abstracts\Vo\multitype:
+         * @return string
          */
         public function getFirstname()
         {
-            return $this->getValueByKey("first_name");
+            return $this->getValueByKey("firstName");
+        }
+        
+        /**
+         * @return string
+         */
+        public function getLastname()
+        {
+            return $this->getValueByKey("lastName");
         }
         
         /**
@@ -26,7 +34,7 @@ namespace Processus\Lib\Mvo
          */
         public function getFullName()
         {
-            return $this->getValueByKey("name");
+            return $this->getValueByKey("fullName");
         }
     }
 }

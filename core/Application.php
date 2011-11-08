@@ -2,6 +2,8 @@
 
 namespace Processus
 {
+    use Processus\Lib\Db\MySQL;
+    
     use Processus\Lib\Db\Memcached;
     
     use Processus\Lib\Server\ServerFactory;
@@ -45,13 +47,18 @@ namespace Processus
          */
         private $_memcached;
 
+        /**
+         * @var MySQL
+         */
+        private $_mysql;
+
         // #########################################################
         
 
         /**
-         * @return \Processus\Lib\Db\Memcached
+         * @return Memcached
          */
-        public function getDefaultCache()
+        public function getDefaultCache ()
         {
             if (! $this->_memcached) {
                 
@@ -71,9 +78,25 @@ namespace Processus
         
 
         /**
+         * @return MySQL
+         */
+        public function getDefaultMysql ()
+        {
+            if (! $this->_mysql) {
+                $this->_mysql = MySQL::getInstance();
+            }
+            
+            return $this->_mysql;
+        
+        }
+
+        // #########################################################
+        
+
+        /**
          * @return \Processus\Application
          */
-        public static function getInstance()
+        public static function getInstance ()
         {
             if (self::$_instance instanceof self !== TRUE) {
                 self::$_instance = new Application();
@@ -88,7 +111,7 @@ namespace Processus
         /**
          * @return \Processus\Registry
          */
-        public function getRegistry()
+        public function getRegistry ()
         {
             if (! $this->_registry) {
                 $this->_registry = new Registry();
@@ -103,7 +126,7 @@ namespace Processus
         /**
          * @return \Processus\Lib\Facebook\FacebookClient
          */
-        public function getFacebookClient()
+        public function getFacebookClient ()
         {
             if (! $this->_facebookClient) {
                 $this->_facebookClient = new FacebookClient();
@@ -117,7 +140,7 @@ namespace Processus
         /**
          * @return \Processus\Lib\Bo\UserBo
          */
-        public function getUserBo()
+        public function getUserBo ()
         {
             if (! $this->_userBo) {
                 $this->_userBo = new UserBo();
@@ -131,7 +154,7 @@ namespace Processus
         /**
          * @return \Processus\Lib\Profiler\Profiler
          */
-        public function getProfiler()
+        public function getProfiler ()
         {
             if (! $this->_profiler) {
                 $this->_profiler = new Profiler();
