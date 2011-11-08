@@ -8,6 +8,8 @@
 namespace Processus\Manager
 {
     
+    use Processus\Lib\Db\MySQL;
+    
     use Processus\Abstracts\Manager\ComConfig;
     
     use Processus\Application;
@@ -19,20 +21,7 @@ namespace Processus\Manager
 
         /**
          * @param array $friendsList
-         */
-        private function insertFriends (array $friendsList)
-        {
-            $com = new ComConfig();
-            $com->setSqlTableName("fbuser_friends")
-                ->setConnector(MySQL::getInstance())
-                ->setSqlParams($friendsList);
-            
-            $this->insert($com);
-        }
-
-        /**
-         * @param string $friendsList
-         * @return mixed|null
+         * @return NULL
          */
         public function filterAppFriends (array $friendsList)
         {
@@ -45,10 +34,23 @@ namespace Processus\Manager
                 ->getFacebookUserId();
             
             $com->setConnector(MySQL::getInstance())
-                ->setSqlStmt("SELECT fbu.id FROM fbusers AS fbu WHERE fbu.id IN (" . $friendsList . ")")
+                ->setSqlStmt("SELECT fbu.id AS id FROM fbusers AS fbu WHERE fbu.id IN (" . $friendsList . ")")
                 ->setMemId($memId);
             
             return $this->fetchAll($com);
+        }
+
+        /**
+         * @param array $friendsList
+         */
+        private function insertFriends (array $friendsList)
+        {
+            $com = new ComConfig();
+            $com->setConnector(MySQL::getInstance())
+                ->setSqlTableName("fbuser_friends")
+                ->setSqlParams($friendsList);
+            
+            $this->insert($com);
         }
 
         /**
