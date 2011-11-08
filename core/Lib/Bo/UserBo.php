@@ -67,7 +67,7 @@ namespace Processus\Lib\Bo
             $friendsIdList = $fbClient->getFriendsIdList();
             
             $userManager = $this->getUserManager();
-            $filterFriends = $userManager->filterAppFriends(join(",", $friendsIdList));
+            $filterFriends = $userManager->filterAppFriends($friendsIdList);
             
             $mvoFriendsList = array();
             
