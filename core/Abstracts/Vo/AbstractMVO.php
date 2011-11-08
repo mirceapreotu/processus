@@ -9,11 +9,13 @@ namespace Processus\Abstracts\Vo
      * Time: 12:39 PM
      * To change this template use File | Settings | File Templates.
      */
+    use Processus\Interfaces\InterfaceDto;
+    
     use Processus\Registry;
-
-	use Processus\Application;
-
-	use Processus\Lib\Db\Memcached;
+    
+    use Processus\Application;
+    
+    use Processus\Lib\Db\Memcached;
     
     use Processus\Lib\Server\ServerFactory;
 
@@ -48,7 +50,7 @@ namespace Processus\Abstracts\Vo
         /**
          * @return string
          */
-        protected function getSaltValue()
+        protected function getSaltValue ()
         {
             return $this->_saltValue;
         }
@@ -56,7 +58,7 @@ namespace Processus\Abstracts\Vo
         /**
          * @return string
          */
-        protected function getHashAlgo()
+        protected function getHashAlgo ()
         {
             return $this->_hashAlgo;
         }
@@ -64,7 +66,7 @@ namespace Processus\Abstracts\Vo
         /**
          * @return string
          */
-        protected function getMemId()
+        protected function getMemId ()
         {
             return $this->_memId;
         }
@@ -73,7 +75,7 @@ namespace Processus\Abstracts\Vo
          * @param string $mId
          * @return \Processus\Abstracts\Vo\AbstractMVO
          */
-        public function setMemId(string $mId)
+        public function setMemId (string $mId)
         {
             $this->_memId = $mId;
             return $this;
@@ -82,7 +84,7 @@ namespace Processus\Abstracts\Vo
         /**
          * @return bool
          */
-        public function saveInMem()
+        public function saveInMem ()
         {
             if (! $this->getMemId()) {
                 return false;
@@ -93,7 +95,7 @@ namespace Processus\Abstracts\Vo
         /**
          * @return bool
          */
-        public function deleteFromMem()
+        public function deleteFromMem ()
         {
             $this->getMemcachedClient()->delete($this->getMemId());
             return true;
@@ -102,7 +104,7 @@ namespace Processus\Abstracts\Vo
         /**
          * @return object
          */
-        public function getFromMem()
+        public function getFromMem ()
         {
             $this->_data = $this->getMemcachedClient()->fetch($this->getMemId());
             return $this->_data;
@@ -112,7 +114,7 @@ namespace Processus\Abstracts\Vo
          * @throws Exception
          * @return \Processus\Lib\Db\Memcached
          */
-        public function getMemcachedClient()
+        public function getMemcachedClient ()
         {
             if (! $this->_memcachedClient) {
                 try {
@@ -132,7 +134,7 @@ namespace Processus\Abstracts\Vo
         /**
          * @return string
          */
-        protected function getMembaseHost()
+        protected function getMembaseHost ()
         {
             return "127.0.0.1";
         }
@@ -140,11 +142,21 @@ namespace Processus\Abstracts\Vo
         /**
          * @return string
          */
-        protected function getDataBucketPort()
+        protected function getDataBucketPort ()
         {
-            return "11280";
+            return "11211";
+        }
+
+        /**
+         * @param InterfaceDto $dto
+         * @return InterfaceDto
+         */
+        public function setDto (InterfaceDto $dto)
+        {
+            $dto->setData($this->getData());
+            return $dto;
         }
     }
 }
 
-?>
+// ?>
