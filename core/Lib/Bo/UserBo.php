@@ -59,7 +59,7 @@ namespace Processus\Lib\Bo
         }
 
         /**
-         * @return Ambigous <\Processus\Manager\mixed, NULL>
+         * @return multitype:Ambigous <multitype:, multitype:NULL >
          */
         public function getAppFriends ()
         {
@@ -88,7 +88,7 @@ namespace Processus\Lib\Bo
                 
                 }
                 
-                $mvoFriendsList[] = $mvo->getDefaultDto()->export();
+                $mvoFriendsList[] = $mvo;
             }
             
             return $mvoFriendsList;
