@@ -8,6 +8,8 @@
 namespace Processus\Manager
 {
     
+    use Processus\Abstracts\Manager\ComConfig;
+    
     use Processus\Application;
     
     use Processus\Abstracts\Manager\AbstractManager;
@@ -18,12 +20,12 @@ namespace Processus\Manager
         /**
          * @param array $friendsList
          */
-        private function insertFriends(array $friendsList)
+        private function insertFriends (array $friendsList)
         {
-            $com = new \Processus\Abstracts\Manager\ComConfig();
+            $com = new ComConfig();
             $com->setSqlTableName("fbuser_friends")
-                ->setSqlParams($friendsList)
-                ->setConnector(\Processus\Lib\Db\MySQL::getInstance());
+                ->setConnector(MySQL::getInstance())
+                ->setSqlParams($friendsList);
             
             $this->insert($com);
         }
@@ -32,13 +34,19 @@ namespace Processus\Manager
          * @param string $friendsList
          * @return mixed|null
          */
-        public function filterAppFriends(string $friendsList)
+        public function filterAppFriends (array $friendsList)
         {
-            $com = new \Processus\Abstracts\Manager\ComConfig();
+            $friendsList = join(',', $friendsList);
             
-            $sqlStmt = "SELECT fbu.id FROM fbusers AS fbu WHERE fbu.id IN (" . $friendsList . ")";
+            $com = new ComConfig();
             
-            $com->setConnector(\Processus\Lib\Db\MySQL::getInstance())->setSqlStmt($sqlStmt)->setMemId(__METHOD__ . "_" . $this->getApplication()->getUserBo()->getFacebookUserId());
+            $memId = "filterAppFriends_" . $this->getApplication()
+                ->getUserBo()
+                ->getFacebookUserId();
+            
+            $com->setConnector(MySQL::getInstance())
+                ->setSqlStmt("SELECT fbu.id FROM fbusers AS fbu WHERE fbu.id IN (" . $friendsList . ")")
+                ->setMemId($memId);
             
             return $this->fetchAll($com);
         }
@@ -47,16 +55,16 @@ namespace Processus\Manager
          * @param array $filteredFriends
          * @return bool
          */
-        public function updateUserFriends(array $filteredFriends)
+        public function updateUserFriends (array $filteredFriends)
         {
-            $fbNum = $this->getApplication()
+            $fbuserId = $this->getApplication()
                 ->getFacebookClient()
                 ->getUserId();
             
             foreach ($filteredFriends as $item) {
                 $items = array();
                 
-                $items['from_fbuser_id'] = $fbNum;
+                $items['from_fbuser_id'] = $fbuserId;
                 $items['with_fbuser_id'] = $item->id;
                 
                 $this->insertFriends($items);
