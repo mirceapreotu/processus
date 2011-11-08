@@ -3,8 +3,8 @@
 namespace Processus\Lib\Db
 {
     use Processus\Application;
-
-	use Processus\Registry;
+    
+    use Processus\Registry;
     use Processus\Interfaces\InterfaceDatabase;
     use Zend\Db\Db;
     use Zend\Db\Statement\Pdo;
@@ -26,12 +26,13 @@ namespace Processus\Lib\Db
         public $dbh;
 
         // #########################################################
+        
 
         /**
          * @static
          * @return MySQL
          */
-        public static function getInstance()
+        public static function getInstance ()
         {
             if (self::$_instance instanceof self !== TRUE) {
                 self::$_instance = new MySQL();
@@ -43,23 +44,28 @@ namespace Processus\Lib\Db
 
         // #########################################################
         
+
         /**
          * @return void
          */
-        public function init()
+        public function init ()
         {
             $registry = Application::getInstance()->getRegistry();
-            $this->dbh = Db::factory($registry->getConfig('database')->adapter, $registry->getConfig('database')->params->toArray());
+            $masters = $registry->getProcessusConfig()
+                ->getMysqlConfig()
+                ->getValueByKey('masters');
+            $this->dbh = Db::factory($masters[0]->adapter, $masters[0]->params->toArray());
         }
 
         // #########################################################        
+        
 
         /**
          * @param null $sql
          * @param array $args
          * @return \Zend\Db\Statement\Pdo
          */
-        private function _prepare($sql = NULL, $args = array())
+        private function _prepare ($sql = NULL, $args = array())
         {
             $stmt = new Pdo($this->dbh, $sql);
             $stmt->setFetchMode(DB::FETCH_OBJ);
@@ -69,48 +75,52 @@ namespace Processus\Lib\Db
 
         // #########################################################
         
+
         /**
          * @param null $sql
          * @param array $args
          * @return string
          */
-        public function fetchValue($sql = NULL, $args = array())
+        public function fetchValue ($sql = NULL, $args = array())
         {
             return $this->_prepare($sql, $args)->fetchColumn();
         }
 
         // #########################################################
         
+
         /**
          * @param null $sql
          * @param array $args
          * @return \Zend\Db\Statement\Pdo
          */
-        public function fetch($sql = NULL, $args = array())
+        public function fetch ($sql = NULL, $args = array())
         {
             return $this->_prepare($sql, $args);
         }
 
         // #########################################################
         
+
         /**
          * @param null $sql
          * @param array $args
          * @return mixed
          */
-        public function fetchOne($sql = NULL, $args = array())
+        public function fetchOne ($sql = NULL, $args = array())
         {
             return $this->_prepare($sql, $args)->fetchObject();
         }
 
         // #########################################################
         
+
         /**
          * @param null $sql
          * @param array $args
          * @return array
          */
-        public function fetchAll($sql = NULL, $args = array())
+        public function fetchAll ($sql = NULL, $args = array())
         {
             return $this->_prepare($sql, $args)->fetchAll();
         }
@@ -123,10 +133,10 @@ namespace Processus\Lib\Db
          * @param array $values
          * @return mixed
          */
-        public function insert($tableName = NULL, $values = array())
+        public function insert ($tableName = NULL, $values = array())
         {
             if (! is_null($tableName) && ! empty($values)) {
-
+                
                 // prepare placeholders and values
                 $_set = array();
                 $_placeholder = array();
@@ -143,7 +153,7 @@ namespace Processus\Lib\Db
                 
                 // build sql
                 $sql = 'INSERT INTO ' . $tableName . ' (' . join(',', $_set) . ') VALUES (' . join(',', $_placeholder) . ')';
-
+                
                 // insert
                 $this->_prepare($sql, $_values);
             }
@@ -160,7 +170,7 @@ namespace Processus\Lib\Db
          * @param array $conditions
          * @return mixed
          */
-        public function update($tableName = NULL, $values = array(), $conditions = array())
+        public function update ($tableName = NULL, $values = array(), $conditions = array())
         {
             if (! is_null($tableName) && ! empty($values) && array_key_exists('id', $conditions)) {
                 // prepare placeholders and values

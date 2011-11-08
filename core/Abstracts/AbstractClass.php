@@ -7,7 +7,9 @@
  */
 namespace Processus\Abstracts
 {
-    use Processus\Application;
+    use Processus\Lib\Vo\Configs\ProcessusConfig;
+
+	use Processus\Application;
 
 	abstract class AbstractClass
     {
@@ -17,6 +19,14 @@ namespace Processus\Abstracts
         protected function getApplication()
         {
             return Application::getInstance();
+        }
+        
+        /**
+         * @return mixed | array | stdClass
+         */
+        protected function config()
+        {
+            return $this->getApplication()->getRegistry()->getConfig(__CLASS__);
         }
     }
 }

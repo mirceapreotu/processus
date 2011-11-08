@@ -17,7 +17,7 @@ namespace Processus\Lib\Mvo
         /**
          * @see Processus\Abstracts\Vo.AbstractMVO::getDataBucketPort()
          */
-        protected function getDataBucketPort()
+        protected function getDataBucketPort ()
         {
             $config = $this->getApplication()
                 ->getRegistry()
@@ -31,16 +31,16 @@ namespace Processus\Lib\Mvo
         /**
          * @see Processus\Abstracts\Vo.AbstractMVO::setMemId()
          */
-        public function setMemId($mId)
+        public function setMemId ($mId)
         {
-            $this->_memId = "FacebookUserMvo_" . $mId;
+            parent::setMemId("FacebookUserMvo_" . $mId);
             return $this;
         }
 
         /**
          * @return FacebookUserDto
          */
-        public function getDefaultDto()
+        public function getDefaultDto ()
         {
             $dto = new FacebookUserDto();
             $dto->setData($this->getData());

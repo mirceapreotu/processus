@@ -50,7 +50,8 @@ namespace Processus\Abstracts\Vo
          */
         public function getValueByKey(string $key)
         {
-            return $this->_data->$key;
+            $data = $this->getData();
+            return $data->$key;
         }
 
         /**

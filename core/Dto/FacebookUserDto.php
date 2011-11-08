@@ -16,13 +16,16 @@ namespace Processus\Dto
         /**
          * @see Processus\Abstracts\Vo.AbstractDTO::getMapping()
          */
-        protected function getMapping()
+        protected function getMapping ()
         {
             return array(
-                "name" => "userName", 
+                
                 "id" => "userId", 
-                "email" => "mail", 
-                "locale" => "language"
+                "first_name" => "firstName", 
+                "last_name" => "lastName", 
+                "name" => "fullName", 
+                "locale" => "language", 
+                "gender" => "gender"
             );
         }
     
