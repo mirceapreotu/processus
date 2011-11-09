@@ -6,6 +6,12 @@ namespace Application\JsonRpc\V1\Admin\Service
 
     class User extends AbstractJsonRpcService
     {
+        public function getInitialData()
+        {
+            $returnData = array();
+            
+            return $returnData;
+        }
     }
 }
 
