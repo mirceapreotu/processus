@@ -135,7 +135,7 @@ namespace Processus\Lib\Db
          */
         public function insert ($tableName = NULL, $values = array())
         {
-            if (! is_null($tableName) && ! empty($values)) {
+            if (! empty($tableName) && ! empty($values)) {
                 
                 // prepare placeholders and values
                 $_set = array();

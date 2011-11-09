@@ -59,18 +59,21 @@ namespace Processus\Lib\Bo
         }
 
         /**
-         * @return Ambigous <\Processus\Manager\mixed, NULL>
+         * @return multitype:Ambigous <multitype:, multitype:NULL >
          */
         public function getAppFriends ()
         {
+            // get friends from facebook
             $fbClient = $this->getApplication()->getFacebookClient();
             $friendsIdList = $fbClient->getFriendsIdList();
             
+            // match appUsers with friendsList from facebook
             $userManager = $this->getUserManager();
-            $filterFriends = $userManager->filterAppFriends(join(",", $friendsIdList));
+            $filterFriends = $userManager->filterAppFriends($friendsIdList);
             
             $mvoFriendsList = array();
-
+            
+            // get friends from membase || or add them
             foreach ($filterFriends as $item) {
                 
                 $mvo = new FacebookUserMvo();
@@ -78,17 +81,15 @@ namespace Processus\Lib\Bo
                 $data = $mvo->getFromMem();
                 
                 if (! $data) {
-                    
                     $data = $this->getApplication()
                         ->getFacebookClient()
                         ->getUserDataById($item->id);
-
+                    
                     $mvo->setData($data);
                     $mvo->saveInMem();
-                
                 }
                 
-                $mvoFriendsList[] = $mvo->getDefaultDto()->export();
+                $mvoFriendsList[] = $mvo;
             }
             
             return $mvoFriendsList;
@@ -112,17 +113,22 @@ namespace Processus\Lib\Bo
             $fbClient = $this->getApplication()->getFacebookClient();
             $fbUserId = $this->getFacebookUserId();
             
-            $userData = $this->getFacebookUserMvo()->getData();
-            
-            if (! $userData) {
+            if ($fbUserId) {
+                $userData = $this->getFacebookUserMvo()->getData();
                 
-                $fbData = $fbClient->getUserDataById($fbUserId);
-                $this->getFacebookUserMvo()->setData($fbData);
-                $this->getFacebookUserMvo()->saveInMem();
-            
+                if (! $userData) {
+                    
+                    $fbData = $fbClient->getUserDataById($fbUserId);
+                    $this->getFacebookUserMvo()->setData($fbData);
+                    $this->getFacebookUserMvo()->saveInMem();
+                
+                }
+                
+                return TRUE;
             }
-            
-            return TRUE;
+            else {
+                return FALSE;
+            }
         }
     }
 }
