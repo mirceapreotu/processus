@@ -2,40 +2,15 @@
 
 namespace Application\JsonRpc\V1\Admin\Service
 {
-    use Processus\Lib\Db\CouchDb;
-    
-    use Processus\Lib\Db\MySQL;
-    
-    use Application\Model\UserModel;
+    use Processus\Abstracts\JsonRpc\AbstractJsonRpcService;
 
-    /**
-     * Date: 10/28/11
-     * Time: 1:23 PM
-     * To change this template use File | Settings | File Templates.
-     */
-    class User
+    class User extends AbstractJsonRpcService
     {
-
-        /**
-         * @param $params
-         * @return mixed
-         */
-        public function listing ($params)
+        public function getInitialData()
         {
-            $model = new UserModel();
-            return $model->listing();
-        }
-
-        /**
-         * @param $userData
-         * @return bool
-         */
-        public function addUser ($userData, $foo, $foobar, $deineMutter, $mama, $fucker)
-        {
-            $userFirstName = $userData['name'];
-            $userLastName = $userData['lastname'];
+            $returnData = array();
             
-            return true;
+            return $returnData;
         }
     }
 }

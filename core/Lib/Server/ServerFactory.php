@@ -37,7 +37,7 @@ namespace Processus\Lib\Server
             
             if (array_key_exists($poolKey, self::$_couchbasePool) === FALSE) {
                 
-                $memcached = new Memcached($host, $port, $id);
+                $memcached = new Memcached($host, $port, $poolKey);
                 self::$_couchbasePool[$poolKey] = $memcached;
             
             }
