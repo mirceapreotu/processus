@@ -1,6 +1,6 @@
 <?php
 
-require_once 'application/php/Application/JsonRpc/V1/Admin/Auth.php';
+require_once 'application/php/Application/JsonRpc/V1/App/Auth.php';
 
 /**
  * Auth test case.
