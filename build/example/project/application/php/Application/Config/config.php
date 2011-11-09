@@ -60,9 +60,9 @@ return array(
                                 'adapter' => 'PdoMysql',
                                 'params' => array(
                                     'host' => 'localhost',
-                                    'username' => '',
-                                    'password' => '',
-                                    'dbname' => '',
+                                    'username' => 'root',
+                                    'password' => 'root',
+                                    'dbname' => 'shakeonitapp',
                                     'driver_options' => array(
                                         PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"
                                     )
@@ -114,21 +114,6 @@ return array(
         'default' => array(
             'lc_all' => 'C',
             'timezone' => 'Europe/Berlin',
-        )
-    ),
-
-    // +++++++++++++++++ db: default (Zend) +++++++++++++++++++++++++
-
-    'database' => array(
-        'adapter' => 'PdoMysql',
-        'params' => array(
-            'host' => 'localhost',
-            'username' => '',
-            'password' => '',
-            'dbname' => '',
-            'driver_options' => array(
-                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"
-            )
         )
     ),
 
