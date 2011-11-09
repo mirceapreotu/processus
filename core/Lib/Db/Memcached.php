@@ -19,6 +19,7 @@ namespace Processus\Lib\Db
         public function __construct(string $host, string $port, $id = "default")
         {
             $this->_memcachedClient = new \Memcached($id);
+            $this->_memcachedClient->setOption(Memcached::OPT_SERIALIZER, Memcached::SERIALIZER_JSON);
             $this->_memcachedClient->addServer($host, $port);
         }
 
@@ -50,10 +51,12 @@ namespace Processus\Lib\Db
         /**
          * @param string $key
          * @param mixed $value
+         * @return Memcached ErrorCode
          */
         public function insert($key = "foobar", $value = array(), $expiredTime = 1)
         {
             $this->_memcachedClient->set($key, $value, $expiredTime);
+            return $this->_memcachedClient->getResultCode();
         }
 
         /**
