@@ -78,8 +78,7 @@ namespace Processus\Abstracts\JsonRpc
         protected function _run ()
         {
             // set class
-            $this->setClass($this->getRequest()
-                ->getSpecifiedServiceClassName());
+            $this->setClass($this->getRequest()->getSpecifiedServiceClassName());
             
             // Handle the request:
             $this->handle();
