@@ -26,7 +26,7 @@ namespace Processus\Abstracts
          */
         protected function config()
         {
-            return $this->getApplication()->getRegistry()->getConfig(__CLASS__);
+            return $this->getApplication()->getRegistry()->getConfig($this);
         }
     }
 }
