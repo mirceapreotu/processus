@@ -1,0 +1,3 @@
+[submodule "Library/Couchbase"]
+	path = Library/Couchbase
+	url = git@github.com:Crowdpark/php-couchbase.git

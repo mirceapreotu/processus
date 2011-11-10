@@ -30,7 +30,7 @@ namespace Processus
                 // display erros for the following part
                 ini_set('display_errors', TRUE);
                 
-                error_reporting(E_ALL | E_STRICT);
+                error_reporting(E_STRICT | E_ALL);
                 set_error_handler(array(
                     'Processus\Bootstrap', 
                     'handleError'
