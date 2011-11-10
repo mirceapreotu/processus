@@ -10,7 +10,18 @@
     initialize: function() {
       window.App.Log(['init controller']);
       window.Member = new App.Models.Member;
-      return window.ViewLayout = new App.Views.Layout;
+      window.ViewLayout = new App.Views.Layout;
+      FB.init({
+        appId: window.AppConfig.fbAppId,
+        status: true,
+        cookie: true,
+        oauth: true,
+        xfbml: true
+      });
+      return FB.Event.subscribe('auth.login', function(response) {
+        window.App.Log(['trigger fb.auth.login', response]);
+        return window.Member.login(response);
+      });
     },
     loadPage: function(elmId) {
       window.App.Log(['show page #', elmId]);
