@@ -19,8 +19,44 @@ namespace Processus\Lib\Db
         public function __construct(string $host, string $port, $id = "default")
         {
             $this->_memcachedClient = new \Memcached($id);
-            $this->_memcachedClient->setOption(Memcached::OPT_SERIALIZER, Memcached::SERIALIZER_JSON);
+            $this->_memcachedClient->setOption(\Memcached::OPT_SERIALIZER, \Memcached::SERIALIZER_JSON);
             $this->_memcachedClient->addServer($host, $port);
+        }
+        
+        /**
+         * Return the filling percentage of the backend storage
+         *
+         * @throws \Zend\Cache\Exception
+         * @return int integer between 0 and 100
+         */
+        public function getFillingPercentage ()
+        {
+            $mems = $this->_memcachedClient->getStats();
+            return $mems;
+            
+            $memSize = null;
+            $memUsed = null;
+            foreach ($mems as $key => $mem) {
+                if ($mem === false) {
+                    $this->_log('can\'t get stat from ' . $key);
+                    continue;
+                }
+        
+                $eachSize = $mem['limit_maxbytes'];
+                $eachUsed = $mem['bytes'];
+                if ($eachUsed > $eachSize) {
+                    $eachUsed = $eachSize;
+                }
+        
+                $memSize += $eachSize;
+                $memUsed += $eachUsed;
+            }
+        
+            if ($memSize === null || $memUsed === null) {
+                Cache\Cache::throwException('Can\'t get filling percentage');
+            }
+        
+            return ((int) (100. * ($memUsed / $memSize)));
         }
 
         /**
@@ -29,7 +65,8 @@ namespace Processus\Lib\Db
          */
         public function fetch($key = "foobar")
         {
-            return $this->_memcachedClient->get($key);
+            $jsonObject = json_decode($this->_memcachedClient->get($key));
+            return (object)$jsonObject;
         }
 
         /**
@@ -55,7 +92,8 @@ namespace Processus\Lib\Db
          */
         public function insert($key = "foobar", $value = array(), $expiredTime = 1)
         {
-            $this->_memcachedClient->set($key, $value, $expiredTime);
+            $jsonString = json_encode($value);
+            $this->_memcachedClient->set($key, $jsonString, $expiredTime);
             return $this->_memcachedClient->getResultCode();
         }
 
