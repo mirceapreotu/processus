@@ -25,8 +25,21 @@ App.Controllers.App = Backbone.Router.extend
 
     # trigger successful authentication
     FB.Event.subscribe 'auth.login', (response) ->
-      window.App.Log ['trigger fb.auth.login', response]
-      window.Member.login(response)
+      window.App.Log ['trigger fb.auth.login', response, document.cookie]
+      window.AppController.fbConnectedCookieChecker(response)   
+
+  ###############################################
+
+  fbConnectedCookieChecker: (response) ->
+    intervalMs = 1
+
+    cookieChecker = (intervalInstance) ->
+      window.App.Log ["controller.fbConnectedCookieChecker... #{intervalMs}ms", document.cookie]
+      if document.cookie.match(/fbsr_/)
+        window.clearInterval(run)
+        window.Member.login(response)
+
+    run = window.setInterval(cookieChecker, intervalMs)
 
   ###############################################
 
