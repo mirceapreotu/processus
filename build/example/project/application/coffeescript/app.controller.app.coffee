@@ -15,6 +15,32 @@ App.Controllers.App = Backbone.Router.extend
     window.Member = new App.Models.Member
     window.ViewLayout = new App.Views.Layout
 
+    # facebook init
+    FB.init
+      appId: window.AppConfig.fbAppId
+      status: true
+      cookie: true
+      oauth: true
+      xfbml: true
+
+    # trigger successful authentication
+    FB.Event.subscribe 'auth.login', (response) ->
+      window.App.Log ['trigger fb.auth.login', response, document.cookie]
+      window.AppController.fbConnectedCookieChecker(response)   
+
+  ###############################################
+
+  fbConnectedCookieChecker: (response) ->
+    intervalMs = 1
+
+    cookieChecker = (intervalInstance) ->
+      window.App.Log ["controller.fbConnectedCookieChecker... #{intervalMs}ms", document.cookie]
+      if document.cookie.match(/fbsr_/)
+        window.clearInterval(run)
+        window.Member.login(response)
+
+    run = window.setInterval(cookieChecker, intervalMs)
+
   ###############################################
 
   loadPage: (elmId) ->
@@ -38,19 +64,6 @@ App.Controllers.App = Backbone.Router.extend
 
   login: ->
     window.App.Log ['controller.login']
-
-    # facebook init
-    FB.init
-      appId: window.AppConfig.fbAppId
-      status: true
-      cookie: true
-      oauth: true
-      xfbml: true
-
-    # redirect if we successfuly signed-in
-    FB.Event.subscribe 'auth.login', (response) ->
-      window.App.Log ['trigger fb.auth.login', response]
-      window.Member.login(response)
 
     # we got a session
     FB.getLoginStatus (response) ->
