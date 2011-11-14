@@ -66,6 +66,8 @@ namespace Processus\Lib\Db
             return $this->_memcachedClient->getResultCode();
         }
 
+
+
         /**
          * @throws \Exception
          */

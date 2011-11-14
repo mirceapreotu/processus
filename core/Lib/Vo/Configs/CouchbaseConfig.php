@@ -14,7 +14,7 @@ namespace Processus\Lib\Vo\Configs
     {
 
         /**
-         * @return \Processus\Abstracts\Vo\mixed
+         * @return mixed
          */
         public function getRandomCouchbaseServerConfig()
         {
@@ -27,7 +27,7 @@ namespace Processus\Lib\Vo\Configs
         }
 
         /**
-         * @return \Processus\Abstracts\Vo\mixed
+         * @return array|mixed
          */
         private function getCouchbaseServerList()
         {
@@ -35,8 +35,8 @@ namespace Processus\Lib\Vo\Configs
         }
 
         /**
-         * @return array
          * @param string $databucketKey
+         * @return mixed
          */
         public function getCouchbasePortByDatabucketKey(string $databucketKey)
         {
@@ -44,7 +44,7 @@ namespace Processus\Lib\Vo\Configs
         }
 
         /**
-         * @return string
+         * @return array|mixed
          */
         private function getCouchbaseSalt()
         {

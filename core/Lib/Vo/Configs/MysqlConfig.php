@@ -11,8 +11,6 @@ namespace Processus\Lib\Vo\Configs
 
     class MysqlConfig extends AbstractVO
     {
-        //TODO - Insert your code here
-    
 
     }
 }

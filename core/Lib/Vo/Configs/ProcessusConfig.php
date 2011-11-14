@@ -29,7 +29,7 @@ namespace Processus\Lib\Vo\Configs
         private $_mysqlConfig;
 
         /**
-         * @return \Processus\Lib\Vo\Configs\CouchbaseConfig
+         * @return CouchbaseConfig
          */
         public function getCouchbaseConfig()
         {
@@ -41,7 +41,7 @@ namespace Processus\Lib\Vo\Configs
         }
 
         /**
-         * @return \Processus\Lib\Vo\Configs\BeanstalkdConfig
+         * @return BeanstalkdConfig
          */
         public function getBeanstalkdConfig()
         {
@@ -54,7 +54,7 @@ namespace Processus\Lib\Vo\Configs
         }
 
         /**
-         * @return \Processus\Lib\Vo\Configs\MysqlConfig
+         * @return MysqlConfig
          */
         public function getMysqlConfig()
         {

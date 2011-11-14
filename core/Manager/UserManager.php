@@ -32,7 +32,10 @@ namespace Processus\Manager
             $memId = "filterAppFriends_" . $this->getApplication()
                 ->getUserBo()
                 ->getFacebookUserId();
-            
+            /**
+             * TODO: replace with memcached getMultipleKey($friendslist);
+             * TODO: Serverfactory get couchbaseDatabucktById($dataBucketId);
+             */
             $com->setConnector(MySQL::getInstance())
                 ->setSqlStmt("SELECT fbu.id AS id FROM fbusers AS fbu WHERE fbu.id IN (" . $friendsList . ")")
                 ->setMemId($memId);

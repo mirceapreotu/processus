@@ -94,7 +94,8 @@ namespace Processus
         
 
         /**
-         * @return \Processus\Application
+         * @static
+         * @return Application
          */
         public static function getInstance ()
         {
@@ -109,7 +110,7 @@ namespace Processus
         
 
         /**
-         * @return \Processus\Registry
+         * @return Registry
          */
         public function getRegistry ()
         {
@@ -124,7 +125,7 @@ namespace Processus
         
 
         /**
-         * @return \Processus\Lib\Facebook\FacebookClient
+         * @return FacebookClient
          */
         public function getFacebookClient ()
         {
@@ -138,7 +139,7 @@ namespace Processus
         
 
         /**
-         * @return \Processus\Lib\Bo\UserBo
+         * @return UserBo
          */
         public function getUserBo ()
         {
@@ -152,7 +153,7 @@ namespace Processus
         
 
         /**
-         * @return \Processus\Lib\Profiler\Profiler
+         * @return Profiler
          */
         public function getProfiler ()
         {

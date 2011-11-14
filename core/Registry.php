@@ -37,8 +37,8 @@ namespace Processus
         
 
         /**
-         * @param string $key
-         * @return Config
+         * @param null $key
+         * @return bool
          */
         public function getConfig($key = NULL)
         {
@@ -46,7 +46,7 @@ namespace Processus
                 return $this->config->$key;
             }
             
-            return;
+            return false;
         }
 
         // #########################################################
