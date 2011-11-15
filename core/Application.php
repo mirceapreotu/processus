@@ -94,7 +94,8 @@ namespace Processus
         
 
         /**
-         * @return \Processus\Application
+         * @static
+         * @return Application
          */
         public static function getInstance ()
         {
@@ -138,7 +139,7 @@ namespace Processus
         
 
         /**
-         * @return \Processus\Lib\Bo\UserBo
+         * @return UserBo
          */
         public function getUserBo ()
         {

@@ -93,6 +93,7 @@ namespace Processus\Abstracts\JsonRpc
         public function isValidRequest ()
         {
             $authModule = $this->getAuthModule();
+
             if ($authModule instanceof InterfaceAuthModule) {
                 if ($authModule->isAuthorized() === FALSE) {
                     throw new \Exception("Authorisation Required");

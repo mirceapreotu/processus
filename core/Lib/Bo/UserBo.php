@@ -119,9 +119,11 @@ namespace Processus\Lib\Bo
                 if (! $userData) {
                     
                     $fbData = $fbClient->getUserDataById($fbUserId);
+                    $fbData['created'] = time();
                     $this->getFacebookUserMvo()->setData($fbData);
                     $this->getFacebookUserMvo()->saveInMem();
-                
+
+                    $this->getUserManager()->insertNewUser($this->getFacebookUserMvo());
                 }
                 
                 return TRUE;

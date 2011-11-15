@@ -46,7 +46,6 @@ namespace Processus\Lib\Mvo
             $dto->setData($this->getData());
             return $dto;
         }
-    
     }
 
 }

@@ -10,6 +10,8 @@ namespace Processus\Lib\Vo\Configs
     
     use Processus\Abstracts\Vo\AbstractVO;
 
+    use Processus\Lib\Vo\Configs\Facebook;
+
     class ProcessusConfig extends AbstractVO
     {
 
@@ -29,7 +31,26 @@ namespace Processus\Lib\Vo\Configs
         private $_mysqlConfig;
 
         /**
-         * @return \Processus\Lib\Vo\Configs\CouchbaseConfig
+         * @var Facebook
+         */
+        private $_facebookConfig;
+
+        /**
+         * @return Facebook
+         */
+        public function getFacebookConfig()
+        {
+            if(!$this->_facebookConfig)
+            {
+                $this->_facebookConfig = new Facebook();
+                $this->_facebookConfig->setData($this->getValueByKey("Facebook"));
+            }
+
+            return $this->_facebookConfig;
+        }
+
+        /**
+         * @return CouchbaseConfig
          */
         public function getCouchbaseConfig()
         {
@@ -41,7 +62,7 @@ namespace Processus\Lib\Vo\Configs
         }
 
         /**
-         * @return \Processus\Lib\Vo\Configs\BeanstalkdConfig
+         * @return BeanstalkdConfig
          */
         public function getBeanstalkdConfig()
         {
@@ -54,7 +75,7 @@ namespace Processus\Lib\Vo\Configs
         }
 
         /**
-         * @return \Processus\Lib\Vo\Configs\MysqlConfig
+         * @return MysqlConfig
          */
         public function getMysqlConfig()
         {
