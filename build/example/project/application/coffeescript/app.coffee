@@ -6,7 +6,7 @@ window.AppConfig =
   public_root:  "#{build_root}"
   assets_root:  "#{build_root}/assets"
   api_urlroot:  "/api/v1"
-  fbAppId: '162288590534951'
+  fbAppId: '184206854998730'
   log_silence:  false
 
 ###############################################
