@@ -37,8 +37,8 @@ namespace Processus\Lib\Bo
             if (!$this->_userMvo) {
                 $this->_userMvo = new FacebookUserMvo();
                 $this->_userMvo->setMemId($this->getApplication()
-                        ->getFacebookClient()
-                        ->getUserId());
+                    ->getFacebookClient()
+                    ->getUserId());
 
                 $this->_userMvo->getFromMem();
             }
@@ -83,8 +83,8 @@ namespace Processus\Lib\Bo
 
                 if (!$data) {
                     $data = $this->getApplication()
-                            ->getFacebookClient()
-                            ->getUserDataById($item->id);
+                        ->getFacebookClient()
+                        ->getUserDataById($item->id);
 
                     $mvo->setData($data);
                     $mvo->saveInMem();
@@ -102,8 +102,8 @@ namespace Processus\Lib\Bo
         public function getFacebookUserId()
         {
             return $this->getApplication()
-                    ->getFacebookClient()
-                    ->getUserId();
+                ->getFacebookClient()
+                ->getUserId();
         }
 
         /**
@@ -120,9 +120,11 @@ namespace Processus\Lib\Bo
                 if (!$userData) {
 
                     $fbData = $fbClient->getUserDataById($fbUserId);
+                    $fbData['created'] = time();
                     $this->getFacebookUserMvo()->setData($fbData);
                     $this->getFacebookUserMvo()->saveInMem();
 
+                    $this->getUserManager()->insertNewUser($this->getFacebookUserMvo());
                 }
 
                 return TRUE;
