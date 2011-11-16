@@ -11,8 +11,9 @@ namespace Processus\Abstracts
      */
     use Processus\Abstracts\Manager\AbstractManager;
 
-	class AbstractTask extends AbstractManager
+    class AbstractTask extends AbstractManager
     {
+        abstract public function run();
     }
 }
 
