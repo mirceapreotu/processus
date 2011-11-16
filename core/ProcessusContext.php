@@ -9,26 +9,18 @@ namespace Processus
     use Processus\Lib\Server\ServerFactory;
     
     use Processus\Lib\Bo\UserBo;
-    
-    use Processus\Lib\Profiler\Profiler;
 
     use Processus\Interfaces\InterfaceApplicationContext;
 
-    class ApplicationContext implements InterfaceApplicationContext
+    class ProcessusContext implements InterfaceApplicationContext
     {
-
         /**
-         * @var Application
-         */
-        private static $_instance;
-
-        /**
-         * @var Profiler
+         * @var \Processus\Lib\Profiler\ProcessusProfiler
          */
         private $_profiler;
 
         /**
-         * @var Registry
+         * @var \Processus\ProcessusRegistry
          */
         private $_registry;
 
@@ -52,8 +44,24 @@ namespace Processus
          */
         private $_mysql;
 
-        // #########################################################
-        
+        /**
+         * @var \Processus\ProcessusContext
+         */
+        private static $_instance;
+
+        /**
+         * @static
+         * @return ProcessusContext
+         */
+        public static function getInstance()
+        {
+            if(! self::$_instance)
+            {
+                self::$_instance = new ProcessusContext();
+            }
+
+            return self::$_instance;
+        }
 
         /**
          * @return Memcached
@@ -74,9 +82,6 @@ namespace Processus
         
         }
 
-        // #########################################################
-        
-
         /**
          * @return MySQL
          */
@@ -90,39 +95,17 @@ namespace Processus
         
         }
 
-        // #########################################################
-        
-
         /**
-         * @static
-         * @return Application
-         */
-        public static function getInstance ()
-        {
-            if (self::$_instance instanceof self !== TRUE) {
-                self::$_instance = new Application();
-            }
-            
-            return self::$_instance;
-        }
-
-        // #########################################################
-        
-
-        /**
-         * @return Registry
+         * @return ProcessusRegistry
          */
         public function getRegistry ()
         {
             if (! $this->_registry) {
-                $this->_registry = new Registry();
+                $this->_registry = new ProcessusRegistry();
                 $this->_registry->init();
             }
             return $this->_registry;
         }
-
-        // #########################################################
-        
 
         /**
          * @return Lib\Facebook\FacebookClient
@@ -157,7 +140,7 @@ namespace Processus
         public function getProfiler ()
         {
             if (! $this->_profiler) {
-                $this->_profiler = new Profiler();
+                $this->_profiler = new ProcessusProfiler();
             }
             
             return $this->_profiler;

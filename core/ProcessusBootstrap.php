@@ -13,15 +13,20 @@ namespace Processus
     class ProcessusBootstrap implements InterfaceBootstrap
     {
 
+        /**
+         * @var \Processus\ProcessusContext
+         */
         private $_applicationContext;
 
+        /**
+         * @return ProcessusContext
+         */
         public function getApplication()
         {
-            if(! $this->_applicationContext)
-            {
-                $this->_applicationContext = new \Application\ApplicationContext();
+            if (!$this->_applicationContext) {
+                $this->_applicationContext = new ProcessusContext();
             }
-            return ();
+            return $this->_applicationContext;
         }
 
         /**
@@ -47,16 +52,17 @@ namespace Processus
                 error_reporting(E_ALL | E_STRICT);
 
                 set_error_handler(array(
-                                       'Processus\Bootstrap',
+                                       'Processus\ProcessusBootstrap',
                                        'handleError'
                                   ));
 
                 register_shutdown_function(array(
-                                                'Processus\Bootstrap',
+                                                'Processus\ProcessusBootstrap',
                                                 'handleError'
                                            ));
 
-                set_exception_handler(array('Bootstrap',
+                set_exception_handler(array(
+                                           'Processus\ProcessusBootstrap',
                                            'handleError'
                                       ));
 
@@ -71,11 +77,11 @@ namespace Processus
 
                 // setup autoloader
                 spl_autoload_register(array(
-                                           'Processus\Bootstrap',
+                                           'Processus\ProcessusBootstrap',
                                            '_autoLoad'
                                       ));
 
-                $registry = Application::getInstance()->getRegistry();
+                $registry = $this->getApplication()->getRegistry();
 
                 // setup locale
                 setlocale(LC_ALL, $registry->getConfig('locale')->default->lc_all);
@@ -118,7 +124,7 @@ namespace Processus
          *
          * @return void
          */
-        public function _autoLoad($className)
+        public static function _autoLoad($className)
         {
             $rootPath = NULL;
 
@@ -150,9 +156,14 @@ namespace Processus
             require_once $classFile;
         }
 
-        // #########################################################
-
-        public function handleError()
+        /**
+         * @static
+         *
+         * @param $errorObj
+         *
+         * @return bool
+         */
+        public static function handleError($errorObj)
         {
             $lastError = error_get_last();
 
