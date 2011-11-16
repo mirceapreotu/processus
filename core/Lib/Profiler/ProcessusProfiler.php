@@ -23,7 +23,7 @@ namespace Processus\Lib\Profiler
         private $_appDuration;
 
         /**
-         * @return \ProcessusProfiler\Lib\Profiler\Profiler
+         * @return ProcessusProfiler
          */
         public function profile()
         {
@@ -31,7 +31,7 @@ namespace Processus\Lib\Profiler
         }
 
         /**
-         * @return \ProcessusProfiler\Lib\Profiler\Profiler
+         * @return ProcessusProfiler
          */
         public function applicationProfilerStart()
         {
@@ -40,7 +40,7 @@ namespace Processus\Lib\Profiler
         }
 
         /**
-         * @return \ProcessusProfiler\Lib\Profiler\Profiler
+         * @return ProcessusProfiler
          */
         public function applicationProfilerEnd()
         {
@@ -49,7 +49,7 @@ namespace Processus\Lib\Profiler
         }
 
         /**
-         * @return multitype:number
+         * @return array
          */
         public function getDefaultInformation()
         {
