@@ -18,7 +18,7 @@ namespace Processus\Abstracts
          */
         protected function getApplication()
         {
-            return Application::getInstance();
+            return \Application\ApplicationContext::getInstance();
         }
         
         /**
