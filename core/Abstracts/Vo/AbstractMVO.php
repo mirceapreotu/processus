@@ -10,7 +10,7 @@ namespace Processus\Abstracts\Vo {
 	 */
 	use Processus\Interfaces\InterfaceDto;
 	
-	use Processus\Registry;
+	use Processus\ProcessusRegistry;
 	
 	use Processus\Application;
 	
