@@ -1,10 +1,10 @@
 <?php
 
-    use Processus\Bootstrap;
+    use Processus\ProcessusBootstrap;
     use Application\JsonRpc\V1\App\Gateway;
     
     require_once ('../../../../library/Processus/core/Bootstrap.php');
-    Bootstrap::init();
+    ProcessusBootstrap::init();
     
     $gtw = new Gateway();
     $gtw->run();
