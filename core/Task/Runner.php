@@ -1,18 +1,5 @@
 <?php
 
-/**
- * Lib_Task_Runner
- *
- * @todo		Implement list option (scan directory for tasks)
- *
- * @category	basilicom
- * @package		Lib
- *
- * @copyright	Copyright (c) 2010 basilicom GmbH (http://basilicom.de)
- * @license		http://basilicom.de/license/default
- * @version		$Id$
- */
-
 namespace Processus\Task
 {
 
@@ -73,7 +60,7 @@ namespace Processus\Task
                     
                     echo "Available tasks to run:\n";
                     
-                    foreach (new \DirectoryIterator(SRC_PATH . '/application/App/Task') as /** @var DirectoryIterator $fileInfo */
+                    foreach (new \DirectoryIterator(PATH_ROOT . '/application/App/Task') as /** @var DirectoryIterator $fileInfo */
                     $fileInfo) {
                         
                         if ($fileInfo->isDot())
