@@ -5,11 +5,24 @@ namespace Processus
 
     require_once 'helpers.php';
 
+    use Processus\Interfaces\InterfaceBootstrap;
+
     /**
      *
      */
-    class Bootstrap
+    class ProcessusBootstrap implements InterfaceBootstrap
     {
+
+        private $_applicationContext;
+
+        public function getApplication()
+        {
+            if(! $this->_applicationContext)
+            {
+                $this->_applicationContext = new \Application\ApplicationContext();
+            }
+            return ();
+        }
 
         /**
          * Initializes the system
@@ -19,7 +32,7 @@ namespace Processus
          * @return boolean true on success
          *
          */
-        public static function init($mode = 'DEFAULT')
+        public function init($mode = 'DEFAULT')
         {
             try {
 
@@ -97,9 +110,6 @@ namespace Processus
             }
         }
 
-        // #########################################################
-
-
         /**
          * Custom class auto loader
          * @static
@@ -108,7 +118,7 @@ namespace Processus
          *
          * @return void
          */
-        public static function _autoLoad($className)
+        public function _autoLoad($className)
         {
             $rootPath = NULL;
 
@@ -142,7 +152,7 @@ namespace Processus
 
         // #########################################################
 
-        public static function handleError()
+        public function handleError()
         {
             $lastError = error_get_last();
 

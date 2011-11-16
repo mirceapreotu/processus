@@ -9,7 +9,7 @@ namespace Processus
     /**
      *
      */
-    class Registry
+    class ProcessusRegistry
     {
 
         /**

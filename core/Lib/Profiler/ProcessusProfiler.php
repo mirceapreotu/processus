@@ -9,7 +9,7 @@
 namespace Processus\Lib\Profiler
 {
 
-    class Profiler
+    class ProcessusProfiler
     {
 
         /**
@@ -23,7 +23,7 @@ namespace Processus\Lib\Profiler
         private $_appDuration;
 
         /**
-         * @return \Processus\Lib\Profiler\Profiler
+         * @return \ProcessusProfiler\Lib\Profiler\Profiler
          */
         public function profile()
         {
@@ -31,7 +31,7 @@ namespace Processus\Lib\Profiler
         }
 
         /**
-         * @return \Processus\Lib\Profiler\Profiler
+         * @return \ProcessusProfiler\Lib\Profiler\Profiler
          */
         public function applicationProfilerStart()
         {
@@ -40,7 +40,7 @@ namespace Processus\Lib\Profiler
         }
 
         /**
-         * @return \Processus\Lib\Profiler\Profiler
+         * @return \ProcessusProfiler\Lib\Profiler\Profiler
          */
         public function applicationProfilerEnd()
         {

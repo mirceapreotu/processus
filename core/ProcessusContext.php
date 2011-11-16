@@ -12,7 +12,9 @@ namespace Processus
     
     use Processus\Lib\Profiler\Profiler;
 
-    class Application
+    use Processus\Interfaces\InterfaceApplicationContext;
+
+    class ApplicationContext implements InterfaceApplicationContext
     {
 
         /**
