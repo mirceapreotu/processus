@@ -15,7 +15,7 @@ namespace Processus\Lib\Mvo
     {
 
         /**
-         * @see Processus\Abstracts\Vo.AbstractMVO::getDataBucketPort()
+         * @return mixed
          */
         protected function getDataBucketPort ()
         {
@@ -29,7 +29,8 @@ namespace Processus\Lib\Mvo
         }
 
         /**
-         * @see Processus\Abstracts\Vo.AbstractMVO::setMemId()
+         * @param $mId
+         * @return FacebookUserMvo
          */
         public function setMemId ($mId)
         {
@@ -38,13 +39,30 @@ namespace Processus\Lib\Mvo
         }
 
         /**
-         * @return FacebookUserDto
+         * @return \Processus\Dto\FacebookUserDto
          */
         public function getDefaultDto ()
         {
             $dto = new FacebookUserDto();
             $dto->setData($this->getData());
             return $dto;
+        }
+
+        /**
+         * @param string $size
+         * @return string
+         */
+        public function getFacebookUserImageUrl(string $size)
+        {
+            return 'https://graph.facebook.com/' . $this->getFacebookUserId() . '/picture?type=' . $size;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getFacebookUserId()
+        {
+            return $this->getApplication()->getFacebookClient()->getUserId();
         }
     }
 
