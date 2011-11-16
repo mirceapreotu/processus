@@ -37,6 +37,11 @@ namespace Processus\Lib\Facebook
         private $_facebookFriends;
 
         /**
+         * @var \Processus\Lib\Facebook\Api\OpenGraph
+         */
+        private $_openGraphClient;
+
+        /**
          * @return string
          */
         public function getLoginUrl ()
@@ -143,6 +148,19 @@ namespace Processus\Lib\Facebook
         {
             $userData = $this->getFacebookSdk()->api("/" . $facebookUserId);
             return $userData;
+        }
+
+        /**
+         * @return \Processus\Lib\Facebook\Api\OpenGraph
+         */
+        public function getOpenGraphClient()
+        {
+            if($this->_openGraphClient)
+            {
+                $this->_openGraphClient = new \Processus\Lib\Facebook\Api\OpenGraph();
+            }
+
+            return $this->_openGraphClient;
         }
     }
 }
