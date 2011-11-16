@@ -78,7 +78,7 @@ namespace Processus
         /**
          * @return MySQL
          */
-        public function getDefaultMysql ()
+        public function getMasterMySql ()
         {
             if (! $this->_mysql) {
                 $this->_mysql = MySQL::getInstance();
