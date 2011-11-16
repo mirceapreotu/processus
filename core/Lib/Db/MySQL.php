@@ -4,7 +4,7 @@ namespace Processus\Lib\Db
 {
     use Processus\Application;
     
-    use Processus\Registry;
+    use Processus\ProcessusRegistry;
     use Processus\Interfaces\InterfaceDatabase;
     use Zend\Db\Db;
     use Zend\Db\Statement\Pdo;
@@ -50,7 +50,7 @@ namespace Processus\Lib\Db
          */
         public function init ()
         {
-            $registry = Application::getInstance()->getRegistry();
+            $registry = \Processus\ProcessusContext::getInstance()->getRegistry();
             $masters = $registry->getProcessusConfig()
                 ->getMysqlConfig()
                 ->getValueByKey('masters');
