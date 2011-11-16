@@ -27,7 +27,7 @@ namespace Processus\Manager
         public function insertNewUser(InterfaceUser $user)
         {
             $com = new ComConfig();
-            $com->setConnector($this->getApplication()->getDefaultMysql())
+            $com->setConnector($this->getApplication()->getMasterMySql())
                 ->setSqlTableName("fbUsers")
                 ->setSqlParams(array("id" => $user->getId(), "created" => $user->getCreated()));
 
