@@ -125,7 +125,7 @@ namespace Processus\Abstracts\Manager
         private function generateMemId ()
         {
             return md5(
-                $this->_sqlStmt . join('', $this->_sqlParams) . $this->_expiredTime . Application::getInstance()->getRegistry()
+                $this->_sqlStmt . join('', $this->_sqlParams) . $this->_expiredTime . \Processus\ProcessusContext::getInstance()->getRegistry()
                     ->getProcessusConfig()
                     ->getCouchbaseConfig()
                     ->getValueByKey('couchbaseSalt'));

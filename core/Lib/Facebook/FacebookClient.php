@@ -1,16 +1,16 @@
 <?php
 
-/** 
+/**
  * @author francis
- * 
- * 
+ *
+ *
  */
 
 namespace Processus\Lib\Facebook
 {
-    
+
     use Processus\Abstracts\AbstractClass;
-    
+
     use Processus\Contrib\Facebook\Facebook;
 
     class FacebookClient extends AbstractClass
@@ -44,7 +44,7 @@ namespace Processus\Lib\Facebook
         /**
          * @return string
          */
-        public function getLoginUrl ()
+        public function getLoginUrl()
         {
             return $this->getFacebookSdk()->getLoginUrl();
         }
@@ -52,9 +52,9 @@ namespace Processus\Lib\Facebook
         /**
          * @return Ambigous <\Processus\multitype:, multitype:>
          */
-        protected function getFacebookClientConfig ()
+        protected function getFacebookClientConfig()
         {
-            if (! $this->_facebookSdkConf) {
+            if (!$this->_facebookSdkConf) {
                 /**  */
                 $this->_facebookSdkConf = $this->getApplication()
                     ->getRegistry()
@@ -66,19 +66,19 @@ namespace Processus\Lib\Facebook
         /**
          * @return Ambigous <\Processus\Contrib\Facebook\mixed, mixed>
          */
-        public function getUserFacebookData ()
+        public function getUserFacebookData()
         {
-            if (! $this->_userFacebookData) {
+            if (!$this->_userFacebookData) {
                 $this->_userFacebookData = $this->getFacebookSdk()->api("/me");
             }
-            
+
             return $this->_userFacebookData;
         }
 
         /**
          * @return string
          */
-        public function isUserAuthorizedOnFacebook ()
+        public function isUserAuthorizedOnFacebook()
         {
             return $this->getFacebookSdk()->getAccessToken();
         }
@@ -86,7 +86,7 @@ namespace Processus\Lib\Facebook
         /**
          * @return string
          */
-        public function getUserId ()
+        public function getUserId()
         {
             return $this->getFacebookSdk()->getUser();
         }
@@ -94,57 +94,58 @@ namespace Processus\Lib\Facebook
         /**
          * @return \Processus\Lib\Facebook\mixed
          */
-        public function getUserFriends ()
+        public function getUserFriends()
         {
             $defaultCache = $this->getApplication()->getDefaultCache();
-            $fbNum = $this->getUserId();
-            $memKey = "getFriendsList_67" . $fbNum;
-            
+            $fbNum        = $this->getUserId();
+            $memKey       = "getFriendsList_67" . $fbNum;
+
             $facebookFriends = $defaultCache->fetch($memKey);
-            
-            if (! $facebookFriends) {
-                $rawData = $this->getFacebookSdk()->api("/me/friends");
+
+            if (!$facebookFriends) {
+                $rawData         = $this->getFacebookSdk()->api("/me/friends");
                 $facebookFriends = $rawData['data'];
-                
+
                 $defaultCache->insert($memKey, $facebookFriends, 60 * 60 * 3);
             }
-            
+
             return $facebookFriends;
         }
 
         /**
          * @return \Processus\Contrib\Facebook\Facebook
          */
-        protected function getFacebookSdk ()
+        protected function getFacebookSdk()
         {
-            if (! $this->_facebookSdk) {
+            if (!$this->_facebookSdk) {
                 $this->_facebookSdk = new Facebook($this->getFacebookClientConfig());
             }
-            
+
             return $this->_facebookSdk;
         }
 
         /**
          * @return multitype:unknown
          */
-        public function getFriendsIdList ()
+        public function getFriendsIdList()
         {
             $friendsList = $this->getUserFriends();
-            
+
             $idList = array();
-            
+
             foreach ($friendsList as $item) {
                 $idList[] = $item['id'];
             }
-            
+
             return $idList;
         }
 
         /**
          * @param string $facebookUserId
+         *
          * @return Ambigous <\Processus\Contrib\Facebook\mixed, mixed>
          */
-        public function getUserDataById (string $facebookUserId)
+        public function getUserDataById(string $facebookUserId)
         {
             $userData = $this->getFacebookSdk()->api("/" . $facebookUserId);
             return $userData;
@@ -155,8 +156,7 @@ namespace Processus\Lib\Facebook
          */
         public function getOpenGraphClient()
         {
-            if($this->_openGraphClient)
-            {
+            if ($this->_openGraphClient) {
                 $this->_openGraphClient = new \Processus\Lib\Facebook\Api\OpenGraph();
             }
 

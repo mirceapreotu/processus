@@ -197,7 +197,7 @@ class Server extends \Zend\Server\AbstractServer
         
         // Get response
         $response = $this->_getReadyResponse();
-        
+
         // Emit response?
         if ($this->autoEmitResponse()) {
             echo $response;

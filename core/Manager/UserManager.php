@@ -28,8 +28,9 @@ namespace Processus\Manager
         {
             $com = new ComConfig();
             $com->setConnector($this->getApplication()->getMasterMySql())
-                ->setSqlTableName("fbUsers")
-                ->setSqlParams(array("id" => $user->getId(), "created" => $user->getCreated()));
+                ->setSqlTableName("fbusers")
+                ->setSqlParams(array("id"     => $user->getId(),
+                                    "created" => $user->getCreated()));
 
             $this->insert($com);
         }
@@ -37,8 +38,7 @@ namespace Processus\Manager
 
         /**
          * @param array $friendsList
-         *
-         * @return NULL
+         * @return array|string
          */
         public function filterAppFriends(array $friendsList)
         {
@@ -50,17 +50,11 @@ namespace Processus\Manager
                 ->getUserBo()
                 ->getFacebookUserId();
 
-            $friendsList = $this->getApplication()->getDefaultCache()->getMulipleByKey($friendsList);
-
-            /**
-             * TODO: replace with memcached getMultipleKey($friendslist);
-             * TODO: Serverfactory get couchbaseDatabucktById($dataBucketId);
-             */
             $com->setConnector(MySQL::getInstance())
                 ->setSqlStmt("SELECT fbu.id AS id FROM fbusers AS fbu WHERE fbu.id IN (" . $friendsList . ")")
                 ->setMemId($memId);
 
-            return $this->fetchAll($com);
+            return $friendsList;
         }
 
         /**
