@@ -14,7 +14,7 @@ namespace Processus\Abstracts
 	abstract class AbstractClass
     {
         /**
-         * @return \Processus\Application
+         * @return \Application\ApplicationContext
          */
         protected function getApplication()
         {

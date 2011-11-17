@@ -2,17 +2,7 @@
 
 namespace Processus
 {
-    use Processus\Lib\Db\MySQL;
-    
-    use Processus\Lib\Db\Memcached;
-    
-    use Processus\Lib\Server\ServerFactory;
-    
-    use Processus\Lib\Bo\UserBo;
-
-    use Processus\Interfaces\InterfaceApplicationContext;
-
-    class ProcessusContext implements InterfaceApplicationContext
+    class ProcessusContext implements \Processus\Interfaces\InterfaceApplicationContext
     {
         /**
          * @var \Processus\Lib\Profiler\ProcessusProfiler
@@ -75,7 +65,7 @@ namespace Processus
                     ->getCouchbaseConfig()
                     ->getCouchbasePortByDatabucketKey("default");
                 
-                $this->_memcached = ServerFactory::memcachedFactory($config['host'], $config['port']);
+                $this->_memcached = \Processus\Lib\Server\ServerFactory::memcachedFactory($config['host'], $config['port']);
             }
             
             return $this->_memcached;
@@ -88,7 +78,7 @@ namespace Processus
         public function getMasterMySql ()
         {
             if (! $this->_mysql) {
-                $this->_mysql = MySQL::getInstance();
+                $this->_mysql = \Processus\Lib\Db\MySQL::getInstance();
             }
             
             return $this->_mysql;
@@ -122,12 +112,12 @@ namespace Processus
         
 
         /**
-         * @return UserBo
+         * @return \Processus\Lib\Bo\UserBo
          */
         public function getUserBo ()
         {
             if (! $this->_userBo) {
-                $this->_userBo = new UserBo();
+                $this->_userBo = new \Processus\Lib\Bo\UserBo();
             }
             return $this->_userBo;
         }
@@ -140,7 +130,7 @@ namespace Processus
         public function getProfiler ()
         {
             if (! $this->_profiler) {
-                $this->_profiler = new ProcessusProfiler();
+                $this->_profiler = new \Processus\Lib\Profiler\ProcessusProfiler();
             }
             
             return $this->_profiler;
