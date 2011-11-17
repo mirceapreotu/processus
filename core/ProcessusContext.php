@@ -5,7 +5,7 @@ namespace Processus
     use Processus\Lib\Db\MySQL;
     
     use Processus\Lib\Db\Memcached;
-    
+
     use Processus\Lib\Server\ServerFactory;
     
     use Processus\Lib\Bo\UserBo;
@@ -35,7 +35,7 @@ namespace Processus
         private $_userBo;
 
         /**
-         * @var Memcached
+         * @var \Processus\Lib\Db\Memcached
          */
         private $_memcached;
 
@@ -64,7 +64,7 @@ namespace Processus
         }
 
         /**
-         * @return Memcached
+         * @return Lib\Db\Memcached
          */
         public function getDefaultCache ()
         {

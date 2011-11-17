@@ -66,7 +66,14 @@ namespace Processus\Lib\Db
             return $this->_memcachedClient->getResultCode();
         }
 
-
+        /**
+         * @param array $keys
+         * @return mixed
+         */
+        public function getMulipleByKey(array $keys)
+        {
+            return $this->_memcachedClient->getMulti($keys);
+        }
 
         /**
          * @throws \Exception

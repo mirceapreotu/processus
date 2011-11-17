@@ -50,6 +50,8 @@ namespace Processus\Manager
                 ->getUserBo()
                 ->getFacebookUserId();
 
+            $friendsList = $this->getApplication()->getDefaultCache()->getMulipleByKey($friendsList);
+
             /**
              * TODO: replace with memcached getMultipleKey($friendslist);
              * TODO: Serverfactory get couchbaseDatabucktById($dataBucketId);

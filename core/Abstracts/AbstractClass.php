@@ -14,11 +14,11 @@ namespace Processus\Abstracts
 	abstract class AbstractClass
     {
         /**
-         * @return \Processus\Application
+         * @return \Processus\ProcessusContext
          */
         protected function getApplication()
         {
-            return \Application\ApplicationContext::getInstance();
+            return \Processus\ProcessusContext::getInstance();
         }
         
         /**
