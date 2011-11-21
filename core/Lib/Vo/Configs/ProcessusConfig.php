@@ -7,12 +7,9 @@
  */
 namespace Processus\Lib\Vo\Configs
 {
-    
-    use Processus\Abstracts\Vo\AbstractVO;
-
     use Processus\Lib\Vo\Configs\Facebook;
 
-    class ProcessusConfig extends AbstractVO
+    class ProcessusConfig extends \Processus\Abstracts\Vo\AbstractVO
     {
 
         /**
