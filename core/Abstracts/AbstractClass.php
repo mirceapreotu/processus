@@ -7,10 +7,6 @@
  */
 namespace Processus\Abstracts
 {
-    use Processus\Lib\Vo\Configs\ProcessusConfig;
-
-	use Processus\Application;
-
 	abstract class AbstractClass
     {
         /**
