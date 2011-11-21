@@ -31,8 +31,16 @@ namespace Processus\Abstracts\Vo
         {
             $exportData = array();
             
-            foreach ($this->getMapping() as $item => $key) {
-                $exportData[$key] = $this->getValueByKey($item);
+            foreach ($this->getMapping() as $key => $item) {
+
+                $data = $this->getValueByKey($item['match']);
+
+                if(!$data)
+                {
+                    $data = $item['default'];
+                }
+
+                $exportData[$key] = $data;
             }
             
             return $exportData;
