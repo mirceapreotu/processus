@@ -82,6 +82,15 @@ namespace Processus\Lib\Db
         {
             throw new \Exception("Not implemented");
         }
+
+        /**
+         * @param $key
+         * @return bool
+         */
+        public function delete($key)
+        {
+            return $this->_memcachedClient->delete($key);
+        }
     }
 }
 
