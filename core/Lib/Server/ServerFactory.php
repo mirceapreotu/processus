@@ -31,7 +31,7 @@ namespace Processus\Lib\Server
          * @param string $port
          * @param string $id
          *
-         * @return Memcached
+         * @return \Memcached
          */
         public static function memcachedFactory(string $host, string $port, $id = "default")
         {
@@ -39,7 +39,7 @@ namespace Processus\Lib\Server
 
             if (array_key_exists($poolKey, self::$_couchbasePool) === FALSE) {
 
-                $memcached = new Memcached($host, $port, $poolKey);
+                $memcached                      = new Memcached($host, $port, $poolKey);
                 self::$_couchbasePool[$poolKey] = $memcached;
 
             }
