@@ -57,13 +57,19 @@ namespace Processus\Abstracts\JsonRpc
 
 
         /**
-         * public run method
+         * @throws \Processus\Exceptions\JsonRpc\ServerException
          */
         public function run()
         {
             // if valid request let it handle via Zend\Json\Server\Server
             if ($this->isValidRequest() === TRUE) {
                 $this->_run();
+            }
+            else
+            {
+                $exception = new \Processus\Exceptions\JsonRpc\ServerException("Invalid Server Class.");
+                $exception->setMethod(__METHOD__);
+                throw $exception;
             }
         }
 
@@ -147,8 +153,16 @@ namespace Processus\Abstracts\JsonRpc
                 $this->setRequest($request);
             }
 
-            // Handle request
-            $this->_handle();
+            try
+            {
+                // Handle request
+                $this->_handle();
+            }
+            catch (\Exception $exception)
+            {
+                var_dump($exception);
+            }
+
 
             // Get response
             $response = $this->_getReadyResponse();
