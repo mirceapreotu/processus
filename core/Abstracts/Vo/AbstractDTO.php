@@ -12,11 +12,13 @@ namespace Processus\Abstracts\Vo
      */
     use Processus\Interfaces\InterfaceDto;
 
-	abstract class AbstractDTO extends AbstractVO implements InterfaceDto
+    abstract class AbstractDTO extends AbstractVO implements InterfaceDto
     {
-        
+
         /**
-         * @see Processus\Abstracts\Vo.AbstractVO::setData()
+         * @param $data
+         *
+         * @return AbstractDTO
          */
         public function setData($data)
         {
@@ -30,19 +32,18 @@ namespace Processus\Abstracts\Vo
         public function export()
         {
             $exportData = array();
-            
+
             foreach ($this->getMapping() as $key => $item) {
 
                 $data = $this->getValueByKey($item['match']);
 
-                if(!$data)
-                {
+                if (!$data) {
                     $data = $item['default'];
                 }
 
                 $exportData[$key] = $data;
             }
-            
+
             return $exportData;
         }
 
