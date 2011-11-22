@@ -12,8 +12,6 @@ namespace Processus\Abstracts\JsonRpc
 
 	abstract class AbstractJsonRpcService extends AbstractClass
     {
-    
-
     }
 
 }
