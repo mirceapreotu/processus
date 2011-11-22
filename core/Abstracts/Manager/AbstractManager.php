@@ -2,20 +2,12 @@
 
 namespace Processus\Abstracts\Manager
 {
-    
-    use Processus\Lib\Db\Memcached;
-    
-    use Processus\Interfaces\InterfaceComConfig;
-    
-    use Processus\Lib\Server\ServerFactory;
-    
-    use Processus\Abstracts\AbstractClass;
 
-    abstract class AbstractManager extends AbstractClass
+    abstract class AbstractManager extends \Processus\Abstracts\AbstractClass
     {
 
         /**
-         * @var Memcached
+         * @var \Processus\Lib\Db\Memcached
          */
         protected $_memcached;
 
@@ -28,175 +20,185 @@ namespace Processus\Abstracts\Manager
         }
 
         // #########################################################
-        
+
 
         /**
          * @return \Processus\Lib\Db\Memcached
          */
         protected function getMemcached()
         {
-            if (! $this->_memcached) {
+            if (!$this->_memcached) {
                 $config = $this->getApplication()
                     ->getRegistry()
                     ->getProcessusConfig()
                     ->getCouchbaseConfig()
                     ->getCouchbasePortByDatabucketKey($this->getDataBucketKey());
-                
-                $this->_memcached = ServerFactory::memcachedFactory($config['host'], $config['port']);
+
+                $this->_memcached = \Processus\Lib\Server\ServerFactory::memcachedFactory($config['host'], $config['port']);
             }
-            
+
             return $this->_memcached;
-        
+
         }
 
         // #########################################################
-        
+
 
         /**
-         * @param InterfaceComConfig $com
-         * @return \Processus\Lib\Db\mixed
+         * @param \Processus\Interfaces\InterfaceComConfig $com
+         *
+         * @return mixed
          */
-        protected function getDataFromCache(InterfaceComConfig $com)
+        protected function getDataFromCache(\Processus\Interfaces\InterfaceComConfig $com)
         {
             return $this->getMemcached()->fetch($com->getMemId());
         }
 
         // #########################################################
-        
+
 
         /**
          * @param InterfaceComConfig $com
+         *
+         * @return mixed|null
          */
         protected function fetch(InterfaceComConfig $com)
         {
             $results = NULL;
-            
+
             if ($com->getFromCache() === TRUE) {
                 $results = $this->getDataFromCache($com);
             }
-            
+
             if (empty($results)) {
                 $results = $this->_fetchFromMysql($com);
                 $this->cacheResult($com, $results);
             }
-            
+
             return $results;
         }
 
         // #########################################################
-        
+
 
         /**
          * @param InterfaceComConfig $com
+         *
+         * @return mixed|null
          */
         protected function fetchOne(InterfaceComConfig $com)
         {
             $results = NULL;
-            
+
             if ($com->getFromCache() === TRUE) {
                 $results = $this->getDataFromCache($com);
             }
-            
+
             if (empty($results)) {
                 $results = $this->_fetchOneFromMysql($com);
                 $this->cacheResult($com, $results);
             }
-            
+
             return $results;
         }
 
         // #########################################################
-        
+
 
         /**
-         * @param InterfaceComConfig $com
+         * @param \Processus\Interfaces\InterfaceComConfig $com
+         *
+         * @return mixed|null
          */
-        protected function fetchAll(InterfaceComConfig $com)
+        protected function fetchAll(\Processus\Interfaces\InterfaceComConfig $com)
         {
             $results = NULL;
-            
+
             if ($com->getFromCache() === TRUE) {
                 $results = $this->getDataFromCache($com);
             }
-            
+
             if (empty($results)) {
                 $results = $this->_fetchAllFromMysql($com);
                 $this->cacheResult($com, $results);
             }
-            
+
             return $results;
         }
 
         // #########################################################
-        
+
 
         /**
-         * @param InterfaceComConfig $com
+         * @param \Processus\Interfaces\InterfaceComConfig $com
          */
-        protected function insert(InterfaceComConfig $com)
+        protected function insert(\Processus\Interfaces\InterfaceComConfig $com)
         {
             $com->getConnector()->insert($com->getSqlTableName(), $com->getSqlParams());
         }
 
         // #########################################################
-        
+
 
         /**
-         * @param InterfaceComConfig $com
+         * @param \Processus\Interfaces\InterfaceComConfig $com
          */
-        protected function update(InterfaceComConfig $com)
+        protected function update(\Processus\Interfaces\InterfaceComConfig $com)
         {
             $com->getConnector()->update($com->getSqlTableName(), $com->getSqlConditions());
         }
 
         // #########################################################
-        
+
 
         /**
-         * @param $com
+         * @param \Processus\Interfaces\InterfaceComConfig $com
+         *
          * @return mixed
          */
-        protected function _fetchFromMysql($com)
+        protected function _fetchFromMysql(\Processus\Interfaces\InterfaceComConfig $com)
         {
             return $com->getConnector()->fetch($com->getSqlStmt(), $com->getSqlParams());
         }
 
         // #########################################################
-        
+
 
         /**
-         * @param $com
+         * @param \Processus\Interfaces\InterfaceComConfig $com
+         *
          * @return mixed
          */
-        protected function _fetchOneFromMysql($com)
+        protected function _fetchOneFromMysql(\Processus\Interfaces\InterfaceComConfig $com)
         {
             return $com->getConnector()->fetchOne($com->getSqlStmt(), $com->getSqlParams());
         }
 
         // #########################################################
-        
+
 
         /**
-         * @param $com
+         * @param \Processus\Interfaces\InterfaceComConfig $com
+         *
          * @return mixed
          */
-        protected function _fetchAllFromMysql($com)
+        protected function _fetchAllFromMysql(\Processus\Interfaces\InterfaceComConfig $com)
         {
             return $com->getConnector()->fetchAll($com->getSqlStmt(), $com->getSqlParams());
         }
 
         // #########################################################
-        
+
 
         /**
-         * @param InterfaceComConfig $com
-         * @param mixed|array $results
+         * @param \Processus\Interfaces\InterfaceComConfig $com
+         * @param                                          $results
          */
-        protected function cacheResult(InterfaceComConfig $com, $results)
+        protected function cacheResult(\Processus\Interfaces\InterfaceComConfig $com, $results)
         {
             $this->getMemcached()->insert($com->getMemId(), $results, $com->getExpiredTime());
         }
-    
+
     }
 }
 
