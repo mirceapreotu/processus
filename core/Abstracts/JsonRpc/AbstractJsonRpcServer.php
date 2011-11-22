@@ -139,11 +139,10 @@ namespace Processus\Abstracts\JsonRpc
         }
 
         /**
-         * Handle request
+         * @param bool $request
          *
-         * @param  Zend\Json\Server\Request $request
-         *
-         * @return null|Zend\Json\Server\Response
+         * @return \Zend\Json\Server\Zend\Json\Server\Response
+         * @throws Exception
          */
         public function handle($request = false)
         {
