@@ -184,6 +184,9 @@ namespace Processus
                 $debug['method']  = $errorObj->getMethod();
 
                 $user['message'] = $errorObj->getUserMessage();
+                $user['title'] = $errorObj->getUserMessageTitle();
+                $user['code'] = $errorObj->getUserErrorCode();
+                $user['details'] = $errorObj->getUserDetailError();
 
                 $error['debug']   = $debug;
                 $error['user'] = $user;

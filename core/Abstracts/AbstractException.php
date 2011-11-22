@@ -13,7 +13,9 @@ namespace Processus\Abstracts
     {
 
         private $_errorData = array(
-            'userMessage' => 'Something went wrong! Please reload the site!'
+            'userMessage'      => 'Something went wrong! Please reload the site!',
+            'userMessageTitle' => 'Error',
+            'userErrorCode'    => '1900',
         );
 
         /**
@@ -74,6 +76,64 @@ namespace Processus\Abstracts
         public function getUserMessage()
         {
             return $this->_errorData['userMessage'];
+        }
+
+        /**
+         * @param string $title
+         *
+         * @return AbstractException
+         */
+        public function setUserMessageTitle(\string $title)
+        {
+            $this->_errorData["userMessageTitle"] = $title;
+            return $this;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getUserMessageTitle()
+        {
+            return $this->_errorData["userMessageTitle"];
+        }
+
+        /**
+         * @param string $errorCode
+         *
+         * @return AbstractException
+         */
+        public function setUserErrorCode(\string $errorCode)
+        {
+            $this->_errorData['userErrorCode'] = $errorCode;
+            return $this;
+        }
+
+
+        /**
+         * @return mixed
+         */
+        public function getUserErrorCode()
+        {
+            return $this->_errorData['userErrorCode'];
+        }
+
+        /**
+         * @param string $details
+         *
+         * @return AbstractException
+         */
+        public function setUserDetailError(\string $details)
+        {
+            $this->_errorData['userErrorDetail'] = $details;
+            return $this;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getUserDetailError()
+        {
+            return $this->_errorData['userErrorDetail'];
         }
     }
 }
