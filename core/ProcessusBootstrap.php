@@ -188,15 +188,19 @@ namespace Processus
                 $user['code'] = $errorObj->getUserErrorCode();
                 $user['details'] = $errorObj->getUserDetailError();
 
+                $lastError['data'] = $lastError;
+
                 $error['debug']   = $debug;
                 $error['user'] = $user;
+                $error['lasterror'] = $lastError;
                 $returnValue['error'] = $error;
 
                 echo json_encode($returnValue);
 
             }
 
-            if ($lastError) {
+            if ($lastError)
+            {
 
                 $returnValue        = array();
                 $error['backtrace'] = debug_backtrace();
@@ -205,21 +209,6 @@ namespace Processus
                 $returnValue['error'] = $error;
 
                 echo json_encode($returnValue);
-            }
-
-            if (is_array($lastError) && array_key_exists('message', $lastError)) {
-                echo '<div style="background:#c00;color:#fff;font-size:22px;padding:10px">';
-                echo $lastError['message'] . '<hr>';
-                echo 'File: ' . $lastError['file'] . '<br>';
-                echo 'Line: ' . $lastError['line'] . '<br>';
-                echo '</div>';
-
-                echo '<h3>Stack</h3>';
-                echo '<pre style="background:#ffc;padding:10px">';
-                print_r(debug_backtrace());
-                echo '</pre>';
-
-                return TRUE;
             }
         }
     }
