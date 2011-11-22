@@ -111,8 +111,10 @@ namespace Processus
 
             }
             catch (\Exception $e) {
-                var_dump($e);
-                die("" . __METHOD__ . " FAILED.");
+
+                echo json_encode($e);
+                //die("" . __METHOD__ . " FAILED.");
+
             }
         }
 
@@ -166,6 +168,41 @@ namespace Processus
         public static function handleError($errorObj)
         {
             $lastError = error_get_last();
+
+            $returnValue           = array();
+            $returnValue['result'] = array();
+            $returnValue['error'] = array();
+            if ($errorObj instanceof \Processus\Abstracts\AbstractException) {
+
+                $debug = array();
+                $user = array();
+
+                $debug['file']    = $errorObj->getFile();
+                $debug['line']    = $errorObj->getLine();
+                $debug['message'] = $errorObj->getMessage();
+                $debug['trace']   = $errorObj->getTraceAsString();
+                $debug['method']  = $errorObj->getMethod();
+
+                $user['message'] = $errorObj->getUserMessage();
+
+                $error['debug']   = $debug;
+                $error['user'] = $user;
+                $returnValue['error'] = $error;
+
+                echo json_encode($returnValue);
+
+            }
+
+            if ($lastError) {
+
+                $returnValue        = array();
+                $error['backtrace'] = debug_backtrace();
+                $error['errorData'] = $lastError;
+
+                $returnValue['error'] = $error;
+
+                echo json_encode($returnValue);
+            }
 
             if (is_array($lastError) && array_key_exists('message', $lastError)) {
                 echo '<div style="background:#c00;color:#fff;font-size:22px;padding:10px">';
