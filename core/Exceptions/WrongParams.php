@@ -6,17 +6,9 @@
  * Time: 4:58 PM
  * To change this template use File | Settings | File Templates.
  */
-namespace Processus\Exception
+namespace Processus\Exceptions
 {
     class WrongParams extends \Processus\Abstracts\AbstractException
     {
-
-        /**
-         * @return string
-         */
-        public function getMessage()
-        {
-            return "Wrong params!";
-        }
     }
 }
