@@ -6,7 +6,8 @@
  * Time: 12:09 PM
  * To change this template use File | Settings | File Templates.
  */
-namespace Processus\Interfaces{
+namespace Processus\Interfaces
+{
     interface InterfaceVo
     {
         public function setData($data);
