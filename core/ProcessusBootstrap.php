@@ -172,6 +172,7 @@ namespace Processus
             $returnValue           = array();
             $returnValue['result'] = array();
             $returnValue['error'] = array();
+
             if ($errorObj instanceof \Processus\Abstracts\AbstractException) {
 
                 $debug = array();
@@ -190,9 +191,13 @@ namespace Processus
 
                 $lastError['data'] = $lastError;
 
+
+
                 $error['debug']   = $debug;
+
                 $error['user'] = $user;
                 $error['lasterror'] = $lastError;
+
                 $returnValue['error'] = $error;
 
                 echo json_encode($returnValue);
