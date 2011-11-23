@@ -12,5 +12,10 @@ namespace Processus\Interfaces
     {
         public function getId();
         public function getCreated();
+        public function getFacebookId();
+        public function getFullName();
+        public function getFirstName();
+        public function getName();
+        public function getUrlName();
     }
 }
