@@ -130,10 +130,11 @@ namespace Processus\Abstracts\Manager
 
         /**
          * @param \Processus\Interfaces\InterfaceComConfig $com
+         * @return \Zend\Db\Statement\Pdo
          */
         protected function insert(\Processus\Interfaces\InterfaceComConfig $com)
         {
-            $com->getConnector()->insert($com->getSqlTableName(), $com->getSqlParams());
+            return $com->getConnector()->insert($com->getSqlTableName(), $com->getSqlParams());
         }
 
         // #########################################################
@@ -141,10 +142,11 @@ namespace Processus\Abstracts\Manager
 
         /**
          * @param \Processus\Interfaces\InterfaceComConfig $com
+         * @return mixed
          */
         protected function update(\Processus\Interfaces\InterfaceComConfig $com)
         {
-            $com->getConnector()->update($com->getSqlTableName(), $com->getSqlConditions());
+            return $com->getConnector()->update($com->getSqlTableName(), $com->getSqlConditions());
         }
 
         // #########################################################
