@@ -155,7 +155,7 @@ namespace Processus\Lib\Db
                 $sql = 'INSERT INTO ' . $tableName . ' (' . join(',', $_set) . ') VALUES (' . join(',', $_placeholder) . ')';
                 
                 // insert
-                $this->_prepare($sql, $_values);
+                return $this->_prepare($sql, $_values);
             }
             
             return;
@@ -196,7 +196,7 @@ namespace Processus\Lib\Db
                 $sql = 'UPDATE ' . $tableName . ' SET ' . join(',', $_set) . ' WHERE ' . join(' AND ', $_cond);
                 
                 // update
-                $this->_prepare($sql, $_values);
+                return $this->_prepare($sql, $_values);
             }
             
             return;
