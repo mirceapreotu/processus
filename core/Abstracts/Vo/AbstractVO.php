@@ -14,7 +14,7 @@ namespace Processus\Abstracts\Vo
 
 	use Processus\Abstracts\AbstractClass;
 
-    abstract class AbstractVO extends AbstractClass
+    abstract class AbstractVO extends AbstractClass implements \Processus\Interfaces\InterfaceVo
     {
 
         /**
