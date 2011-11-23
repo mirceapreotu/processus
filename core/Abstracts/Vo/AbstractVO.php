@@ -2,21 +2,9 @@
 
 namespace Processus\Abstracts\Vo
 {
-    
-    /**
-     * Created by JetBrains PhpStorm.
-     * User: francis
-     * Date: 7/8/11
-     * Time: 11:38 AM
-     * To change this template use File | Settings | File Templates.
-     */
-    use Zend\Pdf\BinaryParser\DataSource\String;
 
-	use Processus\Abstracts\AbstractClass;
-
-    abstract class AbstractVO extends AbstractClass implements \Processus\Interfaces\InterfaceVo
+    abstract class AbstractVO extends \Processus\Abstracts\AbstractClass implements \Processus\Interfaces\InterfaceVo
     {
-
         /**
          * @var object
          */
@@ -38,7 +26,7 @@ namespace Processus\Abstracts\Vo
          * @param mixed $value
          * @return \Processus\Abstracts\Vo\AbstractVO
          */
-        public function setValueByKey(string $key, mixed $value)
+        public function setValueByKey(\string $key, \object $value)
         {
             $this->_data->$key = $value;
             return $this;
@@ -48,22 +36,10 @@ namespace Processus\Abstracts\Vo
          * @param string $key
          * @return mixed | array
          */
-        public function getValueByKey(string $key)
+        public function getValueByKey(\string $key)
         {
             $data = $this->getData();
             $value = $data->$key;
-
-            if( ! $value)
-            {
-                $exception = new \Processus\Exceptions\ProcessusException();
-                $message = "Value not found. " . $key;
-
-                $exception->setMessage($message);
-                $exception->setMethod(__METHOD__);
-
-                throw $exception;
-            }
-
             return $value;
         }
 
