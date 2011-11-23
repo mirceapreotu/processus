@@ -47,7 +47,7 @@ namespace Processus
                 define('PATH_PUBLIC', PATH_ROOT . '/htdocs');
 
                 // display erros for the following part
-                ini_set('display_errors', TRUE);
+                ini_set('display_errors', 'On');
 
                 error_reporting(E_ALL | E_STRICT);
 
@@ -65,9 +65,6 @@ namespace Processus
                                            'Processus\ProcessusBootstrap',
                                            'handleError'
                                       ));
-
-                // all error handlers are initialized
-                ini_set('display_errors', FALSE);
 
                 // cache current include path
                 $cachedIncludePath = get_include_path();
