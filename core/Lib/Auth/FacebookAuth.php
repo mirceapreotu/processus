@@ -8,17 +8,13 @@
  */
 namespace Processus\Lib\Auth
 {
-    use Processus\Abstracts\JsonRpc\AbstractJsonRpcAuth;
-    
-    use Processus\Interfaces\InterfaceAuthModule;
-
-    class FacebookAuth extends AbstractJsonRpcAuth implements InterfaceAuthModule
+    class FacebookAuth extends \Processus\Abstracts\JsonRpc\AbstractJsonRpcAuth implements \Processus\Interfaces\InterfaceAuthModule
     {
 
         private $_isAuth;
 
         /**
-         *@see Processus\Interfaces.InterfaceAuthModule::setAuthData()
+         * @param $authData
          */
         public function setAuthData ($authData)
         {
@@ -28,7 +24,7 @@ namespace Processus\Lib\Auth
         }
 
         /**
-         * @see Processus\Interfaces.InterfaceAuthModule::isAuthorized()
+         * @return mixed
          */
         public function isAuthorized ()
         {
