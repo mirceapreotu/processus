@@ -1,15 +1,11 @@
 <?php
 
-/** 
+/**
  * @author francis
- * 
- * 
+ *
  */
 namespace Processus\Lib\Mvo
 {
-    use Processus\Dto\FacebookUserDto;
-    
-    use Processus\Lib\Mvo\UserMvo;
 
     class FacebookUserMvo extends UserMvo
     {
@@ -17,22 +13,23 @@ namespace Processus\Lib\Mvo
         /**
          * @return mixed
          */
-        protected function getDataBucketPort ()
+        protected function getDataBucketPort()
         {
             $config = $this->getApplication()
                 ->getRegistry()
                 ->getProcessusConfig()
                 ->getCouchbaseConfig()
                 ->getCouchbasePortByDatabucketKey("fbusers");
-            
+
             return $config['port'];
         }
 
         /**
          * @param $mId
+         *
          * @return FacebookUserMvo
          */
-        public function setMemId ($mId)
+        public function setMemId($mId)
         {
             parent::setMemId("FacebookUserMvo_" . $mId);
             return $this;
@@ -41,7 +38,7 @@ namespace Processus\Lib\Mvo
         /**
          * @return \Processus\Dto\FacebookUserDto
          */
-        public function getDefaultDto ()
+        public function getDefaultDto()
         {
             $dto = new FacebookUserDto();
             $dto->setData($this->getData());
@@ -50,6 +47,7 @@ namespace Processus\Lib\Mvo
 
         /**
          * @param string $size
+         *
          * @return string
          */
         public function getFacebookUserImageUrl(string $size)
@@ -63,6 +61,25 @@ namespace Processus\Lib\Mvo
         public function getFacebookUserId()
         {
             return $this->getApplication()->getFacebookClient()->getUserId();
+        }
+
+        /**
+         * @param bool $firstTime
+         *
+         * @return FacebookUserMvo
+         */
+        public function setFirstTime(\boolean $firstTime)
+        {
+            $this->setValueByKey('firstTime', $firstTime);
+            return $this;
+        }
+
+        /**
+         * @return array|mixed
+         */
+        public function isFirstTime()
+        {
+            return $this->getValueByKey('firstTime');
         }
     }
 
