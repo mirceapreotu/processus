@@ -135,5 +135,15 @@ namespace Processus\Abstracts
         {
             return $this->_errorData['userErrorDetail'];
         }
+
+        /**
+         * @param string $message
+         * @return AbstractException
+         */
+        public function setMessage(\string $message)
+        {
+            $this->message = $message;
+            return $this;
+        }
     }
 }
