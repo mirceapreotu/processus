@@ -6,11 +6,10 @@
  *
  */
 
-namespace Processus\Lib\Mvo {
-    use Processus\Abstracts\Vo\AbstractMVO;
-    use Processus\Interfaces\InterfaceUser;
+namespace Processus\Lib\Mvo
+{
 
-    class UserMvo extends AbstractMVO implements InterfaceUser
+    class UserMvo extends \Processus\Abstracts\Vo\AbstractMVO implements \Processus\Interfaces\InterfaceUser
     {
 
         /**
@@ -51,6 +50,30 @@ namespace Processus\Lib\Mvo {
         public function getCreated()
         {
             return $this->getValueByKey("created");
+        }
+
+        /**
+         * @return array|mixed
+         */
+        public function getFacebookId()
+        {
+            return $this->getValueByKey("id");
+        }
+
+        /**
+         * @return array|mixed
+         */
+        public function getName()
+        {
+            return $this->getValueByKey("name");
+        }
+
+        /**
+         * @return array|mixed
+         */
+        public function getUrlName()
+        {
+            return $this->getValueByKey("urlName");
         }
     }
 }
