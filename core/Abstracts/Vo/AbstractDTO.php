@@ -10,9 +10,7 @@ namespace Processus\Abstracts\Vo
      * Time: 1:50 PM
      * To change this template use File | Settings | File Templates.
      */
-    use Processus\Interfaces\InterfaceDto;
-
-    abstract class AbstractDTO extends AbstractVO implements InterfaceDto
+    abstract class AbstractDTO extends AbstractVO implements \Processus\Interfaces\InterfaceDto
     {
 
         /**
