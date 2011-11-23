@@ -98,7 +98,7 @@ namespace Processus\Lib\Facebook
         {
             $defaultCache = $this->getApplication()->getDefaultCache();
             $fbNum        = $this->getUserId();
-            $memKey       = "getFriendsList_67" . $fbNum;
+            $memKey       = __CLASS__ . "\\" . $fbNum;
 
             $facebookFriends = $defaultCache->fetch($memKey);
 
