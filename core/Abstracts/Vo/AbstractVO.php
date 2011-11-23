@@ -51,7 +51,20 @@ namespace Processus\Abstracts\Vo
         public function getValueByKey(string $key)
         {
             $data = $this->getData();
-            return $data->$key;
+            $value = $data->$key;
+
+            if( ! $value)
+            {
+                $exception = new \Processus\Exceptions\ProcessusException();
+                $message = "Value not found. " . $key;
+
+                $exception->setMessage($message);
+                $exception->setMethod(__METHOD__);
+
+                throw $exception;
+            }
+
+            return $value;
         }
 
         /**
