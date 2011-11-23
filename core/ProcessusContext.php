@@ -20,7 +20,7 @@ namespace Processus
         private $_facebookClient;
 
         /**
-         * @var UserBo
+         * @var \Processus\Lib\Bo\UserBo
          */
         private $_userBo;
 
@@ -30,7 +30,7 @@ namespace Processus
         private $_memcached;
 
         /**
-         * @var MySQL
+         * @var \Processus\Lib\Db\MySQL
          */
         private $_mysql;
 
@@ -73,7 +73,7 @@ namespace Processus
         }
 
         /**
-         * @return MySQL
+         * @return \Processus\Lib\Db\MySQL
          */
         public function getMasterMySql ()
         {
