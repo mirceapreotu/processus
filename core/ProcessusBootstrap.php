@@ -171,12 +171,12 @@ namespace Processus
 
             $returnValue           = array();
             $returnValue['result'] = array();
-            $returnValue['error'] = array();
+            $returnValue['error']  = array();
 
             if ($errorObj instanceof \Processus\Abstracts\AbstractException) {
 
                 $debug = array();
-                $user = array();
+                $user  = array();
 
                 $debug['file']    = $errorObj->getFile();
                 $debug['line']    = $errorObj->getLine();
@@ -185,17 +185,15 @@ namespace Processus
                 $debug['method']  = $errorObj->getMethod();
 
                 $user['message'] = $errorObj->getUserMessage();
-                $user['title'] = $errorObj->getUserMessageTitle();
-                $user['code'] = $errorObj->getUserErrorCode();
+                $user['title']   = $errorObj->getUserMessageTitle();
+                $user['code']    = $errorObj->getUserErrorCode();
                 $user['details'] = $errorObj->getUserDetailError();
 
                 $lastError['data'] = $lastError;
 
+                $error['debug'] = $debug;
 
-
-                $error['debug']   = $debug;
-
-                $error['user'] = $user;
+                $error['user']      = $user;
                 $error['lasterror'] = $lastError;
 
                 $returnValue['error'] = $error;
@@ -204,8 +202,7 @@ namespace Processus
 
             }
 
-            if ($lastError)
-            {
+            if ($lastError) {
 
                 $returnValue        = array();
                 $error['backtrace'] = debug_backtrace();
