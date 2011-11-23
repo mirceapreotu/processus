@@ -27,10 +27,10 @@ namespace Processus\Manager
         public function insertNewUser(InterfaceUser $user)
         {
             $com = new ComConfig();
+
             $com->setConnector($this->getApplication()->getMasterMySql())
                 ->setSqlTableName("fbusers")
-                ->setSqlParams(array("id"     => $user->getId(),
-                                    "created" => $user->getCreated()));
+                ->setSqlParams(array("id" => $user->getId(), "created" => $user->getCreated()));
 
             $this->insert($com);
         }
@@ -38,6 +38,7 @@ namespace Processus\Manager
 
         /**
          * @param array $friendsList
+         *
          * @return array|string
          */
         public function filterAppFriends(array $friendsList)
@@ -54,7 +55,7 @@ namespace Processus\Manager
                 ->setSqlStmt("SELECT fbu.id AS id FROM fbusers AS fbu WHERE fbu.id IN (" . $friendsList . ")")
                 ->setMemId($memId);
 
-            return $friendsList;
+            return $this->fetchAll($com);
         }
 
         /**
