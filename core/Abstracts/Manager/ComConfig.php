@@ -2,13 +2,13 @@
 namespace Processus\Abstracts\Manager
 {
     use Processus\Application;
-    
+
     use Processus\Interfaces\InterfaceComConfig;
-    
+
     use Processus\Interfaces\InterfaceDatabase;
 
     /**
-     * 
+     *
      * @author fightbulc
      *
      */
@@ -34,95 +34,98 @@ namespace Processus\Abstracts\Manager
         private $_sqlTableName = "";
 
         // #########################################################
-        
+
 
         /**
          * @return the $_sqlConditions
          */
-        public function getSqlConditions ()
+        public function getSqlConditions()
         {
             return $this->_sqlConditions;
         }
 
         // #########################################################
-        
+
 
         /**
          * @return the $_tableName
          */
-        public function getSqlTableName ()
+        public function getSqlTableName()
         {
             return $this->_sqlTableName;
         }
 
         // #########################################################
-        
+
 
         /**
-         * @param multitype: $_sqlConditions
+         * @param $_sqlConditions
+         *
+         * @return ComConfig
          */
-        public function setSqlConditions ($_sqlConditions)
+        public function setSqlConditions($_sqlConditions)
         {
             $this->_sqlConditions = $_sqlConditions;
             return $this;
         }
 
         // #########################################################
-        
+
 
         /**
-         * @param field_type $_tableName
+         * @param $_sqlTableName
+         * @return ComConfig
          */
-        public function setSqlTableName ($_sqlTableName)
+        public function setSqlTableName($_sqlTableName)
         {
             $this->_sqlTableName = $_sqlTableName;
             return $this;
         }
 
         // #########################################################
-        
+
 
         /**
          * @return string
          */
-        public function getClassPath ()
+        public function getClassPath()
         {
             return $this->_classPath;
         }
 
         // #########################################################
-        
+
 
         /**
          * @param string $_classPath
          */
-        public function setClassPath (string $_classPath)
+        public function setClassPath(string $_classPath)
         {
             $this->_classPath = $_classPath;
         }
 
         // #########################################################
-        
+
 
         /**
          * @return string
          */
-        public function getMemId ()
+        public function getMemId()
         {
             if (empty($this->_memId)) {
                 $this->setMemId($this->generateMemId());
             }
-            
+
             return $this->_memId;
         }
 
         // #########################################################
-        
+
 
         /**
          * @return string
          */
-        private function generateMemId ()
+        private function generateMemId()
         {
             return md5(
                 $this->_sqlStmt . join('', $this->_sqlParams) . $this->_expiredTime . \Processus\ProcessusContext::getInstance()->getRegistry()
@@ -132,138 +135,142 @@ namespace Processus\Abstracts\Manager
         }
 
         // #########################################################
-        
+
 
         /**
          * @param string $_memId
          */
-        public function setMemId (string $_memId)
+        public function setMemId(string $_memId)
         {
             $this->_memId = $_memId;
         }
 
         // #########################################################
-        
+
 
         /**
          * @return boolean $_fromCache
          */
-        public function getFromCache ()
+        public function getFromCache()
         {
             return $this->_fromCache;
         }
 
         // #########################################################
-        
+
 
         /**
          * @return string $_sqlStmt
          */
-        public function getSqlStmt ()
+        public function getSqlStmt()
         {
             return $this->_sqlStmt;
         }
 
         // #########################################################
-        
+
 
         /**
          * @return array $_sqlParams
          */
-        public function getSqlParams ()
+        public function getSqlParams()
         {
             return $this->_sqlParams;
         }
 
         // #########################################################
-        
+
 
         /**
          * @return int
          */
-        public function getExpiredTime ()
+        public function getExpiredTime()
         {
             return $this->_expiredTime;
         }
 
         // #########################################################
-        
+
 
         /**
          * @return the $_connector
          */
-        public function getConnector ()
+        public function getConnector()
         {
             return $this->_connector;
         }
 
         // #########################################################
-        
+
 
         /**
          * @param $_fromCache
+         *
          * @return ComConfig
          */
-        public function setFromCache ($_fromCache)
+        public function setFromCache($_fromCache)
         {
             $this->_fromCache = $_fromCache;
             return $this;
         }
 
         // #########################################################
-        
+
 
         /**
          * @param string $_sqlStmt
+         *
          * @return ComConfig
          */
-        public function setSqlStmt (string $_sqlStmt)
+        public function setSqlStmt(string $_sqlStmt)
         {
             $this->_sqlStmt = $_sqlStmt;
             return $this;
         }
 
         // #########################################################
-        
+
 
         /**
          * @param array $_sqlParams
+         *
          * @return ComConfig
          */
-        public function setSqlParams (array $_sqlParams)
+        public function setSqlParams(array $_sqlParams)
         {
             $this->_sqlParams = $_sqlParams;
             return $this;
         }
 
         // #########################################################
-        
+
 
         /**
          * @param $_expiredTime
+         *
          * @return ComConfig
          */
-        public function setExpiredTime ($_expiredTime)
+        public function setExpiredTime($_expiredTime)
         {
             $this->_expiredTime = $_expiredTime;
             return $this;
         }
 
         // #########################################################        
-        
+
 
         /**
          * @param \Processus\Interfaces\InterfaceDatabase $_connector
+         *
          * @return ComConfig
          */
-        public function setConnector (InterfaceDatabase $_connector)
+        public function setConnector(InterfaceDatabase $_connector)
         {
             $this->_connector = $_connector;
             return $this;
         }
-    
-    // #########################################################        
-    
+
+        // #########################################################
 
     }
 }
