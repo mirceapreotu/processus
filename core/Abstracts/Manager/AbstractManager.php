@@ -82,11 +82,10 @@ namespace Processus\Abstracts\Manager
 
 
         /**
-         * @param InterfaceComConfig $com
-         *
+         * @param \Processus\Interfaces\InterfaceComConfig $com
          * @return mixed|null
          */
-        protected function fetchOne(InterfaceComConfig $com)
+        protected function fetchOne(\Processus\Interfaces\InterfaceComConfig $com)
         {
             $results = NULL;
 
