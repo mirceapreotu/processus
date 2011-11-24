@@ -11,6 +11,14 @@ namespace Processus\Abstracts\Vo
         protected $_data;
 
         /**
+         * @return array|mixed
+         */
+        public function getId()
+        {
+           return $this->getValueByKey('id');
+        }
+
+        /**
          * @param array $data
          * @return \Processus\Abstracts\Vo\AbstractVO
          */
