@@ -8,7 +8,7 @@
  */
 namespace Processus\Interfaces
 {
-    interface InterfaceUser
+    interface InterfaceUser extends InterfaceVo
     {
         public function getId();
         public function getCreated();
