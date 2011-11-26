@@ -14,7 +14,6 @@ function array_to_object($array)
     
     if (is_array($array) && count($array) > 0) {
         foreach ($array as $name => $value) {
-            $name = strtolower(trim($name));
             if (! empty($name)) {
                 $object->$name = array_to_object($value);
             }
