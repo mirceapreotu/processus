@@ -1,9 +1,9 @@
 <?php
 
-/** 
+/**
  * @author francis
- * 
- * 
+ *
+ *
  */
 
 namespace Processus\Lib\Profiler
@@ -23,10 +23,37 @@ namespace Processus\Lib\Profiler
         private $_appDuration;
 
         /**
+         * @var array
+         */
+        private $_debugProfilerStack = array();
+
+        /**
+         * @var \Processus\Lib\Profiler\ProcessusProfiler
+         */
+        private static $_Instance;
+
+        /**
+         * @static
          * @return ProcessusProfiler
          */
-        public function profile()
+        public static function getInstance()
         {
+            if (!self::$_Instance)
+            {
+                self::$_Instance = new ProcessusProfiler();
+            }
+
+            return self::$_Instance;
+        }
+
+        /**
+         * @param \Processus\Lib\Profiler\IProcessusDebugProfilerVo $profilerInfo
+         *
+         * @return ProcessusProfiler
+         */
+        public function addDebugInfo(IProcessusDebugProfilerVo $profilerInfo)
+        {
+            $this->_debugProfilerStack[] = $profilerInfo;
             return $this;
         }
 
@@ -54,8 +81,8 @@ namespace Processus\Lib\Profiler
         public function getDefaultInformation()
         {
             return array(
-                    "appDuration" => $this->_appDuration,
-                    "profilerStack" => ProfilerStack::getProfilerStackData(),
+                "appDuration"   => $this->_appDuration,
+                "profilerStack" => ProfilerStack::getProfilerStackData(),
             );
         }
     }
