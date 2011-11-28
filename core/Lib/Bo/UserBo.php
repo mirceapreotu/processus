@@ -62,18 +62,25 @@ namespace Processus\Lib\Bo
 
             $mvoFriendsList = array();
 
+            $connector = $this->getApplication()->getDefaultCache();
+
+            $idList = array();
+
+            // generating key
+            foreach($filterFriends as $item)
+            {
+                $idList[] = "FacebookUserMvo_" . $item->id;
+            }
+
+            // improvement get keys
+            $friendsCollections = $connector->getMulipleByKey($idList);
+
             // get friends from membase || or add them
-            foreach ($filterFriends as $item) {
+            foreach ($friendsCollections as $item)
+            {
 
                 $mvo = new \Processus\Lib\Mvo\FacebookUserMvo();
-                $mvo->setMemId($item->id);
-                $data = $mvo->getFromMem();
-
-                if (!$data) {
-                    $data = $this->getApplication()->getFacebookClient()->getUserDataById($item->id);
-                    $mvo->setData($data);
-                    $mvo->saveInMem();
-                }
+                $mvo->setData($item);
 
                 $mvoFriendsList[] = $mvo;
             }
