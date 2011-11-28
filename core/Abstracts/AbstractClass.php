@@ -24,6 +24,14 @@ namespace Processus\Abstracts
         {
             return $this->getApplication()->getRegistry()->getConfig($this);
         }
+
+        /**
+         * @return \Processus\Lib\Profiler\ProcessusProfiler
+         */
+        protected function getProfiler()
+        {
+            return \Processus\Lib\Profiler\ProcessusProfiler::getInstance();
+        }
     }
 }
 
