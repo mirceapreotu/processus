@@ -151,6 +151,7 @@ namespace Processus\Abstracts\JsonRpc
                 throw new \Exception('Invalid request type provided; cannot handle');
             } elseif ($request)
             {
+                $this->setResponse(new AbstractJsonRpcResponse());
                 $this->setRequest($request);
             }
 
