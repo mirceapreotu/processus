@@ -52,12 +52,12 @@ namespace Processus\Lib\Bo
         public function getAppFriends()
         {
             // get friends from facebook
-            $fbClient = $this->getApplication()->getFacebookClient();
+            $fbClient      = $this->getApplication()->getFacebookClient();
             $friendsIdList = $fbClient->getFriendsIdList();
 
             // match appUsers with friendsList from facebook
             /** @var $userManager UserManager */
-            $userManager = $this->getUserManager();
+            $userManager   = $this->getUserManager();
             $filterFriends = $userManager->filterAppFriends($friendsIdList);
 
             $mvoFriendsList = array();
@@ -72,7 +72,6 @@ namespace Processus\Lib\Bo
             // get friends from membase || or add them
             foreach ($friendsCollections as $item)
             {
-
                 $mvo = new \Processus\Lib\Mvo\FacebookUserMvo();
                 $mvo->setData($item);
 
@@ -103,11 +102,12 @@ namespace Processus\Lib\Bo
 
                 if (!$userData) {
 
-                    $fbClient = $this->getApplication()->getFacebookClient();
-                    $fbData = $fbClient->getUserDataById($fbUserId);
+                    $fbClient          = $this->getApplication()->getFacebookClient();
+                    $fbData            = $fbClient->getUserDataById($fbUserId);
                     $fbData['created'] = time();
-                    $this->getFacebookUserMvo()->setData($fbData);
-                    $this->getFacebookUserMvo()->saveInMem();
+                    $this->getFacebookUserMvo()->setData($fbData)
+                        ->setMemId($this->getFacebookUserId())
+                        ->saveInMem();
 
                     $this->getUserManager()->insertNewUser($this->getFacebookUserMvo());
                 }
