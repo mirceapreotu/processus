@@ -11,5 +11,17 @@ namespace Processus\Lib\Vo\Configs
     class ProfilerConfig extends \Processus\Abstracts\Vo\AbstractVO
     {
 
+        /**
+         * @param string $ip
+         *
+         * @return bool
+         */
+        public function checkIpForDeveloper(\string $ip)
+        {
+            $isDeveloper = TRUE;
+
+            return $isDeveloper;
+        }
+
     }
 }
