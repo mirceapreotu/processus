@@ -30,6 +30,14 @@ namespace Processus\Abstracts
         }
 
         /**
+         * @return mixed
+         */
+        public function getExtendData()
+        {
+            return $this->_errorData['extended'];
+        }
+
+        /**
          * @param string $method
          *
          * @return AbstractException
@@ -138,6 +146,7 @@ namespace Processus\Abstracts
 
         /**
          * @param string $message
+         *
          * @return AbstractException
          */
         public function setMessage(\string $message)
