@@ -102,7 +102,8 @@ namespace Processus\Lib\Facebook
 
             $facebookFriends = $defaultCache->fetch($memKey);
 
-            if (!$facebookFriends) {
+            if (!$facebookFriends)
+            {
                 $rawData         = $this->getFacebookSdk()->api("/me/friends");
                 $facebookFriends = $rawData['data'];
 
@@ -125,7 +126,7 @@ namespace Processus\Lib\Facebook
         }
 
         /**
-         * @return multitype:unknown
+         * @return array
          */
         public function getFriendsIdList()
         {
@@ -156,7 +157,8 @@ namespace Processus\Lib\Facebook
          */
         public function getOpenGraphClient()
         {
-            if ($this->_openGraphClient) {
+            if ($this->_openGraphClient)
+            {
                 $this->_openGraphClient = new \Processus\Lib\Facebook\Api\OpenGraph();
             }
 

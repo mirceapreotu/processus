@@ -146,9 +146,12 @@ namespace Processus\Abstracts\JsonRpc
          */
         public function handle($request = false)
         {
-            if ((false !== $request) && (!$request instanceof Request)) {
-                throw new Exception('Invalid request type provided; cannot handle');
-            } elseif ($request) {
+            if ((false !== $request) && (!$request instanceof Request))
+            {
+                throw new \Exception('Invalid request type provided; cannot handle');
+            } elseif ($request)
+            {
+                $this->setResponse(new AbstractJsonRpcResponse());
                 $this->setRequest($request);
             }
 
@@ -159,15 +162,15 @@ namespace Processus\Abstracts\JsonRpc
             }
             catch (\Exception $exception)
             {
-                var_dump($exception);
+                throw $exception;
             }
 
-
-            // Get response
+            /** @var $response \Zend\Json\Server\Response */
             $response = $this->_getReadyResponse();
 
             // Emit response?
-            if ($this->autoEmitResponse()) {
+            if ($this->autoEmitResponse())
+            {
                 echo $response;
                 return;
             }

@@ -175,11 +175,13 @@ namespace Processus
                 $debug = array();
                 $user  = array();
 
+                $debug['trigger'] = "Manual Exception";
                 $debug['file']    = $errorObj->getFile();
                 $debug['line']    = $errorObj->getLine();
                 $debug['message'] = $errorObj->getMessage();
                 $debug['trace']   = $errorObj->getTraceAsString();
                 $debug['method']  = $errorObj->getMethod();
+                $debug['extendedData'] = $errorObj->getExtendData();
 
                 $user['message'] = $errorObj->getUserMessage();
                 $user['title']   = $errorObj->getUserMessageTitle();
@@ -196,18 +198,20 @@ namespace Processus
                 $returnValue['error'] = $error;
 
                 echo json_encode($returnValue);
-
+                return;
             }
 
             if ($lastError) {
 
                 $returnValue        = array();
+                $error['trigger']   = "Auto Exception";
                 $error['backtrace'] = debug_backtrace();
                 $error['errorData'] = $lastError;
 
                 $returnValue['error'] = $error;
 
                 echo json_encode($returnValue);
+                return;
             }
         }
     }

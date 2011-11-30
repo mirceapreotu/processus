@@ -58,7 +58,7 @@ namespace Processus\Abstracts\Vo {
          */
         protected function getMemId()
         {
-            return $this->_memId;
+            return (string)$this->getValueByKey('memId');
         }
 
         /**
@@ -68,7 +68,7 @@ namespace Processus\Abstracts\Vo {
          */
         public function setMemId(string $mId)
         {
-            $this->_memId = $mId;
+            $this->setValueByKey('memId', $mId);
             return $this;
         }
 
@@ -77,10 +77,22 @@ namespace Processus\Abstracts\Vo {
          */
         public function saveInMem()
         {
-            if (!$this->getMemId()) {
-                return false;
+            if (!$this->getMemId())
+            {
+
+                $errorData = array();
+                $errorData['message'] = "Mvo has no Id ";
+                $errorData['stack'] = debug_backtrace();
+
+                $mvoException = new \Processus\Exceptions\MvoException();
+                $mvoException->setClass(__CLASS__)
+                    ->setMessage(json_encode($errorData))
+                    ->setMethod(__METHOD__)
+                    ->setExtendData(json_encode($this->getData()));
+
+                throw $mvoException;
             }
-            return $this->getMemcachedClient()->insert($this->getMemId(), $this->getData(), 0);
+            return $this->getMemcachedClient()->insert($this->getMemId(), $this->getData(), $this->getExpiredTime());
         }
 
         /**
@@ -123,6 +135,14 @@ namespace Processus\Abstracts\Vo {
         }
 
         /**
+         * @return int
+         */
+        protected function getExpiredTime()
+        {
+            return 0;
+        }
+
+        /**
          * @return string
          */
         protected function getMembaseHost()
@@ -140,6 +160,7 @@ namespace Processus\Abstracts\Vo {
 
         /**
          * @param \Processus\Interfaces\InterfaceDto $dto
+         *
          * @return \Processus\Interfaces\InterfaceDto
          */
         public function setDto(\Processus\Interfaces\InterfaceDto $dto)

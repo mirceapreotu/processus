@@ -1,9 +1,9 @@
 <?php
 
-/** 
+/**
  * @author francis
- * 
- * 
+ *
+ *
  */
 namespace Processus\Lib\Vo\Configs
 {
@@ -13,32 +13,36 @@ namespace Processus\Lib\Vo\Configs
     {
 
         /**
-         * @var CouchbaseConfig
+         * @var \Processus\Lib\Vo\Configs\CouchbaseConfig
          */
         private $_couchbaseConfig;
 
         /**
-         * @var BeanstalkdConfig
+         * @var \Processus\Lib\Vo\Configs\BeanstalkdConfig
          */
         private $_beanstalkdConfig;
 
         /**
-         * @var MysqlConfig
+         * @var \Processus\Lib\Vo\Configs\MysqlConfig
          */
         private $_mysqlConfig;
 
         /**
-         * @var Facebook
+         * @var \Processus\Lib\Vo\Configs\Facebook\Facebook
          */
         private $_facebookConfig;
+
+        /**
+         * @var \Processus\Lib\Vo\Configs\ProfilerConfig
+         */
+        private $_profilerConfig;
 
         /**
          * @return Facebook
          */
         public function getFacebookConfig()
         {
-            if(!$this->_facebookConfig)
-            {
+            if (!$this->_facebookConfig) {
                 $this->_facebookConfig = new Facebook();
                 $this->_facebookConfig->setData($this->getValueByKey("Facebook"));
             }
@@ -51,7 +55,7 @@ namespace Processus\Lib\Vo\Configs
          */
         public function getCouchbaseConfig()
         {
-            if (! $this->_couchbaseConfig) {
+            if (!$this->_couchbaseConfig) {
                 $this->_couchbaseConfig = new CouchbaseConfig();
                 $this->_couchbaseConfig->setData($this->getValueByKey("couchbaseConfig"));
             }
@@ -63,11 +67,11 @@ namespace Processus\Lib\Vo\Configs
          */
         public function getBeanstalkdConfig()
         {
-            if (! $this->_beanstalkdConfig) {
+            if (!$this->_beanstalkdConfig) {
                 $this->_beanstalkdConfig = new BeanstalkdConfig();
                 $this->_beanstalkdConfig->setData($this->getValueByKey("beanstalkd"));
             }
-            
+
             return $this->_beanstalkdConfig;
         }
 
@@ -76,14 +80,27 @@ namespace Processus\Lib\Vo\Configs
          */
         public function getMysqlConfig()
         {
-            if (! $this->_mysqlConfig) {
+            if (!$this->_mysqlConfig) {
                 $this->_mysqlConfig = new MysqlConfig();
                 $this->_mysqlConfig->setData($this->getValueByKey("mysql"));
             }
-            
+
             return $this->_mysqlConfig;
         }
-    
+
+        /**
+         * @return ProfilerConfig
+         */
+        public function getProfilerConfig()
+        {
+            if (!$this->_profilerConfig) {
+                $this->_profilerConfig = new ProfilerConfig();
+                $this->_profilerConfig->setData($this->getValueByKey('Profiler'));
+            }
+
+            return $this->_profilerConfig;
+        }
+
     }
 }
 ?>

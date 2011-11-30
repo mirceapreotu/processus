@@ -25,7 +25,7 @@ namespace Processus\Abstracts\Vo
         public function setData($data)
         {
             /** @var object $_data */
-            $this->_data = array_to_object($data);
+            $this->_data = prosc_array_to_object($data);
             return $this;
         }
 
