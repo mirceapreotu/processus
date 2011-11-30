@@ -64,7 +64,7 @@ namespace Processus\Lib\Bo
 
             $connector = $this->getApplication()->getDefaultCache();
 
-            $idList = array_prefixing("FacebookUserMvo_", $filterFriends);
+            $idList = prosc_array_prefixing("FacebookUserMvo_", $filterFriends);
 
             // improvement get keys
             $friendsCollections = $connector->getMulipleByKey($idList);

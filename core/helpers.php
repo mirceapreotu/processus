@@ -5,7 +5,7 @@
  *
  * @return object
  */
-function array_to_object($array)
+function prosc_array_to_object($array)
 {
     if (!is_array($array)) {
         return $array;
@@ -16,7 +16,7 @@ function array_to_object($array)
     if (is_array($array) && count($array) > 0) {
         foreach ($array as $name => $value) {
             if (!empty($name)) {
-                $object->$name = array_to_object($value);
+                $object->$name = prosc_array_to_object($value);
             }
         }
 
@@ -33,7 +33,7 @@ function array_to_object($array)
  *
  * @return array
  */
-function array_prefixing(string $prefix, array $idList)
+function prosc_array_prefixing(string $prefix, array $idList)
 {
     $prefixList = array();
     foreach ($idList as $idItem)
