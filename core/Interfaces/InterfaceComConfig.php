@@ -19,6 +19,10 @@ namespace Processus\Interfaces
         
         public function getMemId();
 
+        /**
+         * @abstract
+         * @return \Processus\Interfaces\InterfaceDatabase
+         */
         public function getConnector();
 
         public function setConnector(InterfaceDatabase $_connector);

@@ -1,18 +1,12 @@
 <?php
 namespace Processus\Abstracts\Manager
 {
-    use Processus\Application;
-
-    use Processus\Interfaces\InterfaceComConfig;
-
-    use Processus\Interfaces\InterfaceDatabase;
-
     /**
      *
      * @author fightbulc
      *
      */
-    class ComConfig implements InterfaceComConfig
+    class ComConfig implements \Processus\Interfaces\InterfaceComConfig
     {
 
         private $_memId;
@@ -29,6 +23,9 @@ namespace Processus\Abstracts\Manager
 
         private $_expiredTime = 1;
 
+        /**
+         * @var InterfaceDatabase
+         */
         private $_connector;
 
         private $_sqlTableName = "";
@@ -193,7 +190,7 @@ namespace Processus\Abstracts\Manager
 
 
         /**
-         * @return the $_connector
+         * @return InterfaceDatabase
          */
         public function getConnector()
         {
@@ -262,9 +259,9 @@ namespace Processus\Abstracts\Manager
         /**
          * @param \Processus\Interfaces\InterfaceDatabase $_connector
          *
-         * @return ComConfig
+         * @return \Processus\Abstracts\Manager\ComConfig
          */
-        public function setConnector(InterfaceDatabase $_connector)
+        public function setConnector(\Processus\Interfaces\InterfaceDatabase $_connector)
         {
             $this->_connector = $_connector;
             return $this;
