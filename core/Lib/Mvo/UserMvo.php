@@ -75,6 +75,25 @@ namespace Processus\Lib\Mvo
         {
             return $this->getValueByKey("urlName");
         }
+
+        /**
+         * @return array|mixed
+         */
+        public function getIsAppUser()
+        {
+            return $this->getValueByKey('isAppUser');
+        }
+
+        /**
+         * @param bool $is
+         *
+         * @return \Processus\Lib\Mvo\UserMvo
+         */
+        public function setIsAppUser(\boolean $is)
+        {
+            $this->setValueByKey('isAppUser', $is);
+            return $this;
+        }
     }
 }
 ?>
