@@ -21,7 +21,7 @@ namespace Processus
         private $_processusConfig;
 
         // #########################################################
-        
+
 
         /**
          * @return void
@@ -32,36 +32,33 @@ namespace Processus
         }
 
         // #########################################################
-        
+
 
         /**
          * @param null $key
-         * @return bool
+         *
+         * @return mixed
          */
         public function getConfig($key = NULL)
         {
-            if (! is_null($key) && $this->config->$key)
-            {
+            if (!is_null($key) && $this->config->$key) {
                 return $this->config->$key;
             }
-            
-            return false;
         }
 
         // #########################################################
-        
+
 
         /**
          * @return Lib\Vo\Configs\ProcessusConfig
          */
         public function getProcessusConfig()
         {
-            if (! $this->_processusConfig)
-            {
+            if (!$this->_processusConfig) {
                 $this->_processusConfig = new \Processus\Lib\Vo\Configs\ProcessusConfig();
                 $this->_processusConfig->setData($this->getConfig("processus"));
             }
-            
+
             return $this->_processusConfig;
         }
     }
