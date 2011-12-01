@@ -17,5 +17,7 @@ namespace Processus\Interfaces
         public function getFirstName();
         public function getName();
         public function getUrlName();
+        public function getIsAppUser();
+        public function setIsAppUser(\boolean $is);
     }
 }
