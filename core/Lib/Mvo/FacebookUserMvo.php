@@ -40,7 +40,7 @@ namespace Processus\Lib\Mvo
          */
         public function getDefaultDto()
         {
-            $dto = new FacebookUserDto();
+            $dto = new \Processus\Dto\FacebookUserDto();
             $dto->setData($this->getData());
             return $dto;
         }
@@ -50,7 +50,7 @@ namespace Processus\Lib\Mvo
          *
          * @return string
          */
-        public function getFacebookUserImageUrl(string $size)
+        public function getFacebookUserImageUrl(\string $size)
         {
             return 'https://graph.facebook.com/' . $this->getFacebookUserId() . '/picture?type=' . $size;
         }
@@ -80,6 +80,54 @@ namespace Processus\Lib\Mvo
         public function isFirstTime()
         {
             return $this->getValueByKey('firstTime');
+        }
+
+        /**
+         * @return array|mixed
+         */
+        public function getLink()
+        {
+            return $this->getValueByKey('link');
+        }
+
+        /**
+         * @return array|mixed
+         */
+        public function getUserName()
+        {
+            return $this->getValueByKey('username');
+        }
+
+        /**
+         * @return array|mixed
+         */
+        public function getGender()
+        {
+            return $this->getValueByKey('gender');
+        }
+
+        /**
+         * @return array|mixed
+         */
+        public function getEmail()
+        {
+            return $this->getValueByKey('email');
+        }
+
+        /**
+         * @return array|mixed
+         */
+        public function getLocale()
+        {
+            return $this->getValueByKey('locale');
+        }
+
+        /**
+         * @return array|mixed
+         */
+        public function getVerified()
+        {
+            return $this->getValueByKey('verified');
         }
     }
 
