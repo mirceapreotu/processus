@@ -27,6 +27,8 @@ namespace Processus\Lib\Profiler
          */
         private $_debugProfilerStack = array();
 
+        private $_isEnded = FALSE;
+
         /**
          * @var \Processus\Lib\Profiler\ProcessusProfiler
          */
@@ -38,8 +40,7 @@ namespace Processus\Lib\Profiler
          */
         public static function getInstance()
         {
-            if (!self::$_Instance)
-            {
+            if (!self::$_Instance) {
                 self::$_Instance = new ProcessusProfiler();
             }
 
@@ -47,7 +48,7 @@ namespace Processus\Lib\Profiler
         }
 
         /**
-         * @param \Processus\Lib\Profiler\IProcessusDebugProfilerVo $profilerInfo
+         * @param IProcessusDebugProfilerVo $profilerInfo
          *
          * @return ProcessusProfiler
          */
@@ -58,12 +59,16 @@ namespace Processus\Lib\Profiler
         }
 
         /**
-         * @return ProcessusProfiler
+         * @return int
          */
         public function applicationProfilerStart()
         {
-            $this->_startTime = time();
-            return $this;
+            if (!$this->_startTime)
+            {
+                $this->_startTime = microtime_float();
+            }
+
+            return $this->_startTime;
         }
 
         /**
@@ -71,8 +76,30 @@ namespace Processus\Lib\Profiler
          */
         public function applicationProfilerEnd()
         {
-            $this->_appDuration = time() - $this->_startTime;
-            return $this;
+            $endTime = microtime_float();
+            $this->_appDuration = $endTime - $this->_startTime;
+            $this->_isEnded     = true;
+            return $endTime;
+        }
+
+        /**
+         * @return int
+         */
+        public function applicationDuration()
+        {
+            if ($this->_isEnded == FALSE) {
+                $this->applicationProfilerEnd();
+            }
+
+            return $this->_appDuration;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getProfilerStack()
+        {
+            return $this->_debugProfilerStack;
         }
 
         /**
