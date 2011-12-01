@@ -42,3 +42,12 @@ function prosc_array_prefixing(string $prefix, array $idList)
     }
     return $prefixList;
 }
+
+/**
+ * @return float
+ */
+function microtime_float()
+{
+    list($usec, $sec) = explode(" ", microtime());
+    return ((float)$usec + (float)$sec);
+}

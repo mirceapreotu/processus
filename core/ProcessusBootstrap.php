@@ -25,6 +25,7 @@ namespace Processus
         {
             if (!$this->_applicationContext) {
                 $this->_applicationContext = new ProcessusContext();
+                \Processus\Lib\Profiler\ProcessusProfiler::getInstance()->applicationProfilerStart();
             }
             return $this->_applicationContext;
         }
@@ -175,12 +176,12 @@ namespace Processus
                 $debug = array();
                 $user  = array();
 
-                $debug['trigger'] = "Manual Exception";
-                $debug['file']    = $errorObj->getFile();
-                $debug['line']    = $errorObj->getLine();
-                $debug['message'] = $errorObj->getMessage();
-                $debug['trace']   = $errorObj->getTraceAsString();
-                $debug['method']  = $errorObj->getMethod();
+                $debug['trigger']      = "Manual Exception";
+                $debug['file']         = $errorObj->getFile();
+                $debug['line']         = $errorObj->getLine();
+                $debug['message']      = $errorObj->getMessage();
+                $debug['trace']        = $errorObj->getTraceAsString();
+                $debug['method']       = $errorObj->getMethod();
                 $debug['extendedData'] = $errorObj->getExtendData();
 
                 $user['message'] = $errorObj->getUserMessage();

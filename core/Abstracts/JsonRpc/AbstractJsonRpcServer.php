@@ -125,54 +125,43 @@ namespace Processus\Abstracts\JsonRpc
         }
 
         /**
-         * @param null $fault
-         * @param int  $code
-         * @param null $data
          *
-         * @return \Zend\Json\Server\Error
+         * Get response object
+         *
+         * @return \Processus\Abstracts\JsonRpc\AbstractJsonRpcResponse
          */
-        public function fault($fault = null, $code = 404, $data = null)
+        public function getResponse()
         {
-            $error = new \Zend\Json\Server\Error($fault, $code, $data);
-            $this->getResponse()->setError($error);
-            return $error;
+            if (null === ($response = $this->_response)) {
+                $this->setResponse(new AbstractJsonRpcResponse());
+            }
+            return $this->_response;
         }
 
         /**
          * @param bool $request
          *
          * @return \Zend\Json\Server\Zend\Json\Server\Response
-         * @throws Exception
+         * @throws \Exception
          */
         public function handle($request = false)
         {
-            if ((false !== $request) && (!$request instanceof Request))
-            {
+            if ((false !== $request) && (!$request instanceof Request)) {
                 throw new \Exception('Invalid request type provided; cannot handle');
-            } elseif ($request)
-            {
-                $this->setResponse(new AbstractJsonRpcResponse());
+            } elseif ($request) {
                 $this->setRequest($request);
             }
 
-            try
-            {
-                // Handle request
-                $this->_handle();
-            }
-            catch (\Exception $exception)
-            {
-                throw $exception;
-            }
+            // Handle request
+            $this->_handle();
 
-            /** @var $response \Zend\Json\Server\Response */
+            // Get response
             $response = $this->_getReadyResponse();
 
             // Emit response?
-            if ($this->autoEmitResponse())
-            {
+            if ($this->autoEmitResponse()) {
                 echo $response;
-                return;
+                exit();
             }
 
             // or return it?
