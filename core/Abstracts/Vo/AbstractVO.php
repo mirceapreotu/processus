@@ -15,11 +15,12 @@ namespace Processus\Abstracts\Vo
          */
         public function getId()
         {
-           return $this->getValueByKey('id');
+            return $this->getValueByKey('id');
         }
 
         /**
          * @param array $data
+         *
          * @return \Processus\Abstracts\Vo\AbstractVO
          */
         public function setData($data)
@@ -31,7 +32,8 @@ namespace Processus\Abstracts\Vo
 
         /**
          * @param string $key
-         * @param mixed $value
+         * @param mixed  $value
+         *
          * @return \Processus\Abstracts\Vo\AbstractVO
          */
         public function setValueByKey(\string $key, \object $value)
@@ -42,11 +44,12 @@ namespace Processus\Abstracts\Vo
 
         /**
          * @param string $key
+         *
          * @return mixed | array
          */
         public function getValueByKey(\string $key)
         {
-            $data = $this->getData();
+            $data  = $this->getData();
             $value = $data->$key;
             return $value;
         }
@@ -58,7 +61,18 @@ namespace Processus\Abstracts\Vo
         {
             return $this->_data;
         }
-    
+
+        /**
+         * @param \Processus\Interfaces\InterfaceDto $dto
+         *
+         * @return \Processus\Interfaces\InterfaceDto
+         */
+        public function setDto(\Processus\Interfaces\InterfaceDto $dto)
+        {
+            $dto->setData($this->getData());
+            return $dto;
+        }
+
     }
 }
 

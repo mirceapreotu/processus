@@ -157,17 +157,6 @@ namespace Processus\Abstracts\Vo {
         {
             return "11211";
         }
-
-        /**
-         * @param \Processus\Interfaces\InterfaceDto $dto
-         *
-         * @return \Processus\Interfaces\InterfaceDto
-         */
-        public function setDto(\Processus\Interfaces\InterfaceDto $dto)
-        {
-            $dto->setData($this->getData());
-            return $dto;
-        }
     }
 }
 
