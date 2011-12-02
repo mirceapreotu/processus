@@ -58,11 +58,11 @@ namespace Processus\Abstracts\Manager
 
 
         /**
-         * @param InterfaceComConfig $com
+         * @param \Processus\Interfaces\InterfaceComConfig $com
          *
          * @return mixed|null
          */
-        protected function fetch(InterfaceComConfig $com)
+        protected function fetch(\Processus\Interfaces\InterfaceComConfig $com)
         {
             $results = NULL;
 
@@ -83,6 +83,7 @@ namespace Processus\Abstracts\Manager
 
         /**
          * @param \Processus\Interfaces\InterfaceComConfig $com
+         *
          * @return mixed|null
          */
         protected function fetchOne(\Processus\Interfaces\InterfaceComConfig $com)
@@ -130,6 +131,7 @@ namespace Processus\Abstracts\Manager
 
         /**
          * @param \Processus\Interfaces\InterfaceComConfig $com
+         *
          * @return \Zend\Db\Statement\Pdo
          */
         protected function insert(\Processus\Interfaces\InterfaceComConfig $com)
@@ -142,6 +144,7 @@ namespace Processus\Abstracts\Manager
 
         /**
          * @param \Processus\Interfaces\InterfaceComConfig $com
+         *
          * @return mixed
          */
         protected function update(\Processus\Interfaces\InterfaceComConfig $com)
