@@ -58,7 +58,7 @@ namespace Processus\Abstracts\Vo {
          */
         protected function getMemId()
         {
-            return (string)$this->getValueByKey('memId');
+            return $this->_memId;
         }
 
         /**
@@ -68,6 +68,7 @@ namespace Processus\Abstracts\Vo {
          */
         public function setMemId(string $mId)
         {
+            $this->_memId = $mId;
             $this->setValueByKey('memId', $mId);
             return $this;
         }
