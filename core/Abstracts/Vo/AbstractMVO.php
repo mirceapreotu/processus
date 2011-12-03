@@ -78,12 +78,11 @@ namespace Processus\Abstracts\Vo {
          */
         public function saveInMem()
         {
-            if (!$this->getMemId())
-            {
+            if (!$this->getMemId()) {
 
-                $errorData = array();
+                $errorData            = array();
                 $errorData['message'] = "Mvo has no Id ";
-                $errorData['stack'] = debug_backtrace();
+                $errorData['stack']   = debug_backtrace();
 
                 $mvoException = new \Processus\Exceptions\MvoException();
                 $mvoException->setClass(__CLASS__)
