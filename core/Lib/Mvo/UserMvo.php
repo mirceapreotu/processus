@@ -17,7 +17,7 @@ namespace Processus\Lib\Mvo
          */
         public function getFirstname()
         {
-            return $this->getValueByKey("firstName");
+            return $this->getValueByKey("first_name");
         }
 
         /**
@@ -25,7 +25,7 @@ namespace Processus\Lib\Mvo
          */
         public function getLastname()
         {
-            return $this->getValueByKey("lastName");
+            return $this->getValueByKey("last_name");
         }
 
         /**
@@ -33,7 +33,7 @@ namespace Processus\Lib\Mvo
          */
         public function getFullName()
         {
-            return $this->getValueByKey("fullName");
+            return $this->getValueByKey("name");
         }
 
         /**
@@ -73,7 +73,7 @@ namespace Processus\Lib\Mvo
          */
         public function getUrlName()
         {
-            return $this->getValueByKey("urlName");
+            return $this->getValueByKey("username");
         }
 
         /**
