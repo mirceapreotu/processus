@@ -56,7 +56,7 @@ namespace Processus\Abstracts\Vo {
         /**
          * @return string
          */
-        protected function getMemId()
+        public function getMemId()
         {
             return $this->_memId;
         }
