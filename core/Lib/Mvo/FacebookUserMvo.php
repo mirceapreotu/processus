@@ -15,7 +15,7 @@ namespace Processus\Lib\Mvo
          */
         protected function getDataBucketPort()
         {
-            $config = $this->getApplication()
+            $config = $this->getProcessusContext()
                 ->getRegistry()
                 ->getProcessusConfig()
                 ->getCouchbaseConfig()
@@ -60,7 +60,7 @@ namespace Processus\Lib\Mvo
          */
         public function getFacebookUserId()
         {
-            return $this->getApplication()->getFacebookClient()->getUserId();
+            return $this->getProcessusContext()->getFacebookClient()->getUserId();
         }
 
         /**

@@ -15,12 +15,12 @@ namespace Application\JsonRpc\V1\App\Service
         public function getInitialData ()
         {
             // get data from current user
-            $userMvo = $this->getApplication()->getUserBo()->getFacebookUserMvo();
+            $userMvo = $this->getProcessusContext()->getUserBo()->getFacebookUserMvo();
             
             $userDto = $userMvo->setDto(new FbBasicDto())->export();
             
             // get current user's friends
-            $friendsList = $this->getApplication()->getUserBo()->getAppFriends();
+            $friendsList = $this->getProcessusContext()->getUserBo()->getAppFriends();
             
             $friendsListDto = array();
             

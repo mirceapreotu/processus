@@ -67,6 +67,8 @@ namespace Processus
                                            'handleError'
                                       ));
 
+                ini_set('display_errors', 'Off');
+
                 // cache current include path
                 $cachedIncludePath = get_include_path();
 
@@ -173,6 +175,8 @@ namespace Processus
 
             if ($errorObj instanceof \Processus\Abstracts\AbstractException) {
 
+                header('HTTP/1.1 500 Internal Server Error');
+
                 $debug = array();
                 $user  = array();
 
@@ -203,6 +207,8 @@ namespace Processus
             }
 
             if ($lastError) {
+
+                header('HTTP/1.1 500 Internal Server Error');
 
                 $returnValue        = array();
                 $error['trigger']   = "Auto Exception";

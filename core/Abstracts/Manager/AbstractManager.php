@@ -28,7 +28,7 @@ namespace Processus\Abstracts\Manager
         protected function getMemcached()
         {
             if (!$this->_memcached) {
-                $config = $this->getApplication()
+                $config = $this->getProcessusContext()
                     ->getRegistry()
                     ->getProcessusConfig()
                     ->getCouchbaseConfig()

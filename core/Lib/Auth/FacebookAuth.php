@@ -18,7 +18,7 @@ namespace Processus\Lib\Auth
          */
         public function setAuthData ($authData)
         {
-            $this->_isAuth = $this->getApplication()
+            $this->_isAuth = $this->getProcessusContext()
                 ->getUserBo()
                 ->isAuthorized();
         }

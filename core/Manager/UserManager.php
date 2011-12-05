@@ -28,7 +28,7 @@ namespace Processus\Manager
         {
             $com = new ComConfig();
 
-            $com->setConnector($this->getApplication()->getMasterMySql())
+            $com->setConnector($this->getProcessusContext()->getMasterMySql())
                 ->setSqlTableName("fbusers")
                 ->setSqlParams(array("id" => $user->getId(), "created" => $user->getCreated()));
 
@@ -47,7 +47,7 @@ namespace Processus\Manager
 
             $com = new ComConfig();
 
-            $memId = "filterAppFriends_" . $this->getApplication()
+            $memId = "filterAppFriends_" . $this->getProcessusContext()
                 ->getUserBo()
                 ->getFacebookUserId();
 
@@ -78,7 +78,7 @@ namespace Processus\Manager
          */
         public function updateUserFriends(array $filteredFriends)
         {
-            $fbuserId = $this->getApplication()
+            $fbuserId = $this->getProcessusContext()
                 ->getFacebookClient()
                 ->getUserId();
 

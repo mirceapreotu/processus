@@ -12,7 +12,7 @@ namespace Processus\Abstracts
         /**
          * @return \Processus\ProcessusContext
          */
-        protected function getApplication()
+        protected function getProcessusContext()
         {
             return \Processus\ProcessusContext::getInstance();
         }
@@ -22,7 +22,7 @@ namespace Processus\Abstracts
          */
         protected function config()
         {
-            return $this->getApplication()->getRegistry()->getConfig($this);
+            return $this->getProcessusContext()->getRegistry()->getConfig($this);
         }
 
         /**

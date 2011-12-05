@@ -56,7 +56,7 @@ namespace Processus\Lib\Facebook
         {
             if (!$this->_facebookSdkConf) {
                 /**  */
-                $this->_facebookSdkConf = $this->getApplication()
+                $this->_facebookSdkConf = $this->getProcessusContext()
                     ->getRegistry()
                     ->getConfig("Facebook");
             }
@@ -96,7 +96,7 @@ namespace Processus\Lib\Facebook
          */
         public function getUserFriends()
         {
-            $defaultCache = $this->getApplication()->getDefaultCache();
+            $defaultCache = $this->getProcessusContext()->getDefaultCache();
             $fbNum        = $this->getUserId();
             $memKey       = "getUserFriends_" . $fbNum;
 

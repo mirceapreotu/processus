@@ -52,7 +52,7 @@ namespace Processus\Lib\Bo
         public function getAppFriends()
         {
             // get friends from facebook
-            $fbClient      = $this->getApplication()->getFacebookClient();
+            $fbClient      = $this->getProcessusContext()->getFacebookClient();
             $friendsIdList = $fbClient->getFriendsIdList();
 
             // match appUsers with friendsList from facebook
@@ -62,7 +62,7 @@ namespace Processus\Lib\Bo
 
             $mvoFriendsList = array();
 
-            $connector = $this->getApplication()->getDefaultCache();
+            $connector = $this->getProcessusContext()->getDefaultCache();
 
             $idList = prosc_array_prefixing("FacebookUserMvo_", $filterFriends);
 
@@ -86,7 +86,7 @@ namespace Processus\Lib\Bo
          */
         public function getFacebookUserId()
         {
-            return $this->getApplication()->getFacebookClient()->getUserId();
+            return $this->getProcessusContext()->getFacebookClient()->getUserId();
         }
 
         /**
@@ -102,7 +102,7 @@ namespace Processus\Lib\Bo
 
                 if (!$userData) {
 
-                    $fbClient          = $this->getApplication()->getFacebookClient();
+                    $fbClient          = $this->getProcessusContext()->getFacebookClient();
                     $fbData            = $fbClient->getUserDataById($fbUserId);
                     $fbData['created'] = time();
                     $this->getFacebookUserMvo()->setData($fbData)
