@@ -36,7 +36,7 @@ namespace Processus\Lib\Profiler
 
         /**
          * @static
-         * @return ProcessusProfiler
+         * @return \Processus\Lib\Profiler\ProcessusProfiler
          */
         public static function getInstance()
         {
@@ -48,9 +48,9 @@ namespace Processus\Lib\Profiler
         }
 
         /**
-         * @param IProcessusDebugProfilerVo $profilerInfo
+         * @param \Processus\Lib\Profiler\IProcessusDebugProfilerVo $profilerInfo
          *
-         * @return ProcessusProfiler
+         * @return \Processus\Lib\Profiler\ProcessusProfiler
          */
         public function addDebugInfo(IProcessusDebugProfilerVo $profilerInfo)
         {
@@ -72,7 +72,7 @@ namespace Processus\Lib\Profiler
         }
 
         /**
-         * @return ProcessusProfiler
+         * @return \Processus\Lib\Profiler\ProcessusProfiler
          */
         public function applicationProfilerEnd()
         {
@@ -100,17 +100,6 @@ namespace Processus\Lib\Profiler
         public function getProfilerStack()
         {
             return $this->_debugProfilerStack;
-        }
-
-        /**
-         * @return array
-         */
-        public function getDefaultInformation()
-        {
-            return array(
-                "appDuration"   => $this->_appDuration,
-                "profilerStack" => ProfilerStack::getProfilerStackData(),
-            );
         }
     }
 }
