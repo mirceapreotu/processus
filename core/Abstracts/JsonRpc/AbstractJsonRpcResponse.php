@@ -43,11 +43,14 @@ namespace Processus\Abstracts\JsonRpc
                         "request_time" => $this->_getServerParams()->getRequestTime()
                     );
 
+                    $currentUser = \Processus\ProcessusContext::getInstance()->getUserBo()->getFacebookUserMvo()->setDto(new \Application\Dto\FbBasicDto())->export();
+
                     $debugInfo = array(
-                        "memory"    => $memory,
-                        "app"       => $app,
-                        "system"    => $system,
-                        "profiling" => $this->_getProfiler()->getProfilerStack()
+                        "memory"      => $memory,
+                        "app"         => $app,
+                        "system"      => $system,
+                        "profiling"   => $this->_getProfiler()->getProfilerStack(),
+                        'currentUser' => $currentUser,
                     );
 
                     $response['debug'] = $debugInfo;
