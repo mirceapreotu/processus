@@ -6,9 +6,10 @@
  * Time: 10:39 AM
  * To change this template use File | Settings | File Templates.
  */
-namespace ${NS}{ 
-class ValidatorException
+namespace Processus\Exceptions
 {
+    class ValidatorException extends ProcessusException
+    {
 
-}
+    }
 }
