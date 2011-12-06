@@ -33,7 +33,7 @@ namespace Processus\Lib\System
          */
         public function getMemoryPeakUsage()
         {
-            return number_format(memory_get_peak_usage() / 1024 / 1024, 2);
+            return number_format(memory_get_peak_usage() / 1024, 2);
         }
 
         /**
@@ -41,7 +41,7 @@ namespace Processus\Lib\System
          */
         public function getMemoryUsage()
         {
-            return number_format(memory_get_usage() / 1024 / 1024, 2);
+            return number_format(memory_get_usage() / 1024, 2);
         }
     }
 }
