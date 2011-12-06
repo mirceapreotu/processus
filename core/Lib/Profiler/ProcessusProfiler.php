@@ -27,6 +27,9 @@ namespace Processus\Lib\Profiler
          */
         private $_debugProfilerStack = array();
 
+        /**
+         * @var bool
+         */
         private $_isEnded = FALSE;
 
         /**
