@@ -7,30 +7,20 @@
  */
 namespace Processus\Manager
 {
-
-    use Processus\Lib\Db\MySQL;
-
-    use Processus\Abstracts\Manager\ComConfig;
-
-    use Processus\Application;
-
-    use Processus\Abstracts\Manager\AbstractManager;
-
-    use Processus\Interfaces\InterfaceUser;
-
-    class UserManager extends AbstractManager
+    class UserManager extends \Processus\Abstracts\Manager\AbstractManager
     {
 
         /**
          * @param \Processus\Interfaces\InterfaceUser $user
          */
-        public function insertNewUser(InterfaceUser $user)
+        public function insertNewUser(\Processus\Interfaces\InterfaceUser $user)
         {
-            $com = new ComConfig();
+            $com = new \Processus\Abstracts\Manager\ComConfig();
 
             $com->setConnector($this->getProcessusContext()->getMasterMySql())
                 ->setSqlTableName("fbusers")
-                ->setSqlParams(array("id" => $user->getId(), "created" => $user->getCreated()));
+                ->setSqlParams(array("id"     => $user->getId(),
+                                    "created" => $user->getCreated()));
 
             $this->insert($com);
         }
@@ -45,13 +35,13 @@ namespace Processus\Manager
         {
             $friendsList = join(',', $friendsList);
 
-            $com = new ComConfig();
+            $com = new \Processus\Abstracts\Manager\ComConfig();
 
             $memId = "filterAppFriends_" . $this->getProcessusContext()
                 ->getUserBo()
                 ->getFacebookUserId();
 
-            $com->setConnector(MySQL::getInstance())
+            $com->setConnector(\Processus\Lib\Db\MySQL::getInstance())
                 ->setSqlStmt("SELECT fbu.id AS id FROM fbusers AS fbu WHERE fbu.id IN (" . $friendsList . ")")
                 ->setMemId($memId);
 
@@ -63,8 +53,8 @@ namespace Processus\Manager
          */
         private function insertFriends(array $friendsList)
         {
-            $com = new ComConfig();
-            $com->setConnector(MySQL::getInstance())
+            $com = new \Processus\Abstracts\Manager\ComConfig();
+            $com->setConnector(\Processus\Lib\Db\MySQL::getInstance())
                 ->setSqlTableName("fbuser_friends")
                 ->setSqlParams($friendsList);
 
@@ -82,7 +72,8 @@ namespace Processus\Manager
                 ->getFacebookClient()
                 ->getUserId();
 
-            foreach ($filteredFriends as $item) {
+            foreach ($filteredFriends as $item)
+            {
                 $items = array();
 
                 $items['from_fbuser_id'] = $fbuserId;
