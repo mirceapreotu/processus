@@ -10,8 +10,16 @@ namespace Processus\Interfaces
 {
     interface InterfaceUser extends InterfaceVo
     {
+        /**
+         * @abstract
+         * @return int
+         */
         public function getId();
         public function getCreated();
+        /**
+         * @abstract
+         * @return int
+         */
         public function getFacebookId();
         public function getFullName();
         public function getFirstName();
