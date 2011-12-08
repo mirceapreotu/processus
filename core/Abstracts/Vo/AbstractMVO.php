@@ -62,6 +62,14 @@ namespace Processus\Abstracts\Vo {
         }
 
         /**
+         * @return int
+         */
+        public function valueSize()
+        {
+            return sizeof($this->_data);
+        }
+
+        /**
          * @param string $mId
          *
          * @return AbstractMVO
