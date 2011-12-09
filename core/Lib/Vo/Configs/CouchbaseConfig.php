@@ -45,6 +45,14 @@ namespace Processus\Lib\Vo\Configs
         }
 
         /**
+         * @return mixed
+         */
+        public function getCouchbasePortList()
+        {
+            return $this->_data->couchbasePorts;
+        }
+
+        /**
          * @return array|mixed
          */
         private function getCouchbaseSalt()

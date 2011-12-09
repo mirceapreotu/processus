@@ -22,6 +22,12 @@ namespace Processus\Manager
                 ->setSqlParams(array("id"     => $user->getId(),
                                     "created" => $user->getCreated()));
 
+
+            $feedVo = new \Application\Vo\Feed\BaseFeedVo();
+            $feedVo->setValueByKey('fbUserId', $user->getId());
+            $manager = new \Application\Manager\Feed\NewUser();
+            $manager->setFeedItemData($feedVo);
+
             $this->insert($com);
         }
 

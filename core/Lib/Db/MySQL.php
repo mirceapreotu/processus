@@ -13,7 +13,7 @@ namespace Processus\Lib\Db
         private static $_instance;
 
         /**
-         * @var
+         * @var \Zend\Db\Adapter\AbstractAdapter
          */
         public $dbh;
 
@@ -85,7 +85,7 @@ namespace Processus\Lib\Db
 
 
         /**
-         * @param null $sql
+         * @param string $sql
          * @param array $args
          *
          * @return \Zend\Db\Statement\Pdo

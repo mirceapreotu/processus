@@ -32,6 +32,7 @@ namespace Processus\Lib\Db
 
         /**
          * @param $key
+         *
          * @return mixed
          */
         public function fetch($key = "foobar")
@@ -57,7 +58,8 @@ namespace Processus\Lib\Db
 
         /**
          * @param string $key
-         * @param mixed $value
+         * @param mixed  $value
+         *
          * @return Memcached ErrorCode
          */
         public function insert($key = "foobar", $value = array(), $expiredTime = 1)
@@ -68,6 +70,7 @@ namespace Processus\Lib\Db
 
         /**
          * @param array $keys
+         *
          * @return mixed
          */
         public function getMulipleByKey(array $keys)
@@ -84,7 +87,16 @@ namespace Processus\Lib\Db
         }
 
         /**
+         * @return bool
+         */
+        public function flush()
+        {
+            return $this->_memcachedClient->flush();
+        }
+
+        /**
          * @param $key
+         *
          * @return bool
          */
         public function delete($key)
