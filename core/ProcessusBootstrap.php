@@ -161,11 +161,14 @@ namespace Processus
         /**
          * @static
          *
-         * @param $errorObj
+         * @param $errno
+         * @param $errstr
+         * @param $errfile
+         * @param $errline
          *
-         * @return bool
+         * @return mixed
          */
-        public static function handleError($errorObj)
+        public static function handleError($errno, $errstr, $errfile, $errline)
         {
             $lastError = error_get_last();
 
@@ -173,7 +176,7 @@ namespace Processus
             $returnValue['result'] = array();
             $returnValue['error']  = array();
 
-            if ($errorObj instanceof \Processus\Abstracts\AbstractException) {
+            if ($errno instanceof \Processus\Abstracts\AbstractException) {
 
                 header('HTTP/1.1 500 Internal Server Error');
 
@@ -181,17 +184,17 @@ namespace Processus
                 $user  = array();
 
                 $debug['trigger']      = "Manual Exception";
-                $debug['file']         = $errorObj->getFile();
-                $debug['line']         = $errorObj->getLine();
-                $debug['message']      = $errorObj->getMessage();
-                $debug['trace']        = $errorObj->getTraceAsString();
-                $debug['method']       = $errorObj->getMethod();
-                $debug['extendedData'] = $errorObj->getExtendData();
+                $debug['file']         = $errno->getFile();
+                $debug['line']         = $errno->getLine();
+                $debug['message']      = $errno->getMessage();
+                $debug['trace']        = $errno->getTraceAsString();
+                $debug['method']       = $errno->getMethod();
+                $debug['extendedData'] = $errno->getExtendData();
 
-                $user['message'] = $errorObj->getUserMessage();
-                $user['title']   = $errorObj->getUserMessageTitle();
-                $user['code']    = $errorObj->getUserErrorCode();
-                $user['details'] = $errorObj->getUserDetailError();
+                $user['message'] = $errno->getUserMessage();
+                $user['title']   = $errno->getUserMessageTitle();
+                $user['code']    = $errno->getUserErrorCode();
+                $user['details'] = $errno->getUserDetailError();
 
                 $lastError['data'] = $lastError;
 
@@ -214,6 +217,10 @@ namespace Processus
                 $error['trigger']   = "Auto Exception";
                 $error['backtrace'] = debug_backtrace();
                 $error['errorData'] = $lastError;
+                $error['params']    = array("number"  => $errno,
+                                            "message" => $errstr,
+                                            "file"    => $errfile,
+                                            "line"    => $errline);
 
                 $returnValue['error'] = $error;
 
