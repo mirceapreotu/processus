@@ -187,9 +187,14 @@ namespace Processus\Lib\Db
                 $_cond = array();
 
                 foreach ($conditions as $key => $val) {
-                    $placeholder_key = ':_' . $key;
-                    $_cond[] = $key . '=' . $placeholder_key;
-                    $_values[$placeholder_key] = $val;
+                    if (is_null($val)) {
+                        $_cond[] = $key;
+                    }
+                    else {
+                        $placeholder_key = ':_' . $key;
+                        $_cond[] = $key . '=' . $placeholder_key;
+                        $_values[$placeholder_key] = $val;
+                    }
                 }
 
                 // build sql
