@@ -20,7 +20,7 @@ namespace Processus\Manager
             $com->setConnector($this->getProcessusContext()->getMasterMySql())
                 ->setSqlTableName("fbusers")
                 ->setSqlParams(array("id"     => $user->getId(),
-                                    "created" => $user->getCreated()));
+                                    "created" => time()));
 
 
             $feedVo = new \Application\Vo\Feed\BaseFeedVo();
