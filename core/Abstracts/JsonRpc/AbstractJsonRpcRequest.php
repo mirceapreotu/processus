@@ -39,6 +39,11 @@ namespace Processus\Abstracts\JsonRpc
          */
         protected $_extended;
 
+        /**
+         * @var array
+         */
+        protected $_validatorList;
+
         // #########################################################
         
 
