@@ -15,6 +15,11 @@ namespace Processus\Interfaces
          * @return int
          */
         public function getId();
+
+        /**
+         * @abstract
+         * @return int
+         */
         public function getCreated();
         /**
          * @abstract
