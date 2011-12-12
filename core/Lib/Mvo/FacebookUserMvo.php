@@ -27,7 +27,7 @@ namespace Processus\Lib\Mvo
         /**
          * @param $mId
          *
-         * @return FacebookUserMvo
+         * @return \Processus\Lib\Mvo\FacebookUserMvo
          */
         public function setMemId($mId)
         {
@@ -66,7 +66,7 @@ namespace Processus\Lib\Mvo
         /**
          * @param bool $firstTime
          *
-         * @return FacebookUserMvo
+         * @return \Processus\Lib\Mvo\FacebookUserMvo
          */
         public function setFirstTime(\boolean $firstTime)
         {
