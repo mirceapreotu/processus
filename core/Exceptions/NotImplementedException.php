@@ -6,9 +6,9 @@
  * Time: 1:57 AM
  * To change this template use File | Settings | File Templates.
  */
-namespace ${NS}{ 
-class NotImplementedException
+namespace Processus\Exceptions
 {
-
-}
+    class NotImplementedException extends ProcessusException
+    {
+    }
 }
