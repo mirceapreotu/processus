@@ -8,16 +8,11 @@
 
 namespace Processus\Lib\Facebook
 {
-
-    use Processus\Abstracts\AbstractClass;
-
-    use Processus\Contrib\Facebook\Facebook;
-
-    class FacebookClient extends AbstractClass
+    class FacebookClient extends \Processus\Abstracts\AbstractClass
     {
 
         /**
-         * @var Facebook
+         * @var \Processus\Contrib\Facebook\Facebook
          */
         private $_facebookSdk;
 
@@ -50,7 +45,16 @@ namespace Processus\Lib\Facebook
         }
 
         /**
-         * @return Ambigous <\Processus\multitype:, multitype:>
+         * @return mixed
+         */
+        public function getAppId()
+        {
+            $fbConfig = $this->getFacebookClientConfig();
+            return $fbConfig['appId'];
+        }
+
+        /**
+         * @return mixed
          */
         protected function getFacebookClientConfig()
         {
@@ -64,7 +68,7 @@ namespace Processus\Lib\Facebook
         }
 
         /**
-         * @return Ambigous <\Processus\Contrib\Facebook\mixed, mixed>
+         * @return array|mixed
          */
         public function getUserFacebookData()
         {
@@ -92,7 +96,7 @@ namespace Processus\Lib\Facebook
         }
 
         /**
-         * @return \Processus\Lib\Facebook\mixed
+         * @return mixed
          */
         public function getUserFriends()
         {
@@ -102,8 +106,7 @@ namespace Processus\Lib\Facebook
 
             $facebookFriends = $defaultCache->fetch($memKey);
 
-            if (!$facebookFriends)
-            {
+            if (!$facebookFriends) {
                 $rawData         = $this->getFacebookSdk()->api("/me/friends");
                 $facebookFriends = $rawData['data'];
 
@@ -119,7 +122,7 @@ namespace Processus\Lib\Facebook
         protected function getFacebookSdk()
         {
             if (!$this->_facebookSdk) {
-                $this->_facebookSdk = new Facebook($this->getFacebookClientConfig());
+                $this->_facebookSdk = new \Processus\Contrib\Facebook\Facebook($this->getFacebookClientConfig());
             }
 
             return $this->_facebookSdk;
@@ -144,7 +147,7 @@ namespace Processus\Lib\Facebook
         /**
          * @param string $facebookUserId
          *
-         * @return Ambigous <\Processus\Contrib\Facebook\mixed, mixed>
+         * @return array|mixed
          */
         public function getUserDataById(string $facebookUserId)
         {
@@ -157,8 +160,7 @@ namespace Processus\Lib\Facebook
          */
         public function getOpenGraphClient()
         {
-            if ($this->_openGraphClient)
-            {
+            if ($this->_openGraphClient) {
                 $this->_openGraphClient = new \Processus\Lib\Facebook\Api\OpenGraph();
             }
 
