@@ -13,7 +13,7 @@ namespace Processus\Abstracts
         /**
          * @return array|mixed
          */
-        protected function getValidationData()
+        public function getValidationData()
         {
             return $this->getValueByKey('validationData');
         }
