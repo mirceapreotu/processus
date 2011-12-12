@@ -98,7 +98,7 @@ namespace Processus\Lib\Bo
         }
 
         /**
-         * @return boolean
+         * @return bool|string
          */
         public function isAuthorized()
         {
@@ -110,20 +110,23 @@ namespace Processus\Lib\Bo
 
                 if (!$userData) {
 
-                    $fbClient          = $this->getProcessusContext()->getFacebookClient();
-                    $fbData            = $fbClient->getUserDataById($fbUserId);
+                    $fbClient = $this->getProcessusContext()->getFacebookClient();
+                    $fbData   = $fbClient->getUserDataById($fbUserId);
+
                     $fbData['created'] = time();
                     $this->getFacebookUserMvo()->setData($fbData)
                         ->setMemId($this->getFacebookUserId())
                         ->saveInMem();
 
                     $this->getUserManager()->insertNewUser($this->getFacebookUserMvo());
+
                 }
 
                 return TRUE;
             }
-            else {
-                return FALSE;
+            else
+            {
+                return $this->getProcessusContext()->getFacebookClient()->getLoginUrl();
             }
         }
     }

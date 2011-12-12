@@ -15,10 +15,12 @@ namespace Processus\Lib\Auth
 
         /**
          * @param $authData
+         *
+         * @return bool|string
          */
-        public function setAuthData ($authData)
+        public function setAuthData($authData)
         {
-            $this->_isAuth = $this->getProcessusContext()
+            return $this->_isAuth = $this->getProcessusContext()
                 ->getUserBo()
                 ->isAuthorized();
         }
@@ -26,7 +28,7 @@ namespace Processus\Lib\Auth
         /**
          * @return mixed
          */
-        public function isAuthorized ()
+        public function isAuthorized()
         {
             return $this->_isAuth;
         }
