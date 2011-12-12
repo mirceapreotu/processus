@@ -154,5 +154,18 @@ namespace Processus\Abstracts
             $this->message = $message;
             return $this;
         }
+
+        /**
+         * @param $message
+         * @param $code
+         * @param $severity
+         * @param $filename
+         * @param $lineno
+         * @param $previous
+         */
+        public function __construct($message = "", $code = "PRC-1000", $severity = "10", $filename = __FILE__, $lineno = __LINE__, $previous)
+        {
+            parent::__construct($message, $code, $severity, $filename, $lineno, $previous);
+        }
     }
 }
