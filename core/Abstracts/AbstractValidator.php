@@ -8,10 +8,8 @@
  */
 namespace Processus\Abstracts
 {
-    abstract class AbstractValidator extends \Processus\Abstracts\Vo\AbstractVO
+    abstract class AbstractValidator extends \Processus\Abstracts\Vo\AbstractVO implements \Processus\Interfaces\InterfaceValidator
     {
-        abstract public function validate();
-
         /**
          * @return array|mixed
          */
@@ -29,6 +27,14 @@ namespace Processus\Abstracts
         {
             $this->setValueByKey('validationData', $validationData);
             return $this;
+        }
+
+        /**
+         * @return boolean
+         */
+        public function isValid()
+        {
+            throw new \Processus\Exceptions\NotImplementedException('Method not implemented!', 'PRC-1001', '', __FILE__, __LINE__);
         }
     }
 }
