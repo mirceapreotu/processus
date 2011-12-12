@@ -6,9 +6,9 @@
  * Time: 1:53 AM
  * To change this template use File | Settings | File Templates.
  */
-namespace ${NS}{ 
-class BaseValidator
+namespace Processus\Base
 {
-
-}
+    class BaseValidator extends \Processus\Abstracts\AbstractValidator
+    {
+    }
 }
