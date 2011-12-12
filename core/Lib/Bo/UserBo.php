@@ -90,6 +90,14 @@ namespace Processus\Lib\Bo
         }
 
         /**
+         * @return int
+         */
+        public function getFacebookHighScore()
+        {
+            return 1;
+        }
+
+        /**
          * @return boolean
          */
         public function isAuthorized()
