@@ -162,8 +162,7 @@ namespace Processus\Abstracts\Manager
          */
         public function getSqlStmt()
         {
-            if(strlen($this->_sqlStmt) > 1)
-            {
+            if (strlen($this->_sqlStmt) <= 1) {
                 throw new ComConfigException('SQL Statement not available');
             }
             return $this->_sqlStmt;
@@ -177,10 +176,6 @@ namespace Processus\Abstracts\Manager
          */
         public function getSqlParams()
         {
-            if(!$this->_sqlParams)
-            {
-                throw new ComConfigException("Sql Params not available!");
-            }
             return $this->_sqlParams;
         }
 
@@ -203,8 +198,7 @@ namespace Processus\Abstracts\Manager
          */
         public function getConnector()
         {
-            if(!$this->_connector)
-            {
+            if (!$this->_connector) {
                 throw new ComConfigException('Connector not available');
             }
             return $this->_connector;
