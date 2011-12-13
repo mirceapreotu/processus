@@ -55,6 +55,10 @@ namespace Processus\Lib\Bo
             $fbClient      = $this->getProcessusContext()->getFacebookClient();
             $friendsIdList = $fbClient->getFriendsIdList();
 
+            if (count($friendsIdList) <= 0) {
+                return FALSE;
+            }
+
             // match appUsers with friendsList from facebook
             /** @var $userManager UserManager */
             $userManager   = $this->getUserManager();
