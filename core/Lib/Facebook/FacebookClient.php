@@ -122,7 +122,7 @@ namespace Processus\Lib\Facebook
         protected function getFacebookSdk()
         {
             if (!$this->_facebookSdk) {
-                $this->_facebookSdk = new \Processus\Contrib\Facebook\Facebook($this->getFacebookClientConfig());
+                $this->_facebookSdk = new \Processus\Contrib\Facebook\Facebook($this->getFacebookClientConfig()->toArray());
             }
 
             return $this->_facebookSdk;
