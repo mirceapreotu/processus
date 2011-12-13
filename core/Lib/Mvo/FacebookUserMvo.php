@@ -129,6 +129,25 @@ namespace Processus\Lib\Mvo
         {
             return $this->getValueByKey('verified');
         }
+
+        /**
+         * @return array|mixed
+         */
+        public function getAccessToken()
+        {
+            return $this->getValueByKey('accessToken');
+        }
+
+        /**
+         * @param string $accessToken
+         *
+         * @return \Processus\Lib\Mvo\FacebookUserMvo
+         */
+        public function setAccessToken(\string $accessToken)
+        {
+            $this->setValueByKey('accessToken', $accessToken);
+            return $this;
+        }
     }
 
 }
