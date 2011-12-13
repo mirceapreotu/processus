@@ -17,6 +17,11 @@ namespace Processus
         private $_applicationContext;
 
         /**
+         * @var array
+         */
+        private $_errorStack = array();
+
+        /**
          * @return ProcessusContext
          */
         public function getApplication()
@@ -194,7 +199,7 @@ namespace Processus
 
                 $returnValue['error'] = $error;
 
-                $this->getApplication()->getErrorLogger()->log(json_encode($returnValue), 1);
+                $this->getApplication()->getErrorLogger()->log(var_export($returnValue, true), 1);
 
                 echo json_encode($returnValue);
                 return;
@@ -212,7 +217,7 @@ namespace Processus
 
                 $returnValue['error'] = $error;
 
-                $this->getApplication()->getErrorLogger()->log(json_encode($returnValue), 1);
+                $this->getApplication()->getErrorLogger()->log(var_export($error, true), 1, $error);
 
                 echo json_encode($returnValue);
                 return;
