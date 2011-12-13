@@ -5,12 +5,10 @@ namespace Processus
 
     require_once 'helpers.php';
 
-    use Processus\Interfaces\InterfaceBootstrap;
-
     /**
      *
      */
-    class ProcessusBootstrap implements InterfaceBootstrap
+    class ProcessusBootstrap implements \Processus\Interfaces\InterfaceBootstrap
     {
 
         /**
@@ -49,7 +47,7 @@ namespace Processus
 
                 // setup autoloader
                 spl_autoload_register(array(
-                                           'Processus\ProcessusBootstrap',
+                                           $this,
                                            '_autoLoad'
                                       ));
 
@@ -58,9 +56,22 @@ namespace Processus
 
                 error_reporting(E_ALL | E_STRICT);
 
-                $this->getApplication()->getErrorLogger()->registerErrorHandler();
+                set_error_handler(array(
+                                       $this,
+                                       'handleError'
+                                  ));
 
-                ini_set('display_errors', 'Off');
+                register_shutdown_function(array(
+                                                $this,
+                                                'handleError'
+                                           ));
+
+                set_exception_handler(array(
+                                           $this,
+                                           'handleError'
+                                      ));
+
+                //ini_set('display_errors', 'Off');
 
                 // cache current include path
                 $cachedIncludePath = get_include_path();
@@ -102,14 +113,13 @@ namespace Processus
         }
 
         /**
-         * Custom class auto loader
          * @static
          *
-         * @param string $className
+         * @param $className
          *
-         * @return void
+         * @throws \Zend\Di\Exception\ClassNotFoundException
          */
-        public static function _autoLoad($className)
+        public function _autoLoad($className)
         {
             $rootPath = NULL;
 
@@ -134,24 +144,22 @@ namespace Processus
 
             $classFile = $rootPath . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $pathParts) . '.php';
 
-            if (!file_exists($classFile))
-            {
-                throw new \Zend\Di\Exception\ClassNotFoundException();
+            if (!file_exists($classFile)) {
+                throw new \Zend\Di\Exception\ClassNotFoundException('Class not found!');
             }
 
             require_once $classFile;
         }
 
         /**
-         * @static
-         *
          * @param $erroObj
          *
          * @return mixed
          */
-        public static function handleError($erroObj)
+        public function handleError($erroObj)
         {
-            $lastError = error_get_last();
+            $lastError  = error_get_last();
+            $errorLevel = error_reporting();
 
             $returnValue           = array();
             $returnValue['result'] = array();
@@ -186,6 +194,8 @@ namespace Processus
 
                 $returnValue['error'] = $error;
 
+                $this->getApplication()->getErrorLogger()->log(json_encode($returnValue), 1);
+
                 echo json_encode($returnValue);
                 return;
             }
@@ -202,11 +212,11 @@ namespace Processus
 
                 $returnValue['error'] = $error;
 
+                $this->getApplication()->getErrorLogger()->log(json_encode($returnValue), 1);
+
                 echo json_encode($returnValue);
                 return;
             }
         }
     }
 }
-
-?>

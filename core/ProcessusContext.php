@@ -86,7 +86,7 @@ namespace Processus
         public function getProfilingLogger()
         {
             if (!$this->_profilingLogger) {
-                $streamWriter           = new \Zend\Log\Writer\Stream(PATH_ROOT . 'logs/application/profiling/zend.profiling.log');
+                $streamWriter           = new \Zend\Log\Writer\Stream(PATH_ROOT . '/logs/application/profiling/zend.profiling.log');
                 $this->_profilingLogger = new \Zend\Log\Logger($streamWriter);
             }
 
