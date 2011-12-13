@@ -47,39 +47,23 @@ namespace Processus
                 define('PATH_APP', PATH_ROOT . '/application/php');
                 define('PATH_PUBLIC', PATH_ROOT . '/htdocs');
 
-                // display erros for the following part
-                ini_set('display_errors', 'On');
-
-                error_reporting(E_ALL | E_STRICT);
-
-                set_error_handler(array(
-                                       'Processus\ProcessusBootstrap',
-                                       'handleError'
-                                  ));
-
-                register_shutdown_function(array(
-                                                'Processus\ProcessusBootstrap',
-                                                'handleError'
-                                           ));
-
-                set_exception_handler(array(
-                                           'Processus\ProcessusBootstrap',
-                                           'handleError'
-                                      ));
-
-                ini_set('display_errors', 'Off');
-
-                // cache current include path
-                $cachedIncludePath = get_include_path();
-
-                // set new include path
-                //                 set_include_path(PATH_CORE . '/Contrib' . PATH_SEPARATOR . PATH_CORE . PATH_APP);
-
                 // setup autoloader
                 spl_autoload_register(array(
                                            'Processus\ProcessusBootstrap',
                                            '_autoLoad'
                                       ));
+
+                // display erros for the following part
+                ini_set('display_errors', 'On');
+
+                error_reporting(E_ALL | E_STRICT);
+
+                $this->getApplication()->getErrorLogger()->registerErrorHandler();
+
+                ini_set('display_errors', 'Off');
+
+                // cache current include path
+                $cachedIncludePath = get_include_path();
 
                 $registry = $this->getApplication()->getRegistry();
 
@@ -110,11 +94,10 @@ namespace Processus
                 return true;
 
             }
-            catch (\Exception $e) {
-
+            catch (\Exception $e)
+            {
                 echo json_encode($e);
-                //die("" . __METHOD__ . " FAILED.");
-
+                exit;
             }
         }
 
@@ -151,8 +134,9 @@ namespace Processus
 
             $classFile = $rootPath . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $pathParts) . '.php';
 
-            if (!file_exists($classFile)) {
-                return;
+            if (!file_exists($classFile))
+            {
+                throw new \Zend\Di\Exception\ClassNotFoundException();
             }
 
             require_once $classFile;
