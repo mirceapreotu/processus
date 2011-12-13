@@ -34,6 +34,11 @@ namespace Processus\Abstracts\JsonRpc
             if ($this->validateConfigKey('validClasses') && in_array($this->getRequest()->getClass(), $this->getConfigValue('validClasses'))) {
                 return TRUE;
             }
+            else
+            {
+                $exception = new \Processus\Exceptions\JsonRpc\ValidJsonRpcRequest("Is not a valid class!", "PRC-2001_" . __METHOD__, "10", __FILE__, __LINE__);
+                throw $exception;
+            }
 
             return FALSE;
         }
@@ -48,6 +53,11 @@ namespace Processus\Abstracts\JsonRpc
         {
             if ($this->hasNamespace() && $this->isValidClass()) {
                 return TRUE;
+            }
+            else
+            {
+                $exception = new \Processus\Exceptions\JsonRpc\ValidJsonRpcRequest("Is not a valid request!", "PRC-2000_" . __METHOD__, "10", __FILE__, __LINE__);
+                throw $exception;
             }
 
             return FALSE;
