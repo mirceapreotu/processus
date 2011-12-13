@@ -24,11 +24,11 @@ namespace Processus\Abstracts\Manager
         private $_expiredTime = 1;
 
         /**
-         * @var InterfaceDatabase
+         * @var \Processus\Interfaces\InterfaceDatabase
          */
-        private $_connector;
+        private $_connector = null;
 
-        private $_sqlTableName = "";
+        private $_sqlTableName = null;
 
         // #########################################################
 
@@ -58,7 +58,7 @@ namespace Processus\Abstracts\Manager
         /**
          * @param $_sqlConditions
          *
-         * @return ComConfig
+         * @return \Processus\Abstracts\Manager\ComConfig
          */
         public function setSqlConditions($_sqlConditions)
         {
@@ -71,7 +71,8 @@ namespace Processus\Abstracts\Manager
 
         /**
          * @param $_sqlTableName
-         * @return ComConfig
+         *
+         * @return \Processus\Abstracts\Manager\ComConfig
          */
         public function setSqlTableName($_sqlTableName)
         {
@@ -161,6 +162,10 @@ namespace Processus\Abstracts\Manager
          */
         public function getSqlStmt()
         {
+            if(strlen($this->_sqlStmt) > 1)
+            {
+                throw new ComConfigException('SQL Statement not available');
+            }
             return $this->_sqlStmt;
         }
 
@@ -172,6 +177,10 @@ namespace Processus\Abstracts\Manager
          */
         public function getSqlParams()
         {
+            if(!$this->_sqlParams)
+            {
+                throw new ComConfigException("Sql Params not available!");
+            }
             return $this->_sqlParams;
         }
 
@@ -190,10 +199,14 @@ namespace Processus\Abstracts\Manager
 
 
         /**
-         * @return InterfaceDatabase
+         * @return \Processus\Interfaces\InterfaceDatabase
          */
         public function getConnector()
         {
+            if(!$this->_connector)
+            {
+                throw new ComConfigException('Connector not available');
+            }
             return $this->_connector;
         }
 
@@ -203,7 +216,7 @@ namespace Processus\Abstracts\Manager
         /**
          * @param $_fromCache
          *
-         * @return ComConfig
+         * @return \Processus\Abstracts\Manager\ComConfig
          */
         public function setFromCache($_fromCache)
         {
@@ -217,7 +230,7 @@ namespace Processus\Abstracts\Manager
         /**
          * @param string $_sqlStmt
          *
-         * @return ComConfig
+         * @return \Processus\Abstracts\Manager\ComConfig
          */
         public function setSqlStmt(string $_sqlStmt)
         {
@@ -231,7 +244,7 @@ namespace Processus\Abstracts\Manager
         /**
          * @param array $_sqlParams
          *
-         * @return ComConfig
+         * @return \Processus\Abstracts\Manager\ComConfig
          */
         public function setSqlParams(array $_sqlParams)
         {
@@ -245,7 +258,7 @@ namespace Processus\Abstracts\Manager
         /**
          * @param $_expiredTime
          *
-         * @return ComConfig
+         * @return \Processus\Abstracts\Manager\ComConfig
          */
         public function setExpiredTime($_expiredTime)
         {

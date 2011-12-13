@@ -6,9 +6,10 @@
  * Time: 1:47 PM
  * To change this template use File | Settings | File Templates.
  */
-namespace ${NS}{ 
-class ComConfigException
+namespace Processus\Abstracts\Manager
 {
+    class ComConfigException extends \Processus\Exceptions\ProcessusException
+    {
 
-}
+    }
 }
