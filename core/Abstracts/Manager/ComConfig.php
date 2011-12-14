@@ -8,7 +8,6 @@ namespace Processus\Abstracts\Manager
      */
     class ComConfig implements \Processus\Interfaces\InterfaceComConfig
     {
-
         private $_memId;
 
         private $_classPath;
@@ -19,7 +18,7 @@ namespace Processus\Abstracts\Manager
 
         private $_sqlParams = array();
 
-        private $_sqlConditions = array();
+        private $_sqlUpdateConditions = array();
 
         private $_expiredTime = 1;
 
@@ -34,11 +33,11 @@ namespace Processus\Abstracts\Manager
 
 
         /**
-         * @return the $_sqlConditions
+         * @return the $_sqlUpdateConditions
          */
-        public function getSqlConditions()
+        public function getSqlUpdateConditions()
         {
-            return $this->_sqlConditions;
+            return $this->_sqlUpdateConditions;
         }
 
         // #########################################################
@@ -56,13 +55,12 @@ namespace Processus\Abstracts\Manager
 
 
         /**
-         * @param $_sqlConditions
-         *
+         * @param $_sqlUpdateConditions
          * @return \Processus\Abstracts\Manager\ComConfig
          */
-        public function setSqlConditions($_sqlConditions)
+        public function setSqlUpdateConditions($_sqlUpdateConditions)
         {
-            $this->_sqlConditions = $_sqlConditions;
+            $this->_sqlUpdateConditions = $_sqlUpdateConditions;
             return $this;
         }
 
@@ -71,7 +69,6 @@ namespace Processus\Abstracts\Manager
 
         /**
          * @param $_sqlTableName
-         *
          * @return \Processus\Abstracts\Manager\ComConfig
          */
         public function setSqlTableName($_sqlTableName)
@@ -84,7 +81,7 @@ namespace Processus\Abstracts\Manager
 
 
         /**
-         * @return string
+         * @return mixed
          */
         public function getClassPath()
         {

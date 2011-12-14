@@ -149,7 +149,7 @@ namespace Processus\Abstracts\Manager
          */
         protected function update(\Processus\Interfaces\InterfaceComConfig $com)
         {
-            return $com->getConnector()->update($com->getSqlTableName(), $com->getSqlParams(), $com->getSqlConditions());
+            return $com->getConnector()->update($com->getSqlTableName(), $com->getSqlParams(), $com->getSqlUpdateConditions());
         }
 
         // #########################################################
