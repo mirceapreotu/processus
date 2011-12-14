@@ -172,7 +172,7 @@ namespace Processus\Lib\Db
          */
         public function update($tableName = NULL, $values = array(), $conditions = array())
         {
-            if (!is_null($tableName) && !empty($values) && array_key_exists('id', $conditions)) {
+            if (!is_null($tableName) && !empty($values) && ! empty($conditions)) {
                 // prepare placeholders and values
                 $_set = array();
                 $_values = array();
