@@ -63,12 +63,20 @@ namespace Processus\Abstracts\JsonRpc
 
                 $currentUser = \Processus\ProcessusContext::getInstance()->getUserBo()->getFacebookUserMvo()->setDto(new \Application\Dto\FbBasicDto())->export();
 
+                $requireList = \Processus\ProcessusContext::getInstance()->getBootstrap()->getFilesRequireList();
+
+                $fileStack = array(
+                    'list'  => $requireList,
+                    'total' => count($requireList)
+                );
+
                 $debugInfo = array(
                     "memory"      => $memory,
                     "app"         => $app,
                     "system"      => $system,
                     "profiling"   => $this->_getProfiler()->getProfilerStack(),
                     'currentUser' => $currentUser,
+                    'fileStack'   => $requireList
                 );
 
                 $response['debug'] = $debugInfo;
