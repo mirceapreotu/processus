@@ -22,15 +22,21 @@ namespace Processus
         private $_errorStack = array();
 
         /**
-         * @return ProcessusContext
+         * @var array
          */
-        public function getApplication()
+        private $_filesRequireFiles = array();
+
+        /**
+         * @var float
+         */
+        private $_startTime;
+
+        /**
+         * @return array
+         */
+        public function getFilesRequireList()
         {
-            if (!$this->_applicationContext) {
-                $this->_applicationContext = new ProcessusContext();
-                \Processus\Lib\Profiler\ProcessusProfiler::getInstance()->applicationProfilerStart();
-            }
-            return $this->_applicationContext;
+            return $this->_filesRequireFiles;
         }
 
         /**
@@ -44,6 +50,8 @@ namespace Processus
         public function init($mode = 'DEFAULT')
         {
             try {
+
+                $this->_startTime = microtime(TRUE);
 
                 define('PATH_ROOT', realpath(dirname(__FILE__) . '/../../../'));
                 define('PATH_CORE', PATH_ROOT . '/library/Processus/core');
@@ -81,7 +89,8 @@ namespace Processus
                 // cache current include path
                 $cachedIncludePath = get_include_path();
 
-                $registry = $this->getApplication()->getRegistry();
+                ProcessusContext::getInstance()->setBootstrap($this)->getProfiler()->applicationProfilerStart();
+                $registry = ProcessusContext::getInstance()->getRegistry();
 
                 // setup locale
                 setlocale(LC_ALL, $registry->getConfig('locale')->default->lc_all);
@@ -153,15 +162,22 @@ namespace Processus
                 throw new \Zend\Di\Exception\ClassNotFoundException('Class not found!');
             }
 
+            $currentTime = microtime(TRUE) - $this->_startTime;
+            $fileData = array(
+                'file' => $classFile,
+                'time' => $currentTime * 1000,
+            );
+            $this->_filesRequireFiles[] = $fileData;
+
             require_once $classFile;
         }
 
         /**
-         * @param $erroObj
+         * @param $errorObj
          *
          * @return mixed
          */
-        public function handleError($erroObj)
+        public function handleError($errorObj)
         {
             $lastError  = error_get_last();
             $errorLevel = error_reporting();
@@ -170,7 +186,7 @@ namespace Processus
             $returnValue['result'] = array();
             $returnValue['error']  = array();
 
-            if ($erroObj instanceof \Processus\Abstracts\AbstractException) {
+            if ($errorObj instanceof \Processus\Abstracts\AbstractException) {
 
                 header('HTTP/1.1 500 Internal Server Error');
 
@@ -178,17 +194,17 @@ namespace Processus
                 $user  = array();
 
                 $debug['trigger']      = "Manual Exception";
-                $debug['file']         = $erroObj->getFile();
-                $debug['line']         = $erroObj->getLine();
-                $debug['message']      = $erroObj->getMessage();
-                $debug['trace']        = $erroObj->getTraceAsString();
-                $debug['method']       = $erroObj->getMethod();
-                $debug['extendedData'] = $erroObj->getExtendData();
+                $debug['file']         = $errorObj->getFile();
+                $debug['line']         = $errorObj->getLine();
+                $debug['message']      = $errorObj->getMessage();
+                $debug['trace']        = $errorObj->getTraceAsString();
+                $debug['method']       = $errorObj->getMethod();
+                $debug['extendedData'] = $errorObj->getExtendData();
 
-                $user['message'] = $erroObj->getUserMessage();
-                $user['title']   = $erroObj->getUserMessageTitle();
-                $user['code']    = $erroObj->getUserErrorCode();
-                $user['details'] = $erroObj->getUserDetailError();
+                $user['message'] = $errorObj->getUserMessage();
+                $user['title']   = $errorObj->getUserMessageTitle();
+                $user['code']    = $errorObj->getUserErrorCode();
+                $user['details'] = $errorObj->getUserDetailError();
 
                 $lastError['data'] = $lastError;
 
@@ -213,7 +229,7 @@ namespace Processus
                 $error['trigger']   = "Auto Exception";
                 $error['backtrace'] = debug_backtrace();
                 $error['errorData'] = $lastError;
-                $error['params']    = $erroObj;
+                $error['params']    = $errorObj;
 
                 $returnValue['error'] = $error;
 
