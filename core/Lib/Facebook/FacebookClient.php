@@ -73,7 +73,20 @@ namespace Processus\Lib\Facebook
         public function getUserFacebookData()
         {
             if (!$this->_userFacebookData) {
-                $this->_userFacebookData = $this->getFacebookSdk()->api("/me");
+
+                try
+                {
+
+                    $this->_userFacebookData = $this->getFacebookSdk()->api("/me");
+
+                }
+                catch (\Exception $error)
+                {
+                    $this->getProcessusContext()->getErrorLogger()->log('User API ME FAILED', 100, $this->_userFacebookData);
+                    $this->getProcessusContext()->getErrorLogger()->log('Error', 100, $error);
+
+                    throw $error;
+                }
             }
 
             return $this->_userFacebookData;
@@ -151,7 +164,14 @@ namespace Processus\Lib\Facebook
          */
         public function getUserDataById(string $facebookUserId)
         {
-            $userData = $this->getFacebookSdk()->api("/" . $facebookUserId);
+            try {
+                $userData = $this->getFacebookSdk()->api("/" . $facebookUserId);
+            }
+            catch (\Exception $error)
+            {
+                throw $error;
+            }
+
             return $userData;
         }
 
