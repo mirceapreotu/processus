@@ -107,13 +107,12 @@ namespace Processus\Lib\Bo
         public function isAuthorized()
         {
             $fbUserId = $this->getFacebookUserId();
-
             if ($fbUserId) {
 
                 $userData = $this->getFacebookUserMvo()->getData();
 
-                if (!$userData) {
-
+                if (is_null($userData->id)) {
+                    
                     $fbClient = $this->getProcessusContext()->getFacebookClient();
                     $fbData   = $fbClient->getUserDataById($fbUserId);
 
