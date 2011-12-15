@@ -76,7 +76,7 @@ namespace Processus\Abstracts\JsonRpc
                     "system"      => $system,
                     "profiling"   => $this->_getProfiler()->getProfilerStack(),
                     'currentUser' => $currentUser,
-                    'fileStack'   => $requireList
+                    'fileStack'   => $requireList,
                 );
 
                 $response['debug'] = $debugInfo;
