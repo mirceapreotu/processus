@@ -40,8 +40,28 @@ namespace Processus
         private static $_instance;
 
         /**
+         * @var \Zend\Log\Logger
+         */
+        private $_errorLogger;
+
+        /**
+         * @var \Zend\Log\Logger
+         */
+        private $_debugLogger;
+
+        /**
+         * @var \Zend\Log\Logger
+         */
+        private $_profilingLogger;
+
+        /**
+         * @var \Processus\ProcessusBootstrap
+         */
+        private $_bootstrap;
+
+        /**
          * @static
-         * @return ProcessusContext
+         * @return \Processus\ProcessusContext
          */
         public static function getInstance()
         {
@@ -50,6 +70,64 @@ namespace Processus
             }
 
             return self::$_instance;
+        }
+
+        /**
+         * @param \Processus\ProcessusBootstrap $bootstrap
+         *
+         * @return \Processus\ProcessusContext
+         */
+        public function setBootstrap(ProcessusBootstrap $bootstrap)
+        {
+            $this->_bootstrap = $bootstrap;
+            return $this;
+        }
+
+        /**
+         * @return \Processus\ProcessusBootstrap
+         */
+        public function getBootstrap()
+        {
+            return $this->_bootstrap;
+        }
+
+        /**
+         * @return \Zend\Log\Logger
+         */
+        public function getDebugLogger()
+        {
+            if (!$this->_debugLogger) {
+                $streamWriter       = new \Zend\Log\Writer\Stream(PATH_ROOT . '/logs/application/debug/zend.debug.log');
+                $this->_debugLogger = new \Zend\Log\Logger($streamWriter);
+            }
+
+            return $this->_debugLogger;
+        }
+
+        /**
+         * @return \Zend\Log\Logger
+         */
+        public function getProfilingLogger()
+        {
+            if (!$this->_profilingLogger) {
+                $streamWriter           = new \Zend\Log\Writer\Stream(PATH_ROOT . '/logs/application/profiling/zend.profiling.log');
+                $this->_profilingLogger = new \Zend\Log\Logger($streamWriter);
+            }
+
+            return $this->_profilingLogger;
+        }
+
+        /**
+         * @return \Zend\Log\Logger
+         */
+        public function getErrorLogger()
+        {
+            if (!$this->_errorLogger) {
+                $streamWriter       = new \Zend\Log\Writer\Stream(PATH_ROOT . '/logs/application/error/zend.error.log');
+                $this->_errorLogger = new \Zend\Log\Logger($streamWriter);
+            }
+
+            return $this->_errorLogger;
         }
 
         /**
@@ -109,7 +187,6 @@ namespace Processus
 
         // #########################################################
 
-
         /**
          * @return \Processus\Lib\Bo\UserBo
          */
@@ -124,7 +201,7 @@ namespace Processus
         // #########################################################
 
         /**
-         * @return Profiler
+         * @return \Processus\Lib\Profiler\ProcessusProfiler
          */
         public function getProfiler()
         {

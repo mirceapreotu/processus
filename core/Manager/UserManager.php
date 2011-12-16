@@ -12,6 +12,8 @@ namespace Processus\Manager
 
         /**
          * @param \Processus\Interfaces\InterfaceUser $user
+         *
+         * @return \Zend\Db\Statement\Pdo
          */
         public function insertNewUser(\Processus\Interfaces\InterfaceUser $user)
         {
@@ -20,7 +22,7 @@ namespace Processus\Manager
             $com->setConnector($this->getProcessusContext()->getMasterMySql())
                 ->setSqlTableName("fbusers")
                 ->setSqlParams(array("id"     => $user->getId(),
-                                    "created" => $user->getCreated()));
+                                    "created" => time()));
 
 
             $feedVo = new \Application\Vo\Feed\BaseFeedVo();
@@ -28,7 +30,10 @@ namespace Processus\Manager
             $manager = new \Application\Manager\Feed\NewUser();
             $manager->setFeedItemData($feedVo);
 
-            $this->insert($com);
+            $leaderboardManager = new \Application\Manager\Leaderboard\AddNewUser();
+            $leaderboardManager->addUser();
+
+            return $this->insert($com);
         }
 
 
@@ -43,7 +48,7 @@ namespace Processus\Manager
 
             $com = new \Processus\Abstracts\Manager\ComConfig();
 
-            $memId = "filterAppFriends_" . $this->getProcessusContext()
+            $memId = "FilterAppFriends_" . $this->getProcessusContext()
                 ->getUserBo()
                 ->getFacebookUserId();
 

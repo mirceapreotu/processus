@@ -30,12 +30,13 @@ namespace Processus\Contrib\Facebook
          * access token if during the course of execution
          * we discover them.
          *
-         * @param Array $config the application configuration.
+         * @param array $config the application configuration.
+         *
          * @see BaseFacebook::__construct in facebook.php
          */
-        public function __construct($config)
+        public function __construct(array $config)
         {
-            if (! session_id()) {
+            if (!session_id()) {
                 session_start();
             }
             parent::__construct($config);
@@ -48,36 +49,41 @@ namespace Processus\Contrib\Facebook
          * methods.  The implementation uses PHP sessions to maintain
          * a store for authorization codes, user ids, CSRF states, and
          * access tokens.
+         *
+         * @param $key
+         * @param $value
+         *
+         * @return mixed
          */
         protected function setPersistentData($key, $value)
         {
-            if (! in_array($key, self::$kSupportedKeys)) {
+            if (!in_array($key, self::$kSupportedKeys)) {
                 self::errorLog('Unsupported key passed to setPersistentData.');
                 return;
             }
-            
-            $session_var_name = $this->constructSessionVariableName($key);
+
+            $session_var_name            = $this->constructSessionVariableName($key);
             $_SESSION[$session_var_name] = $value;
         }
 
         protected function getPersistentData($key, $default = false)
         {
-            if (! in_array($key, self::$kSupportedKeys)) {
+            if (!in_array($key, self::$kSupportedKeys)) {
                 self::errorLog('Unsupported key passed to getPersistentData.');
                 return $default;
             }
-            
+
             $session_var_name = $this->constructSessionVariableName($key);
             return isset($_SESSION[$session_var_name]) ? $_SESSION[$session_var_name] : $default;
         }
 
         protected function clearPersistentData($key)
         {
-            if (! in_array($key, self::$kSupportedKeys)) {
+            if (!in_array($key, self::$kSupportedKeys)) {
                 self::errorLog('Unsupported key passed to clearPersistentData.');
                 return;
             }
-            
+
             $session_var_name = $this->constructSessionVariableName($key);
             unset($_SESSION[$session_var_name]);
         }

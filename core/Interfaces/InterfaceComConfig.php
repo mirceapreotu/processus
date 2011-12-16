@@ -7,7 +7,7 @@ namespace Processus\Interfaces
 
         public function getFromCache();
 
-        public function getSqlConditions();
+        public function getSqlUpdateConditions();
 
         public function getSqlTableName();
 

@@ -54,6 +54,10 @@ namespace Processus\Lib\Bo
             $fbClient = $this->getProcessusContext()->getFacebookClient();
             $friendsIdList = $fbClient->getFriendsIdList();
 
+            if (count($friendsIdList) <= 0) {
+                return FALSE;
+            }
+
             // match appUsers with friendsList from facebook
             /** @var $userManager UserManager */
             $userManager = $this->getUserManager();
@@ -89,17 +93,23 @@ namespace Processus\Lib\Bo
         }
 
         /**
-         * @return boolean
+         * @return int
+         */
+        public function getFacebookHighScore()
+        {
+            return 1;
+        }
+
+        /**
+         * @return bool|string
          */
         public function isAuthorized()
         {
             $fbUserId = $this->getFacebookUserId();
-
             if ($fbUserId) {
 
                 $userData = $this->getFacebookUserMvo()->getData();
-
-                if (!$userData) {
+                if(is_null($userData->id)) {
                     $fbClient = $this->getProcessusContext()->getFacebookClient();
                     $fbData = $fbClient->getUserDataById($fbUserId);
                     $fbData['created'] = time();
@@ -113,10 +123,12 @@ namespace Processus\Lib\Bo
 
                 return TRUE;
             }
-            else {
-                return FALSE;
+            else
+            {
+                return $this->getProcessusContext()->getFacebookClient()->getLoginUrl();
             }
         }
     }
 }
+
 ?>

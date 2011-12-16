@@ -25,11 +25,11 @@ namespace Processus\Lib\Mvo
         }
 
         /**
-         * @param $mId
+         * @param string $mId
          *
          * @return FacebookUserMvo
          */
-        public function setMemId($mId)
+        public function setMemId(\string $mId)
         {
             parent::setMemId("FacebookUserMvo_" . $mId);
             return $this;
@@ -50,7 +50,7 @@ namespace Processus\Lib\Mvo
          *
          * @return string
          */
-        public function getFacebookUserImageUrl(\string $size)
+        public function getFacebookUserImageUrl(string $size)
         {
             return 'https://graph.facebook.com/' . $this->getFacebookUserId() . '/picture?type=' . $size;
         }
@@ -68,7 +68,7 @@ namespace Processus\Lib\Mvo
          *
          * @return FacebookUserMvo
          */
-        public function setFirstTime(\boolean $firstTime)
+        public function setFirstTime(boolean $firstTime)
         {
             $this->setValueByKey('firstTime', $firstTime);
             return $this;
@@ -128,6 +128,25 @@ namespace Processus\Lib\Mvo
         public function getVerified()
         {
             return $this->getValueByKey('verified');
+        }
+
+        /**
+         * @return array|mixed
+         */
+        public function getAccessToken()
+        {
+            return $this->getValueByKey('accessToken');
+        }
+
+        /**
+         * @param string $accessToken
+         *
+         * @return \Processus\Lib\Mvo\FacebookUserMvo
+         */
+        public function setAccessToken(\string $accessToken)
+        {
+            $this->setValueByKey('accessToken', $accessToken);
+            return $this;
         }
     }
 

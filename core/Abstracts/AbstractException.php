@@ -154,5 +154,19 @@ namespace Processus\Abstracts
             $this->message = $message;
             return $this;
         }
+
+        /**
+         * @param string $message
+         * @param int    $code
+         * @param int    $severity
+         * @param string $filename
+         * @param int    $lineno
+         * @param array  $previous
+         */
+        public function __construct($message = "", $code = 1000, $severity = 10, $filename = __FILE__, $lineno = __LINE__, $previous = array())
+        {
+            $previous = error_get_last();
+            parent::__construct($message, $code, $severity, $filename, $lineno, $previous);
+        }
     }
 }

@@ -5,12 +5,10 @@ namespace Processus
 
     require_once 'helpers.php';
 
-    use Processus\Interfaces\InterfaceBootstrap;
-
     /**
      *
      */
-    class ProcessusBootstrap implements InterfaceBootstrap
+    class ProcessusBootstrap implements \Processus\Interfaces\InterfaceBootstrap
     {
 
         /**
@@ -19,15 +17,26 @@ namespace Processus
         private $_applicationContext;
 
         /**
-         * @return ProcessusContext
+         * @var array
          */
-        public function getApplication()
+        private $_errorStack = array();
+
+        /**
+         * @var array
+         */
+        private $_filesRequireFiles = array();
+
+        /**
+         * @var float
+         */
+        private $_startTime;
+
+        /**
+         * @return array
+         */
+        public function getFilesRequireList()
         {
-            if (!$this->_applicationContext) {
-                $this->_applicationContext = new ProcessusContext();
-                \Processus\Lib\Profiler\ProcessusProfiler::getInstance()->applicationProfilerStart();
-            }
-            return $this->_applicationContext;
+            return $this->_filesRequireFiles;
         }
 
         /**
@@ -42,10 +51,18 @@ namespace Processus
         {
             try {
 
+                $this->_startTime = microtime(TRUE);
+
                 define('PATH_ROOT', realpath(dirname(__FILE__) . '/../../../'));
                 define('PATH_CORE', PATH_ROOT . '/library/Processus/core');
                 define('PATH_APP', PATH_ROOT . '/application/php');
                 define('PATH_PUBLIC', PATH_ROOT . '/htdocs');
+
+                // setup autoloader
+                spl_autoload_register(array(
+                                           $this,
+                                           '_autoLoad'
+                                      ));
 
                 // display erros for the following part
                 ini_set('display_errors', 'On');
@@ -53,35 +70,27 @@ namespace Processus
                 error_reporting(E_ALL | E_STRICT);
 
                 set_error_handler(array(
-                                       'Processus\ProcessusBootstrap',
+                                       $this,
                                        'handleError'
                                   ));
 
                 register_shutdown_function(array(
-                                                'Processus\ProcessusBootstrap',
+                                                $this,
                                                 'handleError'
                                            ));
 
                 set_exception_handler(array(
-                                           'Processus\ProcessusBootstrap',
+                                           $this,
                                            'handleError'
                                       ));
 
-                ini_set('display_errors', 'Off');
+                //ini_set('display_errors', 'Off');
 
                 // cache current include path
                 $cachedIncludePath = get_include_path();
 
-                // set new include path
-                //                 set_include_path(PATH_CORE . '/Contrib' . PATH_SEPARATOR . PATH_CORE . PATH_APP);
-
-                // setup autoloader
-                spl_autoload_register(array(
-                                           'Processus\ProcessusBootstrap',
-                                           '_autoLoad'
-                                      ));
-
-                $registry = $this->getApplication()->getRegistry();
+                ProcessusContext::getInstance()->setBootstrap($this)->getProfiler()->applicationProfilerStart();
+                $registry = ProcessusContext::getInstance()->getRegistry();
 
                 // setup locale
                 setlocale(LC_ALL, $registry->getConfig('locale')->default->lc_all);
@@ -110,23 +119,21 @@ namespace Processus
                 return true;
 
             }
-            catch (\Exception $e) {
-
+            catch (\Exception $e)
+            {
                 echo json_encode($e);
-                //die("" . __METHOD__ . " FAILED.");
-
+                exit;
             }
         }
 
         /**
-         * Custom class auto loader
          * @static
          *
-         * @param string $className
+         * @param $className
          *
-         * @return void
+         * @throws \Zend\Di\Exception\ClassNotFoundException
          */
-        public static function _autoLoad($className)
+        public function _autoLoad($className)
         {
             $rootPath = NULL;
 
@@ -152,31 +159,34 @@ namespace Processus
             $classFile = $rootPath . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $pathParts) . '.php';
 
             if (!file_exists($classFile)) {
-                return;
+                throw new \Zend\Di\Exception\ClassNotFoundException('Class not found!');
             }
+
+            $currentTime = microtime(TRUE) - $this->_startTime;
+            $fileData = array(
+                'file' => $classFile,
+                'time' => $currentTime * 1000,
+            );
+            $this->_filesRequireFiles[] = $fileData;
 
             require_once $classFile;
         }
 
         /**
-         * @static
-         *
-         * @param $errno
-         * @param $errstr
-         * @param $errfile
-         * @param $errline
+         * @param $errorObj
          *
          * @return mixed
          */
-        public static function handleError($errno, $errstr, $errfile, $errline)
+        public function handleError($errorObj)
         {
-            $lastError = error_get_last();
+            $lastError  = error_get_last();
+            $errorLevel = error_reporting();
 
             $returnValue           = array();
             $returnValue['result'] = array();
             $returnValue['error']  = array();
 
-            if ($errno instanceof \Processus\Abstracts\AbstractException) {
+            if ($errorObj instanceof \Processus\Abstracts\AbstractException) {
 
                 header('HTTP/1.1 500 Internal Server Error');
 
@@ -184,17 +194,17 @@ namespace Processus
                 $user  = array();
 
                 $debug['trigger']      = "Manual Exception";
-                $debug['file']         = $errno->getFile();
-                $debug['line']         = $errno->getLine();
-                $debug['message']      = $errno->getMessage();
-                $debug['trace']        = $errno->getTraceAsString();
-                $debug['method']       = $errno->getMethod();
-                $debug['extendedData'] = $errno->getExtendData();
+                $debug['file']         = $errorObj->getFile();
+                $debug['line']         = $errorObj->getLine();
+                $debug['message']      = $errorObj->getMessage();
+                $debug['trace']        = $errorObj->getTraceAsString();
+                $debug['method']       = $errorObj->getMethod();
+                $debug['extendedData'] = $errorObj->getExtendData();
 
-                $user['message'] = $errno->getUserMessage();
-                $user['title']   = $errno->getUserMessageTitle();
-                $user['code']    = $errno->getUserErrorCode();
-                $user['details'] = $errno->getUserDetailError();
+                $user['message'] = $errorObj->getUserMessage();
+                $user['title']   = $errorObj->getUserMessageTitle();
+                $user['code']    = $errorObj->getUserErrorCode();
+                $user['details'] = $errorObj->getUserDetailError();
 
                 $lastError['data'] = $lastError;
 
@@ -204,6 +214,8 @@ namespace Processus
                 $error['lasterror'] = $lastError;
 
                 $returnValue['error'] = $error;
+
+                $this->getApplication()->getErrorLogger()->log(var_export($returnValue, true), 1);
 
                 echo json_encode($returnValue);
                 return;
@@ -217,12 +229,11 @@ namespace Processus
                 $error['trigger']   = "Auto Exception";
                 $error['backtrace'] = debug_backtrace();
                 $error['errorData'] = $lastError;
-                $error['params']    = array("number"  => $errno,
-                                            "message" => $errstr,
-                                            "file"    => $errfile,
-                                            "line"    => $errline);
+                $error['params']    = $errorObj;
 
                 $returnValue['error'] = $error;
+
+                $this->getApplication()->getErrorLogger()->log(var_export($error, true), 1, $error);
 
                 echo json_encode($returnValue);
                 return;
@@ -230,5 +241,3 @@ namespace Processus
         }
     }
 }
-
-?>
