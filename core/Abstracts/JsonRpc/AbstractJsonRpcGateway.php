@@ -231,7 +231,7 @@ namespace Processus\Abstracts\JsonRpc
         {
             $authClass = $this->getConfigValue('namespace') . "\\" . "Auth";
 
-            if (class_exists($authClass)) {
+            if(class_exists($authClass, FALSE)) {
                 /** @var $_authModule InterfaceAuthModule */
                 $this->_authModule = new $authClass();
                 $this->_authModule->setAuthData($this->getRequest());
