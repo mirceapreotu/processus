@@ -1,13 +1,13 @@
 <?php
 
-/** 
+/**
  * @author fightbulc
- * 
- * 
+ *
+ *
  */
 namespace Processus\Abstracts
 {
-	abstract class AbstractClass
+    abstract class AbstractClass
     {
         /**
          * @return \Processus\ProcessusContext
@@ -16,7 +16,7 @@ namespace Processus\Abstracts
         {
             return \Processus\ProcessusContext::getInstance();
         }
-        
+
         /**
          * @return mixed | array | stdClass
          */

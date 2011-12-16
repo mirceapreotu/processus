@@ -11,9 +11,13 @@ namespace Processus\Interfaces
     interface InterfaceVo
     {
         public function setData($data);
+
         public function setValueByKey(\string $key, \object $value);
+
         public function getValueByKey(\string $key);
+
         public function getData();
+
         public function setDto(\Processus\Interfaces\InterfaceDto $dto);
     }
 }

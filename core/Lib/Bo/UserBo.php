@@ -9,7 +9,6 @@ namespace Processus\Lib\Bo
 {
     class UserBo extends \Processus\Abstracts\AbstractClass
     {
-
         /**
          * @var \Processus\Lib\Mvo\FacebookUserMvo
          */
@@ -52,12 +51,12 @@ namespace Processus\Lib\Bo
         public function getAppFriends()
         {
             // get friends from facebook
-            $fbClient      = $this->getProcessusContext()->getFacebookClient();
+            $fbClient = $this->getProcessusContext()->getFacebookClient();
             $friendsIdList = $fbClient->getFriendsIdList();
 
             // match appUsers with friendsList from facebook
             /** @var $userManager UserManager */
-            $userManager   = $this->getUserManager();
+            $userManager = $this->getUserManager();
             $filterFriends = $userManager->filterAppFriends($friendsIdList);
 
             $mvoFriendsList = array();
@@ -101,11 +100,11 @@ namespace Processus\Lib\Bo
                 $userData = $this->getFacebookUserMvo()->getData();
 
                 if (!$userData) {
-
-                    $fbClient          = $this->getProcessusContext()->getFacebookClient();
-                    $fbData            = $fbClient->getUserDataById($fbUserId);
+                    $fbClient = $this->getProcessusContext()->getFacebookClient();
+                    $fbData = $fbClient->getUserDataById($fbUserId);
                     $fbData['created'] = time();
-                    $this->getFacebookUserMvo()->setData($fbData)
+                    $this->getFacebookUserMvo()
+                        ->setData($fbData)
                         ->setMemId($this->getFacebookUserId())
                         ->saveInMem();
 

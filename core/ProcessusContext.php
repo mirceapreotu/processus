@@ -45,8 +45,7 @@ namespace Processus
          */
         public static function getInstance()
         {
-            if(! self::$_instance)
-            {
+            if (!self::$_instance) {
                 self::$_instance = new ProcessusContext();
             }
 
@@ -56,41 +55,41 @@ namespace Processus
         /**
          * @return Lib\Db\Memcached
          */
-        public function getDefaultCache ()
+        public function getDefaultCache()
         {
-            if (! $this->_memcached) {
-                
+            if (!$this->_memcached) {
+
                 $config = $this->getRegistry()
                     ->getProcessusConfig()
                     ->getCouchbaseConfig()
                     ->getCouchbasePortByDatabucketKey("default");
-                
+
                 $this->_memcached = \Processus\Lib\Server\ServerFactory::memcachedFactory($config['host'], $config['port']);
             }
-            
+
             return $this->_memcached;
-        
+
         }
 
         /**
          * @return \Processus\Lib\Db\MySQL
          */
-        public function getMasterMySql ()
+        public function getMasterMySql()
         {
-            if (! $this->_mysql) {
+            if (!$this->_mysql) {
                 $this->_mysql = \Processus\Lib\Db\MySQL::getInstance();
             }
-            
+
             return $this->_mysql;
-        
+
         }
 
         /**
          * @return ProcessusRegistry
          */
-        public function getRegistry ()
+        public function getRegistry()
         {
-            if (! $this->_registry) {
+            if (!$this->_registry) {
                 $this->_registry = new ProcessusRegistry();
                 $this->_registry->init();
             }
@@ -100,23 +99,23 @@ namespace Processus
         /**
          * @return Lib\Facebook\FacebookClient
          */
-        public function getFacebookClient ()
+        public function getFacebookClient()
         {
-            if (! $this->_facebookClient) {
+            if (!$this->_facebookClient) {
                 $this->_facebookClient = new \Processus\Lib\Facebook\FacebookClient();
             }
             return $this->_facebookClient;
         }
 
         // #########################################################
-        
+
 
         /**
          * @return \Processus\Lib\Bo\UserBo
          */
-        public function getUserBo ()
+        public function getUserBo()
         {
-            if (! $this->_userBo) {
+            if (!$this->_userBo) {
                 $this->_userBo = new \Processus\Lib\Bo\UserBo();
             }
             return $this->_userBo;
@@ -127,12 +126,12 @@ namespace Processus
         /**
          * @return Profiler
          */
-        public function getProfiler ()
+        public function getProfiler()
         {
-            if (! $this->_profiler) {
+            if (!$this->_profiler) {
                 $this->_profiler = new \Processus\Lib\Profiler\ProcessusProfiler();
             }
-            
+
             return $this->_profiler;
         }
     }

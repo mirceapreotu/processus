@@ -10,11 +10,16 @@ namespace Processus\Interfaces
 {
     interface InterfaceApplicationContext
     {
-        public function getDefaultCache ();
-        public function getMasterMySql ();
-        public function getRegistry ();
-        public function getFacebookClient ();
-        public function getUserBo ();
-        public function getProfiler ();
+        public function getDefaultCache();
+
+        public function getMasterMySql();
+
+        public function getRegistry();
+
+        public function getFacebookClient();
+
+        public function getUserBo();
+
+        public function getProfiler();
     }
 }

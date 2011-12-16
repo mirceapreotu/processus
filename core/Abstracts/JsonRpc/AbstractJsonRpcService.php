@@ -7,13 +7,9 @@
  */
 namespace Processus\Abstracts\JsonRpc
 {
-
-    use Processus\Abstracts\AbstractClass;
-
-	abstract class AbstractJsonRpcService extends AbstractClass
+	abstract class AbstractJsonRpcService extends \Processus\Abstracts\AbstractClass
     {
     }
-
 }
 
 ?>
