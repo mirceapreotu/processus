@@ -51,3 +51,22 @@ function microtime_float()
     list($usec, $sec) = explode(" ", microtime());
     return ((float)$usec + (float)$sec);
 }
+
+/**
+ * @param $message
+ */
+function trace($message)
+{
+    echo "[" . udate('H:i:s:u') . "]" . $message .PHP_EOL;
+}
+
+function udate($format, $utimestamp = null)
+{
+    if (is_null($utimestamp))
+        $utimestamp = microtime(true);
+
+    $timestamp = floor($utimestamp);
+    $milliseconds = round(($utimestamp - $timestamp) * 1000000);
+
+    return date(preg_replace('`(?<!\\\\)u`', $milliseconds, $format), $timestamp);
+}
