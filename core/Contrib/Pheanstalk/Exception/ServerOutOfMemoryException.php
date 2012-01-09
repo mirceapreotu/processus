@@ -7,6 +7,7 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Pheanstalk_Exception_ServerOutOfMemoryException extends Pheanstalk_Exception_ServerException
+class Pheanstalk_Exception_ServerOutOfMemoryException
+	extends Pheanstalk_Exception_ServerException
 {
 }
