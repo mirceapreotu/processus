@@ -203,6 +203,20 @@ namespace Processus\Abstracts\Manager
             $this->getMemcached()->insert($com->getMemId(), $results, $com->getExpiredTime());
         }
 
+        /**
+         * @param null|\Processus\Interfaces\InterfaceDatabase $connector
+         *
+         * @return ComConfig
+         */
+        protected function ccFactory(\Processus\Interfaces\InterfaceDatabase $connector = NULL)
+        {
+            if(!$connector)
+            {
+                $connector = \Processus\Lib\Db\MySQL::getInstance();
+            }
+            $comConfig = new ComConfig();
+            return $comConfig->setConnector($connector);
+        }
     }
 }
 
