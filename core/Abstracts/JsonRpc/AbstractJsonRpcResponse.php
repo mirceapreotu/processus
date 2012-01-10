@@ -93,7 +93,6 @@ namespace Processus\Abstracts\JsonRpc
          */
         public function setError(Error $error)
         {
-            \Processus\ProcessusContext::getInstance()->getErrorLogger()->log(var_export($error, true), 1);
             $this->_error = $error;
             return $this;
         }
