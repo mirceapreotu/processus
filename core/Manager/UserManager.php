@@ -18,15 +18,15 @@ namespace Processus\Manager
         public function insertNewUser(\Processus\Interfaces\InterfaceUser $user)
         {
             $com = new \Processus\Abstracts\Manager\ComConfig();
-
-            $com->setConnector($this->getProcessusContext()->getMasterMySql())
+            $com->setConnector(\Processus\Lib\Db\MySQL::getInstance())
                 ->setSqlTableName("fbusers")
-                ->setSqlParams(array("id"     => $user->getId(),
-                                    "created" => time()));
-
+                ->setSqlParams(array("fb_id"     => $user->getId(),
+                                    "created"    => time()
+                               ));
 
             $feedVo = new \Application\Vo\Feed\BaseFeedVo();
             $feedVo->setValueByKey('fbUserId', $user->getId());
+
             $manager = new \Application\Manager\Feed\NewUser();
             $manager->setFeedItemData($feedVo);
 
@@ -51,6 +51,7 @@ namespace Processus\Manager
             $memId = "FilterAppFriends_" . $this->getProcessusContext()
                 ->getUserBo()
                 ->getFacebookUserId();
+
 
             $com->setConnector(\Processus\Lib\Db\MySQL::getInstance())
                 ->setSqlStmt("SELECT fbu.id AS id FROM fbusers AS fbu WHERE fbu.id IN (" . $friendsList . ")")
