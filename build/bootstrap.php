@@ -9,8 +9,7 @@
 
 print_r("=== Init Bootstrap ===" . PHP_EOL);
 
-$processusCorePath = dirname(__FILE__) . "/../library/Processus/core/";
-$applicationPath   = dirname(__FILE__) . '/../application/php/Application/';
+$processusCorePath = dirname(__FILE__) . "/../core/";
 
 print_r("=== After define paths ===" . PHP_EOL);
 
@@ -27,11 +26,10 @@ include_once($processusCorePath . 'ProcessusContext.php');
 
 print_r("=== Before require ApplicationBootstrap ===" . PHP_EOL);
 
-require_once($applicationPath . 'ApplicationBootstrap.php');
-
 print_r("=== After require ApplicationBootstrap ===" . PHP_EOL);
 
-\Application\ApplicationBootstrap::getInstance()->init();
+$processusBootstrap = new \Processus\ProcessusBootstrap();
+$processusBootstrap->init();
 
 print_r("=== After init ApplicationBootstrap ===" . PHP_EOL);
 
