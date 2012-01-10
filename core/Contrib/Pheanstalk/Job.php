@@ -7,7 +7,8 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Pheanstalk_Job
+namespace Pheanstalk;
+class Job
 {
 	const STATUS_READY = 'ready';
 	const STATUS_RESERVED = 'reserved';

@@ -14,7 +14,8 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Pheanstalk_Socket_WriteHistory
+namespace Pheanstalk\Socket;
+class WriteHistory
 {
 	private $_limit;
 	private $_data = array();

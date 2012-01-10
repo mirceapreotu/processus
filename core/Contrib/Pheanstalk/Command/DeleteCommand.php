@@ -8,14 +8,16 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Pheanstalk_Command_DeleteCommand
-	extends Pheanstalk_Command_AbstractCommand
-	implements Pheanstalk_ResponseParser
+namespace Pheanstalk\Command;
+class DeleteCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
+    /**
+     * @var \Pheanstalk\Job
+     */
 	private $_job;
 
 	/**
-	 * @param object $job Pheanstalk_Job
+	 * @param \Pheanstalk\Job $job Job
 	 */
 	public function __construct($job)
 	{
@@ -23,7 +25,7 @@ class Pheanstalk_Command_DeleteCommand
 	}
 
 	/* (non-phpdoc)
-	 * @see Pheanstalk_Command::getCommandLine()
+	 * @see Command::getCommandLine()
 	 */
 	public function getCommandLine()
 	{
@@ -31,13 +33,13 @@ class Pheanstalk_Command_DeleteCommand
 	}
 
 	/* (non-phpdoc)
-	 * @see Pheanstalk_ResponseParser::parseRespose()
+	 * @see ResponseParser::parseRespose()
 	 */
 	public function parseResponse($responseLine, $responseData)
 	{
-		if ($responseLine == Pheanstalk_Response::RESPONSE_NOT_FOUND)
+		if ($responseLine == \Pheanstalk\Response::RESPONSE_NOT_FOUND)
 		{
-			throw new Pheanstalk_Exception_ServerException(sprintf(
+			throw new \Pheanstalk\Exception\ServerException(sprintf(
 				'Cannot delete job %d: %s',
 				$this->_job->getId(),
 				$responseLine

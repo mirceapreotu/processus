@@ -8,11 +8,11 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Pheanstalk_Command_ListTubesWatchedCommand
-	extends Pheanstalk_Command_AbstractCommand
+namespace Pheanstalk\Command;
+class ListTubesWatchedCommand extends AbstractCommand
 {
 	/* (non-phpdoc)
-	 * @see Pheanstalk_Command::getCommandLine()
+	 * @see Command::getCommandLine()
 	 */
 	public function getCommandLine()
 	{
@@ -20,12 +20,12 @@ class Pheanstalk_Command_ListTubesWatchedCommand
 	}
 
 	/* (non-phpdoc)
-	 * @see Pheanstalk_Command::getResponseParser()
+	 * @see Command::getResponseParser()
 	 */
 	public function getResponseParser()
 	{
-		return new Pheanstalk_YamlResponseParser(
-			Pheanstalk_YamlResponseParser::MODE_LIST
+		return new \Pheanstalk\YamlResponseParser(
+			\Pheanstalk\YamlResponseParser::MODE_LIST
 		);
 	}
 }

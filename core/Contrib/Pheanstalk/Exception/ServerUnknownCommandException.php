@@ -7,7 +7,7 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Pheanstalk_Exception_ServerUnknownCommandException
-	extends Pheanstalk_Exception_ServerException
+namespace Pheanstalk\Exception;
+class ServerUnknownCommandException extends ServerException
 {
 }

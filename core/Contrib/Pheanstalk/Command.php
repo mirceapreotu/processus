@@ -7,7 +7,8 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-interface Pheanstalk_Command
+namespace Pheanstalk;
+interface Command
 {
 	const COMMAND_PUT = 'put';
 	const COMMAND_USE = 'use';
@@ -53,7 +54,7 @@ interface Pheanstalk_Command
 
 	/**
 	 * The response parser for the command.
-	 * @return Pheanstalk_ResponseParser
+	 * @return ResponseParser
 	 */
 	public function getResponseParser();
 }

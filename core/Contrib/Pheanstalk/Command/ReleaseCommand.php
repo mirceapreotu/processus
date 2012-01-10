@@ -8,19 +8,21 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Pheanstalk_Command_ReleaseCommand
-	extends Pheanstalk_Command_AbstractCommand
-	implements Pheanstalk_ResponseParser
+namespace Pheanstalk\Command;
+class ReleaseCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
+    /**
+     * @var \Pheanstalk\Job
+     */
 	private $_job;
 	private $_priority;
 	private $_delay;
 
 	/**
-	 * @param object $job Pheanstalk_Job
-	 * @param int $priority From 0 (most urgent) to 0xFFFFFFFF (least urgent)
-	 * @param int $delay Seconds to wait before job becomes ready
-	 */
+     * @param $job \Pheanstalk\Job
+     * @param $priority
+     * @param $delay
+     */
 	public function __construct($job, $priority, $delay)
 	{
 		$this->_job = $job;
@@ -29,7 +31,7 @@ class Pheanstalk_Command_ReleaseCommand
 	}
 
 	/* (non-phpdoc)
-	 * @see Pheanstalk_Command::getCommandLine()
+	 * @see Command::getCommandLine()
 	 */
 	public function getCommandLine()
 	{
@@ -42,22 +44,22 @@ class Pheanstalk_Command_ReleaseCommand
 	}
 
 	/* (non-phpdoc)
-	 * @see Pheanstalk_ResponseParser::parseRespose()
+	 * @see ResponseParser::parseRespose()
 	 */
 	public function parseResponse($responseLine, $responseData)
 	{
-		if ($responseLine == Pheanstalk_Response::RESPONSE_BURIED)
+		if ($responseLine == \Pheanstalk\Response::RESPONSE_BURIED)
 		{
-			throw new Pheanstalk_Exception_ServerException(sprintf(
+			throw new \Pheanstalk\Exception\ServerException(sprintf(
 				'Job %s %d: out of memory trying to grow data structure',
 				$this->_job->getId(),
 				$responseLine
 			));
 		}
 
-		if ($responseLine == Pheanstalk_Response::RESPONSE_NOT_FOUND)
+		if ($responseLine == \Pheanstalk\Response::RESPONSE_NOT_FOUND)
 		{
-			throw new Pheanstalk_Exception_ServerException(sprintf(
+			throw new \Pheanstalk\Exception\ServerException(sprintf(
 				'Job %d %s: does not exist or is not reserved by client',
 				$this->_job->getId(),
 				$responseLine

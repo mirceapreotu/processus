@@ -10,9 +10,8 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Pheanstalk_Command_KickCommand
-	extends Pheanstalk_Command_AbstractCommand
-	implements Pheanstalk_ResponseParser
+namespace Pheanstalk\Command;
+class KickCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
 	private $_max;
 
@@ -25,7 +24,7 @@ class Pheanstalk_Command_KickCommand
 	}
 
 	/* (non-phpdoc)
-	 * @see Pheanstalk_Command::getCommandLine()
+	 * @see Command::getCommandLine()
 	 */
 	public function getCommandLine()
 	{
@@ -33,7 +32,7 @@ class Pheanstalk_Command_KickCommand
 	}
 
 	/* (non-phpdoc)
-	 * @see Pheanstalk_ResponseParser::parseRespose()
+	 * @see ResponseParser::parseRespose()
 	 */
 	public function parseResponse($responseLine, $responseData)
 	{

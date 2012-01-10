@@ -8,15 +8,14 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Pheanstalk_Command_BuryCommand
-	extends Pheanstalk_Command_AbstractCommand
-	implements Pheanstalk_ResponseParser
+namespace Pheanstalk\Command;
+class BuryCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
 	private $_job;
 	private $_priority;
 
 	/**
-	 * @param object $job Pheanstalk_Job
+	 * @param object $job Job
 	 * @param int $priority From 0 (most urgent) to 0xFFFFFFFF (least urgent)
 	 */
 	public function __construct($job, $priority)
@@ -25,9 +24,9 @@ class Pheanstalk_Command_BuryCommand
 		$this->_priority = $priority;
 	}
 
-	/* (non-phpdoc)
-	 * @see Pheanstalk_Command::getCommandLine()
-	 */
+	/**
+     * @return string
+     */
 	public function getCommandLine()
 	{
 		return sprintf(
@@ -38,25 +37,25 @@ class Pheanstalk_Command_BuryCommand
 	}
 
 	/* (non-phpdoc)
-	 * @see Pheanstalk_ResponseParser::parseRespose()
+	 * @see ResponseParser::parseRespose()
 	 */
 	public function parseResponse($responseLine, $responseData)
 	{
-		if ($responseLine == Pheanstalk_Response::RESPONSE_NOT_FOUND)
+		if ($responseLine == \Pheanstalk\Response::RESPONSE_NOT_FOUND)
 		{
-			throw new Pheanstalk_Exception_ServerException(sprintf(
+			throw new \Pheanstalk\Exception\ServerException(sprintf(
 				'%s: Job %d is not reserved or does not exist.',
 				$responseLine,
 				$this->_job->getId()
 			));
 		}
-		elseif ($responseLine == Pheanstalk_Response::RESPONSE_BURIED)
+		elseif ($responseLine == \Pheanstalk\Response::RESPONSE_BURIED)
 		{
-			return $this->_createResponse(Pheanstalk_Response::RESPONSE_BURIED);
+			return $this->_createResponse(\Pheanstalk\Response::RESPONSE_BURIED);
 		}
 		else
 		{
-			throw new Pheanstalk_Exception('Unhandled response: '.$responseLine);
+			throw new \Pheanstalk\Exception('Unhandled response: '.$responseLine);
 		}
 	}
 }

@@ -9,9 +9,8 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Pheanstalk_Command_PutCommand
-	extends Pheanstalk_Command_AbstractCommand
-	implements Pheanstalk_ResponseParser
+namespace Pheanstalk\Command;
+class PutCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
 	private $_data;
 	private $_priority;
@@ -34,7 +33,7 @@ class Pheanstalk_Command_PutCommand
 	}
 
 	/* (non-phpdoc)
-	 * @see Pheanstalk_Command::getCommandLine()
+	 * @see Command::getCommandLine()
 	 */
 	public function getCommandLine()
 	{
@@ -48,7 +47,7 @@ class Pheanstalk_Command_PutCommand
 	}
 
 	/* (non-phpdoc)
-	 * @see Pheanstalk_Command::hasData()
+	 * @see Command::hasData()
 	 */
 	public function hasData()
 	{
@@ -56,7 +55,7 @@ class Pheanstalk_Command_PutCommand
 	}
 
 	/* (non-phpdoc)
-	 * @see Pheanstalk_Command::getData()
+	 * @see Command::getData()
 	 */
 	public function getData()
 	{
@@ -64,7 +63,7 @@ class Pheanstalk_Command_PutCommand
 	}
 
 	/* (non-phpdoc)
-	 * @see Pheanstalk_Command::getDataLength()
+	 * @see Command::getDataLength()
 	 */
 	public function getDataLength()
 	{
@@ -72,7 +71,7 @@ class Pheanstalk_Command_PutCommand
 	}
 
 	/* (non-phpdoc)
-	 * @see Pheanstalk_ResponseParser::parseRespose()
+	 * @see ResponseParser::parseRespose()
 	 */
 	public function parseResponse($responseLine, $responseData)
 	{
@@ -84,28 +83,28 @@ class Pheanstalk_Command_PutCommand
 		}
 		elseif (preg_match('#^BURIED (\d)+$#', $responseLine, $matches))
 		{
-			throw new Pheanstalk_Exception(sprintf(
+			throw new \Pheanstalk\Exception(sprintf(
 				'%s: server ran out of memory trying to grow the priority queue data structure.',
 				$responseLine
 			));
 		}
 		elseif (preg_match('#^JOB_TOO_BIG$#', $responseLine))
 		{
-			throw new Pheanstalk_Exception(sprintf(
+			throw new \Pheanstalk\Exception(sprintf(
 				'%s: job data exceeds server-enforced limit',
 				$responseLine
 			));
 		}
 		elseif (preg_match('#^EXPECTED_CRLF#', $responseLine))
 		{
-			throw new Pheanstalk_Exception(sprintf(
+			throw new \Pheanstalk\Exception(sprintf(
 				'%s: CRLF expected',
 				$responseLine
 			));
 		}
 		else
 		{
-			throw new Pheanstalk_Exception(sprintf(
+			throw new \Pheanstalk\Exception(sprintf(
 				'Unhandled response: %s',
 				$responseLine
 			));
