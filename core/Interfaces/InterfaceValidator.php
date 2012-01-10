@@ -10,9 +10,10 @@ namespace Processus\Interfaces
 {
     interface InterfaceValidator extends InterfaceVo
     {
+
         /**
          * @abstract
-         * @return boolean
+         * @return bool
          */
         public function isValid();
 
