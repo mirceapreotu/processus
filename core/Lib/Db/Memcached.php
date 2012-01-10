@@ -58,9 +58,9 @@ namespace Processus\Lib\Db
 
         /**
          * @param string $key
-         * @param mixed  $value
-         *
-         * @return Memcached ErrorCode
+         * @param array $value
+         * @param int $expiredTime
+         * @return int
          */
         public function insert($key = "foobar", $value = array(), $expiredTime = 1)
         {
@@ -73,7 +73,7 @@ namespace Processus\Lib\Db
          *
          * @return mixed
          */
-        public function getMulipleByKey(array $keys)
+        public function getMultipleByKey(array $keys)
         {
             return $this->_memcachedClient->getMulti($keys);
         }
