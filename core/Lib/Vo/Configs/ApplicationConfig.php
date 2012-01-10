@@ -6,7 +6,9 @@
  * Time: 11:25 AM
  * To change this template use File | Settings | File Templates.
  */
-class ApplicationConfig
+namespace Processus\Lib\Vo\Configs;
+
+class ApplicationConfig extends \Processus\Abstracts\Vo\AbstractVO
 {
 
 }
