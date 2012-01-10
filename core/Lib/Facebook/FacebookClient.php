@@ -37,6 +37,11 @@ namespace Processus\Lib\Facebook
         private $_openGraphClient;
 
         /**
+         * @var string
+         */
+        private $_userId;
+
+        /**
          * @return string
          */
         public function getLoginUrl()
@@ -105,7 +110,11 @@ namespace Processus\Lib\Facebook
          */
         public function getUserId()
         {
-            return $this->getFacebookSdk()->getUser();
+            if(!$this->_userId)
+            {
+                $this->_userId = $this->getFacebookSdk()->getUser();
+            }
+            return $this->_userId;
         }
 
         /**
