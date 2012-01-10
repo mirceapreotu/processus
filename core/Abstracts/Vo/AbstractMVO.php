@@ -81,15 +81,17 @@ namespace Processus\Abstracts\Vo {
         }
 
         /**
-         * @return bool
+         * @return int
+         *
+         * @throws \Processus\Exceptions\MvoException
          */
         public function saveInMem()
         {
             if (!$this->getMemId()) {
 
-                $errorData            = array();
+                $errorData = array();
                 $errorData['message'] = "Mvo has no Id ";
-                $errorData['stack']   = debug_backtrace();
+                $errorData['stack'] = debug_backtrace();
 
                 $mvoException = new \Processus\Exceptions\MvoException();
                 $mvoException->setClass(__CLASS__)
@@ -99,7 +101,27 @@ namespace Processus\Abstracts\Vo {
 
                 throw $mvoException;
             }
-            return $this->getMemcachedClient()->insert($this->getMemId(), $this->getData(), $this->getExpiredTime());
+
+            $resultCode = $this->getMemcachedClient()->insert($this->getMemId(), $this->getData(), $this->getExpiredTime());
+            $this->_checkResultCode($resultCode);
+            return $resultCode;
+        }
+
+        /**
+         * @param int $resultCode
+         */
+        private function _checkResultCode(\int $resultCode)
+        {
+            switch($this->getMemcachedClient()->getR)
+            {
+                case \Memcached::RES_BAD_KEY_PROVIDED:
+                    break;
+                case \Memcached::RES_FAILURE:
+                    break;
+                break;
+                default:
+                    break;
+            }
         }
 
         /**
