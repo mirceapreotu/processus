@@ -52,7 +52,7 @@ namespace Processus\Lib\Bo
         public function getAppFriends()
         {
             // get friends from facebook
-            $fbClient      = $this->getProcessusContext()->getFacebookClient();
+            $fbClient = $this->getProcessusContext()->getFacebookClient();
             $friendsIdList = $fbClient->getFriendsIdList();
 
             if (count($friendsIdList) <= 0) {
@@ -61,7 +61,7 @@ namespace Processus\Lib\Bo
 
             // match appUsers with friendsList from facebook
             /** @var $userManager UserManager */
-            $userManager   = $this->getUserManager();
+            $userManager = $this->getUserManager();
             $filterFriends = $userManager->filterAppFriends($friendsIdList);
 
             $mvoFriendsList = array();
@@ -71,7 +71,7 @@ namespace Processus\Lib\Bo
             $idList = prosc_array_prefixing("FacebookUserMvo_", $filterFriends);
 
             // improvement get keys
-            $friendsCollections = $connector->getMulipleByKey($idList);
+            $friendsCollections = $connector->getMultipleByKey($idList);
 
             // get friends from membase || or add them
             foreach ($friendsCollections as $item)
@@ -107,19 +107,20 @@ namespace Processus\Lib\Bo
         public function isAuthorized()
         {
             $fbUserId = $this->getFacebookUserId();
+
             if ($fbUserId) {
 
                 $userData = $this->getFacebookUserMvo()->getData();
 
-                if (is_null($userData->id)) {
-                    
+                if (is_null($userData->id) == TRUE || empty($userData)) {
+
                     $fbClient = $this->getProcessusContext()->getFacebookClient();
-                    $fbData   = $fbClient->getUserDataById($fbUserId);
+                    $fbData = $fbClient->getUserDataById($fbUserId);
 
                     $fbData['created'] = time();
-                    $this->getFacebookUserMvo()->setData($fbData)
-                        ->setMemId($this->getFacebookUserId())
-                        ->saveInMem();
+                    $memSaved = $this->getFacebookUserMvo()->setData($fbData)
+                                     ->setMemId($this->getFacebookUserId())
+                                     ->saveInMem();
 
                     $this->getUserManager()->insertNewUser($this->getFacebookUserMvo());
 
