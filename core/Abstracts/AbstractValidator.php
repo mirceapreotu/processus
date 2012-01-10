@@ -21,7 +21,7 @@ namespace Processus\Abstracts
         /**
          * @param object $validationData
          *
-         * @return AbstractValidator
+         * @return \Processus\Abstracts\AbstractValidator
          */
         public function setValidationData(\object $validationData)
         {
@@ -30,11 +30,9 @@ namespace Processus\Abstracts
         }
 
         /**
+         * @abstract
          * @return boolean
          */
-        public function isValid()
-        {
-            throw new \Processus\Exceptions\NotImplementedException('Method not implemented!', 'PRC-1001', '', __FILE__, __LINE__);
-        }
+        abstract public function isValid();
     }
 }
