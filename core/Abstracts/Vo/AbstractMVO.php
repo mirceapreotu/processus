@@ -109,10 +109,11 @@ namespace Processus\Abstracts\Vo {
 
         /**
          * @param int $resultCode
+         * @todo checking more result code from memcached and throw exception is something wrong
          */
         private function _checkResultCode(\int $resultCode)
         {
-            switch($this->getMemcachedClient()->getR)
+            switch($resultCode)
             {
                 case \Memcached::RES_BAD_KEY_PROVIDED:
                     break;
