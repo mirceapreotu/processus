@@ -40,12 +40,9 @@ namespace Processus
         }
 
         /**
-         * Initializes the system
+         * @param string $mode
          *
-         * @param string $mode the mode for which to initialize
-         *
-         * @return boolean true on success
-         *
+         * @return \Processus\ProcessusBootstrap
          */
         public function init($mode = 'DEFAULT')
         {
@@ -64,27 +61,26 @@ namespace Processus
                                            '_autoLoad'
                                       ));
 
-                // display erros for the following part
-                ini_set('display_errors', 'On');
+                // display errors for the following part
+                ini_set('display_errors', '1');
 
                 error_reporting(E_ALL | E_STRICT);
 
                 set_error_handler(array(
-                                       $this,
+                                       "Processus\\ProcessusBootstrap",
                                        'handleError'
                                   ));
 
                 register_shutdown_function(array(
-                                                $this,
+                                                "Processus\\ProcessusBootstrap",
                                                 'handleError'
                                            ));
 
                 set_exception_handler(array(
-                                           $this,
+                                           "Processus\\ProcessusBootstrap",
                                            'handleError'
                                       ));
-
-                //ini_set('display_errors', 'Off');
+                //ini_set('display_errors', '0');
 
                 // cache current include path
                 $cachedIncludePath = get_include_path();
@@ -103,26 +99,23 @@ namespace Processus
 
                     case 'TEST':
                         set_include_path(get_include_path() . PATH_SEPARATOR . $cachedIncludePath);
-
                         break;
-
                     case 'TASK':
                         break;
 
                     case 'DEFAULT':
                         break;
-
                     default:
                         break;
                 }
 
-                return true;
+                return $this;
 
             }
             catch (\Exception $e)
             {
                 echo json_encode($e);
-                exit;
+                return FALSE;
             }
         }
 
@@ -159,11 +152,11 @@ namespace Processus
             $classFile = $rootPath . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $pathParts) . '.php';
 
             if (!file_exists($classFile)) {
-                throw new \Zend\Di\Exception\ClassNotFoundException('Class not found!');
+                throw new \Zend\Di\Exception\ClassNotFoundException('Class not found! -> ' . $classFile);
             }
 
-            $currentTime = microtime(TRUE) - $this->_startTime;
-            $fileData = array(
+            $currentTime                = microtime(TRUE) - $this->_startTime;
+            $fileData                   = array(
                 'file' => $classFile,
                 'time' => $currentTime * 1000,
             );
@@ -177,8 +170,12 @@ namespace Processus
          *
          * @return mixed
          */
-        public function handleError($errorObj)
+        public static function handleError($errorObj)
         {
+            if ($errorObj == NULL || $errorObj == E_RECOVERABLE_ERROR || $errorObj == E_NOTICE || $errorObj == E_WARNING) {
+                return;
+            }
+
             $lastError  = error_get_last();
             $errorLevel = error_reporting();
 
@@ -215,13 +212,11 @@ namespace Processus
 
                 $returnValue['error'] = $error;
 
-                $this->getApplication()->getErrorLogger()->log(var_export($returnValue, true), 1);
-
                 echo json_encode($returnValue);
                 return;
             }
 
-            if ($lastError) {
+            if (is_object($errorObj)) {
 
                 header('HTTP/1.1 500 Internal Server Error');
 
@@ -233,11 +228,27 @@ namespace Processus
 
                 $returnValue['error'] = $error;
 
-                $this->getApplication()->getErrorLogger()->log(var_export($error, true), 1, $error);
-
                 echo json_encode($returnValue);
+                return;
+            }
+
+            if ($errorObj instanceof \RuntimeException) {
+                header('HTTP/1.1 500 Internal Server Error');
+
+                $debug            = array();
+                $debug['_id']     = uniqid();
+                $debug['file']    = $errorObj->getFile();
+                $debug['line']    = $errorObj->getLine();
+                $debug['message'] = $errorObj->getMessage();
+                $debug['trace']   = $errorObj->getTraceAsString();
+
+                $returnValue['error'] = $debug;
+                echo json_encode($returnValue);
+
                 return;
             }
         }
     }
 }
+
+?>
