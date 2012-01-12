@@ -38,12 +38,17 @@ namespace Processus\Lib\Vo\Configs
         private $_profilerConfig;
 
         /**
-         * @return Facebook
+         * @var \Processus\Lib\Vo\Configs\ApplicationConfig
+         */
+        private $_applicationConfig;
+
+        /**
+         * @return \Processus\Lib\Vo\Configs\Facebook\Facebook
          */
         public function getFacebookConfig()
         {
             if (!$this->_facebookConfig) {
-                $this->_facebookConfig = new Facebook();
+                $this->_facebookConfig = new \Processus\Lib\Vo\Configs\Facebook\Facebook();
                 $this->_facebookConfig->setData($this->getValueByKey("Facebook"));
             }
 
@@ -51,7 +56,7 @@ namespace Processus\Lib\Vo\Configs
         }
 
         /**
-         * @return CouchbaseConfig
+         * @return \Processus\Lib\Vo\Configs\CouchbaseConfig
          */
         public function getCouchbaseConfig()
         {
@@ -63,7 +68,7 @@ namespace Processus\Lib\Vo\Configs
         }
 
         /**
-         * @return BeanstalkdConfig
+         * @return \Processus\Lib\Vo\Configs\BeanstalkdConfig
          */
         public function getBeanstalkdConfig()
         {
@@ -76,7 +81,7 @@ namespace Processus\Lib\Vo\Configs
         }
 
         /**
-         * @return MysqlConfig
+         * @return \Processus\Lib\Vo\Configs\MysqlConfig
          */
         public function getMysqlConfig()
         {
@@ -89,7 +94,7 @@ namespace Processus\Lib\Vo\Configs
         }
 
         /**
-         * @return ProfilerConfig
+         * @return \Processus\Lib\Vo\Configs\ProfilerConfig
          */
         public function getProfilerConfig()
         {
@@ -99,6 +104,20 @@ namespace Processus\Lib\Vo\Configs
             }
 
             return $this->_profilerConfig;
+        }
+
+        /**
+         * @return \Processus\Lib\Vo\Configs\ApplicationConfig
+         */
+        public function getApplicationConfig()
+        {
+            if(!$this->_applicationConfig)
+            {
+                $this->_applicationConfig = new ApplicationConfig();
+                $this->_applicationConfig->setData($this->getValueByKey('application'));
+            }
+
+            return $this->_applicationConfig;
         }
 
     }

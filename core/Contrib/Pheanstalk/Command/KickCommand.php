@@ -10,36 +10,36 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Pheanstalk_Command_KickCommand extends Pheanstalk_Command_AbstractCommand implements 
-Pheanstalk_ResponseParser
+namespace Pheanstalk\Command;
+class KickCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
+	private $_max;
 
-    private $_max;
-
-    /**
-     * @param int $max The maximum number of jobs to kick
-     */
-    public function __construct ($max)
-    {
-        $this->_max = (int) $max;
-    }
-
-    /* (non-phpdoc)
-	 * @see Pheanstalk_Command::getCommandLine()
+	/**
+	 * @param int $max The maximum number of jobs to kick
 	 */
-    public function getCommandLine ()
-    {
-        return 'kick ' . $this->_max;
-    }
+	public function __construct($max)
+	{
+		$this->_max = (int)$max;
+	}
 
-    /* (non-phpdoc)
-	 * @see Pheanstalk_ResponseParser::parseRespose()
+	/* (non-phpdoc)
+	 * @see Command::getCommandLine()
 	 */
-    public function parseResponse ($responseLine, $responseData)
-    {
-        list ($code, $count) = explode(' ', $responseLine);
-        
-        return $this->_createResponse($code, 
-        array('kicked' => (int) $count));
-    }
+	public function getCommandLine()
+	{
+		return 'kick '.$this->_max;
+	}
+
+	/* (non-phpdoc)
+	 * @see ResponseParser::parseRespose()
+	 */
+	public function parseResponse($responseLine, $responseData)
+	{
+		list($code, $count) = explode(' ', $responseLine);
+
+		return $this->_createResponse($code, array(
+			'kicked' => (int)$count,
+		));
+	}
 }

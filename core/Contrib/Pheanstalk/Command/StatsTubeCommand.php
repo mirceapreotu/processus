@@ -8,33 +8,34 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Pheanstalk_Command_StatsTubeCommand extends Pheanstalk_Command_AbstractCommand
+namespace Pheanstalk\Command;
+class StatsTubeCommand extends AbstractCommand
 {
+	private $_tube;
 
-    private $_tube;
-
-    /**
-     * @param string $tube
-     */
-    public function __construct ($tube)
-    {
-        $this->_tube = $tube;
-    }
-
-    /* (non-phpdoc)
-	 * @see Pheanstalk_Command::getCommandLine()
+	/**
+	 * @param string $tube
 	 */
-    public function getCommandLine ()
-    {
-        return sprintf('stats-tube %s', $this->_tube);
-    }
+	public function __construct($tube)
+	{
+		$this->_tube = $tube;
+	}
 
-    /* (non-phpdoc)
-	 * @see Pheanstalk_Command::getResponseParser()
+	/* (non-phpdoc)
+	 * @see Command::getCommandLine()
 	 */
-    public function getResponseParser ()
-    {
-        return new Pheanstalk_YamlResponseParser(
-        Pheanstalk_YamlResponseParser::MODE_DICT);
-    }
+	public function getCommandLine()
+	{
+		return sprintf('stats-tube %s', $this->_tube);
+	}
+
+	/* (non-phpdoc)
+	 * @see Command::getResponseParser()
+	 */
+	public function getResponseParser()
+	{
+		return new \Pheanstalk\YamlResponseParser(
+			\Pheanstalk\YamlResponseParser::MODE_DICT
+		);
+	}
 }

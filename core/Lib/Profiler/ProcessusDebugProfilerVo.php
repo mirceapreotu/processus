@@ -6,32 +6,32 @@
  * Time: 4:01 PM
  * To change this template use File | Settings | File Templates.
  */
-namespace Processus\Profiler
+namespace Processus\Lib\Profiler
 {
     class ProcessusDebugProfilerVo extends \Processus\Abstracts\Vo\AbstractVO implements \Processus\Lib\Profiler\IProcessusDebugProfilerVo
     {
         /**
-         * @return ProcessusDebugProfilerVo
+         * @return \Processus\Lib\Profiler\ProcessusDebugProfilerVo
          */
         public function startTimeTrack()
         {
-            $this->setValueByKey("startTimeTrack", time());
+            $this->setValueByKey("startTimeTrack", microtime(TRUE) / 1000);
             return $this;
         }
 
         /**
-         * @return ProcessusDebugProfilerVo
+         * @return \Processus\Lib\Profiler\ProcessusDebugProfilerVo
          */
         public function endTimeTrack()
         {
-            $this->setValueByKey("endTimeTrack", time());
+            $this->setValueByKey("endTimeTrack", microtime(TRUE) / 1000);
             return $this;
         }
 
         /**
          * @param string $method
          *
-         * @return \Processus\Lib\Vo\Profiler\ProfilerVo
+         * @return \Processus\Lib\Profiler\ProcessusDebugProfilerVo
          */
         public function setMethod(\string $method)
         {
@@ -51,7 +51,7 @@ namespace Processus\Profiler
         /**
          * @param string $line
          *
-         * @return ProfilerVo
+         * @return \Processus\Lib\Profiler\ProcessusDebugProfilerVo
          */
         public function setLine(\string $line)
         {
@@ -70,7 +70,7 @@ namespace Processus\Profiler
         /**
          * @param string $comment
          *
-         * @return ProfilerVo
+         * @return \Processus\Lib\Profiler\ProcessusDebugProfilerVo
          */
         public function setComment(\string $comment)
         {
@@ -89,7 +89,7 @@ namespace Processus\Profiler
         /**
          * @param string $class
          *
-         * @return ProfilerVo
+         * @return \Processus\Lib\Profiler\ProcessusDebugProfilerVo
          */
         public function setClass(\string $class)
         {

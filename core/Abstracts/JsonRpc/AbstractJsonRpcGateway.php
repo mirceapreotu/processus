@@ -2,10 +2,6 @@
 
 namespace Processus\Abstracts\JsonRpc
 {
-    use Processus\Abstracts\JsonRpc\AbstractJsonRpcRequest;
-    use Processus\Abstracts\JsonRpc\AbstractJsonRpcServer;
-    use Processus\Interfaces\InterfaceAuthModule;
-
     /**
      *
      * @example {"id":"112","method":"Pub.User.listing","params":[{"name":"Tino"}], "extended":[{}]}
@@ -16,14 +12,13 @@ namespace Processus\Abstracts\JsonRpc
 
         // #########################################################
 
-
         /**
-         * @var AbstractJsonRpcRequest
+         * @var \Processus\Abstracts\JsonRpc\AbstractJsonRpcRequest
          */
         protected $_request;
 
         /**
-         * @var AbstractJsonRpcServer
+         * @var \Processus\Abstracts\JsonRpc\AbstractJsonRpcServer
          */
         protected $_server;
 
@@ -33,7 +28,7 @@ namespace Processus\Abstracts\JsonRpc
         protected $_config;
 
         /**
-         * @var InterfaceAuthModule
+         * @var \Processus\Interfaces\InterfaceAuthModule
          */
         protected $_authModule;
 
@@ -92,7 +87,8 @@ namespace Processus\Abstracts\JsonRpc
         {
             $authModule = $this->getAuthModule();
 
-            if ($authModule instanceof InterfaceAuthModule) {
+            if ($authModule instanceof \Processus\Interfaces\InterfaceAuthModule) {
+
                 if ($authModule->isAuthorized() === FALSE) {
                     throw new \Exception("Authorisation Required");
                 }
@@ -150,13 +146,9 @@ namespace Processus\Abstracts\JsonRpc
 
         // #########################################################
 
-
-        /**
-         *
-         */
         protected function _run()
         {
-            /** @var $server AbstractJsonRpcServer */
+            /** @var $server \Processus\Abstracts\JsonRpc\AbstractJsonRpcServer */
             $server = $this->getServer();
             $server->run();
         }
@@ -165,7 +157,7 @@ namespace Processus\Abstracts\JsonRpc
 
 
         /**
-         * @return AbstractJsonRpcRequest
+         * @return \Processus\Abstracts\JsonRpc\AbstractJsonRpcRequest
          */
         private function getRequest()
         {
@@ -173,7 +165,7 @@ namespace Processus\Abstracts\JsonRpc
 
                 $requestClassName = $this->getRequestClassName();
 
-                /** @var $_request AbstractJsonRpcRequest */
+                /** @var $_request \Processus\Abstracts\JsonRpc\AbstractJsonRpcRequest */
                 $this->_request = new $requestClassName();
                 $this->_request->setSpecifiedNamespace($this->getConfigValue('namespace'));
             }
@@ -225,20 +217,31 @@ namespace Processus\Abstracts\JsonRpc
 
 
         /**
-         * @return \Processus\Interfaces\InterfaceAuthModule
+         * @return null | \Processus\Interfaces\InterfaceAuthModule
          */
         public function getAuthModule()
         {
-            $authClass = $this->getConfigValue('namespace') . "\\" . "Auth";
+            $authClass  = $this->getConfigValue('namespace') . "\\" . "Auth";
+            $authFile   = str_replace("\\", "/", $this->getConfigValue('namespace') . "\\" . "Auth");
+            $classExist = file_exists(PATH_APP . "/" . $authFile . '.php');
 
-            if(class_exists($authClass, FALSE)) {
-                /** @var $_authModule InterfaceAuthModule */
-                $this->_authModule = new $authClass();
-                $this->_authModule->setAuthData($this->getRequest());
-                return $this->_authModule;
+            if ($classExist) {
+
+                try {
+
+                    /** @var $_authModule \Processus\Interfaces\InterfaceAuthModule */
+                    $this->_authModule = new $authClass();
+                    $this->_authModule->setAuthData($this->getRequest());
+
+                    return $this->_authModule;
+                } catch (\Exception $error)
+                {
+                    throw $error;
+                }
+
             }
 
-            return FALSE;
+            return null;
         }
 
         // #########################################################

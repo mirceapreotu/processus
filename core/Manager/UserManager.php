@@ -17,30 +17,21 @@ namespace Processus\Manager
          */
         public function insertNewUser(\Processus\Interfaces\InterfaceUser $user)
         {
-            $com = new \Processus\Abstracts\Manager\ComConfig();
-
-            $com->setConnector($this->getProcessusContext()->getMasterMySql())
-                ->setSqlTableName("fbusers")
-                ->setSqlParams(array("id"     => $user->getId(),
-                                    "created" => time()));
-
-
-            $feedVo = new \Application\Vo\Feed\BaseFeedVo();
-            $feedVo->setValueByKey('fbUserId', $user->getId());
-            $manager = new \Application\Manager\Feed\NewUser();
-            $manager->setFeedItemData($feedVo);
-
-            $leaderboardManager = new \Application\Manager\Leaderboard\AddNewUser();
-            $leaderboardManager->addUser();
-
-            return $this->insert($com);
+            $pdo = $this->insert($this->ccFactory()
+                    ->setSqlTableName("users")
+                    ->setSqlParams(array("fb_id"     => $user->getId(),
+                                        "created"    => time()
+                                   )
+                )
+            );
+            return $pdo;
         }
 
 
         /**
          * @param array $friendsList
          *
-         * @return array|string
+         * @return mixed|null
          */
         public function filterAppFriends(array $friendsList)
         {
@@ -52,11 +43,11 @@ namespace Processus\Manager
                 ->getUserBo()
                 ->getFacebookUserId();
 
-            $com->setConnector(\Processus\Lib\Db\MySQL::getInstance())
-                ->setSqlStmt("SELECT fbu.id AS id FROM fbusers AS fbu WHERE fbu.id IN (" . $friendsList . ")")
-                ->setMemId($memId);
-
-            return $this->fetchAll($com);
+            return $this->fetchAll($this->ccFactory()
+                    ->setSqlStmt("SELECT fb_id AS id FROM users WHERE fb_id IN (" . $friendsList . ")")
+                    ->setMemId($memId)
+                    ->setFromCache(FALSE)
+            );
         }
 
         /**

@@ -49,15 +49,13 @@ namespace Processus\Abstracts\Vo
          */
         public function getValueByKey(\string $key)
         {
-            $data = $this->getData();
-            try {
-                return $data->$key;
+            if (is_null($this->_data->$key)) {
+                return NULL;
             }
-            catch (\Exception $error)
-            {
-                return null;
+            else {
+                return $this->_data->$key;
             }
-            return null;
+
         }
 
         /**
@@ -72,7 +70,6 @@ namespace Processus\Abstracts\Vo
             {
                 return null;
             }
-            return null;
         }
 
         /**

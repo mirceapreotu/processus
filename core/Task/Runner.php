@@ -21,10 +21,6 @@ namespace Processus\Task
             $invokedBySymlink = false;
             $command = @$_SERVER['argv'][0];
             
-            var_dump($command);
-            
-            exit;
-            
             // case 1:	php file is symlink pointing to the taskrunner
             //			In this case, use the symlink name as task name.
             // 			Rule: foo_bar_baz becomes App_Task_FooBarBaz
@@ -49,7 +45,6 @@ namespace Processus\Task
             else {
                 
                 // case 2: Just use the first parameter as task name
-                
 
                 $taskname = trim(@$_SERVER['argv'][1]);
                 
@@ -82,8 +77,8 @@ namespace Processus\Task
                 
                 unset($_SERVER['argv'][1]);
             }
-            
-            return "App_Task_" . $taskname;
+
+            return "\\Application\\Task\\" . $taskname;
         }
 
         /**
@@ -109,14 +104,13 @@ namespace Processus\Task
             catch (\Exception $exception) {
                 
                 unset($exception); // not needed
-                
-
                 $existsClass = false; // set to false on autoload exception
+
             }
             
             if ($existsClass) {
                 
-                /** @var $task Lib_Task_TaskAbstract */
+                /** @var $task \Processus\Abstracts\AbstractTask */
                 $task = new $taskClassName();
                 $task->run();
             

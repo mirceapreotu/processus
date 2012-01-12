@@ -28,6 +28,7 @@ namespace Processus\Abstracts\JsonRpc
 
         /**
          * @return bool
+         * @throws \Processus\Exceptions\JsonRpc\ValidJsonRpcRequest
          */
         public function isValidClass()
         {
@@ -48,6 +49,7 @@ namespace Processus\Abstracts\JsonRpc
 
         /**
          * @return bool
+         * @throws \Processus\Exceptions\JsonRpc\ValidJsonRpcRequest
          */
         public function isValidRequest()
         {
@@ -171,7 +173,7 @@ namespace Processus\Abstracts\JsonRpc
             // Emit response?
             if ($this->autoEmitResponse()) {
                 echo $response;
-                exit();
+                exit;
             }
 
             // or return it?

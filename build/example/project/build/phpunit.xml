@@ -1,0 +1,14 @@
+<phpunit bootstrap="./bootstrap.php"
+         colors="true"
+         stopOnFailure="true"
+         strict="true"
+         verbose="true">
+    <filter>
+        <blacklist>
+            <file>../application/php/ApplicationBootstrap.php</file>
+            <file>../application/php/ApplicationContext.php</file>
+            <file>../library/Processus/core/ProcessusBootstrap.php</file>
+            <file>../library/Processus/core/ProcessusContext.php</file>
+        </blacklist>
+    </filter>
+</phpunit>
