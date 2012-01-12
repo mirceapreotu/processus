@@ -37,8 +37,6 @@ namespace Processus\Manager
         {
             $friendsList = join(',', $friendsList);
 
-            $com = new \Processus\Abstracts\Manager\ComConfig();
-
             $memId = "FilterAppFriends_" . $this->getProcessusContext()
                 ->getUserBo()
                 ->getFacebookUserId();
