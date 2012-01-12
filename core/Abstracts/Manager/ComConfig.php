@@ -56,6 +56,7 @@ namespace Processus\Abstracts\Manager
 
         /**
          * @param $_sqlUpdateConditions
+         *
          * @return \Processus\Abstracts\Manager\ComConfig
          */
         public function setSqlUpdateConditions($_sqlUpdateConditions)
@@ -69,6 +70,7 @@ namespace Processus\Abstracts\Manager
 
         /**
          * @param $_sqlTableName
+         *
          * @return \Processus\Abstracts\Manager\ComConfig
          */
         public function setSqlTableName($_sqlTableName)
@@ -134,10 +136,13 @@ namespace Processus\Abstracts\Manager
 
         /**
          * @param string $_memId
+         *
+         * @return \Processus\Abstracts\Manager\ComConfig
          */
         public function setMemId(string $_memId)
         {
             $this->_memId = $_memId;
+            return $this;
         }
 
         // #########################################################
