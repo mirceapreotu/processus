@@ -70,3 +70,12 @@ function udate($format, $utimestamp = null)
 
     return date(preg_replace('`(?<!\\\\)u`', $milliseconds, $format), $timestamp);
 }
+
+/**
+ * @param $unixtime
+ * @return string
+ */
+function convertUnixTimeToIso($unixtime)
+{
+    return date('Y-m-d\TH:i:s', $unixtime);
+}
