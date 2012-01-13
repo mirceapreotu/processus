@@ -29,9 +29,8 @@ namespace Processus\Lib\Bo
          */
         public function getMysqlId()
         {
-            if (!$this->_mysqlId)
-            {
-                $sqlStmt = "SELECT id FROM users WHERE fb_id = :fb_id";
+            if (!$this->_mysqlId) {
+                $sqlStmt   = "SELECT id FROM users WHERE fb_id = :fb_id";
                 $sqlParams = array(
                     "fb_id" => $this->getFacebookUserId()
                 );
@@ -133,8 +132,8 @@ namespace Processus\Lib\Bo
                 $userData = $this->getFacebookUserMvo()->getData();
                 if (is_null($userData->id) == TRUE || empty($userData)) {
                     $fbClient = $this->getProcessusContext()->getFacebookClient();
-                    $fbData = $fbClient->getUserDataById($fbUserId);
-                    $fbData['created'] = time();
+                    $fbData   = $fbClient->getUserDataById($fbUserId);
+                    $fbData['created'] = date('Y-m-d\TH:i:s', time());
                     $memSaved          = $this->getFacebookUserMvo()->setData($fbData)
                         ->setMemId($this->getProcessusContext()->getUserBo()->getFacebookUserId())
                         ->saveInMem();
