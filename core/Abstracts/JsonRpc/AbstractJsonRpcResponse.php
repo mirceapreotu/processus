@@ -36,7 +36,6 @@ namespace Processus\Abstracts\JsonRpc
 
                 $response                       = array();
                 $response['result']             = $this->getResult();
-                $response['result']['userData'] = \Processus\ProcessusContext::getInstance()->getUserBo()->getFacebookUserMvo()->setDto(new \Application\Dto\FbBasicDto())->export();
                 $response['id']                 = $this->getId();
 
             }
