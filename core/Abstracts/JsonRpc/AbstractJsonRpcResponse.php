@@ -8,7 +8,7 @@
  */
 namespace Processus\Abstracts\JsonRpc
 {
-    class AbstractJsonRpcResponse extends \Zend\Json\Server\Response
+    abstract class AbstractJsonRpcResponse extends \Zend\Json\Server\Response
     {
         /**
          * Cast to JSON
@@ -34,9 +34,10 @@ namespace Processus\Abstracts\JsonRpc
             else
             {
 
-                $response           = array();
-                $response['result'] = $this->getResult();
-                $response['id']     = $this->getId();
+                $response                       = array();
+                $response['result']             = $this->getResult();
+                $response['result']['userData'] = \Processus\ProcessusContext::getInstance()->getUserBo()->getFacebookUserMvo()->setDto(new \Application\Dto\FbBasicDto())->export();
+                $response['id']                 = $this->getId();
 
             }
 
@@ -83,7 +84,7 @@ namespace Processus\Abstracts\JsonRpc
 
             }
 
-            return \Zend\Json\Json::encode($response);
+            return json_encode($response);
         }
 
         /**
