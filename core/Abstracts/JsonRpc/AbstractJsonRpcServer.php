@@ -5,10 +5,20 @@ namespace Processus\Abstracts\JsonRpc
 
     abstract class AbstractJsonRpcServer extends \Zend\Json\Server\Server
     {
-
+        /**
+         * @var array
+         */
         protected $_config;
 
         // #########################################################
+
+        /**
+         * @return array
+         */
+        public function getConfig()
+        {
+            return $this->_config;
+        }
 
 
         /**
@@ -40,8 +50,6 @@ namespace Processus\Abstracts\JsonRpc
                 $exception = new \Processus\Exceptions\JsonRpc\ValidJsonRpcRequest("Is not a valid class!", "PRC-2001_" . __METHOD__, "10", __FILE__, __LINE__);
                 throw $exception;
             }
-
-            return FALSE;
         }
 
         // #########################################################
@@ -61,8 +69,6 @@ namespace Processus\Abstracts\JsonRpc
                 $exception = new \Processus\Exceptions\JsonRpc\ValidJsonRpcRequest("Is not a valid request!", "PRC-2000_" . __METHOD__, "10", __FILE__, __LINE__);
                 throw $exception;
             }
-
-            return FALSE;
         }
 
         // #########################################################
@@ -111,14 +117,6 @@ namespace Processus\Abstracts\JsonRpc
             return parent::getRequest();
         }
 
-        /**
-         * @return mixed
-         */
-        public function getConfig()
-        {
-            return $this->_config;
-        }
-
         // #########################################################
 
 
@@ -145,38 +143,62 @@ namespace Processus\Abstracts\JsonRpc
         public function getResponse()
         {
             if (null === ($response = $this->_response)) {
-                $this->setResponse(new AbstractJsonRpcResponse());
+
+                $responseClass = $this->getConfigValue('namespace') . "\\" . "Response";
+                $responseFile  = str_replace("\\", "/", $this->getConfigValue('namespace') . "\\" . "Response");
+                $classExist    = file_exists(PATH_APP . "/" . $responseFile . '.php');
+
+                if ($classExist) {
+
+                    try
+                    {
+
+                        /** @var $responseClass \Processus\Abstracts\JsonRpc\AbstractJsonRpcResponse */
+                        $this->_response = new $responseClass();
+                        $this->setResponse($this->_response);
+
+                        return $this->_response;
+
+                    } catch (\Exception $error)
+                    {
+                        throw $error;
+                    }
+
+                }
             }
             return $this->_response;
         }
 
         /**
-         * @param bool $request
+         * @param \Processus\Abstracts\JsonRpc\AbstractJsonRpcResponse $response
          *
-         * @return \Zend\Json\Server\Zend\Json\Server\Response
-         * @throws \Exception
+         * @return AbstractJsonRpcServer
          */
-        public function handle($request = false)
+        public function setResponse(AbstractJsonRpcResponse $response)
         {
-            if ((false !== $request) && (!$request instanceof Request)) {
-                throw new \Exception('Invalid request type provided; cannot handle');
-            } elseif ($request) {
-                $this->setRequest($request);
+            $this->_response = $response;
+            return $this;
+        }
+
+        /**
+         * Set response state
+         *
+         * @return Zend\Json\Server\Response
+         */
+        protected function _getReadyResponse()
+        {
+            $request  = $this->getRequest();
+            $response = $this->getResponse();
+
+            $response->setServiceMap($this->getServiceMap());
+
+            if (null !== ($id = $request->getId())) {
+                $response->setId($id);
+            }
+            if (null !== ($version = $request->getVersion())) {
+                $response->setVersion($version);
             }
 
-            // Handle request
-            $this->_handle();
-
-            // Get response
-            $response = $this->_getReadyResponse();
-
-            // Emit response?
-            if ($this->autoEmitResponse()) {
-                echo $response;
-                exit;
-            }
-
-            // or return it?
             return $response;
         }
 
