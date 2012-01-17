@@ -87,9 +87,6 @@ namespace Processus\Lib\Facebook
                 }
                 catch (\Exception $error)
                 {
-                    $this->getProcessusContext()->getErrorLogger()->log('User API ME FAILED', 100, $this->_userFacebookData);
-                    $this->getProcessusContext()->getErrorLogger()->log('Error', 100, $error);
-
                     throw $error;
                 }
             }
