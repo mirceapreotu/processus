@@ -55,8 +55,13 @@ namespace Processus
         private $_profilingLogger;
 
         /**
+         * @var \Processus\ProcessusBootstrap
+         */
+        private $_bootstrap;
+
+        /**
          * @static
-         * @return ProcessusContext
+         * @return \Processus\ProcessusContext
          */
         public static function getInstance()
         {
@@ -65,6 +70,25 @@ namespace Processus
             }
 
             return self::$_instance;
+        }
+
+        /**
+         * @param \Processus\ProcessusBootstrap $bootstrap
+         *
+         * @return \Processus\ProcessusContext
+         */
+        public function setBootstrap(ProcessusBootstrap $bootstrap)
+        {
+            $this->_bootstrap = $bootstrap;
+            return $this;
+        }
+
+        /**
+         * @return \Processus\ProcessusBootstrap
+         */
+        public function getBootstrap()
+        {
+            return $this->_bootstrap;
         }
 
         /**
@@ -178,7 +202,7 @@ namespace Processus
         // #########################################################
 
         /**
-         * @return Profiler
+         * @return \Processus\Lib\Profiler\ProcessusProfiler
          */
         public function getProfiler()
         {

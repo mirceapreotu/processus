@@ -171,7 +171,7 @@ namespace Processus\Abstracts\JsonRpc
             // Emit response?
             if ($this->autoEmitResponse()) {
                 echo $response;
-                exit();
+                exit;
             }
 
             // or return it?

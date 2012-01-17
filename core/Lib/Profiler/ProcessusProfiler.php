@@ -102,7 +102,14 @@ namespace Processus\Lib\Profiler
          */
         public function getProfilerStack()
         {
-            return $this->_debugProfilerStack;
+            $rawData = array();
+            /** @var $debug \Processus\Abstracts\Vo\AbstractVO */
+            foreach($this->_debugProfilerStack as $debug)
+            {
+                $data = $debug->getData();
+                $rawData[] = $data;
+            }
+            return $rawData;
         }
     }
 }
