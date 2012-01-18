@@ -35,7 +35,7 @@ namespace Processus\Abstracts\Vo
 
                 $data = $this->getValueByKey($item['match']);
 
-                if (!$data) {
+                if (is_null($data)) {
                     $data = $item['default'];
                 }
 
