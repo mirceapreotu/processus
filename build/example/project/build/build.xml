@@ -1,0 +1,145 @@
+<project name="project" default="build" basedir="..">
+
+
+    <!--
+    #################################################################
+    Properties Targets
+    #################################################################
+    -->
+    <property file="build/build.properties" description="Base Properties"/>
+    <!--
+    #################################################################
+    Properties Targets
+    #################################################################
+    -->
+
+    <!--
+    #################################################################
+    Setup Targets
+    #################################################################
+    -->
+
+    <!--
+    #################################################################
+    Setup Targets
+    #################################################################
+    -->
+
+    <!--
+    #################################################################
+    Major Targets
+    #################################################################
+    -->
+
+    <!--
+    #################################################################
+    Major Targets
+    #################################################################
+    -->
+    <target name="build" depends="clean, prepare">
+
+    </target>
+    <target name="completeTest">
+
+    </target>
+    <target name="phpUnitApplication" depends="clean, prepare">
+        <echo message="--- Starting Build ---"/>
+        <echo message="loading -> ${phpUnit.config}"/>
+        <echo message="execute -> phpunit --verbose --configuration ${phpUnit.config} ${phpUnit.class.folder}" />
+        <exec command="phpunit --verbose --configuration ${phpUnit.config} ${phpUnit.class.folder}"
+              dir="."
+              logoutput="true"
+              checkreturn="true">
+        </exec>
+        <echo message="--- End Build ---"/>
+    </target>
+    <target name="phpUnitProcessus" depends="clean, prepare">
+        <echo message="--- Starting Build ---"/>
+        <echo message="loading -> ${phpUnit.config}"/>
+        <echo message="execute -> phpunit --verbose --configuration ${phpUnit.config} ${phpUnit.class.folder}" />
+        <exec command="phpunit --verbose --configuration ${phpUnit.config} ${phpUnit.class.folder}"
+              dir="."
+              logoutput="true"
+              checkreturn="true">
+        </exec>
+        <echo message="--- End Build ---"/>
+    </target>
+    <!--
+    #################################################################
+    Test Targets
+    #################################################################
+    -->
+    <target name="testCreateBet">
+
+    </target>
+
+    <target name="testAcceptBet">
+
+    </target>
+
+    <target name="testCancelBet">
+
+    </target>
+    <!--
+    #################################################################
+    Test Targets
+    #################################################################
+    -->
+
+    <!--
+    #################################################################
+    Sub Targets
+    #################################################################
+    -->
+    <target name="clean">
+        <echo message="--- Starting Clean ---"/>
+        <delete dir="${app.basedir}/logs/"/>
+        <echo message="Delete logs dir"/>
+        <!--<exec command="php -f ${app.script.folder}/blowJob.php" checkreturn="true"/>-->
+        <echo message="blowJobed the enviroment" />
+        <echo message="--- End Clean ---"/>
+    </target>
+
+    <target name="prepare">
+        <echo message="--- Starting Prepare ---"/>
+        <mkdir dir="${app.basedir}/logs/build"/>
+        <touch file="${app.basedir}/logs/build/.keep"/>
+        <mkdir dir="${app.basedir}/logs/application/debug"/>
+        <mkdir dir="${app.basedir}/logs/application/error"/>
+        <mkdir dir="${app.basedir}/logs/application/profiling"/>
+        <echo message="--- End Prepare ---"/>
+    </target>
+    <target name="permissions" depends="clean, prepare">
+        <echo message="--- Setting Permission ---"/>
+        <chmod file="logs/build/" mode="0777" verbose="true"/>
+        <chmod file="logs/application/debug/" mode="0777" verbose="true"/>
+        <chmod file="logs/application/error/" mode="0777" verbose="true"/>
+        <chmod file="logs/application/profiling/" mode="0777" verbose="true"/>
+        <echo message="--- Setting Permission ---"/>
+    </target>
+    <!--
+    #################################################################
+    Sub Targets
+    #################################################################
+    -->
+
+    <!--
+    #################################################################
+    SetUp Project
+    #################################################################
+    -->
+    <target name="setup" depends="-initDb">
+
+    </target>
+    <target name="-initDb">
+        <pdosqlexec url="mysql:host=localhost;dbname=">
+
+        </pdosqlexec>
+    </target>
+    <!--
+    #################################################################
+    SetUp Project
+    #################################################################
+    -->
+
+</project>

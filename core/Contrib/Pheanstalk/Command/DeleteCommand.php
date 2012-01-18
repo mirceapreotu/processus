@@ -8,39 +8,44 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Pheanstalk_Command_DeleteCommand extends Pheanstalk_Command_AbstractCommand implements 
-Pheanstalk_ResponseParser
+namespace Pheanstalk\Command;
+class DeleteCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
-
-    private $_job;
-
     /**
-     * @param object $job Pheanstalk_Job
+     * @var \Pheanstalk\Job
      */
-    public function __construct ($job)
-    {
-        $this->_job = $job;
-    }
+	private $_job;
 
-    /* (non-phpdoc)
-	 * @see Pheanstalk_Command::getCommandLine()
+	/**
+	 * @param \Pheanstalk\Job $job Job
 	 */
-    public function getCommandLine ()
-    {
-        return 'delete ' . $this->_job->getId();
-    }
+	public function __construct($job)
+	{
+		$this->_job = $job;
+	}
 
-    /* (non-phpdoc)
-	 * @see Pheanstalk_ResponseParser::parseRespose()
+	/* (non-phpdoc)
+	 * @see Command::getCommandLine()
 	 */
-    public function parseResponse ($responseLine, $responseData)
-    {
-        if ($responseLine == Pheanstalk_Response::RESPONSE_NOT_FOUND) {
-            throw new Pheanstalk_Exception_ServerException(
-            sprintf('Cannot delete job %d: %s', $this->_job->getId(), 
-            $responseLine));
-        }
-        
-        return $this->_createResponse($responseLine);
-    }
+	public function getCommandLine()
+	{
+		return 'delete '.$this->_job->getId();
+	}
+
+	/* (non-phpdoc)
+	 * @see ResponseParser::parseRespose()
+	 */
+	public function parseResponse($responseLine, $responseData)
+	{
+		if ($responseLine == \Pheanstalk\Response::RESPONSE_NOT_FOUND)
+		{
+			throw new \Pheanstalk\Exception\ServerException(sprintf(
+				'Cannot delete job %d: %s',
+				$this->_job->getId(),
+				$responseLine
+			));
+		}
+
+		return $this->_createResponse($responseLine);
+	}
 }

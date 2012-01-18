@@ -13,39 +13,44 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Pheanstalk_Command_TouchCommand extends Pheanstalk_Command_AbstractCommand implements 
-Pheanstalk_ResponseParser
+namespace Pheanstalk\Command;
+class TouchCommand extends AbstractCommand implements \Pheanstalk\ResponseParser
 {
-
-    private $_job;
-
     /**
-     * @param Pheanstalk_Job $job
+     * @var \Pheanstalk\Command\Job
      */
-    public function __construct ($job)
-    {
-        $this->_job = $job;
-    }
+	private $_job;
 
-    /* (non-phpdoc)
-	 * @see Pheanstalk_Command::getCommandLine()
+	/**
+	 * @param \Pheanstalk\Job $job
 	 */
-    public function getCommandLine ()
-    {
-        return sprintf('touch %d', $this->_job->getId());
-    }
+	public function __construct($job)
+	{
+		$this->_job = $job;
+	}
 
-    /* (non-phpdoc)
-	 * @see Pheanstalk_ResponseParser::parseRespose()
+	/* (non-phpdoc)
+	 * @see Command::getCommandLine()
 	 */
-    public function parseResponse ($responseLine, $responseData)
-    {
-        if ($responseLine == Pheanstalk_Response::RESPONSE_NOT_FOUND) {
-            throw new Pheanstalk_Exception_ServerException(
-            sprintf('Job %d %s: does not exist or is not reserved by client', 
-            $this->_job->getId(), $responseLine));
-        }
-        
-        return $this->_createResponse($responseLine);
-    }
+	public function getCommandLine()
+	{
+		return sprintf('touch %d', $this->_job->getId());
+	}
+
+	/* (non-phpdoc)
+	 * @see ResponseParser::parseRespose()
+	 */
+	public function parseResponse($responseLine, $responseData)
+	{
+		if ($responseLine == \Pheanstalk\Response::RESPONSE_NOT_FOUND)
+		{
+			throw new \Pheanstalk\Exception\ServerException(sprintf(
+				'Job %d %s: does not exist or is not reserved by client',
+				$this->_job->getId(),
+				$responseLine
+			));
+		}
+
+		return $this->_createResponse($responseLine);
+	}
 }

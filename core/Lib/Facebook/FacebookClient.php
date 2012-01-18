@@ -37,6 +37,11 @@ namespace Processus\Lib\Facebook
         private $_openGraphClient;
 
         /**
+         * @var string
+         */
+        private $_userId;
+
+        /**
          * @return string
          */
         public function getLoginUrl()
@@ -73,7 +78,17 @@ namespace Processus\Lib\Facebook
         public function getUserFacebookData()
         {
             if (!$this->_userFacebookData) {
-                $this->_userFacebookData = $this->getFacebookSdk()->api("/me");
+
+                try
+                {
+
+                    $this->_userFacebookData = $this->getFacebookSdk()->api("/me");
+
+                }
+                catch (\Exception $error)
+                {
+                    throw $error;
+                }
             }
 
             return $this->_userFacebookData;
@@ -92,7 +107,11 @@ namespace Processus\Lib\Facebook
          */
         public function getUserId()
         {
-            return $this->getFacebookSdk()->getUser();
+            if(!$this->_userId)
+            {
+                $this->_userId = $this->getFacebookSdk()->getUser();
+            }
+            return $this->_userId;
         }
 
         /**
@@ -151,7 +170,14 @@ namespace Processus\Lib\Facebook
          */
         public function getUserDataById(string $facebookUserId)
         {
-            $userData = $this->getFacebookSdk()->api("/" . $facebookUserId);
+            try {
+                $userData = $this->getFacebookSdk()->api("/" . $facebookUserId);
+            }
+            catch (\Exception $error)
+            {
+                throw $error;
+            }
+
             return $userData;
         }
 

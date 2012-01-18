@@ -9,15 +9,12 @@
 
 namespace Processus\Lib\Beanstalkd
 {
-    
-    use Processus\Lib\Beanstalkd\AbstractWorker;
-
     class DefaultWorker extends AbstractWorker
     {
 
         public function startWorker()
         {
-        
+
         }
     }
 }

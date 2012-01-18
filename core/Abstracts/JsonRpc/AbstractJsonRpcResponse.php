@@ -8,7 +8,7 @@
  */
 namespace Processus\Abstracts\JsonRpc
 {
-    class AbstractJsonRpcResponse extends \Zend\Json\Server\Response
+    abstract class AbstractJsonRpcResponse extends \Zend\Json\Server\Response
     {
         /**
          * Cast to JSON
@@ -22,22 +22,6 @@ namespace Processus\Abstracts\JsonRpc
 
                 $response = array();
                 $error    = array();
-
-                $error['code']    = $this->getError()->getCode();
-                $error['message'] = $this->getError()->getMessage();
-                $error['data']    = $this->getError()->getData();
-                $error['stack']   = $this->getError()->getData()->getTraceAsString();
-
-                $response['error'] = $error;
-                $response['id']    = $this->getId();
-
-            }
-            else
-            {
-
-                $response           = array();
-                $response['result'] = $this->getResult();
-                $response['id']     = $this->getId();
 
             }
 
@@ -88,6 +72,21 @@ namespace Processus\Abstracts\JsonRpc
                 );
 
                 $response['debug'] = $debugInfo;
+                $error['code']    = $this->getError()->getCode();
+                $error['message'] = $this->getError()->getMessage();
+                $error['data']    = $this->getError()->getData();
+                $error['stack']   = $this->getError()->getData()->getTraceAsString();
+
+                $response['error'] = $error;
+                $response['id']    = $this->getId();
+
+            }
+            else
+            {
+
+                $response                       = array();
+                $response['result']             = $this->getResult();
+                $response['id']                 = $this->getId();
 
             }
 

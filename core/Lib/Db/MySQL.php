@@ -19,6 +19,13 @@ namespace Processus\Lib\Db
 
         // #########################################################
 
+        /**
+         * @return \Zend\Db\Adapter\AbstractAdapter
+         */
+        public function getDbHandler()
+        {
+            return $this->dbh;
+        }
 
         /**
          * @static
@@ -43,7 +50,7 @@ namespace Processus\Lib\Db
         public function init()
         {
             $registry = \Processus\ProcessusContext::getInstance()->getRegistry();
-            $masters = $registry->getProcessusConfig()
+            $masters  = $registry->getProcessusConfig()
                 ->getMysqlConfig()
                 ->getValueByKey('masters');
 
@@ -54,7 +61,7 @@ namespace Processus\Lib\Db
 
 
         /**
-         * @param null $sql
+         * @param null  $sql
          * @param array $args
          *
          * @return \Zend\Db\Statement\Pdo
@@ -69,9 +76,22 @@ namespace Processus\Lib\Db
 
         // #########################################################
 
+        /**
+         * @param string $sql
+         * @param array  $args
+         *
+         * @return \Zend\Db\Statement\Pdo
+         */
+        public function execute(\string $sql, $args = array())
+        {
+            $stmt = new \Zend\Db\Statement\Pdo($this->getDbHandler(), $sql);
+            $stmt->execute($args);
+            return $stmt;
+        }
+
 
         /**
-         * @param null $sql
+         * @param null  $sql
          * @param array $args
          *
          * @return string
@@ -86,7 +106,7 @@ namespace Processus\Lib\Db
 
         /**
          * @param string $sql
-         * @param array $args
+         * @param array  $args
          *
          * @return \Zend\Db\Statement\Pdo
          */
@@ -99,7 +119,7 @@ namespace Processus\Lib\Db
 
 
         /**
-         * @param null $sql
+         * @param null  $sql
          * @param array $args
          *
          * @return mixed
@@ -113,7 +133,7 @@ namespace Processus\Lib\Db
 
 
         /**
-         * @param null $sql
+         * @param null  $sql
          * @param array $args
          *
          * @return array
@@ -127,7 +147,7 @@ namespace Processus\Lib\Db
 
 
         /**
-         * @param null $tableName
+         * @param null  $tableName
          * @param array $values
          *
          * @return mixed
@@ -137,15 +157,15 @@ namespace Processus\Lib\Db
             if (!empty($tableName) && !empty($values)) {
 
                 // prepare placeholders and values
-                $_set = array();
+                $_set         = array();
                 $_placeholder = array();
-                $_values = array();
+                $_values      = array();
 
                 foreach ($values as $key => $val) {
                     $_set[] = $key;
 
                     $placeholder_key = ':' . $key;
-                    $_placeholder[] = $placeholder_key;
+                    $_placeholder[]  = $placeholder_key;
 
                     $_values[$placeholder_key] = $val;
                 }
@@ -157,14 +177,14 @@ namespace Processus\Lib\Db
                 return $this->_prepare($sql, $_values);
             }
 
-            return;
+            return FALSE;
         }
 
         // #########################################################
 
 
         /**
-         * @param null $tableName
+         * @param null  $tableName
          * @param array $values
          * @param array $conditions
          *
@@ -172,14 +192,14 @@ namespace Processus\Lib\Db
          */
         public function update($tableName = NULL, $values = array(), $conditions = array())
         {
-            if (!is_null($tableName) && !empty($values) && array_key_exists('id', $conditions)) {
+            if (!is_null($tableName) && !empty($values) && !empty($conditions)) {
                 // prepare placeholders and values
-                $_set = array();
+                $_set    = array();
                 $_values = array();
 
                 foreach ($values as $key => $val) {
-                    $placeholder_key = ':' . $key;
-                    $_set[] = $key . '=' . $placeholder_key;
+                    $placeholder_key           = ':' . $key;
+                    $_set[]                    = $key . '=' . $placeholder_key;
                     $_values[$placeholder_key] = $val;
                 }
 
@@ -191,8 +211,8 @@ namespace Processus\Lib\Db
                         $_cond[] = $key;
                     }
                     else {
-                        $placeholder_key = ':_' . $key;
-                        $_cond[] = $key . '=' . $placeholder_key;
+                        $placeholder_key           = ':_' . $key;
+                        $_cond[]                   = $key . '=' . $placeholder_key;
                         $_values[$placeholder_key] = $val;
                     }
                 }
@@ -204,7 +224,7 @@ namespace Processus\Lib\Db
                 return $this->_prepare($sql, $_values);
             }
 
-            return;
+            return FALSE;
         }
     }
 }

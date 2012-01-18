@@ -12,12 +12,6 @@ namespace Processus\Interfaces
     {
         /**
          * @abstract
-         * @return boolean
-         */
-        public function isValid();
-
-        /**
-         * @abstract
          * @return array
          */
         public function getValidationData();

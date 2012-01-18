@@ -1,46 +1,46 @@
 <?php
 
 /**
- * Common functionality for Pheanstalk_Command implementations.
+ * Common functionality for Command implementations.
  *
- * @author Paul Annesley
+ * @author  Paul Annesley
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-abstract class Pheanstalk_Command_AbstractCommand implements Pheanstalk_Command
+namespace Pheanstalk\Command;
+abstract class AbstractCommand implements \Pheanstalk\Command
 {
-
-    /* (non-phpdoc)
-	 * @see Pheanstalk_Command::hasData()
-	 */
-    public function hasData ()
+    /**
+     * @return bool
+     */
+    public function hasData()
     {
         return false;
     }
 
-    /* (non-phpdoc)
-	 * @see Pheanstalk_Command::getData()
-	 */
-    public function getData ()
+    /**
+     * @throws \Pheanstalk\Exception\CommandException
+     */
+    public function getData()
     {
-        throw new Pheanstalk_Exception_CommandException('Command has no data');
+        throw new \Pheanstalk\Exception\CommandException('Command has no data');
     }
 
-    /* (non-phpdoc)
-	 * @see Pheanstalk_Command::getDataLength()
-	 */
-    public function getDataLength ()
+    /**
+     * @throws \Pheanstalk\Exception\CommandException
+     */
+    public function getDataLength()
     {
-        throw new Pheanstalk_Exception_CommandException('Command has no data');
+        throw new \Pheanstalk\Exception\CommandException('Command has no data');
     }
 
-    /* (non-phpdoc)
-	 * @see Pheanstalk_Command::getResponseParser()
-	 */
-    public function getResponseParser ()
+    /**
+     * @return \Pheanstalk\Exception\AbstractCommand
+     */
+    public function getResponseParser()
     {
         // concrete implementation must either:
-        // a) implement Pheanstalk_ResponseParser
+        // a) implement ResponseParser
         // b) override this getResponseParser method
         return $this;
     }
@@ -49,22 +49,22 @@ abstract class Pheanstalk_Command_AbstractCommand implements Pheanstalk_Command
      * The string representation of the object.
      * @return string
      */
-    public function __toString ()
+    public function __toString()
     {
         return $this->getCommandLine();
     }
 
     // ----------------------------------------
     // protected
-    
 
     /**
-     * Creates a Pheanstalk_Response for the given data
-     * @param array
-     * @return object Pheanstalk_Response
+     * @param       $name
+     * @param array $data
+     *
+     * @return \Pheanstalk\Response\ArrayResponse
      */
-    protected function _createResponse ($name, $data = array())
+    protected function _createResponse($name, $data = array())
     {
-        return new Pheanstalk_Response_ArrayResponse($name, $data);
+        return new \Pheanstalk\Response\ArrayResponse($name, $data);
     }
 }

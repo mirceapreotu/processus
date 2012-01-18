@@ -10,6 +10,9 @@ namespace Processus\Exceptions\JsonRpc
 {
     class AuthException extends \Processus\Abstracts\AbstractException
     {
-
+        public function __construct($message = "", $code = 1000, $severity = 10, $filename = __FILE__, $lineno = __LINE__, $previous = array())
+        {
+            parent::__construct("Authorisation failed", $code, $severity, $filename, $lineno, $previous);
+        }
     }
 }

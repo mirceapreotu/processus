@@ -67,6 +67,7 @@ namespace Processus
                 error_reporting(E_ALL | E_STRICT);
 
                 set_error_handler(array(
+
                     "Processus\\ProcessusBootstrap",
                     'handleError'
                 ));
@@ -80,6 +81,7 @@ namespace Processus
                     "Processus\\ProcessusBootstrap",
                     'handleError'
                 ));
+
                 //ini_set('display_errors', '0');
 
                 // cache current include path
@@ -155,8 +157,8 @@ namespace Processus
                 throw new \Zend\Di\Exception\ClassNotFoundException('Class not found! -> ' . $classFile);
             }
 
-            $currentTime                = microtime(TRUE) - $this->_startTime;
-            $fileData                   = array(
+            $currentTime = microtime(TRUE) - $this->_startTime;
+            $fileData = array(
                 'file' => $classFile,
                 'time' => $currentTime * 1000,
             );
@@ -176,38 +178,38 @@ namespace Processus
                 return;
             }
 
-            $lastError  = error_get_last();
+            $lastError = error_get_last();
             $errorLevel = error_reporting();
 
-            $returnValue           = array();
+            $returnValue = array();
             $returnValue['result'] = array();
-            $returnValue['error']  = array();
+            $returnValue['error'] = array();
 
             if ($errorObj instanceof \Processus\Abstracts\AbstractException) {
 
                 header('HTTP/1.1 500 Internal Server Error');
 
                 $debug = array();
-                $user  = array();
+                $user = array();
 
-                $debug['trigger']      = "Manual Exception";
-                $debug['file']         = $errorObj->getFile();
-                $debug['line']         = $errorObj->getLine();
-                $debug['message']      = $errorObj->getMessage();
-                $debug['trace']        = $errorObj->getTraceAsString();
-                $debug['method']       = $errorObj->getMethod();
+                $debug['trigger'] = "Manual Exception";
+                $debug['file'] = $errorObj->getFile();
+                $debug['line'] = $errorObj->getLine();
+                $debug['message'] = $errorObj->getMessage();
+                $debug['trace'] = $errorObj->getTraceAsString();
+                $debug['method'] = $errorObj->getMethod();
                 $debug['extendedData'] = $errorObj->getExtendData();
 
                 $user['message'] = $errorObj->getUserMessage();
-                $user['title']   = $errorObj->getUserMessageTitle();
-                $user['code']    = $errorObj->getUserErrorCode();
+                $user['title'] = $errorObj->getUserMessageTitle();
+                $user['code'] = $errorObj->getUserErrorCode();
                 $user['details'] = $errorObj->getUserDetailError();
 
                 $lastError['data'] = $lastError;
 
                 $error['debug'] = $debug;
 
-                $error['user']      = $user;
+                $error['user'] = $user;
                 $error['lasterror'] = $lastError;
 
                 $returnValue['error'] = $error;
@@ -220,11 +222,11 @@ namespace Processus
 
                 header('HTTP/1.1 500 Internal Server Error');
 
-                $returnValue        = array();
-                $error['trigger']   = "Auto Exception";
+                $returnValue = array();
+                $error['trigger'] = "Auto Exception";
                 $error['backtrace'] = debug_backtrace();
                 $error['errorData'] = $lastError;
-                $error['params']    = $errorObj;
+                $error['params'] = $errorObj;
 
                 $returnValue['error'] = $error;
 
@@ -235,12 +237,12 @@ namespace Processus
             if ($errorObj instanceof \RuntimeException) {
                 header('HTTP/1.1 500 Internal Server Error');
 
-                $debug            = array();
-                $debug['_id']     = uniqid();
-                $debug['file']    = $errorObj->getFile();
-                $debug['line']    = $errorObj->getLine();
+                $debug = array();
+                $debug['_id'] = uniqid();
+                $debug['file'] = $errorObj->getFile();
+                $debug['line'] = $errorObj->getLine();
                 $debug['message'] = $errorObj->getMessage();
-                $debug['trace']   = $errorObj->getTraceAsString();
+                $debug['trace'] = $errorObj->getTraceAsString();
 
                 $returnValue['error'] = $debug;
                 echo json_encode($returnValue);

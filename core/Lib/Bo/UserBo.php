@@ -21,6 +21,28 @@ namespace Processus\Lib\Bo
         private $_userManager;
 
         /**
+         * @var int
+         */
+        private $_mysqlId;
+
+        /**
+         * @return int
+         */
+        public function getMysqlId()
+        {
+            if (!$this->_mysqlId) {
+                $sqlStmt   = "SELECT id FROM users WHERE fb_id = :fb_id";
+                $sqlParams = array(
+                    "fb_id" => $this->getFacebookUserId()
+                );
+
+                $this->_mysqlId = \Processus\Lib\Db\MySQL::getInstance()->fetchValue($sqlStmt, $sqlParams);
+            }
+
+            return $this->_mysqlId;
+        }
+
+        /**
          * @return \Processus\Lib\Mvo\FacebookUserMvo
          */
         public function getFacebookUserMvo()
@@ -51,12 +73,14 @@ namespace Processus\Lib\Bo
          */
         public function getAppFriends()
         {
-            // get friends from facebook
-            $fbClient      = $this->getProcessusContext()->getFacebookClient();
-            $friendsIdList = $fbClient->getFriendsIdList();
+            $friendsIdList = $this->getProcessusContext()->getFacebookClient()->getFriendsIdList();
+
+            if (count($friendsIdList) <= 0) {
+                return FALSE;
+            }
 
             // match appUsers with friendsList from facebook
-            /** @var $userManager UserManager */
+            /** @var $userManager \Processus\Manager\UserManager */
             $userManager   = $this->getUserManager();
             $filterFriends = $userManager->filterAppFriends($friendsIdList);
 
@@ -67,7 +91,7 @@ namespace Processus\Lib\Bo
             $idList = prosc_array_prefixing("FacebookUserMvo_", $filterFriends);
 
             // improvement get keys
-            $friendsCollections = $connector->getMulipleByKey($idList);
+            $friendsCollections = $connector->getMultipleByKey($idList);
 
             // get friends from membase || or add them
             foreach ($friendsCollections as $item)
@@ -108,14 +132,14 @@ namespace Processus\Lib\Bo
 
                 $userData = $this->getFacebookUserMvo()->getData();
 
-                if (!$userData) {
+                if (is_null($userData->id) == TRUE || empty($userData)) {
 
                     $fbClient = $this->getProcessusContext()->getFacebookClient();
                     $fbData   = $fbClient->getUserDataById($fbUserId);
 
-                    $fbData['created'] = time();
-                    $this->getFacebookUserMvo()->setData($fbData)
-                        ->setMemId($this->getFacebookUserId())
+                    $fbData['created'] = date('Y-m-d\TH:i:s', time());
+                    $memSaved          = $this->getFacebookUserMvo()->setData($fbData)
+                        ->setMemId($this->getProcessusContext()->getUserBo()->getFacebookUserId())
                         ->saveInMem();
 
                     $this->getUserManager()->insertNewUser($this->getFacebookUserMvo());

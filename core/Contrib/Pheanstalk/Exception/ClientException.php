@@ -7,6 +7,7 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Pheanstalk_Exception_ClientException extends Pheanstalk_Exception
+namespace Pheanstalk\Exception;
+class ClientException extends \Pheanstalk\Exception
 {
 }

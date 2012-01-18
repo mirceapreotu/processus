@@ -8,28 +8,29 @@
  * @package Pheanstalk
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-interface Pheanstalk_Socket
+namespace Pheanstalk;
+interface Socket
 {
+	/**
+	 * Writes data to the socket.
+	 * @param string $data
+	 * @return void
+	 */
+	public function write($data);
 
-    /**
-     * Writes data to the socket.
-     * @param string $data
-     * @return void
-     */
-    public function write ($data);
-
-    /**
+	/**
      * Reads up to $length bytes from the socket.
      *
-     * @return string
+     * @abstract
+     * @param $length
      */
-    public function read ($length);
+	public function read($length);
 
-    /**
-     * Reads up to the next new-line, or $length - 1 bytes.
-     * Trailing whitespace is trimmed.
-     *
-     * @param int
-     */
-    public function getLine ($length = null);
+	/**
+	 * Reads up to the next new-line, or $length - 1 bytes.
+	 * Trailing whitespace is trimmed.
+	 *
+	 * @param int
+	 */
+	public function getLine($length = null);
 }

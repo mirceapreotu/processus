@@ -21,7 +21,7 @@
 namespace Processus\Lib\Seat
 {
 
-    set_include_path(get_include_path() . PATH_SEPARATOR . '.:/usr/lib/php' . PATH_SEPARATOR . '.:/usr/local/lib/php');
+    set_include_path(get_include_path() . PATH_SEPARATOR . '.:/usr/lib/php/pear' . PATH_SEPARATOR . '.:/usr/local/lib/php' . PATH_SEPARATOR . '.:/usr/lib/php/pear');
     require_once 'HTTP/Request2.php';
 
 

@@ -29,7 +29,7 @@ namespace Processus\Interfaces
         public function getFullName();
         public function getFirstName();
         public function getName();
-        public function getUrlName();
+        public function getUserName();
         public function getIsAppUser();
         public function setIsAppUser(\boolean $is);
     }
