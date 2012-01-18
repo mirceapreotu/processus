@@ -10,5 +10,6 @@ namespace Processus\Exceptions
 {
     class NotImplementedException extends ProcessusException
     {
+
     }
 }
