@@ -58,8 +58,9 @@ namespace Processus\Lib\Db
 
         /**
          * @param string $key
-         * @param array $value
-         * @param int $expiredTime
+         * @param array  $value
+         * @param int    $expiredTime
+         *
          * @return int
          */
         public function insert($key = "foobar", $value = array(), $expiredTime = 1)
