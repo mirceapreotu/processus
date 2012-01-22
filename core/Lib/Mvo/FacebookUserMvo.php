@@ -104,6 +104,17 @@ namespace Processus\Lib\Mvo
         }
 
         /**
+         * @param $mail
+         *
+         * @return \Processus\Lib\Mvo\FacebookUserMvo
+         */
+        public function setEmail($mail)
+        {
+            $this->setValueByKey('email', $mail);
+            return $this;
+        }
+
+        /**
          * @return array|mixed
          */
         public function getLocale()
