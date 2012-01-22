@@ -6,6 +6,7 @@
  * Time: 3:53 AM
  * To change this template use File | Settings | File Templates.
  */
+namespace Processus\Lib\Net\Http;
 class HttpService
 {
 
