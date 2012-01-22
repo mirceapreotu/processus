@@ -104,7 +104,17 @@ namespace Processus\Abstracts\Vo {
 
             $resultCode = $this->getMemcachedClient()->insert($this->getMemId(), $this->getData(), $this->getExpiredTime());
             $this->_checkResultCode($resultCode);
+            $this->_updated();
             return $resultCode;
+        }
+
+        /**
+         * @return \Processus\Abstracts\Vo\AbstractMVO
+         */
+        protected function _updated()
+        {
+            $this->setValueByKey("updated", time());
+            return $this;
         }
 
         /**
