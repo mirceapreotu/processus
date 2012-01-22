@@ -4,7 +4,7 @@ namespace Processus\Lib\Db
 {
     use Processus\Interfaces\InterfaceDatabase;
 
-    class Memcached implements InterfaceDatabase
+    class MemcachedJson implements InterfaceDatabase
     {
         /**
          * @var \Memcached
@@ -20,6 +20,7 @@ namespace Processus\Lib\Db
         {
             $this->_memcachedClient = new \Memcached($id);
             $this->_memcachedClient->addServer($host, $port);
+            $this->_memcachedClient->setOption(\Memcached::OPT_SERIALIZER, \Memcached::SERIALIZER_JSON);
         }
 
         /**
@@ -37,7 +38,7 @@ namespace Processus\Lib\Db
          */
         public function fetch($key = "foobar")
         {
-            return $this->_memcachedClient->get($key);
+            return json_decode($this->_memcachedClient->get($key));
         }
 
         /**
@@ -65,7 +66,8 @@ namespace Processus\Lib\Db
          */
         public function insert($key = "foobar", $value = array(), $expiredTime = 1)
         {
-            $this->_memcachedClient->set($key, $value, $expiredTime);
+            $jsonDoc = json_encode($value);
+            $this->_memcachedClient->set($key, $jsonDoc, $expiredTime);
             return $this->_memcachedClient->getResultCode();
         }
 
@@ -76,7 +78,7 @@ namespace Processus\Lib\Db
          */
         public function getMultipleByKey(array $keys)
         {
-            return $this->_memcachedClient->getMulti($keys);
+            return json_decode($this->_memcachedClient->getMulti($keys));
         }
 
         /**
