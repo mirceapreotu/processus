@@ -89,9 +89,9 @@ namespace Processus\Abstracts\Vo {
         {
             if (!$this->getMemId()) {
 
-                $errorData = array();
+                $errorData            = array();
                 $errorData['message'] = "Mvo has no Id ";
-                $errorData['stack'] = debug_backtrace();
+                $errorData['stack']   = debug_backtrace();
 
                 $mvoException = new \Processus\Exceptions\MvoException();
                 $mvoException->setClass(__CLASS__)
@@ -109,17 +109,19 @@ namespace Processus\Abstracts\Vo {
 
         /**
          * @param int $resultCode
+         *
          * @todo checking more result code from memcached and throw exception is something wrong
          */
         private function _checkResultCode(\int $resultCode)
         {
-            switch($resultCode)
+            switch ($resultCode)
             {
                 case \Memcached::RES_BAD_KEY_PROVIDED:
                     break;
                 case \Memcached::RES_FAILURE:
                     break;
-                break;
+                case \Memcached::RES_WRITE_FAILURE:
+                    break;
                 default:
                     break;
             }
@@ -186,6 +188,17 @@ namespace Processus\Abstracts\Vo {
         protected function getDataBucketPort()
         {
             return "11211";
+        }
+
+        /**
+         * @param \Processus\Interfaces\InterfaceDatabase $memcached
+         *
+         * @return \Processus\Abstracts\Vo\AbstractMVO
+         */
+        public function setAdapter(\Processus\Interfaces\InterfaceDatabase $memcached)
+        {
+            $this->_memcachedClient = $memcached;
+            return $this;
         }
     }
 }
