@@ -78,7 +78,8 @@ namespace Processus\Lib\Db
          */
         public function getMultipleByKey(array $keys)
         {
-            return json_decode($this->_memcachedClient->getMulti($keys));
+            $stupidPHP = null;
+            return json_decode($this->_memcachedClient->getMulti($keys, $stupidPHP, \Memcached::GET_PRESERVE_ORDER));
         }
 
         /**
