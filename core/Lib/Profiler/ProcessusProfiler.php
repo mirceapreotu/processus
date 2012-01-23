@@ -68,7 +68,7 @@ namespace Processus\Lib\Profiler
         {
             if (!$this->_startTime)
             {
-                $this->_startTime = microtime_float();
+                $this->_startTime = (float)array_sum(explode(' ',microtime()));
             }
 
             return $this->_startTime;
@@ -79,7 +79,7 @@ namespace Processus\Lib\Profiler
          */
         public function applicationProfilerEnd()
         {
-            $endTime = microtime_float();
+            $endTime = (float)array_sum(explode(' ',microtime()));
             $this->_appDuration = $endTime - $this->_startTime;
             $this->_isEnded     = true;
             return $endTime;
@@ -94,7 +94,7 @@ namespace Processus\Lib\Profiler
                 $this->applicationProfilerEnd();
             }
 
-            return $this->_appDuration;
+            return sprintf("%.4f", ($this->_appDuration * 1000));
         }
 
         /**
