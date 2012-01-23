@@ -72,6 +72,17 @@ namespace Processus\Lib\Mvo
         }
 
         /**
+         * @param $firstTime
+         *
+         * @return \Processus\Lib\Mvo\FacebookUserMvo
+         */
+        public function setFirstTime($firstTime)
+        {
+            $this->setValueByKey("firstTime", $firstTime);
+            return $this;
+        }
+
+        /**
          * @return array|mixed
          */
         public function getLink()
