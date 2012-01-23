@@ -15,7 +15,7 @@ namespace Processus\Lib\Profiler
          */
         public function startTimeTrack()
         {
-            $this->setValueByKey("startTimeTrack", microtime(TRUE) / 1000);
+            $this->setValueByKey("startTimeTrack", (float)array_sum(explode(' ', microtime())));
             return $this;
         }
 
@@ -24,7 +24,7 @@ namespace Processus\Lib\Profiler
          */
         public function endTimeTrack()
         {
-            $this->setValueByKey("endTimeTrack", microtime(TRUE) / 1000);
+            $this->setValueByKey("endTimeTrack", (float)array_sum(explode(' ', microtime())));
             return $this;
         }
 
@@ -36,7 +36,6 @@ namespace Processus\Lib\Profiler
         public function setMethod(\string $method)
         {
             $this->setValueByKey('method', $method);
-
             return $this;
         }
 
