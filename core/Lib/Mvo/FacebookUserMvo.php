@@ -260,7 +260,7 @@ namespace Processus\Lib\Mvo
          */
         protected function _generateUserImageUrl($type)
         {
-            return "https://graph.facebook.com/" . $this->getId() . "/picture?" . $type;
+            return "https://graph.facebook.com/" . $this->getId() . "/picture?type=" . $type;
         }
     }
 
