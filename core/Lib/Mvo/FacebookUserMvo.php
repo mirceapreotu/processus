@@ -243,7 +243,7 @@ namespace Processus\Lib\Mvo
         }
 
         /**
-         * @param $imageurl
+         * @param $imageUrl
          *
          * @return \Processus\Lib\Mvo\FacebookUserMvo
          */
