@@ -7,8 +7,6 @@
  */
 namespace Processus\Lib\Vo\Configs
 {
-    use Processus\Lib\Vo\Configs\Facebook;
-
     class ProcessusConfig extends \Processus\Abstracts\Vo\AbstractVO
     {
 
@@ -111,13 +109,30 @@ namespace Processus\Lib\Vo\Configs
          */
         public function getApplicationConfig()
         {
-            if(!$this->_applicationConfig)
-            {
+            if (!$this->_applicationConfig) {
                 $this->_applicationConfig = new ApplicationConfig();
                 $this->_applicationConfig->setData($this->getValueByKey('application'));
             }
 
             return $this->_applicationConfig;
+        }
+
+        /**
+         * @var \Processus\Lib\Vo\Configs\ExpiredTimeConfig
+         */
+        private $_expiredTimeConfig;
+
+        /**
+         * @return ExpiredTimeConfig
+         */
+        public function getExpiredTimeConfig()
+        {
+            if (!$this->_expiredTimeConfig) {
+                $this->_expiredTimeConfig = new ExpiredTimeConfig();
+                $this->_expiredTimeConfig->setData($this->getApplicationConfig()->getValueByKey("expiredTime"));
+            }
+
+            return $this->_expiredTimeConfig;
         }
 
     }
