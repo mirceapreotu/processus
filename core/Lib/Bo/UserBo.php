@@ -30,7 +30,7 @@ namespace Processus\Lib\Bo
         public function getMysqlId()
         {
             if (!$this->_mysqlId) {
-                $sqlStmt = "SELECT id FROM users WHERE fb_id = :fb_id";
+                $sqlStmt   = "SELECT id FROM users WHERE fb_id = :fb_id";
                 $sqlParams = array(
                     "fb_id" => $this->getFacebookUserId()
                 );
@@ -80,7 +80,7 @@ namespace Processus\Lib\Bo
 
             // match appUsers with friendsList from facebook
             /** @var $userManager \Processus\Manager\UserManager */
-            $userManager = $this->getUserManager();
+            $userManager   = $this->getUserManager();
             $filterFriends = $userManager->filterAppFriends($friendsIdList);
 
             $mvoFriendsList = array();
@@ -130,9 +130,11 @@ namespace Processus\Lib\Bo
             if ($fbUserId) {
 
                 $userData = $this->getFacebookUserMvo()->getData();
-                if (is_null($userData->id) == TRUE || empty($userData)) {
-                    $fbClient = $this->getProcessusContext()->getFacebookClient();
-                    $fbData = $fbClient->getUserDataById($fbUserId);
+
+                if (is_null($userData->id) == TRUE || empty($userData))
+                {
+                    $fbClient          = $this->getProcessusContext()->getFacebookClient();
+                    $fbData            = $fbClient->getUserDataById($fbUserId);
                     $fbData['created'] = convertUnixTimeToIso(time());
                     $this->getFacebookUserMvo()->setData($fbData)
                         ->setMemId($this->getProcessusContext()->getUserBo()->getFacebookUserId())
