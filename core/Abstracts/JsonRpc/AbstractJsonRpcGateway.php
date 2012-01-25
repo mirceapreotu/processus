@@ -74,7 +74,7 @@ namespace Processus\Abstracts\JsonRpc
             }
 
             // throw new Exception
-            return FALSE;
+            throw new \Exception("Not a valid request!", 1);
         }
 
         // #########################################################
