@@ -18,6 +18,13 @@ namespace Processus\Interfaces
 
         public function getData();
 
+        /**
+         * @abstract
+         *
+         * @param InterfaceDto $dto
+         *
+         * @return \Processus\Interfaces\InterfaceVo
+         */
         public function setDto(\Processus\Interfaces\InterfaceDto $dto);
     }
 }
