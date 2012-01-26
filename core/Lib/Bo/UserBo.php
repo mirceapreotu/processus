@@ -129,19 +129,22 @@ namespace Processus\Lib\Bo
 
             if ($fbUserId) {
 
-                $userData = $this->getFacebookUserMvo()->getData();
+                $userData  = $this->getFacebookUserMvo()->getData();
+                $isInMySql = $this->_isInMySqlTable();
 
-                if (is_null($userData->id) == TRUE || empty($userData))
+                if (count($isInMySql) == 1)
                 {
-                    $fbClient          = $this->getProcessusContext()->getFacebookClient();
-                    $fbData            = $fbClient->getUserDataById($fbUserId);
-                    $fbData['created'] = convertUnixTimeToIso(time());
-                    $this->getFacebookUserMvo()->setData($fbData)
-                        ->setMemId($this->getProcessusContext()->getUserBo()->getFacebookUserId())
-                        ->saveInMem();
-
-                    $this->getUserManager()->insertNewUser($this->getFacebookUserMvo());
+                    return TRUE;
                 }
+
+                $fbClient          = $this->getProcessusContext()->getFacebookClient();
+                $fbData            = $fbClient->getUserDataById($fbUserId);
+                $fbData['created'] = convertUnixTimeToIso(time());
+                $this->getFacebookUserMvo()->setData($fbData)
+                    ->setMemId($this->getProcessusContext()->getUserBo()->getFacebookUserId())
+                    ->saveInMem();
+
+                $this->getUserManager()->insertNewUser($this->getFacebookUserMvo());
 
                 return TRUE;
             }
@@ -149,6 +152,20 @@ namespace Processus\Lib\Bo
             {
                 return $this->getProcessusContext()->getFacebookClient()->getLoginUrl();
             }
+        }
+
+        /**
+         * @return array
+         */
+        protected function _isInMySqlTable()
+        {
+            $mysql     = $this->getProcessusContext()->getMasterMySql();
+            $sqlStmt   = "SELECT id, fb_id FROM users WHERE fb_id=:fb_id";
+            $sqlParams = array(
+                "fb_id" => $this->getProcessusContext()->getUserBo()->getFacebookUserId(),
+            );
+            $userData = $mysql->fetchAll($sqlStmt, $sqlParams);
+            return $userData;
         }
     }
 }
