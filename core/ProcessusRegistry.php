@@ -37,13 +37,15 @@ namespace Processus
         /**
          * @param null $key
          *
-         * @return mixed
+         * @return null|mixed
          */
         public function getConfig($key = NULL)
         {
             if (!is_null($key) && $this->config->$key) {
                 return $this->config->$key;
             }
+
+            return NULL;
         }
 
         // #########################################################
@@ -60,6 +62,63 @@ namespace Processus
             }
 
             return $this->_processusConfig;
+        }
+
+        /**
+         * @var \Processus\Lib\Vo\Configs\Sendgrid\SendgridConfig
+         */
+        private $_sendgridConfig;
+
+        /**
+         * @return Lib\Vo\Configs\Sendgrid\SendgridConfig
+         */
+        public function getSendgridConfig()
+        {
+            if (!$this->_sendgridConfig) {
+                $this->_sendgridConfig = new \Processus\Lib\Vo\Configs\Sendgrid\SendgridConfig();
+                $this->_sendgridConfig->setData($this->getConfig("SendGrid"));
+            }
+
+            return $this->_sendgridConfig;
+        }
+
+
+        /**
+         * @var \Processus\Lib\Vo\Configs\FacebookConfig
+         */
+        private $_facebookConfig;
+
+
+        /**
+         * @return Lib\Vo\Configs\FacebookConfig
+         */
+        public function getFacebookConfig()
+        {
+            if (!$this->_facebookConfig) {
+                $this->_facebookConfig = new \Processus\Lib\Vo\Configs\FacebookConfig();
+                $this->_facebookConfig->setData($this->getConfig("Facebook"));
+            }
+
+            return $this->_facebookConfig;
+        }
+
+
+        /**
+         * @var \Processus\Lib\Vo\Configs\Amazon\AmazonConfig
+         */
+        private $_amazonConfig;
+
+        /**
+         * @return Lib\Vo\Configs\Amazon\AmazonConfig
+         */
+        public function getAmazonConfig()
+        {
+            if (!$this->_amazonConfig) {
+                $this->_amazonConfig = new \Processus\Lib\Vo\Configs\Amazon\AmazonConfig();
+                $this->_amazonConfig->setData($this->getConfig("Amazon"));
+            }
+
+            return $this->_amazonConfig;
         }
     }
 }

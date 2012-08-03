@@ -1,9 +1,9 @@
 <?php
 
-/** 
+/**
  * @author francis
- * 
- * 
+ *
+ *
  */
 namespace Processus\Lib\Vo\Configs
 {
@@ -14,4 +14,3 @@ namespace Processus\Lib\Vo\Configs
 
     }
 }
-?>

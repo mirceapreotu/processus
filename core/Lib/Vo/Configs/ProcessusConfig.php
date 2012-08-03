@@ -7,8 +7,6 @@
  */
 namespace Processus\Lib\Vo\Configs
 {
-    use Processus\Lib\Vo\Configs\Facebook;
-
     class ProcessusConfig extends \Processus\Abstracts\Vo\AbstractVO
     {
 
@@ -28,11 +26,6 @@ namespace Processus\Lib\Vo\Configs
         private $_mysqlConfig;
 
         /**
-         * @var \Processus\Lib\Vo\Configs\Facebook\Facebook
-         */
-        private $_facebookConfig;
-
-        /**
          * @var \Processus\Lib\Vo\Configs\ProfilerConfig
          */
         private $_profilerConfig;
@@ -42,18 +35,6 @@ namespace Processus\Lib\Vo\Configs
          */
         private $_applicationConfig;
 
-        /**
-         * @return \Processus\Lib\Vo\Configs\Facebook\Facebook
-         */
-        public function getFacebookConfig()
-        {
-            if (!$this->_facebookConfig) {
-                $this->_facebookConfig = new \Processus\Lib\Vo\Configs\Facebook\Facebook();
-                $this->_facebookConfig->setData($this->getValueByKey("Facebook"));
-            }
-
-            return $this->_facebookConfig;
-        }
 
         /**
          * @return \Processus\Lib\Vo\Configs\CouchbaseConfig
@@ -111,8 +92,7 @@ namespace Processus\Lib\Vo\Configs
          */
         public function getApplicationConfig()
         {
-            if(!$this->_applicationConfig)
-            {
+            if (!$this->_applicationConfig) {
                 $this->_applicationConfig = new ApplicationConfig();
                 $this->_applicationConfig->setData($this->getValueByKey('application'));
             }
@@ -120,6 +100,23 @@ namespace Processus\Lib\Vo\Configs
             return $this->_applicationConfig;
         }
 
+        /**
+         * @var \Processus\Lib\Vo\Configs\ExpiredTimeConfig
+         */
+        private $_expiredTimeConfig;
+
+        /**
+         * @return ExpiredTimeConfig
+         */
+        public function getExpiredTimeConfig()
+        {
+            if (!$this->_expiredTimeConfig) {
+                $this->_expiredTimeConfig = new ExpiredTimeConfig();
+                $this->_expiredTimeConfig->setData($this->getApplicationConfig()->getValueByKey("expiredTime"));
+            }
+
+            return $this->_expiredTimeConfig;
+        }
+
     }
 }
-?>

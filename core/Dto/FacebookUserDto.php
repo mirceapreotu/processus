@@ -16,7 +16,7 @@ namespace Processus\Dto
         /**
          * @see Processus\Abstracts\Vo.AbstractDTO::getMapping()
          */
-        protected function getMapping ()
+        protected function _getMapping ()
         {
             return array(
                 
@@ -27,6 +27,11 @@ namespace Processus\Dto
                 "locale" => "language", 
                 "gender" => "gender"
             );
+        }
+
+        protected function _getDtoCachingId()
+        {
+
         }
     
     }

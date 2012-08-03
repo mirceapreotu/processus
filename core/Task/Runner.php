@@ -93,7 +93,7 @@ namespace Processus\Task
             self::$_pid = getmypid();
             
             $taskClassName = self::_getTaskClassname();
-            
+
             try {
                 
                 // we need to suppress errors because the autoloaders exceptions

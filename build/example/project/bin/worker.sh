@@ -11,7 +11,7 @@ echo "`date`;Starting worker shell loop wrapper"
 while true
 do
     echo "`date` Starting PHP worker instance"
-    $BIN_PATH/run_task.php Queue_Worker -q default_svz -v 2>&1
+    $BIN_PATH/speedy.php SimpleWorker -v 2>&1
     RC="$?"
     case "$RC" in
         0)

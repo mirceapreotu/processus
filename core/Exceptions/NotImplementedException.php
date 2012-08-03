@@ -10,5 +10,9 @@ namespace Processus\Exceptions
 {
     class NotImplementedException extends ProcessusException
     {
+        public function __construct()
+        {
+            parent::__construct("Function not implemented");
+        }
     }
 }

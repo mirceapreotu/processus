@@ -585,7 +585,7 @@ namespace Processus\Contrib\Facebook
             // generic application level parameters
             $params['api_key'] = $this->getAppId();
             $params['format'] = 'json-strings';
-            
+
             $result = json_decode($this->_oauthRequest($this->getApiUrl($params['method']), $params), true);
             
             // results are returned, errors are thrown

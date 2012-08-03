@@ -10,5 +10,9 @@ namespace Processus\Base
 {
     class BaseValidator extends \Processus\Abstracts\AbstractValidator
     {
+        public function isValid()
+        {
+
+        }
     }
 }

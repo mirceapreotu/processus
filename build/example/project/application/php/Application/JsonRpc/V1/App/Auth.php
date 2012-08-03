@@ -2,12 +2,20 @@
 
 namespace Application\JsonRpc\V1\App
 {
-    use Processus\Lib\Auth\FacebookAuth;
-
-    class Auth extends FacebookAuth
+    class Auth extends \Processus\Lib\Auth\FacebookAuth
     {
+        /**
+         * @var bool
+         */
+        private $_isAuthorized = TRUE;
 
-        private $_isAuthorized = FALSE;
+        /**
+         * @return bool
+         */
+        public function isAuthorized()
+        {
+            return $this->_isAuthorized;
+        }
     }
 }
 

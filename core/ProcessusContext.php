@@ -92,45 +92,6 @@ namespace Processus
         }
 
         /**
-         * @return \Zend\Log\Logger
-         */
-        public function getDebugLogger()
-        {
-            if (!$this->_debugLogger) {
-                $streamWriter       = new \Zend\Log\Writer\Stream(PATH_ROOT . '/logs/application/debug/zend.debug.log');
-                $this->_debugLogger = new \Zend\Log\Logger($streamWriter);
-            }
-
-            return $this->_debugLogger;
-        }
-
-        /**
-         * @return \Zend\Log\Logger
-         */
-        public function getProfilingLogger()
-        {
-            if (!$this->_profilingLogger) {
-                $streamWriter           = new \Zend\Log\Writer\Stream(PATH_ROOT . '/logs/application/profiling/zend.profiling.log');
-                $this->_profilingLogger = new \Zend\Log\Logger($streamWriter);
-            }
-
-            return $this->_profilingLogger;
-        }
-
-        /**
-         * @return \Zend\Log\Logger
-         */
-        public function getErrorLogger()
-        {
-            if (!$this->_errorLogger) {
-                $streamWriter       = new \Zend\Log\Writer\Stream(PATH_ROOT . '/logs/application/error/zend.error.log');
-                $this->_errorLogger = new \Zend\Log\Logger($streamWriter);
-            }
-
-            return $this->_errorLogger;
-        }
-
-        /**
          * @return Lib\Db\Memcached
          */
         public function getDefaultCache()
@@ -142,7 +103,9 @@ namespace Processus
                     ->getCouchbaseConfig()
                     ->getCouchbasePortByDatabucketKey("default");
 
-                $this->_memcached = \Processus\Lib\Server\ServerFactory::memcachedFactory($config['host'], $config['port']);
+                $this->_memcached = \Processus\Lib\Server\ServerFactory::memcachedFactory(
+                    $config['host'], $config['port']
+                );
             }
 
             return $this->_memcached;
@@ -175,6 +138,16 @@ namespace Processus
         }
 
         /**
+         * @param ProcessusRegistry $registry
+         * @return ProcessusContext
+         */
+        public function setRegistry(ProcessusRegistry $registry)
+        {
+            $this->_registry = $registry;
+            return $this;
+        }
+
+        /**
          * @return Lib\Facebook\FacebookClient
          */
         public function getFacebookClient()
@@ -187,9 +160,8 @@ namespace Processus
 
         // #########################################################
 
-
         /**
-         * @return \Processus\Lib\Bo\UserBo
+         * @return Lib\Bo\UserBo
          */
         public function getUserBo()
         {
@@ -197,6 +169,17 @@ namespace Processus
                 $this->_userBo = new \Processus\Lib\Bo\UserBo();
             }
             return $this->_userBo;
+        }
+
+        /**
+         * @param Lib\Bo\UserBo $bo
+         *
+         * @return ProcessusContext
+         */
+        public function setUserBo(\Processus\Lib\Bo\UserBo $bo)
+        {
+            $this->_userBo = $bo;
+            return $this;
         }
 
         // #########################################################

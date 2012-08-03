@@ -32,6 +32,27 @@ namespace Processus
         private $_startTime;
 
         /**
+         * @var \Processus\Abstracts\JsonRpc\AbstractJsonRpcGateway
+         */
+        private $_gateway;
+
+        /**
+         * @param Abstracts\JsonRpc\AbstractJsonRpcGateway $gateway
+         */
+        public function setGateway(\Processus\Abstracts\JsonRpc\AbstractJsonRpcGateway $gateway)
+        {
+            $this->_gateway = $gateway;
+        }
+
+        /**
+         * @return Abstracts\JsonRpc\AbstractJsonRpcGateway
+         */
+        public function getGateway()
+        {
+            return $this->_gateway;
+        }
+
+        /**
          * @return array
          */
         public function getFilesRequireList()
@@ -67,6 +88,7 @@ namespace Processus
                 error_reporting(E_ALL | E_STRICT);
 
                 set_error_handler(array(
+
                                        "Processus\\ProcessusBootstrap",
                                        'handleError'
                                   ));
@@ -80,6 +102,7 @@ namespace Processus
                                            "Processus\\ProcessusBootstrap",
                                            'handleError'
                                       ));
+
                 //ini_set('display_errors', '0');
 
                 // cache current include path
@@ -111,9 +134,7 @@ namespace Processus
 
                 return $this;
 
-            }
-            catch (\Exception $e)
-            {
+            } catch (\Exception $e) {
                 echo json_encode($e);
                 return FALSE;
             }
@@ -170,7 +191,7 @@ namespace Processus
          *
          * @return mixed
          */
-        public static function handleError($errorObj)
+        public static function handleError($errorObj = NULL)
         {
             if ($errorObj == NULL || $errorObj == E_RECOVERABLE_ERROR || $errorObj == E_NOTICE || $errorObj == E_WARNING) {
                 return;
@@ -205,8 +226,7 @@ namespace Processus
 
                 $lastError['data'] = $lastError;
 
-                $error['debug'] = $debug;
-
+                $error['debug']     = $debug;
                 $error['user']      = $user;
                 $error['lasterror'] = $lastError;
 
@@ -224,7 +244,7 @@ namespace Processus
                 $error['trigger']   = "Auto Exception";
                 $error['backtrace'] = debug_backtrace();
                 $error['errorData'] = $lastError;
-                $error['params']    = $errorObj;
+                $error['params']    = var_export($errorObj);
 
                 $returnValue['error'] = $error;
 

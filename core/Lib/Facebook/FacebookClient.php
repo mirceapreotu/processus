@@ -79,14 +79,12 @@ namespace Processus\Lib\Facebook
         {
             if (!$this->_userFacebookData) {
 
-                try
-                {
+                try {
 
                     $this->_userFacebookData = $this->getFacebookSdk()->api("/me");
 
                 }
-                catch (\Exception $error)
-                {
+                catch (\Exception $error) {
                     throw $error;
                 }
             }
@@ -107,29 +105,34 @@ namespace Processus\Lib\Facebook
          */
         public function getUserId()
         {
-            if(!$this->_userId)
-            {
+            if (!$this->_userId) {
                 $this->_userId = $this->getFacebookSdk()->getUser();
             }
             return $this->_userId;
         }
 
         /**
+         * @param null $userFbId
+         *
          * @return mixed
          */
-        public function getUserFriends()
+        public function getUserFriends($userFbId = null)
         {
-            $defaultCache = $this->getProcessusContext()->getDefaultCache();
-            $fbNum        = $this->getUserId();
-            $memKey       = "getUserFriends_" . $fbNum;
+            $defaultCache    = $this->getProcessusContext()->getDefaultCache();
+            $fbNum           = (int)$userFbId > 0 ? $userFbId : $this->getUserId();
 
+            $memKey          = "FacebookClient_getUserFriends_" . $fbNum;
             $facebookFriends = $defaultCache->fetch($memKey);
 
-            if (!$facebookFriends) {
+            if (!$facebookFriends && is_null($userFbId)) {
                 $rawData         = $this->getFacebookSdk()->api("/me/friends");
                 $facebookFriends = $rawData['data'];
 
                 $defaultCache->insert($memKey, $facebookFriends, 60 * 60 * 3);
+
+                // update users_relations table with his friends
+                $managerUserRelations = new \Application\Manager\UsersRelations\UsersRelationsManager();
+                $managerUserRelations->updateUserFriends();
             }
 
             return $facebookFriends;
@@ -138,7 +141,7 @@ namespace Processus\Lib\Facebook
         /**
          * @return \Processus\Contrib\Facebook\Facebook
          */
-        protected function getFacebookSdk()
+        public function getFacebookSdk()
         {
             if (!$this->_facebookSdk) {
                 $this->_facebookSdk = new \Processus\Contrib\Facebook\Facebook($this->getFacebookClientConfig()->toArray());
@@ -173,8 +176,7 @@ namespace Processus\Lib\Facebook
             try {
                 $userData = $this->getFacebookSdk()->api("/" . $facebookUserId);
             }
-            catch (\Exception $error)
-            {
+            catch (\Exception $error) {
                 throw $error;
             }
 

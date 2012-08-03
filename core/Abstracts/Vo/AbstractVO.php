@@ -8,7 +8,7 @@ namespace Processus\Abstracts\Vo
         /**
          * @var object
          */
-        protected $_data;
+        protected $_data = null;
 
         /**
          * @return array|mixed
@@ -38,6 +38,10 @@ namespace Processus\Abstracts\Vo
          */
         public function setValueByKey(\string $key, \object $value)
         {
+            if (is_null($this->_data)) {
+                $this->_data = new \stdClass();
+            }
+
             $this->_data->$key = $value;
             return $this;
         }
@@ -66,9 +70,8 @@ namespace Processus\Abstracts\Vo
             try {
                 return $this->_data;
             }
-            catch (\Exception $error)
-            {
-                return null;
+            catch (\Exception $error) {
+                return NULL;
             }
         }
 
@@ -83,6 +86,13 @@ namespace Processus\Abstracts\Vo
             return $dto;
         }
 
+        /**
+         * @return string
+         */
+        public function toJson()
+        {
+            return json_encode($this->_data);
+        }
     }
 }
 

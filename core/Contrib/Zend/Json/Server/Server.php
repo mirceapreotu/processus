@@ -341,7 +341,7 @@ class Server extends \Zend\Server\AbstractServer
     /**
      * Retrieve SMD object
      *
-     * @return Zend\Json\Server\Smd
+     * @return SMD
      */
     public function getServiceMap()
     {

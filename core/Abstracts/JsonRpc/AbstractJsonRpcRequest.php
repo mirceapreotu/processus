@@ -39,11 +39,6 @@ namespace Processus\Abstracts\JsonRpc
          */
         protected $_extended;
 
-        /**
-         * @var array
-         */
-        protected $_validatorList = array();
-
         // #########################################################
 
         public function __construct()
@@ -56,27 +51,12 @@ namespace Processus\Abstracts\JsonRpc
         /**
          * @param \Processus\Interfaces\InterfaceValidator $validator
          *
-         * @return \Processus\Abstracts\JsonRpc\AbstractJsonRpcRequest
+         * @return \Processus\Abstracts\AbstractValidator
          */
-        public function addValidator(\Processus\Interfaces\InterfaceValidator $validator)
+        public function setValidator(\Processus\Interfaces\InterfaceValidator $validator)
         {
-            $validator->setValidationData($this->getRawJson());
-            $this->_validatorList[] = $validator;
-            return $this;
-        }
-
-        /**
-         * @return bool
-         */
-        public function isValidRequest()
-        {
-            /** @var $validator \Processus\Interfaces\InterfaceValidator */
-            foreach ($this->_validatorList as $validator)
-            {
-                return $validator->isValid() == TRUE ? TRUE : FALSE;
-            }
-
-            return TRUE;
+            $validator->setValidationData($this->getParams());
+            return $validator;
         }
 
         // #########################################################

@@ -2,19 +2,17 @@
 
 namespace Application\JsonRpc\V1\App
 {
-    use Processus\Abstracts\JsonRpc\AbstractJsonRpcGateway;
-
-    class Gateway extends AbstractJsonRpcGateway
+    class Gateway extends \Processus\Abstracts\JsonRpc\AbstractJsonRpcGateway
     {
 
         protected $_config = array(
-            'enabled' => TRUE, 
-            'namespace' => __NAMESPACE__, 
+            'enabled'      => TRUE,
+            'namespace'    => __NAMESPACE__,
             'validDomains' => array(
                 'App'
             )
         );
-    
+
     }
 }
 

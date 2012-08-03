@@ -1,8 +1,6 @@
 <?php
 
 namespace Processus\Abstracts\Vo {
-    use \string;
-
     /**
      * User: francis
      * Date: 7/29/11
@@ -28,7 +26,7 @@ namespace Processus\Abstracts\Vo {
         protected $_hashAlgo;
 
         /**
-         * @var Memcached
+         * @var \Processus\Lib\Db\Memcached
          */
         protected $_memcachedClient;
 
@@ -74,7 +72,7 @@ namespace Processus\Abstracts\Vo {
          *
          * @return AbstractMVO
          */
-        public function setMemId(string $mId)
+        public function setMemId($mId)
         {
             $this->_memId = $mId;
             return $this;
@@ -89,9 +87,9 @@ namespace Processus\Abstracts\Vo {
         {
             if (!$this->getMemId()) {
 
-                $errorData = array();
+                $errorData            = array();
                 $errorData['message'] = "Mvo has no Id ";
-                $errorData['stack'] = debug_backtrace();
+                $errorData['stack']   = debug_backtrace();
 
                 $mvoException = new \Processus\Exceptions\MvoException();
                 $mvoException->setClass(__CLASS__)
@@ -102,24 +100,37 @@ namespace Processus\Abstracts\Vo {
                 throw $mvoException;
             }
 
-            $resultCode = $this->getMemcachedClient()->insert($this->getMemId(), $this->getData(), $this->getExpiredTime());
+            $resultCode = $this->getMemcachedClient()->insert(
+                $this->getMemId(), $this->getData(), $this->getExpiredTime()
+            );
             $this->_checkResultCode($resultCode);
+            $this->_updated();
             return $resultCode;
         }
 
         /**
+         * @return \Processus\Abstracts\Vo\AbstractMVO
+         */
+        protected function _updated()
+        {
+            $this->setValueByKey("updated", time());
+            return $this;
+        }
+
+        /**
          * @param int $resultCode
+         *
          * @todo checking more result code from memcached and throw exception is something wrong
          */
-        private function _checkResultCode(\int $resultCode)
+        protected function _checkResultCode(\int $resultCode)
         {
-            switch($resultCode)
-            {
+            switch ($resultCode) {
                 case \Memcached::RES_BAD_KEY_PROVIDED:
                     break;
                 case \Memcached::RES_FAILURE:
                     break;
-                break;
+                case \Memcached::RES_WRITE_FAILURE:
+                    break;
                 default:
                     break;
             }
@@ -131,7 +142,7 @@ namespace Processus\Abstracts\Vo {
         public function deleteFromMem()
         {
             $this->getMemcachedClient()->delete($this->getMemId());
-            return true;
+            return TRUE;
         }
 
         /**
@@ -144,15 +155,19 @@ namespace Processus\Abstracts\Vo {
         }
 
         /**
-         * @throws Exception
          * @return \Processus\Lib\Db\Memcached
+         * @throws \Exception
          */
         public function getMemcachedClient()
         {
             if (!$this->_memcachedClient) {
                 try {
 
-                    $this->_memcachedClient = \Processus\Lib\Server\ServerFactory::memcachedFactory($this->getMembaseHost(), $this->getDataBucketPort());
+                    $this->_memcachedClient = \Processus\Lib\Server\ServerFactory::memcachedFactory(
+                        $this->getMembaseHost(), $this->getDataBucketPort(),
+                        \Processus\Consta\MemcachedFactoryType::MEMCACHED_JSON,
+                        $this->getMembaseHost(), $this->getDataBucketPort()
+                    );
 
                 }
                 catch (\Exception $error) {
@@ -175,17 +190,40 @@ namespace Processus\Abstracts\Vo {
         /**
          * @return string
          */
-        protected function getMembaseHost()
+        protected function getDataBucketPort()
         {
-            return "127.0.0.1";
+            $config = $this->getProcessusContext()
+                ->getRegistry()
+                ->getProcessusConfig()
+                ->getCouchbaseConfig()
+                ->getCouchbasePortByDatabucketKey("default");
+
+            return $config['port'];
         }
 
         /**
-         * @return string
+         * @return mixed
          */
-        protected function getDataBucketPort()
+        protected function getMembaseHost()
         {
-            return "11211";
+            $config = $this->getProcessusContext()
+                ->getRegistry()
+                ->getProcessusConfig()
+                ->getCouchbaseConfig()
+                ->getCouchbasePortByDatabucketKey("default");
+
+            return $config['host'];
+        }
+
+        /**
+         * @param \Processus\Interfaces\InterfaceDatabase $memcached
+         *
+         * @return \Processus\Abstracts\Vo\AbstractMVO
+         */
+        public function setAdapter(\Processus\Interfaces\InterfaceDatabase $memcached)
+        {
+            $this->_memcachedClient = $memcached;
+            return $this;
         }
     }
 }

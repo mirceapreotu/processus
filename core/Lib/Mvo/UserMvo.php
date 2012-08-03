@@ -10,7 +10,6 @@ namespace Processus\Lib\Mvo;
 
 class UserMvo extends \Processus\Abstracts\Vo\AbstractMVO implements \Processus\Interfaces\InterfaceUser
 {
-
     /**
      * @return string
      */
@@ -24,9 +23,9 @@ class UserMvo extends \Processus\Abstracts\Vo\AbstractMVO implements \Processus\
      *
      * @return FacebookUserMvo
      */
-    public function setFirstTime(\string $firstTime)
+    public function setFirstname(\string $firstTime)
     {
-        $this->setValueByKey('firstTime', $firstTime);
+        $this->setValueByKey('first_name', $firstTime);
         return $this;
     }
 

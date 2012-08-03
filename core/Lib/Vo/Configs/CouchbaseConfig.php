@@ -61,4 +61,3 @@ namespace Processus\Lib\Vo\Configs
         }
     }
 }
-?>

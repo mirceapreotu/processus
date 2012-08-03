@@ -41,30 +41,6 @@ return array(
                     "host" => "127.0.0.1",
                     "port" => "11211"
                 ),
-                'fbusers'        => array(
-                    "host" => "127.0.0.1",
-                    "port" => "11211"
-                ),
-                'deeplink'       => array(
-                    "host" => "127.0.0.1",
-                    "port" => "11211"
-                ),
-                'userStake'      => array(
-                    "host" => "127.0.0.1",
-                    "port" => "11211"
-                ),
-                'tmp'            => array(
-                    "host" => "127.0.0.1",
-                    "port" => "11211"
-                ),
-                'comments'       => array(
-                    "host" => "127.0.0.1",
-                    "port" => "11211"
-                ),
-                'bets'           => array(
-                    "host" => "127.0.0.1",
-                    "port" => "11211"
-                ),
             ),
             'couchbaseServers' => array(
                 "0" => array(
@@ -157,12 +133,31 @@ return array(
 
     // ++++++++++++++ fb: osapi ++++++++++++++++++++++++++++++++++++++
 
+    "Twitter"        => array(
+        "consumerKey"    => "",
+        "consumerSecret" => "",
+    ),
+
+    // ++++++++++++++ fb: osapi ++++++++++++++++++++++++++++++++++++++
+
     'Profiler'       => array(
         "ips" => array(""),
     ),
 
     'Logging'        => array(
 
+    ),
+
+    // ++++++++++++++ fb: osapi ++++++++++++++++++++++++++++++++++++++
+
+    'Amazon'         => array(
+        "S3" => array(
+            "auth"    => array(
+                "aws_key" => "",
+                "secret"  => "",
+            ),
+            "buckets" => array("test-bucket"),
+        )
     ),
 
     // ++++++++++++++ Sendgrid Config ++++++++++++++++++++++++++++++++++++++

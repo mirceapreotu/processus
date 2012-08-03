@@ -1,27 +1,27 @@
 <?php
 
-/** 
+/**
  * @author fightbulc
- * 
- * 
+ *
+ *
  */
 namespace Processus\Interfaces
 {
-
     interface InterfaceDto
     {
-
         /**
          * @abstract
+         *
          * @param $data
          */
-        public function setData ($data);
+        public function setData($data);
 
         /**
          * @abstract
-         * @return object
+         *
+         * @param $rawData
          */
-        public function export ();
+        public function export($rawData = null);
     }
 }
 

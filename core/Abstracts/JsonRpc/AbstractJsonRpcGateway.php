@@ -42,7 +42,7 @@ namespace Processus\Abstracts\JsonRpc
             }
 
             // throw new Exception
-            return FALSE;
+            throw new \Exception("Not Enabled!", 1);
         }
 
         // #########################################################
@@ -58,7 +58,7 @@ namespace Processus\Abstracts\JsonRpc
             }
 
             // throw new Exception
-            return FALSE;
+            throw new \Exception("No Namespace!", 1);
         }
 
         // #########################################################
@@ -74,7 +74,7 @@ namespace Processus\Abstracts\JsonRpc
             }
 
             // throw new Exception
-            return FALSE;
+            throw new \Exception("Not a valid request!", 1);
         }
 
         // #########################################################
@@ -99,24 +99,25 @@ namespace Processus\Abstracts\JsonRpc
             }
 
             // throw new Exception
-            return FALSE;
+            throw new \Exception("Not a valid request!", 1);
         }
 
         // #########################################################
 
-
         /**
-         * @return Core\Abstracts\AbstractJsonRpcServer
+         * @return AbstractJsonRpcServer
          */
         public function getServer()
         {
-            $serverClassName = $this->getServerClassName();
+            if (!$this->_server) {
+                $serverClassName = $this->getServerClassName();
 
-            /** @var $server  AbstractJsonRpcServer */
-            $server = new $serverClassName();
-            $server->setRequest($this->getRequest());
+                /** @var $server  AbstractJsonRpcServer */
+                $this->_server = new $serverClassName();
+                $this->_server->setRequest($this->getRequest());
+            }
 
-            return $server;
+            return $this->_server;
         }
 
         // #########################################################
@@ -159,7 +160,7 @@ namespace Processus\Abstracts\JsonRpc
         /**
          * @return \Processus\Abstracts\JsonRpc\AbstractJsonRpcRequest
          */
-        private function getRequest()
+        public function getRequest()
         {
             if (!$this->_request) {
 
@@ -234,7 +235,8 @@ namespace Processus\Abstracts\JsonRpc
                     $this->_authModule->setAuthData($this->getRequest());
 
                     return $this->_authModule;
-                } catch (\Exception $error)
+                }
+                catch (\Exception $error)
                 {
                     throw $error;
                 }

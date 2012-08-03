@@ -17,27 +17,19 @@ namespace Processus\Abstracts\JsonRpc
          */
         public function toJson()
         {
+
             if ($this->isError()) {
 
                 $response = array();
                 $error    = array();
-
                 $error['code']    = $this->getError()->getCode();
                 $error['message'] = $this->getError()->getMessage();
                 $error['data']    = $this->getError()->getData();
-                $error['stack']   = $this->getError()->getData()->getTraceAsString();
+                if (is_object($error['data'])) {
+                    $error['stack']   = $this->getError()->getData()->getTraceAsString();
+                }
 
                 $response['error'] = $error;
-                $response['id']    = $this->getId();
-
-            }
-            else
-            {
-
-                $response                       = array();
-                $response['result']             = $this->getResult();
-                $response['id']                 = $this->getId();
-
             }
 
             if (null !== ($version = $this->getVersion())) {
@@ -61,8 +53,6 @@ namespace Processus\Abstracts\JsonRpc
                     "request_time" => $this->_getServerParams()->getRequestTime()
                 );
 
-                $currentUser = \Processus\ProcessusContext::getInstance()->getUserBo()->getFacebookUserMvo()->setDto(new \Application\Dto\FbBasicDto())->export();
-
                 $requireList = \Processus\ProcessusContext::getInstance()->getBootstrap()->getFilesRequireList();
 
                 $fileStack = array(
@@ -75,13 +65,26 @@ namespace Processus\Abstracts\JsonRpc
                     "app"         => $app,
                     "system"      => $system,
                     "profiling"   => $this->_getProfiler()->getProfilerStack(),
-                    'currentUser' => $currentUser,
+                    'fileStack'   => $fileStack,
                     'fileStack'   => $requireList,
                 );
 
                 $response['debug'] = $debugInfo;
+                $response['id']    = $this->getId();
 
             }
+            else
+            {
+                $response           = array();
+                $response['result'] = $this->getResult();
+                $response['id']     = $this->getId();
+
+            }
+
+            header("Content-Type: application/json");
+            header("Hiring: http://www.crowdpark.com/jobs/");
+            header("Hiring-Code: crowdpark-" . rand(0, 100));
+            header("Hiring-EMail: jobs@crowdpark.com");
 
             return json_encode($response);
         }

@@ -48,8 +48,7 @@ function prosc_array_prefixing(string $prefix, array $idList)
  */
 function microtime_float()
 {
-    list($usec, $sec) = explode(" ", microtime());
-    return ((float)$usec + (float)$sec);
+    return (float)array_sum(explode(' ', microtime()));
 }
 
 /**
@@ -69,4 +68,13 @@ function udate($format, $utimestamp = null)
     $milliseconds = round(($utimestamp - $timestamp) * 1000000);
 
     return date(preg_replace('`(?<!\\\\)u`', $milliseconds, $format), $timestamp);
+}
+
+/**
+ * @param $unixtime
+ * @return string
+ */
+function convertUnixTimeToIso($unixtime)
+{
+    return date('Y-m-d\TH:i:s', $unixtime);
 }

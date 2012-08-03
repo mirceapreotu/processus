@@ -3,103 +3,38 @@
 
     <!--
     #################################################################
-    Properties Targets
+    Properties
     #################################################################
     -->
     <property file="build/build.properties" description="Base Properties"/>
+
+
     <!--
     #################################################################
-    Properties Targets
+    Build targets
     #################################################################
     -->
+    <target name="build" depends="clean, prepare, permissions, setup">
+    </target>
+
 
     <!--
     #################################################################
-    Setup Targets
-    #################################################################
-    -->
-
-    <!--
-    #################################################################
-    Setup Targets
-    #################################################################
-    -->
-
-    <!--
-    #################################################################
-    Major Targets
-    #################################################################
-    -->
-
-    <!--
-    #################################################################
-    Major Targets
-    #################################################################
-    -->
-    <target name="build" depends="clean, prepare">
-
-    </target>
-    <target name="completeTest">
-
-    </target>
-    <target name="phpUnitApplication" depends="clean, prepare">
-        <echo message="--- Starting Build ---"/>
-        <echo message="loading -> ${phpUnit.config}"/>
-        <echo message="execute -> phpunit --verbose --configuration ${phpUnit.config} ${phpUnit.class.folder}" />
-        <exec command="phpunit --verbose --configuration ${phpUnit.config} ${phpUnit.class.folder}"
-              dir="."
-              logoutput="true"
-              checkreturn="true">
-        </exec>
-        <echo message="--- End Build ---"/>
-    </target>
-    <target name="phpUnitProcessus" depends="clean, prepare">
-        <echo message="--- Starting Build ---"/>
-        <echo message="loading -> ${phpUnit.config}"/>
-        <echo message="execute -> phpunit --verbose --configuration ${phpUnit.config} ${phpUnit.class.folder}" />
-        <exec command="phpunit --verbose --configuration ${phpUnit.config} ${phpUnit.class.folder}"
-              dir="."
-              logoutput="true"
-              checkreturn="true">
-        </exec>
-        <echo message="--- End Build ---"/>
-    </target>
-    <!--
-    #################################################################
-    Test Targets
-    #################################################################
-    -->
-    <target name="testCreateBet">
-
-    </target>
-
-    <target name="testAcceptBet">
-
-    </target>
-
-    <target name="testCancelBet">
-
-    </target>
-    <!--
-    #################################################################
-    Test Targets
-    #################################################################
-    -->
-
-    <!--
-    #################################################################
-    Sub Targets
+    Cleanup
     #################################################################
     -->
     <target name="clean">
         <echo message="--- Starting Clean ---"/>
         <delete dir="${app.basedir}/logs/"/>
-        <echo message="Delete logs dir"/>
-        <!--<exec command="php -f ${app.script.folder}/blowJob.php" checkreturn="true"/>-->
-        <echo message="blowJobed the enviroment" />
         <echo message="--- End Clean ---"/>
     </target>
 
+
+    <!--
+    #################################################################
+    Prepare
+    #################################################################
+    -->
     <target name="prepare">
         <echo message="--- Starting Prepare ---"/>
         <mkdir dir="${app.basedir}/logs/build"/>
@@ -109,6 +44,13 @@
         <mkdir dir="${app.basedir}/logs/application/profiling"/>
         <echo message="--- End Prepare ---"/>
     </target>
+
+
+    <!--
+    #################################################################
+    Permissions
+    #################################################################
+    -->
     <target name="permissions" depends="clean, prepare">
         <echo message="--- Setting Permission ---"/>
         <chmod file="logs/build/" mode="0777" verbose="true"/>
@@ -117,32 +59,104 @@
         <chmod file="logs/application/profiling/" mode="0777" verbose="true"/>
         <echo message="--- Setting Permission ---"/>
     </target>
+
+
     <!--
     #################################################################
-    Sub Targets
+    phpUnit
     #################################################################
     -->
+    <target name="phpunit" depends="-phpUnitProcessus">
+    </target>
+
+    <target name="-phpUnitProcessus" depends="clean, prepare, permissions">
+        <echo message="--- Starting phpUnitProcessus ---"/>
+        <echo message="loading -> ${phpUnit.config}"/>
+        <echo message="execute -> phpunit --verbose --configuration ${phpUnit.config} ${phpUnit.class.folder}" />
+        <exec command="phpunit --verbose --configuration ${phpUnit.config} ${phpUnit.class.folder}"
+              dir="."
+              logoutput="true"
+              checkreturn="true">
+        </exec>
+        <echo message="--- End phpUnitProcessus ---"/>
+    </target>
+
 
     <!--
     #################################################################
     SetUp Project
     #################################################################
     -->
-    <target name="setup" depends="-projectFolderSkeleton, -initDb">
-
+    <target name="setup" depends="-initDb, -projectFolderSkeleton">
     </target>
-    <target name="-initDb">
-        <pdosqlexec url="mysql:host=localhost;dbname=">
 
+
+    <!--
+    #################################################################
+    Initialize dabatase schema
+    #################################################################
+    -->
+    <target name="-initDb" description="Execute MySQL initschema">
+        <echo message="execute -> mysql:host=${db.mysql.host}; dbname=${db.mysql.name}; userid=${db.mysql.userid}; password=${db.mysql.password}; SQLdir=${db.sql.folder}" />
+        <pdosqlexec url="mysql:host=${db.mysql.host}; dbname=${db.mysql.name}" userid="${db.mysql.userid}" password="${db.mysql.password}">
+            <fileset dir="${db.sql.folder}">
+                <include name="*.sql"/>
+            </fileset>
         </pdosqlexec>
     </target>
-    <target name="-projectFolderSkeleton">
 
-    </target>
+
     <!--
     #################################################################
-    SetUp Project
+    Project Skeleton
     #################################################################
     -->
+    <target name="-projectFolderSkeleton" description="Create application directory structure">
+        <echo message=">>> Create application dir"/>
+        <mkdir dir="${app.basedir}/../application"/>
+        <copy todir="${app.basedir}/../application" >
+            <fileset dir="${app.basedir}/build/example/project/application/">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+
+        <echo message=">>> Create bin dir"/>
+        <mkdir dir="${app.basedir}/../bin"/>
+        <copy todir="${app.basedir}/../bin" >
+            <fileset dir="${app.basedir}/build/example/project/bin/">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+
+        <echo message=">>> Create build dir"/>
+        <mkdir dir="${app.basedir}/../build"/>
+        <copy todir="${app.basedir}/../build" >
+            <fileset dir="${app.basedir}/build/example/project/build/">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+
+        <echo message=">>> Create htdocs dir"/>
+        <mkdir dir="${app.basedir}/../htdocs"/>
+        <copy todir="${app.basedir}/../htdocs" >
+            <fileset dir="${app.basedir}/build/example/project/htdocs/">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+
+        <echo message=">>> Create library dir"/>
+        <mkdir dir="${app.basedir}/../htdocs"/>
+
+        <echo message=">>> Create logs dir"/>
+        <mkdir dir="${app.basedir}/../logs"/>
+        <copy todir="${app.basedir}/../logs" >
+            <fileset dir="${app.basedir}/logs/">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+
+        <echo message=">>> Move Processus to library dir"/>
+        <move file="${app.basedir}/../Processus" todir="${app.basedir}/../library" includeemptydirs="true" />
+    </target>
 
 </project>

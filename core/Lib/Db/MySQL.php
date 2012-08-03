@@ -150,7 +150,8 @@ namespace Processus\Lib\Db
          * @param null  $tableName
          * @param array $values
          *
-         * @return mixed
+         * @return \Zend\Db\Statement\Pdo
+         * @throws \Processus\Exceptions\MySqlException
          */
         public function insert($tableName = NULL, $values = array())
         {
@@ -177,7 +178,7 @@ namespace Processus\Lib\Db
                 return $this->_prepare($sql, $_values);
             }
 
-            return FALSE;
+            throw new \Processus\Exceptions\MySqlException("Update data are wrong! Required -> Table name && to inserted values");
         }
 
         // #########################################################
@@ -188,7 +189,8 @@ namespace Processus\Lib\Db
          * @param array $values
          * @param array $conditions
          *
-         * @return mixed
+         * @return \Zend\Db\Statement\Pdo
+         * @throws \Processus\Exceptions\MySqlException
          */
         public function update($tableName = NULL, $values = array(), $conditions = array())
         {
@@ -224,7 +226,7 @@ namespace Processus\Lib\Db
                 return $this->_prepare($sql, $_values);
             }
 
-            return FALSE;
+            throw new \Processus\Exceptions\MySqlException("Update data are wrong! Required -> Table name && update values && conditions");
         }
     }
 }

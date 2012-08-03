@@ -19,9 +19,23 @@ namespace Processus\Lib\Mvo
                 ->getRegistry()
                 ->getProcessusConfig()
                 ->getCouchbaseConfig()
-                ->getCouchbasePortByDatabucketKey("fbusers");
+                ->getCouchbasePortByDatabucketKey("default");
 
             return $config['port'];
+        }
+
+        /**
+         * @return mixed
+         */
+        protected function getMembaseHost()
+        {
+            $config = $this->getProcessusContext()
+                ->getRegistry()
+                ->getProcessusConfig()
+                ->getCouchbaseConfig()
+                ->getCouchbasePortByDatabucketKey("default");
+
+            return $config['host'];
         }
 
         /**
@@ -68,7 +82,18 @@ namespace Processus\Lib\Mvo
          */
         public function isFirstTime()
         {
-            return $this->getValueByKey('firstTime');
+            return $this->getValueByKey("firstTime");
+        }
+
+        /**
+         * @param $firstTime
+         *
+         * @return \Processus\Lib\Mvo\FacebookUserMvo
+         */
+        public function setFirstTime($firstTime)
+        {
+            $this->setValueByKey("firstTime", $firstTime);
+            return $this;
         }
 
         /**
@@ -96,6 +121,17 @@ namespace Processus\Lib\Mvo
         }
 
         /**
+         * @param $gender
+         *
+         * @return \Processus\Lib\Mvo\FacebookUserMvo
+         */
+        public function setGender($gender)
+        {
+            $this->setValueByKey('gender', $gender);
+            return $this;
+        }
+
+        /**
          * @return array|mixed
          */
         public function getEmail()
@@ -104,11 +140,33 @@ namespace Processus\Lib\Mvo
         }
 
         /**
+         * @param $mail
+         *
+         * @return \Processus\Lib\Mvo\FacebookUserMvo
+         */
+        public function setEmail($mail)
+        {
+            $this->setValueByKey('email', $mail);
+            return $this;
+        }
+
+        /**
          * @return array|mixed
          */
         public function getLocale()
         {
             return $this->getValueByKey('locale');
+        }
+
+        /**
+         * @param $locale
+         *
+         * @return \Processus\Lib\Mvo\FacebookUserMvo
+         */
+        public function setLocale($locale)
+        {
+            $this->setValueByKey('locale', $locale);
+            return $this;
         }
 
         /**
@@ -146,7 +204,99 @@ namespace Processus\Lib\Mvo
         public function setData($data)
         {
             parent::setData($data);
+
+            $this->setImageUrlLarge($this->_generateUserImageUrl("large"));
+            $this->setImageUrlSquare($this->_generateUserImageUrl("square"));
+            $this->setImageUrlNormal($this->_generateUserImageUrl("normal"));
+            $this->setImageUrlSmall($this->_generateUserImageUrl("small"));
+
             return $this;
+        }
+
+        /**
+         * @return array|mixed
+         */
+        public function getImageUrlSquare()
+        {
+            return $this->getValueByKey('imageUrlSquare');
+        }
+
+        /**
+         * @param $imageUrl
+         *
+         * @return \Processus\Lib\Mvo\FacebookUserMvo
+         */
+        public function setImageUrlSquare($imageUrl)
+        {
+            $this->setValueByKey('imageUrlSquare', $imageUrl);
+            return $this;
+        }
+
+        /**
+         * @return array|mixed
+         */
+        public function getImageUrlSmall()
+        {
+            return $this->getValueByKey('imageUrlSmall');
+        }
+
+        /**
+         * @param $imageUrl
+         *
+         * @return \Processus\Lib\Mvo\FacebookUserMvo
+         */
+        public function setImageUrlSmall($imageUrl)
+        {
+            $this->setValueByKey('imageUrlSmall', $imageUrl);
+            return $this;
+        }
+
+        /**
+         * @return array|mixed
+         */
+        public function getImageUrlNormal()
+        {
+            return $this->getValueByKey('imageUrlNormal');
+        }
+
+        /**
+         * @param $imageUrl
+         *
+         * @return \Processus\Lib\Mvo\FacebookUserMvo
+         */
+        public function setImageUrlNormal($imageUrl)
+        {
+            $this->setValueByKey('imageUrlNormal', $imageUrl);
+            return $this;
+        }
+
+        /**
+         * @return array|mixed
+         */
+        public function getImageUrlLarge()
+        {
+            return $this->getValueByKey('imageUrlLarge');
+        }
+
+        /**
+         * @param $imageUrl
+         *
+         * @return \Processus\Lib\Mvo\FacebookUserMvo
+         */
+        public function setImageUrlLarge($imageUrl)
+        {
+            $this->setValueByKey('imageUrlLarge', $imageUrl);
+            return $this;
+        }
+
+        /**
+         * @param $type
+         *
+         * @return string
+         */
+        protected function _generateUserImageUrl($type)
+        {
+            return "https://graph.facebook.com/" . $this->getId() . "/picture?type=" . $type;
         }
     }
 

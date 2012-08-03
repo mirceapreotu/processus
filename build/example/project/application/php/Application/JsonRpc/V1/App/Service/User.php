@@ -2,11 +2,7 @@
 
 namespace Application\JsonRpc\V1\App\Service
 {
-    use Application\Dto\FbBasicDto;
-    
-    use Processus\Abstracts\JsonRpc\AbstractJsonRpcService;
-
-    class User extends AbstractJsonRpcService
+    class User extends \Processus\Abstracts\JsonRpc\AbstractJsonRpcService
     {
 
         /**
@@ -17,7 +13,7 @@ namespace Application\JsonRpc\V1\App\Service
             // get data from current user
             $userMvo = $this->getProcessusContext()->getUserBo()->getFacebookUserMvo();
             
-            $userDto = $userMvo->setDto(new FbBasicDto())->export();
+            $userDto = $userMvo->setDto(new \Application\Dto\FbBasicDto())->export();
             
             // get current user's friends
             $friendsList = $this->getProcessusContext()->getUserBo()->getAppFriends();
