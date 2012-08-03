@@ -44,17 +44,7 @@ namespace Processus\Abstracts\JsonRpc
          */
         protected function _logJsonRpc(\string $method, $request, $duration, $metaData = null)
         {
-            $mysql = $this->getProcessusContext()->getMasterMySql();
-
-            $insertData = array(
-                "method"    => $method,
-                "request"   => json_encode($request),
-                "meta_data" => json_encode($metaData),
-                "duration"  => $duration,
-                "created"   => time(),
-            );
-
-            return $mysql->insert($this->_getLogTransactionTable(), $insertData);
+            return True;
         }
 
         /**

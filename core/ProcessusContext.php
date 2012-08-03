@@ -30,11 +30,6 @@ namespace Processus
         private $_memcached;
 
         /**
-         * @var \Processus\Lib\Db\MySQL
-         */
-        private $_mysql;
-
-        /**
          * @var \Processus\ProcessusContext
          */
         private static $_instance;
@@ -109,19 +104,6 @@ namespace Processus
             }
 
             return $this->_memcached;
-
-        }
-
-        /**
-         * @return \Processus\Lib\Db\MySQL
-         */
-        public function getMasterMySql()
-        {
-            if (!$this->_mysql) {
-                $this->_mysql = \Processus\Lib\Db\MySQL::getInstance();
-            }
-
-            return $this->_mysql;
 
         }
 

@@ -16,11 +16,6 @@ class ServerFactory
     private static $_couchbasePool = array();
 
     /**
-     * @var array
-     */
-    private static $_mysqlPool;
-
-    /**
      * @static
      *
      * @param string $host
@@ -55,29 +50,6 @@ class ServerFactory
         }
 
         return self::$_couchbasePool[$poolKey];
-    }
-
-    /**
-     * @static
-     *
-     * @param string $adapter
-     * @param array  $params
-     *
-     * @return MySQL
-     */
-    public static function mysqlFactory(\string $adapter, array $params)
-    {
-        $poolKey = md5($adapter . join('', $params));
-
-        if (array_key_exists($poolKey, self::$_mysqlPool) === FALSE) {
-            $mysql = new \Processus\Lib\Db\MySQL();
-            $mysql->init($adapter, $params);
-            self::$_mysqlPool[$poolKey] = $mysql;
-        }
-
-        var_dump(array($mysql, $adapter, $params, $poolKey));
-
-        return $mysql;
     }
 }
 

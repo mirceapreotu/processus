@@ -21,11 +21,6 @@ namespace Processus\Lib\Vo\Configs
         private $_beanstalkdConfig;
 
         /**
-         * @var \Processus\Lib\Vo\Configs\MysqlConfig
-         */
-        private $_mysqlConfig;
-
-        /**
          * @var \Processus\Lib\Vo\Configs\ProfilerConfig
          */
         private $_profilerConfig;
@@ -59,19 +54,6 @@ namespace Processus\Lib\Vo\Configs
             }
 
             return $this->_beanstalkdConfig;
-        }
-
-        /**
-         * @return \Processus\Lib\Vo\Configs\MysqlConfig
-         */
-        public function getMysqlConfig()
-        {
-            if (!$this->_mysqlConfig) {
-                $this->_mysqlConfig = new MysqlConfig();
-                $this->_mysqlConfig->setData($this->getValueByKey("mysql"));
-            }
-
-            return $this->_mysqlConfig;
         }
 
         /**

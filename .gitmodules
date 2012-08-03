@@ -1,3 +1,0 @@
-[submodule "contrib/pheanstalk"]
-	path = contrib/pheanstalk
-	url = git@github.com:Crowdpark/pheanstalk.git

@@ -12,8 +12,6 @@ namespace Processus\Interfaces
     {
         public function getDefaultCache();
 
-        public function getMasterMySql();
-
         public function getRegistry();
 
         public function getFacebookClient();

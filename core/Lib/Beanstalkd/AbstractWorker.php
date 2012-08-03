@@ -17,44 +17,23 @@ namespace Processus\Lib\Beanstalkd
 
         public function AbstractWorker()
         {
-            try
-            {
-                $this->run();
-            }
-            catch (\Exception $error)
-            {
-                $this->_logErrorToMySql($error);
-            }
-
-        }
-
-        /**
-         * @param $error
-         *
-         * @return bool
-         */
-        protected function _logErrorToMySql($error)
-        {
-            $pdo = $this->insert($this->ccFactory()
-                    ->setSqlTableName($this->_getLogTable())
-                    ->setSqlParams($this->_getSqlLogParams($error)
-                )
-            );
-            return $pdo;
+            $this->run();
         }
 
         /**
          * @abstract
          * @return string
          */
-        abstract protected function _getLogTable ();
+        abstract protected function _getLogTable();
 
         /**
          * @abstract
+         *
          * @param $rawObject
+         *
          * @return array
          */
-        abstract protected function _getSqlLogParams ($rawObject);
+        abstract protected function _getSqlLogParams($rawObject);
 
         public function run()
         {
@@ -79,8 +58,7 @@ namespace Processus\Lib\Beanstalkd
          */
         protected function getPheanstalk()
         {
-            if (!$this->_pheanstalk)
-            {
+            if (!$this->_pheanstalk) {
                 $this->_pheanstalk = new \Pheanstalk\Pheanstalk($this->getHost(), $this->getPort());
             }
 
@@ -117,20 +95,6 @@ namespace Processus\Lib\Beanstalkd
         protected function getPort()
         {
             return $this->getProcessusContext()->getRegistry()->getProcessusConfig()->getBeanstalkdConfig()->getServerPort();
-        }
-
-        /**
-         *
-         */
-        protected function _logToMySql()
-        {
-            $sqlTable  = "log_task";
-            $sqlParams = array();
-
-            $this->insert($this->ccFactory()
-                    ->setSqlTableName($sqlTable)
-                    ->setSqlParams($sqlParams)
-            );
         }
     }
 }

@@ -126,23 +126,6 @@ abstract class AbstractJob extends \Processus\Abstracts\Manager\AbstractManager
     }
 
     /**
-     * @param $error
-     *
-     * @return bool
-     */
-    protected function _logErrorToMySql($error)
-    {
-        $pdo = $this->insert(
-            $this->ccFactory()
-                ->setSqlTableName($this->_getLogTable())
-                ->setSqlParams(
-                $this->_getSqlLogParams($error)
-            )
-        );
-        return $pdo;
-    }
-
-    /**
      * @abstract
      * @return string
      */

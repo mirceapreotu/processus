@@ -86,11 +86,6 @@ namespace Processus\Abstracts\Manager
                 $results = $this->getDataFromCache($com);
             }
 
-            if (empty($results)) {
-                $results = $this->_fetchFromMysql($com);
-                $this->cacheResult($com, $results);
-            }
-
             return $results;
         }
 
@@ -110,11 +105,6 @@ namespace Processus\Abstracts\Manager
                 $results = $this->getDataFromCache($com);
             }
 
-            if (empty($results)) {
-                $results = $this->_fetchOneFromMysql($com);
-                $this->cacheResult($com, $results);
-            }
-
             return $results;
         }
 
@@ -132,11 +122,6 @@ namespace Processus\Abstracts\Manager
 
             if ($com->getFromCache() === TRUE) {
                 $results = $this->getDataFromCache($com);
-            }
-
-            if (empty($results)) {
-                $results = $this->_fetchAllFromMysql($com);
-                $this->cacheResult($com, $results);
             }
 
             return $results;
@@ -170,48 +155,6 @@ namespace Processus\Abstracts\Manager
             );
         }
 
-        // #########################################################
-
-
-        /**
-         * @param \Processus\Interfaces\InterfaceComConfig $com
-         *
-         * @return mixed
-         */
-        protected function _fetchFromMysql(\Processus\Interfaces\InterfaceComConfig $com)
-        {
-            return $com->getConnector()->fetch($com->getSqlStmt(), $com->getSqlParams());
-        }
-
-        // #########################################################
-
-
-        /**
-         * @param \Processus\Interfaces\InterfaceComConfig $com
-         *
-         * @return mixed
-         */
-        protected function _fetchOneFromMysql(\Processus\Interfaces\InterfaceComConfig $com)
-        {
-            return $com->getConnector()->fetchOne($com->getSqlStmt(), $com->getSqlParams());
-        }
-
-        // #########################################################
-
-
-        /**
-         * @param \Processus\Interfaces\InterfaceComConfig $com
-         *
-         * @return mixed
-         */
-        protected function _fetchAllFromMysql(\Processus\Interfaces\InterfaceComConfig $com)
-        {
-            return $com->getConnector()->fetchAll($com->getSqlStmt(), $com->getSqlParams());
-        }
-
-        // #########################################################
-
-
         /**
          * @param \Processus\Interfaces\InterfaceComConfig $com
          * @param                                          $results
@@ -228,9 +171,6 @@ namespace Processus\Abstracts\Manager
          */
         protected function ccFactory(\Processus\Interfaces\InterfaceDatabase $connector = NULL)
         {
-            if (!$connector) {
-                $connector = \Processus\Lib\Db\MySQL::getInstance();
-            }
             $comConfig = new ComConfig();
             return $comConfig->setConnector($connector);
         }

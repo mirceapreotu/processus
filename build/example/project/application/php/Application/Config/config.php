@@ -1,14 +1,5 @@
 <?php
 return array(
-    'application'    => array(
-        'state'       => 'development',
-        'host'        => '',
-        'name'        => 'shakeonitapp',
-        'expiredTime' => array(
-            'default'    => 10,
-            'mysqlCache' => 10,
-        ),
-    ),
     'processus'      => array(
         'beanstalkd'      => array(
             'servers' => array(
@@ -61,60 +52,6 @@ return array(
                 )
             )
         ),
-        "mysql"           => array(
-            "masters" => array(
-                "0" => array(
-                    'adapter' => 'PdoMysql',
-                    'params'  => array(
-                        'host'           => 'localhost',
-                        'username'       => 'root',
-                        'password'       => 'root',
-                        'dbname'         => 'shakeonitapp',
-                        'driver_options' => array(
-                            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"
-                        )
-                    )
-                )
-            ),
-            "slaves"  => array(
-                "0" => array(
-                    'adapter' => 'PdoMysql',
-                    'params'  => array(
-                        'host'           => 'localhost',
-                        'username'       => '',
-                        'password'       => '',
-                        'dbname'         => '',
-                        'driver_options' => array(
-                            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"
-                        )
-                    )
-                ),
-                "1" => array(
-                    'adapter' => 'PdoMysql',
-                    'params'  => array(
-                        'host'           => 'localhost',
-                        'username'       => '',
-                        'password'       => '',
-                        'dbname'         => '',
-                        'driver_options' => array(
-                            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"
-                        )
-                    )
-                ),
-                "3" => array(
-                    'adapter' => 'PdoMysql',
-                    'params'  => array(
-                        'host'           => 'localhost',
-                        'username'       => '',
-                        'password'       => '',
-                        'dbname'         => '',
-                        'driver_options' => array(
-                            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"
-                        )
-                    )
-                )
-            )
-        )
     ),
 
     'locale'         => array(
@@ -133,13 +70,6 @@ return array(
 
     // ++++++++++++++ fb: osapi ++++++++++++++++++++++++++++++++++++++
 
-    "Twitter"        => array(
-        "consumerKey"    => "",
-        "consumerSecret" => "",
-    ),
-
-    // ++++++++++++++ fb: osapi ++++++++++++++++++++++++++++++++++++++
-
     'Profiler'       => array(
         "ips" => array(""),
     ),
@@ -148,32 +78,4 @@ return array(
 
     ),
 
-    // ++++++++++++++ fb: osapi ++++++++++++++++++++++++++++++++++++++
-
-    'Amazon'         => array(
-        "S3" => array(
-            "auth"    => array(
-                "aws_key" => "",
-                "secret"  => "",
-            ),
-            "buckets" => array("test-bucket"),
-        )
-    ),
-
-    // ++++++++++++++ Sendgrid Config ++++++++++++++++++++++++++++++++++++++
-
-    'SendGrid'       => array(
-        "credentials" => array(
-            "user"     => "",
-            "password" => ""
-        ),
-        "server"      => array(
-            "host" => "smtp.sendgrid.net",
-            "port" => ""
-        ),
-        "author"      => array(
-            "fromEmail" => "noreply@anteup.com",
-            "fromName"  => "AnteUp"
-        ),
-    ),
 );
